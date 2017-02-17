@@ -72,13 +72,13 @@ Developers Guide
 
 **MSL-LoadLib** uses pytest_ and coverage_ for testing the source code and sphinx_ for creating the documentation.
 
-Build the documentation::
-
-   $ python setup.py docs
-
 Run the tests::
 
    $ python setup.py tests
+
+Build the documentation::
+
+   $ python setup.py docs
 
 Automatically create the API documentation from the docstrings in the source code (uses sphinx-apidoc_).
 
@@ -88,14 +88,14 @@ automatically generated and therefore not kept. If you want to keep the files lo
 the changes made to the files in the* ``docs/_api`` *folder will be kept.*::
 
    $ python setup.py apidoc
-   
-Create a wheel for distributing **MSL-LoadLib**::
-
-   $ python setup.py wheel
 
 Install from source::
 
    $ python setup.py install
+
+Create a wheel for distributing **MSL-LoadLib**::
+
+   $ python setup.py wheel
 
 .. |docs| image:: https://readthedocs.org/projects/msl-loadlib/badge/?version=latest
    :target: http://msl-loadlib.readthedocs.io/en/latest/?badge=latest
@@ -107,4 +107,3 @@ Install from source::
 .. _sphinx: http://www.sphinx-doc.org/en/stable/
 .. _sphinx-apidoc: http://www.sphinx-doc.org/en/stable/man/sphinx-apidoc.html
 .. _coverage: http://coverage.readthedocs.io/en/latest/index.html
-
