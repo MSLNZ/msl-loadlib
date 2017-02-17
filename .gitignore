@@ -1,0 +1,40 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Distribution / packaging
+.Python
+env/
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+
+# Sphinx documentation
+docs/_build/
+docs/_autosummary/
+
+# Project settings
+.ropeproject/
+.project/
+.pydevproject/
+.settings/
+.idea/
+
+# pytest and coverage
+.cache/
+htmlcov/
+.coverage
+junit.xml
+coverage.xml

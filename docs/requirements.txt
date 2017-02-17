@@ -1,0 +1,3 @@
+# Dummy requirements file so that ReadTheDocs online does not try to install pythonnet.
+# Configured the Advanced Settings of RTD online to use this requirements file
+# and not the requirements.txt file in the root folder.
