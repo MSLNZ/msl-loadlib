@@ -148,18 +148,19 @@ by using PyCharm. See `this link <githelp_>`_ for a much more detailed tutorial 
 Execute setup.py commands
 -------------------------
 The **setup.py** file should be run with various arguments in order to perform unittests, to create the documentation,
-to distribute the **MSL-LoadLib** package or to install the **MSL-LoadLib** package. **MSL-LoadLib** uses pytest_ and coverage_ for
+to distribute the **MSL-LoadLib** package or to install the **MSL-LoadLib** package. **MSL-LoadLib** uses pytest_ for
 testing the source code and sphinx_ for creating the documentation.
 
 .. note::
-   The Python packages (e.g., pytest_, coverage_ and sphinx_) that are required to execute the following commands are automatically
+   The Python packages (e.g., pytest_ and sphinx_) that are required to execute the following commands are automatically
    installed (into the **.eggs** folder) if they are not already installed in the **msl** `virtual environment`_.
    Therefore, the first time that you run the **docs** or **tests** command it will take longer to finish executing the
    command because these packages (and their own dependencies) need to be downloaded then installed.
 
 The following command will run all the tests in the **tests** folder as well as testing all the example code that is
-located within the docstrings of the source code. A coverage_ report is can be viewed by opening the **htmlcov/index.html** file. 
-This report provides an overview of which classes/functions/methods are being tested. *(The* **tests** *argument is an alias for the* **pytest** *argument)*::
+located within the docstrings of the source code. A coverage_ report is can be viewed by opening the
+**htmlcov/index.html** file. This report provides an overview of which classes/functions/methods are being tested.
+*(The* **tests** *argument is an alias for the* **pytest** *argument)*::
 
    $ python setup.py tests
 
@@ -171,10 +172,11 @@ To automatically create the API documentation from the docstrings in the source 
 
    $ python setup.py apidoc
 
-*NOTE: The* ``docs/_autosummary`` *folder that is created by running this command is
-automatically generated and therefore not kept. If you want to keep the files located in*
-``docs/_autosummary`` *you should rename the folder to, for example,* ``docs/_api`` *and then
-the changes made to the files in the* ``docs/_api`` *folder will be kept.*
+*NOTE: By default, the* **docs/_autosummary** *folder that is created by running the **apidoc** command is
+automatically generated (it will overwrite existing files). As such, it is excluded from the repository (i.e., this
+folder is specified in the* **.gitignore** *file). If you want to keep the files located in* **docs/_autosummary** *you
+can rename the folder to be, for example,* **docs/_api** *and then the changes made to the files in the* **docs/_api**
+*folder will be kept and will be included in the repository.*
 
 To install **MSL-LoadLib** from source::
 

@@ -80,14 +80,15 @@ Build the documentation::
 
    $ python setup.py docs
 
-Automatically create the API documentation from the docstrings in the source code (uses sphinx-apidoc_).
-
-*NOTE: The* ``docs/_autosummary`` *folder that is created by running this command is
-automatically generated and therefore not kept. If you want to keep the files located in*
-``docs/_autosummary`` *you should rename the folder to, for example,* ``docs/_api`` *and then
-the changes made to the files in the* ``docs/_api`` *folder will be kept.*::
+Automatically create the API documentation from the docstrings in the source code (uses sphinx-apidoc_)::
 
    $ python setup.py apidoc
+
+*NOTE: By default, the* **docs/_autosummary** *folder that is created by running the **apidoc** command is
+automatically generated (it will overwrite existing files). As such, it is excluded from the repository (i.e., this
+folder is specified in the* **.gitignore** *file). If you want to keep the files located in* **docs/_autosummary** *you
+can rename the folder to be, for example,* **docs/_api** *and then the changes made to the files in the* **docs/_api**
+*folder will be kept and will be included in the repository.*
 
 Install from source::
 
