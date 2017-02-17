@@ -3,9 +3,8 @@ Install MSL-LoadLib
 
 To install **MSL-LoadLib** run::
 
-   $ pip install git+https://github.com/mslnz/msl-loadlib
+   $ pip install https://github.com/MSLNZ/msl-loadlib/archive/master.zip
 
-*Note: To run the above command, pip requires that* git_ *is installed and for the* **git** *command to be available on your path.*
 
 Compatibility
 -------------
