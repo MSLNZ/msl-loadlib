@@ -1,2 +1,3 @@
 include msl/loadlib/server32*
-include msl/examples/loadlib/*.*
+include msl/loadlib/verpatch.exe
+include msl/examples/loadlib/*

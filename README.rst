@@ -8,11 +8,9 @@ Purpose
 
 Load a shared library into Python.
 
-This package is basically just a thin wrapper around `ctypes
-<https://docs.python.org/3/library/ctypes.html>`_ and `Python
-for .NET <https://pypi.python.org/pypi/pythonnet/>`_ for loading a shared library
-into Python. However, the primary advantage is that it is possible to communicate
-with a 32-bit shared library from within 64-bit Python.
+This package is basically just a thin wrapper around `ctypes <https://docs.python.org/3/library/ctypes.html>`_ and
+`Python for .NET <https://pypi.python.org/pypi/pythonnet/>`_ for loading a shared library into Python. However,
+the primary advantage is that it is possible to communicate with a 32-bit shared library from 64-bit Python.
 
 Tested in Python 2.7, 3.3 - 3.6. The `examples <http://msl-loadlib.readthedocs.io/en/latest/examples.html>`_
 provided are currently only supported in Windows, however **MSL-LoadLib** should work properly with any OS
@@ -22,8 +20,8 @@ care about loading .NET libraries then **MSL-LoadLib** is a pure-python package 
 Example
 -------
 
-If you are loading a 64-bit library into 64-bit Python, or a 32-bit library into
-32-bit Python, then you can directly load the library using ``msl.loadlib.LoadLibrary``.
+If you are loading a 64-bit library into 64-bit Python, or a 32-bit library into 32-bit Python, then you can
+directly load the library using ``msl.loadlib.LoadLibrary``.
 
 Using a 64-bit Python interpreter, load the 64-bit C++ library named `cpp_lib64 <msl/examples/loadlib/cpp_lib.cpp>`_.
 By default, ``msl.loadlib.LoadLibrary`` loads a library using
@@ -70,13 +68,13 @@ Install **MSL-LoadLib** using pip::
 Developers Guide
 ----------------
 
-**MSL-LoadLib** uses pytest_ and coverage_ for testing the source code and sphinx_ for creating the documentation.
+**MSL-LoadLib** uses pytest_ for testing the source code and sphinx_ for creating the documentation.
 
-Run the tests::
+Run the tests (a coverage_ report is generated in the **htmlcov/index.html** file)::
 
-   $ python setup.py tests
+   $ python setup.py test
 
-Build the documentation::
+Build the documentation, which can be viewed by opening the **docs/_build/html/index.html** file::
 
    $ python setup.py docs
 
@@ -89,14 +87,6 @@ automatically generated (it will overwrite existing files). As such, it is exclu
 folder is specified in the* **.gitignore** *file). If you want to keep the files located in* **docs/_autosummary** *you
 can rename the folder to be, for example,* **docs/_api** *and then the changes made to the files in the* **docs/_api**
 *folder will be kept and will be included in the repository.*
-
-Install from source::
-
-   $ python setup.py install
-
-Create a wheel for distributing **MSL-LoadLib**::
-
-   $ python setup.py wheel
 
 .. |docs| image:: https://readthedocs.org/projects/msl-loadlib/badge/?version=latest
    :target: http://msl-loadlib.readthedocs.io/en/latest/?badge=latest

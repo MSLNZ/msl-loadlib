@@ -158,13 +158,12 @@ testing the source code and sphinx_ for creating the documentation.
    command because these packages (and their own dependencies) need to be downloaded then installed.
 
 The following command will run all the tests in the **tests** folder as well as testing all the example code that is
-located within the docstrings of the source code. A coverage_ report is can be viewed by opening the
-**htmlcov/index.html** file. This report provides an overview of which classes/functions/methods are being tested.
-*(The* **tests** *argument is an alias for the* **pytest** *argument)*::
+located within the docstrings of the source code. A coverage_ report is generated in the **htmlcov/index.html** file.
+This report provides an overview of which classes/functions/methods are being tested::
 
-   $ python setup.py tests
+   $ python setup.py test
 
-To create the **html** documentation files, which can be viewed by opening the **docs/_build/index.html** file, run::
+To build the documentation, which can be viewed by opening the **docs/_build/html/index.html** file, run::
 
    $ python setup.py docs
 
@@ -177,20 +176,6 @@ automatically generated (it will overwrite existing files). As such, it is exclu
 folder is specified in the* **.gitignore** *file). If you want to keep the files located in* **docs/_autosummary** *you
 can rename the folder to be, for example,* **docs/_api** *and then the changes made to the files in the* **docs/_api**
 *folder will be kept and will be included in the repository.*
-
-To install **MSL-LoadLib** from source::
-
-   $ python setup.py install
-
-To create a wheel_ for distributing **MSL-LoadLib** *(the* **wheel** *argument is an alias for the* **bdist_wheel** 
-*argument)*, run::
-
-   $ python setup.py wheel
-
-To install **MSL-LoadLib** from the wheel_ *(which was created from the previous command)*, run::
-
-   $ cd path/to/wheel/file
-   $ pip install msl-loadlib*.whl
 
 .. _Edit the code using the style guide:
 
