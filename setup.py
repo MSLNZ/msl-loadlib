@@ -3,7 +3,7 @@ from setuptools import setup, find_packages
 from setuptools.command.install import install
 from distutils.cmd import Command
 
-import msl
+from msl import loadlib
 
 
 class CustomInstall(install):
@@ -13,7 +13,7 @@ class CustomInstall(install):
     """
     def run(self):
         install.run(self)
-        msl.loadlib.LoadLibrary.check_dot_net_config(sys.executable)
+        loadlib.LoadLibrary.check_dot_net_config(sys.executable)
         sys.exit(0)
 
 
@@ -86,8 +86,8 @@ sphinx = ['sphinx', 'sphinx_rtd_theme'] if needs_sphinx else []
 
 setup(
     name='msl-loadlib',
-    version=msl.loadlib.__version__,
-    author=msl.loadlib.__author__,
+    version=loadlib.__version__,
+    author=loadlib.__author__,
     author_email='joseph.borbely@callaghaninnovation.govt.nz',
     url='https://github.com/MSLNZ/msl-loadlib',
     description='Load a shared library',
