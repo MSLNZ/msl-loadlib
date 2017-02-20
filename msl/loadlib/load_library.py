@@ -65,17 +65,23 @@ class LoadLibrary(object):
         elif libtype == 'net' and self.is_python_net_installed():
             import clr
             try:
-                # pythonnet can only load libraries that are .NET 4.0+
+                # By default, pythonnet can only load libraries that are for .NET 4.0+.
+                #
+                # When MSL-LoadLib is installed, the useLegacyV2RuntimeActivationPolicy
+                # property should have been enabled automatically to allow for loading
+                # assemblies from previous .NET Framework versions.
                 self._net = clr.System.Reflection.Assembly.LoadFile(self._path)
+
             except clr.System.IO.FileLoadException as err:
-                # Example error message that can be displayed if the library is for .NET <4.0 is:
+                # Example error message that can be displayed if the library is for .NET <4.0,
+                # and the useLegacyV2RuntimeActivationPolicy is not enabled, is:
                 #
                 # " Mixed mode assembly is built against version 'v2.0.50727' of the
                 #  runtime and cannot be loaded in the 4.0 runtime without additional
                 #  configuration information. "
                 #
                 # To solve this problem, a <python-executable>.config file must exist and it must
-                # contain a useLegacyV2RuntimeActivationPolicy property that is set to be True
+                # contain a useLegacyV2RuntimeActivationPolicy property that is set to be "true".
                 if "Mixed mode assembly" in str(err):
                     status, msg = self.check_dot_net_config(sys.executable)
                     if not status == 0:
