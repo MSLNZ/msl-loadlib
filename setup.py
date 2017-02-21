@@ -1,9 +1,11 @@
 import sys
 from setuptools import setup, find_packages
 from setuptools.command.install import install
-from distutils.cmd import Command
 
 from msl import loadlib
+
+sys.path.insert(0, './docs')
+import docs_commands
 
 
 class CustomInstall(install):
@@ -17,72 +19,16 @@ class CustomInstall(install):
         sys.exit(0)
 
 
-class ApiDocs(Command):
-    """
-    A custom command that calls sphinx-apidoc
-    see: http://www.sphinx-doc.org/en/latest/man/sphinx-apidoc.html
-    """
-    description = "builds the api documentation using sphinx-apidoc"
-    user_options = []
-
-    def initialize_options(self):
-        pass
-
-    def finalize_options(self):
-        pass
-
-    def run(self):
-        from sphinx.apidoc import main
-        main([
-            'sphinx-apidoc',
-            '--force',  # Overwrite existing files
-            '--module-first',  # Put module documentation before submodule documentation
-            '--separate',  # Put documentation for each module on its own page
-            '-o', './docs/_autosummary',
-            'msl',
-        ])
-        sys.exit(0)
-
-
-class BuildDocs(Command):
-    """
-    A custom command that calls sphinx-build
-    see: http://www.sphinx-doc.org/en/latest/man/sphinx-build.html
-    """
-    description = "builds the documentation using sphinx-build"
-    user_options = []
-
-    def initialize_options(self):
-        pass
-
-    def finalize_options(self):
-        pass
-
-    def run(self):
-        from sphinx import build_main
-        build_main([
-            'sphinx-build',
-            '-b', 'html',  # builder to use
-            '-a',  # generate output for all files
-            '-E',  # ignore cached files, forces to re-read all source files from disk
-            'docs',  # source directory
-            './docs/_build/html', # output directory
-        ])
-        sys.exit(0)
-
-
 def read(filename):
     with open(filename) as fp:
         text = fp.read()
     return text
 
-
-needs_pytest = {'test', 'tests', 'pytest'}.intersection(sys.argv)
-pytest_runner = ['pytest-runner'] if needs_pytest else []
+testing = {'test', 'tests', 'pytest'}.intersection(sys.argv)
+pytest_runner = ['pytest-runner'] if testing else []
 
 needs_sphinx = {'doc', 'docs', 'apidoc', 'apidocs', 'build_sphinx'}.intersection(sys.argv)
 sphinx = ['sphinx', 'sphinx_rtd_theme'] if needs_sphinx else []
-
 
 setup(
     name='msl-loadlib',
@@ -111,9 +57,13 @@ setup(
         'Topic :: Scientific/Engineering :: Physics',
     ],
     setup_requires=sphinx + pytest_runner,
-    tests_require=['pytest-cov', 'pytest'] if needs_pytest else [],
-    install_requires=read('requirements.txt').split() if not needs_pytest else [],
-    cmdclass={'install': CustomInstall, 'docs': BuildDocs, 'apidocs': ApiDocs},
+    tests_require=['pytest-cov', 'pytest'],
+    install_requires=read('requirements.txt').split() if not testing else [],
+    cmdclass={
+        'install': CustomInstall,
+        'docs': docs_commands.BuildDocs,
+        'apidocs': docs_commands.ApiDocs
+    },
     namespace_packages=['msl'],
     packages=find_packages(include=('msl*',)),
     include_package_data=True,
