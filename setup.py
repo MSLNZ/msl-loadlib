@@ -64,7 +64,6 @@ setup(
         'docs': docs_commands.BuildDocs,
         'apidocs': docs_commands.ApiDocs
     },
-    namespace_packages=['msl'],
     packages=find_packages(include=('msl*',)),
     include_package_data=True,
 )
