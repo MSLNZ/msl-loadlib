@@ -82,7 +82,7 @@ Automatically create the API documentation from the docstrings in the source cod
 
    $ python setup.py apidoc
 
-*NOTE: By default, the* **docs/_autosummary** *folder that is created by running the **apidoc** command is
+*NOTE: By default, the* **docs/_autosummary** *folder that is created by running the* **apidoc** *command is
 automatically generated (it will overwrite existing files). As such, it is excluded from the repository (i.e., this
 folder is specified in the* **.gitignore** *file). If you want to keep the files located in* **docs/_autosummary** *you
 can rename the folder to be, for example,* **docs/_api** *and then the changes made to the files in the* **docs/_api**
