@@ -9,10 +9,10 @@ import os
 import sys
 import site
 import uuid
+import time
 import random
-import socket
-import subprocess
 import tempfile
+import subprocess
 try:
     import cPickle as pickle
 except ImportError:
@@ -89,15 +89,10 @@ class Client64(HTTPConnection):
         self._is_active = False
 
         if port is None:
-            # then find a port that is not being used
             while True:
                 port = random.randint(1024, 65535)
-                s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-                s.settimeout(0.01)
-                if s.connect_ex((host, port)) != 0:
-                    s.close()
+                if not self._port_in_use(port):
                     break
-                s.close()
 
         # the temporary file to use to save the pickle'd data
         self._pickle_temp_file = os.path.join(tempfile.gettempdir(), str(uuid.uuid4()))
@@ -149,19 +144,13 @@ class Client64(HTTPConnection):
         subprocess.Popen(cmd, stderr=sys.stderr, stdout=sys.stderr)
 
         # wait for the server to be running -- essentially this is the subprocess.wait() method
-        t = 0.0
-        socket_timeout = 0.02
-        while t < timeout:
-            s = socket.socket(socket.AF_INET)
-            s.settimeout(socket_timeout)
-            if s.connect_ex((host, port)) == 0:
-                s.close()
+        stop = time.time() + max(0.0, timeout)
+        while True:
+            if self._port_in_use(port):
                 break
-            s.close()
-            t += socket_timeout
-        if t >= timeout:
-            msg = 'Timeout after {:.1f} seconds. Cannot connect to {}:{}'.format(t, host, port)
-            raise HTTPException(msg)
+            if time.time() > stop:
+                m = 'Timeout after {:.1f} s. Could not connect to {}:{}'.format(timeout, host, port)
+                raise HTTPException(m)
 
         # start the connection
         HTTPConnection.__init__(self, host, port)
@@ -243,3 +232,10 @@ class Client64(HTTPConnection):
 
     def __del__(self):
         self.shutdown_server()
+
+    def _port_in_use(self, port):
+        """
+        Uses 'netstat' to determine if the port is in use.
+        """
+        p = subprocess.Popen(['netstat', '-an'], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        return p.communicate()[0].decode().find(':{} '.format(port)) > 0
