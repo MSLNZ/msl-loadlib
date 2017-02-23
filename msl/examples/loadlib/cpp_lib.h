@@ -2,7 +2,15 @@
 // Contains the declaration of exported functions.
 //
 
-#define EXPORT __declspec(dllexport)   
+#if defined(_MSC_VER)
+    // Microsoft
+    #define EXPORT __declspec(dllexport)
+#elif defined(__GNUC__)
+    // G++
+    #define EXPORT __attribute__((visibility("default")))
+#else
+#   error "Unknown EXPORT semantics"
+#endif
 
 extern "C" {
 
