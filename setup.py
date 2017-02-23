@@ -1,10 +1,11 @@
+import os
 import sys
 from setuptools import setup, find_packages
 from setuptools.command.install import install
 
 from msl import loadlib
 
-sys.path.insert(0, './docs')
+sys.path.insert(0, os.path.join(os.path.abspath(os.path.dirname(__file__)), 'docs'))
 import docs_commands
 
 
