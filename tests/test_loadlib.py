@@ -2,28 +2,32 @@ import os
 import pytest
 
 from msl import loadlib
-from msl.examples.loadlib import Cpp64, Fortran64, Dummy64
+from msl.examples.loadlib import Cpp64, Fortran64, Dummy64, DotNet64
 
 eps = 1e-10
 
 c = Cpp64()
 f = Fortran64()
 d = Dummy64(True)
+n = DotNet64()
 
 
 def teardown_module(module):
     c.shutdown_server()
     f.shutdown_server()
     d.shutdown_server()
+    n.shutdown_server()
 
 
 def test_unique_ports():
-    for item in [f, d]:
+    for item in [f, d, n]:
         assert c.port != item.port
-    for item in [c, d]:
+    for item in [c, d, n]:
         assert f.port != item.port
-    for item in [c, f]:
+    for item in [c, f, n]:
         assert d.port != item.port
+    for item in [c, f, d]:
+        assert n.port != item.port
 
 
 def test_lib_name():
@@ -32,6 +36,7 @@ def test_lib_name():
 
     assert 'cpp_lib32' == get_name(c.lib32_path)
     assert 'fortran_lib32' == get_name(f.lib32_path)
+    assert 'dotnet_lib32' == get_name(n.lib32_path)
 
 
 def test_load_failure_in_64bit_python():
@@ -40,6 +45,8 @@ def test_load_failure_in_64bit_python():
             loadlib.LoadLibrary(os.path.join('.', 'examples', 'cpp_lib32'))
         with pytest.raises(IOError):
             loadlib.LoadLibrary(os.path.join('.', 'examples', 'fortran_lib32'))
+        with pytest.raises(IOError):
+            loadlib.LoadLibrary(os.path.join('.', 'examples', 'dotnet_lib32'))
 
 
 def test_load_failure_in_32bit_python():
@@ -48,6 +55,8 @@ def test_load_failure_in_32bit_python():
             loadlib.LoadLibrary(os.path.join('.', 'examples', 'cpp_lib64'))
         with pytest.raises(IOError):
             loadlib.LoadLibrary(os.path.join('.', 'examples', 'fortran_lib64'))
+        with pytest.raises(IOError):
+            loadlib.LoadLibrary(os.path.join('.', 'examples', 'dotnet_lib64'))
 
 
 def test_server_version():
@@ -124,3 +133,12 @@ def test_dummy():
     assert kwargs['x'] == x
     assert kwargs['y'] == y
     assert kwargs['my_dict'] == my_dict
+
+
+def test_dotnet():
+
+    assert 'SpelNetLib' == n.get_module_name()
+    assert 'SpelNetLib.Spel' in n.get_class_names()
+    assert 'Home' in n.get_class_functions('Spel')
+    assert 'SpelNetLib.SpelAxis' in n.get_class_names()
+    assert 'X' in n.get_class_functions('SpelAxis')
