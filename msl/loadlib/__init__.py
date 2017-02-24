@@ -43,3 +43,4 @@ else:
 from .load_library import LoadLibrary
 from .server32 import Server32
 from .client64 import Client64
+from . import freeze_server32

@@ -24,6 +24,13 @@ except ImportError:
     sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..')))
     from msl import loadlib
 
+if loadlib.IS_PYTHON2:
+    from urllib import urlopen
+elif loadlib.IS_PYTHON3:
+    from urllib.request import urlopen
+else:
+    raise NotImplementedError('Python major version is not 2 or 3')
+
 
 def main(spec=None):
     """
@@ -46,13 +53,6 @@ def main(spec=None):
         old_dir = os.getcwd()
         os.chdir(os.path.dirname(os.path.abspath(__file__)))
 
-    if loadlib.IS_PYTHON2:
-        from urllib import urlopen
-    elif loadlib.IS_PYTHON3:
-        from urllib.request import urlopen
-    else:
-        raise NotImplementedError('Python major version is not 2 or 3')
-
     if loadlib.IS_PYTHON_64BIT:
         print('Must run {} using a 32-bit Python interpreter'.format(os.path.basename(__file__)))
         sys.exit(0)
@@ -71,14 +71,14 @@ def main(spec=None):
         print('$ pip install pythonnet')
         sys.exit(0)
 
-    _freeze(urlopen, spec)
+    _freeze(spec)
 
     # set the working directory back to the previous one
     if old_dir is not None:
         os.chdir(old_dir)
 
 
-def _freeze(urlopen, spec):
+def _freeze(spec):
     """
     Calls PyInstaller to perform the freezing process.
     """
@@ -92,7 +92,7 @@ def _freeze(urlopen, spec):
                     '--clean',
                     '--hidden-import', 'clr',
                     ])
-        cmd.extend(_get_standard_modules(urlopen))
+        cmd.extend(_get_standard_modules())
         cmd.append('./start_server32.py')
     else:
         cmd.append(spec)
@@ -119,7 +119,7 @@ def _freeze(urlopen, spec):
     loadlib.LoadLibrary.check_dot_net_config(loadlib.SERVER_FILENAME)
 
 
-def _get_standard_modules(urlopen):
+def _get_standard_modules():
     """
     Returns a list of standard python modules to include and exclude in the
     frozen application.
