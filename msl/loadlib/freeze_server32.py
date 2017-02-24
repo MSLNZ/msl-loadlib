@@ -46,13 +46,6 @@ def main(spec=None):
 
     .. _PyInstaller: http://www.pyinstaller.org/
     """
-
-    # this script must be run from its own directory so that the output files are in this folder.
-    old_dir = None
-    if not os.getcwd() == os.path.dirname(os.path.abspath(__file__)):
-        old_dir = os.getcwd()
-        os.chdir(os.path.dirname(os.path.abspath(__file__)))
-
     if loadlib.IS_PYTHON_64BIT:
         print('Must run {} using a 32-bit Python interpreter'.format(os.path.basename(__file__)))
         sys.exit(0)
@@ -71,19 +64,11 @@ def main(spec=None):
         print('$ pip install pythonnet')
         sys.exit(0)
 
-    _freeze(spec)
+    # start the freezing process
 
-    # set the working directory back to the previous one
-    if old_dir is not None:
-        os.chdir(old_dir)
-
-
-def _freeze(spec):
-    """
-    Calls PyInstaller to perform the freezing process.
-    """
+    here = os.path.abspath(os.path.dirname(__file__))
     cmd = ['pyinstaller',
-           '--distpath', '.',
+           '--distpath', here,
            '--noconfirm',
            ]
     if spec is None:
@@ -93,14 +78,15 @@ def _freeze(spec):
                     '--hidden-import', 'clr',
                     ])
         cmd.extend(_get_standard_modules())
-        cmd.append('./start_server32.py')
+        cmd.append(os.path.join(here, 'start_server32.py'))
     else:
         cmd.append(spec)
     subprocess.call(cmd)
 
     # the --version-file option for pyinstaller does not currently work on Windows, this is a fix
     if loadlib.IS_WINDOWS:
-        ver = ['verpatch', loadlib.SERVER_FILENAME,
+        ver = [os.path.join(here, 'verpatch'),
+               os.path.join(here, loadlib.SERVER_FILENAME),
                '/va', loadlib.__version__ + '.0',
                '/pv', '{0}.{1}.{2}.{4}'.format(*sys.version_info),
                '/s', 'description', 'Access a 32-bit library from 64-bit Python',
@@ -116,7 +102,7 @@ def _freeze(spec):
         os.remove(loadlib.SERVER_FILENAME + '.spec')
 
     # create the .NET Framework config file
-    loadlib.LoadLibrary.check_dot_net_config(loadlib.SERVER_FILENAME)
+    loadlib.LoadLibrary.check_dot_net_config(os.path.join(here, loadlib.SERVER_FILENAME))
 
 
 def _get_standard_modules():

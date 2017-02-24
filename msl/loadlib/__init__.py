@@ -8,7 +8,7 @@ from collections import namedtuple
 
 __author__ = 'Joseph Borbely'
 __copyright__ = '\xa9 2017, ' + __author__
-__version__ = '0.1.0'
+__version__ = '0.2.0'
 
 version_info = namedtuple('version_info', 'major minor micro')(*map(int, __version__.split('.')))
 """:py:func:`~collections.namedtuple`: Contains the version information as a (major, minor, micro) tuple."""
@@ -43,4 +43,3 @@ else:
 from .load_library import LoadLibrary
 from .server32 import Server32
 from .client64 import Client64
-from . import freeze_server32
