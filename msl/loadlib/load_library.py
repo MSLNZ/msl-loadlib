@@ -105,7 +105,7 @@ class LoadLibrary(object):
             self._lib = __import__(exports[0].Namespace)
 
         else:
-            raise TypeError('Invalid library type: {}'.format(libtype))
+            raise TypeError('Cannot load libtype={}'.format(libtype))
 
     def __repr__(self):
         return '{} object at {}; libtype={}; path={}'.format(self.__class__.__name__,

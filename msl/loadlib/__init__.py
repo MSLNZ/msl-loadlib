@@ -31,6 +31,15 @@ IS_PYTHON2 = sys.version_info.major == 2
 IS_PYTHON3 = sys.version_info.major == 3
 """:py:class:`bool`: Whether Python 3.x is being used."""
 
+if IS_WINDOWS:
+    SERVER_FILENAME = 'server32-windows.exe'
+elif IS_LINUX:
+    SERVER_FILENAME = 'server32-linux'
+elif IS_MAC:
+    SERVER_FILENAME = 'server32-mac'
+else:
+    SERVER_FILENAME = 'server32-unknown'
+
 from .load_library import LoadLibrary
 from .server32 import Server32
 from .client64 import Client64

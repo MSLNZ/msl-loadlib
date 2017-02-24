@@ -16,8 +16,7 @@ except ImportError:
     import pickle
 
 from msl.loadlib import LoadLibrary
-from msl.loadlib import IS_PYTHON2, IS_PYTHON3
-from msl.loadlib.freeze_server32 import SERVER_FILENAME
+from msl.loadlib import IS_PYTHON2, IS_PYTHON3, SERVER_FILENAME
 
 if IS_PYTHON2:
     from BaseHTTPServer import HTTPServer

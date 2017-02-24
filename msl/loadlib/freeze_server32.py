@@ -15,21 +15,29 @@ Framework library) installed.
 """
 import os
 import sys
-import glob
 import shutil
 import subprocess
 
-SERVER_FILENAME = 'server32-{}'.format(sys.platform)
+try:
+    from msl import loadlib
+except ImportError:
+    sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..')))
+    from msl import loadlib
 
 
-def main():
+def main(spec=None):
     """
-    Creates a `frozen <http://www.pyinstaller.org/>`_ 32-bit Python server.
+    Creates a `frozen <PyInstaller_>`_ 32-bit Python server.
 
-    Uses `PyInstaller <http://www.pyinstaller.org/>`_ to create a `frozen
-    <http://www.pyinstaller.org/>`_ 32-bit Python executable. This executable starts
-    a server, :class:`~.server32.Server32`, which hosts a Python module that can load
-    a 32-bit library.
+    Uses PyInstaller_ to create a `frozen <PyInstaller_>`_ 32-bit Python executable.
+    This executable starts a server, :class:`~.server32.Server32`, which hosts a Python
+    module that can load a 32-bit library.
+
+    Args:
+        spec (str, optional): If you want to freeze using a PyInstaller_ .spec file then you
+            can specify the path to the .spec file. Default is :py:data:`None`.
+
+    .. _PyInstaller: http://www.pyinstaller.org/
     """
 
     # this script must be run from its own directory so that the output files are in this folder.
@@ -37,10 +45,6 @@ def main():
     if not os.getcwd() == os.path.dirname(os.path.abspath(__file__)):
         old_dir = os.getcwd()
         os.chdir(os.path.dirname(os.path.abspath(__file__)))
-
-    # make sure that the msl package is visible before importing it
-    sys.path.insert(0, os.path.join('..', '..'))
-    from msl import loadlib
 
     if loadlib.IS_PYTHON2:
         from urllib import urlopen
@@ -67,32 +71,36 @@ def main():
         print('$ pip install pythonnet')
         sys.exit(0)
 
-    _freeze(urlopen, loadlib)
+    _freeze(urlopen, spec)
 
     # set the working directory back to the previous one
     if old_dir is not None:
         os.chdir(old_dir)
 
 
-def _freeze(urlopen, loadlib):
+def _freeze(urlopen, spec):
     """
     Calls PyInstaller to perform the freezing process.
     """
     cmd = ['pyinstaller',
-           '--name', SERVER_FILENAME,
            '--distpath', '.',
-           '--onefile',
            '--noconfirm',
-           '--clean',
-           '--hidden-import', 'clr',
            ]
-    cmd.extend(_get_standard_modules(urlopen))
-    cmd.append('./start_server32.py')
+    if spec is None:
+        cmd.extend(['--name', loadlib.SERVER_FILENAME,
+                    '--onefile',
+                    '--clean',
+                    '--hidden-import', 'clr',
+                    ])
+        cmd.extend(_get_standard_modules(urlopen))
+        cmd.append('./start_server32.py')
+    else:
+        cmd.append(spec)
     subprocess.call(cmd)
 
     # the --version-file option for pyinstaller does not currently work on Windows, this is a fix
     if loadlib.IS_WINDOWS:
-        ver = ['verpatch', SERVER_FILENAME + '.exe',
+        ver = ['verpatch', loadlib.SERVER_FILENAME,
                '/va', loadlib.__version__ + '.0',
                '/pv', '{0}.{1}.{2}.{4}'.format(*sys.version_info),
                '/s', 'description', 'Access a 32-bit library from 64-bit Python',
@@ -101,13 +109,14 @@ def _freeze(urlopen, loadlib):
         subprocess.call(ver)
 
     # cleanup
-    os.remove(SERVER_FILENAME + '.spec')
     shutil.rmtree('./build')
+    if loadlib.IS_WINDOWS:
+        # pyinstaller is able to include Python.Runtime.dll and Python.Runtime.dll.config
+        # automatically in the build, so we don't need to keep the .spec file
+        os.remove(loadlib.SERVER_FILENAME + '.spec')
 
     # create the .NET Framework config file
-    for name in glob.glob('./{}*'.format(SERVER_FILENAME)):
-        if not name.endswith('.config'):
-            loadlib.LoadLibrary.check_dot_net_config(name)
+    loadlib.LoadLibrary.check_dot_net_config(loadlib.SERVER_FILENAME)
 
 
 def _get_standard_modules(urlopen):
@@ -151,5 +160,12 @@ def _get_standard_modules(urlopen):
             included_modules.extend(['--hidden-import', module])
     return included_modules + excluded_modules
 
+
 if __name__ == '__main__':
-    main()
+    spec = None
+    if len(sys.argv) > 1:
+        if sys.argv[1].endswith('.spec'):
+            spec = sys.argv[1]
+        else:
+            raise IOError('Must pass in a PyInstaller .spec file')
+    main(spec)

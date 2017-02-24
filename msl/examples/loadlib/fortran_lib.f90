@@ -1,6 +1,10 @@
 ! fortran_lib.f90
 !
 ! Basic examples of passing different data types into a FORTRAN function and subroutine.
+!
+! Compiled in Linux using:
+! gfortran -fno-underscoring -fPIC fortran_lib.f90 -shared -o fortran_lib32.so
+!
 	
 ! return the sum of two 8-bit signed integers
 function sum_8bit(a, b) result(value)
@@ -101,7 +105,7 @@ end function factorial
 
 ! calculate the standard deviation of an array.
 function standard_deviation(a, n) result(var)
-    !DEC$ ATTRIBUTES DLLEXPORT, ALIAS:'stdev' :: standard_deviation
+    !DEC$ ATTRIBUTES DLLEXPORT, ALIAS:'standard_deviation' :: standard_deviation
     integer :: n ! the length of the array
     double precision :: var, a(n)
     var = SUM(a)/SIZE(a) ! SUM is a built-in fortran function
@@ -110,8 +114,8 @@ end function standard_deviation
 
 
 ! compute the Bessel function of the first kind of order 0 of x
-function besselJ0(x) result(val)
-    !DEC$ ATTRIBUTES DLLEXPORT, ALIAS:'besselJ0' :: besselJ0
+function besselj0(x) result(val)
+    !DEC$ ATTRIBUTES DLLEXPORT, ALIAS:'besselj0' :: besselj0
     double precision :: x, val
     val = BESSEL_J0(x)
 end function besselJ0
@@ -131,8 +135,8 @@ end subroutine reverse_string
 
 
 ! element-wise addition of two 1D double-precision arrays
-subroutine add_1D_arrays(a, in1, in2, n)
-    !DEC$ ATTRIBUTES DLLEXPORT, ALIAS:'add_1D_arrays' :: add_1D_arrays
+subroutine add_1d_arrays(a, in1, in2, n)
+    !DEC$ ATTRIBUTES DLLEXPORT, ALIAS:'add_1d_arrays' :: add_1d_arrays
     implicit none
     integer(4) :: n ! the length of the input arrays
     double precision :: in1(n), in2(n) ! the arrays to add (element-wise)

@@ -23,11 +23,11 @@ Show all the conda envs that are available and then exit::
 
 Show the conda envs that include **py** in the env name then exit::
 
-   $ python test_envs.py -s -i py
+   $ python test_envs.py -i py -s
 
 Show the conda envs that include **py** in the env name *and* exclude those with **py33** in the name and then exit::
 
-   $ python test_envs.py -s -i py -e py33
+   $ python test_envs.py -i py -e py33 -s
 
 .. _here: https://bitbucket.org/hpk42/tox/issues/273/support-conda-envs-when-using-miniconda
 .. _tox: https://tox.readthedocs.io/en/latest/
@@ -70,12 +70,14 @@ if args.show:
     print('================ test with the following conda envs ================')
     for env in envs:
         print(env)
-    sys.exit(0)
+    sys.exit()
+
+path = 'bin' if sys.platform.startswith('linux') or sys.platform == 'darwin' else ''
 
 # run the tests
 for env in envs:
     print('testing with ' + env)
-    p = subprocess.Popen(os.path.join(env, 'python') + ' setup.py test', stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    p = subprocess.Popen([os.path.join(env, path, 'python'), 'setup.py', 'test'], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     comm = p.communicate()
     output = comm[0].decode()
     error = comm[1].decode()
@@ -83,9 +85,10 @@ for env in envs:
         # if there were any "import issues" and pytest could not start properly then the output will be empty
         print('The following error occurred:')
         print(error)
+        sys.exit()
     if 'FAILURES' in output:
         print(output)
-        sys.exit(0)
+        sys.exit()
     else:
         show = False
         for line in output.split('\n'):

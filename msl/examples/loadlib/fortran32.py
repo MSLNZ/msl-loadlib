@@ -13,9 +13,6 @@ import ctypes
 from msl.loadlib import Server32
 
 
-# TODO: Compile "fortran_lib.f90" in Linux/Mac
-
-
 class Fortran32(Server32):
     """
     A wrapper around a 32-bit FORTRAN library, :ref:`fortran_lib32 <fortran-lib>`.
@@ -336,7 +333,7 @@ class Fortran32(Server32):
         .. code-block:: fortran
 
             function standard_deviation(a, n) result(var)
-                !DEC$ ATTRIBUTES DLLEXPORT, ALIAS:'stdev' :: standard_deviation
+                !DEC$ ATTRIBUTES DLLEXPORT, ALIAS:'standard_deviation' :: standard_deviation
                 integer :: n ! the length of the array
                 double precision :: var, a(n)
                 var = SUM(a)/SIZE(a) ! SUM is a built-in fortran function
@@ -354,8 +351,8 @@ class Fortran32(Server32):
         n = len(data)
         nc = ctypes.c_int32(n)
         datac = (ctypes.c_double * n)(*data)
-        self.lib.stdev.restype = ctypes.c_double
-        return self.lib.stdev(ctypes.byref(datac), ctypes.byref(nc))
+        self.lib.standard_deviation.restype = ctypes.c_double
+        return self.lib.standard_deviation(ctypes.byref(datac), ctypes.byref(nc))
 
     def besselJ0(self, x):
         """
@@ -365,8 +362,8 @@ class Fortran32(Server32):
 
         .. code-block:: fortran
 
-            function besselJ0(x) result(val)
-                !DEC$ ATTRIBUTES DLLEXPORT, ALIAS:'besselJ0' :: besselJ0
+            function besselj0(x) result(val)
+                !DEC$ ATTRIBUTES DLLEXPORT, ALIAS:'besselj0' :: besselj0
                 double precision :: x, val
                 val = BESSEL_J0(x)
             end function besselJ0
@@ -380,8 +377,8 @@ class Fortran32(Server32):
             :py:class:`float`: The value of ``BESSEL_J0(x)``.
         """
         xc = ctypes.c_double(x)
-        self.lib.besselJ0.restype = ctypes.c_double
-        return self.lib.besselJ0(ctypes.byref(xc))
+        self.lib.besselj0.restype = ctypes.c_double
+        return self.lib.besselj0(ctypes.byref(xc))
 
     def reverse_string(self, original):
         """
@@ -427,8 +424,8 @@ class Fortran32(Server32):
 
         .. code-block:: fortran
 
-            subroutine add_1D_arrays(a, in1, in2, n)
-                !DEC$ ATTRIBUTES DLLEXPORT, ALIAS:'add_1D_arrays' :: add_1D_arrays
+            subroutine add_1d_arrays(a, in1, in2, n)
+                !DEC$ ATTRIBUTES DLLEXPORT, ALIAS:'add_1d_arrays' :: add_1d_arrays
                 implicit none
                 integer(4) :: n ! the length of the input arrays
                 double precision :: in1(n), in2(n) ! the arrays to add (element-wise)
@@ -450,8 +447,8 @@ class Fortran32(Server32):
         nc = ctypes.c_int32(n)
         out = (ctypes.c_double * n)()
 
-        self.lib.add_1D_arrays.restype = None
-        self.lib.add_1D_arrays(out,
+        self.lib.add_1d_arrays.restype = None
+        self.lib.add_1d_arrays(out,
                                (ctypes.c_double * n)(*a1),
                                (ctypes.c_double * n)(*a2),
                                ctypes.byref(nc))

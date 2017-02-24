@@ -18,8 +18,7 @@ try:
 except ImportError:
     import pickle
 
-from msl.loadlib import IS_PYTHON2, IS_PYTHON3
-from msl.loadlib.freeze_server32 import SERVER_FILENAME
+from msl.loadlib import IS_PYTHON2, IS_PYTHON3, SERVER_FILENAME
 
 if IS_PYTHON2:
     from httplib import HTTPConnection
@@ -109,20 +108,15 @@ class Client64(HTTPConnection):
             self._pickle_protocol = pickle.HIGHEST_PROTOCOL
 
         # make sure that the server32 executable exists
-        found_server = False
-        for name in os.listdir(os.path.dirname(__file__)):
-            if SERVER_FILENAME in name:
-                found_server = True
-                break
-
-        if not found_server:
-            msg = 'Cannot find {}\n'.format(os.path.join(os.path.dirname(__file__), SERVER_FILENAME))
+        server_exe = os.path.join(os.path.dirname(__file__), SERVER_FILENAME)
+        if not os.path.isfile(server_exe):
+            msg = 'Cannot find {}\n'.format(server_exe)
             msg += 'To create a 32-bit Python server run:\n'
             msg += '>>> from msl.loadlib import freeze_server32\n'
             msg += '>>> freeze_server32.main()'
             raise IOError(msg)
 
-        cmd = [os.path.join(os.path.dirname(__file__), SERVER_FILENAME),
+        cmd = [server_exe,
                '--module', module32,
                '--host', host,
                '--port', str(port)
