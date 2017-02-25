@@ -86,7 +86,7 @@ for env in envs:
         print('The following error occurred:')
         print(error)
         sys.exit()
-    if 'FAILURES' in output or 'FAILED' in output:
+    if 'FAILED' in output or 'FAILURES' in output or 'ERROR' in output:
         print(output)
         sys.exit()
     else:
