@@ -13,13 +13,13 @@ This example shows how to access a 32-bit .NET library from a module that is run
 .. note::
    The `JetBrains dotPeek <https://www.jetbrains.com/decompiler/>`_ program can be used
    to reliably decompile any .NET assembly into the equivalent C# source code. For example,
-   **peeking** inside the **dotnet_lib32.dll** library, that the
+   **peeking** inside the :ref:`dotnet_lib32.dll <dotnet-lib>` library, that the
    :class:`~msl.examples.loadlib.dotnet32.DotNet32` class is a wrapper around, gives
 
-   .. image:: _static/dotpeek_spelnetlib.png
+   .. image:: _static/dotpeek_lib.png
 
-The following shows that the 32-bit **dotnet_lib32.dll** library cannot be loaded in a
-64-bit Python interpreter:
+The following shows that the 32-bit :ref:`dotnet_lib32.dll <dotnet-lib>` library cannot
+be loaded in a 64-bit Python interpreter:
 
 .. code-block:: python
 
@@ -36,7 +36,7 @@ The following shows that the 32-bit **dotnet_lib32.dll** library cannot be loade
       at System.Reflection.Assembly.LoadFile(String path)
 
 Instead, create a :class:`~msl.examples.loadlib.dotnet64.DotNet64` client to communicate
-with the 32-bit **dotnet_lib32.dll** library:
+with the 32-bit :ref:`dotnet_lib32.dll <dotnet-lib>` library:
 
 .. code-block:: python
 
@@ -47,36 +47,69 @@ with the 32-bit **dotnet_lib32.dll** library:
    >>> dn.lib32_path
    'D:\\code\\git\\msl-loadlib\\msl\\examples\\loadlib\\dotnet_lib32.dll'
 
-Get the .NET module name, see :meth:`~msl.examples.loadlib.dotnet64.DotNet64.get_module_name`:
-
-.. code-block:: python
-
-   >>> dn.get_module_name()
-   'SpelNetLib'
-
-Get the names of the classes in the ``SpelNetLib`` module, see
+Get the names of the classes in the .NET library module, see
 :meth:`~msl.examples.loadlib.dotnet64.DotNet64.get_class_names`:
 
 .. code-block:: python
 
    >>> dn.get_class_names()
-   ['SpelNetLib.SPELVideo', 'SpelNetLib.SpelControllerInfo', 'SpelNetLib.SpelEventArgs', 'SpelNetLib.SpelPoint', 'SpelNetLib.Spel', 'SpelNetLib.Spel+EventReceivedEventHandler', 'SpelNetLib.SpelException', 'SpelNetLib.SpelAxis', 'SpelNetLib.SpelBaseAlignment', 'SpelNetLib.SpelDialogs', 'SpelNetLib.SpelIOLabelTypes', 'SpelNetLib.SpelWindows', 'SpelNetLib.SpelEvents', 'SpelNetLib.SpelHand', 'SpelNetLib.SpelElbow', 'SpelNetLib.SpelOperationMode', 'SpelNetLib.SpelRobotPosType', 'SpelNetLib.SpelRobotType', 'SpelNetLib.SpelTaskState', 'SpelNetLib.SpelTaskType', 'SpelNetLib.SpelWrist', 'SpelNetLib.SpelVisionProps']
+   ['StringManipulation', 'DotNetMSL.BasicMath', 'DotNetMSL.ArrayManipulation']
 
-Get the names of the functions that are available in the ``SpelNetLib.Spel`` class, see
-:meth:`~msl.examples.loadlib.dotnet64.DotNet64.get_class_functions`:
-
-.. code-block:: python
-
-   >>> dn.get_class_functions('Spel')
-   ['Abort', 'Accel', 'AccelR', 'AccelS', 'Agl', 'Arc', 'Arch', 'Arm', 'ArmClr', 'ArmDef', 'ArmSet', 'AsyncMode', 'AtHome', 'Atan', 'Atan2', 'AxisLocked', 'BGo', 'BMove', 'BTst', 'Base', 'Box', 'BoxClr', 'BoxDef', 'BuildProject', 'CU', 'CV', 'CVMove', 'CW', 'CX', 'CY', 'CZ', 'Call', 'ClearPoints', 'CommandInCycle', 'Connect', 'Continue', 'CtReset', 'Ctr', 'Curve', 'DegToRad', 'Delay', 'DisableMsgDispatch', 'Disconnect', 'Dispose', 'ECP', 'ECPClr', 'ECPDef', 'ECPSet', 'EStopOn', 'EnableEvent', 'Equals', 'ErrorCode', 'ErrorOn', 'EventReceived', 'EventReceivedEventHandler', 'ExecuteCommand', 'Finalize', 'Fine', 'GetAccel', 'GetArm', 'GetControllerInfo', 'GetECP', 'GetErrorMessage', 'GetHashCode', 'GetIODef', 'GetLimZ', 'GetPoint', 'GetRealTorque', 'GetRobotPos', 'GetSpeed', 'GetTool', 'GetType', 'GetVar', 'Go', 'Halt', 'Here', 'HideWindow', 'Home', 'Homeset', 'Hordr', 'Hour', 'In', 'InBCD', 'InW', 'Initialize', 'InsideBox', 'InsidePlane', 'JRange', 'JS', 'JTran', 'Jump', 'Jump3', 'Jump3CP', 'LimZ', 'LoadPoints', 'Local', 'LocalClr', 'LocalDef', 'MCal', 'MCalComplete', 'Mcordr', 'MemIn', 'MemInW', 'MemOff', 'MemOn', 'MemOut', 'MemOutW', 'MemSw', 'MemberwiseClone', 'MotorsOn', 'Move', 'NoProjectSync', 'Off', 'On', 'OpBCD', 'OperationMode', 'Oport', 'Out', 'OutW', 'Overloads', 'PAgl', 'PDef', 'PDel', 'PTPBoost', 'PTPBoostOK', 'PTran', 'Pallet', 'ParentWindowHandle', 'Pause', 'PauseOn', 'Plane', 'PlaneClr', 'PlaneDef', 'Pls', 'PowerHigh', 'Project', 'ProjectBuildComplete', 'Pulse', 'Quit', 'RadToDeg', 'RebuildProject', 'ReferenceEquals', 'Reset', 'ResetAbort', 'ResetAbortEnabled', 'Resume', 'RobotModel', 'RobotType', 'RunDialog', 'SFree', 'SLock', 'SafetyOn', 'SavePoints', 'Sense', 'ServerOutOfProcess', 'SetIODef', 'SetPoint', 'SetVar', 'ShowWindow', 'Speed', 'SpeedR', 'SpeedS', 'SpelVideoControl', 'Start', 'Stat', 'Stop', 'Sw', 'TGo', 'TLClr', 'TLDef', 'TLSet', 'TMove', 'TW', 'TargetOK', 'TaskState', 'TasksExecuting', 'TeachPoint', 'Till', 'TillOn', 'ToString', 'Tool', 'TrapStop', 'VGet', 'VGetCameraXYU', 'VGetExtrema', 'VGetModelWin', 'VGetPixelXYU', 'VGetRobotXYU', 'VGetSearchWin', 'VRun', 'VSet', 'VSetSearchWin', 'Version', 'WaitCommandComplete', 'WaitMem', 'WaitSw', 'WaitTaskDone', 'WarningCode', 'WarningOn', 'Weight', 'XYLim', 'XYLimClr', 'XYLimDef', 'Xqt', 'add_EventReceived', 'get_AsyncMode', 'get_CommandInCycle', 'get_DisableMsgDispatch', 'get_EStopOn', 'get_ErrorCode', 'get_ErrorOn', 'get_MotorsOn', 'get_NoProjectSync', 'get_OperationMode', 'get_ParentWindowHandle', 'get_PauseOn', 'get_PowerHigh', 'get_Project', 'get_ProjectBuildComplete', 'get_ResetAbortEnabled', 'get_RobotModel', 'get_RobotType', 'get_SafetyOn', 'get_ServerOutOfProcess', 'get_SpelVideoControl', 'get_Version', 'get_WarningCode', 'get_WarningOn', 'raise_EventReceived', 'remove_EventReceived', 'set_AsyncMode', 'set_DisableMsgDispatch', 'set_MotorsOn', 'set_NoProjectSync', 'set_OperationMode', 'set_ParentWindowHandle', 'set_PowerHigh', 'set_Project', 'set_ResetAbortEnabled', 'set_ServerOutOfProcess', 'set_SpelVideoControl']
-
-Get the names of the functions that are available in the ``SpelNetLib.SpelAxis`` class, see
-:meth:`~msl.examples.loadlib.dotnet64.DotNet64.get_class_functions`:
+Add two integers, see :meth:`~msl.examples.loadlib.dotnet64.DotNet64.add_integers`:
 
 .. code-block:: python
 
-   >>> dn.get_class_functions('SpelAxis')
-   ['CompareTo', 'Equals', 'Finalize', 'Format', 'GetHashCode', 'GetName', 'GetNames', 'GetType', 'GetTypeCode', 'GetUnderlyingType', 'GetValues', 'HasFlag', 'IsDefined', 'MemberwiseClone', 'Overloads', 'Parse', 'R', 'ReferenceEquals', 'S', 'T', 'ToObject', 'ToString', 'TryParse', 'U', 'V', 'W', 'X', 'Y', 'Z', 'value__']
+   >>> dn.add_integers(8, 2)
+   10
+
+Divide two C# floating-point numbers, see :meth:`~msl.examples.loadlib.dotnet64.DotNet64.divide_floats`:
+
+.. code-block:: python
+
+   >>> dn.divide_floats(4., 5.)
+   0.8
+
+Multiple two C# double-precision numbers, see :meth:`~msl.examples.loadlib.dotnet64.DotNet64.multiply_doubles`:
+
+.. code-block:: python
+
+   >>> dn.multiply_doubles(872.24, 525.525)
+   458383.926
+
+Add or subtract two C# double-precision numbers, see :meth:`~msl.examples.loadlib.dotnet64.DotNet64.add_or_subtract`:
+
+.. code-block:: python
+
+   >>> dn.add_or_subtract(99., 9., True)
+   108.0
+   >>> dn.add_or_subtract(99., 9., False)
+   90.0
+
+Multiply a 1D array by a number, see :meth:`~msl.examples.loadlib.dotnet64.DotNet64.scalar_multiply`:
+
+.. code-block:: python
+
+   >>> a = [float(val) for val in range(10)]
+   >>> a
+   [0.0, 1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0]
+   >>> dn.scalar_multiply(2.0, a)
+   [0.0, 2.0, 4.0, 6.0, 8.0, 10.0, 12.0, 14.0, 16.0, 18.0]
+
+Multiply two matrices, see :meth:`~msl.examples.loadlib.dotnet64.DotNet64.multiply_matrices`:
+
+.. code-block:: python
+
+   >>> m1 = [[1., 2., 3.], [4., 5., 6.]]
+   >>> m2 = [[1., 2.], [3., 4.], [5., 6.]]
+   >>> dn.multiply_matrices(m1, m2)
+   [[22.0, 28.0], [49.0, 64.0]]
+
+Reverse a string, see :meth:`~msl.examples.loadlib.dotnet64.DotNet64.reverse_string`:
+
+.. code-block:: python
+
+   >>> dn.reverse_string('New Zealand')
+   'dnalaeZ weN'
 
 Shutdown the server, see :meth:`~msl.loadlib.client64.Client64.shutdown_server`:
 

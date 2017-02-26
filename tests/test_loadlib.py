@@ -137,8 +137,27 @@ def test_dummy():
 
 def test_dotnet():
 
-    assert 'SpelNetLib' == n.get_module_name()
-    assert 'SpelNetLib.Spel' in n.get_class_names()
-    assert 'Home' in n.get_class_functions('Spel')
-    assert 'SpelNetLib.SpelAxis' in n.get_class_names()
-    assert 'X' in n.get_class_functions('SpelAxis')
+    names = n.get_class_names()
+    assert 'StringManipulation' in names
+    assert 'DotNetMSL.BasicMath' in names
+    assert 'DotNetMSL.ArrayManipulation' in names
+
+    assert 9 == n.add_integers(4, 5)
+    assert abs(n.divide_floats(4., 5.) - 0.8) < eps
+    assert abs(n.multiply_doubles(872.24, 525.525) - 458383.926) < eps
+    assert abs(n.add_or_subtract(99., 9., True) - 108.0) < eps
+    assert abs(n.add_or_subtract(99., 9., False) - 90.0) < eps
+
+    a = 7.13141
+    values = [float(x) for x in range(1000)]
+    net_values = n.scalar_multiply(a, values)
+    for i in range(len(values)):
+        assert abs(a*values[i] - net_values[i]) < eps
+
+    assert n.reverse_string('New Zealand') == 'dnalaeZ weN'
+
+    net_mat = n.multiply_matrices([[1., 2., 3.], [4., 5., 6.]], [[1., 2.], [3., 4.], [5., 6.]])
+    assert abs(22.0 - net_mat[0][0]) < eps
+    assert abs(28.0 - net_mat[0][1]) < eps
+    assert abs(49.0 - net_mat[1][0]) < eps
+    assert abs(64.0 - net_mat[1][1]) < eps

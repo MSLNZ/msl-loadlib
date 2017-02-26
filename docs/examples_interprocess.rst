@@ -35,3 +35,4 @@ See the :ref:`tutorials <tutorials>` for an overview on how to use these example
 
    cpp_source
    fortran_source
+   dotnet_source

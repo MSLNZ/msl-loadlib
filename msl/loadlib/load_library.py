@@ -10,6 +10,8 @@ import xml.etree.ElementTree as ET
 
 from msl.loadlib import IS_WINDOWS, IS_LINUX, IS_MAC
 
+log = logging.getLogger(__name__)
+
 
 class LoadLibrary(object):
     """
@@ -73,8 +75,8 @@ class LoadLibrary(object):
                 self._net = clr.System.Reflection.Assembly.LoadFile(self._path)
 
             except clr.System.IO.FileLoadException as err:
-                # Example error message that can be displayed if the library is for .NET <4.0,
-                # and the useLegacyV2RuntimeActivationPolicy is not enabled, is:
+                # Example error message that can occur if the library is for .NET <4.0,
+                # and the useLegacyV2RuntimeActivationPolicy is not enabled:
                 #
                 # " Mixed mode assembly is built against version 'v2.0.50727' of the
                 #  runtime and cannot be loaded in the 4.0 runtime without additional
@@ -87,31 +89,45 @@ class LoadLibrary(object):
                     if not status == 0:
                         raise IOError(msg)
                     else:
-                        update_msg = 'Checking .NET config returned "{}"'.format(msg)
-                        update_msg += ' and still cannot load library.\n'
+                        update_msg = 'Checking .NET config returned "{}" '.format(msg)
+                        update_msg += 'and still cannot load library.\n'
                         update_msg += str(err)
                         raise IOError(update_msg)
                 raise IOError('The above "System.IO.FileLoadException" is not handled.\n')
 
-            # the shared library must available be in sys.path
+            # the shared library must be available in sys.path
             head, tail = os.path.split(self._path)
             sys.path.insert(0, head)
 
             # don't include the library extension
             clr.AddReference(os.path.splitext(tail)[0])
 
-            # import the .NET module from the library
-            exports = self._net.GetExportedTypes()
-            self._lib = __import__(exports[0].Namespace)
+            # import the namespaces and create instances of the classes or methods
+            dotnet = {}
+            for typ in self._net.GetTypes():
+                if typ.Namespace is not None:
+                    if typ.Namespace not in dotnet:
+                        dotnet[typ.Namespace] = __import__(typ.Namespace)
+                else:
+                    try:
+                        dotnet[typ.FullName] = self._net.CreateInstance(typ.FullName)
+                    except:
+                        # cannot instantiate the class so look for its methods
+                        # see https://msdn.microsoft.com/en-us/library/a89hcwhh(v=vs.110).aspx
+                        for method in typ.DeclaredMethods:
+                            dotnet[typ.FullName + '_' + method.Name] = \
+                                lambda parameters, m=method, t=typ: m.Invoke(t, parameters)
+            self._lib = DotNetAssembly(dotnet)
 
         else:
             raise TypeError('Cannot load libtype={}'.format(libtype))
+        log.debug('Loaded ' + self._path)
 
     def __repr__(self):
         return '{} object at {}; libtype={}; path={}'.format(self.__class__.__name__,
-                                                             hex(id(self)),
-                                                             str(self.lib.__class__)[8:-2],
-                                                             self._path)
+                                                                hex(id(self)),
+                                                                self.lib.__class__.__name__,
+                                                                self._path)
 
     @property
     def path(self):
@@ -132,7 +148,8 @@ class LoadLibrary(object):
             * if ``libtype`` = **'cdll'** then a :class:`ctypes.CDLL` object is returned
             * if ``libtype`` = **'windll'** then a :class:`ctypes.WinDLL` object is returned
             * if ``libtype`` = **'oledll'** then a :class:`ctypes.OleDLL` object is returned
-            * if ``libtype`` = **'net'** then the imported .NET module is returned
+            * if ``libtype`` = **'net'** then an object containing the .NET namespaces,
+                classes and methods.
         """
         return self._lib
 
@@ -163,8 +180,7 @@ class LoadLibrary(object):
         try:
             import clr
         except ImportError:
-            msg = 'Python for .NET <pythonnet> is not installed. Cannot load a .NET library.'
-            logging.log(logging.WARNING, msg)
+            log.warning('Python for .NET <pythonnet> is not installed. Cannot load a .NET library.')
             return False
         return True
 
@@ -173,9 +189,9 @@ class LoadLibrary(object):
         """
         Check if the **useLegacyV2RuntimeActivationPolicy** property is enabled.
 
-        `Python for .NET <http://pythonnet.github.io/>`_ only works with .NET 4.0+ and
-        therefore it cannot automatically load a shared library that was compiled with
-        .NET <4.0. This method ensures that the **useLegacyV2RuntimeActivationPolicy**
+        By default, `Python for .NET <http://pythonnet.github.io/>`_ only works with .NET
+        4.0+ and therefore it cannot automatically load a shared library that was compiled
+        with .NET <4.0. This method ensures that the **useLegacyV2RuntimeActivationPolicy**
         property exists in the **<python-executable>.config** file and that it is enabled.
 
         This `link <http://stackoverflow.com/questions/14508627/>`_ provides an overview
@@ -218,7 +234,7 @@ class LoadLibrary(object):
             except ET.ParseError:
                 msg = 'Invalid XML file ' + config_path
                 msg += '\nCannot create useLegacyV2RuntimeActivationPolicy property.'
-                logging.log(logging.WARNING, msg)
+                log.warning(msg)
                 return -1, msg
 
             root = tree.getroot()
@@ -230,7 +246,7 @@ class LoadLibrary(object):
                 msg += 'To load an assembly from a .NET Framework version <4.0 the '
                 msg += 'following must be in {}:\n'.format(config_path)
                 msg += '<configuration>' + NET_FRAMEWORK_FIX + '</configuration>\n'
-                logging.log(logging.WARNING, msg)
+                log.warning(msg)
                 return -1, msg
 
             # check if the policy exists
@@ -246,7 +262,7 @@ class LoadLibrary(object):
                 if not policy.attrib['useLegacyV2RuntimeActivationPolicy'].lower() == 'true':
                     msg = 'The useLegacyV2RuntimeActivationPolicy in {} is False\n'.format(config_path)
                     msg += 'Cannot load an assembly from a .NET Framework version <4.0.'
-                    logging.log(logging.WARNING, msg)
+                    log.warning(msg)
                     return -1, msg
                 return 0, 'The useLegacyV2RuntimeActivationPolicy property is enabled'
 
@@ -263,44 +279,35 @@ class LoadLibrary(object):
             return 1, msg
 
 
+class DotNetAssembly(object):
+    """
+    A container for the namespace modules, classes and methods of a .NET library.
+    """
+    def __init__(self, dotnet_dict):
+        self.__dict__.update(dotnet_dict)
+
+
 NET_FRAMEWORK_DESCRIPTION = """
 <!--
   Created by the MSL-LoadLib package.
 
   By default, applications that target the .NET Framework version 4.0+ cannot load assemblies from
   previous .NET Framework versions. You must add and modify the "app".config file and set the
-  useLegacyV2RuntimeActivationPolicy property.
+  useLegacyV2RuntimeActivationPolicy property to be "true".
 
   See http://support.microsoft.com/kb/2572158 for an overview.
 
   For example, Python for .NET (pythonnet, http://pythonnet.github.io/) only works with .NET 4.0+
   and therefore it cannot automatically load a shared library that was compiled with .NET <4.0. If
-  you try to load the library and a System.IO.FileNotFoundException is raised then that probably
-  means that the library is from .NET <4.0.
+  you try to load the library and a System.IO.FileNotFoundException is raised then that might
+  mean that the library is from .NET <4.0.
 
-  The System.IO.FileNotFoundException exception will also be raised if the folder that the DLL is
-  located in is not within sys.path, so first make sure that the shared library is visible to the
-  Python interpreter.
+  Additionally, the System.IO.FileNotFoundException exception will also be raised if the folder
+  that the DLL is located in is not within sys.path, so first make sure that the shared library
+  is visible to the Python interpreter.
 
   NOTE: To install pythonnet, run:
   $ pip install pythonnet
-
-  Example using SpelNetLib.dll, which is a .NET library for the EPSON RC+ 6-axis robot
-  http://www.d.umn.edu/~rlindek1/ME4135_11/e_SPEL%2BRef54_r1.pdf
-
-  >>> import clr
-  >>> clr.AddReference("SpelNetLib")
-
-  If calling AddReference raises the following exception
-
-      System.IO.FileNotFoundException: Unable to find assembly 'SpelNetLib.dll'
-
-  and you are certain that the path to the library is in sys.path, then you can use the following
-  to obtain a more detailed description of the exception:
-
-  >>> from clr import System
-  >>> from System import Reflection
-  >>> Reflection.Assembly.LoadFile('path/to/dll/SpelNetLib.dll')
 -->
 """
 
