@@ -46,7 +46,7 @@ class Server32(HTTPServer):
 
     The returned value will be something similar to::
 
-    'Python 3.5.2 |Continuum Analytics, Inc.| (default, Jul  5 2016, 11:45:57) [MSC v.1900 32 bit (Intel)]'
+    'Python 3.5.3 |Continuum Analytics, Inc.| (default, Feb 22 2017, 21:49:24) [MSC v.1900 32 bit (Intel)]'
 
     Args:
         path (str): The full path to the 32-bit library *or* only the
@@ -95,17 +95,16 @@ class Server32(HTTPServer):
         * if ``libtype`` = **cdll** then a :class:`ctypes.CDLL` object
         * if ``libtype`` = **windll** then a :class:`ctypes.WinDLL` object
         * if ``libtype`` = **oledll** then a :class:`ctypes.OleDLL` object
-        * if ``libtype`` = **net** then the imported .NET module
+        * if ``libtype`` = **'net'** then a :class:`~.load_library.DotNetContainer` containing
+          the .NET namespaces_, classes and/or `System.Type`_ objects.
 
-        .. attention::
-           For **cdll**, **windll** and **oledll** a :py:mod:`ctypes` class is returned.
-           However, for a .NET library it is the imported module that is returned
-           (not a class from the library).
+        .. _namespaces: https://msdn.microsoft.com/en-us/library/z2kcy19k.aspx
+        .. _System.Type: https://msdn.microsoft.com/en-us/library/system.type(v=vs.110).aspx
         """
         return self._library.lib
 
     @property
-    def net(self):
+    def assembly(self):
         """
         Returns the reference to the `.NET RuntimeAssembly <NET_>`_ object -- *only if
         the shared library is a .NET library, otherwise returns* :py:data:`None`.
@@ -116,7 +115,7 @@ class Server32(HTTPServer):
 
         .. _NET: https://msdn.microsoft.com/en-us/library/system.reflection.assembly(v=vs.110).aspx
         """
-        return self._library.net
+        return self._library.assembly
 
     @staticmethod
     def version():

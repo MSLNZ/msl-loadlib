@@ -43,7 +43,8 @@ class LoadLibrary(object):
     """
     def __init__(self, path, libtype='cdll'):
 
-        self._net = None
+        # a reference to the .NET Runtime Assembly
+        self._assembly = None
 
         #  assume a default extension if no extension was provided
         if not os.path.splitext(path)[1]:
@@ -72,7 +73,7 @@ class LoadLibrary(object):
                 # When MSL-LoadLib is installed, the useLegacyV2RuntimeActivationPolicy
                 # property should have been enabled automatically to allow for loading
                 # assemblies from previous .NET Framework versions.
-                self._net = clr.System.Reflection.Assembly.LoadFile(self._path)
+                self._assembly = clr.System.Reflection.Assembly.LoadFile(self._path)
 
             except clr.System.IO.FileLoadException as err:
                 # Example error message that can occur if the library is for .NET <4.0,
@@ -102,22 +103,19 @@ class LoadLibrary(object):
             # don't include the library extension
             clr.AddReference(os.path.splitext(tail)[0])
 
-            # import the namespaces and create instances of the classes or methods
+            # import namespaces, create instances of classes or reference a System.Type[] object
             dotnet = {}
-            for typ in self._net.GetTypes():
-                if typ.Namespace is not None:
-                    if typ.Namespace not in dotnet:
-                        dotnet[typ.Namespace] = __import__(typ.Namespace)
+            for t in self._assembly.GetTypes():
+                if t.Namespace is not None:
+                    if t.Namespace not in dotnet:
+                        dotnet[t.Namespace] = __import__(t.Namespace)
                 else:
                     try:
-                        dotnet[typ.FullName] = self._net.CreateInstance(typ.FullName)
+                        dotnet[t.Name] = self._assembly.CreateInstance(t.FullName)
                     except:
-                        # cannot instantiate the class so look for its methods
-                        # see https://msdn.microsoft.com/en-us/library/a89hcwhh(v=vs.110).aspx
-                        for method in typ.DeclaredMethods:
-                            dotnet[typ.FullName + '_' + method.Name] = \
-                                lambda parameters, m=method, t=typ: m.Invoke(t, parameters)
-            self._lib = DotNetAssembly(dotnet)
+                        if t.Name not in dotnet:
+                            dotnet[t.Name] = t
+            self._lib = DotNetContainer(dotnet)
 
         else:
             raise TypeError('Cannot load libtype={}'.format(libtype))
@@ -148,13 +146,16 @@ class LoadLibrary(object):
             * if ``libtype`` = **'cdll'** then a :class:`ctypes.CDLL` object is returned
             * if ``libtype`` = **'windll'** then a :class:`ctypes.WinDLL` object is returned
             * if ``libtype`` = **'oledll'** then a :class:`ctypes.OleDLL` object is returned
-            * if ``libtype`` = **'net'** then an object containing the .NET namespaces,
-                classes and methods.
+            * if ``libtype`` = **'net'** then a :class:`~.load_library.DotNetContainer` containing
+              the .NET namespaces_, classes and/or `System.Type`_ objects.
+
+        .. _namespaces: https://msdn.microsoft.com/en-us/library/z2kcy19k.aspx
+        .. _System.Type: https://msdn.microsoft.com/en-us/library/system.type(v=vs.110).aspx
         """
         return self._lib
 
     @property
-    def net(self):
+    def assembly(self):
         """
         Returns:
             The reference to the `.NET RuntimeAssembly
@@ -162,7 +163,7 @@ class LoadLibrary(object):
             object -- *only if the shared library is a .NET library, otherwise returns*
             :py:data:`None`.
         """
-        return self._net
+        return self._assembly
 
     @staticmethod
     def is_python_net_installed():
@@ -279,9 +280,13 @@ class LoadLibrary(object):
             return 1, msg
 
 
-class DotNetAssembly(object):
+class DotNetContainer(object):
     """
-    A container for the namespace modules, classes and methods of a .NET library.
+    A container for the namespace_ modules, classes and `System.Type`_ objects
+    of a .NET library.
+
+    .. _namespace: https://msdn.microsoft.com/en-us/library/z2kcy19k.aspx
+    .. _System.Type: https://msdn.microsoft.com/en-us/library/system.type(v=vs.110).aspx
     """
     def __init__(self, dotnet_dict):
         self.__dict__.update(dotnet_dict)
@@ -293,9 +298,8 @@ NET_FRAMEWORK_DESCRIPTION = """
 
   By default, applications that target the .NET Framework version 4.0+ cannot load assemblies from
   previous .NET Framework versions. You must add and modify the "app".config file and set the
-  useLegacyV2RuntimeActivationPolicy property to be "true".
-
-  See http://support.microsoft.com/kb/2572158 for an overview.
+  useLegacyV2RuntimeActivationPolicy property to be "true". For the Python executable this would be
+  a python.exe.config (Windows) or python.config (Unix) configuration file.
 
   For example, Python for .NET (pythonnet, http://pythonnet.github.io/) only works with .NET 4.0+
   and therefore it cannot automatically load a shared library that was compiled with .NET <4.0. If
@@ -305,6 +309,8 @@ NET_FRAMEWORK_DESCRIPTION = """
   Additionally, the System.IO.FileNotFoundException exception will also be raised if the folder
   that the DLL is located in is not within sys.path, so first make sure that the shared library
   is visible to the Python interpreter.
+
+  See http://support.microsoft.com/kb/2572158 for an overview.
 
   NOTE: To install pythonnet, run:
   $ pip install pythonnet
