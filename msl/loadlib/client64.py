@@ -110,7 +110,11 @@ class Client64(HTTPConnection):
         # make sure that the server32 executable exists
         server_exe = os.path.join(os.path.dirname(__file__), SERVER_FILENAME)
         if not os.path.isfile(server_exe):
-            raise IOError('Cannot find {}\n'.format(server_exe))
+            msg = 'Cannot find {}\n'.format(server_exe)
+            msg += 'You can create {} using\n'.format(SERVER_FILENAME)
+            msg += '>>> from msl.loadlib import freeze_server32\n'
+            msg += '>>> freeze_server32.main()'
+            raise IOError(msg)
 
         cmd = [server_exe,
                '--module', module32,
