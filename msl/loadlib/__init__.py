@@ -3,15 +3,16 @@ Load a shared library.
 
 The following constants are provided in the **msl.loadlib** package.
 """
+import re
 import sys
 from collections import namedtuple
 
 __author__ = 'Joseph Borbely'
 __copyright__ = '\xa9 2017, ' + __author__
-__version__ = '0.2.0'
+__version__ = '0.2.0-dev'
 
-version_info = namedtuple('version_info', 'major minor micro')(*map(int, __version__.split('.')))
-""":py:func:`~collections.namedtuple`: Contains the version information as a (major, minor, micro) tuple."""
+version_info = namedtuple('version_info', 'major minor micro releaselevel')(*(int(v) if v.isdigit() else v for v in re.split('[. -]', __version__)))
+""":py:func:`~collections.namedtuple`: Contains the version information as a (major, minor, micro, releaselevel) tuple."""
 
 IS_WINDOWS = sys.platform in ['win32', 'cygwin']
 """:py:class:`bool`: Whether the Operating System is Windows."""
