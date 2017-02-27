@@ -26,7 +26,7 @@ class DotNet32(Server32):
     .. note::
         Any class that is a subclass of :class:`~msl.loadlib.server32.Server32` **MUST**
         provide three arguments in its constructor: ``host``, ``port`` and ``quiet``
-        (in that order). Otherwise the ``server32_*`` executable, see
+        (in that order). Otherwise the ``server32-*`` executable, see
         :class:`~msl.loadlib.start_server32`, cannot create an instance of the
         :class:`~msl.loadlib.server32.Server32` subclass.
     """
@@ -39,11 +39,11 @@ class DotNet32(Server32):
 
     def get_class_names(self):
         """
-        Returns the names of classes that are available in :ref:`dotnet_lib32.dll <dotnet-lib>`.
+        Returns the names of the classes that are available in :ref:`dotnet_lib32.dll <dotnet-lib>`.
 
         See the corresponding 64-bit :meth:`~.dotnet64.DotNet64.get_class_names` method.
         """
-        return ';'.join(str(name) for name in self.net.GetTypes()).split(';')
+        return ';'.join(str(name) for name in self.assembly.GetTypes()).split(';')
 
     def add_integers(self, a, b):
         """
@@ -224,10 +224,11 @@ class DotNet32(Server32):
 
         See the corresponding 64-bit :meth:`~.dotnet64.DotNet64.multiply_matrices` method.
 
-        The **CLR** package from `Python for .NET <http://pythonnet.github.io/>`_ contains
-        the `System <https://msdn.microsoft.com/en-us/library/system(v=vs.110).aspx>`_
-        namespace from the .NET Framework that is required to create and initialize a
-        2D matrix.
+        .. note::
+            The **CLR** package from `Python for .NET <http://pythonnet.github.io/>`_ contains
+            the `System <https://msdn.microsoft.com/en-us/library/system(v=vs.110).aspx>`_
+            namespace from the .NET Framework that is required to create and initialize a
+            2D matrix.
 
         Args:
             a1 (list[list[float]]): A matrix.
@@ -291,7 +292,7 @@ class DotNet32(Server32):
 
     def add_multiple(self, a, b, c, d, e):
         """
-        Add multiple integers.
+        Add multiple integers. *Calls a static method in a static class.*
 
         The corresponding C# code is
 
@@ -314,16 +315,39 @@ class DotNet32(Server32):
         Returns:
             :py:class:`int`: The sum of input arguments.
         """
-        # System is part of the clr package from Python for .NET.
-        # Therefore, until "import clr" has been performed the System module cannot be imported.
-        # The Server32 class imports clr and so we do not have to do it here.
-        from System import Array, Object, Int32
-        params = Array.CreateInstance(Object, 5)
-        params[0] = Int32(a)
-        params[1] = Int32(b)
-        params[2] = Int32(c)
-        params[3] = Int32(d)
-        params[4] = Int32(e)
-        print(params)
-        ret = self.lib.StaticClass_add_multiple(params)
-        return ret
+        return self.lib.StaticClass.GetMethod('add_multiple').Invoke(None, [a, b, c, d, e])
+
+    def concatenate(self, a, b, c, d, e):
+        """
+        Concatenate strings. *Calls a static method in a static class.*
+
+        The corresponding C# code is
+
+        .. code-block:: csharp
+
+            public static string concatenate(string a, string b, string c, bool d, string e)
+            {
+                string res = a + b + c;
+                if (d)
+                {
+                    res += e;
+                }
+                return res;
+
+            }
+
+        See the corresponding 64-bit :meth:`~.dotnet64.DotNet64.concatenate` method.
+
+        Args:
+            a (str): A string
+            b (str): A string
+            c (str): A string
+            d (bool): Whether to include ``e`` in the concatenation
+            e (str): A string
+
+        Returns:
+            :py:class:`str`: The strings concatenated together.
+        """
+        return self.lib.StaticClass.GetMethod('concatenate').Invoke(None, [a, b, c, d, e])
+
+

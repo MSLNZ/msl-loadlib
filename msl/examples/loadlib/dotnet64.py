@@ -19,8 +19,10 @@ from msl.loadlib import Client64
 
 class DotNet64(Client64):
     """
-    Example of a class that can communicate with a 32-bit .NET library,
-    :ref:`dotnet_lib32.dll <dotnet-lib>`.
+    Communicates with the 32-bit C# :ref:`dotnet_lib32.dll <dotnet-lib>` library.
+
+    This class demonstrates how to communicate with a 32-bit .NET library if an instance of this
+    class is created within a 64-bit Python interpreter.
     """
     def __init__(self):
         # specify the name of the corresponding 32-bit server module, dotnet32, which hosts
@@ -145,7 +147,7 @@ class DotNet64(Client64):
 
     def add_multiple(self, a, b, c, d, e):
         """
-        Add multiple integers.
+        Add multiple integers. *Calls a static method in a static class.*
 
         See the corresponding 32-bit :meth:`~.dotnet32.DotNet32.add_multiple` method.
 
@@ -161,6 +163,25 @@ class DotNet64(Client64):
         """
         return self.request32('add_multiple', a, b, c, d, e)
 
+    def concatenate(self, a, b, c, d, e):
+        """
+        Concatenate strings. *Calls a static method in a static class.*
+
+        See the corresponding 32-bit :meth:`~.dotnet32.DotNet32.concatenate` method.
+
+        Args:
+            a (str): A string
+            b (str): A string
+            c (str): A string
+            d (bool): A boolean value for whether to include ``e`` in the concatenation
+            e (str): A string
+
+        Returns:
+            :py:class:`str`: The strings concatenated together.
+        """
+        return self.request32('concatenate', a, b, c, d, e)
+
+
 if __name__ == '__main__':
 
     dll = DotNet64()
@@ -175,3 +196,5 @@ if __name__ == '__main__':
     print(dll.multiply_matrices([[1., 2., 3.], [4., 5., 6.]], [[1., 2.], [3., 4.], [5., 6.]]))
     print(dll.reverse_string('New Zealand'))
     print(dll.add_multiple(1, 2, 3, 4, 5))
+    print(dll.concatenate('the ', 'experiment ', 'worked ', False, 'temporarily'))
+    print(dll.concatenate('the ', 'experiment ', 'worked ', True, 'temporarily'))

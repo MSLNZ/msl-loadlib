@@ -101,25 +101,9 @@ public class StringManipulation
 
 }
 
-// A static class cannot be initiated and therefore the object that is available in
-// Python is the "MethodBase.Invoke Method (Object, Object[])"
-// see: https://msdn.microsoft.com/en-us/library/a89hcwhh(v=vs.110).aspx
-//
-// For example, the StaticClass.add_multiple method would be available in Python as
-// >>> from msl.loadlib import LoadLibrary
-// >>> net = LoadLibrary('dotnet_lib64.dll', 'net')
-// >>> from System import Array, Object
-// >>> x = Array.CreateInstance(Object, 5)
-// >>> for i in range(5):
-// ...     x[i] = i
-// ...
-// >>> x
-// <System.Object[] object at 0x02FAC490>
-// >>> d.lib.StaticClass_add_multiple(x)
-// 10
-//
-// NOTE: A '_' is used instead if a '.' between the class name and the method name
-// i.e., StaticClass_add_multiple and not StaticClass.add_multiple
+// A static class cannot be initiated and therefore the object is available in
+// Python as a System.RuntimeType object.
+// see: https://msdn.microsoft.com/en-us/library/system.type(v=vs.110).aspx
 public static class StaticClass
 {
 

@@ -37,7 +37,7 @@ class Kernel32(Server32):
     .. note::
         Any class that is a subclass of :class:`~msl.loadlib.server32.Server32` **MUST**
         provide three arguments in its constructor: ``host``, ``port`` and ``quiet``
-        (in that order). Otherwise the ``server32_*`` executable, see
+        (in that order). Otherwise the ``server32-*`` executable, see
         :class:`~msl.loadlib.start_server32`, cannot create an instance of the
         :class:`~msl.loadlib.server32.Server32` subclass.
     """
