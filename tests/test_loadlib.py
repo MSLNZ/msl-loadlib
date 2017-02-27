@@ -46,7 +46,7 @@ def test_load_failure_in_64bit_python():
         with pytest.raises(IOError):
             loadlib.LoadLibrary(os.path.join('.', 'examples', 'fortran_lib32'))
         with pytest.raises(IOError):
-            loadlib.LoadLibrary(os.path.join('.', 'examples', 'dotnet_lib32'))
+            loadlib.LoadLibrary(os.path.join('.', 'examples', 'dotnet_lib32'), 'net')
 
 
 def test_load_failure_in_32bit_python():
@@ -138,9 +138,11 @@ def test_dummy():
 def test_dotnet():
 
     names = n.get_class_names()
+    assert len(names) == 4
     assert 'StringManipulation' in names
     assert 'DotNetMSL.BasicMath' in names
     assert 'DotNetMSL.ArrayManipulation' in names
+    assert 'StaticClass' in names
 
     assert 9 == n.add_integers(4, 5)
     assert abs(n.divide_floats(4., 5.) - 0.8) < eps
@@ -161,3 +163,7 @@ def test_dotnet():
     assert abs(28.0 - net_mat[0][1]) < eps
     assert abs(49.0 - net_mat[1][0]) < eps
     assert abs(64.0 - net_mat[1][1]) < eps
+
+    assert 33 == n.add_multiple(11, -22, 33, -44, 55)
+    assert 'the experiment worked ' == n.concatenate('the ', 'experiment ', 'worked ', False, 'temporarily')
+    assert 'the experiment worked temporarily' == n.concatenate('the ', 'experiment ', 'worked ', True, 'temporarily')
