@@ -37,13 +37,13 @@ cannot be loaded in a 64-bit Python interpreter:
        self._handle = _dlopen(self._name, mode)
    OSError: [WinError 193] %1 is not a valid Win32 application
 
-*However, the 64-bit version of the FORTRAN library can be directly loaded in 64-bit Python:*
+However, the 64-bit version of the FORTRAN library can be directly loaded in 64-bit Python:
 
 .. code-block:: python
 
    >>> f64 = msl.loadlib.LoadLibrary('./msl/examples/loadlib/fortran_lib64')
    >>> f64
-   LoadLibrary object at 0x1798a79a860; libtype=ctypes.CDLL; path=D:\code\git\msl-loadlib\msl\examples\loadlib\fortran_lib64.dll
+   LoadLibrary object at 0x1798a79a860; libtype=CDLL; path=D:\code\git\msl-loadlib\msl\examples\loadlib\fortran_lib64.dll
    >>> import ctypes
    >>> f64.lib.sum_8bit(ctypes.byref(ctypes.c_int8(-50)), ctypes.byref(ctypes.c_int8(110)))
    60

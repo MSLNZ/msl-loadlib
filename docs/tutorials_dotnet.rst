@@ -53,7 +53,7 @@ Get the names of the classes in the .NET library module, see
 .. code-block:: python
 
    >>> dn.get_class_names()
-   ['StringManipulation', 'DotNetMSL.BasicMath', 'DotNetMSL.ArrayManipulation']
+   ['StringManipulation', 'StaticClass', 'DotNetMSL.BasicMath', 'DotNetMSL.ArrayManipulation']
 
 Add two integers, see :meth:`~msl.examples.loadlib.dotnet64.DotNet64.add_integers`:
 
@@ -110,6 +110,17 @@ Reverse a string, see :meth:`~msl.examples.loadlib.dotnet64.DotNet64.reverse_str
 
    >>> dn.reverse_string('New Zealand')
    'dnalaeZ weN'
+
+Call the static methods in the **StaticClass** class
+
+.. code-block:: python
+
+   >>> dn.add_multiple(1, 2, 3, 4, 5)
+   15
+   >>> dn.concatenate('the ', 'experiment ', 'worked ', False, 'temporarily')
+   'the experiment worked '
+   >>> dn.concatenate('the ', 'experiment ', 'worked ', True, 'temporarily')
+   'the experiment worked temporarily'
 
 Shutdown the server, see :meth:`~msl.loadlib.client64.Client64.shutdown_server`:
 

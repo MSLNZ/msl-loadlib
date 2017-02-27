@@ -37,13 +37,13 @@ cannot be loaded in a 64-bit Python interpreter:
        self._handle = _dlopen(self._name, mode)
    OSError: [WinError 193] %1 is not a valid Win32 application
 
-*However, the 64-bit version of the C++ library can be directly loaded in 64-bit Python:*
+However, the 64-bit version of the C++ library can be directly loaded in 64-bit Python:
 
 .. code-block:: python
 
    >>> cpp64 = msl.loadlib.LoadLibrary('./msl/examples/loadlib/cpp_lib64')
    >>> cpp64
-   LoadLibrary object at 0x11558dbd898; libtype=ctypes.CDLL; path=D:\code\git\msl-loadlib\msl\examples\loadlib\cpp_lib64.dll
+   LoadLibrary object at 0x11558dbd898; libtype=CDLL; path=D:\code\git\msl-loadlib\msl\examples\loadlib\cpp_lib64.dll
    >>> cpp64.lib.add(3, 14)
    17
 

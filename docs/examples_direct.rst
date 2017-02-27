@@ -28,34 +28,50 @@ Call the :ref:`cpp_lib32.add <cpp-lib>` function that calculates the sum of two 
    >>> cpp.lib.add(ctypes.c_int32(1), ctypes.c_int32(2))
    3
 
-Next, load the **dotnet_lib32.dll** library, which is a 32-bit .NET Framework library.
+Next, load the :ref:`dotnet_lib32 <dotnet-lib>` library, which is a 32-bit C# library for the .NET Framework
 
 .. code:: python
 
-   >>> dot = msl.loadlib.LoadLibrary('./dotnet_lib32', 'net')
-   >>> dot
-   LoadLibrary object at 0x43aea30; libtype=DotNetAssembly; path=D:\examples\dotnet_lib32.dll
-   >>> dot.net
+   >>> net = msl.loadlib.LoadLibrary('./dotnet_lib32', 'net')
+   >>> net
+   LoadLibrary object at 0x43aea30; libtype=DotNetContainer; path=D:\examples\dotnet_lib32.dll
+   >>> net.assembly
    <System.Reflection.RuntimeAssembly object at 0x03E23390>
-   >>> dot.lib
-   <msl.loadlib.load_library.DotNetAssembly object at 0x065BAB70>
+   >>> net.lib
+   <msl.loadlib.load_library.DotNetContainer object at 0x065BAB70>
 
-Display the classes that are available in the **dotnet_lib32.dll** library
+The :ref:`dotnet_lib32 <dotnet-lib>` library contains a module (a C# namespace called **DotNetMSL**),
+an instance of the **StringManipulation** class and a reference to the **StaticClass** class
 
 .. code:: python
 
-   >>> for cls in dot.net.GetTypes():
-   ...     print(cls, type(cls))
+   >>> for item in dir(net.lib):
+   ...     if not item.startswith('_'):
+   ...         print(item, type(getattr(net.lib, item)))
    ...
-   StringManipulation <class 'System.RuntimeType'>
-   DotNetMSL.BasicMath <class 'System.RuntimeType'>
-   DotNetMSL.ArrayManipulation <class 'System.RuntimeType'>
+   DotNetMSL <class 'CLR.ModuleObject'>
+   StaticClass <class 'System.RuntimeType'>
+   StringManipulation <class '.StringManipulation'>
 
-Use the **StringManipulation** class in the .NET library to reverse a string
+View the static methods in the **StaticClass** class
 
 .. code:: python
 
-   >>> dot.lib.StringManipulation.reverse_string('abcdefghijklmnopqrstuvwxyz')
+   >>> for method in net.lib.StaticClass.GetMethods():
+   ...     print(method)
+   ...
+   Int32 add_multiple(Int32, Int32, Int32, Int32, Int32)
+   System.String concatenate(System.String, System.String, System.String, Boolean, System.String)
+   System.String ToString()
+   Boolean Equals(System.Object)
+   Int32 GetHashCode()
+   System.Type GetType()
+
+Use the **StringManipulation** class in the :ref:`dotnet_lib32 <dotnet-lib>` library to reverse a string
+
+.. code:: python
+
+   >>> net.lib.StringManipulation.reverse_string('abcdefghijklmnopqrstuvwxyz')
    'zyxwvutsrqponmlkjihgfedcba'
 
 For more detailed examples on how to pass variables from Python to :mod:`ctypes`

@@ -30,9 +30,7 @@ Running this script would create the following output
 .. note::
    The black text corresponds to the :class:`~msl.examples.loadlib.dummy64.Dummy64` :py:func:`print`
    statements and the red text are the :class:`~msl.examples.loadlib.dummy32.Dummy32` :py:func:`print`
-   statements. The :py:func:`print` statements from a module running on the 32-bit server do
-   not get displayed until the server is shutdown, which is why all the red text appears after
-   the black text.
+   statements.
 
 .. image:: _static/dummy_output.png
 
@@ -112,6 +110,6 @@ Shutdown the server when you are done communicating with the 32-bit library (all
    If the :class:`~msl.loadlib.client64.Client64` subclass does not get destroyed properly, for
    example if you are using an interactive console and then exit the console abruptly, then the server
    will still be running and therefore you must manually terminate the server processes (two
-   ``server32_*`` processes are created when the server starts).
+   ``server32-*`` processes are created when the server starts).
 
 .. _del: https://docs.python.org/3/reference/datamodel.html#object.__del__
