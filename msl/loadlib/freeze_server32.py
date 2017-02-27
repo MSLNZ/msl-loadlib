@@ -87,7 +87,7 @@ def main(spec=None):
     if loadlib.IS_WINDOWS:
         ver = [os.path.join(here, 'verpatch'),
                os.path.join(here, loadlib.SERVER_FILENAME),
-               '/va', loadlib.__version__ + '.0',
+               '/va', '{0}.{1}.{2}'.format(*loadlib.version_info) + '.0',
                '/pv', '{0}.{1}.{2}.{4}'.format(*sys.version_info),
                '/s', 'description', 'Access a 32-bit library from 64-bit Python',
                '/s', 'product', 'Python 32-bit server',
