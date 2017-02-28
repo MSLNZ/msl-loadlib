@@ -24,7 +24,6 @@ communicate with the 32-bit library as a form of `inter-process communication
    API Documentation <api_docs>
    Examples <examples>
    Tutorials <tutorials>
-   Developers Guide <developers_guide>
    License <license>
    Authors <authors>
    Changelog <changelog>
