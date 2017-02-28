@@ -22,12 +22,9 @@ def teardown_module(module):
 def test_unique_ports():
     for item in [f, d, n]:
         assert c.port != item.port
-    for item in [c, d, n]:
+    for item in [d, n]:
         assert f.port != item.port
-    for item in [c, f, n]:
-        assert d.port != item.port
-    for item in [c, f, d]:
-        assert n.port != item.port
+    assert d.port != n.port
 
 
 def test_lib_name():
