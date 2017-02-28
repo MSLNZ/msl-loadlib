@@ -140,6 +140,8 @@ for env in envs:
         if show:
             summary += stdout
             color_print(stdout)
+        if ' seconds ===' in stdout:
+            show = False  # once the test is finished a bunch of blank lines can be printed -- ignore these lines
 
     stdout = proc.stdout.read().decode().strip()
     for item in stdout.split('\n'):
