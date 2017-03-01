@@ -32,7 +32,7 @@ By default, ``msl.loadlib.LoadLibrary`` loads a library using
    >>> from msl.loadlib import LoadLibrary
    >>> cpp = LoadLibrary('./cpp_lib64')
    >>> cpp
-   LoadLibrary object at 0x3e9f750; libtype=CDLL; path=D:\cpp_lib64.dll
+   LoadLibrary object at 0x3e9f750; libtype=CDLL; path=D:/cpp_lib64.dll
    >>> cpp.lib
    <CDLL 'D:\cpp_lib64.dll', handle af1e0000 at 0x3e92f90>
 
