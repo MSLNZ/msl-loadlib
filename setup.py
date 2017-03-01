@@ -50,7 +50,7 @@ setup(
     author=loadlib.__author__,
     author_email='joseph.borbely@callaghaninnovation.govt.nz',
     url='https://github.com/MSLNZ/msl-loadlib',
-    description='Load a shared library (access a 32-bit library from 64-bit Python)',
+    description='Load a shared library (and access a 32-bit library from 64-bit Python)',
     long_description=read('README.rst'),
     license='MIT',
     platforms='any',

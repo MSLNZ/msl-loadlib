@@ -75,11 +75,11 @@ Send multiple data types as arguments and as keyword arguments, see
 
 Shutdown the server when you are done communicating with the 32-bit library (all of the
 :py:func:`print` statements from the server get displayed once the server shuts down), see
-:meth:`~msl.loadlib.client64.Client64.shutdown_server`:
+:meth:`~msl.loadlib.client64.Client64.shutdown_server32`:
 
 .. code-block:: python
 
-   >>> d.shutdown_server()
+   >>> d.shutdown_server32()
    Python 3.5.2 |Continuum Analytics, Inc.| (default, Jul  5 2016, 11:45:57) [MSC v.1900 32 bit (Intel)]
    Serving cpp_lib32.dll on http://127.0.0.1:2521
    The 32-bit server received these args:
@@ -106,10 +106,9 @@ Shutdown the server when you are done communicating with the 32-bit library (all
    object gets destroyed (as it did in the example script above). When using a subclass of
    :class:`~msl.loadlib.client64.Client64` in a script, the `__del__ <del_>`_ command gets
    called automatically when the instance is about to be destroyed and therefore you do not have to
-   call the :meth:`~msl.loadlib.client64.Client64.shutdown_server` method to shutdown the server.
+   call the :meth:`~msl.loadlib.client64.Client64.shutdown_server32` method to shutdown the server.
    If the :class:`~msl.loadlib.client64.Client64` subclass does not get destroyed properly, for
    example if you are using an interactive console and then exit the console abruptly, then the server
-   will still be running and therefore you must manually terminate the server processes (two
-   ``server32-*`` processes are created when the server starts).
+   will still be running and therefore you must manually terminate the server processes.
 
 .. _del: https://docs.python.org/3/reference/datamodel.html#object.__del__

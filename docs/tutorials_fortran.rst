@@ -29,10 +29,11 @@ cannot be loaded in a 64-bit Python interpreter:
 
 .. code-block:: python
 
-   >>> import msl.loadlib
-   >>> msl.loadlib.IS_PYTHON_64BIT
+   >>> import os
+   >>> from msl.loadlib import LoadLibrary, EXAMPLES_DIR, IS_PYTHON_64BIT
+   >>> IS_PYTHON_64BIT
    True
-   >>> f = msl.loadlib.LoadLibrary('./msl/examples/loadlib/fortran_lib32')
+   >>> f = LoadLibrary(os.path.join(EXAMPLES_DIR, 'fortran_lib32'))
    Traceback (most recent call last):
      File "<input>", line 1, in <module>
      File "D:\code\git\msl-loadlib\msl\loadlib\load_library.py", line 60, in __init__
@@ -45,7 +46,7 @@ However, the 64-bit version of the FORTRAN library can be directly loaded in 64-
 
 .. code-block:: python
 
-   >>> f64 = msl.loadlib.LoadLibrary('./msl/examples/loadlib/fortran_lib64')
+   >>> f64 = LoadLibrary('./msl/examples/loadlib/fortran_lib64')
    >>> f64
    LoadLibrary object at 0x1798a79a860; libtype=CDLL; path=D:\code\git\msl-loadlib\msl\examples\loadlib\fortran_lib64.dll
    >>> import ctypes
@@ -178,14 +179,14 @@ Multiply two matrices, see :meth:`~msl.examples.loadlib.fortran64.Fortran64.matr
    >>> f.matrix_multiply(m1, m2)
    [[22.0, 28.0], [49.0, 64.0]]
 
-Shutdown the server, see :meth:`~msl.loadlib.client64.Client64.shutdown_server`:
+Shutdown the server, see :meth:`~msl.loadlib.client64.Client64.shutdown_server32`:
 
 .. code-block:: python
 
-   >>> f.shutdown_server()
+   >>> f.shutdown_server32()
 
 .. note::
    When using a subclass of :class:`~msl.loadlib.client64.Client64` in a script, the
-   :meth:`~msl.loadlib.client64.Client64.shutdown_server` method gets called automatically
+   :meth:`~msl.loadlib.client64.Client64.shutdown_server32` method gets called automatically
    when the instance of the subclass is about to be destroyed and therefore you do not have to call
-   the :meth:`~msl.loadlib.client64.Client64.shutdown_server` method to shutdown the server.
+   the :meth:`~msl.loadlib.client64.Client64.shutdown_server32` method to shutdown the server.

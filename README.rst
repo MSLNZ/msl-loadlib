@@ -29,21 +29,18 @@ By default, ``msl.loadlib.LoadLibrary`` loads a library using
 
 .. code:: python
 
-   >>> import msl.loadlib
-   >>> msl.loadlib.IS_PYTHON_64BIT
-   True
-   >>> cpp = msl.loadlib.LoadLibrary('./cpp_lib64')
+   >>> from msl.loadlib import LoadLibrary
+   >>> cpp = LoadLibrary('./cpp_lib64')
    >>> cpp
-   LoadLibrary object at 0x3e9f750; libtype=ctypes.CDLL; path=D:/examples/cpp_lib64.dll
+   LoadLibrary object at 0x3e9f750; libtype=CDLL; path=D:\cpp_lib64.dll
    >>> cpp.lib
-   <CDLL 'D:/examples/cpp_lib64.dll', handle af1e0000 at 0x3e92f90>
+   <CDLL 'D:\cpp_lib64.dll', handle af1e0000 at 0x3e92f90>
 
 Call the ``cpp_lib64.add`` function that calculates the sum of two integers
 
 .. code:: python
 
-   >>> import ctypes
-   >>> cpp.lib.add(ctypes.c_int32(1), ctypes.c_int32(2))
+   >>> cpp.lib.add(1, 2)
    3
 
 `Inter-process communication <https://en.wikipedia.org/wiki/Inter-process_communication>`_ is used

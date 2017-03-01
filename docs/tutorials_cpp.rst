@@ -29,10 +29,11 @@ cannot be loaded in a 64-bit Python interpreter:
 
 .. code-block:: python
 
-   >>> import msl.loadlib
-   >>> msl.loadlib.IS_PYTHON_64BIT
+   >>> import os
+   >>> from msl.loadlib import LoadLibrary, EXAMPLES_DIR, IS_PYTHON_64BIT
+   >>> IS_PYTHON_64BIT
    True
-   >>> cpp = msl.loadlib.LoadLibrary('./msl/examples/loadlib/cpp_lib32')
+   >>> cpp = LoadLibrary(os.path.join(EXAMPLES_DIR, 'cpp_lib32'))
    Traceback (most recent call last):
      File "<input>", line 1, in <module>
      File "D:\code\git\msl-loadlib\msl\loadlib\load_library.py", line 60, in __init__
@@ -45,7 +46,7 @@ However, the 64-bit version of the C++ library can be directly loaded in 64-bit 
 
 .. code-block:: python
 
-   >>> cpp64 = msl.loadlib.LoadLibrary('./msl/examples/loadlib/cpp_lib64')
+   >>> cpp64 = LoadLibrary(os.path.join(EXAMPLES_DIR, 'cpp_lib64'))
    >>> cpp64
    LoadLibrary object at 0x11558dbd898; libtype=CDLL; path=D:\code\git\msl-loadlib\msl\examples\loadlib\cpp_lib64.dll
    >>> cpp64.lib.add(3, 14)
@@ -112,14 +113,14 @@ see :meth:`~msl.examples.loadlib.cpp64.Cpp64.reverse_string_v2`:
    >>> cpp.reverse_string_v2('uncertainty')
    'ytniatrecnu'
 
-Shutdown the server, see :meth:`~msl.loadlib.client64.Client64.shutdown_server`:
+Shutdown the server, see :meth:`~msl.loadlib.client64.Client64.shutdown_server32`:
 
 .. code-block:: python
 
-   >>> cpp.shutdown_server()
+   >>> cpp.shutdown_server32()
 
 .. note::
    When using a subclass of :class:`~msl.loadlib.client64.Client64` in a script, the
-   :meth:`~msl.loadlib.client64.Client64.shutdown_server` method gets called automatically
+   :meth:`~msl.loadlib.client64.Client64.shutdown_server32` method gets called automatically
    when the instance of the subclass is about to be destroyed and therefore you do not have to call
-   the :meth:`~msl.loadlib.client64.Client64.shutdown_server` method to shutdown the server.
+   the :meth:`~msl.loadlib.client64.Client64.shutdown_server32` method to shutdown the server.

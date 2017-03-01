@@ -7,7 +7,8 @@ If you are loading a 32-bit library in 32-bit Python, or a 64-bit library in 64-
 can directly load the library using :class:`~msl.loadlib.load_library.LoadLibrary`, (by default,
 :class:`ctypes.CDLL` is used to load the library)
 
-Import the :class:`~msl.loadlib.load_library.LoadLibrary` class and the :data:`~msl.loadlib.EXAMPLES_DIR` constant
+Import the :class:`~msl.loadlib.load_library.LoadLibrary` class *(the* :data:`~msl.loadlib.EXAMPLES_DIR` *constant
+is only used for illustrative purposes -- you only need to specify the path to the library that you want to load)*
 
 .. code:: python
 
@@ -30,13 +31,14 @@ Loading a **FORTRAN** library, :ref:`fortran_lib <fortran-lib>`
 
 .. code:: python
 
-   >>> import ctypes
    >>> fortran = LoadLibrary(os.path.join(EXAMPLES_DIR, 'fortran_lib32'))
    >>> fortran
    LoadLibrary object at 0x2e46eb0; libtype=CDLL; path=D:\msl\examples\loadlib\fortran_lib32.dll
    >>> fortran.lib
    <CDLL 'D:\msl\examples\loadlib\fortran_lib32.dll', handle 6f660000 at 0x2e5d470>
-   >>> fortran.lib.sum_32bit(ctypes.byref(ctypes.c_int32(-5)), ctypes.byref(ctypes.c_int32(25)))
+   >>> import ctypes
+   >>> fortran.lib.sum_8bit.restype = ctypes.c_int8
+   >>> fortran.lib.sum_8bit(ctypes.byref(ctypes.c_int8(-5)), ctypes.byref(ctypes.c_int8(25)))
    20
 
 Loading a **C#** library (a .NET Framework Assembly), :ref:`dotnet_lib <dotnet-lib>`
@@ -53,7 +55,8 @@ Loading a **C#** library (a .NET Framework Assembly), :ref:`dotnet_lib <dotnet-l
    >>> net.lib.StringManipulation.reverse_string('Hello World!')
    '!dlroW olleH'
 
-Loading a Windows **__stdcall** library
+Loading a Windows **stdcall** library,
+`kernel32.dll <http://www.geoffchappell.com/studies/windows/win32/kernel32/api/>`_
 
 .. code:: python
 

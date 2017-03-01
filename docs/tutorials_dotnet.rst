@@ -27,10 +27,11 @@ be loaded in a 64-bit Python interpreter:
 
 .. code-block:: python
 
-   >>> import msl.loadlib
-   >>> msl.loadlib.IS_PYTHON_64BIT
+   >>> import os
+   >>> from msl.loadlib import LoadLibrary, EXAMPLES_DIR, IS_PYTHON_64BIT
+   >>> IS_PYTHON_64BIT
    True
-   >>> dn = msl.loadlib.LoadLibrary('./msl/examples/loadlib/dotnet_lib32', 'net')
+   >>> net = LoadLibrary(os.path.join(EXAMPLES_DIR, 'dotnet_lib32'), 'net')
    Traceback (most recent call last):
      File "<input>", line 1, in <module>
      File "D:\code\git\msl-loadlib\msl\loadlib\load_library.py", line 69, in __init__
@@ -38,6 +39,16 @@ be loaded in a 64-bit Python interpreter:
    System.BadImageFormatException: Could not load file or assembly 'dotnet_lib32.dll' or one of its dependencies.  is not a valid Win32 application. (Exception from HRESULT: 0x800700C1)
       at System.Reflection.RuntimeAssembly.nLoadFile(String path, Evidence evidence)
       at System.Reflection.Assembly.LoadFile(String path)
+
+However, the 64-bit version of the .NET library can be directly loaded in 64-bit Python:
+
+.. code-block:: python
+
+   >>> net = LoadLibrary(os.path.join(EXAMPLES_DIR, 'dotnet_lib64'), 'net')
+   >>> net
+   LoadLibrary object at 0x37c1da0; libtype=DotNetContainer; path=D:\code\git\msl-loadlib\msl\examples\loadlib\dotnet_lib64.dll
+   >>> net.lib.StringManipulation.reverse_string('Hello World!')
+   '!dlroW olleH'
 
 Instead, create a :class:`~msl.examples.loadlib.dotnet64.DotNet64` client to communicate
 with the 32-bit :ref:`dotnet_lib32.dll <dotnet-lib>` library:
@@ -126,14 +137,14 @@ Call the static methods in the **StaticClass** class
    >>> dn.concatenate('the ', 'experiment ', 'worked ', True, 'temporarily')
    'the experiment worked temporarily'
 
-Shutdown the server, see :meth:`~msl.loadlib.client64.Client64.shutdown_server`:
+Shutdown the server, see :meth:`~msl.loadlib.client64.Client64.shutdown_server32`:
 
 .. code-block:: python
 
-   >>> dn.shutdown_server()
+   >>> dn.shutdown_server32()
 
 .. note::
    When using a subclass of :class:`~msl.loadlib.client64.Client64` in a script, the
-   :meth:`~msl.loadlib.client64.Client64.shutdown_server` method gets called automatically
+   :meth:`~msl.loadlib.client64.Client64.shutdown_server32` method gets called automatically
    when the instance of the subclass is about to be destroyed and therefore you do not have to call
-   the :meth:`~msl.loadlib.client64.Client64.shutdown_server` method to shutdown the server.
+   the :meth:`~msl.loadlib.client64.Client64.shutdown_server32` method to shutdown the server.

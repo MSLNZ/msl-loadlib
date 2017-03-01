@@ -15,10 +15,10 @@ Python interpreter:
 
 .. code-block:: python
 
-   >>> import msl.loadlib
-   >>> msl.loadlib.IS_PYTHON_64BIT
+   >>> from msl.loadlib import LoadLibrary, IS_PYTHON_64BIT
+   >>> IS_PYTHON_64BIT
    True
-   >>> k = msl.loadlib.LoadLibrary('C:/Windows/SysWOW64/kernel32.dll', 'windll')
+   >>> k = LoadLibrary('C:/Windows/SysWOW64/kernel32.dll', 'windll')
    Traceback (most recent call last):
      File "<input>", line 1, in <module>
      File "D:\code\git\msl-loadlib\msl\loadlib\load_library.py", line 62, in __init__
@@ -47,16 +47,16 @@ Call the library to get the current date and time, see
    >>> k.get_local_time()
    datetime.datetime(2017, 2, 3, 16, 37, 5, 351000)
 
-Shutdown the server, see :meth:`~msl.loadlib.client64.Client64.shutdown_server`:
+Shutdown the server, see :meth:`~msl.loadlib.client64.Client64.shutdown_server32`:
 
 .. code-block:: python
 
-   >>> k.shutdown_server()
+   >>> k.shutdown_server32()
 
 .. note::
    When using a subclass of :class:`~msl.loadlib.client64.Client64` in a script, the
-   :meth:`~msl.loadlib.client64.Client64.shutdown_server` method gets called automatically
+   :meth:`~msl.loadlib.client64.Client64.shutdown_server32` method gets called automatically
    when the instance of the subclass is about to be destroyed and therefore you do not have to call
-   the :meth:`~msl.loadlib.client64.Client64.shutdown_server` method to shutdown the server.
+   the :meth:`~msl.loadlib.client64.Client64.shutdown_server32` method to shutdown the server.
 
 .. _kernel32: http://www.geoffchappell.com/studies/windows/win32/kernel32/api/

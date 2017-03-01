@@ -18,8 +18,11 @@ Compatibility
 
 Prerequisites
 -------------
-Before installing **MSL-LoadLib** on Linux you should create the following script and run it to install
-the prerequisites::
+Before installing **MSL-LoadLib** on Linux you should save the following script on your computer and run
+it to install the prerequisites *(or execute each command individually if you prefer to not create the script)*.
+
+This script installs 32-bit packages needed to load 32-bit C/C++ and FORTRAN libraries in 64-bit Linux and it
+installs `Mono <http://www.mono-project.com/>`_ for loading .NET Framework assemblies::
 
    #!/bin/bash
 
@@ -34,6 +37,10 @@ the prerequisites::
    sudo apt-get update
 
    sudo DEBIAN_FRONTEND=noninteractive apt-get -y -o Dpkg::Options::="--force-confdef" -o Dpkg::Options::="--force-confnew" install mono-devel mono-complete referenceassemblies-pcl ca-certificates-mono nunit-console
+
+You should then be able to run::
+
+   pip install https://github.com/MSLNZ/msl-loadlib/archive/master.zip
 
 The above script was tested on a clean installation of Ubuntu 16.04.1 LTS (xenial).
 
