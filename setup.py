@@ -21,9 +21,10 @@ class CustomInstall(install):
         loadlib.LoadLibrary.check_dot_net_config(sys.executable)
 
         # allow executing the server32-* file as a program and make it read only
-        import stat
-        f = os.path.join(here, 'msl', 'loadlib', loadlib.SERVER_FILENAME)
-        os.chmod(f, stat.S_IRUSR | stat.S_IXUSR | stat.S_IRGRP | stat.S_IXGRP | stat.S_IROTH | stat.S_IXOTH)
+        if loadlib.IS_WINDOWS or loadlib.IS_LINUX:
+            import stat
+            f = os.path.join(here, 'msl', 'loadlib', loadlib.SERVER_FILENAME)
+            os.chmod(f, stat.S_IRUSR | stat.S_IXUSR | stat.S_IRGRP | stat.S_IXGRP | stat.S_IROTH | stat.S_IXOTH)
 
         sys.exit(0)
 
