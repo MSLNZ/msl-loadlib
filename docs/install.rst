@@ -18,7 +18,32 @@ Compatibility
 
 Prerequisites
 -------------
-The following commands should be executed so that you have the prerequisites install to be able to run the
+If **MSL-LoadLib** fails to install on Linux because `Python for .NET <http://pythonnet.sourceforge.net/>`_ fails to
+install then run the following commands::
+
+   sudo apt-get update
+
+   sudo apt-get -y install software-properties-common libglib2.0-dev clang git
+
+   sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 3FA7E0328081BFF6A14DA29AA6A19B38D3D831EF
+
+   echo "deb http://download.mono-project.com/repo/debian wheezy main" | sudo tee /etc/apt/sources.list.d/mono-xamarin.list
+
+   sudo apt-get update
+
+   sudo DEBIAN_FRONTEND=noninteractive apt-get -y -o Dpkg::Options::="--force-confdef" -o Dpkg::Options::="--force-confnew" install mono-devel mono-complete referenceassemblies-pcl ca-certificates-mono nunit-console
+
+   pip3 install pycparser
+
+   git clone https://github.com/pythonnet/pythonnet.git
+
+   cd pythonnet/
+
+   python3 setup.py install
+
+   pip install https://github.com/MSLNZ/msl-loadlib/archive/master.zip
+
+The following commands should be executed so that you have the prerequisites installed to be able to run the
 examples on Linux.
 
 To run the :ref:`C++ <tutorial_cpp>` and :ref:`FORTRAN <tutorial_fortran>` examples::
@@ -33,4 +58,5 @@ To run the .NET example::
    sudo apt-get install mono-complete
 
 Windows already comes with `WoW64 <https://en.wikipedia.org/wiki/WoW64>`_ to run 32-bit software on 64-bit
-Windows and the .NET Framework.
+Windows and the .NET Framework and `Python for .NET <http://pythonnet.sourceforge.net/>`_ usually installs
+automatically with pip.
