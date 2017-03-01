@@ -5,7 +5,9 @@ from setuptools.command.install import install
 
 from msl import loadlib
 
-sys.path.insert(0, os.path.join(os.path.abspath(os.path.dirname(__file__)), 'docs'))
+here = os.path.abspath(os.path.dirname(__file__))
+
+sys.path.insert(0, os.path.join(here, 'docs'))
 import docs_commands
 
 
@@ -17,6 +19,12 @@ class CustomInstall(install):
     def run(self):
         install.run(self)
         loadlib.LoadLibrary.check_dot_net_config(sys.executable)
+
+        # allow executing the server32-* file as a program and make it read only
+        import stat
+        f = os.path.join(here, 'msl', 'loadlib', loadlib.SERVER_FILENAME)
+        os.chmod(f, stat.S_IRUSR | stat.S_IXUSR | stat.S_IRGRP | stat.S_IXGRP | stat.S_IROTH | stat.S_IXOTH)
+
         sys.exit(0)
 
 
