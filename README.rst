@@ -63,7 +63,7 @@ Install
 
 Install **MSL-LoadLib** using pip::
 
-   $ pip install https://github.com/MSLNZ/msl-loadlib/archive/master.zip
+   pip install https://github.com/MSLNZ/msl-loadlib/archive/master.zip
 
 Developers Guide
 ----------------
@@ -72,15 +72,15 @@ Developers Guide
 
 Run the tests (a coverage_ report is generated in the **htmlcov/index.html** file)::
 
-   $ python setup.py test
+   python setup.py test
 
 Build the documentation, which can be viewed by opening the **docs/_build/html/index.html** file::
 
-   $ python setup.py docs
+   python setup.py docs
 
 Automatically create the API documentation from the docstrings in the source code (uses sphinx-apidoc_)::
 
-   $ python setup.py apidoc
+   python setup.py apidoc
 
 *NOTE: By default, the* **docs/_autosummary** *folder that is created by running the* **apidoc** *command is
 automatically generated (it will overwrite existing files). As such, it is excluded from the repository (i.e., this
