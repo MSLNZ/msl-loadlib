@@ -37,5 +37,5 @@ the prerequisites::
 
 The above script was tested on a clean installation of Ubuntu 16.04.1 LTS (xenial).
 
-Windows already comes with `WoW64 <https://en.wikipedia.org/wiki/WoW64>`_ to run 32-bit software on 64-bit
-Windows and the .NET Framework and therefore no prerequisites are required.
+64-bit Windows already comes with `WoW64 <https://en.wikipedia.org/wiki/WoW64>`_ to run 32-bit software and
+includes the .NET Framework and therefore no prerequisites are required.
