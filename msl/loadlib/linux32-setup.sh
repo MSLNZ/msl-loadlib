@@ -1,10 +1,11 @@
 #!/bin/bash
-# This script will install all pre-requisites for the MSL-LoadLib package.
 #
-# Essectiallialy getting everything installed so that you can create the 32-bit server 
+# This script will install the pre-requisites for the MSL-LoadLib package on 32-bit Linux.
+#
+# Essentially the script gets everything installed so that you can create the frozen 32-bit server
 #   $ python3 freeze_server32.py server32-linux.spec
 #
-# and compile the 32-bit versions of the C++ and FORTRAN source code:
+# and compile the 32-bit version of the C++ and FORTRAN source code:
 #   $ g++ -fPIC cpp_lib.cpp -shared -o cpp_lib32.so
 #   $ gfortran -fPIC -fno-underscoring fortran_lib.f90 -shared -o fortran_lib32.so
 #
