@@ -4,13 +4,17 @@
 Load a 32-bit .NET library in 64-bit Python
 ===========================================
 
+.. note::
+   If you have issues running the example please make sure that you have the
+   :ref:`prerequisites <prerequisites>` installed.
+
 This example shows how to access a 32-bit .NET library from a module that is run by a
 64-bit Python interpreter by using `inter-process communication
 <https://en.wikipedia.org/wiki/Inter-process_communication>`_.
 :class:`~msl.examples.loadlib.dotnet32.DotNet32` is the 32-bit server and
 :class:`~msl.examples.loadlib.dotnet64.DotNet64` is the 64-bit client.
 
-.. note::
+.. tip::
    The `JetBrains dotPeek <https://www.jetbrains.com/decompiler/>`_ program can be used
    to reliably decompile any .NET assembly into the equivalent C# source code. For example,
    **peeking** inside the :ref:`dotnet_lib32.dll <dotnet-lib>` library, that the

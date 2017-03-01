@@ -4,6 +4,10 @@
 Load a 32-bit C++ library in 64-bit Python
 ==========================================
 
+.. note::
+   If you have issues running the example please make sure that you have the
+   :ref:`prerequisites <prerequisites>` installed.
+
 This example shows how to access a 32-bit C++ library from a module that is run by a
 64-bit Python interpreter by using `inter-process communication
 <https://en.wikipedia.org/wiki/Inter-process_communication>`_.
