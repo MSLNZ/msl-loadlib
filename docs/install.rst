@@ -18,11 +18,12 @@ Compatibility
 
 Prerequisites
 -------------
-Before installing **MSL-LoadLib** on Linux you should save the following script on your computer and run
+Before installing **MSL-LoadLib** on Linux (Debian/Ubuntu) you should save the following script on your computer and run
 it to install the prerequisites *(or execute each command individually if you prefer to not create the script)*.
 
-This script installs 32-bit packages needed to load 32-bit C/C++ and FORTRAN libraries in 64-bit Linux and it
-installs `Mono <http://www.mono-project.com/>`_ for loading .NET Framework assemblies::
+This script installs 32-bit packages needed to load 32-bit C/C++ and FORTRAN libraries in 64-bit Debian/Ubuntu and it
+installs `Mono <http://www.mono-project.com/>`_ for loading .NET Framework assemblies. For other Linux distributions
+you will need to edit the commands appropriately::
 
    #!/bin/bash
 
