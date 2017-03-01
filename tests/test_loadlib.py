@@ -13,10 +13,10 @@ n = DotNet64()
 
 
 def teardown_module(module):
-    c.shutdown_server()
-    f.shutdown_server()
-    d.shutdown_server()
-    n.shutdown_server()
+    c.shutdown_server32()
+    f.shutdown_server32()
+    d.shutdown_server32()
+    n.shutdown_server32()
 
 
 def test_unique_ports():

@@ -42,7 +42,7 @@ elif IS_MAC:
 else:
     SERVER_FILENAME = 'server32-unknown'
 
-EXAMPLES_DIR =os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'examples', 'loadlib'))
+EXAMPLES_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'examples', 'loadlib'))
 """:py:class:`str`: The path to the directory where the example shared-library files are located."""
 
 from .load_library import LoadLibrary

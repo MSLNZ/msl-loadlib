@@ -65,7 +65,7 @@ class LoadLibrary(object):
             self._lib = ctypes.WinDLL(self._path)
         elif libtype == 'oledll':
             self._lib = ctypes.OleDLL(self._path)
-        elif libtype == 'net' and self.is_python_net_installed():
+        elif libtype == 'net' and self.is_pythonnet_installed():
             import clr
             try:
                 # By default, pythonnet can only load libraries that are for .NET 4.0+.
@@ -166,7 +166,7 @@ class LoadLibrary(object):
         return self._assembly
 
     @staticmethod
-    def is_python_net_installed():
+    def is_pythonnet_installed():
         """
         Checks if `Python for .NET <http://pythonnet.github.io/>`_ is installed.
 
@@ -175,8 +175,8 @@ class LoadLibrary(object):
 
         .. note::
            For help getting Python for .NET working on a non-Windows operating system look at
-           the `Mono <http://www.mono-project.com/>`_ project and
-           `here <http://pythonnet.sourceforge.net/readme.html>`_.
+           the :ref:`prerequisites`, the `Mono <http://www.mono-project.com/>`_ project and
+           the `Python for .NET documentation <http://pythonnet.sourceforge.net/readme.html>`_.
         """
         try:
             import clr

@@ -84,8 +84,9 @@ def main(spec=None):
     subprocess.call(cmd)
 
     # the --version-file option for pyinstaller does not currently work on Windows, this is a fix
-    if loadlib.IS_WINDOWS:
-        ver = [os.path.join(here, 'verpatch'),
+    verpatch = os.path.join(here, 'verpatch.exe')
+    if loadlib.IS_WINDOWS and os.path.isfile(verpatch):
+        ver = [verpatch,
                os.path.join(here, loadlib.SERVER_FILENAME),
                '/va', '{0}.{1}.{2}'.format(*loadlib.version_info) + '.0',
                '/pv', '{0}.{1}.{2}.{4}'.format(*sys.version_info),
@@ -95,7 +96,9 @@ def main(spec=None):
         subprocess.call(ver)
 
     # cleanup
-    shutil.rmtree('./build')
+    shutil.rmtree('./build/' + loadlib.SERVER_FILENAME)
+    if not os.listdir('./build'):
+        shutil.rmtree('./build')
     if loadlib.IS_WINDOWS:
         # pyinstaller is able to include Python.Runtime.dll and Python.Runtime.dll.config
         # automatically in the build, so we don't need to keep the .spec file
@@ -103,6 +106,9 @@ def main(spec=None):
 
     # create the .NET Framework config file
     loadlib.LoadLibrary.check_dot_net_config(os.path.join(here, loadlib.SERVER_FILENAME))
+
+    # allow executing the server32-* file as a program
+    os.chmod(os.path.join(here, loadlib.SERVER_FILENAME), 755)
 
 
 def _get_standard_modules():

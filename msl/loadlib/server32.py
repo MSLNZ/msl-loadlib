@@ -155,7 +155,7 @@ class RequestHandler(BaseHTTPRequestHandler):
         Handle a GET request.
         """
         request = self.path[1:]
-        if request == 'SHUTDOWN_SERVER':
+        if request == 'SHUTDOWN_SERVER32':
             threading.Thread(target=self.server.shutdown).start()
             return
 

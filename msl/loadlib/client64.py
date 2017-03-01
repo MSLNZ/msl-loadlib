@@ -90,7 +90,7 @@ class Client64(HTTPConnection):
         if port is None:
             while True:
                 port = random.randint(1024, 65535)
-                if not self._port_in_use(port):
+                if not self.port_in_use(port):
                     break
 
         # the temporary file to use to save the pickle'd data
@@ -110,11 +110,7 @@ class Client64(HTTPConnection):
         # make sure that the server32 executable exists
         server_exe = os.path.join(os.path.dirname(__file__), SERVER_FILENAME)
         if not os.path.isfile(server_exe):
-            msg = 'Cannot find {}\n'.format(server_exe)
-            msg += 'You can create {} using\n'.format(SERVER_FILENAME)
-            msg += '>>> from msl.loadlib import freeze_server32\n'
-            msg += '>>> freeze_server32.main()'
-            raise IOError(msg)
+            raise IOError('Cannot find ' + server_exe)
 
         cmd = [server_exe,
                '--module', module32,
@@ -140,7 +136,7 @@ class Client64(HTTPConnection):
         # wait for the server to be running -- essentially this is the subprocess.wait() method
         stop = time.time() + max(0.0, timeout)
         while True:
-            if self._port_in_use(port):
+            if self.port_in_use(port):
                 break
             if time.time() > stop:
                 m = 'Timeout after {:.1f} s. Could not connect to {}:{}'.format(timeout, host, port)
@@ -190,7 +186,7 @@ class Client64(HTTPConnection):
         if not self._is_active:
             raise HTTPException('The server is not active')
 
-        if method32 == 'SHUTDOWN_SERVER':
+        if method32 == 'SHUTDOWN_SERVER32':
             self.request('GET', '/' + method32)
             return
 
@@ -207,9 +203,9 @@ class Client64(HTTPConnection):
             return result
         raise HTTPException(response.read().decode())
 
-    def shutdown_server(self):
+    def shutdown_server32(self):
         """
-        Shut down the server and delete the temporary file that is used to save the
+        Shut down the 32-bit server and delete the temporary file that is used to save the
         serialized :py:mod:`pickle`\'d data which is passed between the 32-bit server
         and the 64-bit client.
 
@@ -218,18 +214,28 @@ class Client64(HTTPConnection):
            object gets destroyed.
         """
         if self._is_active:
-            self.request32('SHUTDOWN_SERVER')
+            self.request32('SHUTDOWN_SERVER32')
             if os.path.isfile(self._pickle_temp_file):
                 os.remove(self._pickle_temp_file)
             self.close()
             self._is_active = False
 
     def __del__(self):
-        self.shutdown_server()
+        self.shutdown_server32()
 
-    def _port_in_use(self, port):
+    @staticmethod
+    def port_in_use(port):
         """
-        Uses 'netstat' to determine if the port is in use.
+        Uses netstat_ to determine if the network port is in use.
+
+        Args:
+            port (int): The port number to test.
+
+        Returns:
+            :py:class:`bool`: :py:data:`True` if the port is in use and :py:data:`False` if
+            the port is not in use.
+
+        .. _netstat: http://www.computerhope.com/unix/unetstat.htm
         """
         p = subprocess.Popen(['netstat', '-an'], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
         return p.communicate()[0].decode().find(':{} '.format(port)) > 0
