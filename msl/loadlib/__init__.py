@@ -4,6 +4,7 @@ Load a shared library.
 The following constants are provided in the **msl.loadlib** package.
 """
 import re
+import os
 import sys
 from collections import namedtuple
 
@@ -40,6 +41,9 @@ elif IS_MAC:
     SERVER_FILENAME = 'server32-mac'
 else:
     SERVER_FILENAME = 'server32-unknown'
+
+EXAMPLES_DIR =os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'examples', 'loadlib'))
+""":py:class:`str`: The path to the directory where the example shared-library files are located."""
 
 from .load_library import LoadLibrary
 from .server32 import Server32

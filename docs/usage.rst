@@ -7,21 +7,22 @@ If you are loading a 32-bit library in 32-bit Python, or a 64-bit library in 64-
 can directly load the library using :class:`~msl.loadlib.load_library.LoadLibrary`, (by default,
 :class:`ctypes.CDLL` is used to load the library)
 
-Import :class:`~msl.loadlib.load_library.LoadLibrary`
+Import the :class:`~msl.loadlib.load_library.LoadLibrary` class and the :data:`~msl.loadlib.EXAMPLES_DIR` constant
 
 .. code:: python
 
-   >>> from msl.loadlib import LoadLibrary
+   >>> import os
+   >>> from msl.loadlib import LoadLibrary, EXAMPLES_DIR
 
 Loading a **C++** library, :ref:`cpp_lib <cpp-lib>`
 
 .. code:: python
 
-   >>> cpp = LoadLibrary('./cpp_lib32')
+   >>> cpp = LoadLibrary(os.path.join(EXAMPLES_DIR, 'cpp_lib32'))
    >>> cpp
-   LoadLibrary object at 0x2e41810; libtype=CDLL; path=D:\examples\cpp_lib32.dll
+   LoadLibrary object at 0x2e41810; libtype=CDLL; path=D:\msl\examples\loadlib\cpp_lib32.dll
    >>> cpp.lib
-   <CDLL 'D:\examples\cpp_lib32.dll', handle 6f920000 at 0x2e41890>
+   <CDLL 'D:\msl\examples\loadlib\cpp_lib32.dll', handle 6f920000 at 0x2e41890>
    >>> cpp.lib.add(1, 2)
    3
 
@@ -30,11 +31,11 @@ Loading a **FORTRAN** library, :ref:`fortran_lib <fortran-lib>`
 .. code:: python
 
    >>> import ctypes
-   >>> fortran = LoadLibrary('./fortran_lib32')
+   >>> fortran = LoadLibrary(os.path.join(EXAMPLES_DIR, 'fortran_lib32'))
    >>> fortran
-   LoadLibrary object at 0x2e46eb0; libtype=CDLL; path=D:\examples\fortran_lib32.dll
+   LoadLibrary object at 0x2e46eb0; libtype=CDLL; path=D:\msl\examples\loadlib\fortran_lib32.dll
    >>> fortran.lib
-   <CDLL 'D:\examples\fortran_lib32.dll', handle 6f660000 at 0x2e5d470>
+   <CDLL 'D:\msl\examples\loadlib\fortran_lib32.dll', handle 6f660000 at 0x2e5d470>
    >>> fortran.lib.sum_32bit(ctypes.byref(ctypes.c_int32(-5)), ctypes.byref(ctypes.c_int32(25)))
    20
 
@@ -42,9 +43,9 @@ Loading a **C#** library (a .NET Framework Assembly), :ref:`dotnet_lib <dotnet-l
 
 .. code:: python
 
-   >>> net = LoadLibrary('./dotnet_lib32', 'net')
+   >>> net = LoadLibrary(os.path.join(EXAMPLES_DIR, 'dotnet_lib32.dll'), 'net')
    >>> net
-   LoadLibrary object at 0x2e41cf0; libtype=DotNetContainer; path=D:\examples\dotnet_lib32.dll
+   LoadLibrary object at 0x2e41cf0; libtype=DotNetContainer; path=D:\msl\examples\loadlib\dotnet_lib32.dll
    >>> net.assembly
    <System.Reflection.RuntimeAssembly object at 0x03099330>
    >>> net.lib
