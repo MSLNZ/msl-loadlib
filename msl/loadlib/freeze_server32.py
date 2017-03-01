@@ -107,9 +107,6 @@ def main(spec=None):
     # create the .NET Framework config file
     loadlib.LoadLibrary.check_dot_net_config(os.path.join(here, loadlib.SERVER_FILENAME))
 
-    # allow executing the server32-* file as a program
-    os.chmod(os.path.join(here, loadlib.SERVER_FILENAME), 755)
-
 
 def _get_standard_modules():
     """
