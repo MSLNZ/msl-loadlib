@@ -39,8 +39,9 @@ pytest_runner = ['pytest-runner'] if testing else []
 needs_sphinx = {'doc', 'docs', 'apidoc', 'apidocs', 'build_sphinx'}.intersection(sys.argv)
 sphinx = ['sphinx', 'sphinx_rtd_theme'] if needs_sphinx else []
 
-# pycparser is needed to install pythonnet on Linux
-install_requires = ['pycparser'] if loadlib.IS_LINUX else []
+# pycparser is needed to install pythonnet on a non-Windows OS
+# it does not automatically get installed before pythonnet is installed
+install_requires = ['pycparser'] if not loadlib.IS_WINDOWS else []
 install_requires += read('requirements.txt').split() if not testing else []
 
 setup(
