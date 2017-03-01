@@ -13,7 +13,7 @@ This package is basically just a thin wrapper around `ctypes <https://docs.pytho
 the primary advantage is that it is possible to communicate with a 32-bit shared library from 64-bit Python.
 
 Tested in Python 2.7, 3.3 - 3.6. The `examples <http://msl-loadlib.readthedocs.io/en/latest/examples.html>`_
-provided are currently only supported in Windows, however **MSL-LoadLib** should work properly with any OS
+provided are currently only supported in Windows and Linux, however **MSL-LoadLib** should work properly with any OS
 *(not tested)* that `Python for .NET <https://pypi.python.org/pypi/pythonnet/>`_ supports (and if you don't
 care about loading .NET libraries then **MSL-LoadLib** is a pure-python package so it is OS independent).
 
@@ -61,9 +61,12 @@ The documentation for **MSL-LoadLib** can be found `here <http://msl-loadlib.rea
 Install
 -------
 
-Install **MSL-LoadLib** using pip::
+If using Windows you can install **MSL-LoadLib** using pip::
 
    pip install https://github.com/MSLNZ/msl-loadlib/archive/master.zip
+
+For installation on Linux, please follow the instructions on the
+`prerequisites <http://msl-loadlib.readthedocs.io/en/latest/install.html#prerequisites>`_ section of the documentation.
 
 Developers Guide
 ----------------
