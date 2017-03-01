@@ -1,3 +1,5 @@
-include msl/loadlib/server32*
-include msl/loadlib/verpatch.exe
+include msl/loadlib/server32-windows.exe
+include msl/loadlib/server32-windows.exe.config
+include msl/loadlib/server32-linux
+include msl/loadlib/server32-linux.config
 include msl/examples/loadlib/*
