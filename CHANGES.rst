@@ -2,6 +2,10 @@
 Changelog
 =========
 
+Version 0.2.1 (in development)
+==============================
+-
+
 Version 0.2.0 (2017.03.02)
 ==========================
 - examples now working in Linux
