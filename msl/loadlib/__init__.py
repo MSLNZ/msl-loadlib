@@ -10,7 +10,7 @@ from collections import namedtuple
 
 __author__ = 'Joseph Borbely'
 __copyright__ = '\xa9 2017, ' + __author__
-__version__ = '0.2.0-dev'
+__version__ = '0.2.0'
 
 version_info = namedtuple('version_info', 'major minor micro releaselevel')(*(int(v) if v.isdigit() else v for v in re.split('[. -]', __version__)))
 """:py:func:`~collections.namedtuple`: Contains the version information as a (major, minor, micro, releaselevel) tuple."""

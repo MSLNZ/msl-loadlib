@@ -2,8 +2,8 @@
 Changelog
 =========
 
-Version 0.2.0 (in development)
-==============================
+Version 0.2.0 (2017.03.02)
+==========================
 - examples now working in Linux
 - fix MSL namespace
 - include all C# modules, classes and System.Type objects in the .NET loaded-library object
