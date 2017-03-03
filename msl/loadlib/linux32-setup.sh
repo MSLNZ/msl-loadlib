@@ -1,6 +1,6 @@
 #!/bin/bash
 #
-# This script will install the pre-requisites for the MSL-LoadLib package on 32-bit Linux.
+# This script will install the pre-requisites for the MSL-LoadLib package on 32-bit Ubuntu.
 #
 # Essentially the script gets everything installed so that you can create the frozen 32-bit server
 #   $ python3 freeze_server32.py server32-linux.spec
@@ -18,7 +18,7 @@ sudo apt-get -y install build-essential g++ gcc-multilib g++-multilib gfortran
 
 # install Mono
 
-sudo apt-get -y install software-properties-common libglib2.0-dev clang git 
+sudo apt-get -y install software-properties-common libglib2.0-dev clang
 
 sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 3FA7E0328081BFF6A14DA29AA6A19B38D3D831EF
 
@@ -34,29 +34,12 @@ sudo apt-get -y install python3-pip
 
 sudo -H pip3 install --upgrade pip
 
-# install pythonnet (installing from pip3 did not work)
+# install pythonnet
 
 sudo -H pip3 install pycparser
 
-git clone https://github.com/pythonnet/pythonnet.git
-
-cd pythonnet/
-
-sudo python3 setup.py install
+sudo -H pip3 install pythonnet
 
 # install pyinstaller
 
 sudo -H pip3 install pyinstaller
-
-# freeze server32
-
-cd ~
-
-git clone https://github.com/MSLNZ/msl-loadlib.git
-
-cd msl-loadlib/msl/loadlib/
-
-python3 freeze_server32.py server32-linux.spec
-
-
-

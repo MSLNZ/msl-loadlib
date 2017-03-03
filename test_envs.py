@@ -81,7 +81,6 @@ parser = argparse.ArgumentParser()
 parser.add_argument('-s', '--show', action='store_true', help='show the conda envs to use then exit')
 parser.add_argument('-i', '--include', default='', nargs='+', help='the conda envs to include')
 parser.add_argument('-e', '--exclude', default='', nargs='+', help='the conda envs to exclude')
-parser.add_argument('-t', '--timeout', default=10.0, help='abort after a timeout [default is 10 sec]')
 args = parser.parse_args()
 
 # get a list of all conda envs

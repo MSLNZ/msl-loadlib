@@ -10,9 +10,9 @@ from collections import namedtuple
 
 __author__ = 'Joseph Borbely'
 __copyright__ = '\xa9 2017, ' + __author__
-__version__ = '0.2.1'
+__version__ = '0.2.2'
 
-version_info = namedtuple('version_info', 'major minor micro')(*__version__.split('.'))
+version_info = namedtuple('version_info', 'major minor micro')(*map(int, __version__.split('.')))
 """:py:func:`~collections.namedtuple`: Contains the version information as a (major, minor, micro) tuple."""
 
 IS_WINDOWS = sys.platform in ['win32', 'cygwin']
