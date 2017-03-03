@@ -18,7 +18,7 @@ sudo apt-get -y install build-essential g++ gcc-multilib g++-multilib gfortran
 
 # install Mono
 
-sudo apt-get -y install software-properties-common libglib2.0-dev clang
+sudo apt-get -y install software-properties-common libglib2.0-dev clang git
 
 sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 3FA7E0328081BFF6A14DA29AA6A19B38D3D831EF
 
@@ -35,10 +35,15 @@ sudo apt-get -y install python3-pip
 sudo -H pip3 install --upgrade pip
 
 # install pythonnet
+# (installing from pip3 using the latest release v2.2.2 did not work when doing "import clr" in 64-bit Ubuntu)
 
 sudo -H pip3 install pycparser
 
-sudo -H pip3 install pythonnet
+git clone https://github.com/pythonnet/pythonnet.git
+
+cd pythonnet/
+
+sudo python3 setup.py install
 
 # install pyinstaller
 
