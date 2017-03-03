@@ -2,6 +2,10 @@
 Changelog
 =========
 
+Version 0.2.3 (in development)
+==============================
+-
+
 Version 0.2.2 (2017.03.03)
 ==========================
 - refreeze server32 executables
