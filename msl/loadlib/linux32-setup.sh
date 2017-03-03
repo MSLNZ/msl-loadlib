@@ -18,7 +18,7 @@ sudo apt-get -y install build-essential g++ gcc-multilib g++-multilib gfortran
 
 # install Mono
 
-sudo apt-get -y install software-properties-common libglib2.0-dev clang git 
+sudo apt-get -y install software-properties-common libglib2.0-dev clang
 
 sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 3FA7E0328081BFF6A14DA29AA6A19B38D3D831EF
 
@@ -43,13 +43,3 @@ sudo -H pip3 install pythonnet
 # install pyinstaller
 
 sudo -H pip3 install pyinstaller
-
-# freeze server32
-
-cd ~
-
-git clone https://github.com/MSLNZ/msl-loadlib.git
-
-cd msl-loadlib/msl/loadlib/
-
-python3 freeze_server32.py server32-linux.spec
