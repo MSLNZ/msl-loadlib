@@ -5,6 +5,7 @@ a `.NET Framework <http://pythonnet.github.io/>`_ library.
 import os
 import sys
 import ctypes
+import ctypes.util
 import logging
 import xml.etree.ElementTree as ET
 
@@ -57,7 +58,9 @@ class LoadLibrary(object):
 
         self._path = os.path.abspath(path)
         if not os.path.isfile(self._path):
-            raise IOError('Cannot find the shared library ' + self._path + '\n')
+            self._path = ctypes.util.find_library(path)
+            if self._path is None:
+                raise IOError('Cannot find the shared library ' + path + '\n')
 
         if libtype == 'cdll':
             self._lib = ctypes.CDLL(self._path)
