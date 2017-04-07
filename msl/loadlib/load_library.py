@@ -44,23 +44,35 @@ class LoadLibrary(object):
     """
     def __init__(self, path, libtype='cdll'):
 
+        _path = path
+
         # a reference to the .NET Runtime Assembly
         self._assembly = None
 
         #  assume a default extension if no extension was provided
-        if not os.path.splitext(path)[1]:
+        if not os.path.splitext(_path)[1]:
             if IS_WINDOWS:
-                path += '.dll'
+                _path += '.dll'
             elif IS_LINUX:
-                path += '.so'
+                _path += '.so'
             elif IS_MAC:
-                path += '.dylib'
+                _path += '.dylib'
 
-        self._path = os.path.abspath(path)
+        self._path = os.path.abspath(_path)
         if not os.path.isfile(self._path):
+            # for find_library use the original 'path' value since it may be a library name
+            # without any prefix like lib, suffix like .so, .dylib or version number
             self._path = ctypes.util.find_library(path)
-            if self._path is None:
-                raise IOError('Cannot find the shared library ' + path + '\n')
+            if self._path is None:  # then search sys.path
+                success = False
+                for directory in sys.path:
+                    p = os.path.join(directory, _path)
+                    if os.path.isfile(p):
+                        self._path = p
+                        success = True
+                        break
+                if not success:
+                    raise IOError('Cannot find the shared library "{}"'.format(path))
 
         if libtype == 'cdll':
             self._lib = ctypes.CDLL(self._path)
@@ -126,15 +138,15 @@ class LoadLibrary(object):
 
     def __repr__(self):
         return '{} object at {}; libtype={}; path={}'.format(self.__class__.__name__,
-                                                                hex(id(self)),
-                                                                self.lib.__class__.__name__,
-                                                                self._path)
+                                                             hex(id(self)),
+                                                             self.lib.__class__.__name__,
+                                                             self._path)
 
     @property
     def path(self):
         """
         Returns:
-            :py:class:`str`: The absolute path to the shared library file.
+            :py:class:`str`: The path to the shared library file.
         """
         return self._path
 
