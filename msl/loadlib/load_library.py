@@ -24,9 +24,18 @@ class LoadLibrary(object):
         * :class:`ctypes.WinDLL` object if ``libtype`` = **'windll'**,
         * :class:`ctypes.OleDLL` object if ``libtype`` = **'oledll'**, or a
         * `CLR <http://pythonnet.github.io/>`_-type object if ``libtype`` = **'net'**.
-
+    
     Args:
         path (str): The path to the shared library.
+
+            The search order for finding the shared library is:
+                
+                1. assume that a full or a relative (to the current working directory) 
+                   path is specified,
+                2. use `ctypes.util.find_library <find_>`_ to find the shared library file,
+                3. search :py:data:`sys.path` to find the shared library.
+            
+            .. _find: https://docs.python.org/3/library/ctypes.html#finding-shared-libraries
 
         libtype (str, optional): The library type to use for the calling convention.
 
@@ -49,7 +58,7 @@ class LoadLibrary(object):
         # a reference to the .NET Runtime Assembly
         self._assembly = None
 
-        #  assume a default extension if no extension was provided
+        # assume a default extension if no extension was provided
         if not os.path.splitext(_path)[1]:
             if IS_WINDOWS:
                 _path += '.dll'
@@ -145,18 +154,16 @@ class LoadLibrary(object):
     @property
     def path(self):
         """
-        Returns:
-            :py:class:`str`: The path to the shared library file.
+        :py:class:`str`: The path to the shared library file.
         """
         return self._path
 
     @property
     def lib(self):
         """
-        Returns:
-            The reference to the loaded-library object.
+        The reference to the loaded-library object.
 
-            For example:
+        For example:
 
             * if ``libtype`` = **'cdll'** then a :class:`ctypes.CDLL` object is returned
             * if ``libtype`` = **'windll'** then a :class:`ctypes.WinDLL` object is returned
@@ -172,11 +179,10 @@ class LoadLibrary(object):
     @property
     def assembly(self):
         """
-        Returns:
-            The reference to the `.NET RuntimeAssembly
-            <https://msdn.microsoft.com/en-us/library/system.reflection.assembly(v=vs.110).aspx>`_
-            object -- *only if the shared library is a .NET library, otherwise returns*
-            :py:data:`None`.
+        The reference to the `.NET RuntimeAssembly
+        <https://msdn.microsoft.com/en-us/library/system.reflection.assembly(v=vs.110).aspx>`_
+        object -- *only if the shared library is a .NET library, otherwise returns*
+        :py:data:`None`.
         """
         return self._assembly
 
