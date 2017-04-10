@@ -42,7 +42,7 @@ sphinx = ['sphinx', 'sphinx_rtd_theme'] if needs_sphinx else []
 # pycparser is needed to install pythonnet on a non-Windows OS
 # it does not automatically get installed before pythonnet is installed
 install_requires = ['pycparser'] if not loadlib.IS_WINDOWS else []
-install_requires += read('requirements.txt').split() if not testing else []
+install_requires += read('requirements.txt').split('\n') if not testing else []
 
 setup(
     name='msl-loadlib',
