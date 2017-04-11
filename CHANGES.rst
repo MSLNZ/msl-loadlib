@@ -2,9 +2,10 @@
 Changelog
 =========
 
-Version 0.2.3 (in development)
-==============================
--
+Version 0.2.3 (2017.04.11)
+==========================
+- the frozen server32 executable (for Windows/Linux) now uses Python v3.6.1 and Python.NET v2.3.0
+- include ctypes.util.find_library and sys.path when searching for shared library
 
 Version 0.2.2 (2017.03.03)
 ==========================
