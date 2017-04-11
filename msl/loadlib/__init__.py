@@ -3,7 +3,6 @@ Load a shared library.
 
 The following constants are provided in the **msl.loadlib** package.
 """
-import re
 import os
 import sys
 from collections import namedtuple
