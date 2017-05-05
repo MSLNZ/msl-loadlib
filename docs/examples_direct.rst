@@ -67,12 +67,20 @@ View the static methods in the **StaticClass** class
    Int32 GetHashCode()
    System.Type GetType()
 
+
 Use the **StringManipulation** class in the :ref:`dotnet_lib32 <dotnet-lib>` library to reverse a string
 
 .. code:: python
 
    >>> net.lib.StringManipulation.reverse_string('abcdefghijklmnopqrstuvwxyz')
    'zyxwvutsrqponmlkjihgfedcba'
+
+Use the **StaticClass** in the :ref:`dotnet_lib32 <dotnet-lib>` library to add five numbers
+
+.. code:: python
+
+   >>> print(net.lib.StaticClass.GetMethod('add_multiple').Invoke(None, [1, 2, 3, 4, 5]))
+   15
 
 For more detailed examples on how to pass variables from Python to :mod:`ctypes`
 and `Python for .NET <https://pythonnet.github.io/>`_ view the source code of the
