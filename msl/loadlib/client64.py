@@ -31,9 +31,7 @@ else:
 
 
 class Client64(HTTPConnection):
-    """
-    All classes that want to communicate with a 32-bit library must be inherited
-    from this class.
+    """Base class for communicating with a 32-bit library from 64-bit Python.
 
     Starts a 32-bit server, :class:`~.server32.Server32`, to host a Python module
     that is a wrapper around a 32-bit library. The *client* module runs within
@@ -41,46 +39,49 @@ class Client64(HTTPConnection):
     the 32-bit library to execute the request. The server then provides a
     response back to the client.
 
-    Args:
-        module32 (str): The name of the Python module that is to be imported by
-            the 32-bit server.
+    Parameters
+    ----------
+    module32 : :obj:`str`
+        The name of the Python module that is to be imported by the 32-bit server.
+    host : :obj:`str`, optional
+        The IP address of the 32-bit server. Default is '127.0.0.1'.
+    port : :obj:`int`, optional
+        The port to open on the 32-bit server. Default is :obj:`None` (which means 
+        to automatically find a port that is available).
+    timeout : :obj:`float`, optional)
+        The maximum number of seconds to wait to establish a connection to the 
+        32-bit server. Default is 10.
+    quiet : :obj:`bool`, optional
+        Whether to hide :obj:`sys.stdout` messages from the 32-bit server. 
+        Default is :obj:`True`.
+    append_path : :obj:`str` or :obj:`list` of :obj:`str`, optional
+        Append path(s) to the 32-bit server's :obj:`sys.path` variable. 
+        Default is :obj:`None`.
 
-        host (str, optional): The IP address of the 32-bit server. Default is '127.0.0.1'.
+        For example, to add a single path
 
-        port (int, optional): The port to open on the 32-bit server. Default is :py:data:`None`
-            (which means to automatically find a port that is available).
+            append_path = 'D:/code/scripts'
 
-        timeout (float, optional): The maximum number of seconds to wait to establish a
-            connection to the 32-bit server. Default is 10.0.
+        and to add multiple paths
 
-        quiet (bool, optional): Whether to hide :py:data:`sys.stdout` messages from
-            the 32-bit server. Default is :py:data:`True`.
+            append_path = ['D:/code/scripts', 'D:/code/libs', 'D:/modules']
 
-        append_path (str, list[str], optional): Append
-            path(s) to the 32-bit server's :py:data:`sys.path` list of paths.
-            Default is :py:data:`None`.
+    Note
+    ----
+    If `module32` is not located in the current working directory then you 
+    must either specify the full path to `module32` **or** you can
+    specify the folder where `module32` is located by passing a value to the
+    `append_path` parameter. Using the `append_path` option also allows
+    for any other modules that `module32` may depend on to also be included
+    in :obj:`sys.path` so that those modules can be imported when `module32`
+    is imported.
 
-            For example, to add a single path
-
-                append_path = 'D:/code/scripts'
-
-            and to add multiple paths
-
-                append_path = ['D:/code/scripts', 'D:/code/libs', 'D:/modules']
-
-            .. note::
-                If ``module32`` is not located in the same folder as the *client* module
-                then you must either specify the full path to ``module32`` **or** you can
-                specify the folder where ``module32`` is located by passing a value to the
-                ``append_path`` argument. Using the ``append_path`` option also allows
-                for any other modules that ``module32`` may depend on to also be included
-                in :py:data:`sys.path` so that those modules can be imported when ``module32``
-                is imported.
-
-    Raises:
-        IOError: If the frozen executable cannot be found.
-        :py:class:`~http.client.HTTPException`: If the connection to the 32-bit server cannot
-            be established.
+    Raises
+    ------
+    IOError
+        If the frozen executable cannot be found. 
+    :class:`~http.client.HTTPException`
+        If the connection to the 32-bit server cannot be established.
     """
     def __init__(self, module32, host='127.0.0.1', port=None, timeout=10.0,
                  quiet=True, append_path=None):
@@ -156,32 +157,37 @@ class Client64(HTTPConnection):
 
     @property
     def lib32_path(self):
-        """
-        Returns:
-            :py:class:`str`: The absolute path to the 32-bit shared-library file.
+        """The path to the 32-bit library.
+        
+        Returns
+        -------
+        :obj:`str`
+            The path to the 32-bit shared-library file.
         """
         return self.request32('LIB32_PATH')
 
     def request32(self, method32, *args, **kwargs):
-        """
-        Send a request to the 32-bit server.
+        """Send a request to the 32-bit server.
 
-        Args:
-            method32 (str): The name of the method to call in the
-                :class:`~.server32.Server32` subclass.
+        Parameters
+        ----------
+        method32 : :obj:`str`
+            The name of the method to call in the :class:`~.server32.Server32` subclass.
+        *args
+            The arguments that the `method32` method in the :class:`~.server32.Server32` 
+            subclass requires.
+        **kwargs
+            The keyword arguments that the `method32` method in the 
+            :class:`~.server32.Server32` subclass requires.
 
-            *args: The arguments that the ``method32`` method in the
-                :class:`~.server32.Server32` subclass requires.
+        Returns
+        -------
+        The response from the 32-bit server.
 
-            **kwargs: The keyword arguments that the ``method32`` method in the
-                :class:`~.server32.Server32` subclass requires.
-
-        Returns:
-            The response from the 32-bit server.
-
-        Raises:
-            :py:class:`~http.client.HTTPException`: If there was an error
-                processing the request on the 32-bit server.
+        Raises
+        ------
+        :class:`~http.client.HTTPException`
+            If there was an error processing the request on the 32-bit server.
         """
         if not self._is_active:
             raise HTTPException('The server is not active')
@@ -204,14 +210,17 @@ class Client64(HTTPConnection):
         raise HTTPException(response.read().decode())
 
     def shutdown_server32(self):
-        """
-        Shut down the 32-bit server and delete the temporary file that is used to save the
-        serialized :py:mod:`pickle`\'d data which is passed between the 32-bit server
-        and the 64-bit client.
+        """Shutdown the 32-bit server.
+        
+        This method stops the process that is running the 32-bit server executable
+        and it deletes the temporary file that is used to save the serialized 
+        :mod:`pickle`\'d data which is passed between the 32-bit server and the
+        64-bit client.
 
-        .. note::
-           This method gets called automatically when the :class:`~.client64.Client64`
-           object gets destroyed.
+        Note
+        ----
+        This method gets called automatically when the :class:`~.client64.Client64`
+        object gets destroyed.
         """
         if self._is_active:
             self.request32('SHUTDOWN_SERVER32')
@@ -225,17 +234,19 @@ class Client64(HTTPConnection):
 
     @staticmethod
     def port_in_use(port):
-        """
-        Uses netstat_ to determine if the network port is in use.
-
-        Args:
-            port (int): The port number to test.
-
-        Returns:
-            :py:class:`bool`: :py:data:`True` if the port is in use and :py:data:`False` if
-            the port is not in use.
-
+        """Uses netstat_ to determine if the network port is in use.
+        
         .. _netstat: http://www.computerhope.com/unix/unetstat.htm
+
+        Parameters
+        ----------
+        port : :obj:`int`
+            The port number to test.
+
+        Returns
+        -------
+        :obj:`bool`
+            Whether the port is in use.        
         """
         p = subprocess.Popen(['netstat', '-an'], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
         return p.communicate()[0].decode().find(':{} '.format(port)) > 0

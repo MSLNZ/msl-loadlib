@@ -13,27 +13,28 @@ import ctypes
 from msl.loadlib import Server32
 
 
-# TODO: Compile "cpp_lib.cpp" in Linux/Mac
-
-
 class Cpp32(Server32):
-    """
-    A wrapper around the 32-bit C++ library :ref:`cpp_lib32 <cpp-lib>`.
+    """A wrapper around the 32-bit C++ library :ref:`cpp_lib32 <cpp-lib>`.
 
     This class demonstrates how to send/receive various data types to/from a
     32-bit C++ library via :py:mod:`ctypes`.
 
-    Args:
-        host (str): The IP address of the server.
-        port (int): The port to open on the server.
-        quiet (bool): Whether to hide :py:data:`sys.stdout` messages from the server.
+    Parameters
+    ----------
+    host : :obj:`str`
+        The IP address of the server.
+    port : :obj:`int`
+        The port to open on the server.
+    quiet : :obj:`bool`
+        Whether to hide :obj:`sys.stdout` messages from the server.
 
-    .. note::
-        Any class that is a subclass of :class:`~msl.loadlib.server32.Server32` **MUST**
-        provide three arguments in its constructor: ``host``, ``port`` and ``quiet``
-        (in that order). Otherwise the ``server32-*`` executable, see
-        :class:`~msl.loadlib.start_server32`, cannot create an instance of the
-        :class:`~msl.loadlib.server32.Server32` subclass.
+    Note
+    ----
+    Any class that is a subclass of :class:`~msl.loadlib.server32.Server32` **MUST**
+    provide three arguments in its constructor: `host`, `port` and `quiet`
+    (in that order). Otherwise the ``server32-*`` executable, see
+    :class:`~msl.loadlib.start_server32`, cannot create an instance of the
+    :class:`~msl.loadlib.server32.Server32` subclass.
     """
     def __init__(self, host, port, quiet):
         # By not specifying the extension of the library file the server will open
@@ -42,8 +43,7 @@ class Cpp32(Server32):
                           'cdll', host, port, quiet)
 
     def add(self, a, b):
-        """
-        Add two integers.
+        """Add two integers.
 
         The corresponding C++ code is
 
@@ -55,19 +55,22 @@ class Cpp32(Server32):
 
         See the corresponding 64-bit :meth:`~.cpp64.Cpp64.add` method.
 
-        Args:
-            a (int): The first integer.
-            b (int): The second integer.
+        Parameters
+        ----------
+        a : :obj:`int`
+            The first integer.
+        b : :obj:`int`
+            The second integer.
 
-        Returns:
-            :py:class:`int`: The sum of ``a`` and ``b``.
+        Returns
+        -------
+        :obj:`int`
+            The sum of `a` and `b`.
         """
         return self.lib.add(ctypes.c_int32(a), ctypes.c_int32(b))
 
     def subtract(self, a, b):
-        """
-        Subtract two floating-point numbers. *Note: 'float' refers to the C++
-        data type*.
+        """Subtract two floating-point numbers *('float' refers to the C++ data type)*.
 
         The corresponding C++ code is
 
@@ -79,20 +82,23 @@ class Cpp32(Server32):
 
         See the corresponding 64-bit :meth:`~.cpp64.Cpp64.subtract` method.
 
-        Args:
-            a (float): The first floating-point number.
-            b (float): The second floating-point number.
+        Parameters
+        ----------
+        a : :obj:`float`
+            The first floating-point number.
+        b : :obj:`float`
+            The second floating-point number.
 
-        Returns:
-            :py:class:`float`: The difference between ``a`` and ``b``.
+        Returns
+        -------
+        :obj:`float`
+            The difference between `a` and `b`.
         """
         self.lib.subtract.restype = ctypes.c_float
         return self.lib.subtract(ctypes.c_float(a), ctypes.c_float(b))
 
     def add_or_subtract(self, a, b, do_addition):
-        """
-        Add or subtract two double-precision numbers. *Note: 'double' refers to
-        the C++ data type*.
+        """Add or subtract two double-precision numbers *('double' refers to the C++ data type)*.
 
         The corresponding C++ code is
 
@@ -108,22 +114,25 @@ class Cpp32(Server32):
 
         See the corresponding 64-bit :meth:`~.cpp64.Cpp64.add_or_subtract` method.
 
-        Args:
-            a (float): The first double-precision number.
-            b (float): The second double-precision number.
-            do_addition (bool): Whether to **add**, :py:data:`True`, or **subtract**,
-                :py:data:`False`, the numbers.
+        Parameters
+        ----------
+        a : :obj:`float`
+            The first double-precision number.
+        b : :obj:`float`
+            The second double-precision number.
+        do_addition : :obj:`bool`
+            Whether to **add** the numbers.
 
-        Returns:
-            :py:class:`float`: Either ``a`` + ``b`` if ``do_addition`` is
-            :py:data:`True` or ``a`` - ``b`` otherwise.
+        Returns
+        -------
+        :obj:`float`
+            Either `a` + `b` if `do_addition` is :obj:`True` else `a` - `b`.
         """
         self.lib.add_or_subtract.restype = ctypes.c_double
         return self.lib.add_or_subtract(ctypes.c_double(a), ctypes.c_double(b), do_addition)
 
     def scalar_multiply(self, a, xin):
-        """
-        Multiply each element in an array by a number.
+        """Multiply each element in an array by a number.
 
         The corresponding C++ code is
 
@@ -137,13 +146,17 @@ class Cpp32(Server32):
 
         See the corresponding 64-bit :meth:`~.cpp64.Cpp64.scalar_multiply` method.
 
-        Args:
-            a (float): The scalar value.
-            xin (list[float]): The array to modify.
+        Parameters
+        ----------
+        a : :obj:`float`
+            The scalar value.
+        xin : :obj:`list` of :obj:`float`
+            The array to modify.
 
-        Returns:
-            A :py:class:`list` of :py:class:`float`'s: A new array with each
-            element in ``xin`` multiplied by ``a``.
+        Returns
+        -------
+        :obj:`list` of :obj:`float`
+            A new array with each element in `xin` multiplied by `a`.
         """
         n = len(xin)
         xout = (ctypes.c_double * n)()  # allocate memory
@@ -157,8 +170,7 @@ class Cpp32(Server32):
         return [value for value in xout]
 
     def reverse_string_v1(self, original):
-        """
-        Reverse a string (version 1).
+        """Reverse a string (version 1).
 
         In this method Python allocates the memory for the reversed string and
         passes the string to C++.
@@ -175,11 +187,15 @@ class Cpp32(Server32):
 
         See the corresponding 64-bit :meth:`~.cpp64.Cpp64.reverse_string_v1` method.
 
-        Args:
-            original (str): The original string.
+        Parameters
+        ----------
+        original : :obj:`str`
+            The original string.
 
-        Returns:
-            :py:class:`str`: The string reversed.
+        Returns
+        -------
+        :obj:`str`
+            The string reversed.
         """
         n = len(original)
 
@@ -193,8 +209,7 @@ class Cpp32(Server32):
         return rev.raw.decode()
 
     def reverse_string_v2(self, original):
-        """
-        Reverse a string (version 2).
+        """Reverse a string (version 2).
 
         In this method C++ allocates the memory for the reversed string and passes
         the string to Python.
@@ -213,11 +228,15 @@ class Cpp32(Server32):
 
         See the corresponding 64-bit :meth:`~.cpp64.Cpp64.reverse_string_v2` method.
 
-        Args:
-            original (str): The original string.
+        Parameters
+        ----------
+        original : :obj:`str`
+            The original string.
 
-        Returns:
-            :py:class:`str`: The string reversed.
+        Returns
+        -------
+        :obj:`str`
+            The string reversed.
         """
         n = len(original)
         self.lib.reverse_string_v2.restype = ctypes.c_char_p

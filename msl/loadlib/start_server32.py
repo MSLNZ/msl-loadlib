@@ -21,8 +21,7 @@ from msl.loadlib import Server32
 
 
 def main():
-    """
-    Starts a 32-bit server (which is a subclass of :class:`~.server32.Server32`).
+    """Starts a 32-bit server (which is a subclass of :class:`~.server32.Server32`).
 
     Parses the command-line arguments to run a Python module on a 32-bit server
     to host a 32-bit library. To see the list of arguments that are allowed,

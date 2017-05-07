@@ -20,17 +20,22 @@ class Dummy32(Server32):
     Example of a server class that illustrates that Python data types are preserved
     when they are sent from the :class:`~.dummy64.Dummy64` client to the server.
 
-    Args:
-        host (str): The IP address of the server.
-        port (int): The port to open on the server.
-        quiet (bool): Whether to hide :py:data:`sys.stdout` messages from the server.
+    Parameters
+    ----------
+    host : :obj:`str`
+        The IP address of the server.
+    port : :obj:`int`
+        The port to open on the server.
+    quiet : :obj:`bool`
+        Whether to hide :obj:`sys.stdout` messages from the server.
 
-    .. note::
-        Any class that is a subclass of :class:`~msl.loadlib.server32.Server32` **MUST**
-        provide three arguments in its constructor: ``host``, ``port`` and ``quiet``
-        (in that order). Otherwise the ``server32-*`` executable, see
-        :class:`~msl.loadlib.start_server32`, cannot create an instance of the
-        :class:`~msl.loadlib.server32.Server32` subclass.
+    Note
+    ----
+    Any class that is a subclass of :class:`~msl.loadlib.server32.Server32` **MUST**
+    provide three arguments in its constructor: `host`, `port` and `quiet`
+    (in that order). Otherwise the ``server32-*`` executable, see
+    :class:`~msl.loadlib.start_server32`, cannot create an instance of the
+    :class:`~msl.loadlib.server32.Server32` subclass.
     """
     def __init__(self, host, port, quiet):
         # even though this is a *dummy* class that does not call a shared library
@@ -39,17 +44,20 @@ class Dummy32(Server32):
                           'cdll', host, port, quiet)
 
     def received_data(self, *args, **kwargs):
-        """
-        Process a request from the :meth:`~.dummy64.Dummy64.send_data` method from
+        """Process a request from the :meth:`~.dummy64.Dummy64.send_data` method from
         the 64-bit client.
 
-        Args:
-            *args: The arguments.
+        Parameters
+        ----------
+        *args
+            The arguments.
+        **kwargs
+            The keyword arguments.
 
-            **kwargs: The keyword arguments.
-
-        Returns:
-            :py:class:`tuple`: The ``args`` and ``kwargs`` that were received.
+        Returns
+        -------
+        :obj:`tuple`
+            The `args` and `kwargs` that were received.
         """
         if args and not self.quiet:
             print('The 32-bit server received these args:')

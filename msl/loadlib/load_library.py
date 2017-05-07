@@ -15,41 +15,44 @@ log = logging.getLogger(__name__)
 
 
 class LoadLibrary(object):
-    """
-    Loads the shared library.
+    """Load a shared library.
 
-    Based on the value of ``libtype`` this class will load the shared library as a:
+    Based on the value of `libtype` this class will load the shared library as a:
 
-        * :py:class:`ctypes.CDLL` object if ``libtype`` = **'cdll'**,
-        * :class:`ctypes.WinDLL` object if ``libtype`` = **'windll'**,
-        * :class:`ctypes.OleDLL` object if ``libtype`` = **'oledll'**, or a
-        * `CLR <http://pythonnet.github.io/>`_-type object if ``libtype`` = **'net'**.
+        * :class:`~ctypes.CDLL` if `libtype` = **'cdll'**,
+        * :class:`~ctypes.WinDLL` if `libtype` = **'windll'**,
+        * :class:`~ctypes.OleDLL` if `libtype` = **'oledll'**, or a
+        * :class:`~.load_library.DotNetContainer` if `libtype` = **'net'**.
     
-    Args:
-        path (str): The path to the shared library.
+    Parameters
+    ----------
+    path : :obj:`str`
+        The path to the shared library.
 
-            The search order for finding the shared library is:
-                
-                1. assume that a full or a relative (to the current working directory) 
-                   path is specified,
-                2. use `ctypes.util.find_library <find_>`_ to find the shared library file,
-                3. search :py:data:`sys.path` to find the shared library.
+        The search order for finding the shared library is:
             
-            .. _find: https://docs.python.org/3/library/ctypes.html#finding-shared-libraries
+            1. assume that a full or a relative (to the current working directory) 
+               path is specified,
+            2. use :obj:`ctypes.util.find_library` to find the shared library file,
+            3. search :obj:`sys.path` to find the shared library.
 
-        libtype (str, optional): The library type to use for the calling convention.
+    libtype : :obj:`str`, optional
+        The library type to use for the calling convention.
 
-            The following values are allowed:
+        The following values are allowed:
 
-            * ``libtype`` = **'cdll'**, for a **__cdecl** library
-            * ``libtype`` = **'windll'** or **'oledll'**, for a **__stdcall** library (Windows only)
-            * ``libtype`` = **'net'**, for a **.NET** library
+        * **'cdll'**, for a __cdecl library
+        * **'windll'** or **'oledll'**, for a __stdcall library (Windows only)
+        * **'net'**, for a .NET library
 
-            Default is **'cdll'**.
+        Default is **'cdll'**.
 
-    Raises:
-        IOError: If the shared library cannot be loaded.
-        TypeError: If the value of ``libtype`` is not supported.
+    Raises
+    ------
+    IOError
+        If the shared library cannot be loaded.
+    TypeError
+        If the value of `libtype` is not supported.
     """
     def __init__(self, path, libtype='cdll'):
 
@@ -153,22 +156,19 @@ class LoadLibrary(object):
 
     @property
     def path(self):
-        """
-        :py:class:`str`: The path to the shared library file.
-        """
+        """:obj:`str`: The path to the shared library file."""
         return self._path
 
     @property
     def lib(self):
-        """
-        The reference to the loaded-library object.
+        """Returns the reference to the loaded-library object.
 
         For example:
 
-            * if ``libtype`` = **'cdll'** then a :class:`ctypes.CDLL` object is returned
-            * if ``libtype`` = **'windll'** then a :class:`ctypes.WinDLL` object is returned
-            * if ``libtype`` = **'oledll'** then a :class:`ctypes.OleDLL` object is returned
-            * if ``libtype`` = **'net'** then a :class:`~.load_library.DotNetContainer` containing
+            * if `libtype` = **'cdll'** then a :class:`~ctypes.CDLL` object is returned
+            * if `libtype` = **'windll'** then a :class:`~ctypes.WinDLL` object is returned
+            * if `libtype` = **'oledll'** then a :class:`~ctypes.OleDLL` object is returned
+            * if `libtype` = **'net'** then a :class:`~.load_library.DotNetContainer` containing
               the .NET namespaces_, classes and/or `System.Type`_ objects.
 
         .. _namespaces: https://msdn.microsoft.com/en-us/library/z2kcy19k.aspx
@@ -179,25 +179,31 @@ class LoadLibrary(object):
     @property
     def assembly(self):
         """
-        The reference to the `.NET RuntimeAssembly
-        <https://msdn.microsoft.com/en-us/library/system.reflection.assembly(v=vs.110).aspx>`_
-        object -- *only if the shared library is a .NET library, otherwise returns*
-        :py:data:`None`.
+        Returns the reference to the `.NET RuntimeAssembly <NET_>`_ object -- *only if
+        the shared library is a .NET library, otherwise returns* :obj:`None`.
+
+        .. tip::
+           The `JetBrains dotPeek <https://www.jetbrains.com/decompiler/>`_ program can be used
+           to reliably decompile any .NET assembly into the equivalent C# source code.
+
+        .. _NET: https://msdn.microsoft.com/en-us/library/system.reflection.assembly(v=vs.110).aspx
         """
         return self._assembly
 
     @staticmethod
     def is_pythonnet_installed():
-        """
-        Checks if `Python for .NET <http://pythonnet.github.io/>`_ is installed.
+        """Checks if `Python for .NET <http://pythonnet.github.io/>`_ is installed.
 
-        Returns:
-            :py:class:`bool`: :py:data:`True` if it is installed.
+        Returns
+        -------
+        :obj:`bool`
+            Whether Python for .NET is installed.
 
-        .. note::
-           For help getting Python for .NET working on a non-Windows operating system look at
-           the :ref:`prerequisites`, the `Mono <http://www.mono-project.com/>`_ project and
-           the `Python for .NET documentation <http://pythonnet.sourceforge.net/readme.html>`_.
+        Note
+        ----
+        For help getting Python for .NET working on a non-Windows operating system look at
+        the :ref:`prerequisites`, the `Mono <http://www.mono-project.com/>`_ project and
+        the `Python for .NET documentation <http://pythonnet.sourceforge.net/readme.html>`_.
         """
         try:
             import clr
@@ -208,8 +214,7 @@ class LoadLibrary(object):
 
     @staticmethod
     def check_dot_net_config(py_exe_path):
-        """
-        Check if the **useLegacyV2RuntimeActivationPolicy** property is enabled.
+        """Check if the **useLegacyV2RuntimeActivationPolicy** property is enabled.
 
         By default, `Python for .NET <http://pythonnet.github.io/>`_ only works with .NET
         4.0+ and therefore it cannot automatically load a shared library that was compiled
@@ -229,18 +234,22 @@ class LoadLibrary(object):
                 </startup>
             </configuration>
 
-        Args:
-            py_exe_path (str): The path to the Python executable.
+        Parameters
+        ----------
+        py_exe_path : :obj:`str`
+            The path to the Python executable.
 
-        Returns:
-            :py:class:`tuple`: (:py:class:`int`, :py:class:`str`)
-            Where the first index is one of the following status values:
+        Returns
+        -------
+        :obj:`int`
+            One of the following values:
+            
+                * -1 -- if there was a problem
+                * 0 -- if the .NET property was already enabled, or
+                * 1 -- if the property was created successfully.
 
-            * -1 if there was a problem
-            * 0 if the .NET property was already enabled, or
-            * 1 if the property was created successfully.
-
-            and the second index is a message describing the outcome.
+        :obj:`str`
+            A message describing the outcome.
         """
 
         config_path = py_exe_path + '.config'
@@ -302,8 +311,7 @@ class LoadLibrary(object):
 
 
 class DotNetContainer(object):
-    """
-    A container for the namespace_ modules, classes and `System.Type`_ objects
+    """A container for the namespace_ modules, classes and `System.Type`_ objects
     of a .NET library.
 
     .. _namespace: https://msdn.microsoft.com/en-us/library/z2kcy19k.aspx

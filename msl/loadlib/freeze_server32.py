@@ -33,18 +33,19 @@ else:
 
 
 def main(spec=None):
-    """
-    Creates a `frozen <PyInstaller_>`_ 32-bit Python server.
+    """Creates a `frozen <PyInstaller_>`_ 32-bit Python server.
 
     Uses PyInstaller_ to create a `frozen <PyInstaller_>`_ 32-bit Python executable.
     This executable starts a server, :class:`~.server32.Server32`, which hosts a Python
     module that can load a 32-bit library.
 
-    Args:
-        spec (str, optional): If you want to freeze using a PyInstaller_ .spec file then you
-            can specify the path to the .spec file. Default is :py:data:`None`.
-
     .. _PyInstaller: http://www.pyinstaller.org/
+    
+    Parameters
+    ----------
+    spec : :obj:`str`, optional
+        If you want to freeze using a PyInstaller_ .spec file then you can specify the 
+        path to the .spec file. Default is :obj:`None`.    
     """
     if loadlib.IS_PYTHON_64BIT:
         print('Must run {} using a 32-bit Python interpreter'.format(os.path.basename(__file__)))
@@ -131,8 +132,10 @@ def _get_standard_modules():
     into the frozen application (only if the module is available for the operating
     system that is running this script).
 
-    Returns:
-       list[str]: A list of modules to be included and excluded
+    Returns
+    -------
+    :obj:`list` of :obj:`str`
+        A list of modules to be included and excluded.
     """
 
     # the frozen application is never meant to create GUIs or to add

@@ -22,9 +22,10 @@ class Dummy64(Client64):
     preserved when they are sent to the :class:`~.dummy32.Dummy32` server
     and back again.
 
-    Args:
-        quiet (bool, optional): Whether to hide :py:data:`sys.stdout` messages
-            from the client and from the server.
+    Parameters
+    ----------
+    quiet : :obj:`bool`, optional
+        Whether to hide :obj:`sys.stdout` messages from the client and from the server.
     """
     def __init__(self, quiet=False):
         Client64.__init__(self, module32='dummy32', append_path=os.path.dirname(__file__), quiet=quiet)
@@ -33,25 +34,29 @@ class Dummy64(Client64):
         if not quiet:
             print('Client running on ' + sys.version)
 
-    def send_data(self, *args64, **kwargs64):
-        """
-        Send a request to execute the :meth:`~.dummy32.Dummy32.received_data`
+    def send_data(self, *args, **kwargs):
+        """Send a request to execute the :meth:`~.dummy32.Dummy32.received_data`
         method on the 32-bit server.
 
-        Args:
-            *args64: The arguments that the :meth:`~.dummy32.Dummy32.received_data`
-                method requires.
-
-            **kwargs64: The keyword arguments that the :meth:`~.dummy32.Dummy32.received_data`
-                method requires.
+        Parameters
+        ----------
+        *args
+            The arguments that the :meth:`~.dummy32.Dummy32.received_data` method requires.
+        **kwargs
+            The keyword arguments that the :meth:`~.dummy32.Dummy32.received_data` method requires.
+        
+        Returns
+        -------
+        :obj:`tuple`
+            The `args` and `kwargs` that were returned from :meth:`~.dummy32.Dummy32.received_data`.
         """
-        args32, kwargs32 = self.request32('received_data', *args64, **kwargs64)
-        if args64 and not self._quiet:
-            print('Are the 64- and 32-bit arguments equal? {}'.format(args64 == args32))
+        args32, kwargs32 = self.request32('received_data', *args, **kwargs)
+        if args and not self._quiet:
+            print('Are the 64- and 32-bit arguments equal? {}'.format(args == args32))
             for arg in args32:
                 print('\t{} {}'.format(type(arg), arg))
-        if kwargs64 and not self._quiet:
-            print('Are the 64- and 32-bit keyword arguments equal? {}'.format(kwargs64 == kwargs32))
+        if kwargs and not self._quiet:
+            print('Are the 64- and 32-bit keyword arguments equal? {}'.format(kwargs == kwargs32))
             for key, value in kwargs32.items():
                 print('\t{}: {} {}'.format(key, type(value), value))
         return args32, kwargs32

@@ -18,8 +18,7 @@ from msl.loadlib import Client64
 
 
 class DotNet64(Client64):
-    """
-    Communicates with the 32-bit C# :ref:`dotnet_lib32.dll <dotnet-lib>` library.
+    """Communicates with the 32-bit C# :ref:`dotnet_lib32.dll <dotnet-lib>` library.
 
     This class demonstrates how to communicate with a 32-bit .NET library if an instance of this
     class is created within a 64-bit Python interpreter.
@@ -30,136 +29,172 @@ class DotNet64(Client64):
         Client64.__init__(self, module32='dotnet32', append_path=os.path.dirname(__file__))
 
     def get_class_names(self):
-        """
-        Request the names of the classes that are available in :ref:`dotnet_lib32.dll <dotnet-lib>`.
+        """Return the class names in the library.
 
         See the corresponding 32-bit :meth:`~.dotnet32.DotNet32.get_class_names` method.
+
+        Returns
+        -------
+        :obj:`list` of :obj:`str`
+            The names of the classes that are available in :ref:`dotnet_lib32.dll <dotnet-lib>`.        
         """
         return self.request32('get_class_names')
 
     def add_integers(self, a, b):
-        """
-        Add two integers.
+        """Add two integers.
 
         See the corresponding 32-bit :meth:`~.dotnet32.DotNet32.add_integers` method.
 
-        Args:
-            a (int): The first integer.
-            b (int): The second integer.
+        Parameters
+        ----------
+        a : :obj:`int`
+            The first integer.
+        b : :obj:`int`
+            The second integer.
 
-        Returns:
-            :py:class:`int`: The sum of ``a`` and ``b``.
+        Returns
+        -------
+        :obj:`int`
+            The sum of `a` and `b`.
         """
         return self.request32('add_integers', a, b)
 
     def divide_floats(self, a, b):
-        """
-        Divide two C# floating-point numbers.
+        """Divide two C# floating-point numbers.
 
         See the corresponding 32-bit :meth:`~.dotnet32.DotNet32.divide_floats` method.
 
-        Args:
-            a (float): The first number.
-            b (float): The second number.
+        Parameters
+        ----------
+        a : :obj:`float`
+            The first number.
+        b : :obj:`float`
+            The second number.
 
-        Returns:
-            :py:class:`float`:  ``a`` / ``b``.
+        Returns
+        -------
+        :obj:`float`:
+            The quotient of `a` / `b`.
         """
         return self.request32('divide_floats', a, b)
 
     def multiply_doubles(self, a, b):
-        """
-        Multiply two C# double-precision numbers.
+        """Multiply two C# double-precision numbers.
 
         See the corresponding 32-bit :meth:`~.dotnet32.DotNet32.multiply_doubles` method.
 
-        Args:
-            a (float): The first number.
-            b (float): The second number.
+        Parameters
+        ----------
+        a : :obj:`float`
+            The first number.
+        b : :obj:`float`
+            The second number.
 
-        Returns:
-            :py:class:`float`:  ``a`` * ``b``.
+        Returns
+        -------
+        :obj:`float`
+            The product of `a` * `b`.
         """
         return self.request32('multiply_doubles', a, b)
 
     def add_or_subtract(self, a, b, do_addition):
-        """
-        Add or subtract two C# double-precision numbers.
+        """Add or subtract two C# double-precision numbers.
 
         See the corresponding 32-bit :meth:`~.dotnet32.DotNet32.add_or_subtract` method.
 
-        Args:
-            a (float): The first double-precision number.
-            b (float): The second double-precision number.
-            do_addition (bool): Whether to **add**, :py:data:`True`, or **subtract**,
-                :py:data:`False`, the numbers.
+        Parameters
+        ----------
+        a : :obj:`float`
+            The first double-precision number.
+        b : :obj:`float`
+            The second double-precision number.
+        do_addition : :obj:`bool`
+            Whether to **add** the numbers.
 
-        Returns:
-            :py:class:`float`: Either ``a`` + ``b`` if ``do_addition`` is
-            :py:data:`True` or ``a`` - ``b`` otherwise.
+        Returns
+        -------
+        :obj:`float`
+            Either `a` + `b` if `do_addition` is :obj:`True` else `a` - `b`.
         """
         return self.request32('add_or_subtract', a, b, do_addition)
 
     def scalar_multiply(self, a, xin):
-        """
-        Multiply each element in an array by a number.
+        """Multiply each element in an array by a number.
 
         See the corresponding 32-bit :meth:`~.dotnet32.DotNet32.scalar_multiply` method.
 
-        Args:
-            a (float): The scalar value.
-            xin (list[float]): The array to modify.
+        Parameters
+        ----------
+        a : :obj:`float`
+            The scalar value.
+        xin : :obj:`list` of :obj:`float`
+            The array to modify.
 
-        Returns:
-            A :py:class:`list` of :py:class:`float`'s: A new array with each
-            element in ``xin`` multiplied by ``a``.
+        Returns
+        -------
+        :obj:`list` of :obj:`float`
+            A new array with each element in `xin` multiplied by `a`.
         """
         return self.request32('scalar_multiply', a, xin)
 
     def multiply_matrices(self, a1, a2):
-        """
-        Multiply two matrices.
+        """Multiply two matrices.
 
         See the corresponding 32-bit :meth:`~.dotnet32.DotNet32.multiply_matrices` method.
 
-        Args:
-            a1 (list[list[float]]): A matrix.
-            a2 (list[list[float]]): A matrix.
+        Parameters
+        ----------
+        a1 : :obj:`list` of :obj:`list` of :obj:`float`
+            The first matrix.
+        a2 : :obj:`list` of :obj:`list` of :obj:`float`
+            The second matrix.
 
-        Returns:
-             The result of ``a1`` * ``a2``.
+        Returns
+        -------
+        :obj:`list` of :obj:`list` of :obj:`float`
+             The result of `a1` * `a2`.
         """
         return self.request32('multiply_matrices', a1, a2)
 
     def reverse_string(self, original):
-        """
-        Reverse a string.
+        """Reverse a string.
 
         See the corresponding 32-bit :meth:`~.dotnet32.DotNet32.reverse_string` method.
 
-        Args:
-            original (str): The original string.
+        Parameters
+        ----------
+        original : :obj:`str`
+            The original string.
 
-        Returns:
-            :py:class:`str`: The string reversed.
+        Returns
+        -------
+        :obj:`str`
+            The string reversed.
         """
         return self.request32('reverse_string', original)
 
     def add_multiple(self, a, b, c, d, e):
-        """
-        Add multiple integers. *Calls a static method in a static class.*
+        """Add multiple integers. *Calls a static method in a static class.*
 
         See the corresponding 32-bit :meth:`~.dotnet32.DotNet32.add_multiple` method.
 
-        Args:
-            a (int): An integer.
-            b (int): An integer.
-            c (int): An integer.
-            d (int): An integer.
-            e (int): An integer.
+        Parameters
+        ----------
+        a : :obj:`int`
+            An integer.
+        b : :obj:`int` 
+            An integer.
+        c : :obj:`int`
+            An integer.
+        d : :obj:`int`
+            An integer.
+        e : :obj:`int`
+            An integer.
 
-        Returns:
-            :py:class:`int`: The sum of input arguments.
+        Returns
+        -------
+        :obj:`int`
+            The sum of the input arguments.
         """
         return self.request32('add_multiple', a, b, c, d, e)
 
@@ -169,15 +204,23 @@ class DotNet64(Client64):
 
         See the corresponding 32-bit :meth:`~.dotnet32.DotNet32.concatenate` method.
 
-        Args:
-            a (str): A string
-            b (str): A string
-            c (str): A string
-            d (bool): A boolean value for whether to include ``e`` in the concatenation
-            e (str): A string
+        Parameters
+        ----------
+        a : :obj:`str`
+            A string.
+        b : :obj:`str`
+            A string.
+        c : :obj:`str`
+            A string.
+        d : :obj:`bool`
+            Whether to include `e` in the concatenation.
+        e : :obj:`str`
+            A string.
 
-        Returns:
-            :py:class:`str`: The strings concatenated together.
+        Returns
+        -------
+        :obj:`str`
+            The strings concatenated together.
         """
         return self.request32('concatenate', a, b, c, d, e)
 

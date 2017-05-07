@@ -18,11 +18,10 @@ from msl.loadlib import Client64
 
 
 class Cpp64(Client64):
-    """
-    Communicates with a 32-bit C++ library, :ref:`cpp_lib32 <cpp-lib>`.
+    """Communicates with a 32-bit C++ library, :ref:`cpp_lib32 <cpp-lib>`.
 
-    This class demonstrates how to communicate with a 32-bit C++ library if an instance of this
-    class is created within a 64-bit Python interpreter.
+    This class demonstrates how to communicate with a 32-bit C++ library if an 
+    instance of this class is created within a 64-bit Python interpreter.
     """
     def __init__(self):
         # specify the name of the corresponding 32-bit server module, cpp32, which hosts
@@ -30,102 +29,120 @@ class Cpp64(Client64):
         Client64.__init__(self, module32='cpp32', append_path=os.path.dirname(__file__))
 
     def add(self, a, b):
-        """
-        Add two integers.
+        """Add two integers.
 
         See the corresponding 32-bit :meth:`~.cpp32.Cpp32.add` method.
 
-        Args:
-            a (int): The first integer.
-            b (int): The second integer.
+        Parameters
+        ----------
+        a : :obj:`int`
+            The first integer.
+        b : :obj:`int`
+            The second integer.
 
-        Returns:
-            :py:class:`int`: The sum of ``a`` and ``b``.
+        Returns
+        -------
+        :obj:`int`
+            The sum of `a` and `b`.
         """
         return self.request32('add', a, b)
 
     def subtract(self, a, b):
-        """
-        Subtract two floating-point numbers. *Note: 'float' refers to the C++
-        data type*.
+        """Subtract two floating-point numbers *('float' refers to the C++ data type)*.
 
         See the corresponding 32-bit :meth:`~.cpp32.Cpp32.subtract` method.
 
-        Args:
-            a (float): The first floating-point number.
-            b (float): The second floating-point number.
+        Parameters
+        ----------
+        a : :obj:`float`
+            The first floating-point number.
+        b : :obj:`float`
+            The second floating-point number.
 
-        Returns:
-            :py:class:`float`: The difference between ``a`` and ``b``.
+        Returns
+        -------
+        :obj:`float`
+            The difference between `a` and `b`.
         """
         return self.request32('subtract', a, b)
 
     def add_or_subtract(self, a, b, do_addition):
-        """
-        Add or subtract two floating-point numbers. *Note: 'double' refers to
-        the C++ data type*.
+        """Add or subtract two floating-point numbers *('double' refers to the C++ data type)*.
 
         See the corresponding 32-bit :meth:`~.cpp32.Cpp32.add_or_subtract` method.
 
-        Args:
-            a (float): The first floating-point number.
-            b (float): The second floating-point number.
-            do_addition (bool): Whether to **add**, :py:data:`True`, or **subtract**,
-                :py:data:`False`, the numbers.
+        Parameters
+        ----------
+        a : :obj:`float`
+            The first floating-point number.
+        b : :obj:`float`
+            The second floating-point number.
+        do_addition : :obj:`bool`
+            Whether to **add** the numbers.
 
-        Returns:
-            :py:class:`float`: Either ``a`` + ``b`` if ``do_addition`` is
-            :py:data:`True` or ``a`` - ``b`` otherwise.
+        Returns
+        -------
+        :obj:`float`
+            Either `a` + `b` if `do_addition` is :obj:`True` else `a` - `b`.
         """
         return self.request32('add_or_subtract', a, b, do_addition)
 
     def scalar_multiply(self, a, xin):
-        """
-        Multiply each element in an array by a number.
+        """Multiply each element in an array by a number.
 
         See the corresponding 32-bit :meth:`~.cpp32.Cpp32.scalar_multiply` method.
 
-        Args:
-            a (float): The scalar value.
-            xin (list[float]): The array to modify.
+        Parameters
+        ----------
+        a : :obj:`float`
+            The scalar value.
+        xin : :obj:`list` of :obj:`float`
+            The array to modify.
 
-        Returns:
-            A :py:class:`list` of :py:class:`float`'s: A new array with each element
-            in ``xin`` multiplied by ``a``.
+        Returns
+        -------
+        :obj:`list` of :obj:`float`
+            A new array with each element in `xin` multiplied by `a`.
         """
         return self.request32('scalar_multiply', a, xin)
 
     def reverse_string_v1(self, original):
-        """
-        Reverse a string (version 1).
+        """Reverse a string (version 1).
 
         In this method Python allocates the memory for the reversed string
         and passes the string to C++.
 
         See the corresponding 32-bit :meth:`~.cpp32.Cpp32.reverse_string_v1` method.
 
-        Args:
-            original (str): The original string.
+        Parameters
+        ----------
+        original : :obj:`str`
+            The original string.
 
-        Returns:
-            :py:class:`str`: The string reversed.
+        Returns
+        -------
+        :obj:`str`
+            The string reversed.
         """
         return self.request32('reverse_string_v1', original)
 
     def reverse_string_v2(self, original):
-        """
-        Reverse a string (version 2).
+        """Reverse a string (version 2).
 
         In this method C++ allocates the memory for the reversed string and passes
         the string to Python.
 
         See the corresponding 32-bit :meth:`~.cpp32.Cpp32.reverse_string_v2` method.
 
-        Args:
-            original (str): The original string.
+        Parameters
+        ----------
+        original : :obj:`str`
+            The original string.
 
-        Returns:
-            :py:class:`str`: The string reversed.
+        Returns
+        -------
+        :obj:`str`
+            The string reversed.
         """
         return self.request32('reverse_string_v2', original)
 

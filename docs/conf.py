@@ -37,13 +37,21 @@ autodoc_default_flags = ['members', 'undoc-members', 'show-inheritance']
 autosummary_generate = True
 
 # include both class docstring and __init__
-autoclass_content = "both"
+autoclass_content = 'both'
 
-# Force consistency, leave only Google Style
-napoleon_numpy_docstring = False
-
-# More legible
+# Napoleon settings
+napoleon_google_docstring = False
+napoleon_numpy_docstring = True
+napoleon_include_init_with_doc = False
+napoleon_include_private_with_doc = False
+napoleon_include_special_with_doc = False
+napoleon_use_admonition_for_examples = False
+napoleon_use_admonition_for_notes = False
+napoleon_use_admonition_for_references = False
+napoleon_use_ivar = False
+napoleon_use_param = True
 napoleon_use_rtype = False
+napoleon_use_keyword = True
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ['_templates']
@@ -167,7 +175,6 @@ texinfo_documents = [
 ]
 
 
-
 # -- Options for Epub output ----------------------------------------------
 
 # Bibliographic Dublin Core info.
@@ -187,7 +194,6 @@ epub_copyright = copyright
 
 # A list of files that should not be packed into the epub file.
 epub_exclude_files = ['search.html']
-
 
 
 # Example configuration for intersphinx: refer to the Python standard library.

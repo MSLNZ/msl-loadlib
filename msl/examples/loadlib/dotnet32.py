@@ -18,17 +18,22 @@ class DotNet32(Server32):
     :ref:`dotnet_lib32.dll <dotnet-lib>`. `Python for .NET <http://pythonnet.github.io/>`_
     can handle many native Python data types as input arguments.
 
-    Args:
-        host (str): The IP address of the server.
-        port (int): The port to open on the server.
-        quiet (bool): Whether to hide :py:data:`sys.stdout` messages from the server.
+    Parameters
+    ----------
+    host : :obj:`str`
+        The IP address of the server.
+    port : :obj:`int`
+        The port to open on the server.
+    quiet : :obj:`bool`
+        Whether to hide :obj:`sys.stdout` messages from the server.
 
-    .. note::
-        Any class that is a subclass of :class:`~msl.loadlib.server32.Server32` **MUST**
-        provide three arguments in its constructor: ``host``, ``port`` and ``quiet``
-        (in that order). Otherwise the ``server32-*`` executable, see
-        :class:`~msl.loadlib.start_server32`, cannot create an instance of the
-        :class:`~msl.loadlib.server32.Server32` subclass.
+    Note
+    ----
+    Any class that is a subclass of :class:`~msl.loadlib.server32.Server32` **MUST**
+    provide three arguments in its constructor: `host`, `port` and `quiet`
+    (in that order). Otherwise the ``server32-*`` executable, see
+    :class:`~msl.loadlib.start_server32`, cannot create an instance of the
+    :class:`~msl.loadlib.server32.Server32` subclass.
     """
     def __init__(self, host, port, quiet):
         Server32.__init__(self, os.path.join(os.path.dirname(__file__), 'dotnet_lib32.dll'),
@@ -38,16 +43,19 @@ class DotNet32(Server32):
         self.ArrayManipulation = self.lib.DotNetMSL.ArrayManipulation()
 
     def get_class_names(self):
-        """
-        Returns the names of the classes that are available in :ref:`dotnet_lib32.dll <dotnet-lib>`.
-
+        """Returns the class names in the library.
+        
         See the corresponding 64-bit :meth:`~.dotnet64.DotNet64.get_class_names` method.
+        
+        Returns
+        -------
+        :obj:`list` of :obj:`str`
+            The names of the classes that are available in :ref:`dotnet_lib32.dll <dotnet-lib>`.        
         """
         return ';'.join(str(name) for name in self.assembly.GetTypes()).split(';')
 
     def add_integers(self, a, b):
-        """
-        Add two integers.
+        """Add two integers.
 
         The corresponding C# code is
 
@@ -60,18 +68,22 @@ class DotNet32(Server32):
 
         See the corresponding 64-bit :meth:`~.dotnet64.DotNet64.add_integers` method.
 
-        Args:
-            a (int): The first integer.
-            b (int): The second integer.
+        Parameters
+        ----------
+        a : :obj:`int`
+            The first integer.
+        b : :obj:`int`
+            The second integer.
 
-        Returns:
-            :py:class:`int`: The sum of ``a`` and ``b``.
+        Returns
+        -------
+        :obj:`int`
+            The sum of `a` and `b`.
         """
         return self.BasicMath.add_integers(a, b)
 
     def divide_floats(self, a, b):
-        """
-        Divide two C# floating-point numbers.
+        """Divide two C# floating-point numbers.
 
         The corresponding C# code is
 
@@ -84,18 +96,22 @@ class DotNet32(Server32):
 
         See the corresponding 64-bit :meth:`~.dotnet64.DotNet64.divide_floats` method.
 
-        Args:
-            a (float): The first number.
-            b (float): The second number.
+        Parameters
+        ----------
+        a : :obj:`float`
+            The first number.
+        b : :obj:`float`
+            The second number.
 
-        Returns:
-            :py:class:`float`:  ``a`` / ``b``.
+        Returns
+        -------
+        :obj:`float`:
+            The quotient of `a` / `b`.
         """
         return self.BasicMath.divide_floats(a, b)
 
     def multiply_doubles(self, a, b):
-        """
-        Multiply two C# double-precision numbers.
+        """Multiply two C# double-precision numbers.
 
         The corresponding C# code is
 
@@ -108,18 +124,22 @@ class DotNet32(Server32):
 
         See the corresponding 64-bit :meth:`~.dotnet64.DotNet64.multiply_doubles` method.
 
-        Args:
-            a (float): The first number.
-            b (float): The second number.
+        Parameters
+        ----------
+        a : :obj:`float`
+            The first number.
+        b : :obj:`float`
+            The second number.
 
-        Returns:
-            :py:class:`float`:  ``a`` * ``b``.
+        Returns
+        -------
+        :obj:`float`
+            The product of `a` * `b`.
         """
         return self.BasicMath.multiply_doubles(a, b)
 
     def add_or_subtract(self, a, b, do_addition):
-        """
-        Add or subtract two C# double-precision numbers.
+        """Add or subtract two C# double-precision numbers.
 
         The corresponding C# code is
 
@@ -139,21 +159,24 @@ class DotNet32(Server32):
 
         See the corresponding 64-bit :meth:`~.dotnet64.DotNet64.add_or_subtract` method.
 
-        Args:
-            a (float): The first double-precision number.
-            b (float): The second double-precision number.
-            do_addition (bool): Whether to **add**, :py:data:`True`, or **subtract**,
-                :py:data:`False`, the numbers.
+        Parameters
+        ----------
+        a : :obj:`float`
+            The first double-precision number.
+        b : :obj:`float`
+            The second double-precision number.
+        do_addition : :obj:`bool`
+            Whether to **add** the numbers.
 
-        Returns:
-            :py:class:`float`: Either ``a`` + ``b`` if ``do_addition`` is
-            :py:data:`True` or ``a`` - ``b`` otherwise.
+        Returns
+        -------
+        :obj:`float`
+            Either `a` + `b` if `do_addition` is :obj:`True` else `a` - `b`.
         """
         return self.BasicMath.add_or_subtract(a, b, do_addition)
 
     def scalar_multiply(self, a, xin):
-        """
-        Multiply each element in an array by a number.
+        """Multiply each element in an array by a number.
 
         The corresponding C# code is
 
@@ -172,20 +195,23 @@ class DotNet32(Server32):
 
         See the corresponding 64-bit :meth:`~.dotnet64.DotNet64.scalar_multiply` method.
 
-        Args:
-            a (float): The scalar value.
-            xin (list[float]): The array to modify.
+        Parameters
+        ----------
+        a : :obj:`float`
+            The scalar value.
+        xin : :obj:`list` of :obj:`float`
+            The array to modify.
 
-        Returns:
-            A :py:class:`list` of :py:class:`float`'s: A new array with each
-            element in ``xin`` multiplied by ``a``.
+        Returns
+        -------
+        :obj:`list` of :obj:`float`
+            A new array with each element in `xin` multiplied by `a`.
         """
         ret = self.ArrayManipulation.scalar_multiply(a, xin)
         return [val for val in ret]
 
     def multiply_matrices(self, a1, a2):
-        """
-        Multiply two matrices.
+        """Multiply two matrices.
 
         The corresponding C# code is
 
@@ -224,18 +250,24 @@ class DotNet32(Server32):
 
         See the corresponding 64-bit :meth:`~.dotnet64.DotNet64.multiply_matrices` method.
 
-        .. note::
-            The **CLR** package from `Python for .NET <http://pythonnet.github.io/>`_ contains
-            the `System <https://msdn.microsoft.com/en-us/library/system(v=vs.110).aspx>`_
-            namespace from the .NET Framework that is required to create and initialize a
-            2D matrix.
+        Note
+        ----
+        The **CLR** package from `Python for .NET <http://pythonnet.github.io/>`_ contains
+        the `System <https://msdn.microsoft.com/en-us/library/system(v=vs.110).aspx>`_
+        namespace from the .NET Framework that is required to create and initialize a
+        2D matrix.
 
-        Args:
-            a1 (list[list[float]]): A matrix.
-            a2 (list[list[float]]): A matrix.
+        Parameters
+        ----------
+        a1 : :obj:`list` of :obj:`list` of :obj:`float`
+            The first matrix.
+        a2 : :obj:`list` of :obj:`list` of :obj:`float`
+            The second matrix.
 
-        Returns:
-             The result of ``a1`` * ``a2``.
+        Returns
+        -------
+        :obj:`list` of :obj:`list` of :obj:`float`
+             The result of `a1` * `a2`.
         """
         # System is part of the clr package from Python for .NET.
         # Therefore, until "import clr" has been performed the System module cannot be imported.
@@ -266,8 +298,7 @@ class DotNet32(Server32):
         return [[ret[r, c] for c in range(ncols2)] for r in range(nrows1)]
 
     def reverse_string(self, original):
-        """
-        Reverse a string.
+        """Reverse a string.
 
         The corresponding C# code is
 
@@ -282,17 +313,20 @@ class DotNet32(Server32):
 
         See the corresponding 64-bit :meth:`~.dotnet64.DotNet64.reverse_string` method.
 
-        Args:
-            original (str): The original string.
+        Parameters
+        ----------
+        original : :obj:`str`
+            The original string.
 
-        Returns:
-            :py:class:`str`: The string reversed.
+        Returns
+        -------
+        :obj:`str`
+            The string reversed.
         """
         return self.lib.StringManipulation.reverse_string(original)
 
     def add_multiple(self, a, b, c, d, e):
-        """
-        Add multiple integers. *Calls a static method in a static class.*
+        """Add multiple integers. *Calls a static method in a static class.*
 
         The corresponding C# code is
 
@@ -305,21 +339,28 @@ class DotNet32(Server32):
 
         See the corresponding 64-bit :meth:`~.dotnet64.DotNet64.add_multiple` method.
 
-        Args:
-            a (int): An integer.
-            b (int): An integer.
-            c (int): An integer.
-            d (int): An integer.
-            e (int): An integer.
+        Parameters
+        ----------
+        a : :obj:`int`
+            An integer.
+        b : :obj:`int` 
+            An integer.
+        c : :obj:`int`
+            An integer.
+        d : :obj:`int`
+            An integer.
+        e : :obj:`int`
+            An integer.
 
-        Returns:
-            :py:class:`int`: The sum of input arguments.
+        Returns
+        -------
+        :obj:`int`
+            The sum of the input arguments.
         """
         return self.lib.StaticClass.GetMethod('add_multiple').Invoke(None, [a, b, c, d, e])
 
     def concatenate(self, a, b, c, d, e):
-        """
-        Concatenate strings. *Calls a static method in a static class.*
+        """Concatenate strings. *Calls a static method in a static class.*
 
         The corresponding C# code is
 
@@ -338,16 +379,22 @@ class DotNet32(Server32):
 
         See the corresponding 64-bit :meth:`~.dotnet64.DotNet64.concatenate` method.
 
-        Args:
-            a (str): A string
-            b (str): A string
-            c (str): A string
-            d (bool): Whether to include ``e`` in the concatenation
-            e (str): A string
+        Parameters
+        ----------
+        a : :obj:`str`
+            A string.
+        b : :obj:`str`
+            A string.
+        c : :obj:`str`
+            A string.
+        d : :obj:`bool`
+            Whether to include `e` in the concatenation.
+        e : :obj:`str`
+            A string.
 
-        Returns:
-            :py:class:`str`: The strings concatenated together.
+        Returns
+        -------
+        :obj:`str`
+            The strings concatenated together.
         """
         return self.lib.StaticClass.GetMethod('concatenate').Invoke(None, [a, b, c, d, e])
-
-

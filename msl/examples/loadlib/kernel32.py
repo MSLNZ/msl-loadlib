@@ -29,17 +29,22 @@ class Kernel32(Server32):
     Example of a class that is a wrapper around the Windows 32-bit `kernel32.dll
     <http://www.geoffchappell.com/studies/windows/win32/kernel32/api/>`_ library.
 
-    Args:
-        host (str): The IP address of the server.
-        port (int): The port to open on the server.
-        quiet (bool): Whether to hide :py:data:`sys.stdout` messages from the server.
+    Parameters
+    ----------
+    host : :obj:`str`
+        The IP address of the server.
+    port : :obj:`int`
+        The port to open on the server.
+    quiet : :obj:`bool`
+        Whether to hide :obj:`sys.stdout` messages from the server.
 
-    .. note::
-        Any class that is a subclass of :class:`~msl.loadlib.server32.Server32` **MUST**
-        provide three arguments in its constructor: ``host``, ``port`` and ``quiet``
-        (in that order). Otherwise the ``server32-*`` executable, see
-        :class:`~msl.loadlib.start_server32`, cannot create an instance of the
-        :class:`~msl.loadlib.server32.Server32` subclass.
+    Note
+    ----
+    Any class that is a subclass of :class:`~msl.loadlib.server32.Server32` **MUST**
+    provide three arguments in its constructor: `host`, `port` and `quiet`
+    (in that order). Otherwise the ``server32-*`` executable, see
+    :class:`~msl.loadlib.start_server32`, cannot create an instance of the
+    :class:`~msl.loadlib.server32.Server32` subclass.
     """
     def __init__(self, host, port, quiet):
         Server32.__init__(self, 'C:/Windows/SysWOW64/kernel32.dll', 'windll', host, port, quiet)
@@ -52,8 +57,10 @@ class Kernel32(Server32):
 
         See the corresponding 64-bit :meth:`~.kernel64.Kernel64.get_local_time` method.
 
-        Returns:
-            A :py:class:`~datetime.datetime` object of the current date and time.
+        Returns
+        -------
+        :class:`~datetime.datetime` 
+            The current date and time.
         """
         st = SystemTime()
         self.lib.GetLocalTime(ctypes.pointer(st))
@@ -63,8 +70,7 @@ class Kernel32(Server32):
 
 
 class SystemTime(ctypes.Structure):
-    """
-    Example of creating a :py:class:`ctypes.Structure`.
+    """Example of creating a :class:`ctypes.Structure`.
 
     See SYSTEMTIME_ for a description of the struct.
 

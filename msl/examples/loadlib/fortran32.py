@@ -14,24 +14,28 @@ from msl.loadlib import Server32
 
 
 class Fortran32(Server32):
-    """
-    A wrapper around a 32-bit FORTRAN library, :ref:`fortran_lib32 <fortran-lib>`.
+    """A wrapper around a 32-bit FORTRAN library, :ref:`fortran_lib32 <fortran-lib>`.
 
     This class demonstrates how to send/receive various data types to/from a
     32-bit FORTRAN library via :py:mod:`ctypes`. For a summary of the FORTRAN
     data types see `here <http://earth.uni-muenster.de/~joergs/doc/f90/unix-um/dfum_034.html>`_.
 
-    Args:
-        host (str): The IP address of the server.
-        port (int): The port to open on the server.
-        quiet (bool): Whether to hide :py:data:`sys.stdout` messages from the server.
+    Parameters
+    ----------
+    host : :obj:`str`
+        The IP address of the server.
+    port : :obj:`int`
+        The port to open on the server.
+    quiet : :obj:`bool`
+        Whether to hide :obj:`sys.stdout` messages from the server.
 
-    .. note::
-        Any class that is a subclass of :class:`~msl.loadlib.server32.Server32` **MUST**
-        provide three arguments in its constructor: ``host``, ``port`` and ``quiet``
-        (in that order). Otherwise the ``server32-*`` executable, see
-        :class:`~msl.loadlib.start_server32`, cannot create an instance of the
-        :class:`~msl.loadlib.server32.Server32` subclass.
+    Note
+    ----
+    Any class that is a subclass of :class:`~msl.loadlib.server32.Server32` **MUST**
+    provide three arguments in its constructor: `host`, `port` and `quiet`
+    (in that order). Otherwise the ``server32-*`` executable, see
+    :class:`~msl.loadlib.start_server32`, cannot create an instance of the
+    :class:`~msl.loadlib.server32.Server32` subclass.
     """
     def __init__(self, host, port, quiet):
         # By not specifying the extension of the library file the server will open
@@ -40,10 +44,11 @@ class Fortran32(Server32):
                           'cdll', host, port, quiet)
 
     def sum_8bit(self, a, b):
-        """
-        Add two 8-bit signed integers. *Note: Python only has one* :py:class:`int`
-        *data type to represent integer values. The* :meth:`~.fortran32.Fortran32.sum_8bit`
-        *method converts the data types of* ``a`` *and* ``b`` *to be* :py:class:`ctypes.c_int8`.
+        """Add two 8-bit signed integers. 
+        
+        Python only has one :obj:`int` data type to represent integer values. 
+        The :meth:`~.fortran32.Fortran32.sum_8bit` method converts the data types 
+        of `a` and `b` to be :obj:`ctypes.c_int8`.
 
         The corresponding FORTRAN code is
 
@@ -58,12 +63,17 @@ class Fortran32(Server32):
 
         See the corresponding 64-bit :meth:`~.fortran64.Fortran64.sum_8bit` method.
 
-        Args:
-            a (int): The first 8-bit signed integer.
-            b (int): The second 8-bit signed integer.
+        Parameters
+        ----------
+        a : :obj:`int`
+            The first 8-bit signed integer.
+        b : :obj:`int`
+            The second 8-bit signed integer.
 
-        Returns:
-            :py:class:`int`: The sum of ``a`` and ``b``.
+        Returns
+        -------
+        :obj:`int`
+            The sum of `a` and `b`.
         """
         ac = ctypes.c_int8(a)
         bc = ctypes.c_int8(b)
@@ -71,10 +81,11 @@ class Fortran32(Server32):
         return self.lib.sum_8bit(ctypes.byref(ac), ctypes.byref(bc))
 
     def sum_16bit(self, a, b):
-        """
-        Add two 16-bit signed integers. *Note: Python only has one* :py:class:`int`
-        *data type to represent integer values. The* :meth:`~.fortran32.Fortran32.sum_16bit`
-        *method converts the data types of* ``a`` *and* ``b`` *to be* :py:class:`ctypes.c_int16`.
+        """Add two 16-bit signed integers
+        
+        Python only has one :obj:`int` data type to represent integer values. 
+        The :meth:`~.fortran32.Fortran32.sum_16bit` method converts the data 
+        types of `a` and `b` to be :obj:`ctypes.c_int16`.
 
         The corresponding FORTRAN code is
 
@@ -89,12 +100,17 @@ class Fortran32(Server32):
 
         See the corresponding 64-bit :meth:`~.fortran64.Fortran64.sum_16bit` method.
 
-        Args:
-            a (int): The first 16-bit signed integer.
-            b (int): The second 16-bit signed integer.
+        Parameters
+        ----------
+        a : :obj:`int`
+            The first 16-bit signed integer.
+        b : :obj:`int`
+            The second 16-bit signed integer.
 
-        Returns:
-            :py:class:`int`: The sum of ``a`` and ``b``.
+        Returns
+        -------
+        :obj:`int`
+            The sum of `a` and `b`.
         """
         ac = ctypes.c_int16(a)
         bc = ctypes.c_int16(b)
@@ -102,10 +118,11 @@ class Fortran32(Server32):
         return self.lib.sum_16bit(ctypes.byref(ac), ctypes.byref(bc))
 
     def sum_32bit(self, a, b):
-        """
-        Add two 32-bit signed integers. *Note: Python only has one* :py:class:`int`
-        *data type to represent integer values. The* :meth:`~.fortran32.Fortran32.sum_32bit`
-        *method converts the data types of* ``a`` *and* ``b`` *to be* :py:class:`ctypes.c_int32`.
+        """Add two 32-bit signed integers. 
+        
+        Python only has one :obj:`int` data type to represent integer values. 
+        The :meth:`~.fortran32.Fortran32.sum_32bit` method converts the data types 
+        of `a` and `b` to be :obj:`ctypes.c_int32`.
 
         The corresponding FORTRAN code is
 
@@ -120,12 +137,17 @@ class Fortran32(Server32):
 
         See the corresponding 64-bit :meth:`~.fortran64.Fortran64.sum_32bit` method.
 
-        Args:
-            a (int): The first 32-bit signed integer.
-            b (int): The second 32-bit signed integer.
+        Parameters
+        ----------
+        a : :obj:`int`
+            The first 32-bit signed integer.
+        b : :obj:`int`
+            The second 32-bit signed integer.
 
-        Returns:
-            :py:class:`int`: The sum of ``a`` and ``b``.
+        Returns
+        -------
+        :obj:`int`
+            The sum of `a` and `b`.
         """
         ac = ctypes.c_int32(a)
         bc = ctypes.c_int32(b)
@@ -133,10 +155,11 @@ class Fortran32(Server32):
         return self.lib.sum_32bit(ctypes.byref(ac), ctypes.byref(bc))
 
     def sum_64bit(self, a, b):
-        """
-        Add two 64-bit signed integers. *Note: Python only has one* :py:class:`int`
-        *data type to represent integer values. The* :meth:`~.fortran32.Fortran32.sum_64bit`
-        *method converts the data types of* ``a`` *and* ``b`` *to be* :py:class:`ctypes.c_int64`.
+        """Add two 64-bit signed integers. 
+        
+        Python only has one :obj:`int` data type to represent integer values. 
+        The :meth:`~.fortran32.Fortran32.sum_64bit` method converts the data types 
+        of `a` and `b` to be :obj:`ctypes.c_int64`.
 
         The corresponding FORTRAN code is
 
@@ -151,12 +174,17 @@ class Fortran32(Server32):
 
         See the corresponding 64-bit :meth:`~.fortran64.Fortran64.sum_64bit` method.
 
-        Args:
-            a (int): The first 64-bit signed integer.
-            b (int): The second 64-bit signed integer.
+        Parameters
+        ----------
+        a : :obj:`int`
+            The first 64-bit signed integer.
+        b : :obj:`int`
+            The second 64-bit signed integer.
 
-        Returns:
-            :py:class:`int`: The sum of ``a`` and ``b``.
+        Returns
+        -------
+        :obj:`int`
+            The sum of `a` and `b`.
         """
         ac = ctypes.c_int64(a)
         bc = ctypes.c_int64(b)
@@ -164,8 +192,7 @@ class Fortran32(Server32):
         return self.lib.sum_64bit(ctypes.byref(ac), ctypes.byref(bc))
 
     def multiply_float32(self, a, b):
-        """
-        Multiply two FORTRAN floating-point numbers.
+        """Multiply two FORTRAN floating-point numbers.
 
         The corresponding FORTRAN code is
 
@@ -180,12 +207,17 @@ class Fortran32(Server32):
 
         See the corresponding 64-bit :meth:`~.fortran64.Fortran64.multiply_float32` method.
 
-        Args:
-            a (float): The first floating-point number.
-            b (float): The second floating-point number.
+        Parameters
+        ----------
+        a : :obj:`float`
+            The first floating-point number.
+        b : :obj:`float`
+            The second floating-point number.
 
-        Returns:
-            :py:class:`float`: The product of ``a`` and ``b``.
+        Returns
+        -------
+        :obj:`float`
+            The product of `a` and `b`.
         """
         ac = ctypes.c_float(a)
         bc = ctypes.c_float(b)
@@ -193,8 +225,7 @@ class Fortran32(Server32):
         return self.lib.multiply_float32(ctypes.byref(ac), ctypes.byref(bc))
 
     def multiply_float64(self, a, b):
-        """
-        Multiply two FORTRAN double-precision numbers.
+        """Multiply two FORTRAN double-precision numbers.
 
         The corresponding FORTRAN code is
 
@@ -209,12 +240,17 @@ class Fortran32(Server32):
 
         See the corresponding 64-bit :meth:`~.fortran64.Fortran64.multiply_float64` method.
 
-        Args:
-            a (float): The first double-precision number.
-            b (float): The second double-precision number.
+        Parameters
+        ----------
+        a : :obj:`float`
+            The first double-precision number.
+        b : :obj:`float`
+            The second double-precision number.
 
-        Returns:
-            :py:class:`float`: The product of ``a`` and ``b``.
+        Returns
+        -------
+        :obj:`float`
+            The product of `a` and `b`.
         """
         ac = ctypes.c_double(a)
         bc = ctypes.c_double(b)
@@ -222,8 +258,7 @@ class Fortran32(Server32):
         return self.lib.multiply_float64(ctypes.byref(ac), ctypes.byref(bc))
 
     def is_positive(self, a):
-        """
-        Returns whether the value of the input argument is > 0.
+        """Returns whether the value of the input argument is > 0.
 
         The corresponding FORTRAN code is
 
@@ -239,19 +274,22 @@ class Fortran32(Server32):
 
         See the corresponding 64-bit :meth:`~.fortran64.Fortran64.is_positive` method.
 
-        Args:
-            a (float): A double-precision number.
+        Parameters
+        ----------
+        a : :obj:`float`
+            A double-precision number.
 
-        Returns:
-            :py:class:`bool`: Whether the value of ``a`` is > 0.
+        Returns
+        -------
+        :obj:`bool`
+            Whether the value of `a` is > 0.
         """
         ac = ctypes.c_double(a)
         self.lib.is_positive.restype = ctypes.c_bool
         return self.lib.is_positive(ctypes.byref(ac))
 
     def add_or_subtract(self, a, b, do_addition):
-        """
-        Add or subtract two integers.
+        """Add or subtract two integers.
 
         The corresponding FORTRAN code is
 
@@ -271,15 +309,19 @@ class Fortran32(Server32):
 
         See the corresponding 64-bit :meth:`~.fortran64.Fortran64.add_or_subtract` method.
 
-        Args:
-            a (int): The first integer.
-            b (int): The second integer.
-            do_addition (bool): Whether to **add**, :py:data:`True`, or **subtract**,
-                :py:data:`False`, the numbers.
+        Parameters
+        ----------
+        a : :obj:`int`
+            The first integer.
+        b : :obj:`int`
+            The second integer.
+        do_addition : :obj:`bool`
+            Whether to **add** the numbers.
 
-        Returns:
-            :py:class:`int`: Either ``a`` + ``b`` if ``do_addition`` is
-            :py:data:`True` or ``a`` - ``b`` otherwise.
+        Returns
+        -------
+        :obj:`int`
+            Either `a` + `b` if `do_addition` is :obj:`True` else `a` - `b`.
         """
         ac = ctypes.c_int32(a)
         bc = ctypes.c_int32(b)
@@ -288,8 +330,7 @@ class Fortran32(Server32):
         return self.lib.add_or_subtract(ctypes.byref(ac), ctypes.byref(bc), ctypes.byref(logical))
 
     def factorial(self, n):
-        """
-        Compute the n'th factorial.
+        """Compute the n'th factorial.
 
         The corresponding FORTRAN code is
 
@@ -314,19 +355,22 @@ class Fortran32(Server32):
 
         See the corresponding 64-bit :meth:`~.fortran64.Fortran64.factorial` method.
 
-        Args:
-            n (int): The integer to computer the factorial of. The maximum allowed value is 127.
+        Parameters
+        ----------
+        n : :obj:`int`
+            The integer to computer the factorial of. The maximum allowed value is 127.
 
-        Returns:
-            :py:class:`float`: The factorial of ``n``.
+        Returns
+        -------
+        :obj:`float`
+            The factorial of `n`.
         """
         ac = ctypes.c_int8(n)
         self.lib.factorial.restype = ctypes.c_double
         return self.lib.factorial(ctypes.byref(ac))
 
     def standard_deviation(self, data):
-        """
-        Compute the standard deviation.
+        """Compute the standard deviation.
 
         The corresponding FORTRAN code is
 
@@ -342,11 +386,15 @@ class Fortran32(Server32):
 
         See the corresponding 64-bit :meth:`~.fortran64.Fortran64.standard_deviation` method.
 
-        Args:
-            data (list[float]): The data to compute the standard deviation of.
+        Parameters
+        ----------
+        data : :obj:`list` of :obj:`float`
+            The data to compute the standard deviation of.
 
-        Returns:
-            :py:class:`float`: The standard deviation of ``data``.
+        Returns
+        -------
+        :obj:`float`
+            The standard deviation of `data`.
         """
         n = len(data)
         nc = ctypes.c_int32(n)
@@ -355,8 +403,7 @@ class Fortran32(Server32):
         return self.lib.standard_deviation(ctypes.byref(datac), ctypes.byref(nc))
 
     def besselJ0(self, x):
-        """
-        Compute the Bessel function of the first kind of order 0 of x.
+        """Compute the Bessel function of the first kind of order 0 of x.
 
         The corresponding FORTRAN code is
 
@@ -370,19 +417,22 @@ class Fortran32(Server32):
 
         See the corresponding 64-bit :meth:`~.fortran64.Fortran64.besselJ0` method.
 
-        Args:
-            x (float): The value to compute ``BESSEL_J0`` of.
+        Parameters
+        ----------
+        x : :obj:`float`
+            The value to compute ``BESSEL_J0`` of.
 
-        Returns:
-            :py:class:`float`: The value of ``BESSEL_J0(x)``.
+        Returns
+        -------
+        :obj:`float`
+            The value of ``BESSEL_J0(x)``.
         """
         xc = ctypes.c_double(x)
         self.lib.besselj0.restype = ctypes.c_double
         return self.lib.besselj0(ctypes.byref(xc))
 
     def reverse_string(self, original):
-        """
-        Reverse a string.
+        """Reverse a string.
 
         The corresponding FORTRAN code is
 
@@ -401,11 +451,15 @@ class Fortran32(Server32):
 
         See the corresponding 64-bit :meth:`~.fortran64.Fortran64.reverse_string` method.
 
-        Args:
-            original (str): The original string.
+        Parameters
+        ----------
+        original : :obj:`str`
+            The original string.
 
-        Returns:
-            :py:class:`str`: The string reversed.
+        Returns
+        -------
+        :obj:`str`
+            The string reversed.
         """
         n = len(original)
         nc = ctypes.c_int32(n)
@@ -417,8 +471,7 @@ class Fortran32(Server32):
         return rev.raw.decode()
 
     def add_1D_arrays(self, a1, a2):
-        """
-        Perform an element-wise addition of two 1D double-precision arrays.
+        """Perform an element-wise addition of two 1D double-precision arrays.
 
         The corresponding FORTRAN code is
 
@@ -435,13 +488,17 @@ class Fortran32(Server32):
 
         See the corresponding 64-bit :meth:`~.fortran64.Fortran64.add_1D_arrays` method.
 
-        Args:
-            a1 (list[float]): The first array.
-            a2 (list[float]): The second array.
+        Parameters
+        ----------
+        a1 : :obj:`list` of :obj:`float`
+            The first array.
+        a2 : :obj:`list` of :obj:`float`
+            The second array.
 
-        Returns:
-             A :py:class:`list` of :py:class:`float`'s: The element-wise addition of
-             ``a1`` + ``a2``.
+        Returns
+        -------
+        :obj:`list` of :obj:`float`
+            The element-wise addition of `a1` + `a2`.
         """
         n = len(a1)
         nc = ctypes.c_int32(n)
@@ -455,14 +512,7 @@ class Fortran32(Server32):
         return [val for val in out]
 
     def matrix_multiply(self, a1, a2):
-        """
-        Multiply two matrices.
-
-        .. note::
-            FORTRAN stores multi-dimensional arrays in `column-major order <order_>`_, as
-            opposed to `row-major order <order_>`_ for C (Python) arrays. Therefore the
-            input matrices need to be transposed before sending the matrices to FORTRAN
-            and also the result needs to be transposed before returning the result.
+        """Multiply two matrices.
 
         The corresponding FORTRAN code is
 
@@ -477,16 +527,28 @@ class Fortran32(Server32):
                 a = MATMUL(a1, a2)
             end subroutine matrix_multiply
 
-        See the corresponding 64-bit :meth:`~.fortran64.Fortran64.matrix_multiply` method.
-
-        Args:
-            a1 (list[list[float]]): A matrix.
-            a2 (list[list[float]]): A matrix.
-
-        Returns:
-             The result of ``a1`` * ``a2``.
+        Note
+        ----
+        FORTRAN stores multi-dimensional arrays in `column-major order <order_>`_, as
+        opposed to `row-major order <order_>`_ for C (Python) arrays. Therefore the
+        input matrices need to be transposed before sending the matrices to FORTRAN
+        and also the result needs to be transposed before returning the result.
 
         .. _order: https://en.wikipedia.org/wiki/Row-_and_column-major_order
+        
+        See the corresponding 64-bit :meth:`~.fortran64.Fortran64.matrix_multiply` method.
+
+        Parameters
+        ----------
+        a1 : :obj:`list` of :obj:`list` of :obj:`float`
+            The first matrix.
+        a2 : :obj:`list` of :obj:`list` of :obj:`float`
+            The second matrix.
+
+        Returns
+        -------
+        :obj:`list` of :obj:`list` of :obj:`float`
+            The result of `a1` * `a2`.
         """
         nrows1 = ctypes.c_int32(len(a1))
         ncols1 = ctypes.c_int32(len(a1[0]))

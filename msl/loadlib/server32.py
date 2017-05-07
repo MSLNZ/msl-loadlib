@@ -29,48 +29,46 @@ else:
 
 
 class Server32(HTTPServer):
-    """
-    Loads a 32-bit shared library which is then hosted on a 32-bit server.
+    """Loads a 32-bit shared library which is then hosted on a 32-bit server.
 
     All modules that are to be run on the 32-bit server must contain a class
     that is inherited from this class and the module can import **any** of
-    the `standard`_ python modules **except** for :py:mod:`distutils`,
-    :py:mod:`ensurepip`, :py:mod:`tkinter` and :py:mod:`turtle`.
+    the `standard`_ python modules **except** for :mod:`distutils`,
+    :mod:`ensurepip`, :mod:`tkinter` and :mod:`turtle`.
 
     All modules that are run on the 32-bit server must be able to run on the Python
     interpreter that the server is running on. To get the version information of the
-    Python interpreter run
+    Python interpreter run::
 
         >>> from msl.loadlib import Server32  # doctest: +SKIP
         >>> Server32.version()  # doctest: +SKIP
+        Python 3.5.3 |Continuum Analytics, Inc.| (default, Feb 22 2017, 21:49:24) [MSC v.1900 32 bit (Intel)]
+    
+    .. _standard: https://docs.python.org/3/py-modindex.html
 
-    The returned value will be something similar to::
+    Parameters
+    ----------
+    path : :obj:`str`
+        The path to the 32-bit library.
+    libtype : :obj:`str`
+        The library type to use for the calling convention. One of the following:        
 
-    'Python 3.5.3 |Continuum Analytics, Inc.| (default, Feb 22 2017, 21:49:24) [MSC v.1900 32 bit (Intel)]'
+        * **'cdll'**, for a __cdecl library
+        * **'windll'** or **'oledll'**, for a __stdcall library (Windows only)
+        * **'net'**, for a .NET library        
+    host : :obj:`str`
+        The IP address of the server.
+    port : :obj:`int`
+        The port to open on the server.
+    quiet : :obj:`bool`
+        Whether to hide :obj:`sys.stdout` messages from the server.
 
-    Args:
-        path (str): The full path to the 32-bit library *or* only the
-            filename if the library file is located in the current working directory.
-
-        libtype (str): The library type to use for the calling convention.
-            Must be either **cdll**, **windll**, **oledll** or **net**.
-
-            * **cdll** for a C/C++ __cdecl library or a FORTRAN library
-            * **oledll** or **windll** for a __stdcall library (Windows only), or
-            * **net** for a .NET Framework library.
-
-        host (str): The IP address of the server.
-
-        port (int): The port to open on the server.
-
-        quiet (bool): Whether to hide :py:data:`sys.stdout` messages from
-            the server.
-
-    Raises:
-        IOError: If the shared library cannot be loaded.
-        TypeError: If the value of ``libtype`` is not supported.
-
-    .. _standard: https://docs.python.org/3.5/py-modindex.html
+    Raises
+    ------
+    IOError
+        If the shared library cannot be loaded.
+    TypeError
+        If the value of `libtype` is not supported.    
     """
     def __init__(self, path, libtype, host, port, quiet):
         HTTPServer.__init__(self, (host, int(port)), RequestHandler)
@@ -79,23 +77,19 @@ class Server32(HTTPServer):
 
     @property
     def path(self):
-        """
-        Returns:
-            :py:class:`str`: The absolute path to the shared library file.
-        """
+        """:obj:`str`: The path to the shared library file."""
         return self._library.path
 
     @property
     def lib(self):
-        """
-        Returns the reference to the 32-bit, loaded-library object.
+        """Returns the reference to the 32-bit, loaded-library object.
 
         For example:
 
-        * if ``libtype`` = **cdll** then a :class:`ctypes.CDLL` object
-        * if ``libtype`` = **windll** then a :class:`ctypes.WinDLL` object
-        * if ``libtype`` = **oledll** then a :class:`ctypes.OleDLL` object
-        * if ``libtype`` = **'net'** then a :class:`~.load_library.DotNetContainer` containing
+        * if `libtype` = **'cdll'** then a :class:`~ctypes.CDLL` object
+        * if `libtype` = **'windll'** then a :class:`~ctypes.WinDLL` object
+        * if `libtype` = **'oledll'** then a :class:`~ctypes.OleDLL` object
+        * if `libtype` = **'net'** then a :class:`~.load_library.DotNetContainer` containing
           the .NET namespaces_, classes and/or `System.Type`_ objects.
 
         .. _namespaces: https://msdn.microsoft.com/en-us/library/z2kcy19k.aspx
@@ -107,7 +101,7 @@ class Server32(HTTPServer):
     def assembly(self):
         """
         Returns the reference to the `.NET RuntimeAssembly <NET_>`_ object -- *only if
-        the shared library is a .NET library, otherwise returns* :py:data:`None`.
+        the shared library is a .NET library, otherwise returns* :obj:`None`.
 
         .. tip::
            The `JetBrains dotPeek <https://www.jetbrains.com/decompiler/>`_ program can be used
@@ -119,16 +113,17 @@ class Server32(HTTPServer):
 
     @staticmethod
     def version():
-        """
-        Gets the version of the Python interpreter running on the 32-bit server.
+        """Gets the version of the Python interpreter running on the 32-bit server.
 
-        .. note::
-            This method takes about 1 second to finish because the server executable
-            needs to start in order to determine the Python version.
+        Note
+        ----
+        This method takes about 1 second to finish because the server executable
+        needs to start in order to determine the Python version.
 
-        Returns:
-            :py:class:`str`: The result of executing ``'Python' + sys.version`` on the
-            32-bit server.
+        Returns
+        -------
+        :obj:`str`
+            The result of executing ``'Python ' + sys.version`` on the 32-bit server.
         """
         exe = os.path.join(os.path.dirname(__file__), SERVER_FILENAME)
         pipe = subprocess.Popen([exe, '--version'], stdout=subprocess.PIPE)
@@ -136,8 +131,7 @@ class Server32(HTTPServer):
 
     @staticmethod
     def interactive_console():
-        """
-        Start an interactive console with the Python interpreter on the 32-bit server.
+        """Start an interactive console with the Python interpreter on the 32-bit server.
 
         *Currently only tested on Windows.*
         """
@@ -193,8 +187,8 @@ class RequestHandler(BaseHTTPRequestHandler):
 
     def log_message(self, fmt, *args):
         """
-        Overrides: :py:meth:`~http.server.BaseHTTPRequestHandler.log_message`
+        Overrides: :meth:`~http.server.BaseHTTPRequestHandler.log_message`
 
-        Ignore all log messages from being displayed in :py:data:`sys.stdout`.
+        Ignore all log messages from being displayed in :obj:`sys.stdout`.
         """
         pass

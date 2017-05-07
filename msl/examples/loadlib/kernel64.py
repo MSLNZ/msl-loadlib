@@ -12,7 +12,7 @@ is the 32-bit server for `inter-process communication <ipc_>`_.
 
 .. note::
    The `kernel32.dll <kernel_>`_ library is a standard Windows library and therefore this
-   example is only valid on a Windows computer.
+   example is only valid on a computer running Windows.
 
 .. _ipc: https://en.wikipedia.org/wiki/Inter-process_communication
 .. _kernel: http://www.geoffchappell.com/studies/windows/win32/kernel32/api/
@@ -43,10 +43,12 @@ class Kernel64(Client64):
 
         See the corresponding 32-bit :meth:`~.kernel32.Kernel32.get_time` method.
 
-        Returns:
-            A :py:class:`~datetime.datetime` object of the current date and time.
-
         .. _time: https://msdn.microsoft.com/en-us/library/windows/desktop/ms724338(v=vs.85).aspx
+
+        Returns
+        -------
+        :class:`~datetime.datetime` 
+            The current date and time.
         """
         return self.request32('get_time')
 
