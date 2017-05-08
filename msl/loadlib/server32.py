@@ -16,7 +16,7 @@ except ImportError:
     import pickle
 
 from msl.loadlib import LoadLibrary
-from msl.loadlib import IS_PYTHON2, IS_PYTHON3, SERVER_FILENAME
+from msl.loadlib import IS_PYTHON2, IS_PYTHON3, SERVER_FILENAME, IS_WINDOWS
 
 if IS_PYTHON2:
     from BaseHTTPServer import HTTPServer
@@ -37,12 +37,8 @@ class Server32(HTTPServer):
     :mod:`ensurepip`, :mod:`tkinter` and :mod:`turtle`.
 
     All modules that are run on the 32-bit server must be able to run on the Python
-    interpreter that the server is running on. To get the version information of the
-    Python interpreter run::
-
-        >>> from msl.loadlib import Server32  # doctest: +SKIP
-        >>> Server32.version()  # doctest: +SKIP
-        Python 3.5.3 |Continuum Analytics, Inc.| (default, Feb 22 2017, 21:49:24) [MSC v.1900 32 bit (Intel)]
+    interpreter that the server is running on, see :meth:`.version` for how to 
+    determine the Python interpreter.
     
     .. _standard: https://docs.python.org/3/py-modindex.html
 
@@ -51,11 +47,12 @@ class Server32(HTTPServer):
     path : :obj:`str`
         The path to the 32-bit library.
     libtype : :obj:`str`
-        The library type to use for the calling convention. One of the following:        
-
-        * **'cdll'**, for a __cdecl library
-        * **'windll'** or **'oledll'**, for a __stdcall library (Windows only)
-        * **'net'**, for a .NET library        
+        The library type to use for the calling convention. One of the following:
+        
+            * **'cdll'**, for a __cdecl library
+            * **'windll'** or **'oledll'**, for a __stdcall library (Windows only)
+            * **'net'**, for a .NET library
+            
     host : :obj:`str`
         The IP address of the server.
     port : :obj:`int`
@@ -113,17 +110,23 @@ class Server32(HTTPServer):
 
     @staticmethod
     def version():
-        """Gets the version of the Python interpreter running on the 32-bit server.
-
-        Note
-        ----
-        This method takes about 1 second to finish because the server executable
-        needs to start in order to determine the Python version.
+        """Gets the version of the Python interpreter that the 32-bit server is running on.
 
         Returns
         -------
         :obj:`str`
             The result of executing ``'Python ' + sys.version`` on the 32-bit server.
+
+        Example
+        -------
+        >>> from msl.loadlib import Server32  # doctest: +SKIP
+        >>> Server32.version()  # doctest: +SKIP
+        Python 3.6.1 |Continuum Analytics, Inc.| (default, Mar 22 2017, 20:22:29) [MSC v.1900 32 bit (Intel)]       
+
+        Note
+        ----
+        This method takes about 1 second to finish because the server executable
+        needs to start in order to determine the Python version.
         """
         exe = os.path.join(os.path.dirname(__file__), SERVER_FILENAME)
         pipe = subprocess.Popen([exe, '--version'], stdout=subprocess.PIPE)
@@ -131,12 +134,22 @@ class Server32(HTTPServer):
 
     @staticmethod
     def interactive_console():
-        """Start an interactive console with the Python interpreter on the 32-bit server.
+        """Start an interactive console.
+        
+        This method starts an interactive console, in a new terminal, with the 
+        Python interpreter on the 32-bit server.
 
-        *Currently only tested on Windows.*
+        Example
+        -------
+        >>> from msl.loadlib import Server32  # doctest: +SKIP
+        >>> Server32.interactive_console()  # doctest: +SKIP
         """
         exe = os.path.join(os.path.dirname(__file__), SERVER_FILENAME)
-        os.system('start ' + ' '.join((exe, '--interactive')))
+        if IS_WINDOWS:
+            cmd = 'start {exe} --interactive'
+        else:
+            cmd = "gnome-terminal --command='{exe} --interactive'"
+        os.system(cmd.format(exe=exe))
 
 
 class RequestHandler(BaseHTTPRequestHandler):
