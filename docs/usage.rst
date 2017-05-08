@@ -7,7 +7,7 @@ If you are loading a 32-bit library in 32-bit Python, or a 64-bit library in 64-
 can directly load the library using :class:`~msl.loadlib.load_library.LoadLibrary`, (by default,
 :class:`ctypes.CDLL` is used to load the library)
 
-Import the :class:`~msl.loadlib.load_library.LoadLibrary` class *(the* :data:`~msl.loadlib.EXAMPLES_DIR` *constant
+Import the :class:`~msl.loadlib.load_library.LoadLibrary` class *(the* **EXAMPLES_DIR** *constant
 is only used for illustrative purposes -- you only need to specify the path to the library that you want to load)*
 
 .. code:: python
