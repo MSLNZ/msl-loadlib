@@ -13,7 +13,8 @@ is only used for illustrative purposes -- you only need to specify the path to t
 .. code:: python
 
    >>> import os
-   >>> from msl.loadlib import LoadLibrary, EXAMPLES_DIR
+   >>> from msl.loadlib import LoadLibrary
+   >>> from msl.examples.loadlib import EXAMPLES_DIR
 
 Loading a **C++** library, :ref:`cpp_lib <cpp-lib>`
 

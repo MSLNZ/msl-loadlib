@@ -30,7 +30,8 @@ cannot be loaded in a 64-bit Python interpreter:
 .. code-block:: python
 
    >>> import os
-   >>> from msl.loadlib import LoadLibrary, EXAMPLES_DIR, IS_PYTHON_64BIT
+   >>> from msl.examples.loadlib import EXAMPLES_DIR
+   >>> from msl.loadlib import LoadLibrary, IS_PYTHON_64BIT
    >>> IS_PYTHON_64BIT
    True
    >>> cpp = LoadLibrary(os.path.join(EXAMPLES_DIR, 'cpp_lib32'))

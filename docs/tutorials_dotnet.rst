@@ -28,7 +28,8 @@ be loaded in a 64-bit Python interpreter:
 .. code-block:: python
 
    >>> import os
-   >>> from msl.loadlib import LoadLibrary, EXAMPLES_DIR, IS_PYTHON_64BIT
+   >>> from msl.examples.loadlib import EXAMPLES_DIR
+   >>> from msl.loadlib import LoadLibrary, IS_PYTHON_64BIT
    >>> IS_PYTHON_64BIT
    True
    >>> net = LoadLibrary(os.path.join(EXAMPLES_DIR, 'dotnet_lib32'), 'net')
