@@ -146,7 +146,7 @@ class Server32(HTTPServer):
         """
         exe = os.path.join(os.path.dirname(__file__), SERVER_FILENAME)
         if IS_WINDOWS:
-            cmd = 'start {exe} --interactive'
+            cmd = 'start "msl.loadlib.Server32 || interactive console" "{exe}" --interactive'
         else:
             cmd = "gnome-terminal --command='{exe} --interactive'"
         os.system(cmd.format(exe=exe))
