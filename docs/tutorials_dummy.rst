@@ -7,7 +7,7 @@ Load a 32-bit *Dummy* library in 64-bit Python
 This example does not actually communicate with a 32-bit shared library but shows how Python data types
 are preserved when they are passed from the :class:`~msl.examples.loadlib.dummy64.Dummy64` client to the
 :class:`~msl.examples.loadlib.dummy32.Dummy32` server and back. The :class:`~msl.examples.loadlib.dummy32.Dummy32`
-server just returns a :py:class:`tuple` of the ``args, kwargs`` that it received back to the
+server just returns a :py:class:`tuple` of the ``(*args, **kwargs)`` that it received back to the
 :class:`~msl.examples.loadlib.dummy64.Dummy64` client.
 
 The following is a script that illustrates that the data types are preserved:
@@ -29,7 +29,7 @@ Running this script would create the following output
 
 .. note::
    The black text corresponds to the :class:`~msl.examples.loadlib.dummy64.Dummy64` :py:func:`print`
-   statements and the red text are the :class:`~msl.examples.loadlib.dummy32.Dummy32` :py:func:`print`
+   statements and the red text to the :class:`~msl.examples.loadlib.dummy32.Dummy32` :py:func:`print`
    statements.
 
 .. image:: _static/dummy_output.png
@@ -73,8 +73,7 @@ Send multiple data types as arguments and as keyword arguments, see
        x: <class 'bool'> True
        y: <class 'str'> hello world!
 
-Shutdown the server when you are done communicating with the 32-bit library (all of the
-:py:func:`print` statements from the server get displayed once the server shuts down), see
+Shutdown the server when you are done communicating with the 32-bit library, see
 :meth:`~msl.loadlib.client64.Client64.shutdown_server32`:
 
 .. code-block:: python
