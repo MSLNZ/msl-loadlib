@@ -57,7 +57,7 @@ def test_load_failure_in_32bit_python():
 
 
 def test_server_version():
-    assert 'Python' in loadlib.Server32.version()
+    assert loadlib.Server32.version().startswith('Python')
 
 
 def test_cpp():
