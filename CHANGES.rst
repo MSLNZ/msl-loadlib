@@ -2,9 +2,15 @@
 Changelog
 =========
 
-Version 0.2.4 (in development)
-==============================
--
+Version 0.3.0 (2017.05.09)
+==========================
+*This release breaks backward compatibility*
+
+- can now pass \*\*kwargs from the Client64 constructor to the Server32-subclass constructor
+- new command line arguments for starting the 32-bit server: --kwargs, --append_environ_path
+- renamed the --append_path command line argument to --append_sys_path
+- Server32.interactive_console() works on Windows and Linux
+- edit documentation (thanks to @karna48 for the pull request)
 
 Version 0.2.3 (2017.04.11)
 ==========================
