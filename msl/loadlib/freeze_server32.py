@@ -68,22 +68,26 @@ def main(spec=None):
     # start the freezing process
 
     here = os.path.abspath(os.path.dirname(__file__))
-    cmd = ['pyinstaller',
-           '--distpath', here,
-           '--noconfirm',
-           ]
+    cmd = [
+        'pyinstaller',
+        '--distpath', here,
+        '--noconfirm',
+    ]
+
     if spec is None:
         spec_file = '{}.spec'.format(loadlib.SERVER_FILENAME)
-        yn = input('A {0} file exists. You may want to run "python freeze_server32.py {0}"\n'
-                   'Do you want to continue and overwrite the spec file (y/[n]):'.format(spec_file))
-        if yn.lower() not in ('y', 'yes'):
-            print('Aborted.')
-            return
-        cmd.extend(['--name', loadlib.SERVER_FILENAME,
-                    '--onefile',
-                    '--clean',
-                    '--hidden-import', 'clr',
-                    ])
+        if os.path.exists(spec_file):
+            yn = input('A {0} file exists. You may want to run "python freeze_server32.py {0}"\n'
+                       'Do you want to continue and overwrite the spec file (y/[n]):'.format(spec_file))
+            if yn.lower() not in ('y', 'yes'):
+                print('Aborted.')
+                return
+        cmd.extend([
+            '--name', loadlib.SERVER_FILENAME,
+            '--onefile',
+            '--clean',
+            '--hidden-import', 'clr',
+        ])
         cmd.extend(_get_standard_modules())
         cmd.append(os.path.join(here, 'start_server32.py'))
     else:
