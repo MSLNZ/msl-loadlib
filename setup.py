@@ -48,7 +48,7 @@ setup(
     name='msl-loadlib',
     version=loadlib.__version__,
     author=loadlib.__author__,
-    author_email='joseph.borbely@callaghaninnovation.govt.nz',
+    author_email='joseph.borbely@measurement.govt.nz',
     url='https://github.com/MSLNZ/msl-loadlib',
     description='Load a shared library (and access a 32-bit library from 64-bit Python)',
     long_description=read('README.rst'),
