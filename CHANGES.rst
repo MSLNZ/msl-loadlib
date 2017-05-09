@@ -2,6 +2,10 @@
 Changelog
 =========
 
+Version 0.3.1 (in development)
+==============================
+-
+
 Version 0.3.0 (2017.05.09)
 ==========================
 *NOTE: This release breaks backward compatibility*
