@@ -18,9 +18,20 @@ interpreter. This library gets loaded by the **MyServer** class (that is a subcl
 see :mod:`~msl.loadlib.start_server32`. **MyServer** hosts the library at the specified host
 address and port number. Any class that is a subclass of :class:`~msl.loadlib.server32.Server32`
 **MUST** provide three arguments in its constructor: ``host``, ``port`` and ``quiet``
-(in that order). Otherwise the 32-bit executable cannot create an instance of the subclass.
+(in that order) and ``**kwargs``. Otherwise the 32-bit executable cannot create an instance of the
+subclass.
 
 .. image:: _static/server32.png
+
+Keyword arguments, ``**kwargs``, can be passed to the server either from the client (see,
+:class:`~msl.loadlib.client64.Client64`) or by manually starting the server from the command line
+(see, :class:`~msl.loadlib.start_server32`). However, the data types for the values are not
+preserved (since they are ultimately parsed from the command line). Therefore, all data types for
+each value will be of type :obj:`str` at the constructor of the :class:`~msl.loadlib.server32.Server32`
+subclass. You must convert each value to the appropriate data type. This ``**kwargs`` variable
+is the only variable that the data type is not preserved for the client-server protocol (see, the
+`"Dummy" example <tutorials_dummy.html>`_ that shows that data types are preserved between client-server
+function calls).
 
 **MyClient** is a subclass of :class:`~msl.loadlib.client64.Client64` which sends a request to
 **MyServer** to call the ``add`` function in the shared library. **MyServer** processes the
