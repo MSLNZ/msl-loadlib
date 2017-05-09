@@ -24,21 +24,32 @@ def main():
     """Starts a 32-bit server (which is a subclass of :class:`~.server32.Server32`).
 
     Parses the command-line arguments to run a Python module on a 32-bit server
-    to host a 32-bit library. To see the list of arguments that are allowed,
-    run the executable with the ``--help`` flag.
+    to host a 32-bit library. To see the list of command-line arguments that are 
+    allowed, run the executable with the ``--help`` flag (or click the [source] 
+    link above to view the :obj:`~argparse.ArgumentParser` implementation).
     """
     parser = argparse.ArgumentParser(
         description='Starts a 32-bit Python interpreter which allows for inter-process communication'
                     ' via a client-server protocol -- i.e., calling a 32-bit process (server) from a'
-                    ' 64-bit process (client).')
+                    ' 64-bit process (client).',
+    )
 
     parser.add_argument('-m', '--module', default=None,
-                        help='the Python module to run on the 32-bit server (the module must contain'
-                             ' a class that is a subclass of msl.loadlib.Server32)')
+                        help='the name of the Python module to run on the 32-bit '
+                             'server (the module must contain a class that is a '
+                             'subclass of msl.loadlib.Server32)')
 
-    parser.add_argument('-a', '--append-path', default=None,
-                        help='append path(s) to sys.path, e.g., D:\code\scripts or for multiple '
-                             'paths [D:\code\scripts,D:\code\libs]')
+    parser.add_argument('-asp', '--append-sys-path', default=None,
+                        help=r'append path(s) to the sys.path variable on the 32-bit '
+                             r'server, e.g., -asp D:\path\to\my_scripts, or for '
+                             r'multiple paths separate each path by a semi-colon, '
+                             r'e.g., -asp D:\path\to\my_scripts;D:\lib')
+
+    parser.add_argument('-aep', '--append-environ-path', default=None,
+                        help=r"append path(s) to the os.environ['PATH'] variable on "
+                             r"the 32-bit server, e.g., -aep D:\code\bin, or for "
+                             r"multiple paths separate each path by a semi-colon, "
+                             r"e.g., -aep D:\code\bin;D:\lib")
 
     parser.add_argument('-H', '--host', default='127.0.0.1',
                         help='the IP address of the host [default: 127.0.0.1]')
@@ -47,13 +58,20 @@ def main():
                         help='the port to open on the host [default: 8080]')
 
     parser.add_argument('-q', '--quiet', action='store_true',
-                        help='whether to hide sys.stdout messages from the server [default: False]')
+                        help='whether to hide sys.stdout messages from the server '
+                             '[default: False]')
 
     parser.add_argument('-v', '--version', action='store_true',
-                        help='show the Python version that the server is running on and exit')
+                        help='show the Python version that the server is running on '
+                             'and exit')
 
     parser.add_argument('-i', '--interactive', action='store_true',
                         help='start a 32-bit interactive Python console and exit')
+
+    parser.add_argument('-k', '--kwargs', default=None,
+                        help='keyword arguments that are passed to the constructor '
+                             'of the msl.loadlib.Server32 subclass as "key=value;" '
+                             'pairs, e.g., -k a=-2;b=3.14;c=whatever;d=[1,2,3]')
 
     args = parser.parse_args()
 
@@ -61,33 +79,51 @@ def main():
         print('Python ' + sys.version)
         sys.exit(0)
 
-    # include folders in sys.path
+    # include directories in sys.path
     sys.path.append(os.path.abspath('.'))
     if args.module is not None and os.path.dirname(args.module):
         sys.path.append(os.path.dirname(args.module))
-    if args.append_path is not None:
-        if args.append_path.startswith('[') and args.append_path.endswith(']'):
-            for path in args.append_path[1:-1].split(','):
+    if args.append_sys_path is not None:
+        for path in args.append_sys_path.split(';'):
+            if len(path) > 0:
                 sys.path.append(os.path.abspath(path))
-        else:
-            sys.path.append(os.path.abspath(args.append_path))
+
+    # include directories in os.environ['PATH']
+    if args.append_environ_path is not None:
+        for path in args.append_environ_path.split(';'):
+            if len(path) > 0:
+                os.environ['PATH'] += os.pathsep + os.path.abspath(path)
 
     if args.interactive:
         globals().update({'exit': sys.exit, 'quit': sys.exit})
         console = code.InteractiveConsole(locals=dict(globals(), **locals()))
         banner = 'Python ' + sys.version
-        banner += '\nType exit() or quit() or <CTRL+Z then Enter> to terminate the interactive console'
+        banner += '\nType exit() or quit() or <CTRL+Z then Enter> to terminate the console.'
         console.interact(banner=banner)
         sys.exit(0)
+
+    # build the keyword-argument dictionary
+    kwargs = {}
+    if args.kwargs is not None:
+        for item in args.kwargs.split(';'):
+            item_split = item.split('=')
+            if len(item_split) == 1:
+                key = item_split[0].strip()
+                value = ''
+            else:
+                key = item_split[0].strip()
+                value = item_split[1].strip()
+            if len(key) > 0:
+                kwargs[key] = value
 
     # if you get to this point in the script that means you want to start a server for
     # inter-process communication and therefore args.module must have a value
     if args.module is None:
-        print('You must pass in a Python module to run on the 32-bit server (i.e., -m my_module)')
+        print('You must specify a Python module to run on the 32-bit server (i.e., -m my_module)')
         sys.exit(0)
 
     args.module = os.path.basename(args.module)
-    if len(args.module) > 3 and args.module[-3:] == '.py':
+    if args.module.endswith('.py'):
         args.module = args.module[:-3]
 
     if args.module.startswith('.'):
@@ -99,7 +135,7 @@ def main():
         mod = importlib.import_module(args.module)
     except ImportError as e:
         print('ImportError: {}'.format(e))
-        print('The missing module must be in sys.path (see the --append-path argument)')
+        print('The missing module must be in sys.path (see the --append-sys-path argument)')
         print('The paths in sys.path are:')
         for path in sys.path[2:]:  # the first two paths are TEMP folders from the frozen application
             print('\t' + path)
@@ -122,7 +158,15 @@ def main():
         print()
         sys.exit(0)
 
-    app = server32(args.host, args.port, args.quiet)
+    try:
+        app = server32(args.host, args.port, args.quiet, **kwargs)
+    except TypeError as e:
+        print('TypeError: {}'.format(e))
+        print('The Server32 subclass must be initialized using')
+        print('    def __init__(self, host, port, quiet, **kwargs):')
+        print('Cannot start server.')
+        print()
+        sys.exit(0)
 
     if not args.quiet:
         print('Python ' + sys.version)

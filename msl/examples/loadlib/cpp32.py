@@ -32,11 +32,11 @@ class Cpp32(Server32):
     ----
     Any class that is a subclass of :class:`~msl.loadlib.server32.Server32` **MUST**
     provide three arguments in its constructor: `host`, `port` and `quiet`
-    (in that order). Otherwise the ``server32-*`` executable, see
+    (in that order) and `**kwargs`. Otherwise the ``server32`` executable, see
     :class:`~msl.loadlib.start_server32`, cannot create an instance of the
     :class:`~msl.loadlib.server32.Server32` subclass.
     """
-    def __init__(self, host, port, quiet):
+    def __init__(self, host, port, quiet, **kwargs):
         # By not specifying the extension of the library file the server will open
         # the appropriate file based on the operating system.
         Server32.__init__(self, os.path.join(os.path.dirname(__file__), 'cpp_lib32'),

@@ -28,7 +28,7 @@ class Dummy64(Client64):
         Whether to hide :obj:`sys.stdout` messages from the client and from the server.
     """
     def __init__(self, quiet=False):
-        Client64.__init__(self, module32='dummy32', append_path=os.path.dirname(__file__), quiet=quiet)
+        Client64.__init__(self, module32='dummy32', append_sys_path=os.path.dirname(__file__), quiet=quiet)
 
         self._quiet = quiet
         if not quiet:
@@ -60,6 +60,7 @@ class Dummy64(Client64):
             for key, value in kwargs32.items():
                 print('\t{}: {} {}'.format(key, type(value), value))
         return args32, kwargs32
+
 
 if __name__ == '__main__':
 

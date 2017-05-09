@@ -42,11 +42,11 @@ class Kernel32(Server32):
     ----
     Any class that is a subclass of :class:`~msl.loadlib.server32.Server32` **MUST**
     provide three arguments in its constructor: `host`, `port` and `quiet`
-    (in that order). Otherwise the ``server32-*`` executable, see
+    (in that order) and `**kwargs`. Otherwise the ``server32`` executable, see
     :class:`~msl.loadlib.start_server32`, cannot create an instance of the
     :class:`~msl.loadlib.server32.Server32` subclass.
     """
-    def __init__(self, host, port, quiet):
+    def __init__(self, host, port, quiet, **kwargs):
         Server32.__init__(self, 'C:/Windows/SysWOW64/kernel32.dll', 'windll', host, port, quiet)
 
     def get_time(self):
