@@ -4,7 +4,7 @@ Changelog
 
 Version 0.3.0 (2017.05.09)
 ==========================
-*This release breaks backward compatibility*
+*NOTE: This release breaks backward compatibility*
 
 - can now pass \*\*kwargs from the Client64 constructor to the Server32-subclass constructor
 - new command line arguments for starting the 32-bit server: --kwargs, --append_environ_path
