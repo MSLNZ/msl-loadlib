@@ -2,9 +2,9 @@
 Changelog
 =========
 
-Version 0.3.1 (in development)
-==============================
--
+unreleased
+==========
+- make pythonnet a required dependency only for Windows
 
 Version 0.3.0 (2017.05.09)
 ==========================
