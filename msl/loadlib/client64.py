@@ -79,8 +79,10 @@ class Client64(HTTPConnection):
 
     Raises
     ------
-    IOError
+    FileNotFoundError
         If the frozen executable cannot be found. 
+    TypeError
+        If the data type of `append_sys_path` or `append_environ_path` is invalid.
     :class:`~http.client.HTTPException`
         If the connection to the 32-bit server cannot be established.
     """
@@ -112,7 +114,7 @@ class Client64(HTTPConnection):
         # make sure that the server32 executable exists
         server_exe = os.path.join(os.path.dirname(__file__), SERVER_FILENAME)
         if not os.path.isfile(server_exe):
-            raise IOError('Cannot find ' + server_exe)
+            raise FileNotFoundError('Cannot find ' + server_exe)
 
         cmd = [
             server_exe,
@@ -121,23 +123,27 @@ class Client64(HTTPConnection):
             '--port', str(port)
         ]
 
-        # include directories to the 32-bit server's sys.path
+        # include paths to the 32-bit server's sys.path
         _append_sys_path = site.getsitepackages()
         if append_sys_path is not None:
             if isinstance(append_sys_path, str):
-                _append_sys_path.append(append_sys_path)
-            else:
+                _append_sys_path.append(append_sys_path.strip())
+            elif isinstance(append_sys_path, (list, tuple)):
                 _append_sys_path.extend(append_sys_path)
-        cmd.extend(['--append-sys-path', ';'.join(_append_sys_path)])
-
-        # include directories to the 32-bit server's os.environ['PATH']
-        if append_environ_path is not None:
-            _append_environ_path = []
-            if isinstance(append_environ_path, str):
-                _append_environ_path.append(append_environ_path)
             else:
-                _append_environ_path.extend(append_environ_path)
-            cmd.extend(['--append-environ-path', ';'.join(_append_environ_path)])
+                raise TypeError('append_sys_path must be a str, list or tuple')
+        cmd.extend(['--append-sys-path', ';'.join(_append_sys_path).strip()])
+
+        # include paths to the 32-bit server's os.environ['PATH']
+        if append_environ_path is not None:
+            if isinstance(append_environ_path, str):
+                env_str = append_environ_path.strip()
+            elif isinstance(append_environ_path, (list, tuple)):
+                env_str = ';'.join(append_environ_path).strip()
+            else:
+                raise TypeError('append_environ_path must be a str, list or tuple')
+            if env_str:
+                cmd.extend(['--append-environ-path', env_str])
 
         # include any keyword arguments
         if kwargs:

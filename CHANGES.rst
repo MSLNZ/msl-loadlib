@@ -4,6 +4,7 @@ Changelog
 
 unreleased
 ==========
+- strip whitespace from append_sys_path and append_environ_path
 - make pythonnet a required dependency only for Windows
 
 Version 0.3.0 (2017.05.09)
