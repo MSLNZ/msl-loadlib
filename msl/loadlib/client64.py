@@ -220,7 +220,7 @@ class Client64(HTTPConnection):
             If there was an error processing the request on the 32-bit server.
         """
         if not self._is_active:
-            raise HTTPException('The server is not active')
+            raise HTTPException('The 32-bit server is not active')
 
         if method32 == 'SHUTDOWN_SERVER32':
             self.request('GET', '/SHUTDOWN_SERVER32')

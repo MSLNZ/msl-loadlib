@@ -120,6 +120,7 @@ def main():
     # inter-process communication and therefore args.module must have a value
     if args.module is None:
         print('You must specify a Python module to run on the 32-bit server (i.e., -m my_module)')
+        print('Cannot start 32-bit server.\n')
         sys.exit(0)
 
     args.module = os.path.basename(args.module)
@@ -128,7 +129,8 @@ def main():
 
     if args.module.startswith('.'):
         print('ImportError: ' + args.module)
-        print('Cannot perform relative imports')
+        print('Cannot perform relative imports.')
+        print('Cannot start 32-bit server.\n')
         sys.exit(0)
 
     try:
@@ -139,8 +141,7 @@ def main():
         print('The paths in sys.path are:')
         for path in sys.path[2:]:  # the first two paths are TEMP folders from the frozen application
             print('\t' + path)
-        print('Cannot start server.')
-        print()
+        print('Cannot start 32-bit server.\n')
         sys.exit(0)
 
     # ensure that there is a subclass of Server32 in the module
@@ -154,18 +155,17 @@ def main():
     if server32 is None:
         print('AttributeError: module {}.py'.format(args.module))
         print('Module does not contain a class that is a subclass of Server32')
-        print('Cannot start server.')
-        print()
+        print('Cannot start 32-bit server.\n')
         sys.exit(0)
 
     try:
         app = server32(args.host, args.port, args.quiet, **kwargs)
     except TypeError as e:
         print('TypeError: {}'.format(e))
-        print('The Server32 subclass must be initialized using')
-        print('    def __init__(self, host, port, quiet, **kwargs):')
-        print('Cannot start server.')
-        print()
+        print('The Server32 subclass must be initialized using\n')
+        print('class {}(Server32):'.format(server32.__name__))
+        print('    def __init__(self, host, port, quiet, **kwargs):\n')
+        print('Cannot start 32-bit server.\n')
         sys.exit(0)
 
     if not args.quiet:
