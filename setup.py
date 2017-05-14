@@ -20,7 +20,13 @@ class CustomInstall(install):
         # allow executing the server32-* file as a program, make it read only and create the config file
         if loadlib.IS_WINDOWS or loadlib.IS_LINUX:
             import site
-            for path in site.getsitepackages():
+            try:
+                site_pkgs = site.getsitepackages()
+            except AttributeError:
+                # get "AttributeError: module 'site' has no attribute 'getsitepackages'" on ReadTheDocs
+                site_pkgs = []
+                print('WARNING site.getsitepackages() is not available')
+            for path in site_pkgs:
                 if path.endswith('site-packages'):
                     os.chmod(os.path.join(path, 'msl', 'loadlib', loadlib.SERVER_FILENAME), 365)
         loadlib.LoadLibrary.check_dot_net_config(sys.executable)
