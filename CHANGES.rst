@@ -2,6 +2,10 @@
 Changelog
 =========
 
+unreleased
+==========
+-
+
 Version 0.3.1 (2017.05.15)
 ==========================
 - fix ReadTheDocs build error -- AttributeError: module 'site' has no attribute 'getsitepackages'
