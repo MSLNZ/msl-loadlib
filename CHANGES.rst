@@ -2,8 +2,8 @@
 Changelog
 =========
 
-unreleased
-==========
+Version 0.3.1 (2017.05.15)
+==========================
 - fix ReadTheDocs build error -- AttributeError: module 'site' has no attribute 'getsitepackages'
 - strip whitespace from append_sys_path and append_environ_path
 - make pythonnet a required dependency only for Windows
