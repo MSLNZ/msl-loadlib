@@ -5,6 +5,12 @@ To install **MSL-LoadLib** run::
 
    pip install https://github.com/MSLNZ/msl-loadlib/archive/master.zip
 
+Alternatively, using the `MSL Package Manager`_ run::
+
+   msl install loadlib
+
+.. _MSL Package Manager: http://msl-package-manager.readthedocs.io/en/latest/?badge=latest
+
 Compatibility
 -------------
 

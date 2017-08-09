@@ -62,6 +62,12 @@ If using Windows you can install **MSL-LoadLib** using pip::
 
    pip install https://github.com/MSLNZ/msl-loadlib/archive/master.zip
 
+Alternatively, using the `MSL Package Manager`_ run::
+
+   msl install loadlib
+
+.. _MSL Package Manager: http://msl-package-manager.readthedocs.io/en/latest/?badge=latest
+
 For installation on Linux, please follow the instructions on the
 `prerequisites <http://msl-loadlib.readthedocs.io/en/latest/install.html#prerequisites>`_ section of the documentation.
 
