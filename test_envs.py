@@ -100,7 +100,7 @@ copy_envs = envs[:]
 for exclude in args.exclude:
     compiled = re.compile(exclude)
     for env in copy_envs:
-        if compiled.search(os.path.basename(env)) is not None:
+        if compiled.search(os.path.basename(env)) is not None and env in envs:
             envs.remove(env)
 
 if args.show:
