@@ -1,8 +1,8 @@
 // cpp_lib.cpp
 // Examples that show how to pass various data types between Python and a C++ library.
 //
-// Compiled in Linux using:
-// g++ -fPIC cpp_lib.cpp -shared -o cpp_lib32.so
+// Compiled in Windows using:
+// g++ -fPIC cpp_lib.cpp -static -shared -o cpp_lib64.dll
 //
 
 #include "cpp_lib.h"

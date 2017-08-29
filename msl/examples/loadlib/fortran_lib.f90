@@ -2,8 +2,8 @@
 !
 ! Basic examples of passing different data types into a FORTRAN function and subroutine.
 !
-! Compiled in Linux using:
-! gfortran -fno-underscoring -fPIC fortran_lib.f90 -shared -o fortran_lib32.so
+! Compiled in Windows using:
+! gfortran -fno-underscoring -fPIC fortran_lib.f90 -static -shared -o fortran_lib64.dll
 !
 	
 ! return the sum of two 8-bit signed integers
