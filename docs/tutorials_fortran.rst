@@ -47,7 +47,7 @@ However, the 64-bit version of the FORTRAN library can be directly loaded in 64-
 
 .. code-block:: python
 
-   >>> f64 = LoadLibrary('./msl/examples/loadlib/fortran_lib64')
+   >>> f64 = LoadLibrary(os.path.join(EXAMPLES_DIR, 'fortran_lib64'))
    >>> f64
    LoadLibrary object at 0x1798a79a860; libtype=CDLL; path=D:\code\git\msl-loadlib\msl\examples\loadlib\fortran_lib64.dll
    >>> import ctypes
