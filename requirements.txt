@@ -1,1 +1,1 @@
-pythonnet>=2.2.2 ; platform_system == 'Windows'
+pythonnet>=2.3 ; platform_system == 'Windows'
