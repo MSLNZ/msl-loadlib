@@ -79,7 +79,7 @@ class Client64(HTTPConnection):
 
     Raises
     ------
-    FileNotFoundError
+    IOError
         If the frozen executable cannot be found. 
     TypeError
         If the data type of `append_sys_path` or `append_environ_path` is invalid.
@@ -114,7 +114,7 @@ class Client64(HTTPConnection):
         # make sure that the server32 executable exists
         server_exe = os.path.join(os.path.dirname(__file__), SERVER_FILENAME)
         if not os.path.isfile(server_exe):
-            raise FileNotFoundError('Cannot find ' + server_exe)
+            raise IOError('Cannot find ' + server_exe)
 
         cmd = [
             server_exe,
