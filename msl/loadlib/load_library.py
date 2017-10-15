@@ -35,6 +35,7 @@ class LoadLibrary(object):
                path is specified,
             2. use :obj:`ctypes.util.find_library` to find the shared library file,
             3. search :obj:`sys.path` to find the shared library.
+            4. search :obj:`os.environ['PATH'] <os.environ>` to find the shared library.
 
     libtype : :obj:`str`, optional
         The library type to use for the calling convention.
@@ -70,9 +71,10 @@ class LoadLibrary(object):
             # for find_library use the original 'path' value since it may be a library name
             # without any prefix like lib, suffix like .so, .dylib or version number
             self._path = ctypes.util.find_library(path)
-            if self._path is None:  # then search sys.path
+            if self._path is None:  # then search sys.path and os.environ['PATH']
                 success = False
-                for directory in sys.path:
+                search_dirs = sys.path + os.environ['PATH'].split(os.pathsep)
+                for directory in search_dirs:
                     p = os.path.join(directory, _path)
                     if os.path.isfile(p):
                         self._path = p
