@@ -56,7 +56,9 @@ class Client64(HTTPConnection):
         Whether to hide :obj:`sys.stdout` messages from the 32-bit server. 
         Default is :obj:`True`.
     append_sys_path : :obj:`str` or :obj:`list` of :obj:`str`, optional
-        Append path(s) to the 32-bit server's :obj:`sys.path` variable. 
+        Append path(s) to the 32-bit server's :obj:`sys.path` variable. The value of
+        :obj:`sys.path` from the 64-bit process is automatically included,
+        i.e., ``sys.path(32bit) = sys.path(64bit) + append_sys_path``
         Default is :obj:`None`.
     append_environ_path : :obj:`str` or :obj:`list` of :obj:`str`, optional
         Append path(s) to the 32-bit server's :obj:`os.environ['PATH'] <os.environ>` 
