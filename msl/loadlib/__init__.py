@@ -33,12 +33,16 @@ IS_PYTHON3 = sys.version_info.major == 3
 
 if IS_WINDOWS:
     SERVER_FILENAME = 'server32-windows.exe'
+    DEFAULT_EXTENSION = '.dll'
 elif IS_LINUX:
     SERVER_FILENAME = 'server32-linux'
+    DEFAULT_EXTENSION = '.so'
 elif IS_MAC:
     SERVER_FILENAME = 'server32-mac'
+    DEFAULT_EXTENSION = '.dylib'
 else:
     SERVER_FILENAME = 'server32-unknown'
+    DEFAULT_EXTENSION = '.unknown'
 
 from .load_library import LoadLibrary
 from .server32 import Server32

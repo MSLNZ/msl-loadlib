@@ -9,7 +9,7 @@ import ctypes.util
 import logging
 import xml.etree.ElementTree as ET
 
-from msl.loadlib import IS_WINDOWS, IS_LINUX, IS_MAC
+from msl.loadlib import DEFAULT_EXTENSION
 
 log = logging.getLogger(__name__)
 
@@ -63,12 +63,7 @@ class LoadLibrary(object):
 
         # assume a default extension if no extension was provided
         if not os.path.splitext(_path)[1]:
-            if IS_WINDOWS:
-                _path += '.dll'
-            elif IS_LINUX:
-                _path += '.so'
-            elif IS_MAC:
-                _path += '.dylib'
+            _path += DEFAULT_EXTENSION
 
         self._path = os.path.abspath(_path)
         if not os.path.isfile(self._path):
