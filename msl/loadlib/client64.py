@@ -124,7 +124,7 @@ class Client64(HTTPConnection):
         ]
 
         # include paths to the 32-bit server's sys.path
-        _append_sys_path = site.getsitepackages()
+        _append_sys_path = sys.path
         if append_sys_path is not None:
             if isinstance(append_sys_path, str):
                 _append_sys_path.append(append_sys_path.strip())
