@@ -38,3 +38,6 @@ htmlcov/
 .coverage
 junit.xml
 coverage.xml
+
+# MANIFEST.in is now auto-generated based on the platform
+MANIFEST.in
