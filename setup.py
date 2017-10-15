@@ -23,9 +23,9 @@ class CustomInstall(install):
             try:
                 site_pkgs = site.getsitepackages()
             except AttributeError:
-                # get "AttributeError: module 'site' has no attribute 'getsitepackages'" on ReadTheDocs
+                # site.getsitepackages() is not available in a virtualenv, so ignore os.chmod
                 site_pkgs = []
-                print('WARNING site.getsitepackages() is not available')
+                print('WARNING site.getsitepackages() is not available. Cannot run chmod.')
             for path in site_pkgs:
                 if path.endswith('site-packages'):
                     os.chmod(os.path.join(path, 'msl', 'loadlib', loadlib.SERVER_FILENAME), 365)
