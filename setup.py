@@ -1,36 +1,61 @@
-import os
 import sys
+from distutils.cmd import Command
 from setuptools import setup, find_packages
-from setuptools.command.install import install
 
 from msl import loadlib
 
-sys.path.insert(0, os.path.join(os.path.abspath(os.path.dirname(__file__)), 'docs'))
-import docs_commands
 
+class ApiDocs(Command):
+    """
+    A custom command that calls sphinx-apidoc
+    see: http://www.sphinx-doc.org/en/latest/man/sphinx-apidoc.html
+    """
+    description = 'builds the api documentation using sphinx-apidoc'
+    user_options = []
 
-class CustomInstall(install):
-    """
-    Customized install command that creates the .NET config file
-    after the package has been installed.
-    """
+    def initialize_options(self):
+        pass
+
+    def finalize_options(self):
+        pass
+
     def run(self):
-        install.run(self)
+        from sphinx.apidoc import main
+        main([
+            'sphinx-apidoc',
+            '--force',  # overwrite existing files
+            '--module-first',  # put module documentation before submodule documentation
+            '--separate',  # put documentation for each module on its own page
+            '-o', './docs/_autosummary',  # where to save the output files
+            'msl',
+        ])
+        sys.exit(0)
 
-        # allow executing the server32-* file as a program, make it read only and create the config file
-        if loadlib.IS_WINDOWS or loadlib.IS_LINUX:
-            import site
-            try:
-                site_pkgs = site.getsitepackages()
-            except AttributeError:
-                # site.getsitepackages() is not available in a virtualenv, so ignore os.chmod
-                site_pkgs = []
-                print('WARNING site.getsitepackages() is not available. Cannot run chmod.')
-            for path in site_pkgs:
-                if path.endswith('site-packages'):
-                    os.chmod(os.path.join(path, 'msl', 'loadlib', loadlib.SERVER_FILENAME), 365)
-        loadlib.LoadLibrary.check_dot_net_config(sys.executable)
 
+class BuildDocs(Command):
+    """
+    A custom command that calls sphinx-build
+    see: http://www.sphinx-doc.org/en/latest/man/sphinx-build.html
+    """
+    description = 'builds the documentation using sphinx-build'
+    user_options = []
+
+    def initialize_options(self):
+        pass
+
+    def finalize_options(self):
+        pass
+
+    def run(self):
+        from sphinx import build_main
+        build_main([
+            'sphinx-build',
+            '-b', 'html',  # the builder to use, e.g., create a HTML version of the documentation
+            '-a',  # generate output for all files
+            '-E',  # ignore cached files, forces to re-read all source files from disk
+            'docs',  # the source directory where the documentation files are located
+            './docs/_build/html',  # where to save the output files
+        ])
         sys.exit(0)
 
 
@@ -39,16 +64,6 @@ def read(filename):
         text = fp.read()
     return text
 
-testing = {'test', 'tests', 'pytest'}.intersection(sys.argv)
-pytest_runner = ['pytest-runner'] if testing else []
-
-needs_sphinx = {'doc', 'docs', 'apidoc', 'apidocs', 'build_sphinx'}.intersection(sys.argv)
-sphinx = ['sphinx', 'sphinx_rtd_theme'] if needs_sphinx else []
-
-# pycparser is needed to install pythonnet on a non-Windows OS
-# it does not automatically get installed before pythonnet is installed
-install_requires = ['pycparser'] if not loadlib.IS_WINDOWS else []
-install_requires += read('requirements.txt').splitlines() if not testing else []
 
 # auto generate the MANIFEST.in file based on the platform
 with open('MANIFEST.in', 'w') as f:
@@ -59,6 +74,11 @@ with open('MANIFEST.in', 'w') as f:
     if loadlib.IS_WINDOWS:
         f.write('include msl/loadlib/verpatch.exe\n')
 
+testing = {'test', 'tests', 'pytest'}.intersection(sys.argv)
+pytest_runner = ['pytest-runner'] if testing else []
+
+needs_sphinx = {'doc', 'docs', 'apidoc', 'apidocs', 'build_sphinx'}.intersection(sys.argv)
+sphinx = ['sphinx', 'sphinx_rtd_theme'] if needs_sphinx else []
 
 setup(
     name='msl-loadlib',
@@ -88,12 +108,8 @@ setup(
     ],
     setup_requires=sphinx + pytest_runner,
     tests_require=['pytest-cov', 'pytest'],
-    install_requires=install_requires,
-    cmdclass={
-        'install': CustomInstall,
-        'docs': docs_commands.BuildDocs,
-        'apidocs': docs_commands.ApiDocs
-    },
+    install_requires=['pythonnet>=2.3'] if not testing and loadlib.IS_WINDOWS else [],
+    cmdclass={'docs': BuildDocs, 'apidocs': ApiDocs},
     packages=find_packages(include=('msl*',)),
     include_package_data=True,
 )

@@ -1,6 +1,0 @@
-pytest
-pytest-cov
-pytest-runner
-sphinx
-sphinx_rtd_theme
-pythonnet>=2.3 ; platform_system == 'Windows'
