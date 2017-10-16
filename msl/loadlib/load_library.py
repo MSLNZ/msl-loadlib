@@ -271,7 +271,7 @@ class LoadLibrary(object):
                 msg = 'The root tag in {} is "{}".\n'.format(config_path, root.tag)
                 msg += 'It must be "configuration" in order to create a .NET Framework config file '
                 msg += 'to enable the useLegacyV2RuntimeActivationPolicy property.\n'
-                msg += 'To load an assembly from a .NET Framework version <4.0 the '
+                msg += 'To load an assembly from a .NET Framework version < 4.0 the '
                 msg += 'following must be in {}:\n'.format(config_path)
                 msg += '<configuration>' + NET_FRAMEWORK_FIX + '</configuration>\n'
                 log.warning(msg)
@@ -289,7 +289,7 @@ class LoadLibrary(object):
             else:
                 if not policy.attrib['useLegacyV2RuntimeActivationPolicy'].lower() == 'true':
                     msg = 'The useLegacyV2RuntimeActivationPolicy in {} is False\n'.format(config_path)
-                    msg += 'Cannot load an assembly from a .NET Framework version <4.0.'
+                    msg += 'Cannot load an assembly from a .NET Framework version < 4.0.'
                     log.warning(msg)
                     return -1, msg
                 return 0, 'The useLegacyV2RuntimeActivationPolicy property is enabled'
@@ -301,9 +301,11 @@ class LoadLibrary(object):
                 f.write('<configuration>')
                 f.write(NET_FRAMEWORK_FIX)
                 f.write('</configuration>\n')
-            msg = 'Added the useLegacyV2RuntimeActivationPolicy property to ' + config_path
-            msg += '\nto fix the "System.IO.FileLoadException: Mixed mode assembly..." error.\n'
-            msg += 'Try again to see if Python can now load the .NET library.\n'
+            msg = 'The library appears to be from a .NET Framework version < 4.0.\n'
+            msg += 'The useLegacyV2RuntimeActivationPolicy property was added to {}\n'.format(config_path)
+            msg += 'to fix the "System.IO.FileLoadException: Mixed mode assembly..." error.\n'
+            msg += 'Rerun the script, or shutdown and restart the interactive console, to see\n'
+            msg += 'if Python can now load the .NET library.\n'
             return 1, msg
 
 
