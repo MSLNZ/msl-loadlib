@@ -146,9 +146,30 @@ def _get_standard_modules():
     # support for building and installing Python modules
     ignore_list = ['__main__', 'distutils', 'ensurepip', 'tkinter', 'turtle']
 
+    # some modules are platform specific and got a
+    #   RecursionError: maximum recursion depth exceeded
+    # when running this script with PyInstaller 3.3 installed
+    if loadlib.IS_WINDOWS:
+        os_ignore_list = ['(Unix)', '(Linux)', '(Linux, FreeBSD)']
+    elif loadlib.IS_LINUX:
+        os_ignore_list = ['(Windows)']
+    elif loadlib.IS_MAC:
+        os_ignore_list = ['(Windows)', '(Linux)', '(Linux, FreeBSD)']
+    else:
+        os_ignore_list = []
+
+    modules = []
     url = 'https://docs.python.org/{0}.{1}/py-modindex.html'.format(*sys.version_info)
-    source = urlopen(url).read().decode().split('#module-')
-    modules = [source[idx].split('"><code')[0] for idx in range(1, len(source))]
+    for s in urlopen(url).read().decode().split('#module-')[1:]:
+        m = s.split('"><code')
+        add_module = True
+        for x in os_ignore_list:
+            if x in m[1]:
+                ignore_list.append(m[0])
+                add_module = False
+                break
+        if add_module:
+            modules.append(m[0])
 
     included_modules, excluded_modules = [], []
     for module in modules:
