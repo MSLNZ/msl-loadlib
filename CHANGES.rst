@@ -2,9 +2,21 @@
 Changelog
 =========
 
-unreleased
-==========
--
+Version 0.3.2 (2017.10.17)
+==========================
+
+Added
+-----
+* include ``os.environ['PATH']`` as a search path when loading a shared library
+* the frozen server32 executable (for Windows/Linux) now runs on Python 3.6.3
+* support that the package can now be installed by ``pip install msl-loadlib``
+
+Fixed
+-----
+* remove ``sys.getsitepackages()`` error for virtualenv (`issue #5 <https://github.com/MSLNZ/msl-loadlib/issues/5>`_)
+* received ``RecursionError`` when running freeze_server32.py with PyInstaller 3.3 installed
+* replaced ``FileNotFoundError`` with ``IOError`` (for Python 2.7 support)
+* recompile cpp_lib\*.dll and fortran_lib\*.dll to not depend on external dependencies
 
 Version 0.3.1 (2017.05.15)
 ==========================
