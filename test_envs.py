@@ -77,7 +77,7 @@ def color_print(line):
         elif line.startswith('Install'):
             print(colorama.Fore.CYAN + colorama.Style.BRIGHT + line)
         elif line.startswith('***** '):
-            print(colorama.Fore.BLUE + colorama.Style.BRIGHT + line)
+            print(colorama.Fore.YELLOW + line)
         else:
             print(line)
     else:
