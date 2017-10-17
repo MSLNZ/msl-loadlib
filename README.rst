@@ -9,7 +9,7 @@ Purpose
 Load a shared library into Python.
 
 This package is basically just a thin wrapper around `ctypes <https://docs.python.org/3/library/ctypes.html>`_ and
-`Python for .NET <https://pypi.python.org/pypi/pythonnet/>`_ for loading a shared library into Python. However,
+`Python for .NET`_ for loading a shared library into Python. However,
 the primary advantage is that it is possible to communicate with a 32-bit shared library from 64-bit Python.
 
 Tested in Python 2.7, 3.3 - 3.6. The `examples <http://msl-loadlib.readthedocs.io/en/latest/examples.html>`_
@@ -58,9 +58,9 @@ The documentation for **MSL-LoadLib** can be found `here <http://msl-loadlib.rea
 Install
 -------
 
-If using Windows you can install **MSL-LoadLib** using pip::
+To install **MSL-LoadLib** run::
 
-   pip install https://github.com/MSLNZ/msl-loadlib/archive/master.zip
+   pip install msl-loadlib
 
 Alternatively, using the `MSL Package Manager`_ run::
 
@@ -68,7 +68,7 @@ Alternatively, using the `MSL Package Manager`_ run::
 
 .. _MSL Package Manager: http://msl-package-manager.readthedocs.io/en/latest/?badge=latest
 
-For installation on Linux, please follow the instructions on the
+To install the `Python for .NET`_ dependency on Linux, please follow the instructions on the
 `prerequisites <http://msl-loadlib.readthedocs.io/en/latest/install.html#prerequisites>`_ section of the documentation.
 
 Developers Guide
@@ -99,6 +99,7 @@ can rename the folder to be, for example,* **docs/_api** *and then the changes m
    :alt: Documentation Status
    :scale: 100%
 
+.. _Python for .NET: https://pypi.python.org/pypi/pythonnet/
 .. _git: https://git-scm.com/download
 .. _pytest: http://doc.pytest.org/en/latest/
 .. _sphinx: http://www.sphinx-doc.org/en/stable/

@@ -3,7 +3,7 @@ Install MSL-LoadLib
 
 To install **MSL-LoadLib** run::
 
-   pip install https://github.com/MSLNZ/msl-loadlib/archive/master.zip
+   pip install msl-loadlib
 
 Alternatively, using the `MSL Package Manager`_ run::
 
