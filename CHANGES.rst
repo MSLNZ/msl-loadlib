@@ -2,7 +2,7 @@
 Changelog
 =========
 
-Version 0.3.2 (2017.10.17)
+Version 0.3.2 (2017.10.18)
 ==========================
 
 Added
@@ -14,7 +14,7 @@ Added
 Fixed
 -----
 * remove ``sys.getsitepackages()`` error for virtualenv (`issue #5 <https://github.com/MSLNZ/msl-loadlib/issues/5>`_)
-* received ``RecursionError`` when running freeze_server32.py with PyInstaller 3.3 installed
+* received ``RecursionError`` when freezing freeze_server32.py with PyInstaller 3.3
 * replaced ``FileNotFoundError`` with ``IOError`` (for Python 2.7 support)
 * recompile cpp_lib\*.dll and fortran_lib\*.dll to not depend on external dependencies
 
