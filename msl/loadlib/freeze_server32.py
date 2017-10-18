@@ -10,8 +10,8 @@ to the client.
 
 This module must be run from a 32-bit Python interpreter with both
 `PyInstaller <http://www.pyinstaller.org/>`_ (to create the executable) and
-`Python .NET <https://pypi.python.org/pypi/pythonnet/>`_ (to be able to load a .NET
-Framework library) installed.
+`Python for .NET <https://pypi.python.org/pypi/pythonnet/>`_ (to be able to load .NET
+Framework assemblies) installed.
 """
 import os
 import sys

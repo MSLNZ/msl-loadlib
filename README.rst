@@ -14,8 +14,8 @@ the primary advantage is that it is possible to communicate with a 32-bit shared
 
 Tested in Python 2.7, 3.3 - 3.6. The `examples <http://msl-loadlib.readthedocs.io/en/latest/examples.html>`_
 provided are currently only supported in Windows and Linux, however **MSL-LoadLib** should work properly with any OS
-*(not tested)* that `Python for .NET <https://pypi.python.org/pypi/pythonnet/>`_ supports (and if you don't
-care about loading .NET libraries then **MSL-LoadLib** is a pure-python package so it is OS independent).
+*(not tested)* that `Python for .NET <https://pypi.python.org/pypi/pythonnet/>`_ supports (and if you do not
+need to load .NET libraries then **MSL-LoadLib** is a pure-python package so it is OS independent).
 
 Example
 -------
@@ -68,7 +68,7 @@ Alternatively, using the `MSL Package Manager`_ run::
 
 .. _MSL Package Manager: http://msl-package-manager.readthedocs.io/en/latest/?badge=latest
 
-To install the `Python for .NET`_ dependency on Linux, please follow the instructions on the
+To install the dependencies on Linux, please follow the instructions on the
 `prerequisites <http://msl-loadlib.readthedocs.io/en/latest/install.html#prerequisites>`_ section of the documentation.
 
 Developers Guide
