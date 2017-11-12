@@ -1,7 +1,7 @@
 Welcome to MSL-LoadLib
 ======================
 
-|docs|
+|docs| |pypi|
 
 Purpose
 -------
@@ -98,6 +98,9 @@ can rename the folder to be, for example,* **docs/_api** *and then the changes m
    :target: http://msl-loadlib.readthedocs.io/en/latest/?badge=latest
    :alt: Documentation Status
    :scale: 100%
+
+.. |pypi| image:: https://badge.fury.io/py/msl-loadlib.svg
+   :target: https://badge.fury.io/py/msl-loadlib
 
 .. _Python for .NET: https://pypi.python.org/pypi/pythonnet/
 .. _git: https://git-scm.com/download
