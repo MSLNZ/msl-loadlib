@@ -49,17 +49,24 @@ except ImportError:
 
 
 def color_print(line):
+    def get_index_length(string):
+        return line.find(string), len(string)
+
     if has_colorama:
-        if line.endswith('SKIPPED'):
-            print(line[:-7] + colorama.Fore.YELLOW + 'SKIPPED')
-        elif line.endswith('PASSED'):
-            print(line[:-6] + colorama.Fore.GREEN + 'PASSED')
-        elif line.endswith('FAILED'):
-            print(line[:-6] + colorama.Fore.RED + 'FAILED')
+        if 'SKIPPED' in line:
+            i, n = get_index_length('SKIPPED')
+            print(line[:i] + colorama.Fore.YELLOW + 'SKIPPED' + colorama.Fore.CYAN + line[i+n:])
+        elif 'PASSED' in line:
+            i, n = get_index_length('PASSED')
+            print(line[:i] + colorama.Fore.GREEN + 'PASSED' + colorama.Fore.CYAN + line[i+n:])
+        elif 'FAILED' in line:
+            i, n = get_index_length('FAILED')
+            print(line[:i] + colorama.Fore.RED + 'FAILED' + colorama.Fore.CYAN + line[i+n:])
+        elif 'ERROR' in line:
+            i, n = get_index_length('ERROR')
+            print(line[:i] + colorama.Fore.RED + 'ERROR' + colorama.Fore.CYAN + line[i+n:])
         elif 'FAILURES' in line:
             print(colorama.Fore.RED + colorama.Style.BRIGHT + line)
-        elif line.endswith('ERROR'):
-            print(line[:-5] + colorama.Fore.RED + 'ERROR')
         elif line.startswith('___'):
             print(colorama.Fore.RED + colorama.Style.BRIGHT + line)
         elif line.startswith('E '):
@@ -82,6 +89,7 @@ def color_print(line):
             print(line)
     else:
         print(line)
+
 
 parser = argparse.ArgumentParser()
 parser.add_argument('-s', '--show', action='store_true', help='show the conda envs to use then exit')
