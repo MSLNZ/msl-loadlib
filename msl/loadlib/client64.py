@@ -7,10 +7,9 @@ from 64-bit Python.
 """
 import os
 import sys
-import site
 import uuid
 import time
-import random
+import socket
 import tempfile
 import subprocess
 
@@ -94,10 +93,10 @@ class Client64(HTTPConnection):
         self._is_active = False
 
         if port is None:
-            while True:
-                port = random.randint(1024, 65535)
-                if not self.port_in_use(port):
-                    break
+            sock = socket.socket()
+            sock.bind(('', 0))  # get any available port
+            port = sock.getsockname()[1]
+            sock.close()
 
         # the temporary file to use to save the pickle'd data
         self._pickle_temp_file = os.path.join(tempfile.gettempdir(), str(uuid.uuid4()))
