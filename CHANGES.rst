@@ -5,6 +5,11 @@ Changelog
 Version 0.3.3 (in development)
 ==============================
 
+Changed
+-------
+* use :meth:`~socket.socket.bind` to select an available port
+  instead of checking if :meth:`~msl.loadlib.client64.Client64.port_in_use`
+
 Version 0.3.2 (2017.10.18)
 ==========================
 
