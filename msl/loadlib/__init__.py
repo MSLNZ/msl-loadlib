@@ -7,7 +7,7 @@ import sys
 from collections import namedtuple
 
 __author__ = 'Joseph Borbely'
-__copyright__ = '\xa9 2017, ' + __author__
+__copyright__ = '\xa9 2017 - 2018, ' + __author__
 __version__ = '0.3.3.dev0'
 
 version_info = namedtuple('version_info', 'major minor micro')(*map(int, __version__.split('.')[:3]))
