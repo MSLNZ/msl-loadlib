@@ -11,7 +11,7 @@ import xml.etree.ElementTree as ET
 
 from msl.loadlib import DEFAULT_EXTENSION
 
-log = logging.getLogger(__name__)
+logger = logging.getLogger(__name__)
 
 
 class LoadLibrary(object):
@@ -57,10 +57,17 @@ class LoadLibrary(object):
     """
     def __init__(self, path, libtype='cdll'):
 
-        _path = path
+        # a reference to the shared library
+        self._lib = None
 
         # a reference to the .NET Runtime Assembly
         self._assembly = None
+
+        # create a new reference to `path` just in case the
+        # DEFAULT_EXTENSION is appended below so that the
+        # ctypes.util.find_library function call will use the
+        # unmodified value of `path`
+        _path = path
 
         # assume a default extension if no extension was provided
         if not os.path.splitext(_path)[1]:
@@ -69,7 +76,7 @@ class LoadLibrary(object):
         self._path = os.path.abspath(_path)
         if not os.path.isfile(self._path):
             # for find_library use the original 'path' value since it may be a library name
-            # without any prefix like lib, suffix like .so, .dylib or version number
+            # without any prefix like 'lib', suffix like '.so', '.dylib' or version number
             self._path = ctypes.util.find_library(path)
             if self._path is None:  # then search sys.path and os.environ['PATH']
                 success = False
@@ -94,9 +101,13 @@ class LoadLibrary(object):
             try:
                 # By default, pythonnet can only load libraries that are for .NET 4.0+.
                 #
-                # When MSL-LoadLib is installed, the useLegacyV2RuntimeActivationPolicy
-                # property should have been enabled automatically to allow for loading
-                # assemblies from previous .NET Framework versions.
+                # In order to allow pythonnet to load a library from .NET <4.0 the
+                # useLegacyV2RuntimeActivationPolicy property needs to be enabled
+                # in a python.exe.config file. If the following statement raises a
+                # FileLoadException then attempt to create the configuration file
+                # that has the property enabled and then notify the user why
+                # loading the library failed and ask them to re-run their Python
+                # script to load the .NET library.
                 self._assembly = clr.System.Reflection.Assembly.LoadFile(self._path)
 
             except clr.System.IO.FileLoadException as err:
@@ -107,8 +118,9 @@ class LoadLibrary(object):
                 #  runtime and cannot be loaded in the 4.0 runtime without additional
                 #  configuration information. "
                 #
-                # To solve this problem, a <python-executable>.config file must exist and it must
-                # contain a useLegacyV2RuntimeActivationPolicy property that is set to be "true".
+                # To solve this problem, a <python-executable>.config file must exist
+                # and it must contain a useLegacyV2RuntimeActivationPolicy property
+                # that is set to be "true".
                 if "Mixed mode assembly" in str(err):
                     status, msg = self.check_dot_net_config(sys.executable)
                     if not status == 0:
@@ -122,13 +134,13 @@ class LoadLibrary(object):
 
             # the shared library must be available in sys.path
             head, tail = os.path.split(self._path)
-            sys.path.insert(0, head)
+            sys.path.append(head)
 
             # don't include the library extension
             clr.AddReference(os.path.splitext(tail)[0])
 
             # import namespaces, create instances of classes or reference a System.Type[] object
-            dotnet = {}
+            dotnet = dict()
             for t in self._assembly.GetTypes():
                 if t.Namespace is not None:
                     if t.Namespace not in dotnet:
@@ -143,13 +155,11 @@ class LoadLibrary(object):
 
         else:
             raise TypeError('Cannot load libtype={}'.format(libtype))
-        log.debug('Loaded ' + self._path)
+        logger.debug('Loaded ' + self._path)
 
     def __repr__(self):
-        return '{} object at {}; libtype={}; path={}'.format(self.__class__.__name__,
-                                                             hex(id(self)),
-                                                             self.lib.__class__.__name__,
-                                                             self._path)
+        return '<{} id={:#x} libtype={} path={}>'.format(
+            self.__class__.__name__, id(self), self._lib.__class__.__name__, self._path)
 
     @property
     def path(self):
@@ -205,7 +215,7 @@ class LoadLibrary(object):
         try:
             import clr
         except ImportError:
-            log.warning('Python for .NET <pythonnet> is not installed. Cannot load a .NET library.')
+            logger.warning('Python for .NET <pythonnet> is not installed. Cannot load a .NET library.')
             return False
         return True
 
@@ -262,7 +272,7 @@ class LoadLibrary(object):
             except ET.ParseError:
                 msg = 'Invalid XML file ' + config_path
                 msg += '\nCannot create useLegacyV2RuntimeActivationPolicy property.'
-                log.warning(msg)
+                logger.warning(msg)
                 return -1, msg
 
             root = tree.getroot()
@@ -274,7 +284,7 @@ class LoadLibrary(object):
                 msg += 'To load an assembly from a .NET Framework version < 4.0 the '
                 msg += 'following must be in {}:\n'.format(config_path)
                 msg += '<configuration>' + NET_FRAMEWORK_FIX + '</configuration>\n'
-                log.warning(msg)
+                logger.warning(msg)
                 return -1, msg
 
             # check if the policy exists
@@ -290,7 +300,7 @@ class LoadLibrary(object):
                 if not policy.attrib['useLegacyV2RuntimeActivationPolicy'].lower() == 'true':
                     msg = 'The useLegacyV2RuntimeActivationPolicy in {} is False\n'.format(config_path)
                     msg += 'Cannot load an assembly from a .NET Framework version < 4.0.'
-                    log.warning(msg)
+                    logger.warning(msg)
                     return -1, msg
                 return 0, 'The useLegacyV2RuntimeActivationPolicy property is enabled'
 
