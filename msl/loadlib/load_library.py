@@ -53,7 +53,7 @@ class LoadLibrary(object):
     IOError
         If the shared library cannot be loaded.
     TypeError
-        If the value of `libtype` is not supported.
+        If `libtype` is not a supported library type.
     """
     def __init__(self, path, libtype='cdll'):
 
