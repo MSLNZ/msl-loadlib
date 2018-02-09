@@ -38,21 +38,21 @@ Before using **MSL-LoadLib** on Linux the following packages are required.
 
 Install the packages that are needed to load C/C++ and FORTRAN libraries::
 
-   $ sudo apt-get update
-   $ sudo apt-get install software-properties-common build-essential g++ gcc-multilib g++-multilib gfortran libgfortran3:i386 zlib1g:i386
+   sudo apt-get update
+   sudo apt-get install software-properties-common build-essential g++ gcc-multilib g++-multilib gfortran libgfortran3:i386 zlib1g:i386
 
 If you need to load .NET Framework assemblies then you must install Mono_ (v4.8.0 is specified below)::
 
-   $ sudo apt-get libglib2.0-dev clang
-   $ sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 3FA7E0328081BFF6A14DA29AA6A19B38D3D831EF
-   $ echo "deb http://download.mono-project.com/repo/ubuntu wheezy/snapshots/4.8.0 main" | sudo tee /etc/apt/sources.list.d/mono-official.list
-   $ sudo apt-get update
-   $ sudo apt-get install mono-devel mono-complete -y
+   sudo apt-get install libglib2.0-dev clang
+   sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 3FA7E0328081BFF6A14DA29AA6A19B38D3D831EF
+   echo "deb http://download.mono-project.com/repo/ubuntu wheezy/snapshots/4.8.0 main" | sudo tee /etc/apt/sources.list.d/mono-official.list
+   sudo apt-get update
+   sudo apt-get install mono-devel mono-complete -y
 
 Also, `Python for .NET`_ is not automatically installed when **MSL-LoadLib** is installed on Linux.
 You will have to run::
 
-   $ pip install pythonnet
+   pip install pythonnet
 
 Installing `Python for .NET`_ v2.3.0 with Mono_ v4.8.0 installed on Ubuntu 16.04.3 has been confirmed to work::
 
