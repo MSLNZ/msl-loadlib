@@ -15,47 +15,58 @@ logger = logging.getLogger(__name__)
 
 
 class LoadLibrary(object):
-    """Load a shared library.
 
-    Based on the value of `libtype` this class will load the shared library as a:
+    def __init__(self, path, libtype='cdll', get_assembly_types=True):
+        """Load a shared library.
 
-        * :class:`~ctypes.CDLL` if `libtype` = **'cdll'**,
-        * :class:`~ctypes.WinDLL` if `libtype` = **'windll'**,
-        * :class:`~ctypes.OleDLL` if `libtype` = **'oledll'**, or a
-        * :class:`~.load_library.DotNetContainer` if `libtype` = **'net'**.
-    
-    Parameters
-    ----------
-    path : :obj:`str`
-        The path to the shared library.
+        Based on the value of `libtype` this class will load the shared library as a:
 
-        The search order for finding the shared library is:
-            
-            1. assume that a full or a relative (to the current working directory) 
-               path is specified,
-            2. use :obj:`ctypes.util.find_library` to find the shared library file,
-            3. search :obj:`sys.path` to find the shared library.
-            4. search :obj:`os.environ['PATH'] <os.environ>` to find the shared library.
+            * :class:`~ctypes.CDLL` if `libtype` = ``'cdll'``,
+            * :class:`~ctypes.WinDLL` if `libtype` = ``'windll'``,
+            * :class:`~ctypes.OleDLL` if `libtype` = ``'oledll'``, or a
+            * :class:`~.load_library.DotNetContainer` if `libtype` = ``'net'`` **and**
+              `get_assembly_types` = :obj:`True`.
 
-    libtype : :obj:`str`, optional
-        The library type to use for the calling convention.
+        Parameters
+        ----------
+        path : :obj:`str`
+            The path to the shared library.
 
-        The following values are allowed:
+            The search order for finding the shared library is:
 
-        * **'cdll'**, for a __cdecl library
-        * **'windll'** or **'oledll'**, for a __stdcall library (Windows only)
-        * **'net'**, for a .NET library
+                1. assume that a full or a relative (to the current working directory)
+                   path is specified,
+                2. use :obj:`ctypes.util.find_library` to find the shared library file,
+                3. search :obj:`sys.path`, then
+                4. search :obj:`os.environ['PATH'] <os.environ>` to find the shared library.
 
-        Default is **'cdll'**.
+        libtype : :obj:`str`, optional
+            The library type to use for the calling convention.
 
-    Raises
-    ------
-    IOError
-        If the shared library cannot be loaded.
-    TypeError
-        If `libtype` is not a supported library type.
-    """
-    def __init__(self, path, libtype='cdll'):
+            The following values are allowed:
+
+            * ``'cdll'``, for a __cdecl library
+            * ``'windll'`` or ``'oledll'``, for a __stdcall library (Windows only)
+            * ``'net'``, for a .NET library
+
+            Default is ``'cdll'``.
+
+        get_assembly_types : :obj:`bool`, optional
+            Whether to automatically call
+            `System.Reflection.Assembly.GetTypes <https://msdn.microsoft.com/en-us/library/system.reflection.assembly.gettypes(v=vs.110).aspx>`_
+            when a .NET library is loaded to parse the types in the assembly. This
+            parameter is only used if `libtype` = ``'net'``. If this value is
+            :obj:`False` then the :obj:`lib` property value will return :obj:`None`,
+            but you can still import .NET modules and access the attributes of
+            the :obj:`assembly`.
+
+        Raises
+        ------
+        IOError
+            If the shared library cannot be loaded.
+        TypeError
+            If `libtype` is not a supported library type.
+        """
 
         # a reference to the shared library
         self._lib = None
@@ -139,19 +150,20 @@ class LoadLibrary(object):
             # don't include the library extension
             clr.AddReference(os.path.splitext(tail)[0])
 
-            # import namespaces, create instances of classes or reference a System.Type[] object
-            dotnet = dict()
-            for t in self._assembly.GetTypes():
-                if t.Namespace is not None:
-                    if t.Namespace not in dotnet:
-                        dotnet[t.Namespace] = __import__(t.Namespace)
-                else:
-                    try:
-                        dotnet[t.Name] = self._assembly.CreateInstance(t.FullName)
-                    except:
-                        if t.Name not in dotnet:
-                            dotnet[t.Name] = t
-            self._lib = DotNetContainer(dotnet)
+            if get_assembly_types:
+                # import namespaces, create instances of classes or reference a System.Type[] object
+                dotnet = dict()
+                for t in self._assembly.GetTypes():
+                    if t.Namespace is not None:
+                        if t.Namespace not in dotnet:
+                            dotnet[t.Namespace] = __import__(t.Namespace)
+                    else:
+                        try:
+                            dotnet[t.Name] = self._assembly.CreateInstance(t.FullName)
+                        except:
+                            if t.Name not in dotnet:
+                                dotnet[t.Name] = t
+                self._lib = DotNetContainer(dotnet)
 
         else:
             raise TypeError('Cannot load libtype={}'.format(libtype))
@@ -162,32 +174,10 @@ class LoadLibrary(object):
             self.__class__.__name__, id(self), self._lib.__class__.__name__, self._path)
 
     @property
-    def path(self):
-        """:obj:`str`: The path to the shared library file."""
-        return self._path
-
-    @property
-    def lib(self):
-        """Returns the reference to the loaded-library object.
-
-        For example:
-
-            * if `libtype` = **'cdll'** then a :class:`~ctypes.CDLL` object is returned
-            * if `libtype` = **'windll'** then a :class:`~ctypes.WinDLL` object is returned
-            * if `libtype` = **'oledll'** then a :class:`~ctypes.OleDLL` object is returned
-            * if `libtype` = **'net'** then a :class:`~.load_library.DotNetContainer` containing
-              the .NET namespaces_, classes and/or `System.Type`_ objects.
-
-        .. _namespaces: https://msdn.microsoft.com/en-us/library/z2kcy19k.aspx
-        .. _System.Type: https://msdn.microsoft.com/en-us/library/system.type(v=vs.110).aspx
-        """
-        return self._lib
-
-    @property
     def assembly(self):
         """
-        Returns the reference to the `.NET RuntimeAssembly <NET_>`_ object -- *only if
-        the shared library is a .NET library, otherwise returns* :obj:`None`.
+        Returns the reference to the `.NET Runtime Assembly <NET_>`_ object, *only if
+        the shared library is a .NET library*, otherwise returns :obj:`None`.
 
         .. tip::
            The `JetBrains dotPeek <https://www.jetbrains.com/decompiler/>`_ program can be used
@@ -196,6 +186,32 @@ class LoadLibrary(object):
         .. _NET: https://msdn.microsoft.com/en-us/library/system.reflection.assembly(v=vs.110).aspx
         """
         return self._assembly
+
+    @property
+    def lib(self):
+        """Returns the reference to the loaded library object.
+
+        For example:
+
+            * if `libtype` = ``'cdll'`` then a :class:`~ctypes.CDLL` object is returned
+            * if `libtype` = ``'windll'`` then a :class:`~ctypes.WinDLL` object is returned
+            * if `libtype` = ``'oledll'`` then a :class:`~ctypes.OleDLL` object is returned
+            * if `libtype` = ``'net'`` **and** the :class:`LoadLibrary` class was instantiated
+              with `get_assembly_types` = :obj:`True` then a :class:`~.load_library.DotNetContainer`
+              object is returned, which contains the types defined in the .NET assembly
+              (i.e., the namespace_ modules, classes and/or System.Type_ objects). If
+              `get_assembly_types` = :obj:`False` then :obj:`None` is returned; however,
+              you can still access the .NET :obj:`assembly` object and import the .NET modules.
+
+        .. _namespace: https://msdn.microsoft.com/en-us/library/z2kcy19k.aspx
+        .. _System.Type: https://msdn.microsoft.com/en-us/library/system.type(v=vs.110).aspx
+        """
+        return self._lib
+
+    @property
+    def path(self):
+        """:obj:`str`: The path to the shared library file."""
+        return self._path
 
     @staticmethod
     def is_pythonnet_installed():
