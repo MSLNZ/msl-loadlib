@@ -155,8 +155,9 @@ class LoadLibrary(object):
                 dotnet = dict()
                 for t in self._assembly.GetTypes():
                     if t.Namespace is not None:
-                        if t.Namespace not in dotnet:
-                            dotnet[t.Namespace] = __import__(t.Namespace)
+                        mod = __import__(t.Namespace)
+                        if mod.__name__ not in dotnet:
+                            dotnet[mod.__name__] = mod
                     else:
                         try:
                             dotnet[t.Name] = self._assembly.CreateInstance(t.FullName)
