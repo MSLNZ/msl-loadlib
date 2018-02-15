@@ -1,8 +1,10 @@
 import os
 import pytest
 
+import clr
+
 from msl import loadlib
-from msl.examples.loadlib import Cpp64, Fortran64, Dummy64, DotNet64
+from msl.examples.loadlib import Cpp64, Fortran64, Dummy64, DotNet64, EXAMPLES_DIR
 
 eps = 1e-10
 
@@ -36,24 +38,29 @@ def test_lib_name():
     assert 'dotnet_lib32' == get_name(n.lib32_path)
 
 
-def test_load_failure_in_64bit_python():
+def test_invalid_libtype():
+    with pytest.raises(TypeError):
+        loadlib.LoadLibrary(os.path.join(EXAMPLES_DIR, 'cpp_lib64'), libtype='xxxxxxxx')
+
+
+def test_load_failure_in_wrong_python_bitness():
+    # loading a 32-bit library in 64-bit Python will raise an exception
+    # loading a 64-bit library in 32-bit Python will raise an exception
+
+    def check(path, libtype, exception):
+        path += loadlib.DEFAULT_EXTENSION
+        assert os.path.isfile(path)
+        with pytest.raises(exception):
+            loadlib.LoadLibrary(path, libtype=libtype)
+
     if loadlib.IS_PYTHON_64BIT:
-        with pytest.raises(IOError):
-            loadlib.LoadLibrary(os.path.join('.', 'examples', 'cpp_lib32'))
-        with pytest.raises(IOError):
-            loadlib.LoadLibrary(os.path.join('.', 'examples', 'fortran_lib32'))
-        with pytest.raises(IOError):
-            loadlib.LoadLibrary(os.path.join('.', 'examples', 'dotnet_lib32'), 'net')
-
-
-def test_load_failure_in_32bit_python():
-    if not loadlib.IS_PYTHON_64BIT:
-        with pytest.raises(IOError):
-            loadlib.LoadLibrary(os.path.join('.', 'examples', 'cpp_lib64'))
-        with pytest.raises(IOError):
-            loadlib.LoadLibrary(os.path.join('.', 'examples', 'fortran_lib64'))
-        with pytest.raises(IOError):
-            loadlib.LoadLibrary(os.path.join('.', 'examples', 'dotnet_lib64'))
+        check(os.path.join(EXAMPLES_DIR, 'cpp_lib32'), 'cdll', OSError)
+        check(os.path.join(EXAMPLES_DIR, 'fortran_lib32'), 'cdll', OSError)
+        check(os.path.join(EXAMPLES_DIR, 'dotnet_lib32'), 'net', clr.System.BadImageFormatException)
+    else:
+        check(os.path.join(EXAMPLES_DIR, 'cpp_lib64'), 'cdll', OSError)
+        check(os.path.join(EXAMPLES_DIR, 'fortran_lib64'), 'cdll', OSError)
+        check(os.path.join(EXAMPLES_DIR, 'dotnet_lib64'), 'net', clr.System.BadImageFormatException)
 
 
 def test_server_version():
