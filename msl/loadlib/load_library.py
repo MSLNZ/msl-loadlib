@@ -108,16 +108,20 @@ class LoadLibrary(object):
             self._lib = ctypes.WinDLL(self._path)
         elif libtype == 'oledll':
             self._lib = ctypes.OleDLL(self._path)
-        elif libtype == 'net' and self.is_pythonnet_installed():
+        elif libtype == 'net':
+            if not self.is_pythonnet_installed():
+                raise IOError('Cannot load a .NET Assembly because pythonnet is not installed.\n'
+                              'To install pythonnet run: pip install pythonnet')
+
             import clr
             try:
                 # By default, pythonnet can only load libraries that are for .NET 4.0+.
                 #
                 # In order to allow pythonnet to load a library from .NET <4.0 the
                 # useLegacyV2RuntimeActivationPolicy property needs to be enabled
-                # in a python.exe.config file. If the following statement raises a
-                # FileLoadException then attempt to create the configuration file
-                # that has the property enabled and then notify the user why
+                # in a <python-executable>.config file. If the following statement
+                # raises a FileLoadException then attempt to create the configuration
+                # file that has the property enabled and then notify the user why
                 # loading the library failed and ask them to re-run their Python
                 # script to load the .NET library.
                 self._assembly = clr.System.Reflection.Assembly.LoadFile(self._path)
@@ -129,11 +133,7 @@ class LoadLibrary(object):
                 # " Mixed mode assembly is built against version 'v2.0.50727' of the
                 #  runtime and cannot be loaded in the 4.0 runtime without additional
                 #  configuration information. "
-                #
-                # To solve this problem, a <python-executable>.config file must exist
-                # and it must contain a useLegacyV2RuntimeActivationPolicy property
-                # that is set to be "true".
-                if "Mixed mode assembly" in str(err):
+                if str(err).startswith('Mixed mode assembly'):
                     status, msg = self.check_dot_net_config(sys.executable)
                     if not status == 0:
                         raise IOError(msg)
