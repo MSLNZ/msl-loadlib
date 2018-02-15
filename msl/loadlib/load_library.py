@@ -101,6 +101,7 @@ class LoadLibrary(object):
                 if not success:
                     raise IOError('Cannot find the shared library "{}"'.format(path))
 
+        libtype = libtype.lower()
         if libtype == 'cdll':
             self._lib = ctypes.CDLL(self._path)
         elif libtype == 'windll':
