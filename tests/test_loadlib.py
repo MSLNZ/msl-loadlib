@@ -179,3 +179,10 @@ def test_pathlib_object():
         loadlib.LoadLibrary(pathlib.Path(os.path.join(EXAMPLES_DIR, 'cpp_lib64')))
     else:
         loadlib.LoadLibrary(pathlib.Path(os.path.join(EXAMPLES_DIR, 'cpp_lib32')))
+
+
+def test_namespace_with_dots():
+    # checks that Issue #7 is fixed
+    net = loadlib.LoadLibrary('./tests/namespace_with_dots/Namespace.With.Dots.dll', 'net')
+    checker = net.lib.Namespace.With.Dots.Checker()
+    assert checker.IsSuccess()
