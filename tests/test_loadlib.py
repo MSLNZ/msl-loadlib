@@ -1,6 +1,6 @@
 import os
 import pytest
-
+import pathlib
 import clr
 
 from msl import loadlib
@@ -171,3 +171,11 @@ def test_dotnet():
     assert 33 == n.add_multiple(11, -22, 33, -44, 55)
     assert 'the experiment worked ' == n.concatenate('the ', 'experiment ', 'worked ', False, 'temporarily')
     assert 'the experiment worked temporarily' == n.concatenate('the ', 'experiment ', 'worked ', True, 'temporarily')
+
+
+def test_pathlib_object():
+    # checks that Issue #8 is fixed
+    if loadlib.IS_PYTHON_64BIT:
+        loadlib.LoadLibrary(pathlib.Path(os.path.join(EXAMPLES_DIR, 'cpp_lib64')))
+    else:
+        loadlib.LoadLibrary(pathlib.Path(os.path.join(EXAMPLES_DIR, 'cpp_lib32')))

@@ -74,6 +74,9 @@ class LoadLibrary(object):
         # a reference to the .NET Runtime Assembly
         self._assembly = None
 
+        # fixes Issue #8, if `path` is a <class 'pathlib.Path'> object
+        path = str(path)
+
         # create a new reference to `path` just in case the
         # DEFAULT_EXTENSION is appended below so that the
         # ctypes.util.find_library function call will use the
