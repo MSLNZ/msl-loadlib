@@ -12,7 +12,7 @@ This package is basically just a thin wrapper around `ctypes <https://docs.pytho
 `Python for .NET`_ for loading a shared library into Python. However,
 the primary advantage is that it is possible to communicate with a 32-bit shared library from 64-bit Python.
 
-Tested in Python 2.7, 3.3 - 3.6. The `examples <http://msl-loadlib.readthedocs.io/en/latest/examples.html>`_
+Tested in Python 2.7, 3.3+. The `examples <http://msl-loadlib.readthedocs.io/en/latest/examples.html>`_
 provided are currently only supported in Windows and Linux, however **MSL-LoadLib** should work properly with any OS
 *(not tested)* that `Python for .NET <https://pypi.python.org/pypi/pythonnet/>`_ supports (and if you do not
 need to load .NET libraries then **MSL-LoadLib** is a pure-python package so it is OS independent).

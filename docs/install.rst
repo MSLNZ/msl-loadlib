@@ -14,7 +14,7 @@ Alternatively, using the `MSL Package Manager`_ run::
 Compatibility
 -------------
 
-* Tested with Python versions 2.7, 3.3 - 3.6.
+* Tested with Python versions 2.7, 3.3+.
 * The :mod:`~msl.loadlib.start_server32` module has been built into a `frozen <http://www.pyinstaller.org/>`_
   Python application for Windows and Linux and works with the Python versions listed above. The 32-bit server
   is running on Python 3.6.3 and therefore all modules that run on the server must use Python 3 syntax.
