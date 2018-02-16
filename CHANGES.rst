@@ -5,6 +5,18 @@ Changelog
 Version 0.3.3 (in development)
 ==============================
 
+Added
+-----
+* include a ``get_assembly_types`` keyword argument to the :class:`~msl.loadlib.load_library.LoadLibrary` class
+* improved the error message when loading a .NET Assembly and pythonnet is not installed
+* updated the documentation and the docstrings
+
+Fixed
+-----
+* Issue `#8 <https://github.com/MSLNZ/msl-loadlib/issues/8>`_
+* Issue `#7 <https://github.com/MSLNZ/msl-loadlib/issues/7>`_
+* ``AttributeError("'LoadLibrary' object has no attribute '_lib'") raised in repr()``
+
 Changed
 -------
 * use :meth:`~socket.socket.bind` to select an available port
