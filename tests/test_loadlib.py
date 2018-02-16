@@ -44,14 +44,24 @@ def test_invalid_libtype():
 
 
 def test_load_failure_in_wrong_python_bitness():
-    # loading a 32-bit library in 64-bit Python will raise an exception
-    # loading a 64-bit library in 32-bit Python will raise an exception
 
     def check(path, libtype, exception):
-        path += loadlib.DEFAULT_EXTENSION
+        if libtype == 'net':
+            path += '.dll'
+        else:
+            path += loadlib.DEFAULT_EXTENSION
         assert os.path.isfile(path)
-        with pytest.raises(exception):
-            loadlib.LoadLibrary(path, libtype=libtype)
+
+        if loadlib.IS_WINDOWS or libtype != 'net':
+            with pytest.raises(exception):
+                loadlib.LoadLibrary(path, libtype=libtype)
+        elif loadlib.IS_LINUX and libtype == 'net':
+            # Mono can load a 32/64 bit library in 64/32 bit Python
+            net = loadlib.LoadLibrary(path, libtype=libtype)
+            math = net.lib.DotNetMSL.BasicMath()
+            assert 9 == math.add_integers(4, 5)
+        else:
+            raise NotImplementedError
 
     if loadlib.IS_PYTHON_64BIT:
         check(os.path.join(EXAMPLES_DIR, 'cpp_lib32'), 'cdll', OSError)
