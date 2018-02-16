@@ -38,6 +38,7 @@ htmlcov/
 .coverage
 junit.xml
 coverage.xml
+.pytest_cache
 
 # MANIFEST.in is now auto-generated based on the platform
 MANIFEST.in
