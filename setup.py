@@ -20,15 +20,22 @@ class ApiDocs(Command):
         pass
 
     def run(self):
+        import sphinx
         from sphinx.apidoc import main
-        main([
-            'sphinx-apidoc',
+
+        command = [
+            None,  # in Sphinx < 1.7.0 the first command-line argument was parsed, in 1.7.0 it became argv[1:]
             '--force',  # overwrite existing files
             '--module-first',  # put module documentation before submodule documentation
             '--separate',  # put documentation for each module on its own page
             '-o', './docs/_autosummary',  # where to save the output files
-            'msl',
-        ])
+            'msl',  # the path to the Python package to document
+        ]
+
+        if sphinx.version_info[:2] >= (1, 7):
+            command.pop(0)
+
+        main(command)
         sys.exit(0)
 
 
@@ -47,15 +54,24 @@ class BuildDocs(Command):
         pass
 
     def run(self):
-        from sphinx import build_main
-        build_main([
-            'sphinx-build',
+        import sphinx
+
+        command = [
+            None,  # in Sphinx < 1.7.0 the first command-line argument was parsed, in 1.7.0 it became argv[1:]
             '-b', 'html',  # the builder to use, e.g., create a HTML version of the documentation
             '-a',  # generate output for all files
             '-E',  # ignore cached files, forces to re-read all source files from disk
             'docs',  # the source directory where the documentation files are located
             './docs/_build/html',  # where to save the output files
-        ])
+        ]
+
+        if sphinx.version_info[:2] < (1, 7):
+            from sphinx import build_main  # Sphinx also changed the location of build_main
+        else:
+            from sphinx.cmd.build import build_main
+            command.pop(0)
+
+        build_main(command)
         sys.exit(0)
 
 
