@@ -86,7 +86,7 @@ class Server32(HTTPServer):
         * if `libtype` = **'cdll'** then a :class:`~ctypes.CDLL` object
         * if `libtype` = **'windll'** then a :class:`~ctypes.WinDLL` object
         * if `libtype` = **'oledll'** then a :class:`~ctypes.OleDLL` object
-        * if `libtype` = **'net'** then a :class:`~.load_library.DotNetContainer` containing
+        * if `libtype` = **'net'** then a :class:`~.load_library.DotNet` containing
           the .NET namespaces_, classes and/or `System.Type`_ objects.
 
         .. _namespaces: https://msdn.microsoft.com/en-us/library/z2kcy19k.aspx

@@ -24,7 +24,7 @@ class LoadLibrary(object):
             * :class:`~ctypes.CDLL` if `libtype` = ``'cdll'``,
             * :class:`~ctypes.WinDLL` if `libtype` = ``'windll'``,
             * :class:`~ctypes.OleDLL` if `libtype` = ``'oledll'``, or a
-            * :class:`~.load_library.DotNetContainer` if `libtype` = ``'net'`` **and**
+            * :class:`~.load_library.DotNet` if `libtype` = ``'net'`` **and**
               `get_assembly_types` = :obj:`True`.
 
         Parameters
@@ -168,7 +168,7 @@ class LoadLibrary(object):
                         except:
                             if t.Name not in dotnet:
                                 dotnet[t.Name] = t
-                self._lib = DotNetContainer(dotnet)
+                self._lib = DotNet(dotnet, self._path)
 
         else:
             raise TypeError('Cannot load libtype={}'.format(libtype))
@@ -202,7 +202,7 @@ class LoadLibrary(object):
             * if `libtype` = ``'windll'`` then a :class:`~ctypes.WinDLL` object is returned
             * if `libtype` = ``'oledll'`` then a :class:`~ctypes.OleDLL` object is returned
             * if `libtype` = ``'net'`` **and** the :class:`LoadLibrary` class was instantiated
-              with `get_assembly_types` = :obj:`True` then a :class:`~.load_library.DotNetContainer`
+              with `get_assembly_types` = :obj:`True` then a :class:`~.load_library.DotNet`
               object is returned, which contains the types defined in the .NET assembly
               (i.e., the namespace_ modules, classes and/or System.Type_ objects). If
               `get_assembly_types` = :obj:`False` then :obj:`None` is returned; however,
@@ -340,15 +340,19 @@ class LoadLibrary(object):
             return 1, msg
 
 
-class DotNetContainer(object):
-    """A container for the namespace_ modules, classes and `System.Type`_ objects
-    of a .NET library.
+class DotNet(object):
+    """Contains the namespace_ modules, classes and `System.Type`_ objects of a .NET library.
 
     .. _namespace: https://msdn.microsoft.com/en-us/library/z2kcy19k.aspx
     .. _System.Type: https://msdn.microsoft.com/en-us/library/system.type(v=vs.110).aspx
     """
-    def __init__(self, dotnet_dict):
+    def __init__(self, dotnet_dict, path):
         self.__dict__.update(dotnet_dict)
+        self._path = path
+
+    def __repr__(self):
+        return '<{} id={:#x} path={}>'.format(
+            self.__class__.__name__, id(self), self._path)
 
 
 NET_FRAMEWORK_DESCRIPTION = """
