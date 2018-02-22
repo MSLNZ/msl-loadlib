@@ -31,64 +31,65 @@ else:
 
 
 class Client64(HTTPConnection):
-    """Base class for communicating with a 32-bit library from 64-bit Python.
 
-    Starts a 32-bit server, :class:`~.server32.Server32`, to host a Python module
-    that is a wrapper around a 32-bit library. The *client* module runs within
-    a 64-bit Python interpreter and it sends a request to the server which calls
-    the 32-bit library to execute the request. The server then provides a
-    response back to the client.
-
-    Parameters
-    ----------
-    module32 : :obj:`str`
-        The name of the Python module that is to be imported by the 32-bit server.
-    host : :obj:`str`, optional
-        The IP address of the 32-bit server. Default is '127.0.0.1'.
-    port : :obj:`int`, optional
-        The port to open on the 32-bit server. Default is :obj:`None` *(which means 
-        to automatically find a port that is available).*
-    timeout : :obj:`float`, optional
-        The maximum number of seconds to wait to establish a connection to the 
-        32-bit server. Default is 10.
-    quiet : :obj:`bool`, optional
-        Whether to hide :obj:`sys.stdout` messages from the 32-bit server. 
-        Default is :obj:`True`.
-    append_sys_path : :obj:`str` or :obj:`list` of :obj:`str`, optional
-        Append path(s) to the 32-bit server's :obj:`sys.path` variable. The value of
-        :obj:`sys.path` from the 64-bit process is automatically included,
-        i.e., ``sys.path(32bit) = sys.path(64bit) + append_sys_path``
-        Default is :obj:`None`.
-    append_environ_path : :obj:`str` or :obj:`list` of :obj:`str`, optional
-        Append path(s) to the 32-bit server's :obj:`os.environ['PATH'] <os.environ>` 
-        variable. This can be useful if the library that is being loaded requires 
-        additional libraries that must be available on ``PATH``. Default is :obj:`None`.
-    **kwargs
-        Keyword arguments that will be passed to the :class:`~.server32.Server32`
-        subclass. The data type of each value is not preserved. It will be a string
-        at the constructor of the :class:`~.server32.Server32` subclass.
-
-    Note
-    ----
-    If `module32` is not located in the current working directory then you 
-    must either specify the full path to `module32` **or** you can
-    specify the folder where `module32` is located by passing a value to the
-    `append_sys_path` parameter. Using the `append_sys_path` option also allows
-    for any other modules that `module32` may depend on to also be included
-    in :obj:`sys.path` so that those modules can be imported when `module32`
-    is imported.
-
-    Raises
-    ------
-    IOError
-        If the frozen executable cannot be found. 
-    TypeError
-        If the data type of `append_sys_path` or `append_environ_path` is invalid.
-    :class:`~http.client.HTTPException`
-        If the connection to the 32-bit server cannot be established.
-    """
-    def __init__(self, module32, host='127.0.0.1', port=None, timeout=10.0, quiet=True,
+    def __init__(self, module32, host='localhost', port=None, timeout=10.0, quiet=True,
                  append_sys_path=None, append_environ_path=None, **kwargs):
+        """Base class for communicating with a 32-bit library from 64-bit Python.
+
+        Starts a 32-bit server, :class:`~.server32.Server32`, to host a Python module
+        that is a wrapper around a 32-bit library. The *client* module runs within
+        a 64-bit Python interpreter and it sends a request to the server which calls
+        the 32-bit library to execute the request. The server then provides a
+        response back to the client.
+
+        Parameters
+        ----------
+        module32 : :obj:`str`
+            The name of the Python module that is to be imported by the 32-bit server.
+        host : :obj:`str`, optional
+            The IP address of the 32-bit server. Default is ``'localhost'``.
+        port : :obj:`int`, optional
+            The port to open on the 32-bit server. Default is :obj:`None` *(which means
+            to automatically find a port that is available).*
+        timeout : :obj:`float`, optional
+            The maximum number of seconds to wait to establish a connection to the
+            32-bit server. Default is 10 seconds.
+        quiet : :obj:`bool`, optional
+            Whether to hide :obj:`sys.stdout` messages from the 32-bit server.
+            Default is :obj:`True`.
+        append_sys_path : :obj:`str` or :obj:`list` of :obj:`str`, optional
+            Append path(s) to the 32-bit server's :obj:`sys.path` variable. The value of
+            :obj:`sys.path` from the 64-bit process is automatically included,
+            i.e., ``sys.path(32bit) = sys.path(64bit) + append_sys_path``
+            Default is :obj:`None`.
+        append_environ_path : :obj:`str` or :obj:`list` of :obj:`str`, optional
+            Append path(s) to the 32-bit server's :obj:`os.environ['PATH'] <os.environ>`
+            variable. This can be useful if the library that is being loaded requires
+            additional libraries that must be available on ``PATH``. Default is :obj:`None`.
+        **kwargs
+            Keyword arguments that will be passed to the :class:`~.server32.Server32`
+            subclass. The data type of each value is not preserved. It will be a string
+            at the constructor of the :class:`~.server32.Server32` subclass.
+
+        Note
+        ----
+        If `module32` is not located in the current working directory then you
+        must either specify the full path to `module32` **or** you can
+        specify the folder where `module32` is located by passing a value to the
+        `append_sys_path` parameter. Using the `append_sys_path` option also allows
+        for any other modules that `module32` may depend on to also be included
+        in :obj:`sys.path` so that those modules can be imported when `module32`
+        is imported.
+
+        Raises
+        ------
+        IOError
+            If the frozen executable cannot be found.
+        TypeError
+            If the data type of `append_sys_path` or `append_environ_path` is invalid.
+        :class:`~http.client.HTTPException`
+            If the connection to the 32-bit server cannot be established.
+        """
 
         self._is_active = False
 
@@ -163,28 +164,22 @@ class Client64(HTTPConnection):
             if self.port_in_use(port):
                 break
             if time.time() > stop:
-                m = 'Timeout after {:.1f} s. Could not connect to {}:{}'.format(timeout, host, port)
+                m = 'Timeout after {:.1f} seconds. Could not connect to {}:{}'.format(timeout, host, port)
                 raise HTTPException(m)
 
         # start the connection
         HTTPConnection.__init__(self, host, port)
         self._is_active = True
 
-        # Problem: If one creates a Client64 object and does not send a request to the
-        #   server then when the __del__ function gets called to shutdown_server32() a
-        #   "LookupError: unknown encoding: idna" error is thrown.
-        #   Trying "import encodings.idna" at the top of this module did not fix it.
-        # Solution: It seems as though all we have to do is send one request to the server
-        #   before shutdown_server32() is called. So, just request the lib path.
         self._lib32_path = self.request32('LIB32_PATH')
 
     def __repr__(self):
-        msg = '{} object at {}'.format(self.__class__.__name__, hex(id(self)))
+        msg = '<{} id={:#x} '.format(self.__class__.__name__, id(self))
         if self._is_active:
             lib = os.path.basename(self._lib32_path)
-            return msg + ' hosting {} on http://{}:{}'.format(lib, self.host, self.port)
+            return msg + 'lib={} address={}:{}>'.format(lib, self.host, self.port)
         else:
-            return msg + ' has stopped the server'
+            return msg + 'lib=None address=None:None>'
 
     @property
     def lib32_path(self):
