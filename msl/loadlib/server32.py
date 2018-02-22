@@ -51,9 +51,9 @@ class Server32(HTTPServer):
         libtype : :obj:`str`
             The library type to use for the calling convention. One of the following:
 
-                * **'cdll'**, for a __cdecl library
-                * **'windll'** or **'oledll'**, for a __stdcall library (Windows only)
-                * **'net'**, for a .NET library
+                * ``'cdll'``, for a __cdecl library
+                * ``'windll'`` or ``'oledll'``, for a __stdcall library (Windows only)
+                * ``'net'``, for a .NET library
 
         host : :obj:`str`
             The IP address of the server.
@@ -84,10 +84,10 @@ class Server32(HTTPServer):
 
         For example:
 
-        * if `libtype` = **'cdll'** then a :class:`~ctypes.CDLL` object
-        * if `libtype` = **'windll'** then a :class:`~ctypes.WinDLL` object
-        * if `libtype` = **'oledll'** then a :class:`~ctypes.OleDLL` object
-        * if `libtype` = **'net'** then a :class:`~.load_library.DotNet` containing
+        * if `libtype` = ``'cdll'`` then a :class:`~ctypes.CDLL` object
+        * if `libtype` = ``'windll'`` then a :class:`~ctypes.WinDLL` object
+        * if `libtype` = ``'oledll'`` then a :class:`~ctypes.OleDLL` object
+        * if `libtype` = ``'net'`` then a :class:`~.load_library.DotNet` containing
           the .NET namespaces_, classes and/or `System.Type`_ objects.
 
         .. _namespaces: https://msdn.microsoft.com/en-us/library/z2kcy19k.aspx
