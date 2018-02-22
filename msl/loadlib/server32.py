@@ -29,45 +29,46 @@ else:
 
 
 class Server32(HTTPServer):
-    """Loads a 32-bit shared library which is then hosted on a 32-bit server.
 
-    All modules that are to be run on the 32-bit server must contain a class
-    that is inherited from this class and the module can import **any** of
-    the `standard`_ python modules **except** for :mod:`distutils`,
-    :mod:`ensurepip`, :mod:`tkinter` and :mod:`turtle`.
-
-    All modules that are run on the 32-bit server must be able to run on the Python
-    interpreter that the server is running on, see :meth:`.version` for how to 
-    determine the Python interpreter.
-    
-    .. _standard: https://docs.python.org/3/py-modindex.html
-
-    Parameters
-    ----------
-    path : :obj:`str`
-        The path to the 32-bit library.
-    libtype : :obj:`str`
-        The library type to use for the calling convention. One of the following:
-        
-            * **'cdll'**, for a __cdecl library
-            * **'windll'** or **'oledll'**, for a __stdcall library (Windows only)
-            * **'net'**, for a .NET library
-            
-    host : :obj:`str`
-        The IP address of the server.
-    port : :obj:`int`
-        The port to open on the server.
-    quiet : :obj:`bool`
-        Whether to hide :obj:`sys.stdout` messages from the server.
-
-    Raises
-    ------
-    IOError
-        If the shared library cannot be loaded.
-    TypeError
-        If the value of `libtype` is not supported.    
-    """
     def __init__(self, path, libtype, host, port, quiet):
+        """Loads a 32-bit shared library which is then hosted on a 32-bit server.
+
+        All modules that are to be run on the 32-bit server must contain a class
+        that is inherited from this class and the module can import **any** of
+        the `standard`_ python modules **except** for :mod:`distutils`,
+        :mod:`ensurepip`, :mod:`tkinter` and :mod:`turtle`.
+
+        All modules that are run on the 32-bit server must be able to run on the Python
+        interpreter that the server is running on, see :meth:`.version` for how to
+        determine the Python interpreter.
+
+        .. _standard: https://docs.python.org/3/py-modindex.html
+
+        Parameters
+        ----------
+        path : :obj:`str`
+            The path to the 32-bit library.
+        libtype : :obj:`str`
+            The library type to use for the calling convention. One of the following:
+
+                * **'cdll'**, for a __cdecl library
+                * **'windll'** or **'oledll'**, for a __stdcall library (Windows only)
+                * **'net'**, for a .NET library
+
+        host : :obj:`str`
+            The IP address of the server.
+        port : :obj:`int`
+            The port to open on the server.
+        quiet : :obj:`bool`
+            Whether to hide :obj:`sys.stdout` messages from the server.
+
+        Raises
+        ------
+        IOError
+            If the shared library cannot be loaded.
+        TypeError
+            If the value of `libtype` is not supported.
+        """
         HTTPServer.__init__(self, (host, int(port)), RequestHandler)
         self.quiet = quiet
         self._library = LoadLibrary(path, libtype)
