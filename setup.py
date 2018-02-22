@@ -124,7 +124,7 @@ setup(
         'Topic :: Scientific/Engineering :: Physics',
     ],
     setup_requires=sphinx + pytest_runner,
-    tests_require=['pytest-cov', 'pytest', 'pathlib'],
+    tests_require=['pytest-cov', 'pytest', 'pathlib', 'pythonnet'],
     install_requires=['pythonnet>=2.3'] if not testing and loadlib.IS_WINDOWS else [],
     cmdclass={'docs': BuildDocs, 'apidocs': ApiDocs},
     packages=find_packages(include=('msl*',)),
