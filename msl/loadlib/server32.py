@@ -46,20 +46,20 @@ class Server32(HTTPServer):
 
         Parameters
         ----------
-        path : :obj:`str`
+        path : :class:`str`
             The path to the 32-bit library.
-        libtype : :obj:`str`
+        libtype : :class:`str`
             The library type to use for the calling convention. One of the following:
 
                 * ``'cdll'``, for a __cdecl library
                 * ``'windll'`` or ``'oledll'``, for a __stdcall library (Windows only)
                 * ``'net'``, for a .NET library
 
-        host : :obj:`str`
+        host : :class:`str`
             The IP address of the server.
-        port : :obj:`int`
+        port : :class:`int`
             The port to open on the server.
-        quiet : :obj:`bool`
+        quiet : :class:`bool`
             Whether to hide :obj:`sys.stdout` messages from the server.
 
         Raises
@@ -75,7 +75,7 @@ class Server32(HTTPServer):
 
     @property
     def path(self):
-        """:obj:`str`: The path to the shared library file."""
+        """:class:`str`: The path to the shared library file."""
         return self._library.path
 
     @property
@@ -115,7 +115,7 @@ class Server32(HTTPServer):
 
         Returns
         -------
-        :obj:`str`
+        :class:`str`
             The result of executing ``'Python ' + sys.version`` on the 32-bit server.
 
         Example

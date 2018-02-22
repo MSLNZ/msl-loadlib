@@ -1,5 +1,5 @@
 """
-This module is built into a 32-bit executable by running :mod:`.freeze_server32`.
+This module is built in to a 32-bit executable by running :mod:`.freeze_server32`.
 
 The executable is used to host a 32-bit library, :class:`~.server32.Server32`,
 so that a module running in a 64-bit Python interpreter, :class:`~.client64.Client64`,

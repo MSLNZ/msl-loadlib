@@ -29,7 +29,7 @@ class LoadLibrary(object):
 
         Parameters
         ----------
-        path : :obj:`str`
+        path : :class:`str`
             The path to the shared library.
 
             The search order for finding the shared library is:
@@ -40,7 +40,7 @@ class LoadLibrary(object):
                 3. search :obj:`sys.path`, then
                 4. search :obj:`os.environ['PATH'] <os.environ>` to find the shared library.
 
-        libtype : :obj:`str`, optional
+        libtype : :class:`str`, optional
             The library type to use for the calling convention.
 
             The following values are allowed:
@@ -51,7 +51,7 @@ class LoadLibrary(object):
 
             Default is ``'cdll'``.
 
-        get_assembly_types : :obj:`bool`, optional
+        get_assembly_types : :class:`bool`, optional
             Whether to automatically call
             `System.Reflection.Assembly.GetTypes <https://msdn.microsoft.com/en-us/library/system.reflection.assembly.gettypes(v=vs.110).aspx>`_
             when a .NET library is loaded to parse the types in the assembly. This
@@ -215,7 +215,7 @@ class LoadLibrary(object):
 
     @property
     def path(self):
-        """:obj:`str`: The path to the shared library file."""
+        """:class:`str`: The path to the shared library file."""
         return self._path
 
     @staticmethod
@@ -224,7 +224,7 @@ class LoadLibrary(object):
 
         Returns
         -------
-        :obj:`bool`
+        :class:`bool`
             Whether Python for .NET is installed.
 
         Note
@@ -264,19 +264,19 @@ class LoadLibrary(object):
 
         Parameters
         ----------
-        py_exe_path : :obj:`str`
+        py_exe_path : :class:`str`
             The path to the Python executable.
 
         Returns
         -------
-        :obj:`int`
+        :class:`int`
             One of the following values:
             
                 * -1 -- if there was a problem
                 * 0 -- if the .NET property was already enabled, or
                 * 1 -- if the property was created successfully.
 
-        :obj:`str`
+        :class:`str`
             A message describing the outcome.
         """
 

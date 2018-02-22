@@ -43,7 +43,7 @@ def main(spec=None):
     
     Parameters
     ----------
-    spec : :obj:`str`, optional
+    spec : :class:`str`, optional
         If you want to freeze using a PyInstaller_ .spec file then you can specify the 
         path to the .spec file. Default is :obj:`None`.    
     """
@@ -138,7 +138,7 @@ def _get_standard_modules():
 
     Returns
     -------
-    :obj:`list` of :obj:`str`
+    :class:`list` of :class:`str`
         A list of modules to be included and excluded.
     """
 

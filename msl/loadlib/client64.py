@@ -44,25 +44,25 @@ class Client64(HTTPConnection):
 
         Parameters
         ----------
-        module32 : :obj:`str`
+        module32 : :class:`str`
             The name of the Python module that is to be imported by the 32-bit server.
-        host : :obj:`str`, optional
+        host : :class:`str`, optional
             The IP address of the 32-bit server. Default is ``'127.0.0.1'``.
-        port : :obj:`int`, optional
+        port : :class:`int`, optional
             The port to open on the 32-bit server. Default is :obj:`None` *(which means
             to automatically find a port that is available).*
-        timeout : :obj:`float`, optional
+        timeout : :class:`float`, optional
             The maximum number of seconds to wait to establish a connection to the
             32-bit server. Default is 10 seconds.
-        quiet : :obj:`bool`, optional
+        quiet : :class:`bool`, optional
             Whether to hide :obj:`sys.stdout` messages from the 32-bit server.
             Default is :obj:`True`.
-        append_sys_path : :obj:`str` or :obj:`list` of :obj:`str`, optional
+        append_sys_path : :class:`str` or :class:`list` of :class:`str`, optional
             Append path(s) to the 32-bit server's :obj:`sys.path` variable. The value of
             :obj:`sys.path` from the 64-bit process is automatically included,
             i.e., ``sys.path(32bit) = sys.path(64bit) + append_sys_path``
             Default is :obj:`None`.
-        append_environ_path : :obj:`str` or :obj:`list` of :obj:`str`, optional
+        append_environ_path : :class:`str` or :class:`list` of :class:`str`, optional
             Append path(s) to the 32-bit server's :obj:`os.environ['PATH'] <os.environ>`
             variable. This can be useful if the library that is being loaded requires
             additional libraries that must be available on ``PATH``. Default is :obj:`None`.
@@ -187,7 +187,7 @@ class Client64(HTTPConnection):
         
         Returns
         -------
-        :obj:`str`
+        :class:`str`
             The path to the 32-bit shared-library file.
         """
         return self._lib32_path
@@ -197,7 +197,7 @@ class Client64(HTTPConnection):
 
         Parameters
         ----------
-        method32 : :obj:`str`
+        method32 : :class:`str`
             The name of the method to call in the :class:`~.server32.Server32` subclass.
         *args
             The arguments that the `method32` method in the :class:`~.server32.Server32` 
@@ -266,12 +266,12 @@ class Client64(HTTPConnection):
 
         Parameters
         ----------
-        port : :obj:`int`
+        port : :class:`int`
             The port number to test.
 
         Returns
         -------
-        :obj:`bool`
+        :class:`bool`
             Whether the port is in use.        
         """
         p = subprocess.Popen(['netstat', '-an'], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
