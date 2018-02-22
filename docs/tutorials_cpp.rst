@@ -16,30 +16,28 @@ This example shows how to access a 32-bit C++ library from a module that is run 
 code of the C++ program is available :ref:`here <cpp-lib>`.
 
 .. important::
-   By default :py:mod:`ctypes` expects that a :py:class:`ctypes.c_int` data type is
+   By default :mod:`ctypes` expects that a :class:`ctypes.c_int` data type is
    returned from the library call. If the returned value from the library is not a
-   :py:class:`ctypes.c_int` then you **MUST** redefine the ctypes `restype`_ value
-   to be the appropriate data type. The :class:`~msl.examples.loadlib.cpp32.Cpp32`
-   class shows various examples of redefining the `restype`_ value.
-
-.. _restype: https://docs.python.org/3/library/ctypes.html#ctypes._FuncPtr.restype
+   :class:`ctypes.c_int` then you **MUST** redefine the ctypes
+   :ref:`restype <python:ctypes-return-types>` value to be the appropriate data type.
+   The :class:`~msl.examples.loadlib.cpp32.Cpp32` class shows various examples of
+   redefining the :ref:`restype <python:ctypes-return-types>` value.
 
 The following shows that the :ref:`cpp_lib32 <cpp-lib>` library
 cannot be loaded in a 64-bit Python interpreter:
 
 .. code-block:: python
 
-   >>> import os
-   >>> from msl.examples.loadlib import EXAMPLES_DIR
    >>> from msl.loadlib import LoadLibrary, IS_PYTHON_64BIT
+   >>> from msl.examples.loadlib import EXAMPLES_DIR
    >>> IS_PYTHON_64BIT
    True
-   >>> cpp = LoadLibrary(os.path.join(EXAMPLES_DIR, 'cpp_lib32'))
+   >>> cpp = LoadLibrary(EXAMPLES_DIR + '/cpp_lib32')
    Traceback (most recent call last):
      File "<input>", line 1, in <module>
-     File "D:\code\git\msl-loadlib\msl\loadlib\load_library.py", line 60, in __init__
+     File "D:\msl\loadlib\load_library.py", line 109, in __init__
        self._lib = ctypes.CDLL(self._path)
-     File "C:\Users\j.borbely\Miniconda3\lib\ctypes\__init__.py", line 347, in __init__
+     File "C:\Miniconda3\lib\ctypes\__init__.py", line 348, in __init__
        self._handle = _dlopen(self._name, mode)
    OSError: [WinError 193] %1 is not a valid Win32 application
 
@@ -47,9 +45,9 @@ However, the 64-bit version of the C++ library can be directly loaded in 64-bit 
 
 .. code-block:: python
 
-   >>> cpp64 = LoadLibrary(os.path.join(EXAMPLES_DIR, 'cpp_lib64'))
+   >>> cpp64 = LoadLibrary(EXAMPLES_DIR + '/cpp_lib64')
    >>> cpp64
-   LoadLibrary object at 0x11558dbd898; libtype=CDLL; path=D:\code\git\msl-loadlib\msl\examples\loadlib\cpp_lib64.dll
+   <LoadLibrary id=0x3b48ca8 libtype=CDLL path=D:\msl\examples\loadlib\cpp_lib64.dll>
    >>> cpp64.lib.add(3, 14)
    17
 
@@ -61,9 +59,9 @@ Instead, create a :class:`~msl.examples.loadlib.cpp64.Cpp64` client to communica
    >>> from msl.examples.loadlib import Cpp64
    >>> cpp = Cpp64()
    >>> cpp
-   Cpp64 object at 0x1798a79af60 hosting cpp_lib32.dll on http://127.0.0.1:16517
+   <Cpp64 id=0x38befd0 lib=cpp_lib32.dll address=localhost:63238>
    >>> cpp.lib32_path
-   'D:\\code\\git\\msl-loadlib\\msl\\examples\\loadlib\\cpp_lib32.dll'
+   'D:\\msl\\examples\\loadlib\\cpp_lib32.dll'
 
 Add two integers, see :meth:`~msl.examples.loadlib.cpp64.Cpp64.add`:
 

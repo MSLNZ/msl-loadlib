@@ -16,30 +16,28 @@ This example shows how to access a 32-bit FORTRAN library from a module that is 
 code of the FORTRAN program is available :ref:`here <fortran-lib>`.
 
 .. important::
-   By default :py:mod:`ctypes` expects that a :py:class:`ctypes.c_int` data type is
+   By default :mod:`ctypes` expects that a :class:`ctypes.c_int` data type is
    returned from the library call. If the returned value from the library is not a
-   :py:class:`ctypes.c_int` then you **MUST** redefine the ctypes `restype`_ value
-   to be the appropriate data type. The :class:`~msl.examples.loadlib.fortran32.Fortran32`
-   class shows various examples of redefining the `restype`_ value.
-
-.. _restype: https://docs.python.org/3/library/ctypes.html#ctypes._FuncPtr.restype
+   :class:`ctypes.c_int` then you **MUST** redefine the ctypes
+   :ref:`restype <python:ctypes-return-types>` value to be the appropriate data type.
+   The :class:`~msl.examples.loadlib.fortran32.Fortran32` class shows various examples
+   of redefining the :ref:`restype <python:ctypes-return-types>` value.
 
 The following shows that the :ref:`fortran_lib32 <fortran-lib>` library
 cannot be loaded in a 64-bit Python interpreter:
 
 .. code-block:: python
 
-   >>> import os
-   >>> from msl.examples.loadlib import EXAMPLES_DIR
    >>> from msl.loadlib import LoadLibrary, IS_PYTHON_64BIT
+   >>> from msl.examples.loadlib import EXAMPLES_DIR
    >>> IS_PYTHON_64BIT
    True
-   >>> f = LoadLibrary(os.path.join(EXAMPLES_DIR, 'fortran_lib32'))
+   >>> f = LoadLibrary(EXAMPLES_DIR + '/fortran_lib32')
    Traceback (most recent call last):
      File "<input>", line 1, in <module>
-     File "D:\code\git\msl-loadlib\msl\loadlib\load_library.py", line 60, in __init__
+     File "D:\msl\loadlib\load_library.py", line 109, in __init__
        self._lib = ctypes.CDLL(self._path)
-     File "C:\Users\j.borbely\Miniconda3\lib\ctypes\__init__.py", line 347, in __init__
+     File "C:\Miniconda3\lib\ctypes\__init__.py", line 348, in __init__
        self._handle = _dlopen(self._name, mode)
    OSError: [WinError 193] %1 is not a valid Win32 application
 
@@ -47,11 +45,11 @@ However, the 64-bit version of the FORTRAN library can be directly loaded in 64-
 
 .. code-block:: python
 
-   >>> f64 = LoadLibrary(os.path.join(EXAMPLES_DIR, 'fortran_lib64'))
+   >>> f64 = LoadLibrary(EXAMPLES_DIR + '/fortran_lib64')
    >>> f64
-   LoadLibrary object at 0x1798a79a860; libtype=CDLL; path=D:\code\git\msl-loadlib\msl\examples\loadlib\fortran_lib64.dll
-   >>> import ctypes
-   >>> f64.lib.sum_8bit(ctypes.byref(ctypes.c_int8(-50)), ctypes.byref(ctypes.c_int8(110)))
+   <LoadLibrary id=0x1798a79 libtype=CDLL path=D:\msl\examples\loadlib\fortran_lib64.dll>
+   >>> from ctypes import byref, c_int8
+   >>> f64.lib.sum_8bit(byref(c_int8(-50)), byref(c_int8(110)))
    60
 
 Instead, create a :class:`~msl.examples.loadlib.fortran64.Fortran64` client to communicate with the
@@ -62,9 +60,9 @@ Instead, create a :class:`~msl.examples.loadlib.fortran64.Fortran64` client to c
    >>> from msl.examples.loadlib import Fortran64
    >>> f = Fortran64()
    >>> f
-   Fortran64 object at 0x1798a7adcf8 hosting fortran_lib32.dll on http://127.0.0.1:42888
+   <Fortran64 id=0x1798a7a lib=fortran_lib32.dll address=localhost:42888>
    >>> f.lib32_path
-   'D:\\code\\git\\msl-loadlib\\msl\\examples\\loadlib\\fortran_lib32.dll'
+   'D:\\msl\\examples\\loadlib\\fortran_lib32.dll'
 
 Add two ``int8`` values, see :meth:`~msl.examples.loadlib.fortran64.Fortran64.sum_8bit`:
 

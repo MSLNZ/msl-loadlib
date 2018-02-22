@@ -17,7 +17,7 @@ This example shows how to access a 32-bit .NET library from a module that is run
 .. tip::
    The `JetBrains dotPeek <https://www.jetbrains.com/decompiler/>`_ program can be used
    to reliably decompile any .NET assembly into the equivalent C# source code. For example,
-   **peeking** inside the :ref:`dotnet_lib32.dll <dotnet-lib>` library, that the
+   *peeking* inside the :ref:`dotnet_lib32.dll <dotnet-lib>` library, that the
    :class:`~msl.examples.loadlib.dotnet32.DotNet32` class is a wrapper around, gives
 
    .. image:: _static/dotpeek_lib.png
@@ -27,16 +27,15 @@ be loaded in a 64-bit Python interpreter:
 
 .. code-block:: python
 
-   >>> import os
-   >>> from msl.examples.loadlib import EXAMPLES_DIR
    >>> from msl.loadlib import LoadLibrary, IS_PYTHON_64BIT
+   >>> from msl.examples.loadlib import EXAMPLES_DIR
    >>> IS_PYTHON_64BIT
    True
-   >>> net = LoadLibrary(os.path.join(EXAMPLES_DIR, 'dotnet_lib32'), 'net')
+   >>> net = LoadLibrary(EXAMPLES_DIR + '/dotnet_lib32', 'net')
    Traceback (most recent call last):
      File "<input>", line 1, in <module>
-     File "D:\code\git\msl-loadlib\msl\loadlib\load_library.py", line 69, in __init__
-       self._net = clr.System.Reflection.Assembly.LoadFile(self._path)
+     File "D:\msl\loadlib\load_library.py", line 130, in __init__
+       self._assembly = clr.System.Reflection.Assembly.LoadFile(self._path)
    System.BadImageFormatException: Could not load file or assembly 'dotnet_lib32.dll' or one of its dependencies.  is not a valid Win32 application. (Exception from HRESULT: 0x800700C1)
       at System.Reflection.RuntimeAssembly.nLoadFile(String path, Evidence evidence)
       at System.Reflection.Assembly.LoadFile(String path)
@@ -45,9 +44,9 @@ However, the 64-bit version of the .NET library can be directly loaded in 64-bit
 
 .. code-block:: python
 
-   >>> net = LoadLibrary(os.path.join(EXAMPLES_DIR, 'dotnet_lib64'), 'net')
+   >>> net = LoadLibrary(EXAMPLES_DIR + '/dotnet_lib64', 'net')
    >>> net
-   LoadLibrary object at 0x37c1da0; libtype=DotNetContainer; path=D:\code\git\msl-loadlib\msl\examples\loadlib\dotnet_lib64.dll
+   <LoadLibrary id=0x37c1da0 libtype=DotNet path=D:\msl\examples\loadlib\dotnet_lib64.dll>
    >>> net.lib.StringManipulation.reverse_string('Hello World!')
    '!dlroW olleH'
 
@@ -59,9 +58,9 @@ with the 32-bit :ref:`dotnet_lib32.dll <dotnet-lib>` library:
    >>> from msl.examples.loadlib import DotNet64
    >>> dn = DotNet64()
    >>> dn
-   DotNet64 object at 0x1d4ee95cda0 hosting dotnet_lib32.dll on http://127.0.0.1:11051
+   <DotNet64 id=0x1d4ee95 lib=dotnet_lib32.dll address=localhost:11051>
    >>> dn.lib32_path
-   'D:\\code\\git\\msl-loadlib\\msl\\examples\\loadlib\\dotnet_lib32.dll'
+   'D:\\msl\\examples\\loadlib\\dotnet_lib32.dll'
 
 Get the names of the classes in the .NET library module, see
 :meth:`~msl.examples.loadlib.dotnet64.DotNet64.get_class_names`:
@@ -127,7 +126,7 @@ Reverse a string, see :meth:`~msl.examples.loadlib.dotnet64.DotNet64.reverse_str
    >>> dn.reverse_string('New Zealand')
    'dnalaeZ weN'
 
-Call the static methods in the **StaticClass** class
+Call the static methods in the ``StaticClass`` class
 
 .. code-block:: python
 

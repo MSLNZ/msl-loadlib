@@ -103,11 +103,10 @@ Shutdown the server when you are done communicating with the 32-bit library, see
 .. note::
    The server will automatically shutdown when the :class:`~msl.examples.loadlib.dummy64.Dummy64`
    object gets destroyed (as it did in the example script above). When using a subclass of
-   :class:`~msl.loadlib.client64.Client64` in a script, the `__del__ <del_>`_ command gets
-   called automatically when the instance is about to be destroyed and therefore you do not have to
-   call the :meth:`~msl.loadlib.client64.Client64.shutdown_server32` method to shutdown the server.
+   :class:`~msl.loadlib.client64.Client64` in a script, the :meth:`__del__ <object.__del__>` method
+   gets called automatically when the instance is about to be destroyed (and the reference count
+   reaches 0) and therefore you do not have to call the
+   :meth:`~msl.loadlib.client64.Client64.shutdown_server32` method to shutdown the server.
    If the :class:`~msl.loadlib.client64.Client64` subclass does not get destroyed properly, for
    example if you are using an interactive console and then exit the console abruptly, then the server
    will still be running and therefore you must manually terminate the server processes.
-
-.. _del: https://docs.python.org/3/reference/datamodel.html#object.__del__

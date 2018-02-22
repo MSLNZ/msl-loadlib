@@ -21,9 +21,9 @@ Python interpreter:
    >>> k = LoadLibrary('C:/Windows/SysWOW64/kernel32.dll', 'windll')
    Traceback (most recent call last):
      File "<input>", line 1, in <module>
-     File "D:\code\git\msl-loadlib\msl\loadlib\load_library.py", line 62, in __init__
+     File "D:\msl\loadlib\load_library.py", line 111, in __init__
        self._lib = ctypes.WinDLL(self._path)
-     File "C:\Users\j.borbely\Miniconda3\lib\ctypes\__init__.py", line 347, in __init__
+     File "C:\Miniconda3\lib\ctypes\__init__.py", line 348, in __init__
        self._handle = _dlopen(self._name, mode)
    OSError: [WinError 193] %1 is not a valid Win32 application
 
@@ -35,7 +35,7 @@ Instead, create a :class:`~msl.examples.loadlib.kernel64.Kernel64` client to com
    >>> from msl.examples.loadlib import Kernel64
    >>> k = Kernel64()
    >>> k
-   Kernel64 object at 0x1798a792940 hosting kernel32.dll on http://127.0.0.1:59481
+   <Kernel64 id=0x1798a79 lib=kernel32.dll address=localhost:59481>
    >>> k.lib32_path
    'C:\\Windows\\SysWOW64\\kernel32.dll'
 
