@@ -58,7 +58,7 @@ with the 32-bit :ref:`dotnet_lib32.dll <dotnet-lib>` library:
    >>> from msl.examples.loadlib import DotNet64
    >>> dn = DotNet64()
    >>> dn
-   <DotNet64 id=0x1d4ee95 lib=dotnet_lib32.dll address=localhost:11051>
+   <DotNet64 id=0x1d4ee95 lib=dotnet_lib32.dll address=127.0.0.1:11051>
    >>> dn.lib32_path
    'D:\\msl\\examples\\loadlib\\dotnet_lib32.dll'
 

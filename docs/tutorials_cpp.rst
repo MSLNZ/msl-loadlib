@@ -59,7 +59,7 @@ Instead, create a :class:`~msl.examples.loadlib.cpp64.Cpp64` client to communica
    >>> from msl.examples.loadlib import Cpp64
    >>> cpp = Cpp64()
    >>> cpp
-   <Cpp64 id=0x38befd0 lib=cpp_lib32.dll address=localhost:63238>
+   <Cpp64 id=0x38befd0 lib=cpp_lib32.dll address=127.0.0.1:63238>
    >>> cpp.lib32_path
    'D:\\msl\\examples\\loadlib\\cpp_lib32.dll'
 

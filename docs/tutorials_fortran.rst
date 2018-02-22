@@ -60,7 +60,7 @@ Instead, create a :class:`~msl.examples.loadlib.fortran64.Fortran64` client to c
    >>> from msl.examples.loadlib import Fortran64
    >>> f = Fortran64()
    >>> f
-   <Fortran64 id=0x1798a7a lib=fortran_lib32.dll address=localhost:42888>
+   <Fortran64 id=0x1798a7a lib=fortran_lib32.dll address=127.0.0.1:42888>
    >>> f.lib32_path
    'D:\\msl\\examples\\loadlib\\fortran_lib32.dll'
 

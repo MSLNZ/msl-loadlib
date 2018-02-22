@@ -35,7 +35,7 @@ Instead, create a :class:`~msl.examples.loadlib.kernel64.Kernel64` client to com
    >>> from msl.examples.loadlib import Kernel64
    >>> k = Kernel64()
    >>> k
-   <Kernel64 id=0x1798a79 lib=kernel32.dll address=localhost:59481>
+   <Kernel64 id=0x1798a79 lib=kernel32.dll address=127.0.0.1:59481>
    >>> k.lib32_path
    'C:\\Windows\\SysWOW64\\kernel32.dll'
 

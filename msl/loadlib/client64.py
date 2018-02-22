@@ -32,7 +32,7 @@ else:
 
 class Client64(HTTPConnection):
 
-    def __init__(self, module32, host='localhost', port=None, timeout=10.0, quiet=True,
+    def __init__(self, module32, host='127.0.0.1', port=None, timeout=10.0, quiet=True,
                  append_sys_path=None, append_environ_path=None, **kwargs):
         """Base class for communicating with a 32-bit library from 64-bit Python.
 
@@ -47,7 +47,7 @@ class Client64(HTTPConnection):
         module32 : :obj:`str`
             The name of the Python module that is to be imported by the 32-bit server.
         host : :obj:`str`, optional
-            The IP address of the 32-bit server. Default is ``'localhost'``.
+            The IP address of the 32-bit server. Default is ``'127.0.0.1'``.
         port : :obj:`int`, optional
             The port to open on the 32-bit server. Default is :obj:`None` *(which means
             to automatically find a port that is available).*
