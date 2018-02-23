@@ -87,17 +87,14 @@ class Client64(HTTPConnection):
             If the frozen executable cannot be found.
         TypeError
             If the data type of `append_sys_path` or `append_environ_path` is invalid.
-        :class:`~http.client.HTTPException`
+        TimeoutError
             If the connection to the 32-bit server cannot be established.
         """
 
         self._is_active = False
 
         if port is None:
-            sock = socket.socket()
-            sock.bind(('', 0))  # get any available port
-            port = sock.getsockname()[1]
-            sock.close()
+            port = self.get_available_port()
 
         # the temporary file to use to save the pickle'd data
         self._pickle_temp_file = os.path.join(tempfile.gettempdir(), str(uuid.uuid4()))
@@ -157,15 +154,7 @@ class Client64(HTTPConnection):
 
         # start the server, cannot use subprocess.call() because it blocks
         subprocess.Popen(cmd, stderr=sys.stderr, stdout=sys.stderr)
-
-        # wait for the server to be running -- essentially this is the subprocess.wait() method
-        stop = time.time() + max(0.0, timeout)
-        while True:
-            if self.port_in_use(port):
-                break
-            if time.time() > stop:
-                m = 'Timeout after {:.1f} seconds. Could not connect to {}:{}'.format(timeout, host, port)
-                raise HTTPException(m)
+        self.wait_for_server(host, port, timeout)
 
         # start the connection
         HTTPConnection.__init__(self, host, port)
@@ -276,3 +265,40 @@ class Client64(HTTPConnection):
         """
         p = subprocess.Popen(['netstat', '-an'], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
         return p.communicate()[0].decode().find(':{} '.format(port)) > 0
+
+    @staticmethod
+    def get_available_port():
+        """:class:`int`: Returns a port number that is available."""
+        sock = socket.socket()
+        sock.bind(('', 0))  # get any available port
+        port = sock.getsockname()[1]
+        sock.close()
+        return port
+
+    @staticmethod
+    def wait_for_server(host, port, timeout):
+        """Wait for the server to start.
+
+        Parameters
+        ----------
+        host : :class:`str`
+            The host address of the server.
+        port : :class:`int`
+            The port number of the server.
+        timeout : :class:`float`
+            The maximum number of seconds to wait to establish a connection to the server.
+
+        Raises
+        ------
+        TimeoutError
+            If a timeout occurred.
+        """
+
+        # wait for the server to be running -- essentially this is the subprocess.wait() method
+        stop = time.time() + max(0.0, timeout)
+        while True:
+            if Client64.port_in_use(port):
+                break
+            if time.time() > stop:
+                m = 'Timeout after {:.1f} seconds. Could not connect to {}:{}'.format(timeout, host, port)
+                raise TimeoutError(m)

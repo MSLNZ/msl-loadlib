@@ -7,9 +7,10 @@ import sys
 import ctypes
 import ctypes.util
 import logging
+import subprocess
 import xml.etree.ElementTree as ET
 
-from msl.loadlib import DEFAULT_EXTENSION
+from msl.loadlib import DEFAULT_EXTENSION, Client64
 
 logger = logging.getLogger(__name__)
 
@@ -26,6 +27,7 @@ class LoadLibrary(object):
             * :class:`~ctypes.OleDLL` if `libtype` = ``'oledll'``, or a
             * :class:`~.load_library.DotNet` if `libtype` = ``'net'`` **and**
               `get_assembly_types` = :obj:`True`.
+            * :class:`~.py4j.java_gateway.JavaGateway` if `libtype` = ``'jar'``.
 
         Parameters
         ----------
@@ -48,6 +50,7 @@ class LoadLibrary(object):
             * ``'cdll'``, for a __cdecl library
             * ``'windll'`` or ``'oledll'``, for a __stdcall library (Windows only)
             * ``'net'``, for a .NET library
+            * ``'jar'``, for a Java library
 
             Default is ``'cdll'``.
 
@@ -111,6 +114,34 @@ class LoadLibrary(object):
             self._lib = ctypes.WinDLL(self._path)
         elif libtype == 'oledll':
             self._lib = ctypes.OleDLL(self._path)
+        elif libtype == 'jar':
+            if not self.is_py4j_installed():
+                raise IOError('Cannot load a JAR file because Py4J is not installed.\n'
+                              'To install Py4J run: pip install py4j')
+
+            from py4j.java_gateway import JavaGateway, GatewayParameters
+
+            address = '127.0.0.1'
+            port = Client64.get_available_port()
+            jar = os.path.join(os.path.dirname(__file__), 'py4j-wrapper.jar')
+            cmd = ['java', '-jar', jar, str(port), self._path]
+
+            # start the Java server, cannot use subprocess.call() because it blocks
+            try:
+                subprocess.Popen(cmd, stderr=sys.stderr, stdout=sys.stderr)
+                msg = None
+            except IOError:
+                msg = 'You must have a Java Runtime Environment installed and available on the PATH'
+
+            if msg:
+                raise IOError(msg)
+
+            Client64.wait_for_server(address, port, 10.0)
+
+            self._lib = JavaGateway(
+                gateway_parameters=GatewayParameters(address=address, port=port)
+            )
+
         elif libtype == 'net':
             if not self.is_pythonnet_installed():
                 raise IOError('Cannot load a .NET Assembly because pythonnet is not installed.\n'
@@ -178,6 +209,10 @@ class LoadLibrary(object):
         return '<{} id={:#x} libtype={} path={}>'.format(
             self.__class__.__name__, id(self), self._lib.__class__.__name__, self._path)
 
+    def __del__(self):
+        if self._lib is not None and self._lib.__class__.__name__ == 'JavaGateway':
+            self._lib.shutdown()
+
     @property
     def assembly(self):
         """
@@ -207,6 +242,8 @@ class LoadLibrary(object):
               (i.e., the namespace_ modules, classes and/or System.Type_ objects). If
               `get_assembly_types` = :obj:`False` then :obj:`None` is returned; however,
               you can still access the .NET :obj:`assembly` object and import the .NET modules.
+            * if `libtype` = ``'jar'`` then a :class:`~py4j.java_gateway.JavaGateway` object
+              is returned.
 
         .. _namespace: https://msdn.microsoft.com/en-us/library/z2kcy19k.aspx
         .. _System.Type: https://msdn.microsoft.com/en-us/library/system.type(v=vs.110).aspx
@@ -237,6 +274,24 @@ class LoadLibrary(object):
             import clr
         except ImportError:
             logger.warning('Python for .NET <pythonnet> is not installed. Cannot load a .NET library.')
+            return False
+        return True
+
+    @staticmethod
+    def is_py4j_installed():
+        """Checks if Py4J_ is installed.
+
+        .. _Py4J: https://www.py4j.org/index.html#
+
+        Returns
+        -------
+        :class:`bool`
+            Whether Py4J_ is installed.
+        """
+        try:
+            import py4j
+        except ImportError:
+            logger.warning('Py4j is not installed. Cannot load a JAR file.')
             return False
         return True
 
