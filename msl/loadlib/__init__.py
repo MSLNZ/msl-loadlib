@@ -44,6 +44,7 @@ else:
     SERVER_FILENAME = 'server32-unknown'
     DEFAULT_EXTENSION = '.unknown'
 
-from .client64 import Client64
+from . import utils
 from .load_library import LoadLibrary
+from .client64 import Client64
 from .server32 import Server32

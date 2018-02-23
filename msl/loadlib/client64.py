@@ -8,8 +8,6 @@ from 64-bit Python.
 import os
 import sys
 import uuid
-import time
-import socket
 import tempfile
 import subprocess
 
@@ -18,6 +16,7 @@ try:
 except ImportError:
     import pickle
 
+from msl.loadlib import utils
 from msl.loadlib import IS_PYTHON2, IS_PYTHON3, SERVER_FILENAME
 
 if IS_PYTHON2:
@@ -94,7 +93,7 @@ class Client64(HTTPConnection):
         self._is_active = False
 
         if port is None:
-            port = self.get_available_port()
+            port = utils.get_available_port()
 
         # the temporary file to use to save the pickle'd data
         self._pickle_temp_file = os.path.join(tempfile.gettempdir(), str(uuid.uuid4()))
@@ -154,7 +153,7 @@ class Client64(HTTPConnection):
 
         # start the server, cannot use subprocess.call() because it blocks
         subprocess.Popen(cmd, stderr=sys.stderr, stdout=sys.stderr)
-        self.wait_for_server(host, port, timeout)
+        utils.wait_for_server(host, port, timeout)
 
         # start the connection
         HTTPConnection.__init__(self, host, port)
@@ -246,59 +245,3 @@ class Client64(HTTPConnection):
 
     def __del__(self):
         self.shutdown_server32()
-
-    @staticmethod
-    def port_in_use(port):
-        """Uses netstat_ to determine if the network port is in use.
-        
-        .. _netstat: http://www.computerhope.com/unix/unetstat.htm
-
-        Parameters
-        ----------
-        port : :class:`int`
-            The port number to test.
-
-        Returns
-        -------
-        :class:`bool`
-            Whether the port is in use.        
-        """
-        p = subprocess.Popen(['netstat', '-an'], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-        return p.communicate()[0].decode().find(':{} '.format(port)) > 0
-
-    @staticmethod
-    def get_available_port():
-        """:class:`int`: Returns a port number that is available."""
-        sock = socket.socket()
-        sock.bind(('', 0))  # get any available port
-        port = sock.getsockname()[1]
-        sock.close()
-        return port
-
-    @staticmethod
-    def wait_for_server(host, port, timeout):
-        """Wait for the server to start.
-
-        Parameters
-        ----------
-        host : :class:`str`
-            The host address of the server.
-        port : :class:`int`
-            The port number of the server.
-        timeout : :class:`float`
-            The maximum number of seconds to wait to establish a connection to the server.
-
-        Raises
-        ------
-        TimeoutError
-            If a timeout occurred.
-        """
-
-        # wait for the server to be running -- essentially this is the subprocess.wait() method
-        stop = time.time() + max(0.0, timeout)
-        while True:
-            if Client64.port_in_use(port):
-                break
-            if time.time() > stop:
-                m = 'Timeout after {:.1f} seconds. Could not connect to {}:{}'.format(timeout, host, port)
-                raise TimeoutError(m)
