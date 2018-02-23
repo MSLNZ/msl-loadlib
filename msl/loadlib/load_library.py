@@ -27,7 +27,7 @@ class LoadLibrary(object):
             * :class:`~ctypes.OleDLL` if `libtype` = ``'oledll'``, or a
             * :class:`~.load_library.DotNet` if `libtype` = ``'net'`` **and**
               `get_assembly_types` = :obj:`True`.
-            * :class:`~.py4j.java_gateway.JavaGateway` if `libtype` = ``'jar'``.
+            * :class:`~.py4j.java_gateway.JVMView` if `libtype` = ``'jar'``.
 
         Parameters
         ----------
@@ -50,7 +50,8 @@ class LoadLibrary(object):
             * ``'cdll'``, for a __cdecl library
             * ``'windll'`` or ``'oledll'``, for a __stdcall library (Windows only)
             * ``'net'``, for a .NET library
-            * ``'jar'``, for a Java library
+            * ``'jar'``, for a Java ARchive *(note: you can omit specifying the* `libtype`
+              *if loading a JAR file provided that the file extension is* ``.jar``*)*
 
             Default is ``'cdll'``.
 
@@ -77,6 +78,9 @@ class LoadLibrary(object):
         # a reference to the .NET Runtime Assembly
         self._assembly = None
 
+        # a reference to the Py4J JavaGateway
+        self._gateway = None
+
         # fixes Issue #8, if `path` is a <class 'pathlib.Path'> object
         path = str(path)
 
@@ -88,7 +92,14 @@ class LoadLibrary(object):
 
         # assume a default extension if no extension was provided
         if not os.path.splitext(_path)[1]:
-            _path += DEFAULT_EXTENSION
+            if libtype == 'jar':
+                _path += '.jar'
+            else:
+                _path += DEFAULT_EXTENSION
+
+        # the jar extension uniquely defines the backend to use to load the library
+        if os.path.splitext(_path)[1] == '.jar' and libtype != 'jar':
+            libtype = 'jar'
 
         self._path = os.path.abspath(_path)
         if not os.path.isfile(self._path):
@@ -119,28 +130,40 @@ class LoadLibrary(object):
                 raise IOError('Cannot load a JAR file because Py4J is not installed.\n'
                               'To install Py4J run: pip install py4j')
 
+            from py4j.version import __version__
             from py4j.java_gateway import JavaGateway, GatewayParameters
 
+            # the address and port to use to host the py4j.GatewayServer
             address = '127.0.0.1'
             port = Client64.get_available_port()
-            jar = os.path.join(os.path.dirname(__file__), 'py4j-wrapper.jar')
-            cmd = ['java', '-jar', jar, str(port), self._path]
 
-            # start the Java server, cannot use subprocess.call() because it blocks
+            # include the py4j JAR in the classpath (needed to import py4j.GatewayServer on the Java side)
+            root = os.path.dirname(sys.executable)
+            py4j_jar = os.path.join(root, 'share', 'py4j', 'py4j'+__version__+'.jar')
+            if not os.path.isfile(py4j_jar):
+                raise IOError('Cannot find ' + py4j_jar)
+
+            # build the java command
+            wrapper = os.path.join(os.path.dirname(__file__), 'py4j-wrapper.jar')
+            cmd = ['java', '-cp', py4j_jar + os.pathsep + wrapper, 'nz.msl.Py4JWrapper', str(port), self._path]
+
             try:
-                subprocess.Popen(cmd, stderr=sys.stderr, stdout=sys.stderr)
-                msg = None
+                # start the py4j.GatewayServer, cannot use subprocess.call() because it blocks
+                subprocess.Popen(cmd, stderr=sys.stderr, stdout=sys.stdout)
+                err = None
             except IOError:
-                msg = 'You must have a Java Runtime Environment installed and available on the PATH'
+                err = 'You must have a Java Runtime Environment installed and available on PATH'
 
-            if msg:
-                raise IOError(msg)
+            if err:
+                raise IOError(err)
 
-            Client64.wait_for_server(address, port, 10.0)
+            Client64.wait_for_server(address, port, 5.0)
 
-            self._lib = JavaGateway(
+            self._gateway = JavaGateway(
                 gateway_parameters=GatewayParameters(address=address, port=port)
             )
+
+            self._lib = self._gateway.jvm
 
         elif libtype == 'net':
             if not self.is_pythonnet_installed():
@@ -210,8 +233,9 @@ class LoadLibrary(object):
             self.__class__.__name__, id(self), self._lib.__class__.__name__, self._path)
 
     def __del__(self):
-        if self._lib is not None and self._lib.__class__.__name__ == 'JavaGateway':
-            self._lib.shutdown()
+        if self._gateway is not None:
+            self._gateway.shutdown()
+            logger.debug('shutdown py4j.GatewayServer')
 
     @property
     def assembly(self):
@@ -228,6 +252,14 @@ class LoadLibrary(object):
         return self._assembly
 
     @property
+    def gateway(self):
+        """
+        Returns the :class:`~py4j.java_gateway.JavaGateway` object, *only if
+        the shared library is a Java archive*, otherwise returns :obj:`None`.
+        """
+        return self._gateway
+
+    @property
     def lib(self):
         """Returns the reference to the loaded library object.
 
@@ -242,7 +274,7 @@ class LoadLibrary(object):
               (i.e., the namespace_ modules, classes and/or System.Type_ objects). If
               `get_assembly_types` = :obj:`False` then :obj:`None` is returned; however,
               you can still access the .NET :obj:`assembly` object and import the .NET modules.
-            * if `libtype` = ``'jar'`` then a :class:`~py4j.java_gateway.JavaGateway` object
+            * if `libtype` = ``'jar'`` then a :class:`~py4j.java_gateway.JVMView` object
               is returned.
 
         .. _namespace: https://msdn.microsoft.com/en-us/library/z2kcy19k.aspx
