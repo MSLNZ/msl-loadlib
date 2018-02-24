@@ -17,7 +17,7 @@ Compatibility
 * Tested with Python versions 2.7, 3.3+.
 * The :mod:`~msl.loadlib.start_server32` module has been built into a `frozen <http://www.pyinstaller.org/>`_
   Python application for Windows and Linux and works with the Python versions listed above. The 32-bit server
-  is running on Python 3.6.3 and therefore all modules that run on the server must use Python 3 syntax.
+  is running on Python 3.6 and therefore all modules that run on the server must use Python 3 syntax.
 * The 32-bit server can be `frozen <http://www.pyinstaller.org/>`_ for other operating systems by running
   the :mod:`~msl.loadlib.freeze_server32` module in the operating system of your choice using a 32-bit
   Python interpreter of your choice.
@@ -30,7 +30,17 @@ Prerequisites
 Windows
 +++++++
 64-bit Windows already comes with `WoW64 <https://en.wikipedia.org/wiki/WoW64>`_ to run 32-bit software and
-includes the .NET Framework and therefore no prerequisites are required.
+includes the .NET Framework and therefore no prerequisites are required to load ``__cdecl``, ``__stdcall``
+or ``.NET`` libraries.
+
+If you need to load a ``JAR`` file then you must install a `Java Runtime Environment`_ and ensure that
+the ``java`` executable is available on your ``PATH``. For example, the following should return the version
+of Java that is installed::
+
+   C:\>java -version
+   java version "1.8.0_161"
+   Java(TM) SE Runtime Environment (build 1.8.0_161-b12)
+   Java HotSpot(TM) 64-Bit Server VM (build 25.161-b12, mixed mode)
 
 Linux
 ++++++
@@ -41,7 +51,7 @@ Install the packages that are needed to load C/C++ and FORTRAN libraries::
    sudo apt-get update
    sudo apt-get install software-properties-common build-essential g++ gcc-multilib g++-multilib gfortran libgfortran3:i386 zlib1g:i386
 
-If you need to load .NET Framework assemblies then you must install Mono_ (v4.8.0 is specified below)::
+If you need to load a .NET Framework then you must install Mono_ (v4.8.0 is specified below)::
 
    sudo apt-get install libglib2.0-dev clang
    sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 3FA7E0328081BFF6A14DA29AA6A19B38D3D831EF
@@ -76,7 +86,20 @@ Installing `Python for .NET`_ v2.3.0 with Mono_ v4.8.0 installed on Ubuntu 16.04
        GC:            sgen
 
 If you run in to problems installing `Python for .NET`_ then the best place to find help is on the
-`issues <https://github.com/pythonnet/pythonnet/issues>`_ page of pythonnet's repository.
+`issues <https://github.com/pythonnet/pythonnet/issues>`_ page of `Python for .NET`_\'s repository.
+
+If you need to load a ``JAR`` file then you must install a `Java Runtime Environment`_::
+
+   sudo apt-get install default-jre
+
+and ensure that the ``java`` executable is available on your ``PATH``. For example, the following
+should return the version of Java that is installed::
+
+   joe@msl:~$ java -version
+   openjdk version "1.8.0_131"
+   OpenJDK Runtime Environment (build 1.8.0_131-8u131-b11-2ubuntu1.16.04.3-b11)
+   OpenJDK 64-Bit Server VM (build 25.131-b11, mixed mode)
 
 .. _Mono: http://www.mono-project.com/
-.. _Python for .NET: https://pypi.python.org/pypi/pythonnet/
+.. _Python for .NET: https://github.com/pythonnet/pythonnet/wiki
+.. _Java Runtime Environment: http://www.oracle.com/technetwork/java/javase/downloads/index.html
