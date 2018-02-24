@@ -5,7 +5,7 @@ MSL-LoadLib
 This package is used to load a shared library in to Python. It is basically just a
 thin wrapper around `ctypes <https://docs.python.org/3/library/ctypes.html>`_ (for libraries
 using the ``__cdecl`` and ``__stdcall`` calling convention),
-`Python for .NET <https://github.com/pythonnet/pythonnet/wiki>`_ (for libraries using Microsoft's
+`Python for .NET <http://pythonnet.github.io/>`_ (for libraries using Microsoft's
 .NET Framework) and `Py4J <https://www.py4j.org/>`_ (for Java ARchive libraries, ``JAR``).
 
 However, the primary advantage is that it is possible to communicate with a 32-bit

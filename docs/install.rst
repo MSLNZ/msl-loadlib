@@ -101,5 +101,5 @@ should return the version of Java that is installed::
    OpenJDK 64-Bit Server VM (build 25.131-b11, mixed mode)
 
 .. _Mono: http://www.mono-project.com/
-.. _Python for .NET: https://github.com/pythonnet/pythonnet/wiki
+.. _Python for .NET: http://pythonnet.github.io/
 .. _Java Runtime Environment: http://www.oracle.com/technetwork/java/javase/downloads/index.html
