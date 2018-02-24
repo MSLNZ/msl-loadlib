@@ -1,7 +1,9 @@
 import os
-import pytest
 import pathlib
+from ctypes import c_double, byref
+
 import clr
+import pytest
 
 from msl import loadlib
 from msl.examples.loadlib import Cpp64, Fortran64, Dummy64, DotNet64, EXAMPLES_DIR
@@ -196,3 +198,116 @@ def test_namespace_with_dots():
     net = loadlib.LoadLibrary('./tests/namespace_with_dots/Namespace.With.Dots.dll', 'net')
     checker = net.lib.Namespace.With.Dots.Checker()
     assert checker.IsSuccess()
+
+
+def test_labview():
+
+    path = EXAMPLES_DIR + '/labview_lib64.dll'
+
+    if not loadlib.IS_PYTHON_64BIT:
+        with pytest.raises(OSError):
+            loadlib.LoadLibrary(path)
+    else:
+        labview = loadlib.LoadLibrary(path)
+
+        data = [1, 2, 3, 4, 5, 6, 7, 8, 9]
+        x = (c_double * len(data))(*data)
+
+        mean, variance, stdev = c_double(), c_double(), c_double()
+
+        # weighting to use: 0 -> sample, 1-> population
+
+        labview.lib.stdev(x, len(data), 0, byref(mean), byref(variance), byref(stdev))
+        assert abs(mean.value - 5.0) < eps
+        assert abs(variance.value - 7.5) < eps
+        assert abs(stdev.value - 2.73861278752583) < eps
+
+        labview.lib.stdev(x, len(data), 1, byref(mean), byref(variance), byref(stdev))
+        assert abs(mean.value - 5.0) < eps
+        assert abs(variance.value - 6.66666666666667) < eps
+        assert abs(stdev.value - 2.58198889747161) < eps
+
+
+def test_java():
+    jar = loadlib.LoadLibrary(EXAMPLES_DIR + '/java_lib.jar')
+
+    Math = jar.lib.nz.msl.example.MathUtils
+    Matrix = jar.lib.nz.msl.example.Matrix
+
+    assert 0.0 <= Math.random() < 1.0
+    assert abs(Math.sqrt(32.4) - 5.69209978830308) < eps
+
+    #
+    # check LU decomposition
+    #
+
+    n = 14
+    m1 = Matrix(n, n, 2.0, 8.0)
+    L = m1.getL()
+    U = m1.getU()
+    LU = m1.multiply(L, U)
+    for i in range(n):
+        for j in range(n):
+            assert abs(m1.getValue(i, j) - LU.getValue(i, j)) < eps
+
+    #
+    # check QR decomposition
+    #
+
+    n = 8
+    m2 = Matrix(n, n, -100.0, 100.0)
+    Q = m2.getQ()
+    R = m2.getR()
+    QR = m2.multiply(Q, R)
+    for i in range(n):
+        for j in range(n):
+            assert abs(m2.getValue(i, j) - QR.getValue(i, j)) < eps
+
+    #
+    # solve Ax=b
+    #
+    m3 = jar.gateway.new_array(jar.lib.Double, 3, 3)
+    m3[0][0] = 3.
+    m3[0][1] = 2.
+    m3[0][2] = -1.
+    m3[1][0] = 2.
+    m3[1][1] = -2.
+    m3[1][2] = 4.
+    m3[2][0] = -1.0
+    m3[2][1] = 0.5
+    m3[2][2] = 1.0
+
+    m4 = jar.gateway.new_array(jar.lib.Double, 3)
+    m4[0] = 1.0
+    m4[1] = -2.0
+    m4[2] = 0.0
+
+    A = Matrix(m3)
+    x = Matrix.solve(A, Matrix(m4))
+
+    bprime = Matrix.multiply(A, x)
+    for i in range(3):
+        assert abs(bprime.getValue(i, 0) - m4[i]) < eps
+
+    #
+    # Check inverse
+    #
+    n = 30
+    m5 = Matrix(n, n, 0.0, 100.0)
+    m6 = m5.getInverse()
+    m7 = Matrix.multiply(m5, m6)
+    identity = Matrix(n)
+    for i in range(n):
+        for j in range(n):
+            assert abs(identity.getValue(i, j) - m7.getValue(i, j)) < eps
+
+    #
+    # Check determinant
+    #
+    a = [[6, 1, 1], [4, -2, 5], [2, 8, 7]]
+    ja = jar.gateway.new_array(jar.lib.Double, 3, 3)
+    for i in range(3):
+        for j in range(3):
+            ja[i][j] = float(a[i][j])
+    m8 = Matrix(ja)
+    assert abs(m8.getDeterminant() - (-306)) < eps
