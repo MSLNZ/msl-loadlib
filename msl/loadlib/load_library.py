@@ -1,6 +1,5 @@
 """
-Load a :class:`~ctypes.CDLL`, :class:`~ctypes.WinDLL`, :class:`~ctypes.OleDLL`, or
-a `.NET Framework <http://pythonnet.github.io/>`_ library.
+Load a shared library.
 """
 import os
 import sys
@@ -17,17 +16,18 @@ logger = logging.getLogger(__name__)
 
 class LoadLibrary(object):
 
-    def __init__(self, path, libtype='cdll', get_assembly_types=True):
+    def __init__(self, path, libtype='cdll'):
         """Load a shared library.
+
+        For example, a C/C++, FORTRAN, CLR, Java, Delphi, LabVIEW, ... library.
 
         Based on the value of `libtype` this class will load the shared library as a:
 
-            * :class:`~ctypes.CDLL` if `libtype` = ``'cdll'``,
-            * :class:`~ctypes.WinDLL` if `libtype` = ``'windll'``,
-            * :class:`~ctypes.OleDLL` if `libtype` = ``'oledll'``, or a
-            * :class:`~.load_library.DotNet` if `libtype` = ``'net'`` **and**
-              `get_assembly_types` = :obj:`True`.
-            * :class:`~.py4j.java_gateway.JVMView` if `libtype` = ``'jar'``.
+            * :class:`~ctypes.CDLL` if `libtype` is ``'cdll'``,
+            * :class:`~ctypes.WinDLL` if `libtype` is ``'windll'``,
+            * :class:`~ctypes.OleDLL` if `libtype` is ``'oledll'``,
+            * :class:`~.load_library.DotNet` if `libtype` is ``'net'``, or a
+            * :class:`~.py4j.java_gateway.JavaGateway` if `libtype` is ``'jar'``.
 
         Parameters
         ----------
@@ -43,26 +43,15 @@ class LoadLibrary(object):
                 4. search :obj:`os.environ['PATH'] <os.environ>` to find the shared library.
 
         libtype : :class:`str`, optional
-            The library type to use for the calling convention.
+            The library type. The following values are currently supported:
 
-            The following values are allowed:
-
-            * ``'cdll'``, for a __cdecl library
-            * ``'windll'`` or ``'oledll'``, for a __stdcall library (Windows only)
-            * ``'net'``, for a .NET library
-            * ``'jar'``, for a Java ARchive *(note: you can omit specifying the* `libtype`
+            * ``'cdll'``, for a library that uses the __cdecl calling convention
+            * ``'windll'`` or ``'oledll'``, for a __stdcall calling convention
+            * ``'net'``, for Microsoft's .NET Framework
+            * ``'jar'``, for a Java archive *(note: you can omit specifying the* `libtype`
               *if loading a JAR file provided that the file extension is* ``.jar``*)*
 
             Default is ``'cdll'``.
-
-        get_assembly_types : :class:`bool`, optional
-            Whether to automatically call
-            `System.Reflection.Assembly.GetTypes <https://msdn.microsoft.com/en-us/library/system.reflection.assembly.gettypes(v=vs.110).aspx>`_
-            when a .NET library is loaded to parse the types in the assembly. This
-            parameter is only used if `libtype` = ``'net'``. If this value is
-            :obj:`False` then the :obj:`lib` property value will return :obj:`None`,
-            but you can still import .NET modules and access the attributes of
-            the :obj:`assembly`.
 
         Raises
         ------
@@ -208,21 +197,20 @@ class LoadLibrary(object):
             # don't include the library extension
             clr.AddReference(os.path.splitext(tail)[0])
 
-            if get_assembly_types:
-                # import namespaces, create instances of classes or reference a System.Type[] object
-                dotnet = dict()
-                for t in self._assembly.GetTypes():
-                    if t.Namespace is not None:
-                        mod = __import__(t.Namespace)
-                        if mod.__name__ not in dotnet:
-                            dotnet[mod.__name__] = mod
-                    else:
-                        try:
-                            dotnet[t.Name] = self._assembly.CreateInstance(t.FullName)
-                        except:
-                            if t.Name not in dotnet:
-                                dotnet[t.Name] = t
-                self._lib = DotNet(dotnet, self._path)
+            # import namespaces, create instances of classes or reference a System.Type[] object
+            dotnet = dict()
+            for t in self._assembly.GetTypes():
+                if t.Namespace is not None:
+                    mod = __import__(t.Namespace)
+                    if mod.__name__ not in dotnet:
+                        dotnet[mod.__name__] = mod
+                else:
+                    try:
+                        dotnet[t.Name] = self._assembly.CreateInstance(t.FullName)
+                    except:
+                        if t.Name not in dotnet:
+                            dotnet[t.Name] = t
+            self._lib = DotNet(dotnet, self._path)
 
         else:
             raise TypeError('Cannot load libtype={}'.format(libtype))
@@ -240,14 +228,15 @@ class LoadLibrary(object):
     @property
     def assembly(self):
         """
-        Returns the reference to the `.NET Runtime Assembly <NET_>`_ object, *only if
-        the shared library is a .NET library*, otherwise returns :obj:`None`.
+        Returns a reference to the `.NET Runtime Assembly <NET_>`_ object, *only if
+        the shared library is a .NET Framework*, otherwise returns :obj:`None`.
 
         .. tip::
-           The `JetBrains dotPeek <https://www.jetbrains.com/decompiler/>`_ program can be used
-           to reliably decompile any .NET assembly into the equivalent C# source code.
+           The `JetBrains dotPeek`_ program can be used to reliably decompile any
+           .NET Runtime Assembly in to the equivalent source code.
 
         .. _NET: https://msdn.microsoft.com/en-us/library/system.reflection.assembly(v=vs.110).aspx
+        .. _JetBrains dotPeek: https://www.jetbrains.com/decompiler/
         """
         return self._assembly
 
@@ -265,20 +254,11 @@ class LoadLibrary(object):
 
         For example:
 
-            * if `libtype` = ``'cdll'`` then a :class:`~ctypes.CDLL` object is returned
-            * if `libtype` = ``'windll'`` then a :class:`~ctypes.WinDLL` object is returned
-            * if `libtype` = ``'oledll'`` then a :class:`~ctypes.OleDLL` object is returned
-            * if `libtype` = ``'net'`` **and** the :class:`LoadLibrary` class was instantiated
-              with `get_assembly_types` = :obj:`True` then a :class:`~.load_library.DotNet`
-              object is returned, which contains the types defined in the .NET assembly
-              (i.e., the namespace_ modules, classes and/or System.Type_ objects). If
-              `get_assembly_types` = :obj:`False` then :obj:`None` is returned; however,
-              you can still access the .NET :obj:`assembly` object and import the .NET modules.
-            * if `libtype` = ``'jar'`` then a :class:`~py4j.java_gateway.JVMView` object
-              is returned.
-
-        .. _namespace: https://msdn.microsoft.com/en-us/library/z2kcy19k.aspx
-        .. _System.Type: https://msdn.microsoft.com/en-us/library/system.type(v=vs.110).aspx
+            * if `libtype` is ``'cdll'`` then a :class:`~ctypes.CDLL` object
+            * if `libtype` is ``'windll'`` then a :class:`~ctypes.WinDLL` object
+            * if `libtype` is ``'oledll'`` then a :class:`~ctypes.OleDLL` object
+            * if `libtype` is ``'net'`` then a :class:`~.load_library.DotNet` object
+            * if `libtype` is ``'jar'`` then a :class:`~py4j.java_gateway.JVMView` object
         """
         return self._lib
 
@@ -289,13 +269,16 @@ class LoadLibrary(object):
 
 
 class DotNet(object):
-    """Contains the namespace_ modules, classes and `System.Type`_ objects of a .NET library.
 
-    .. _namespace: https://msdn.microsoft.com/en-us/library/z2kcy19k.aspx
-    .. _System.Type: https://msdn.microsoft.com/en-us/library/system.type(v=vs.110).aspx
-    """
-    def __init__(self, dotnet_dict, path):
-        self.__dict__.update(dotnet_dict)
+    def __init__(self, dot_net_dict, path):
+        """Contains the namespace_ modules, classes and `System.Type`_ objects of a .NET Assembly.
+
+        Do not instantiate directly.
+
+        .. _namespace: https://msdn.microsoft.com/en-us/library/z2kcy19k.aspx
+        .. _System.Type: https://msdn.microsoft.com/en-us/library/system.type(v=vs.110).aspx
+        """
+        self.__dict__.update(dot_net_dict)
         self._path = path
 
     def __repr__(self):
