@@ -1,6 +1,6 @@
 ! fortran_lib.f90
 !
-! Basic examples of passing different data types into a FORTRAN function and subroutine.
+! Basic examples of passing different data types to a FORTRAN function and subroutine.
 !
 ! Compiled in Windows using:
 ! gfortran -fno-underscoring -fPIC fortran_lib.f90 -static -shared -o fortran_lib64.dll
