@@ -3,10 +3,10 @@ MSL-LoadLib
 ===========
 
 This package is used to load a shared library in to Python. It is basically just a
-thin wrapper around `ctypes <https://docs.python.org/3/library/ctypes.html>`_ (for libraries
-using the ``__cdecl`` and ``__stdcall`` calling convention),
-`Python for .NET <http://pythonnet.github.io/>`_ (for libraries using Microsoft's
-.NET Framework) and `Py4J <https://www.py4j.org/>`_ (for Java ARchive libraries, ``JAR``).
+thin wrapper around :mod:`ctypes` (for libraries that use the ``__cdecl`` or ``__stdcall``
+calling convention), `Python for .NET <http://pythonnet.github.io/>`_ (for libraries that use
+Microsoft's .NET Framework, ``CLR``) and `Py4J <https://www.py4j.org/>`_ (for a Java ARchive,
+``JAR``).
 
 However, the primary advantage is that it is possible to communicate with a 32-bit
 shared library in 64-bit Python. For various reasons, mainly to do with the
@@ -17,14 +17,18 @@ a :class:`~msl.loadlib.client64.Client64` class that sends a request to the serv
 communicate with the 32-bit library as a form of `inter-process communication
 <https://en.wikipedia.org/wiki/Inter-process_communication>`_.
 
+========
+Contents
+========
+
 .. toctree::
    :maxdepth: 2
 
    Install <install>
-   Load a library <usage>
-   API Documentation <api_docs>
-   Examples <examples>
-   Tutorials <tutorials>
+   Load a library <direct>
+   Access a 32-bit library in 64-bit Python <interprocess_communication>
+   API documentation <api_docs>
+   Source code for the example libraries <examples_source_code>
    License <license>
    Authors <authors>
    Changelog <changelog>

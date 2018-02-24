@@ -49,3 +49,10 @@ Package Structure
    msl.loadlib.server32 <_api/msl.loadlib.server32>
    msl.loadlib.start_server32 <_api/msl.loadlib.start_server32>
    msl.loadlib.utils <_api/msl.loadlib.utils>
+
+Example modules for communicating with a 32-bit library from 64-bit Python
+--------------------------------------------------------------------------
+
+.. toctree::
+
+   _api/msl.examples.loadlib

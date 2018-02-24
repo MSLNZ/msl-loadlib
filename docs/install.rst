@@ -1,3 +1,5 @@
+.. _install:
+
 Install MSL-LoadLib
 ===================
 
@@ -15,7 +17,7 @@ Compatibility
 -------------
 
 * Tested with Python versions 2.7, 3.3+.
-* The :mod:`~msl.loadlib.start_server32` module has been built into a `frozen <http://www.pyinstaller.org/>`_
+* The :mod:`~msl.loadlib.start_server32` module has been built in to a `frozen <http://www.pyinstaller.org/>`_
   Python application for Windows and Linux and works with the Python versions listed above. The 32-bit server
   is running on Python 3.6 and therefore all modules that run on the server must use Python 3 syntax.
 * The 32-bit server can be `frozen <http://www.pyinstaller.org/>`_ for other operating systems by running
@@ -33,14 +35,20 @@ Windows
 includes the .NET Framework and therefore no prerequisites are required to load ``__cdecl``, ``__stdcall``
 or ``.NET`` libraries.
 
-If you need to load a ``JAR`` file then you must install a `Java Runtime Environment`_ and ensure that
-the ``java`` executable is available on your ``PATH``. For example, the following should return the version
-of Java that is installed::
+If you need to load a Java archive, a ``JAR`` file, then you must install a `Java Runtime Environment`_
+and ensure that the ``java`` executable is available on your ``PATH``. For example, the following should
+return the version of Java that is installed::
 
    C:\>java -version
    java version "1.8.0_161"
    Java(TM) SE Runtime Environment (build 1.8.0_161-b12)
    Java HotSpot(TM) 64-Bit Server VM (build 25.161-b12, mixed mode)
+
+When loading a shared library it is vital that all dependency's of the library are also available on your
+computer and that the shared library knows where to locate the dependency. A helpful utility to use to
+determine the dependencies of a shared library is `Dependency Walker <http://www.dependencywalker.com/>`_.
+For finding the dependencies of a .NET library the
+`DependencyWalker for .NET <https://github.com/isindicic/DependencyWalker.Net>`_ is also useful.
 
 Linux
 ++++++
@@ -88,7 +96,7 @@ Installing `Python for .NET`_ v2.3.0 with Mono_ v4.8.0 installed on Ubuntu 16.04
 If you run in to problems installing `Python for .NET`_ then the best place to find help is on the
 `issues <https://github.com/pythonnet/pythonnet/issues>`_ page of `Python for .NET`_\'s repository.
 
-If you need to load a ``JAR`` file then you must install a `Java Runtime Environment`_::
+If you need to load a Java archive, a ``JAR`` file, then you must install a `Java Runtime Environment`_::
 
    sudo apt-get install default-jre
 
