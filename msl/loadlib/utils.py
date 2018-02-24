@@ -56,7 +56,7 @@ def is_pythonnet_installed():
     ----
     For help getting Python for .NET working on a non-Windows operating system look at
     the :ref:`prerequisites`, the `Mono <http://www.mono-project.com/>`_ project and
-    the `Python for .NET documentation <http://pythonnet.sourceforge.net/readme.html>`_.
+    the `Python for .NET documentation <http://pythonnet.github.io/>`_.
     """
     try:
         import clr
@@ -217,7 +217,7 @@ def wait_for_server(host, port, timeout):
     Parameters
     ----------
     host : :class:`str`
-        The host address of the server.
+        The host address of the server, e.g., ``'127.0.0.1'``.
     port : :class:`int`
         The port number of the server.
     timeout : :class:`float`

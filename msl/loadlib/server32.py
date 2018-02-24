@@ -31,7 +31,7 @@ else:
 class Server32(HTTPServer):
 
     def __init__(self, path, libtype, host, port, quiet):
-        """Loads a 32-bit shared library which is then hosted on a 32-bit server.
+        """Base class for loading a 32-bit library in 32-bit Python.
 
         All modules that are to be run on the 32-bit server must contain a class
         that is inherited from this class and the module can import **any** of
@@ -40,9 +40,10 @@ class Server32(HTTPServer):
 
         All modules that are run on the 32-bit server must be able to run on the Python
         interpreter that the server is running on, see :meth:`.version` for how to
-        determine the Python interpreter.
+        determine the version of the Python interpreter.
 
         .. _standard: https://docs.python.org/3/py-modindex.html
+        .. _JVM: https://en.wikipedia.org/wiki/Java_virtual_machine
 
         Parameters
         ----------
@@ -54,6 +55,8 @@ class Server32(HTTPServer):
                 * ``'cdll'``, for a __cdecl library
                 * ``'windll'`` or ``'oledll'``, for a __stdcall library (Windows only)
                 * ``'net'``, for a .NET library
+                * *Note: Since Java byte code is executed on the* JVM_ *it does not make
+                  sense to use* :class:`Serve32` *for a* ``JAR`` *file.*
 
         host : :class:`str`
             The IP address of the server.
@@ -74,28 +77,6 @@ class Server32(HTTPServer):
         self._library = LoadLibrary(path, libtype)
 
     @property
-    def path(self):
-        """:class:`str`: The path to the shared library file."""
-        return self._library.path
-
-    @property
-    def lib(self):
-        """Returns the reference to the 32-bit, loaded-library object.
-
-        For example:
-
-        * if `libtype` = ``'cdll'`` then a :class:`~ctypes.CDLL` object
-        * if `libtype` = ``'windll'`` then a :class:`~ctypes.WinDLL` object
-        * if `libtype` = ``'oledll'`` then a :class:`~ctypes.OleDLL` object
-        * if `libtype` = ``'net'`` then a :class:`~.load_library.DotNet` containing
-          the .NET namespaces_, classes and/or `System.Type`_ objects.
-
-        .. _namespaces: https://msdn.microsoft.com/en-us/library/z2kcy19k.aspx
-        .. _System.Type: https://msdn.microsoft.com/en-us/library/system.type(v=vs.110).aspx
-        """
-        return self._library.lib
-
-    @property
     def assembly(self):
         """
         Returns the reference to the `.NET RuntimeAssembly <NET_>`_ object -- *only if
@@ -108,6 +89,24 @@ class Server32(HTTPServer):
         .. _NET: https://msdn.microsoft.com/en-us/library/system.reflection.assembly(v=vs.110).aspx
         """
         return self._library.assembly
+
+    @property
+    def lib(self):
+        """Returns the reference to the 32-bit, loaded-library object.
+
+        For example, if `libtype` is
+
+        * ``'cdll'`` then a :class:`~ctypes.CDLL` object
+        * ``'windll'`` then a :class:`~ctypes.WinDLL` object
+        * ``'oledll'`` then a :class:`~ctypes.OleDLL` object
+        * ``'net'`` then a :class:`~.load_library.DotNet` object
+        """
+        return self._library.lib
+
+    @property
+    def path(self):
+        """:class:`str`: The path to the shared library file."""
+        return self._library.path
 
     @staticmethod
     def version():
@@ -127,7 +126,7 @@ class Server32(HTTPServer):
         Note
         ----
         This method takes about 1 second to finish because the server executable
-        needs to start in order to determine the Python version.
+        needs to start in order to determine the version of the Python interpreter.
         """
         exe = os.path.join(os.path.dirname(__file__), SERVER_FILENAME)
         pipe = subprocess.Popen([exe, '--version'], stdout=subprocess.PIPE)

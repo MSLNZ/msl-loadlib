@@ -36,7 +36,7 @@ class Client64(HTTPConnection):
         """Base class for communicating with a 32-bit library from 64-bit Python.
 
         Starts a 32-bit server, :class:`~.server32.Server32`, to host a Python module
-        that is a wrapper around a 32-bit library. The *client* module runs within
+        that is a wrapper around a 32-bit library. The *client64* module runs within
         a 64-bit Python interpreter and it sends a request to the server which calls
         the 32-bit library to execute the request. The server then provides a
         response back to the client.
@@ -48,8 +48,8 @@ class Client64(HTTPConnection):
         host : :class:`str`, optional
             The IP address of the 32-bit server. Default is ``'127.0.0.1'``.
         port : :class:`int`, optional
-            The port to open on the 32-bit server. Default is :obj:`None` *(which means
-            to automatically find a port that is available).*
+            The port to open on the 32-bit server. Default is :obj:`None`, which means
+            to automatically find a port that is available.
         timeout : :class:`float`, optional
             The maximum number of seconds to wait to establish a connection to the
             32-bit server. Default is 10 seconds.

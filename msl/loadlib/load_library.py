@@ -48,8 +48,8 @@ class LoadLibrary(object):
             * ``'cdll'``, for a library that uses the __cdecl calling convention
             * ``'windll'`` or ``'oledll'``, for a __stdcall calling convention
             * ``'net'``, for Microsoft's .NET Framework
-            * ``'jar'``, for a Java archive *(note: you can omit specifying the* `libtype`
-              *if loading a JAR file provided that the file extension is* ``.jar``*)*
+            * ``'jar'``, for a Java archive *(NOTE: you can omit specifying the `libtype`*
+              *if loading a JAR file provided that the file extension is* ``.jar`` *)*
 
             Default is ``'cdll'``.
 
@@ -252,13 +252,13 @@ class LoadLibrary(object):
     def lib(self):
         """Returns the reference to the loaded library object.
 
-        For example:
+        For example, if `libtype` is
 
-            * if `libtype` is ``'cdll'`` then a :class:`~ctypes.CDLL` object
-            * if `libtype` is ``'windll'`` then a :class:`~ctypes.WinDLL` object
-            * if `libtype` is ``'oledll'`` then a :class:`~ctypes.OleDLL` object
-            * if `libtype` is ``'net'`` then a :class:`~.load_library.DotNet` object
-            * if `libtype` is ``'jar'`` then a :class:`~py4j.java_gateway.JVMView` object
+            * ``'cdll'`` then a :class:`~ctypes.CDLL` object
+            * ``'windll'`` then a :class:`~ctypes.WinDLL` object
+            * ``'oledll'`` then a :class:`~ctypes.OleDLL` object
+            * ``'net'`` then a :class:`~.load_library.DotNet` object
+            * ``'jar'`` then a :class:`~py4j.java_gateway.JVMView` object
         """
         return self._lib
 
