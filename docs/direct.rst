@@ -222,12 +222,12 @@ Load a **Java** archive, a ``JAR`` file, in a JVM_, see :ref:`here <java-lib>` f
    >>> jar.gateway
    <py4j.java_gateway.JavaGateway object at 0x000002061A4524E0>
 
-The Java archive contains a ``nz.msl.example`` package with two classes, ``MathUtils`` and ``Matrix``
+The Java archive contains a ``nz.msl.examples`` package with two classes, ``MathUtils`` and ``Matrix``
 
 .. code:: python
 
-   >>> MathUtils = jar.lib.nz.msl.example.MathUtils
-   >>> Matrix = jar.lib.nz.msl.example.Matrix
+   >>> MathUtils = jar.lib.nz.msl.examples.MathUtils
+   >>> Matrix = jar.lib.nz.msl.examples.Matrix
 
 Generate a random number and calculate the square root of a number using the ``MathUtils`` class
 
@@ -268,6 +268,7 @@ Solve a linear system of equations, Ax=b
    >>> for i in range(3):
    ...     for j in range(3):
    ...         A[i][j] = float(coeff[i][j])
+   ...
    >>> b = jar.gateway.new_array(jar.lib.Double, 3)
    >>> b[0] = 1.6
    >>> b[1] = -12.3

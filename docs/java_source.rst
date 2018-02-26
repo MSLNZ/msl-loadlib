@@ -2,7 +2,7 @@
 
 Java
 ====
-The following classes are included in the ``nz.msl.example`` package in ``java_lib.jar``.
+The following classes are included in the ``nz.msl.examples`` package in ``java_lib.jar``.
 
 .. _java-lib-MathUtils:
 
@@ -10,7 +10,7 @@ The following classes are included in the ``nz.msl.example`` package in ``java_l
 MathUtils.java
 ==============
 
-.. literalinclude:: ../msl/examples/loadlib/MathUtils.java
+.. literalinclude:: ../msl/examples/loadlib/nz/msl/examples/MathUtils.java
    :language: java
 
 .. _java-lib-Matrix:
@@ -19,5 +19,5 @@ MathUtils.java
 Matrix.java
 ===========
 
-.. literalinclude:: ../msl/examples/loadlib/Matrix.java
+.. literalinclude:: ../msl/examples/loadlib/nz/msl/examples/Matrix.java
    :language: java

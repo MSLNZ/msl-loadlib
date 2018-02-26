@@ -55,8 +55,10 @@ class Server32(HTTPServer):
                 * ``'cdll'``, for a __cdecl library
                 * ``'windll'`` or ``'oledll'``, for a __stdcall library (Windows only)
                 * ``'net'``, for a .NET library
-                * *Note: Since Java byte code is executed on the* JVM_ *it does not make
-                  sense to use* :class:`Serve32` *for a* ``JAR`` *file.*
+
+            .. note::
+               Since Java byte code is executed on the JVM_ it does not make sense to
+               use :class:`Serve32` for a Java ``.jar`` or ``.class`` file.
 
         host : :class:`str`
             The IP address of the server.

@@ -231,8 +231,8 @@ def test_labview():
 def test_java():
     jar = loadlib.LoadLibrary(EXAMPLES_DIR + '/java_lib.jar')
 
-    Math = jar.lib.nz.msl.example.MathUtils
-    Matrix = jar.lib.nz.msl.example.Matrix
+    Math = jar.lib.nz.msl.examples.MathUtils
+    Matrix = jar.lib.nz.msl.examples.Matrix
 
     assert 0.0 <= Math.random() < 1.0
     assert abs(Math.sqrt(32.4) - 5.69209978830308) < eps

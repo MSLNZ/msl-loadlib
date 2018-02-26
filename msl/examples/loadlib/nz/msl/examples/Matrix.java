@@ -1,4 +1,4 @@
-package nz.msl.example;
+package nz.msl.examples;
 
 import java.util.Random;
 

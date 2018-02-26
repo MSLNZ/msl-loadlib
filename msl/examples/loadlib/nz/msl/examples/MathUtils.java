@@ -1,4 +1,4 @@
-package nz.msl.example;
+package nz.msl.examples;
 
 public class MathUtils {
   

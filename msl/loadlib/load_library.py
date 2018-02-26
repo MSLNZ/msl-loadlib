@@ -27,7 +27,7 @@ class LoadLibrary(object):
             * :class:`~ctypes.WinDLL` if `libtype` is ``'windll'``,
             * :class:`~ctypes.OleDLL` if `libtype` is ``'oledll'``,
             * :class:`~.load_library.DotNet` if `libtype` is ``'net'``, or a
-            * :class:`~.py4j.java_gateway.JavaGateway` if `libtype` is ``'jar'``.
+            * :class:`~.py4j.java_gateway.JavaGateway` if `libtype` is ``'java'``.
 
         Parameters
         ----------
@@ -45,11 +45,10 @@ class LoadLibrary(object):
         libtype : :class:`str`, optional
             The library type. The following values are currently supported:
 
-            * ``'cdll'``, for a library that uses the __cdecl calling convention
-            * ``'windll'`` or ``'oledll'``, for a __stdcall calling convention
-            * ``'net'``, for Microsoft's .NET Framework
-            * ``'jar'``, for a Java archive *(NOTE: you can omit specifying the `libtype`*
-              *if loading a JAR file provided that the file extension is* ``.jar`` *)*
+            * ``'cdll'`` -- for a library that uses the __cdecl calling convention
+            * ``'windll'`` or ``'oledll'`` -- for a __stdcall calling convention
+            * ``'net'`` -- for Microsoft's .NET Framework
+            * ``'java'`` -- for a Java archive, ``.jar``, or Java byte code, ``.class``
 
             Default is ``'cdll'``.
 
@@ -81,14 +80,11 @@ class LoadLibrary(object):
 
         # assume a default extension if no extension was provided
         if not os.path.splitext(_path)[1]:
-            if libtype == 'jar':
-                _path += '.jar'
-            else:
-                _path += DEFAULT_EXTENSION
+            _path += DEFAULT_EXTENSION
 
-        # the jar extension uniquely defines the backend to use to load the library
-        if os.path.splitext(_path)[1] == '.jar' and libtype != 'jar':
-            libtype = 'jar'
+        # the .jar or .class extension uniquely defines a Java library
+        if os.path.splitext(_path)[1] in ('.jar', '.class'):
+            libtype = 'java'
 
         self._path = os.path.abspath(_path)
         if not os.path.isfile(self._path):
@@ -114,7 +110,7 @@ class LoadLibrary(object):
             self._lib = ctypes.WinDLL(self._path)
         elif libtype == 'oledll':
             self._lib = ctypes.OleDLL(self._path)
-        elif libtype == 'jar':
+        elif libtype == 'java':
             if not utils.is_py4j_installed():
                 raise IOError('Cannot load a JAR file because Py4J is not installed.\n'
                               'To install Py4J run: pip install py4j')
@@ -134,7 +130,7 @@ class LoadLibrary(object):
 
             # build the java command
             wrapper = os.path.join(os.path.dirname(__file__), 'py4j-wrapper.jar')
-            cmd = ['java', '-cp', py4j_jar + os.pathsep + wrapper, 'nz.msl.Py4JWrapper', str(port), self._path]
+            cmd = ['java', '-cp', py4j_jar + os.pathsep + wrapper, 'Py4JWrapper', str(port), self._path]
 
             try:
                 # start the py4j.GatewayServer, cannot use subprocess.call() because it blocks
@@ -258,7 +254,7 @@ class LoadLibrary(object):
             * ``'windll'`` then a :class:`~ctypes.WinDLL` object
             * ``'oledll'`` then a :class:`~ctypes.OleDLL` object
             * ``'net'`` then a :class:`~.load_library.DotNet` object
-            * ``'jar'`` then a :class:`~py4j.java_gateway.JVMView` object
+            * ``'java'`` then a :class:`~py4j.java_gateway.JVMView` object
         """
         return self._lib
 
