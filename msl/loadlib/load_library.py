@@ -9,7 +9,7 @@ import logging
 import subprocess
 
 from msl.loadlib import utils
-from msl.loadlib import DEFAULT_EXTENSION, IS_WINDOWS
+from msl.loadlib import DEFAULT_EXTENSION
 
 logger = logging.getLogger(__name__)
 
@@ -133,15 +133,16 @@ class LoadLibrary(object):
 
             # find the py4j JAR (needed to import py4j.GatewayServer on the Java side)
             root = os.path.dirname(sys.executable)
-            if not IS_WINDOWS:
-                root = os.path.dirname(root)
             filename = 'py4j'+__version__+'.jar'
             py4j_jar = os.path.join(root, 'share', 'py4j', filename)
             if not os.path.isfile(py4j_jar):
-                py4j_jar = os.environ.get('PY4J_JAR', '')
+                root = os.path.dirname(root)  # then check one folder up (for unix or venv)
+                py4j_jar = os.path.join(root, 'share', 'py4j', filename)
                 if not os.path.isfile(py4j_jar):
-                    raise IOError('Cannot find {0}\nCreate a PY4J_JAR environment '
-                                  'variable to be equal to the full path to {0}'.format(filename))
+                    py4j_jar = os.environ.get('PY4J_JAR', '')  # then check the environment variable
+                    if not os.path.isfile(py4j_jar):
+                        raise IOError('Cannot find {0}\nCreate a PY4J_JAR environment '
+                                      'variable to be equal to the full path to {0}'.format(filename))
 
             # build the java command
             wrapper = os.path.join(os.path.dirname(__file__), 'py4j-wrapper.jar')
