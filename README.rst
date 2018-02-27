@@ -67,7 +67,7 @@ Load a `FORTRAN <msl/examples/loadlib/fortran_lib.f90>`_ library and call the ``
    >>> fortran = LoadLibrary(EXAMPLES_DIR + '/fortran_lib64')
 
 With a FORTRAN library you must pass values by reference using ctypes_, and, since the returned value is not
-of type ``int`` we must configure ctypes for a value of type ``double`` to be returned
+of type ``int`` we must configure ctypes_ for a value of type ``double`` to be returned
 
    >>> from ctypes import byref, c_int, c_double
    >>> fortran.lib.factorial.restype = c_double
