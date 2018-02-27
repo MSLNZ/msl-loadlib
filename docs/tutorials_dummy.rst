@@ -34,6 +34,11 @@ Running this script would create the following output
 
 .. image:: _static/dummy_output.png
 
+Observant readers will notice that the 32-bit server indicated that it is
+*Serving cpp_lib32.dll on http://127.0.0.1:2521*. Even though this is a *dummy* example, a library must
+still be loaded even though it is not being called. The *cpp_lib32.dll* library is loaded to satisfy
+this requirement.
+
 Or, by using an interactive console, create a :class:`~msl.examples.loadlib.dummy64.Dummy64` object:
 
 .. code-block:: python
@@ -46,7 +51,7 @@ Send a boolean as an argument, see :meth:`~msl.examples.loadlib.dummy64.Dummy64.
 
 .. code-block:: python
 
-   >>> d.send_data(True)
+   >>> result = d.send_data(True)
    Are the 64- and 32-bit arguments equal? True
        <class 'bool'> True
 
@@ -54,7 +59,7 @@ Send a boolean as a keyword argument, see :meth:`~msl.examples.loadlib.dummy64.D
 
 .. code-block:: python
 
-   >>> d.send_data(boolean=True)
+   >>> result = d.send_data(boolean=True)
    Are the 64- and 32-bit keyword arguments equal? True
        boolean: <class 'bool'> True
 
@@ -63,7 +68,7 @@ Send multiple data types as arguments and as keyword arguments, see
 
 .. code-block:: python
 
-   >>> d.send_data(1.2, {'my list':[1, 2, 3]}, 0.2j, range(10), x=True, y='hello world!')
+   >>> result = d.send_data(1.2, {'my list':[1, 2, 3]}, 0.2j, range(10), x=True, y='hello world!')
    Are the 64- and 32-bit arguments equal? True
         <class 'float'> 1.2
         <class 'dict'> {'my list': [1, 2, 3]}
@@ -80,7 +85,7 @@ Shutdown the server when you are done communicating with the 32-bit library, see
 
    >>> d.shutdown_server32()
    Python 3.5.2 |Continuum Analytics, Inc.| (default, Jul  5 2016, 11:45:57) [MSC v.1900 32 bit (Intel)]
-   Serving cpp_lib32.dll on http://127.0.0.1:2521
+   Serving cpp_lib32.dll on http://127.0.0.1:25521
    The 32-bit server received these args:
         <class 'bool'> True
    The 32-bit server received these args:
@@ -98,7 +103,7 @@ Shutdown the server when you are done communicating with the 32-bit library, see
    The 32-bit server received these kwargs:
        x: <class 'bool'> True
        y: <class 'str'> hello world!
-   Stopped http://127.0.0.1:2521
+   Stopped http://127.0.0.1:25521
 
 .. note::
    The server will automatically shutdown when the :class:`~msl.examples.loadlib.dummy64.Dummy64`

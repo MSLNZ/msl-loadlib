@@ -1,8 +1,8 @@
 .. _tutorial_stdcall:
 
-========================================================
-Load a 32-bit Windows *stdcall* library in 64-bit Python
-========================================================
+============================================================
+Load a 32-bit Windows **__stdcall** library in 64-bit Python
+============================================================
 
 This example shows how to access the 32-bit Windows `kernel32 <kernel32_>`_ library, from a
 module that is run by a 64-bit Python interpreter by using `inter-process communication

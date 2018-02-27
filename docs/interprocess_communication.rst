@@ -39,22 +39,22 @@ interpreter. This library gets loaded by the **MyServer** class (that is a subcl
 :class:`~msl.loadlib.server32.Server32`) which is running within a 32-bit executable,
 see :mod:`~msl.loadlib.start_server32`. **MyServer** hosts the library at the specified host
 address and port number. Any class that is a subclass of :class:`~msl.loadlib.server32.Server32`
-**must** provide three arguments in its constructor: ``host``, ``port`` and ``quiet``
+*must* provide three arguments in its constructor: ``host``, ``port`` and ``quiet``
 (in that order) and ``**kwargs``. Otherwise the 32-bit executable cannot create an instance of the
 subclass.
 
 .. code-block:: python
 
-    ## my_server.py
+    # my_server.py
 
     from msl.loadlib import Server32
 
     class MyServer(Server32):
-        """A wrapper around a 32-bit C++ library, 'cpp_lib32', that has an 'add' function."""
+        """A wrapper around a 32-bit C++ library, 'cpp_lib32.dll', that has an 'add' function."""
 
         def __init__(self, host, port, quiet, **kwargs):
             # Load the 'cpp_lib32' shared-library file using ctypes.CDLL
-            Server32.__init__(self, 'cpp_lib32', 'cdll', host, port, quiet)
+            Server32.__init__(self, 'cpp_lib32.dll', 'cdll', host, port, quiet)
 
         def add(self, a, b):
             # The Server32 class has a 'lib' attribute that is a reference to the ctypes.CDLL object.
@@ -69,7 +69,7 @@ each value will be of type :class:`str` at the constructor of the :class:`~msl.l
 subclass. You must convert each value to the appropriate data type. This ``**kwargs`` variable
 is the only variable that the data type is not preserved for the client-server protocol (see, the
 `"Dummy" example <tutorials_dummy.html>`_ that shows that data types are preserved between client-server
-function calls).
+method calls).
 
 **MyClient** is a subclass of :class:`~msl.loadlib.client64.Client64` which sends a request to
 **MyServer** to call the ``add`` function in the shared library. **MyServer** processes the
