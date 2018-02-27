@@ -21,13 +21,16 @@ class LoadLibrary(object):
 
         For example, a C/C++, FORTRAN, CLR, Java, Delphi, LabVIEW, ... library.
 
-        Based on the value of `libtype` this class will load the shared library as a:
+        Based on the value of `libtype` or the file extension this class will load the
+        shared library as a:
 
             * :class:`~ctypes.CDLL` if `libtype` is ``'cdll'``,
             * :class:`~ctypes.WinDLL` if `libtype` is ``'windll'``,
             * :class:`~ctypes.OleDLL` if `libtype` is ``'oledll'``,
-            * :class:`~.load_library.DotNet` if `libtype` is ``'net'``, or a
+            * `System.Reflection.Assembly <Assembly_>`_ if `libtype` is ``'net'``, or a
             * :class:`~.py4j.java_gateway.JavaGateway` if `libtype` is ``'java'``.
+
+        .. _Assembly: https://msdn.microsoft.com/en-us/library/system.reflection.assembly(v=vs.110).aspx
 
         Parameters
         ----------
@@ -47,10 +50,15 @@ class LoadLibrary(object):
 
             * ``'cdll'`` -- for a library that uses the __cdecl calling convention
             * ``'windll'`` or ``'oledll'`` -- for a __stdcall calling convention
-            * ``'net'`` -- for Microsoft's .NET Framework
-            * ``'java'`` -- for a Java archive, ``.jar``, or Java byte code, ``.class``
+            * ``'net'`` -- for Microsoft's .NET Framework (Common Language Runtime)
+            * ``'java'`` -- for a Java archive, ``.jar``, or Java byte code, ``.class``, file
 
             Default is ``'cdll'``.
+
+            .. note::
+               Since the ``.jar`` or ``.class`` extension uniquely defines a Java library,
+               the `libtype` will automatically be set to ``'java'`` if `path` ends with
+               ``.jar`` or ``.class``.
 
         Raises
         ------
@@ -79,11 +87,12 @@ class LoadLibrary(object):
         _path = path
 
         # assume a default extension if no extension was provided
-        if not os.path.splitext(_path)[1]:
+        ext = os.path.splitext(_path)[1]
+        if not ext:
             _path += DEFAULT_EXTENSION
 
         # the .jar or .class extension uniquely defines a Java library
-        if os.path.splitext(_path)[1] in ('.jar', '.class'):
+        if ext in ('.jar', '.class'):
             libtype = 'java'
 
         self._path = os.path.abspath(_path)
@@ -130,7 +139,15 @@ class LoadLibrary(object):
 
             # build the java command
             wrapper = os.path.join(os.path.dirname(__file__), 'py4j-wrapper.jar')
-            cmd = ['java', '-cp', py4j_jar + os.pathsep + wrapper, 'Py4JWrapper', str(port), self._path]
+            cmd = ['java', '-cp', py4j_jar + os.pathsep + wrapper, 'Py4JWrapper', str(port)]
+
+            # from the URLClassLoader documentation:
+            #   Any URL that ends with a '/' is assumed to refer to a directory. Otherwise, the URL
+            #   is assumed to refer to a JAR file which will be downloaded and opened as needed.
+            if ext == '.jar':
+                cmd.append(self._path)
+            else:  # it is a .class file
+                cmd.append(os.path.dirname(self._path) + '/')
 
             try:
                 # start the py4j.GatewayServer, cannot use subprocess.call() because it blocks
@@ -229,7 +246,7 @@ class LoadLibrary(object):
 
         .. tip::
            The `JetBrains dotPeek`_ program can be used to reliably decompile any
-           .NET Runtime Assembly in to the equivalent source code.
+           .NET Assembly in to the equivalent source code.
 
         .. _NET: https://msdn.microsoft.com/en-us/library/system.reflection.assembly(v=vs.110).aspx
         .. _JetBrains dotPeek: https://www.jetbrains.com/decompiler/

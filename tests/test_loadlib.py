@@ -1,6 +1,5 @@
 import os
 import pathlib
-from ctypes import c_double, byref
 
 import clr
 import pytest
@@ -200,32 +199,35 @@ def test_namespace_with_dots():
     assert checker.IsSuccess()
 
 
-def test_labview():
-
-    path = EXAMPLES_DIR + '/labview_lib64.dll'
-
-    if not loadlib.IS_PYTHON_64BIT:
-        with pytest.raises(OSError):
-            loadlib.LoadLibrary(path)
-    else:
-        labview = loadlib.LoadLibrary(path)
-
-        data = [1, 2, 3, 4, 5, 6, 7, 8, 9]
-        x = (c_double * len(data))(*data)
-
-        mean, variance, stdev = c_double(), c_double(), c_double()
-
-        # weighting to use: 0 -> sample, 1-> population
-
-        labview.lib.stdev(x, len(data), 0, byref(mean), byref(variance), byref(stdev))
-        assert abs(mean.value - 5.0) < eps
-        assert abs(variance.value - 7.5) < eps
-        assert abs(stdev.value - 2.73861278752583) < eps
-
-        labview.lib.stdev(x, len(data), 1, byref(mean), byref(variance), byref(stdev))
-        assert abs(mean.value - 5.0) < eps
-        assert abs(variance.value - 6.66666666666667) < eps
-        assert abs(stdev.value - 2.58198889747161) < eps
+# def test_labview():
+#
+#     # this test requires that an appropriate LabVIEW Run-Time Engine is installed
+#
+#     from ctypes import c_double, byref
+#
+#     if loadlib.IS_PYTHON_64BIT:
+#         path = EXAMPLES_DIR + '/labview_lib64.dll'
+#     else:
+#         path = EXAMPLES_DIR + '/labview_lib32.dll'
+#
+#     labview = loadlib.LoadLibrary(path)
+#
+#     data = [1, 2, 3, 4, 5, 6, 7, 8, 9]
+#     x = (c_double * len(data))(*data)
+#
+#     mean, variance, stdev = c_double(), c_double(), c_double()
+#
+#     # weighting to use: 0 -> sample, 1-> population
+#
+#     labview.lib.stdev(x, len(data), 0, byref(mean), byref(variance), byref(stdev))
+#     assert abs(mean.value - 5.0) < eps
+#     assert abs(variance.value - 7.5) < eps
+#     assert abs(stdev.value - 2.73861278752583) < eps
+#
+#     labview.lib.stdev(x, len(data), 1, byref(mean), byref(variance), byref(stdev))
+#     assert abs(mean.value - 5.0) < eps
+#     assert abs(variance.value - 6.66666666666667) < eps
+#     assert abs(stdev.value - 2.58198889747161) < eps
 
 
 def test_java():
@@ -311,3 +313,24 @@ def test_java():
             ja[i][j] = float(a[i][j])
     m8 = Matrix(ja)
     assert abs(m8.getDeterminant() - (-306)) < eps
+
+    jar.gateway.shutdown()
+
+    import math
+
+    cls = loadlib.LoadLibrary(EXAMPLES_DIR + '/Trig.class')
+    Trig = cls.lib.Trig
+
+    x = 0.123456
+    assert abs(Trig.cos(x) - math.cos(x)) < eps
+    assert abs(Trig.cosh(x) - math.cosh(x)) < eps
+    assert abs(Trig.acos(x) - math.acos(x)) < eps
+    assert abs(Trig.sin(x) - math.sin(x)) < eps
+    assert abs(Trig.sinh(x) - math.sinh(x)) < eps
+    assert abs(Trig.asin(x) - math.asin(x)) < eps
+    assert abs(Trig.tan(x) - math.tan(x)) < eps
+    assert abs(Trig.tanh(x) - math.tanh(x)) < eps
+    assert abs(Trig.atan(x) - math.atan(x)) < eps
+    assert abs(Trig.atan2(-4.321, x) - math.atan2(-4.321, x)) < eps
+
+    cls.gateway.shutdown()
