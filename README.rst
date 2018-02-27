@@ -38,10 +38,6 @@ By default, ``msl.loadlib.LoadLibrary`` loads a library using
    >>> from msl.loadlib import LoadLibrary
    >>> from msl.examples.loadlib import EXAMPLES_DIR
    >>> cpp = LoadLibrary(EXAMPLES_DIR + '/cpp_lib64')
-   >>> cpp
-   <LoadLibrary id=0x3e9f750 libtype=CDLL path=D:\msl\examples\loadlib\cpp_lib64.dll>
-   >>> cpp.lib
-   <CDLL 'D:\msl\examples\loadlib\cpp_lib64.dll', handle af1e0000 at 0x3e92f90>
 
 Call the ``cpp_lib64.add`` function that calculates the sum of two integers
 
