@@ -150,11 +150,11 @@ def _get_standard_modules():
     #   RecursionError: maximum recursion depth exceeded
     # when running this script with PyInstaller 3.3 installed
     if loadlib.IS_WINDOWS:
-        os_ignore_list = ['(Unix,)', '(Linux,)', '(Linux, FreeBSD)']
+        os_ignore_list = ['(Unix)', '(Linux)', '(Linux, FreeBSD)']
     elif loadlib.IS_LINUX:
-        os_ignore_list = ['(Windows,)']
+        os_ignore_list = ['(Windows)']
     elif loadlib.IS_MAC:
-        os_ignore_list = ['(Windows,)', '(Linux,)', '(Linux, FreeBSD)']
+        os_ignore_list = ['(Windows)', '(Linux)', '(Linux, FreeBSD)']
     else:
         os_ignore_list = []
 
