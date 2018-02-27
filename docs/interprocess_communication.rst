@@ -24,12 +24,14 @@ communicate with the 32-bit library.
    msl.examples.loadlib.dummy64
    msl.examples.loadlib.cpp32
    msl.examples.loadlib.cpp64
-   msl.examples.loadlib.kernel32
-   msl.examples.loadlib.kernel64
-   msl.examples.loadlib.dotnet32
-   msl.examples.loadlib.dotnet64
    msl.examples.loadlib.fortran32
    msl.examples.loadlib.fortran64
+   msl.examples.loadlib.dotnet32
+   msl.examples.loadlib.dotnet64
+   msl.examples.loadlib.kernel32
+   msl.examples.loadlib.kernel64
+   msl.examples.loadlib.labview32
+   msl.examples.loadlib.labview64
 
 The following illustrates a minimal usage example. The **cpp_lib32.dll** file is a
 32-bit C++ library that cannot be loaded from a module that is running within a 64-bit Python
@@ -98,4 +100,5 @@ compiled in different programming languages or using different calling conventio
    C++ <tutorials_cpp>
    FORTRAN <tutorials_fortran>
    Microsoft .NET Framework <tutorials_dotnet>
-   Windows stdcall <tutorials_stdcall>
+   Windows __stdcall <tutorials_stdcall>
+   LabVIEW <tutorials_labview>

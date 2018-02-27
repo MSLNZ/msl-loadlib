@@ -35,9 +35,9 @@ Windows
 includes the .NET Framework and therefore no prerequisites are required to load ``__cdecl``, ``__stdcall``
 or ``.NET`` libraries.
 
-If you need to load a Java archive, a ``JAR`` file, then you must install a `Java Runtime Environment`_
-and ensure that the ``java`` executable is available on your ``PATH``. For example, the following should
-return the version of Java that is installed::
+If you need to load a Java library, a ``.jar`` or ``.class`` file, then you must install a
+`Java Runtime Environment`_ and ensure that the ``java`` executable is available on your ``PATH``.
+For example, the following should return the version of Java that is installed::
 
    C:\>java -version
    java version "1.8.0_161"
@@ -96,7 +96,8 @@ Installing `Python for .NET`_ v2.3.0 with Mono_ v4.8.0 installed on Ubuntu 16.04
 If you run in to problems installing `Python for .NET`_ then the best place to find help is on the
 `issues <https://github.com/pythonnet/pythonnet/issues>`_ page of `Python for .NET`_\'s repository.
 
-If you need to load a Java archive, a ``JAR`` file, then you must install a `Java Runtime Environment`_::
+If you need to load a Java library, a ``.jar`` or ``.class`` file, then you must install a
+`Java Runtime Environment`_::
 
    sudo apt-get install default-jre
 

@@ -77,8 +77,8 @@ you must pass the value by reference
    >>> fortran.lib.sum_8bit(byref(c_int8(-5)), byref(c_int8(25)))
    20
 
-Microsoft .NET
---------------
+Microsoft .NET Framework
+------------------------
 Load a 64-bit **C#** library (a .NET Framework library) in 64-bit Python, see :ref:`here <dotnet-lib>`
 for the source code. *To load the 32-bit version in 32-bit Python use* ``'dotnet_lib32.dll'``.
 
@@ -160,7 +160,12 @@ See :ref:`here <tutorial_stdcall>` for how to communicate with ``kernel32.dll`` 
 LabVIEW
 -------
 Load a 64-bit **LabVIEW** library in 64-bit Python, see :ref:`here <labview-lib>` for the source code.
-*Note: A 32-bit version of the LabVIEW library is not included with the MSL-LoadLib package.*
+*To load the 32-bit version in 32-bit Python use* ``'labview_lib32.dll'``. *Also, an appropriate LabVIEW*
+*Run-Time Engine must be installed. The LabVIEW example is only valid on Windows.*
+
+.. note::
+   A LabVIEW library can be built in to a DLL using the ``__cdecl`` or  ``__stdcall`` calling convention.
+   Make sure that you specify the appropriate `libtype` when instantiating the :class:`LoadLibrary` class.
 
 .. code:: python
 
@@ -180,30 +185,30 @@ convert it to :mod:`ctypes`
 
    >>> from ctypes import c_double, byref
    >>> x = (c_double * len(data))(*data)
-   >>> mean, variance, stdev = c_double(), c_double(), c_double()
+   >>> mean, variance, std = c_double(), c_double(), c_double()
 
-calculate the *sample* standard deviation (the third argument is set to 0)
+calculate the *sample* standard deviation and variance (the third argument is set to 0)
 
 .. code:: python
 
-   >>> ret = labview.lib.stdev(x, len(data), 0, byref(mean), byref(variance), byref(stdev))
+   >>> ret = labview.lib.stdev(x, len(data), 0, byref(mean), byref(variance), byref(std))
    >>> mean.value
    5.0
    >>> variance.value
    7.5
-   >>> stdev.value
+   >>> std.value
    2.7386127875258306
 
-calculate the *population* standard deviation (the third argument is set to 1)
+calculate the *population* standard deviation and variance (the third argument is set to 1)
 
 .. code:: python
 
-   >>> ret = labview.lib.stdev(x, len(data), 1, byref(mean), byref(variance), byref(stdev))
+   >>> ret = labview.lib.stdev(x, len(data), 1, byref(mean), byref(variance), byref(std))
    >>> mean.value
    5.0
    >>> variance.value
    6.666666666666667
-   >>> stdev.value
+   >>> std.value
    2.581988897471611
 
 Java
@@ -212,7 +217,7 @@ Since Java byte code is executed in the JVM_ it doesn't matter whether it was bu
 64-bit Java Development Kit. The Python interpreter does not load the Java byte code but communicates
 with the JVM_ through a local network socket that is created by `Py4J <https://www.py4j.org/>`_.
 
-Load a **Java** archive, a ``JAR`` file, in a JVM_, see :ref:`here <java-lib>` for the source code.
+Load a **Java** archive, a ``JAR`` file, in a JVM_, see :ref:`here <java-lib-jar>` for the source code.
 
 .. code:: python
 
@@ -293,5 +298,33 @@ Shutdown the connection to the JVM_ when you are finished
 .. code:: python
 
    >>> jar.gateway.shutdown()
+
+Load **Java** byte code, a ``.class`` file, in a JVM_, see :ref:`here <java-lib-class>` for the source code.
+
+   >>> cls = LoadLibrary(EXAMPLES_DIR + '/Trig.class')
+   >>> cls
+   <LoadLibrary id=0x3930e10 libtype=JVMView path=D:\msl\examples\loadlib\Trig.class>
+   >>> cls.lib
+   <py4j.java_gateway.JVMView object at 0x0000000003A89898>
+
+The Java library contains a ``Trig`` class, which calculates various trigonometric quantities
+
+.. code:: python
+
+   >>> Trig = cls.lib.Trig
+   >>> Trig
+   <py4j.java_gateway.JavaClass object at 0x00000000038EA6A0>
+   >>> Trig.cos(1.2)
+   0.3623577544766736
+   >>> Trig.asin(0.6)
+   0.6435011087932844
+   >>> Trig.tanh(1.3)
+   0.8617231593133063
+
+Once again, shutdown the connection to the JVM_ when you are finished
+
+.. code:: python
+
+   >>> cls.gateway.shutdown()
 
 .. _JVM: https://en.wikipedia.org/wiki/Java_virtual_machine

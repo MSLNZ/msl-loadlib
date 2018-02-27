@@ -3,6 +3,8 @@
 C++
 ===
 
+Source code for the example C++ library.
+
 .. _cpp-lib-header:
 
 =========

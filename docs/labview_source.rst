@@ -3,6 +3,8 @@
 LabVIEW
 =======
 
+Source code for the example LabVIEW library.
+
 .. _labview-lib-source:
 
 ==============
@@ -10,7 +12,6 @@ labview_lib.vi
 ==============
 
 .. image:: _static/labview_lib.png
-   :width: 50%
 
 .. _labview-lib-header:
 
