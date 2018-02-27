@@ -14,7 +14,7 @@ from msl.loadlib import Server32
 
 
 class Cpp32(Server32):
-    """A wrapper around the 32-bit C++ library :ref:`cpp_lib32 <cpp-lib>`.
+    """A wrapper around the 32-bit C++ library, :ref:`cpp_lib32 <cpp-lib>`.
 
     This class demonstrates how to send/receive various data types to/from a
     32-bit C++ library via :py:mod:`ctypes`.
