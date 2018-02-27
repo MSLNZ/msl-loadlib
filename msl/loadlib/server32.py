@@ -52,9 +52,9 @@ class Server32(HTTPServer):
         libtype : :class:`str`
             The library type to use for the calling convention. One of the following:
 
-                * ``'cdll'``, for a __cdecl library
-                * ``'windll'`` or ``'oledll'``, for a __stdcall library (Windows only)
-                * ``'net'``, for a .NET library
+                * ``'cdll'`` -- for a __cdecl library
+                * ``'windll'`` or ``'oledll'`` -- for a __stdcall library (Windows only)
+                * ``'net'`` -- for a .NET library
 
             .. note::
                Since Java byte code is executed on the JVM_ it does not make sense to
@@ -81,14 +81,15 @@ class Server32(HTTPServer):
     @property
     def assembly(self):
         """
-        Returns the reference to the `.NET RuntimeAssembly <NET_>`_ object -- *only if
-        the shared library is a .NET library, otherwise returns* :obj:`None`.
+        Returns a reference to the `.NET Runtime Assembly <NET_>`_ object, *only if
+        the shared library is a .NET Framework*, otherwise returns :obj:`None`.
 
         .. tip::
-           The `JetBrains dotPeek <https://www.jetbrains.com/decompiler/>`_ program can be used
-           to reliably decompile any .NET assembly into the equivalent C# source code.
+           The `JetBrains dotPeek`_ program can be used to reliably decompile any
+           .NET Assembly in to the equivalent source code.
 
         .. _NET: https://msdn.microsoft.com/en-us/library/system.reflection.assembly(v=vs.110).aspx
+        .. _JetBrains dotPeek: https://www.jetbrains.com/decompiler/
         """
         return self._library.assembly
 
