@@ -16,13 +16,15 @@ communicate with the 32-bit library.
 
 .. toctree::
 
-   dummy32 <msl.examples.loadlib.dummy32>
-   dummy64 <msl.examples.loadlib.dummy64>
    cpp32 <msl.examples.loadlib.cpp32>
    cpp64 <msl.examples.loadlib.cpp64>
-   kernel32 <msl.examples.loadlib.kernel32>
-   kernel64 <msl.examples.loadlib.kernel64>
    dotnet32 <msl.examples.loadlib.dotnet32>
    dotnet64 <msl.examples.loadlib.dotnet64>
+   dummy32 <msl.examples.loadlib.dummy32>
+   dummy64 <msl.examples.loadlib.dummy64>
    fortran32 <msl.examples.loadlib.fortran32>
    fortran64 <msl.examples.loadlib.fortran64>
+   kernel32 <msl.examples.loadlib.kernel32>
+   kernel64 <msl.examples.loadlib.kernel64>
+   labview32 <msl.examples.loadlib.labview32>
+   labview64 <msl.examples.loadlib.labview64>

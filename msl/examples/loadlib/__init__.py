@@ -13,5 +13,7 @@ from .fortran32 import Fortran32
 from .fortran64 import Fortran64
 from .kernel32 import Kernel32
 from .kernel64 import Kernel64
+from .labview32 import Labview32
+from .labview64 import Labview64
 
 EXAMPLES_DIR = os.path.abspath(os.path.dirname(__file__))
