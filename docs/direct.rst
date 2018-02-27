@@ -12,10 +12,10 @@ then you can directly load the library using :class:`~msl.loadlib.load_library.L
 The :ref:`C++ <cpp-lib>` and :ref:`FORTRAN <fortran-lib>` libraries have been compiled in 32-
 and 64-bit Windows and Linux. The :ref:`.NET <dotnet-lib>` library was complied to 32 and 64 bit
 using Microsoft Visual Studio. The
-`kernel32 <http://www.geoffchappell.com/studies/windows/win32/kernel32/api/>`_ library is only
-valid on Windows, since it uses the ``__stdcall`` calling convention. The :ref:`LabVIEW <labview-lib>`
-library was built using 64-bit LabVIEW on Windows. The :ref:`Java <java-lib>` archive is platform
-and bitness independent since it runs in the JVM_.
+`kernel32 <http://www.geoffchappell.com/studies/windows/win32/kernel32/api/>`_ library is a 32-bit
+library and it is only valid on Windows, since it uses the ``__stdcall`` calling convention.
+The :ref:`LabVIEW <labview-lib>` library was built using 32- and 64-bit LabVIEW on Windows.
+The :ref:`Java <java-lib>` libraries are platform and bitness independent since they run in the JVM_.
 
 .. important::
    If you want to load a 32-bit library in 64-bit Python then `inter-process communication
@@ -38,7 +38,7 @@ If the file extension is not included then a default extension, ``.dll`` (Window
 
 C++
 ---
-Loading a 64-bit **C++** library in 64-bit Python, see :ref:`here <cpp-lib>` for the source code.
+Load a 64-bit C++ library in 64-bit Python, see :ref:`here <cpp-lib>` for the source code.
 *To load the 32-bit version in 32-bit Python use* ``'cpp_lib32'``.
 
 .. code:: python
@@ -58,7 +58,7 @@ Call the ``add`` function that calculates the sum of two integers
 
 FORTRAN
 -------
-Loading a 64-bit **FORTRAN** library in 64-bit Python, see :ref:`here <fortran-lib>` for the source code.
+Load a 64-bit FORTRAN library in 64-bit Python, see :ref:`here <fortran-lib>` for the source code.
 *To load the 32-bit version in 32-bit Python use* ``'fortran_lib32'``.
 
 .. code:: python
@@ -69,20 +69,20 @@ Loading a 64-bit **FORTRAN** library in 64-bit Python, see :ref:`here <fortran-l
    >>> fortran.lib
    <CDLL 'D:\msl\examples\loadlib\fortran_lib64.dll', handle 6f660000 at 0x2e5d470>
 
-Call the ``sum_8bit`` function that calculates the sum of two 8-bit integers. For **FORTRAN**
-you must pass the value by reference
+Call the ``factorial`` function. With a FORTRAN library you must pass values by reference using :mod:`ctypes`,
+and, since the returned value is not of type ``int`` we must configure :mod:`ctypes` for a value of type
+``double`` to be returned
 
-.. code:: python
-
-   >>> from ctypes import c_int8, byref
-   >>> fortran.lib.sum_8bit.restype = c_int8
-   >>> fortran.lib.sum_8bit(byref(c_int8(-5)), byref(c_int8(25)))
-   20
+   >>> from ctypes import byref, c_int, c_double
+   >>> fortran.lib.factorial.restype = c_double
+   >>> fortran.lib.factorial(byref(c_int(37)))
+   1.3763753091226343e+43
 
 Microsoft .NET Framework
 ------------------------
-Load a 64-bit **C#** library (a .NET Framework library) in 64-bit Python, see :ref:`here <dotnet-lib>`
-for the source code. *To load the 32-bit version in 32-bit Python use* ``'dotnet_lib32.dll'``.
+Load a 64-bit C# library (a .NET Framework) in 64-bit Python, see :ref:`here <dotnet-lib>`
+for the source code. Include the ``'net'`` argument to indicate that the ``.dll`` file is for
+the .NET Framework. *To load the 32-bit version in 32-bit Python use* ``'dotnet_lib32.dll'``.
 
 .. code:: python
 
@@ -108,6 +108,30 @@ The :ref:`dotnet_lib64 <dotnet-lib>` library contains a reference to the ``DotNe
    StaticClass <class 'System.RuntimeType'>
    StringManipulation <class '.StringManipulation'>
 
+Create an instance of the ``BasicMath`` class in the ``DotNetMSL`` namespace and call the
+``multiply_doubles`` method
+
+   >>> bm = net.lib.DotNetMSL.BasicMath()
+   >>> bm.multiply_doubles(2.3, 5.6)
+   12.879999999999999
+
+Create an instance of the ``ArrayManipulation`` class in the ``DotNetMSL`` namespace and call the
+``scalar_multiply`` method
+
+   >>> am = net.lib.DotNetMSL.ArrayManipulation()
+   >>> values = am.scalar_multiply(2., [1., 2., 3., 4., 5.])
+   >>> values
+   <System.Double[] object at 0x00000000040BB2E8>
+   >>> [val for val in values]
+   [2.0, 4.0, 6.0, 8.0, 10.0]
+
+Use the ``reverse_string`` method in the ``StringManipulation`` class to reverse a string
+
+.. code:: python
+
+   >>> net.lib.StringManipulation.reverse_string('abcdefghijklmnopqrstuvwxyz')
+   'zyxwvutsrqponmlkjihgfedcba'
+
 View the static methods in the ``StaticClass`` class
 
 .. code:: python
@@ -122,16 +146,7 @@ View the static methods in the ``StaticClass`` class
    Int32 GetHashCode()
    System.Type GetType()
 
-Use the ``reverse_string`` method in the ``StringManipulation`` class in the :ref:`dotnet_lib64 <dotnet-lib>`
-library to reverse a string
-
-.. code:: python
-
-   >>> net.lib.StringManipulation.reverse_string('abcdefghijklmnopqrstuvwxyz')
-   'zyxwvutsrqponmlkjihgfedcba'
-
-Use the static ``add_multiple`` method in the ``StaticClass`` class in the :ref:`dotnet_lib64 <dotnet-lib>`
-library to add five integers
+Use the static ``add_multiple`` method in the ``StaticClass`` class to add five integers
 
 .. code:: python
 
@@ -140,8 +155,9 @@ library to add five integers
 
 Windows __stdcall
 -----------------
-Load a 32-bit Windows **__stdcall** library in 32-bit Python, see
-`kernel32.dll <http://www.geoffchappell.com/studies/windows/win32/kernel32/api/>`_
+Load a 32-bit Windows ``__stdcall`` library in 32-bit Python, see
+`kernel32.dll <http://www.geoffchappell.com/studies/windows/win32/kernel32/api/>`_. Include the
+``'windll'`` argument to specify that the calling convention is ``__stdcall``.
 
 .. code:: python
 
@@ -161,13 +177,14 @@ See :ref:`here <tutorial_stdcall>` for how to communicate with ``kernel32.dll`` 
 
 LabVIEW
 -------
-Load a 64-bit **LabVIEW** library in 64-bit Python, see :ref:`here <labview-lib>` for the source code.
+Load a 64-bit LabVIEW library in 64-bit Python, see :ref:`here <labview-lib>` for the source code.
 *To load the 32-bit version in 32-bit Python use* ``'labview_lib32.dll'``. *Also, an appropriate LabVIEW*
 *Run-Time Engine must be installed. The LabVIEW example is only valid on Windows.*
 
 .. note::
    A LabVIEW library can be built in to a DLL using the ``__cdecl`` or  ``__stdcall`` calling convention.
-   Make sure that you specify the appropriate `libtype` when instantiating the :class:`LoadLibrary` class.
+   Make sure that you specify the appropriate `libtype` when instantiating the
+   :class:`~msl.loadlib.load_library.LoadLibrary` class.
 
 .. code:: python
 
@@ -175,13 +192,13 @@ Load a 64-bit **LabVIEW** library in 64-bit Python, see :ref:`here <labview-lib>
    >>> labview
    <LoadLibrary id=0x2060085bd68 libtype=CDLL path=D:\msl\examples\loadlib\labview_lib64.dll>
 
-Create some data to calculate the mean, variance and standard deviation
+Create some data to calculate the mean, variance and standard deviation of
 
 .. code:: python
 
    >>> data = [1, 2, 3, 4, 5, 6, 7, 8, 9]
 
-convert it to :mod:`ctypes`
+Convert `data` to a :mod:`ctypes` array and allocate memory for the returned values
 
 .. code:: python
 
@@ -189,7 +206,7 @@ convert it to :mod:`ctypes`
    >>> x = (c_double * len(data))(*data)
    >>> mean, variance, std = c_double(), c_double(), c_double()
 
-calculate the *sample* standard deviation and variance (the third argument is set to 0)
+Calculate the *sample* (i.e., the third argument is set to 0) standard deviation and variance
 
 .. code:: python
 
@@ -201,7 +218,7 @@ calculate the *sample* standard deviation and variance (the third argument is se
    >>> std.value
    2.7386127875258306
 
-calculate the *population* standard deviation and variance (the third argument is set to 1)
+Calculate the *population* (i.e., the third argument is set to 1) standard deviation and variance
 
 .. code:: python
 
@@ -219,7 +236,7 @@ Since Java byte code is executed in the JVM_ it doesn't matter whether it was bu
 64-bit Java Development Kit. The Python interpreter does not load the Java byte code but communicates
 with the JVM_ through a local network socket that is created by `Py4J <https://www.py4j.org/>`_.
 
-Load a **Java** archive, a ``JAR`` file, in a JVM_, see :ref:`here <java-lib-jar>` for the source code.
+Load a Java archive, a ``.jar`` file, in a JVM_, see :ref:`here <java-lib-jar>` for the source code.
 
 .. code:: python
 
@@ -285,6 +302,11 @@ Solve a linear system of equations, Ax=b
    -5.892562e-01
    +8.826446e-01
    -1.602479e+00
+
+Show that `x` is a solution by getting `b` back
+
+.. code:: python
+
    >>> for i in range(3):
    ...     val = 0.0
    ...     for j in range(3):
@@ -301,7 +323,7 @@ Shutdown the connection to the JVM_ when you are finished
 
    >>> jar.gateway.shutdown()
 
-Load **Java** byte code, a ``.class`` file, in a JVM_, see :ref:`here <java-lib-class>` for the source code.
+Load Java byte code, a ``.class`` file, in a JVM_, see :ref:`here <java-lib-class>` for the source code.
 
    >>> cls = LoadLibrary(EXAMPLES_DIR + '/Trig.class')
    >>> cls
