@@ -121,7 +121,7 @@ class LoadLibrary(object):
             self._lib = ctypes.OleDLL(self._path)
         elif libtype == 'java':
             if not utils.is_py4j_installed():
-                raise IOError('Cannot load a JAR file because Py4J is not installed.\n'
+                raise IOError('Cannot load a Java file because Py4J is not installed.\n'
                               'To install Py4J run: pip install py4j')
 
             from py4j.version import __version__
