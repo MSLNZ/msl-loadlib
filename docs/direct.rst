@@ -34,6 +34,8 @@ and the directory where the example libraries are located
 
    >>> from msl.examples.loadlib import EXAMPLES_DIR
 
+If the file extension is not included then a default extension, ``.dll`` (Windows) or ``.so`` (Linux), is used.
+
 C++
 ---
 Loading a 64-bit **C++** library in 64-bit Python, see :ref:`here <cpp-lib>` for the source code.
