@@ -1,3 +1,4 @@
+======================
 Welcome to MSL-LoadLib
 ======================
 
@@ -6,16 +7,21 @@ Welcome to MSL-LoadLib
 Purpose
 -------
 
-Load a shared library into Python.
+This package is used to load a shared library in to Python. It is basically just a
+thin wrapper around `ctypes <https://docs.python.org/3/library/ctypes.html>`_ (for
+libraries that use the ``__cdecl`` or ``__stdcall`` calling convention),
+`Python for .NET`_ (for libraries that use Microsoft's .NET Framework,
+``CLR``) and Py4J_ (for Java ``.jar`` or ``.class`` files). However,
+the primary advantage is that it is possible to communicate with a 32-bit shared
+library from 64-bit Python.
 
-This package is basically just a thin wrapper around `ctypes <https://docs.python.org/3/library/ctypes.html>`_ and
-`Python for .NET`_ for loading a shared library into Python. However,
-the primary advantage is that it is possible to communicate with a 32-bit shared library from 64-bit Python.
+Tested in Python 2.7, 3.3+. The `examples <http://msl-loadlib.readthedocs.io/en/latest/direct.html>`_
+provided are currently only supported in Windows and Linux. The 32-bit server has not yet been
+created for OSX.
 
-Tested in Python 2.7, 3.3+. The `examples <http://msl-loadlib.readthedocs.io/en/latest/examples.html>`_
-provided are currently only supported in Windows and Linux, however **MSL-LoadLib** should work properly with any OS
-*(not tested)* that `Python for .NET <https://pypi.python.org/pypi/pythonnet/>`_ supports (and if you do not
-need to load .NET libraries then **MSL-LoadLib** is a pure-python package so it is OS independent).
+**MSL-LoadLib** is a pure-python package, but `Python for .NET`_ depends on the .NET Common Language
+Runtime (CLR) on Windows and Mono runtime on Linux and OSX and Py4J_ depends on having a
+`Java Virtual Machine <https://en.wikipedia.org/wiki/Java_virtual_machine>`_ installed.
 
 Example
 -------
@@ -30,11 +36,12 @@ By default, ``msl.loadlib.LoadLibrary`` loads a library using
 .. code:: python
 
    >>> from msl.loadlib import LoadLibrary
-   >>> cpp = LoadLibrary('./cpp_lib64')
+   >>> from msl.examples.loadlib import EXAMPLES_DIR
+   >>> cpp = LoadLibrary(EXAMPLES_DIR + '/cpp_lib64')
    >>> cpp
-   LoadLibrary object at 0x3e9f750; libtype=CDLL; path=D:/cpp_lib64.dll
+   <LoadLibrary id=0x3e9f750 libtype=CDLL path=D:\msl\examples\loadlib\cpp_lib64.dll>
    >>> cpp.lib
-   <CDLL 'D:\cpp_lib64.dll', handle af1e0000 at 0x3e92f90>
+   <CDLL 'D:\msl\examples\loadlib\cpp_lib64.dll', handle af1e0000 at 0x3e92f90>
 
 Call the ``cpp_lib64.add`` function that calculates the sum of two integers
 
@@ -43,12 +50,11 @@ Call the ``cpp_lib64.add`` function that calculates the sum of two integers
    >>> cpp.lib.add(1, 2)
    3
 
-`Inter-process communication <https://en.wikipedia.org/wiki/Inter-process_communication>`_ is used
-to access a 32-bit shared library from a module that is running within a 64-bit Python interpreter.
-The procedure uses a client-server protocol where the client is a subclass of ``msl.loadlib.Client64``
-and the server is a subclass of ``msl.loadlib.Server32``. See the `tutorials 
-<http://msl-loadlib.readthedocs.io/en/latest/tutorials.html>`_ for examples on how to implement
-`inter-process communication <https://en.wikipedia.org/wiki/Inter-process_communication>`_.
+`Inter-process communication <ipc_>`_ is used to access a 32-bit shared library from a module that is
+running within a 64-bit Python interpreter. The procedure uses a client-server protocol where the client
+is a subclass of ``msl.loadlib.Client64`` and the server is a subclass of ``msl.loadlib.Server32``.
+See the `examples <http://msl-loadlib.readthedocs.io/en/latest/interprocess_communication.html>`_ for how
+to implement `inter-process communication <ipc_>`_.
 
 Documentation
 -------------
@@ -102,9 +108,10 @@ can rename the folder to be, for example,* **docs/_api** *and then the changes m
 .. |pypi| image:: https://badge.fury.io/py/msl-loadlib.svg
    :target: https://badge.fury.io/py/msl-loadlib
 
-.. _Python for .NET: https://pypi.python.org/pypi/pythonnet/
-.. _git: https://git-scm.com/download
+.. _Python for .NET: http://pythonnet.github.io/
+.. _Py4J: https://www.py4j.org/
 .. _pytest: http://doc.pytest.org/en/latest/
 .. _sphinx: http://www.sphinx-doc.org/en/stable/
 .. _sphinx-apidoc: http://www.sphinx-doc.org/en/stable/man/sphinx-apidoc.html
 .. _coverage: http://coverage.readthedocs.io/en/latest/index.html
+.. _ipc: https://en.wikipedia.org/wiki/Inter-process_communication
