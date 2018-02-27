@@ -109,6 +109,11 @@ should return the version of Java that is installed::
    OpenJDK Runtime Environment (build 1.8.0_131-8u131-b11-2ubuntu1.16.04.3-b11)
    OpenJDK 64-Bit Server VM (build 25.131-b11, mixed mode)
 
+OSX
++++
+The 32-bit server has not been created for OSX nor have the C++/FORTRAN example libraries been
+compiled in OSX.
+
 .. _Mono: http://www.mono-project.com/
 .. _Python for .NET: http://pythonnet.github.io/
 .. _Java Runtime Environment: http://www.oracle.com/technetwork/java/javase/downloads/index.html
