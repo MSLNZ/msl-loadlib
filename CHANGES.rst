@@ -2,25 +2,31 @@
 Changelog
 =========
 
-Version 0.3.3 (in development)
-==============================
+Version 0.4.0 (2018.02.28)
+==========================
 
 Added
 -----
-* include a ``get_assembly_types`` keyword argument to the :class:`~msl.loadlib.load_library.LoadLibrary` class
-* improved the error message when loading a .NET Assembly and pythonnet is not installed
-* updated the documentation and the docstrings
+- `Py4J <https://www.py4j.org/>`_ wrapper for loading ``.jar`` and ``.class`` Java files
+- example on how to load a library that was built with LabVIEW
 
 Fixed
 -----
-* Issue `#8 <https://github.com/MSLNZ/msl-loadlib/issues/8>`_
-* Issue `#7 <https://github.com/MSLNZ/msl-loadlib/issues/7>`_
-* ``AttributeError("'LoadLibrary' object has no attribute '_lib'") raised in repr()``
+- Issue `#8 <https://github.com/MSLNZ/msl-loadlib/issues/8>`_
+- Issue `#7 <https://github.com/MSLNZ/msl-loadlib/issues/7>`_
+- ``AttributeError("'LoadLibrary' object has no attribute '_lib'") raised in repr()``
 
 Changed
 -------
-* use :meth:`~socket.socket.bind` to select an available port
-  instead of checking if :meth:`~msl.loadlib.client64.Client64.port_in_use`
+- rename ``DotNetContainer`` to ``DotNet``
+- use :meth:`~socket.socket.bind` to select an available port instead of checking if
+  :meth:`~msl.loadlib.utils.port_in_use`
+- moved the static methods to the ``msl.loadlib.utils`` module:
+    + Client64.port_in_use -> utils.port_in_use
+    + Client64.get_available_port -> utils.get_available_port
+    + Client64.wait_for_server -> utils.wait_for_server
+    + LoadLibrary.check_dot_net_config -> utils.check_dot_net_config
+    + LoadLibrary.is_pythonnet_installed -> utils.is_pythonnet_installed
 
 Version 0.3.2 (2017.10.18)
 ==========================
