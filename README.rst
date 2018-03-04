@@ -32,8 +32,6 @@ Alternatively, using the `MSL Package Manager`_ run::
 
    msl install loadlib
 
-.. _MSL Package Manager: http://msl-package-manager.readthedocs.io/en/latest/?badge=latest
-
 To install the dependencies on Linux, please follow the instructions on the
 `prerequisites <http://msl-loadlib.readthedocs.io/en/latest/install.html#prerequisites>`_
 section of the documentation.
@@ -56,32 +54,46 @@ Import the ``LoadLibrary`` class and the directory where the example libraries a
 
 If the file extension is not included then a default extension, ``.dll`` (Windows) or ``.so`` (Linux), is used.
 
-Load a `C++ <msl/examples/loadlib/cpp_lib.cpp>`_ library and call the ``add`` function
+Load a `C++ <https://github.com/MSLNZ/msl-loadlib/blob/master/msl/examples/loadlib/cpp_lib.cpp>`_ library
+and call the ``add`` function
+
+.. code:: python
 
    >>> cpp = LoadLibrary(EXAMPLES_DIR + '/cpp_lib64')
    >>> cpp.lib.add(1, 2)
    3
 
-Load a `FORTRAN <msl/examples/loadlib/fortran_lib.f90>`_ library and call the ``factorial`` function
+Load a `FORTRAN <https://github.com/MSLNZ/msl-loadlib/blob/master/msl/examples/loadlib/fortran_lib.f90>`_
+library and call the ``factorial`` function
+
+.. code:: python
 
    >>> fortran = LoadLibrary(EXAMPLES_DIR + '/fortran_lib64')
 
 With a FORTRAN library you must pass values by reference using ctypes_, and, since the returned value is not
 of type ``int`` we must configure ctypes_ for a value of type ``double`` to be returned
 
+.. code:: python
+
    >>> from ctypes import byref, c_int, c_double
    >>> fortran.lib.factorial.restype = c_double
    >>> fortran.lib.factorial(byref(c_int(37)))
    1.3763753091226343e+43
 
-Load a `.NET <msl/examples/loadlib/dotnet_lib.cs>`_ library and call the ``reverse_string`` function, we must
-specify that the library type is a .NET library by passing in the ``'net'`` argument
+Load a `.NET <https://github.com/MSLNZ/msl-loadlib/blob/master/msl/examples/loadlib/dotnet_lib.cs>`_ library
+and call the ``reverse_string`` function, we must specify that the library type is a .NET library by passing
+in the ``'net'`` argument
+
+.. code:: python
 
    >>> net = LoadLibrary(EXAMPLES_DIR + '/dotnet_lib64.dll', 'net')
    >>> net.lib.StringManipulation.reverse_string('abcdefghijklmnopqrstuvwxyz')
    'zyxwvutsrqponmlkjihgfedcba'
 
-Load `Java <msl/examples/loadlib/Trig.java>`_ byte code and call the ``cos`` function
+Load `Java <https://github.com/MSLNZ/msl-loadlib/blob/master/msl/examples/loadlib/Trig.java>`_ byte code
+and call the ``cos`` function
+
+.. code:: python
 
    >>> java = LoadLibrary(EXAMPLES_DIR + '/Trig.class')
    >>> java.lib.Trig.cos(1.234)
@@ -90,13 +102,15 @@ Load `Java <msl/examples/loadlib/Trig.java>`_ byte code and call the ``cos`` fun
 Python interacts with the `Java Virtual Machine`_ via a local network socket and therefore the connection
 needs to be closed when you are done using the Java library
 
+.. code:: python
+
    >>> java.gateway.shutdown()
 
 `Inter-process communication <ipc_>`_ is used to access a 32-bit shared library from a module that is
 running within a 64-bit Python interpreter. The procedure uses a client-server protocol where the client
 is a subclass of ``msl.loadlib.Client64`` and the server is a subclass of ``msl.loadlib.Server32``.
-See the `examples <http://msl-loadlib.readthedocs.io/en/latest/interprocess_communication.html>`_ for how
-to implement `inter-process communication <ipc_>`_.
+See the `tutorials <http://msl-loadlib.readthedocs.io/en/latest/interprocess_communication.html>`_ for
+examples on how to implement `inter-process communication <ipc_>`_.
 
 Documentation
 -------------
@@ -138,8 +152,9 @@ can rename the folder to be, for example,* **docs/_api** *and then the changes m
 .. _Python for .NET: http://pythonnet.github.io/
 .. _Py4J: https://www.py4j.org/
 .. _pytest: http://doc.pytest.org/en/latest/
-.. _sphinx: http://www.sphinx-doc.org/en/stable/
-.. _sphinx-apidoc: http://www.sphinx-doc.org/en/stable/man/sphinx-apidoc.html
+.. _sphinx: http://www.sphinx-doc.org/en/latest/
+.. _sphinx-apidoc: http://www.sphinx-doc.org/en/latest/man/sphinx-apidoc.html
 .. _coverage: http://coverage.readthedocs.io/en/latest/index.html
 .. _ipc: https://en.wikipedia.org/wiki/Inter-process_communication
 .. _Java Virtual Machine: https://en.wikipedia.org/wiki/Java_virtual_machine
+.. _MSL Package Manager: http://msl-package-manager.readthedocs.io/en/latest/?badge=latest
