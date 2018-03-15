@@ -199,7 +199,7 @@ def port_in_use(port):
         Whether the port is in use.
     """
     p = subprocess.Popen(['netstat', '-an'], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-    return p.communicate()[0].decode().find(':{} '.format(port)) > 0
+    return p.communicate()[0].decode(errors='ignore').find(':{} '.format(port)) > 0
 
 
 def get_available_port():
