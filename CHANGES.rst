@@ -5,6 +5,10 @@ Changelog
 Version 0.4.1.dev0 (in development)
 ===================================
 
+Fixed
+-----
+- ``utils.port_in_use()`` raised UnicodeDecodeError (`PR #9 <https://github.com/MSLNZ/msl-loadlib/pull/9>`_)
+
 
 Version 0.4.0 (2018.02.28)
 ==========================

@@ -199,6 +199,8 @@ def port_in_use(port):
         Whether the port is in use.
     """
     p = subprocess.Popen(['netstat', '-an'], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    # include errors='ignore' for when the header of netstat returns characters that
+    # raise UnicodeDecodeError -- see PR #9
     return p.communicate()[0].decode(errors='ignore').find(':{} '.format(port)) > 0
 
 
