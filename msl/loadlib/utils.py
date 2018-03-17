@@ -227,7 +227,7 @@ def wait_for_server(host, port, timeout):
 
     Raises
     ------
-    TimeoutError
+    :exc:`ConnectionTimeoutError`
         If a timeout occurred.
     """
 
@@ -238,4 +238,8 @@ def wait_for_server(host, port, timeout):
             break
         if time.time() > stop:
             m = 'Timeout after {:.1f} seconds. Could not connect to {}:{}'.format(timeout, host, port)
-            raise TimeoutError(m)
+            raise ConnectionTimeoutError(m)
+
+
+class ConnectionTimeoutError(OSError):
+    """Raised when the connection to the 32-bit server cannot be established."""

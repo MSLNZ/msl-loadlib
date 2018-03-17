@@ -86,7 +86,7 @@ class Client64(HTTPConnection):
             If the frozen executable cannot be found.
         TypeError
             If the data type of `append_sys_path` or `append_environ_path` is invalid.
-        TimeoutError
+        :exc:`~msl.loadlib.utils.ConnectionTimeoutError`
             If the connection to the 32-bit server cannot be established.
         """
 

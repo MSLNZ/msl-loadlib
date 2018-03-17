@@ -7,6 +7,8 @@ Version 0.4.1.dev0 (in development)
 
 Fixed
 -----
+- ``utils.wait_for_server()`` raised `NameError: name 'TimeoutError' is not defined` for Python 2.7
+  because :exc:`TimeoutError` was not added until Python 3.3
 - ``utils.port_in_use()`` raised UnicodeDecodeError (`PR #9 <https://github.com/MSLNZ/msl-loadlib/pull/9>`_)
 
 
