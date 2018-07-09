@@ -34,17 +34,17 @@ docs/_autosummary/
 
 # pytest and coverage
 .cache/
+.pytest_cache/
 htmlcov/
 .coverage
 junit.xml
 coverage.xml
-.pytest_cache
 
 # MANIFEST.in is now auto-generated based on the platform
 MANIFEST.in
 
-# ignore all junk files
-junk*.py
+# ignore all scripts in the junk/ folder
+junk/
 
 # the Eclipse project files for Py4JWrapper
 py4jwrapper/bin/
