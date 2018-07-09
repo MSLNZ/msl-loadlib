@@ -83,7 +83,7 @@ request and sends the response back to **MyClient**.
         """Send a request to 'MyServer' to execute the 'add' method and get the response."""
 
         def __init__(self):
-            # Use the default '127.0.0.1' address to start the 'my_server.py' module
+            # Specify the name of the Python module to execute on the 32-bit server, i.e., 'my_server.py'
             Client64.__init__(self, module32='my_server')
 
         def add(self, a, b):
