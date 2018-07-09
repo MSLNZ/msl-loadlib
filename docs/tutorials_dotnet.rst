@@ -25,7 +25,7 @@ This example shows how to access a 32-bit .NET library from a module that is run
 The following shows that the 32-bit :ref:`dotnet_lib32.dll <dotnet-lib>` library cannot
 be loaded in a 64-bit Python interpreter:
 
-.. code-block:: python
+.. code-block:: pycon
 
    >>> from msl.loadlib import LoadLibrary, IS_PYTHON_64BIT
    >>> from msl.examples.loadlib import EXAMPLES_DIR
@@ -42,7 +42,7 @@ be loaded in a 64-bit Python interpreter:
 
 However, the 64-bit version of the .NET library can be directly loaded in 64-bit Python:
 
-.. code-block:: python
+.. code-block:: pycon
 
    >>> net = LoadLibrary(EXAMPLES_DIR + '/dotnet_lib64', 'net')
    >>> net
@@ -53,7 +53,7 @@ However, the 64-bit version of the .NET library can be directly loaded in 64-bit
 Instead, create a :class:`~msl.examples.loadlib.dotnet64.DotNet64` client to communicate
 with the 32-bit :ref:`dotnet_lib32.dll <dotnet-lib>` library:
 
-.. code-block:: python
+.. code-block:: pycon
 
    >>> from msl.examples.loadlib import DotNet64
    >>> dn = DotNet64()
@@ -65,35 +65,35 @@ with the 32-bit :ref:`dotnet_lib32.dll <dotnet-lib>` library:
 Get the names of the classes in the .NET library module, see
 :meth:`~msl.examples.loadlib.dotnet64.DotNet64.get_class_names`:
 
-.. code-block:: python
+.. code-block:: pycon
 
    >>> dn.get_class_names()
    ['StringManipulation', 'StaticClass', 'DotNetMSL.BasicMath', 'DotNetMSL.ArrayManipulation']
 
 Add two integers, see :meth:`~msl.examples.loadlib.dotnet64.DotNet64.add_integers`:
 
-.. code-block:: python
+.. code-block:: pycon
 
    >>> dn.add_integers(8, 2)
    10
 
 Divide two C# floating-point numbers, see :meth:`~msl.examples.loadlib.dotnet64.DotNet64.divide_floats`:
 
-.. code-block:: python
+.. code-block:: pycon
 
    >>> dn.divide_floats(4., 5.)
    0.8
 
 Multiple two C# double-precision numbers, see :meth:`~msl.examples.loadlib.dotnet64.DotNet64.multiply_doubles`:
 
-.. code-block:: python
+.. code-block:: pycon
 
    >>> dn.multiply_doubles(872.24, 525.525)
    458383.926
 
 Add or subtract two C# double-precision numbers, see :meth:`~msl.examples.loadlib.dotnet64.DotNet64.add_or_subtract`:
 
-.. code-block:: python
+.. code-block:: pycon
 
    >>> dn.add_or_subtract(99., 9., True)
    108.0
@@ -102,7 +102,7 @@ Add or subtract two C# double-precision numbers, see :meth:`~msl.examples.loadli
 
 Multiply a 1D array by a number, see :meth:`~msl.examples.loadlib.dotnet64.DotNet64.scalar_multiply`:
 
-.. code-block:: python
+.. code-block:: pycon
 
    >>> a = [float(val) for val in range(10)]
    >>> a
@@ -112,7 +112,7 @@ Multiply a 1D array by a number, see :meth:`~msl.examples.loadlib.dotnet64.DotNe
 
 Multiply two matrices, see :meth:`~msl.examples.loadlib.dotnet64.DotNet64.multiply_matrices`:
 
-.. code-block:: python
+.. code-block:: pycon
 
    >>> m1 = [[1., 2., 3.], [4., 5., 6.]]
    >>> m2 = [[1., 2.], [3., 4.], [5., 6.]]
@@ -121,14 +121,14 @@ Multiply two matrices, see :meth:`~msl.examples.loadlib.dotnet64.DotNet64.multip
 
 Reverse a string, see :meth:`~msl.examples.loadlib.dotnet64.DotNet64.reverse_string`:
 
-.. code-block:: python
+.. code-block:: pycon
 
    >>> dn.reverse_string('New Zealand')
    'dnalaeZ weN'
 
 Call the static methods in the ``StaticClass`` class
 
-.. code-block:: python
+.. code-block:: pycon
 
    >>> dn.add_multiple(1, 2, 3, 4, 5)
    15
@@ -139,7 +139,7 @@ Call the static methods in the ``StaticClass`` class
 
 Shutdown the server, see :meth:`~msl.loadlib.client64.Client64.shutdown_server32`:
 
-.. code-block:: python
+.. code-block:: pycon
 
    >>> dn.shutdown_server32()
 

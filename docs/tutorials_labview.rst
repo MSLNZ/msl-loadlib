@@ -19,7 +19,7 @@ code of the LabVIEW program is available :ref:`here <labview-lib>`.
 Create a :class:`~msl.examples.loadlib.labview64.Labview64` client to communicate with the
 32-bit :ref:`labview_lib32 <labview-lib>` library from 64-bit Python:
 
-.. code-block:: python
+.. code-block:: pycon
 
    >>> from msl.examples.loadlib import Labview64
    >>> labview = Labview64()
@@ -31,7 +31,7 @@ Create a :class:`~msl.examples.loadlib.labview64.Labview64` client to communicat
 Calculate the mean and the *sample* variance and standard deviation of some data, see
 :meth:`~msl.examples.loadlib.labview64.labview64.stdev`:
 
-.. code-block:: python
+.. code-block:: pycon
 
    >>> data = [1, 2, 3, 4, 5, 6, 7, 8, 9]
    >>> labview.stdev(data)
@@ -39,14 +39,14 @@ Calculate the mean and the *sample* variance and standard deviation of some data
 
 Calculate the mean and the *population* variance and standard deviation of data:
 
-.. code-block:: python
+.. code-block:: pycon
 
    >>> labview.stdev(data, 1)
    (5.0, 6.666666666666667, 2.581988897471611)
 
 Shutdown the server, see :meth:`~msl.loadlib.client64.Client64.shutdown_server32`:
 
-.. code-block:: python
+.. code-block:: pycon
 
    >>> labview.shutdown_server32()
 
