@@ -176,6 +176,6 @@ for env in envs:
         print('\n')
 
 if success:
-    color_print('===================== conda envs summary =====================')
+    print('===================== conda envs summary =====================')
     for env in envs:
         color_print('All tests passed with ' + env)
