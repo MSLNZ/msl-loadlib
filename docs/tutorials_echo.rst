@@ -1,13 +1,13 @@
 .. _tutorial_echo:
 
-==============================================
-Load a 32-bit *Echo* library in 64-bit Python
-==============================================
+=================
+An *Echo* Example
+=================
 
 This example does not actually communicate with a 32-bit shared library but shows how Python data types
 are preserved when they are passed from the :class:`~msl.examples.loadlib.echo64.Echo64` client to the
 :class:`~msl.examples.loadlib.echo32.Echo32` server and back. The :class:`~msl.examples.loadlib.echo32.Echo32`
-server just returns a :py:class:`tuple` of the ``(*args, **kwargs)`` that it received back to the
+server just returns a :class:`tuple` of the ``(*args, **kwargs)`` that it received back to the
 :class:`~msl.examples.loadlib.echo64.Echo64` client.
 
 The following is a script that illustrates that the data types are preserved:
@@ -28,8 +28,8 @@ The following is a script that illustrates that the data types are preserved:
 Running this script would create the following output
 
 .. note::
-   The black text corresponds to the :class:`~msl.examples.loadlib.echo64.Echo64` :py:func:`print`
-   statements and the red text to the :class:`~msl.examples.loadlib.echo32.Echo32` :py:func:`print`
+   The black text corresponds to the :class:`~msl.examples.loadlib.echo64.Echo64` :func:`print`
+   statements and the red text to the :class:`~msl.examples.loadlib.echo32.Echo32` :func:`print`
    statements.
 
 .. image:: _static/echo_output.png
