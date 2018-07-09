@@ -198,6 +198,8 @@ Load a 64-bit LabVIEW library in 64-bit Python, see :ref:`here <labview-lib>` fo
    >>> labview = LoadLibrary(EXAMPLES_DIR + '/labview_lib64.dll')
    >>> labview
    <LoadLibrary id=0x2060085bd68 libtype=CDLL path=D:\msl\examples\loadlib\labview_lib64.dll>
+   >>> labview.lib
+   <CDLL 'D:\msl\examples\loadlib\labview_lib64.dll', handle 2a920020 at 0x7e32b77>
 
 Create some data to calculate the mean, variance and standard deviation of
 
