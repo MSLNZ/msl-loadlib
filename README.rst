@@ -24,11 +24,15 @@ Runtime (CLR) on Windows and Mono Runtime on Linux and OSX and Py4J_ depends on 
 Install
 -------
 
-To install **MSL-LoadLib** run::
+To install **MSL-LoadLib** run:
+
+.. code-block:: console
 
    pip install msl-loadlib
 
-Alternatively, using the `MSL Package Manager`_ run::
+Alternatively, using the `MSL Package Manager`_ run:
+
+.. code-block:: console
 
    msl install loadlib
 
@@ -47,7 +51,7 @@ Python interpreter then replace the **64** with **32** in the filename.
 
 Import the ``LoadLibrary`` class and the directory where the example libraries are located
 
-.. code:: python
+.. code-block:: pycon
 
    >>> from msl.loadlib import LoadLibrary
    >>> from msl.examples.loadlib import EXAMPLES_DIR
@@ -57,7 +61,7 @@ If the file extension is not included then a default extension, ``.dll`` (Window
 Load a `C++ <https://github.com/MSLNZ/msl-loadlib/blob/master/msl/examples/loadlib/cpp_lib.cpp>`_ library
 and call the ``add`` function
 
-.. code:: python
+.. code-block:: pycon
 
    >>> cpp = LoadLibrary(EXAMPLES_DIR + '/cpp_lib64')
    >>> cpp.lib.add(1, 2)
@@ -66,14 +70,14 @@ and call the ``add`` function
 Load a `FORTRAN <https://github.com/MSLNZ/msl-loadlib/blob/master/msl/examples/loadlib/fortran_lib.f90>`_
 library and call the ``factorial`` function
 
-.. code:: python
+.. code-block:: pycon
 
    >>> fortran = LoadLibrary(EXAMPLES_DIR + '/fortran_lib64')
 
 With a FORTRAN library you must pass values by reference using ctypes_, and, since the returned value is not
 of type ``int`` we must configure ctypes_ for a value of type ``double`` to be returned
 
-.. code:: python
+.. code-block:: pycon
 
    >>> from ctypes import byref, c_int, c_double
    >>> fortran.lib.factorial.restype = c_double
@@ -84,7 +88,7 @@ Load a `.NET <https://github.com/MSLNZ/msl-loadlib/blob/master/msl/examples/load
 and call the ``reverse_string`` function, we must specify that the library type is a .NET library by passing
 in the ``'net'`` argument
 
-.. code:: python
+.. code-block:: pycon
 
    >>> net = LoadLibrary(EXAMPLES_DIR + '/dotnet_lib64.dll', 'net')
    >>> net.lib.StringManipulation.reverse_string('abcdefghijklmnopqrstuvwxyz')
@@ -93,7 +97,7 @@ in the ``'net'`` argument
 Load `Java <https://github.com/MSLNZ/msl-loadlib/blob/master/msl/examples/loadlib/Trig.java>`_ byte code
 and call the ``cos`` function
 
-.. code:: python
+.. code-block:: pycon
 
    >>> java = LoadLibrary(EXAMPLES_DIR + '/Trig.class')
    >>> java.lib.Trig.cos(1.234)
@@ -102,7 +106,7 @@ and call the ``cos`` function
 Python interacts with the `Java Virtual Machine`_ via a local network socket and therefore the connection
 needs to be closed when you are done using the Java library
 
-.. code:: python
+.. code-block:: pycon
 
    >>> java.gateway.shutdown()
 
@@ -122,15 +126,21 @@ Developers Guide
 
 **MSL-LoadLib** uses pytest_ for testing the source code and sphinx_ for creating the documentation.
 
-Run the tests (a coverage_ report is generated in the **htmlcov/index.html** file)::
+Run the tests (a coverage_ report is generated in the **htmlcov/index.html** file):
+
+.. code-block:: console
 
    python setup.py test
 
-Build the documentation, which can be viewed by opening the **docs/_build/html/index.html** file::
+Build the documentation, which can be viewed by opening the **docs/_build/html/index.html** file:
+
+.. code-block:: console
 
    python setup.py docs
 
-Automatically create the API documentation from the docstrings in the source code (uses sphinx-apidoc_)::
+Automatically create the API documentation from the docstrings in the source code (uses sphinx-apidoc_):
+
+.. code-block:: console
 
    python setup.py apidoc
 
