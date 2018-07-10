@@ -2,57 +2,60 @@
 Changelog
 =========
 
-Version 0.4.1.dev0 (in development)
-===================================
+Version 0.4.1.dev0
+==================
 
-Fixed
------
-- ``utils.wait_for_server()`` raised `NameError: name 'TimeoutError' is not defined` for Python 2.7
-  because :exc:`TimeoutError` was not added until Python 3.3
-- ``utils.port_in_use()`` raised UnicodeDecodeError (`PR #9 <https://github.com/MSLNZ/msl-loadlib/pull/9>`_)
+* Fixed
 
+  - ``utils.wait_for_server()`` raised `NameError: name 'TimeoutError' is not defined` for Python 2.7
+  - ``utils.port_in_use()`` raised `UnicodeDecodeError` (`PR #9 <https://github.com/MSLNZ/msl-loadlib/pull/9>`_)
+  - ``setup.py`` is now also compatible with Sphinx 1.7+
+
+* Changed
+
+  - rename `Dummy` example to `Echo`
 
 Version 0.4.0 (2018.02.28)
 ==========================
 
-Added
------
-- `Py4J <https://www.py4j.org/>`_ wrapper for loading ``.jar`` and ``.class`` Java files
-- example on how to load a library that was built with LabVIEW
+* Added
 
-Fixed
------
-- Issue `#8 <https://github.com/MSLNZ/msl-loadlib/issues/8>`_
-- Issue `#7 <https://github.com/MSLNZ/msl-loadlib/issues/7>`_
-- ``AttributeError("'LoadLibrary' object has no attribute '_lib'") raised in repr()``
+  - `Py4J <https://www.py4j.org/>`_ wrapper for loading ``.jar`` and ``.class`` Java files
+  - example on how to load a library that was built with LabVIEW
 
-Changed
--------
-- rename ``DotNetContainer`` to ``DotNet``
-- use :meth:`~socket.socket.bind` to select an available port instead of checking if
-  :meth:`~msl.loadlib.utils.port_in_use`
-- moved the static methods to the ``msl.loadlib.utils`` module:
-    + Client64.port_in_use -> utils.port_in_use
-    + Client64.get_available_port -> utils.get_available_port
-    + Client64.wait_for_server -> utils.wait_for_server
-    + LoadLibrary.check_dot_net_config -> utils.check_dot_net_config
-    + LoadLibrary.is_pythonnet_installed -> utils.is_pythonnet_installed
+* Fixed
+
+  - Issue `#8 <https://github.com/MSLNZ/msl-loadlib/issues/8>`_
+  - Issue `#7 <https://github.com/MSLNZ/msl-loadlib/issues/7>`_
+  - ``AttributeError("'LoadLibrary' object has no attribute '_lib'") raised in repr()``
+
+* Changed
+
+  - rename ``DotNetContainer`` to ``DotNet``
+  - use :meth:`~socket.socket.bind` to select an available port instead of checking if
+    :meth:`~msl.loadlib.utils.port_in_use`
+  - moved the static methods to the ``msl.loadlib.utils`` module:
+      + Client64.port_in_use -> utils.port_in_use
+      + Client64.get_available_port -> utils.get_available_port
+      + Client64.wait_for_server -> utils.wait_for_server
+      + LoadLibrary.check_dot_net_config -> utils.check_dot_net_config
+      + LoadLibrary.is_pythonnet_installed -> utils.is_pythonnet_installed
 
 Version 0.3.2 (2017.10.18)
 ==========================
 
-Added
------
-* include ``os.environ['PATH']`` as a search path when loading a shared library
-* the frozen server32 executable (for Windows/Linux) now runs on Python 3.6.3
-* support that the package can now be installed by ``pip install msl-loadlib``
+* Added
 
-Fixed
------
-* remove ``sys.getsitepackages()`` error for virtualenv (`issue #5 <https://github.com/MSLNZ/msl-loadlib/issues/5>`_)
-* received ``RecursionError`` when freezing freeze_server32.py with PyInstaller 3.3
-* replaced ``FileNotFoundError`` with ``IOError`` (for Python 2.7 support)
-* recompile cpp_lib\*.dll and fortran_lib\*.dll to not depend on external dependencies
+  - include ``os.environ['PATH']`` as a search path when loading a shared library
+  - the frozen server32 executable (for Windows/Linux) now runs on Python 3.6.3
+  - support that the package can now be installed by ``pip install msl-loadlib``
+
+* Fixed
+
+  - remove ``sys.getsitepackages()`` error for virtualenv (`issue #5 <https://github.com/MSLNZ/msl-loadlib/issues/5>`_)
+  - received ``RecursionError`` when freezing freeze_server32.py with PyInstaller 3.3
+  - replaced ``FileNotFoundError`` with ``IOError`` (for Python 2.7 support)
+  - recompile cpp_lib\*.dll and fortran_lib\*.dll to not depend on external dependencies
 
 Version 0.3.1 (2017.05.15)
 ==========================
