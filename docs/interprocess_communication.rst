@@ -20,18 +20,18 @@ communicate with the 32-bit library.
 
 .. autosummary::
 
-   msl.examples.loadlib.echo32
-   msl.examples.loadlib.echo64
-   msl.examples.loadlib.cpp32
-   msl.examples.loadlib.cpp64
-   msl.examples.loadlib.fortran32
-   msl.examples.loadlib.fortran64
-   msl.examples.loadlib.dotnet32
-   msl.examples.loadlib.dotnet64
-   msl.examples.loadlib.kernel32
-   msl.examples.loadlib.kernel64
-   msl.examples.loadlib.labview32
-   msl.examples.loadlib.labview64
+   ~msl.examples.loadlib.echo32
+   ~msl.examples.loadlib.echo64
+   ~msl.examples.loadlib.cpp32
+   ~msl.examples.loadlib.cpp64
+   ~msl.examples.loadlib.fortran32
+   ~msl.examples.loadlib.fortran64
+   ~msl.examples.loadlib.dotnet32
+   ~msl.examples.loadlib.dotnet64
+   ~msl.examples.loadlib.kernel32
+   ~msl.examples.loadlib.kernel64
+   ~msl.examples.loadlib.labview32
+   ~msl.examples.loadlib.labview64
 
 The following illustrates a minimal usage example. The **cpp_lib32.dll** file is a
 32-bit C++ library that cannot be loaded from a module that is running within a 64-bit Python
