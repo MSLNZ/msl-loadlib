@@ -17,19 +17,16 @@ import os
 import sys
 import shutil
 import subprocess
+try:
+    from urllib import urlopen  # Python 2
+except ImportError:
+    from urllib.request import urlopen
 
 try:
     from msl import loadlib
 except ImportError:
     sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..')))
     from msl import loadlib
-
-if loadlib.IS_PYTHON2:
-    from urllib import urlopen
-elif loadlib.IS_PYTHON3:
-    from urllib.request import urlopen
-else:
-    raise NotImplementedError('Python major version is not 2 or 3')
 
 
 def main(spec=None):

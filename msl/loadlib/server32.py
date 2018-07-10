@@ -14,18 +14,12 @@ try:
     import cPickle as pickle
 except ImportError:
     import pickle
+try:
+    from BaseHTTPServer import HTTPServer, BaseHTTPRequestHandler  # Python 2
+except ImportError:
+    from http.server import HTTPServer, BaseHTTPRequestHandler
 
-from msl.loadlib import LoadLibrary
-from msl.loadlib import IS_PYTHON2, IS_PYTHON3, SERVER_FILENAME, IS_WINDOWS
-
-if IS_PYTHON2:
-    from BaseHTTPServer import HTTPServer
-    from BaseHTTPServer import BaseHTTPRequestHandler
-elif IS_PYTHON3:
-    from http.server import HTTPServer
-    from http.server import BaseHTTPRequestHandler
-else:
-    raise NotImplementedError('Python major version is not 2 or 3')
+from . import LoadLibrary, SERVER_FILENAME, IS_WINDOWS
 
 
 class Server32(HTTPServer):

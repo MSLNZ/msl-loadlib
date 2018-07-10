@@ -8,8 +8,7 @@ import ctypes.util
 import logging
 import subprocess
 
-from msl.loadlib import utils
-from msl.loadlib import DEFAULT_EXTENSION
+from . import utils, DEFAULT_EXTENSION
 
 logger = logging.getLogger(__name__)
 

@@ -10,23 +10,16 @@ import sys
 import uuid
 import tempfile
 import subprocess
-
 try:
     import cPickle as pickle
 except ImportError:
     import pickle
+try:
+    from httplib import HTTPConnection, HTTPException  # Python 2
+except ImportError:
+    from http.client import HTTPConnection, HTTPException
 
-from msl.loadlib import utils
-from msl.loadlib import IS_PYTHON2, IS_PYTHON3, SERVER_FILENAME
-
-if IS_PYTHON2:
-    from httplib import HTTPConnection
-    from httplib import HTTPException
-elif IS_PYTHON3:
-    from http.client import HTTPConnection
-    from http.client import HTTPException
-else:
-    raise NotImplementedError('Python major version is not 2 or 3')
+from . import utils, SERVER_FILENAME
 
 
 class Client64(HTTPConnection):
