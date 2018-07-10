@@ -92,9 +92,9 @@ Multiply a 1D array by a number, see :meth:`~msl.examples.loadlib.cpp64.Cpp64.sc
    The :meth:`~msl.examples.loadlib.cpp64.Cpp64.scalar_multiply` function takes a pointer to an array as an input
    argument, see :ref:`cpp_lib.h <cpp-lib-header>`. One cannot pass pointers from :class:`~msl.loadlib.client64.Client64`
    to :class:`~msl.loadlib.server32.Server32` because a 64-bit process cannot share the same memory space as a
-   32-bit process. All of your 32-bit pointers must be created (using :mod:`ctypes`) in your class that is a
-   subclass of :class:`~msl.loadlib.server32.Server32` and only the value that is stored at that address can be
-   returned to :class:`~msl.loadlib.client64.Client64` for use in your 64-bit program.
+   32-bit process. All 32-bit pointers must be created (using :mod:`ctypes`) in the class that is a subclass of
+   :class:`~msl.loadlib.server32.Server32` and only the **value** that is stored at that address can be returned to
+   :class:`~msl.loadlib.client64.Client64` for use in the 64-bit program.
 
 .. code-block:: pycon
 
