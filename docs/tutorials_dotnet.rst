@@ -31,7 +31,7 @@ be loaded in a 64-bit Python interpreter:
    >>> from msl.examples.loadlib import EXAMPLES_DIR
    >>> IS_PYTHON_64BIT
    True
-   >>> net = LoadLibrary(EXAMPLES_DIR + '/dotnet_lib32', 'net')
+   >>> net = LoadLibrary(EXAMPLES_DIR + '/dotnet_lib32.dll', 'net')
    Traceback (most recent call last):
      File "<input>", line 1, in <module>
      File "D:\msl\loadlib\load_library.py", line 130, in __init__
@@ -44,7 +44,7 @@ However, the 64-bit version of the .NET library can be directly loaded in 64-bit
 
 .. code-block:: pycon
 
-   >>> net = LoadLibrary(EXAMPLES_DIR + '/dotnet_lib64', 'net')
+   >>> net = LoadLibrary(EXAMPLES_DIR + '/dotnet_lib64.dll', 'net')
    >>> net
    <LoadLibrary id=0x37c1da0 libtype=DotNet path=D:\msl\examples\loadlib\dotnet_lib64.dll>
    >>> net.lib.StringManipulation.reverse_string('Hello World!')
