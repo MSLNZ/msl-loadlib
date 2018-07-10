@@ -24,8 +24,8 @@ class Echo64(Client64):
 
     Parameters
     ----------
-    quiet : :obj:`bool`, optional
-        Whether to hide :obj:`sys.stdout` messages from the client and from the server.
+    quiet : :class:`bool`, optional
+        Whether to hide :data:`sys.stdout` messages from the client and from the server.
     """
     def __init__(self, quiet=False):
         Client64.__init__(self, module32='echo32', append_sys_path=os.path.dirname(__file__), quiet=quiet)
@@ -47,7 +47,7 @@ class Echo64(Client64):
         
         Returns
         -------
-        :obj:`tuple`
+        :class:`tuple`
             The `args` and `kwargs` that were returned from :meth:`~.echo32.Echo32.received_data`.
         """
         args32, kwargs32 = self.request32('received_data', *args, **kwargs)

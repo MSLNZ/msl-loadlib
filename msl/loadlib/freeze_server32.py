@@ -45,7 +45,7 @@ def main(spec=None):
     ----------
     spec : :class:`str`, optional
         If you want to freeze using a PyInstaller_ .spec file then you can specify the 
-        path to the .spec file. Default is :obj:`None`.    
+        path to the .spec file. Default is :data:`None`.
     """
     if loadlib.IS_PYTHON_64BIT:
         print('Must run {} using a 32-bit Python interpreter'.format(os.path.basename(__file__)))

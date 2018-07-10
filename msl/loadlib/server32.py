@@ -58,14 +58,14 @@ class Server32(HTTPServer):
 
             .. note::
                Since Java byte code is executed on the JVM_ it does not make sense to
-               use :class:`Serve32` for a Java ``.jar`` or ``.class`` file.
+               use :class:`Server32` for a Java ``.jar`` or ``.class`` file.
 
         host : :class:`str`
             The IP address of the server.
         port : :class:`int`
             The port to open on the server.
         quiet : :class:`bool`
-            Whether to hide :obj:`sys.stdout` messages from the server.
+            Whether to hide :data:`sys.stdout` messages from the server.
 
         Raises
         ------
@@ -82,7 +82,7 @@ class Server32(HTTPServer):
     def assembly(self):
         """
         Returns a reference to the `.NET Runtime Assembly <NET_>`_ object, *only if
-        the shared library is a .NET Framework*, otherwise returns :obj:`None`.
+        the shared library is a .NET Framework*, otherwise returns :data:`None`.
 
         .. tip::
            The `JetBrains dotPeek`_ program can be used to reliably decompile any
@@ -205,6 +205,6 @@ class RequestHandler(BaseHTTPRequestHandler):
         """
         Overrides: :meth:`~http.server.BaseHTTPRequestHandler.log_message`
 
-        Ignore all log messages from being displayed in :obj:`sys.stdout`.
+        Ignore all log messages from being displayed in :data:`sys.stdout`.
         """
         pass

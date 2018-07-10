@@ -22,12 +22,12 @@ class Fortran32(Server32):
 
     Parameters
     ----------
-    host : :obj:`str`
+    host : :class:`str`
         The IP address of the server.
-    port : :obj:`int`
+    port : :class:`int`
         The port to open on the server.
-    quiet : :obj:`bool`
-        Whether to hide :obj:`sys.stdout` messages from the server.
+    quiet : :class:`bool`
+        Whether to hide :data:`sys.stdout` messages from the server.
 
     Note
     ----
@@ -46,9 +46,9 @@ class Fortran32(Server32):
     def sum_8bit(self, a, b):
         """Add two 8-bit signed integers. 
         
-        Python only has one :obj:`int` data type to represent integer values. 
+        Python only has one :class:`int` data type to represent integer values.
         The :meth:`~.fortran32.Fortran32.sum_8bit` method converts the data types 
-        of `a` and `b` to be :obj:`ctypes.c_int8`.
+        of `a` and `b` to be :class:`ctypes.c_int8`.
 
         The corresponding FORTRAN code is
 
@@ -65,14 +65,14 @@ class Fortran32(Server32):
 
         Parameters
         ----------
-        a : :obj:`int`
+        a : :class:`int`
             The first 8-bit signed integer.
-        b : :obj:`int`
+        b : :class:`int`
             The second 8-bit signed integer.
 
         Returns
         -------
-        :obj:`int`
+        :class:`int`
             The sum of `a` and `b`.
         """
         ac = ctypes.c_int8(a)
@@ -83,9 +83,9 @@ class Fortran32(Server32):
     def sum_16bit(self, a, b):
         """Add two 16-bit signed integers
         
-        Python only has one :obj:`int` data type to represent integer values. 
+        Python only has one :class:`int` data type to represent integer values.
         The :meth:`~.fortran32.Fortran32.sum_16bit` method converts the data 
-        types of `a` and `b` to be :obj:`ctypes.c_int16`.
+        types of `a` and `b` to be :class:`ctypes.c_int16`.
 
         The corresponding FORTRAN code is
 
@@ -102,14 +102,14 @@ class Fortran32(Server32):
 
         Parameters
         ----------
-        a : :obj:`int`
+        a : :class:`int`
             The first 16-bit signed integer.
-        b : :obj:`int`
+        b : :class:`int`
             The second 16-bit signed integer.
 
         Returns
         -------
-        :obj:`int`
+        :class:`int`
             The sum of `a` and `b`.
         """
         ac = ctypes.c_int16(a)
@@ -120,9 +120,9 @@ class Fortran32(Server32):
     def sum_32bit(self, a, b):
         """Add two 32-bit signed integers. 
         
-        Python only has one :obj:`int` data type to represent integer values. 
+        Python only has one :class:`int` data type to represent integer values.
         The :meth:`~.fortran32.Fortran32.sum_32bit` method converts the data types 
-        of `a` and `b` to be :obj:`ctypes.c_int32`.
+        of `a` and `b` to be :class:`ctypes.c_int32`.
 
         The corresponding FORTRAN code is
 
@@ -139,14 +139,14 @@ class Fortran32(Server32):
 
         Parameters
         ----------
-        a : :obj:`int`
+        a : :class:`int`
             The first 32-bit signed integer.
-        b : :obj:`int`
+        b : :class:`int`
             The second 32-bit signed integer.
 
         Returns
         -------
-        :obj:`int`
+        :class:`int`
             The sum of `a` and `b`.
         """
         ac = ctypes.c_int32(a)
@@ -157,9 +157,9 @@ class Fortran32(Server32):
     def sum_64bit(self, a, b):
         """Add two 64-bit signed integers. 
         
-        Python only has one :obj:`int` data type to represent integer values. 
+        Python only has one :class:`int` data type to represent integer values.
         The :meth:`~.fortran32.Fortran32.sum_64bit` method converts the data types 
-        of `a` and `b` to be :obj:`ctypes.c_int64`.
+        of `a` and `b` to be :class:`ctypes.c_int64`.
 
         The corresponding FORTRAN code is
 
@@ -176,14 +176,14 @@ class Fortran32(Server32):
 
         Parameters
         ----------
-        a : :obj:`int`
+        a : :class:`int`
             The first 64-bit signed integer.
-        b : :obj:`int`
+        b : :class:`int`
             The second 64-bit signed integer.
 
         Returns
         -------
-        :obj:`int`
+        :class:`int`
             The sum of `a` and `b`.
         """
         ac = ctypes.c_int64(a)
@@ -209,14 +209,14 @@ class Fortran32(Server32):
 
         Parameters
         ----------
-        a : :obj:`float`
+        a : :class:`float`
             The first floating-point number.
-        b : :obj:`float`
+        b : :class:`float`
             The second floating-point number.
 
         Returns
         -------
-        :obj:`float`
+        :class:`float`
             The product of `a` and `b`.
         """
         ac = ctypes.c_float(a)
@@ -242,14 +242,14 @@ class Fortran32(Server32):
 
         Parameters
         ----------
-        a : :obj:`float`
+        a : :class:`float`
             The first double-precision number.
-        b : :obj:`float`
+        b : :class:`float`
             The second double-precision number.
 
         Returns
         -------
-        :obj:`float`
+        :class:`float`
             The product of `a` and `b`.
         """
         ac = ctypes.c_double(a)
@@ -276,12 +276,12 @@ class Fortran32(Server32):
 
         Parameters
         ----------
-        a : :obj:`float`
+        a : :class:`float`
             A double-precision number.
 
         Returns
         -------
-        :obj:`bool`
+        :class:`bool`
             Whether the value of `a` is > 0.
         """
         ac = ctypes.c_double(a)
@@ -311,17 +311,17 @@ class Fortran32(Server32):
 
         Parameters
         ----------
-        a : :obj:`int`
+        a : :class:`int`
             The first integer.
-        b : :obj:`int`
+        b : :class:`int`
             The second integer.
-        do_addition : :obj:`bool`
+        do_addition : :class:`bool`
             Whether to **add** the numbers.
 
         Returns
         -------
-        :obj:`int`
-            Either `a` + `b` if `do_addition` is :obj:`True` else `a` - `b`.
+        :class:`int`
+            Either `a` + `b` if `do_addition` is :data:`True` else `a` - `b`.
         """
         ac = ctypes.c_int32(a)
         bc = ctypes.c_int32(b)
@@ -357,12 +357,12 @@ class Fortran32(Server32):
 
         Parameters
         ----------
-        n : :obj:`int`
+        n : :class:`int`
             The integer to computer the factorial of. The maximum allowed value is 127.
 
         Returns
         -------
-        :obj:`float`
+        :class:`float`
             The factorial of `n`.
         """
         ac = ctypes.c_int8(n)
@@ -388,12 +388,12 @@ class Fortran32(Server32):
 
         Parameters
         ----------
-        data : :obj:`list` of :obj:`float`
+        data : :class:`list` of :class:`float`
             The data to compute the standard deviation of.
 
         Returns
         -------
-        :obj:`float`
+        :class:`float`
             The standard deviation of `data`.
         """
         n = len(data)
@@ -419,12 +419,12 @@ class Fortran32(Server32):
 
         Parameters
         ----------
-        x : :obj:`float`
+        x : :class:`float`
             The value to compute ``BESSEL_J0`` of.
 
         Returns
         -------
-        :obj:`float`
+        :class:`float`
             The value of ``BESSEL_J0(x)``.
         """
         xc = ctypes.c_double(x)
@@ -453,12 +453,12 @@ class Fortran32(Server32):
 
         Parameters
         ----------
-        original : :obj:`str`
+        original : :class:`str`
             The original string.
 
         Returns
         -------
-        :obj:`str`
+        :class:`str`
             The string reversed.
         """
         n = len(original)
@@ -490,14 +490,14 @@ class Fortran32(Server32):
 
         Parameters
         ----------
-        a1 : :obj:`list` of :obj:`float`
+        a1 : :class:`list` of :class:`float`
             The first array.
-        a2 : :obj:`list` of :obj:`float`
+        a2 : :class:`list` of :class:`float`
             The second array.
 
         Returns
         -------
-        :obj:`list` of :obj:`float`
+        :class:`list` of :class:`float`
             The element-wise addition of `a1` + `a2`.
         """
         n = len(a1)
@@ -540,14 +540,14 @@ class Fortran32(Server32):
 
         Parameters
         ----------
-        a1 : :obj:`list` of :obj:`list` of :obj:`float`
+        a1 : :class:`list` of :class:`list` of :class:`float`
             The first matrix.
-        a2 : :obj:`list` of :obj:`list` of :obj:`float`
+        a2 : :class:`list` of :class:`list` of :class:`float`
             The second matrix.
 
         Returns
         -------
-        :obj:`list` of :obj:`list` of :obj:`float`
+        :class:`list` of :class:`list` of :class:`float`
             The result of `a1` * `a2`.
         """
         nrows1 = ctypes.c_int32(len(a1))

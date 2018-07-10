@@ -35,7 +35,7 @@ class DotNet64(Client64):
 
         Returns
         -------
-        :obj:`list` of :obj:`str`
+        :class:`list` of :class:`str`
             The names of the classes that are available in :ref:`dotnet_lib32.dll <dotnet-lib>`.        
         """
         return self.request32('get_class_names')
@@ -47,14 +47,14 @@ class DotNet64(Client64):
 
         Parameters
         ----------
-        a : :obj:`int`
+        a : :class:`int`
             The first integer.
-        b : :obj:`int`
+        b : :class:`int`
             The second integer.
 
         Returns
         -------
-        :obj:`int`
+        :class:`int`
             The sum of `a` and `b`.
         """
         return self.request32('add_integers', a, b)
@@ -66,14 +66,14 @@ class DotNet64(Client64):
 
         Parameters
         ----------
-        a : :obj:`float`
+        a : :class:`float`
             The first number.
-        b : :obj:`float`
+        b : :class:`float`
             The second number.
 
         Returns
         -------
-        :obj:`float`:
+        :class:`float`:
             The quotient of `a` / `b`.
         """
         return self.request32('divide_floats', a, b)
@@ -85,14 +85,14 @@ class DotNet64(Client64):
 
         Parameters
         ----------
-        a : :obj:`float`
+        a : :class:`float`
             The first number.
-        b : :obj:`float`
+        b : :class:`float`
             The second number.
 
         Returns
         -------
-        :obj:`float`
+        :class:`float`
             The product of `a` * `b`.
         """
         return self.request32('multiply_doubles', a, b)
@@ -104,17 +104,17 @@ class DotNet64(Client64):
 
         Parameters
         ----------
-        a : :obj:`float`
+        a : :class:`float`
             The first double-precision number.
-        b : :obj:`float`
+        b : :class:`float`
             The second double-precision number.
-        do_addition : :obj:`bool`
+        do_addition : :class:`bool`
             Whether to **add** the numbers.
 
         Returns
         -------
-        :obj:`float`
-            Either `a` + `b` if `do_addition` is :obj:`True` else `a` - `b`.
+        :class:`float`
+            Either `a` + `b` if `do_addition` is :data:`True` else `a` - `b`.
         """
         return self.request32('add_or_subtract', a, b, do_addition)
 
@@ -125,14 +125,14 @@ class DotNet64(Client64):
 
         Parameters
         ----------
-        a : :obj:`float`
+        a : :class:`float`
             The scalar value.
-        xin : :obj:`list` of :obj:`float`
+        xin : :class:`list` of :class:`float`
             The array to modify.
 
         Returns
         -------
-        :obj:`list` of :obj:`float`
+        :class:`list` of :class:`float`
             A new array with each element in `xin` multiplied by `a`.
         """
         return self.request32('scalar_multiply', a, xin)
@@ -144,14 +144,14 @@ class DotNet64(Client64):
 
         Parameters
         ----------
-        a1 : :obj:`list` of :obj:`list` of :obj:`float`
+        a1 : :class:`list` of :class:`list` of :class:`float`
             The first matrix.
-        a2 : :obj:`list` of :obj:`list` of :obj:`float`
+        a2 : :class:`list` of :class:`list` of :class:`float`
             The second matrix.
 
         Returns
         -------
-        :obj:`list` of :obj:`list` of :obj:`float`
+        :class:`list` of :class:`list` of :class:`float`
              The result of `a1` * `a2`.
         """
         return self.request32('multiply_matrices', a1, a2)
@@ -163,12 +163,12 @@ class DotNet64(Client64):
 
         Parameters
         ----------
-        original : :obj:`str`
+        original : :class:`str`
             The original string.
 
         Returns
         -------
-        :obj:`str`
+        :class:`str`
             The string reversed.
         """
         return self.request32('reverse_string', original)
@@ -180,20 +180,20 @@ class DotNet64(Client64):
 
         Parameters
         ----------
-        a : :obj:`int`
+        a : :class:`int`
             An integer.
-        b : :obj:`int` 
+        b : :class:`int`
             An integer.
-        c : :obj:`int`
+        c : :class:`int`
             An integer.
-        d : :obj:`int`
+        d : :class:`int`
             An integer.
-        e : :obj:`int`
+        e : :class:`int`
             An integer.
 
         Returns
         -------
-        :obj:`int`
+        :class:`int`
             The sum of the input arguments.
         """
         return self.request32('add_multiple', a, b, c, d, e)
@@ -206,20 +206,20 @@ class DotNet64(Client64):
 
         Parameters
         ----------
-        a : :obj:`str`
+        a : :class:`str`
             A string.
-        b : :obj:`str`
+        b : :class:`str`
             A string.
-        c : :obj:`str`
+        c : :class:`str`
             A string.
-        d : :obj:`bool`
+        d : :class:`bool`
             Whether to include `e` in the concatenation.
-        e : :obj:`str`
+        e : :class:`str`
             A string.
 
         Returns
         -------
-        :obj:`str`
+        :class:`str`
             The strings concatenated together.
         """
         return self.request32('concatenate', a, b, c, d, e)

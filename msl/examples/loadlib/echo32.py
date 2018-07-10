@@ -22,12 +22,12 @@ class Echo32(Server32):
 
     Parameters
     ----------
-    host : :obj:`str`
+    host : :class:`str`
         The IP address of the server.
-    port : :obj:`int`
+    port : :class:`int`
         The port to open on the server.
-    quiet : :obj:`bool`
-        Whether to hide :obj:`sys.stdout` messages from the server.
+    quiet : :class:`bool`
+        Whether to hide :data:`sys.stdout` messages from the server.
 
     Note
     ----
@@ -56,7 +56,7 @@ class Echo32(Server32):
 
         Returns
         -------
-        :obj:`tuple`
+        :class:`tuple`
             The `args` and `kwargs` that were received.
         """
         if args and not self.quiet:
