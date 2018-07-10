@@ -1,74 +1,74 @@
-.. _tutorial_dummy:
+.. _tutorial_echo:
 
-==============================================
-Load a 32-bit *Dummy* library in 64-bit Python
-==============================================
+=================
+An *Echo* Example
+=================
 
 This example does not actually communicate with a 32-bit shared library but shows how Python data types
-are preserved when they are passed from the :class:`~msl.examples.loadlib.dummy64.Dummy64` client to the
-:class:`~msl.examples.loadlib.dummy32.Dummy32` server and back. The :class:`~msl.examples.loadlib.dummy32.Dummy32`
-server just returns a :py:class:`tuple` of the ``(*args, **kwargs)`` that it received back to the
-:class:`~msl.examples.loadlib.dummy64.Dummy64` client.
+are preserved when they are passed from the :class:`~msl.examples.loadlib.echo64.Echo64` client to the
+:class:`~msl.examples.loadlib.echo32.Echo32` server and back. The :class:`~msl.examples.loadlib.echo32.Echo32`
+server just returns a :class:`tuple` of the ``(*args, **kwargs)`` that it received back to the
+:class:`~msl.examples.loadlib.echo64.Echo64` client.
 
 The following is a script that illustrates that the data types are preserved:
 
 .. code-block:: python
 
-   from msl.examples.loadlib import Dummy64
+   from msl.examples.loadlib import Echo64
 
-   d = Dummy64()
-   d.send_data()
-   d.send_data(True)
+   echo = Echo64()
+   echo.send_data()
+   echo.send_data(True)
 
-   d.send_data([1, 2, 3, 4, 5, 6])
-   d.send_data(data='my string')
-   d.send_data(x=[1.2, 3.4, 6.1], y=[43.2, 23.6, 12.7])
-   d.send_data(1.12345, {'my list': [1, 2, 3, 4]}, 0.2j, range(10), x=True, y='hello world!')
+   echo.send_data([1, 2, 3, 4, 5, 6])
+   echo.send_data(data='my string')
+   echo.send_data(x=[1.2, 3.4, 6.1], y=[43.2, 23.6, 12.7])
+   echo.send_data(1.12345, {'my list': [1, 2, 3, 4]}, 0.2j, range(10), x=True, y='hello world!')
 
 Running this script would create the following output
 
 .. note::
-   The black text corresponds to the :class:`~msl.examples.loadlib.dummy64.Dummy64` :py:func:`print`
-   statements and the red text to the :class:`~msl.examples.loadlib.dummy32.Dummy32` :py:func:`print`
+   The black text corresponds to the :class:`~msl.examples.loadlib.echo64.Echo64` :func:`print`
+   statements and the red text to the :class:`~msl.examples.loadlib.echo32.Echo32` :func:`print`
    statements.
 
-.. image:: _static/dummy_output.png
+.. image:: _static/echo_output.png
 
 Observant readers will notice that the 32-bit server indicated that it is
-*Serving cpp_lib32.dll on http://127.0.0.1:2521*. Even though this is a *dummy* example, a library must
+*Serving cpp_lib32.dll on http://127.0.0.1:2521*. Even though this is an *echo* example, a library must
 still be loaded even though it is not being called. The *cpp_lib32.dll* library is loaded to satisfy
 this requirement.
 
-Or, by using an interactive console, create a :class:`~msl.examples.loadlib.dummy64.Dummy64` object:
+Or, by using an interactive console, create a :class:`~msl.examples.loadlib.echo64.Echo64` object:
 
-.. code-block:: python
+.. code-block:: pycon
 
-   >>> from msl.examples.loadlib import Dummy64
-   >>> d = Dummy64()
+   >>> from msl.examples.loadlib import Echo64
+   >>> echo = Echo64()
    Client running on 3.5.2 |Continuum Analytics, Inc.| (default, Jul  5 2016, 11:41:13) [MSC v.1900 64 bit (AMD64)]
 
-Send a boolean as an argument, see :meth:`~msl.examples.loadlib.dummy64.Dummy64.send_data`:
+Send a boolean as an argument, see :meth:`~msl.examples.loadlib.echo64.Echo64.send_data`:
 
-.. code-block:: python
+.. code-block:: pycon
 
-   >>> result = d.send_data(True)
+   >>> result = echo.send_data(True)
    Are the 64- and 32-bit arguments equal? True
        <class 'bool'> True
 
-Send a boolean as a keyword argument, see :meth:`~msl.examples.loadlib.dummy64.Dummy64.send_data`:
+Send a boolean as a keyword argument, see :meth:`~msl.examples.loadlib.echo64.Echo64.send_data`:
 
-.. code-block:: python
+.. code-block:: pycon
 
-   >>> result = d.send_data(boolean=True)
+   >>> result = echo.send_data(boolean=True)
    Are the 64- and 32-bit keyword arguments equal? True
        boolean: <class 'bool'> True
 
 Send multiple data types as arguments and as keyword arguments, see
-:meth:`~msl.examples.loadlib.dummy64.Dummy64.send_data`:
+:meth:`~msl.examples.loadlib.echo64.Echo64.send_data`:
 
-.. code-block:: python
+.. code-block:: pycon
 
-   >>> result = d.send_data(1.2, {'my list':[1, 2, 3]}, 0.2j, range(10), x=True, y='hello world!')
+   >>> result = echo.send_data(1.2, {'my list':[1, 2, 3]}, 0.2j, range(10), x=True, y='hello world!')
    Are the 64- and 32-bit arguments equal? True
         <class 'float'> 1.2
         <class 'dict'> {'my list': [1, 2, 3]}
@@ -81,9 +81,9 @@ Send multiple data types as arguments and as keyword arguments, see
 Shutdown the server when you are done communicating with the 32-bit library, see
 :meth:`~msl.loadlib.client64.Client64.shutdown_server32`:
 
-.. code-block:: python
+.. code-block:: pycon
 
-   >>> d.shutdown_server32()
+   >>> echo.shutdown_server32()
    Python 3.5.2 |Continuum Analytics, Inc.| (default, Jul  5 2016, 11:45:57) [MSC v.1900 32 bit (Intel)]
    Serving cpp_lib32.dll on http://127.0.0.1:25521
    The 32-bit server received these args:
@@ -106,7 +106,7 @@ Shutdown the server when you are done communicating with the 32-bit library, see
    Stopped http://127.0.0.1:25521
 
 .. note::
-   The server will automatically shutdown when the :class:`~msl.examples.loadlib.dummy64.Dummy64`
+   The server will automatically shutdown when the :class:`~msl.examples.loadlib.echo64.Echo64`
    object gets destroyed (as it did in the example script above). When using a subclass of
    :class:`~msl.loadlib.client64.Client64` in a script, the :meth:`__del__ <object.__del__>` method
    gets called automatically when the instance is about to be destroyed (and the reference count

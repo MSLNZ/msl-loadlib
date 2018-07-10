@@ -20,12 +20,12 @@ class DotNet32(Server32):
 
     Parameters
     ----------
-    host : :obj:`str`
+    host : :class:`str`
         The IP address of the server.
-    port : :obj:`int`
+    port : :class:`int`
         The port to open on the server.
-    quiet : :obj:`bool`
-        Whether to hide :obj:`sys.stdout` messages from the server.
+    quiet : :class:`bool`
+        Whether to hide :data:`sys.stdout` messages from the server.
 
     Note
     ----
@@ -49,7 +49,7 @@ class DotNet32(Server32):
         
         Returns
         -------
-        :obj:`list` of :obj:`str`
+        :class:`list` of :class:`str`
             The names of the classes that are available in :ref:`dotnet_lib32.dll <dotnet-lib>`.        
         """
         return ';'.join(str(name) for name in self.assembly.GetTypes()).split(';')
@@ -70,14 +70,14 @@ class DotNet32(Server32):
 
         Parameters
         ----------
-        a : :obj:`int`
+        a : :class:`int`
             The first integer.
-        b : :obj:`int`
+        b : :class:`int`
             The second integer.
 
         Returns
         -------
-        :obj:`int`
+        :class:`int`
             The sum of `a` and `b`.
         """
         return self.BasicMath.add_integers(a, b)
@@ -98,14 +98,14 @@ class DotNet32(Server32):
 
         Parameters
         ----------
-        a : :obj:`float`
+        a : :class:`float`
             The first number.
-        b : :obj:`float`
+        b : :class:`float`
             The second number.
 
         Returns
         -------
-        :obj:`float`:
+        :class:`float`:
             The quotient of `a` / `b`.
         """
         return self.BasicMath.divide_floats(a, b)
@@ -126,14 +126,14 @@ class DotNet32(Server32):
 
         Parameters
         ----------
-        a : :obj:`float`
+        a : :class:`float`
             The first number.
-        b : :obj:`float`
+        b : :class:`float`
             The second number.
 
         Returns
         -------
-        :obj:`float`
+        :class:`float`
             The product of `a` * `b`.
         """
         return self.BasicMath.multiply_doubles(a, b)
@@ -161,17 +161,17 @@ class DotNet32(Server32):
 
         Parameters
         ----------
-        a : :obj:`float`
+        a : :class:`float`
             The first double-precision number.
-        b : :obj:`float`
+        b : :class:`float`
             The second double-precision number.
-        do_addition : :obj:`bool`
+        do_addition : :class:`bool`
             Whether to **add** the numbers.
 
         Returns
         -------
-        :obj:`float`
-            Either `a` + `b` if `do_addition` is :obj:`True` else `a` - `b`.
+        :class:`float`
+            Either `a` + `b` if `do_addition` is :data:`True` else `a` - `b`.
         """
         return self.BasicMath.add_or_subtract(a, b, do_addition)
 
@@ -197,14 +197,14 @@ class DotNet32(Server32):
 
         Parameters
         ----------
-        a : :obj:`float`
+        a : :class:`float`
             The scalar value.
-        xin : :obj:`list` of :obj:`float`
+        xin : :class:`list` of :class:`float`
             The array to modify.
 
         Returns
         -------
-        :obj:`list` of :obj:`float`
+        :class:`list` of :class:`float`
             A new array with each element in `xin` multiplied by `a`.
         """
         ret = self.ArrayManipulation.scalar_multiply(a, xin)
@@ -259,14 +259,14 @@ class DotNet32(Server32):
 
         Parameters
         ----------
-        a1 : :obj:`list` of :obj:`list` of :obj:`float`
+        a1 : :class:`list` of :class:`list` of :class:`float`
             The first matrix.
-        a2 : :obj:`list` of :obj:`list` of :obj:`float`
+        a2 : :class:`list` of :class:`list` of :class:`float`
             The second matrix.
 
         Returns
         -------
-        :obj:`list` of :obj:`list` of :obj:`float`
+        :class:`list` of :class:`list` of :class:`float`
              The result of `a1` * `a2`.
         """
         # System is part of the clr package from Python for .NET.
@@ -315,12 +315,12 @@ class DotNet32(Server32):
 
         Parameters
         ----------
-        original : :obj:`str`
+        original : :class:`str`
             The original string.
 
         Returns
         -------
-        :obj:`str`
+        :class:`str`
             The string reversed.
         """
         return self.lib.StringManipulation.reverse_string(original)
@@ -341,20 +341,20 @@ class DotNet32(Server32):
 
         Parameters
         ----------
-        a : :obj:`int`
+        a : :class:`int`
             An integer.
-        b : :obj:`int` 
+        b : :class:`int`
             An integer.
-        c : :obj:`int`
+        c : :class:`int`
             An integer.
-        d : :obj:`int`
+        d : :class:`int`
             An integer.
-        e : :obj:`int`
+        e : :class:`int`
             An integer.
 
         Returns
         -------
-        :obj:`int`
+        :class:`int`
             The sum of the input arguments.
         """
         return self.lib.StaticClass.GetMethod('add_multiple').Invoke(None, [a, b, c, d, e])
@@ -381,20 +381,20 @@ class DotNet32(Server32):
 
         Parameters
         ----------
-        a : :obj:`str`
+        a : :class:`str`
             A string.
-        b : :obj:`str`
+        b : :class:`str`
             A string.
-        c : :obj:`str`
+        c : :class:`str`
             A string.
-        d : :obj:`bool`
+        d : :class:`bool`
             Whether to include `e` in the concatenation.
-        e : :obj:`str`
+        e : :class:`str`
             A string.
 
         Returns
         -------
-        :obj:`str`
+        :class:`str`
             The strings concatenated together.
         """
         return self.lib.StaticClass.GetMethod('concatenate').Invoke(None, [a, b, c, d, e])

@@ -20,18 +20,18 @@ communicate with the 32-bit library.
 
 .. autosummary::
 
-   msl.examples.loadlib.dummy32
-   msl.examples.loadlib.dummy64
-   msl.examples.loadlib.cpp32
-   msl.examples.loadlib.cpp64
-   msl.examples.loadlib.fortran32
-   msl.examples.loadlib.fortran64
-   msl.examples.loadlib.dotnet32
-   msl.examples.loadlib.dotnet64
-   msl.examples.loadlib.kernel32
-   msl.examples.loadlib.kernel64
-   msl.examples.loadlib.labview32
-   msl.examples.loadlib.labview64
+   ~msl.examples.loadlib.echo32
+   ~msl.examples.loadlib.echo64
+   ~msl.examples.loadlib.cpp32
+   ~msl.examples.loadlib.cpp64
+   ~msl.examples.loadlib.fortran32
+   ~msl.examples.loadlib.fortran64
+   ~msl.examples.loadlib.dotnet32
+   ~msl.examples.loadlib.dotnet64
+   ~msl.examples.loadlib.kernel32
+   ~msl.examples.loadlib.kernel64
+   ~msl.examples.loadlib.labview32
+   ~msl.examples.loadlib.labview64
 
 The following illustrates a minimal usage example. The **cpp_lib32.dll** file is a
 32-bit C++ library that cannot be loaded from a module that is running within a 64-bit Python
@@ -68,7 +68,7 @@ preserved (since they are ultimately parsed from the command line). Therefore, a
 each value will be of type :class:`str` at the constructor of the :class:`~msl.loadlib.server32.Server32`
 subclass. You must convert each value to the appropriate data type. This ``**kwargs`` variable
 is the only variable that the data type is not preserved for the client-server protocol (see, the
-`"Dummy" example <tutorials_dummy.html>`_ that shows that data types are preserved between client-server
+`"Echo" example <tutorials_echo.html>`_ that shows that data types are preserved between client-server
 method calls).
 
 **MyClient** is a subclass of :class:`~msl.loadlib.client64.Client64` which sends a request to
@@ -83,7 +83,7 @@ request and sends the response back to **MyClient**.
         """Send a request to 'MyServer' to execute the 'add' method and get the response."""
 
         def __init__(self):
-            # Use the default '127.0.0.1' address to start the 'my_server.py' module
+            # Specify the name of the Python module to execute on the 32-bit server, i.e., 'my_server.py'
             Client64.__init__(self, module32='my_server')
 
         def add(self, a, b):
@@ -96,7 +96,7 @@ compiled in different programming languages or using different calling conventio
 
 .. toctree::
 
-   "Dummy" <tutorials_dummy>
+   "Echo" <tutorials_echo>
    C++ <tutorials_cpp>
    FORTRAN <tutorials_fortran>
    Microsoft .NET Framework <tutorials_dotnet>

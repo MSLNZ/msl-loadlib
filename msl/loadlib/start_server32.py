@@ -26,7 +26,7 @@ def main():
     Parses the command-line arguments to run a Python module on a 32-bit server
     to host a 32-bit library. To see the list of command-line arguments that are 
     allowed, run the executable with the ``--help`` flag (or click here_ to view
-    the source code of the :obj:`argparse.ArgumentParser` implementation).
+    the source code of the :class:`argparse.ArgumentParser` implementation).
 
     .. _here: http://msl-loadlib.readthedocs.io/en/latest/_modules/msl/loadlib/start_server32.html#main
     """

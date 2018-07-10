@@ -41,9 +41,9 @@ class LoadLibrary(object):
 
                 1. assume that a full or a relative (to the current working directory)
                    path is specified,
-                2. use :obj:`ctypes.util.find_library` to find the shared library file,
-                3. search :obj:`sys.path`, then
-                4. search :obj:`os.environ['PATH'] <os.environ>` to find the shared library.
+                2. use :func:`ctypes.util.find_library` to find the shared library file,
+                3. search :data:`sys.path`, then
+                4. search :data:`os.environ['PATH'] <os.environ>` to find the shared library.
 
         libtype : :class:`str`, optional
             The library type. The following values are currently supported:
@@ -249,7 +249,7 @@ class LoadLibrary(object):
     def assembly(self):
         """
         Returns a reference to the `.NET Runtime Assembly <NET_>`_ object, *only if
-        the shared library is a .NET Framework*, otherwise returns :obj:`None`.
+        the shared library is a .NET Framework*, otherwise returns :data:`None`.
 
         .. tip::
            The `JetBrains dotPeek`_ program can be used to reliably decompile any
@@ -264,7 +264,7 @@ class LoadLibrary(object):
     def gateway(self):
         """
         Returns the :class:`~py4j.java_gateway.JavaGateway` object, *only if
-        the shared library is a Java archive*, otherwise returns :obj:`None`.
+        the shared library is a Java archive*, otherwise returns :data:`None`.
         """
         return self._gateway
 

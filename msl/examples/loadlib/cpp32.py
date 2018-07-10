@@ -21,12 +21,12 @@ class Cpp32(Server32):
 
     Parameters
     ----------
-    host : :obj:`str`
+    host : :class:`str`
         The IP address of the server.
-    port : :obj:`int`
+    port : :class:`int`
         The port to open on the server.
-    quiet : :obj:`bool`
-        Whether to hide :obj:`sys.stdout` messages from the server.
+    quiet : :class:`bool`
+        Whether to hide :data:`sys.stdout` messages from the server.
 
     Note
     ----
@@ -57,14 +57,14 @@ class Cpp32(Server32):
 
         Parameters
         ----------
-        a : :obj:`int`
+        a : :class:`int`
             The first integer.
-        b : :obj:`int`
+        b : :class:`int`
             The second integer.
 
         Returns
         -------
-        :obj:`int`
+        :class:`int`
             The sum of `a` and `b`.
         """
         return self.lib.add(ctypes.c_int32(a), ctypes.c_int32(b))
@@ -84,14 +84,14 @@ class Cpp32(Server32):
 
         Parameters
         ----------
-        a : :obj:`float`
+        a : :class:`float`
             The first floating-point number.
-        b : :obj:`float`
+        b : :class:`float`
             The second floating-point number.
 
         Returns
         -------
-        :obj:`float`
+        :class:`float`
             The difference between `a` and `b`.
         """
         self.lib.subtract.restype = ctypes.c_float
@@ -116,17 +116,17 @@ class Cpp32(Server32):
 
         Parameters
         ----------
-        a : :obj:`float`
+        a : :class:`float`
             The first double-precision number.
-        b : :obj:`float`
+        b : :class:`float`
             The second double-precision number.
-        do_addition : :obj:`bool`
+        do_addition : :class:`bool`
             Whether to **add** the numbers.
 
         Returns
         -------
-        :obj:`float`
-            Either `a` + `b` if `do_addition` is :obj:`True` else `a` - `b`.
+        :class:`float`
+            Either `a` + `b` if `do_addition` is :data:`True` else `a` - `b`.
         """
         self.lib.add_or_subtract.restype = ctypes.c_double
         return self.lib.add_or_subtract(ctypes.c_double(a), ctypes.c_double(b), do_addition)
@@ -148,14 +148,14 @@ class Cpp32(Server32):
 
         Parameters
         ----------
-        a : :obj:`float`
+        a : :class:`float`
             The scalar value.
-        xin : :obj:`list` of :obj:`float`
+        xin : :class:`list` of :class:`float`
             The array to modify.
 
         Returns
         -------
-        :obj:`list` of :obj:`float`
+        :class:`list` of :class:`float`
             A new array with each element in `xin` multiplied by `a`.
         """
         n = len(xin)
@@ -189,12 +189,12 @@ class Cpp32(Server32):
 
         Parameters
         ----------
-        original : :obj:`str`
+        original : :class:`str`
             The original string.
 
         Returns
         -------
-        :obj:`str`
+        :class:`str`
             The string reversed.
         """
         n = len(original)
@@ -230,12 +230,12 @@ class Cpp32(Server32):
 
         Parameters
         ----------
-        original : :obj:`str`
+        original : :class:`str`
             The original string.
 
         Returns
         -------
-        :obj:`str`
+        :class:`str`
             The string reversed.
         """
         n = len(original)

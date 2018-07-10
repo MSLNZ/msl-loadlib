@@ -12,7 +12,7 @@ by a 32-bit Python server, :mod:`.labview32`. A 64-bit process cannot load a
 32-bit library and therefore `inter-process communication <ipc_>`_ is used to
 interact with a 32-bit library from a 64-bit process.
 
-:class:`~.labview64.Labview64` is the 64-bit client and :class:`~.labview.Labview32`
+:class:`~.labview64.Labview64` is the 64-bit client and :class:`~.labview32.Labview32`
 is the 32-bit server for `inter-process communication <ipc_>`_.
 
 .. _ipc: https://en.wikipedia.org/wiki/Inter-process_communication

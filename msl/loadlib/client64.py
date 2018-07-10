@@ -48,23 +48,23 @@ class Client64(HTTPConnection):
         host : :class:`str`, optional
             The IP address of the 32-bit server. Default is ``'127.0.0.1'``.
         port : :class:`int`, optional
-            The port to open on the 32-bit server. Default is :obj:`None`, which means
+            The port to open on the 32-bit server. Default is :data:`None`, which means
             to automatically find a port that is available.
         timeout : :class:`float`, optional
             The maximum number of seconds to wait to establish a connection to the
             32-bit server. Default is 10 seconds.
         quiet : :class:`bool`, optional
-            Whether to hide :obj:`sys.stdout` messages from the 32-bit server.
-            Default is :obj:`True`.
+            Whether to hide :data:`sys.stdout` messages from the 32-bit server.
+            Default is :data:`True`.
         append_sys_path : :class:`str` or :class:`list` of :class:`str`, optional
-            Append path(s) to the 32-bit server's :obj:`sys.path` variable. The value of
-            :obj:`sys.path` from the 64-bit process is automatically included,
+            Append path(s) to the 32-bit server's :data:`sys.path` variable. The value of
+            :data:`sys.path` from the 64-bit process is automatically included,
             i.e., ``sys.path(32bit) = sys.path(64bit) + append_sys_path``
-            Default is :obj:`None`.
+            Default is :data:`None`.
         append_environ_path : :class:`str` or :class:`list` of :class:`str`, optional
-            Append path(s) to the 32-bit server's :obj:`os.environ['PATH'] <os.environ>`
+            Append path(s) to the 32-bit server's :data:`os.environ['PATH'] <os.environ>`
             variable. This can be useful if the library that is being loaded requires
-            additional libraries that must be available on ``PATH``. Default is :obj:`None`.
+            additional libraries that must be available on ``PATH``. Default is :data:`None`.
         **kwargs
             Keyword arguments that will be passed to the :class:`~.server32.Server32`
             subclass. The data type of each value is not preserved. It will be a string
@@ -77,7 +77,7 @@ class Client64(HTTPConnection):
         specify the folder where `module32` is located by passing a value to the
         `append_sys_path` parameter. Using the `append_sys_path` option also allows
         for any other modules that `module32` may depend on to also be included
-        in :obj:`sys.path` so that those modules can be imported when `module32`
+        in :data:`sys.path` so that those modules can be imported when `module32`
         is imported.
 
         Raises

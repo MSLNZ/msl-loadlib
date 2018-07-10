@@ -35,14 +35,14 @@ class Cpp64(Client64):
 
         Parameters
         ----------
-        a : :obj:`int`
+        a : :class:`int`
             The first integer.
-        b : :obj:`int`
+        b : :class:`int`
             The second integer.
 
         Returns
         -------
-        :obj:`int`
+        :class:`int`
             The sum of `a` and `b`.
         """
         return self.request32('add', a, b)
@@ -54,14 +54,14 @@ class Cpp64(Client64):
 
         Parameters
         ----------
-        a : :obj:`float`
+        a : :class:`float`
             The first floating-point number.
-        b : :obj:`float`
+        b : :class:`float`
             The second floating-point number.
 
         Returns
         -------
-        :obj:`float`
+        :class:`float`
             The difference between `a` and `b`.
         """
         return self.request32('subtract', a, b)
@@ -73,17 +73,17 @@ class Cpp64(Client64):
 
         Parameters
         ----------
-        a : :obj:`float`
+        a : :class:`float`
             The first floating-point number.
-        b : :obj:`float`
+        b : :class:`float`
             The second floating-point number.
-        do_addition : :obj:`bool`
+        do_addition : :class:`bool`
             Whether to **add** the numbers.
 
         Returns
         -------
-        :obj:`float`
-            Either `a` + `b` if `do_addition` is :obj:`True` else `a` - `b`.
+        :class:`float`
+            Either `a` + `b` if `do_addition` is :data:`True` else `a` - `b`.
         """
         return self.request32('add_or_subtract', a, b, do_addition)
 
@@ -94,14 +94,14 @@ class Cpp64(Client64):
 
         Parameters
         ----------
-        a : :obj:`float`
+        a : :class:`float`
             The scalar value.
-        xin : :obj:`list` of :obj:`float`
+        xin : :class:`list` of :class:`float`
             The array to modify.
 
         Returns
         -------
-        :obj:`list` of :obj:`float`
+        :class:`list` of :class:`float`
             A new array with each element in `xin` multiplied by `a`.
         """
         return self.request32('scalar_multiply', a, xin)
@@ -116,12 +116,12 @@ class Cpp64(Client64):
 
         Parameters
         ----------
-        original : :obj:`str`
+        original : :class:`str`
             The original string.
 
         Returns
         -------
-        :obj:`str`
+        :class:`str`
             The string reversed.
         """
         return self.request32('reverse_string_v1', original)
@@ -136,12 +136,12 @@ class Cpp64(Client64):
 
         Parameters
         ----------
-        original : :obj:`str`
+        original : :class:`str`
             The original string.
 
         Returns
         -------
-        :obj:`str`
+        :class:`str`
             The string reversed.
         """
         return self.request32('reverse_string_v2', original)

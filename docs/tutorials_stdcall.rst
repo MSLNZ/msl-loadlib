@@ -13,7 +13,7 @@ module that is run by a 64-bit Python interpreter by using `inter-process commun
 The following shows that the `kernel32 <kernel32_>`_ library cannot be loaded in a 64-bit
 Python interpreter:
 
-.. code-block:: python
+.. code-block:: pycon
 
    >>> from msl.loadlib import LoadLibrary, IS_PYTHON_64BIT
    >>> IS_PYTHON_64BIT
@@ -30,7 +30,7 @@ Python interpreter:
 Instead, create a :class:`~msl.examples.loadlib.kernel64.Kernel64` client to communicate with the
 32-bit `kernel32 <kernel32_>`_ library:
 
-.. code-block:: python
+.. code-block:: pycon
 
    >>> from msl.examples.loadlib import Kernel64
    >>> k = Kernel64()
@@ -42,14 +42,14 @@ Instead, create a :class:`~msl.examples.loadlib.kernel64.Kernel64` client to com
 Call the library to get the current date and time, see
 :func:`~msl.examples.loadlib.kernel64.Kernel64.get_local_time`:
 
-.. code-block:: python
+.. code-block:: pycon
 
    >>> k.get_local_time()
    datetime.datetime(2017, 2, 3, 16, 37, 5, 351000)
 
 Shutdown the server, see :meth:`~msl.loadlib.client64.Client64.shutdown_server32`:
 
-.. code-block:: python
+.. code-block:: pycon
 
    >>> k.shutdown_server32()
 

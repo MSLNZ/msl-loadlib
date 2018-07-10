@@ -21,9 +21,6 @@ class ApiDocs(Command):
         pass
 
     def run(self):
-        import sphinx
-        from sphinx.apidoc import main
-
         command = [
             None,  # in Sphinx < 1.7.0 the first command-line argument was parsed, in 1.7.0 it became argv[1:]
             '--force',  # overwrite existing files
@@ -33,7 +30,11 @@ class ApiDocs(Command):
             'msl',  # the path to the Python package to document
         ]
 
-        if sphinx.version_info[:2] >= (1, 7):
+        import sphinx
+        if sphinx.version_info[:2] < (1, 7):
+            from sphinx.apidoc import main
+        else:
+            from sphinx.ext.apidoc import main  # Sphinx also changed the location of apidoc.main
             command.pop(0)
 
         main(command)
@@ -67,9 +68,9 @@ class BuildDocs(Command):
         ]
 
         if sphinx.version_info[:2] < (1, 7):
-            from sphinx import build_main  # Sphinx also changed the location of build_main
+            from sphinx import build_main
         else:
-            from sphinx.cmd.build import build_main
+            from sphinx.cmd.build import build_main  # Sphinx also changed the location of build_main
             command.pop(0)
 
         build_main(command)

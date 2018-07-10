@@ -3,7 +3,7 @@
 Load a library
 ==============
 
-If you are loading a 32-bit library in to 32-bit Python, or a 64-bit library in to 64-bit Python
+If you are loading a 32-bit library in 32-bit Python, or a 64-bit library in 64-bit Python,
 then you can directly load the library using :class:`~msl.loadlib.load_library.LoadLibrary`.
 
 .. note::
@@ -24,24 +24,25 @@ The :ref:`Java <java-lib>` libraries are platform and bitness independent since 
 
 The first step is to import the :class:`~msl.loadlib.load_library.LoadLibrary` class
 
-.. code:: python
+.. code-block:: pycon
 
    >>> from msl.loadlib import LoadLibrary
 
 and the directory where the example libraries are located
 
-.. code:: python
+.. code-block:: pycon
 
    >>> from msl.examples.loadlib import EXAMPLES_DIR
 
-If the file extension is not included then a default extension, ``.dll`` (Windows) or ``.so`` (Linux), is used.
+.. tip::
+   If the file extension is not specified then a default extension, ``.dll`` (Windows) or ``.so`` (Linux), is used.
 
 C++
 ---
 Load a 64-bit C++ library in 64-bit Python, see :ref:`here <cpp-lib>` for the source code.
 *To load the 32-bit version in 32-bit Python use* ``'cpp_lib32'``.
 
-.. code:: python
+.. code-block:: pycon
 
    >>> cpp = LoadLibrary(EXAMPLES_DIR + '/cpp_lib64')
    >>> cpp
@@ -51,7 +52,7 @@ Load a 64-bit C++ library in 64-bit Python, see :ref:`here <cpp-lib>` for the so
 
 Call the ``add`` function that calculates the sum of two integers
 
-.. code:: python
+.. code-block:: pycon
 
    >>> cpp.lib.add(1, 2)
    3
@@ -61,7 +62,7 @@ FORTRAN
 Load a 64-bit FORTRAN library in 64-bit Python, see :ref:`here <fortran-lib>` for the source code.
 *To load the 32-bit version in 32-bit Python use* ``'fortran_lib32'``.
 
-.. code:: python
+.. code-block:: pycon
 
    >>> fortran = LoadLibrary(EXAMPLES_DIR + '/fortran_lib64')
    >>> fortran
@@ -72,6 +73,8 @@ Load a 64-bit FORTRAN library in 64-bit Python, see :ref:`here <fortran-lib>` fo
 Call the ``factorial`` function. With a FORTRAN library you must pass values by reference using :mod:`ctypes`,
 and, since the returned value is not of type ``int`` we must configure :mod:`ctypes` for a value of type
 ``double`` to be returned
+
+.. code-block:: pycon
 
    >>> from ctypes import byref, c_int, c_double
    >>> fortran.lib.factorial.restype = c_double
@@ -84,7 +87,7 @@ Load a 64-bit C# library (a .NET Framework) in 64-bit Python, see :ref:`here <do
 for the source code. Include the ``'net'`` argument to indicate that the ``.dll`` file is for
 the .NET Framework. *To load the 32-bit version in 32-bit Python use* ``'dotnet_lib32.dll'``.
 
-.. code:: python
+.. code-block:: pycon
 
    >>> net = LoadLibrary(EXAMPLES_DIR + '/dotnet_lib64.dll', 'net')
    >>> net
@@ -98,7 +101,7 @@ The :ref:`dotnet_lib64 <dotnet-lib>` library contains a reference to the ``DotNe
 (which is a C# namespace), an instance of the ``StringManipulation`` class and a reference to the
 ``StaticClass`` class
 
-.. code:: python
+.. code-block:: pycon
 
    >>> for item in dir(net.lib):
    ...     if not item.startswith('_'):
@@ -111,12 +114,16 @@ The :ref:`dotnet_lib64 <dotnet-lib>` library contains a reference to the ``DotNe
 Create an instance of the ``BasicMath`` class in the ``DotNetMSL`` namespace and call the
 ``multiply_doubles`` method
 
+.. code-block:: pycon
+
    >>> bm = net.lib.DotNetMSL.BasicMath()
    >>> bm.multiply_doubles(2.3, 5.6)
    12.879999999999999
 
 Create an instance of the ``ArrayManipulation`` class in the ``DotNetMSL`` namespace and call the
 ``scalar_multiply`` method
+
+.. code-block:: pycon
 
    >>> am = net.lib.DotNetMSL.ArrayManipulation()
    >>> values = am.scalar_multiply(2., [1., 2., 3., 4., 5.])
@@ -127,14 +134,14 @@ Create an instance of the ``ArrayManipulation`` class in the ``DotNetMSL`` names
 
 Use the ``reverse_string`` method in the ``StringManipulation`` class to reverse a string
 
-.. code:: python
+.. code-block:: pycon
 
    >>> net.lib.StringManipulation.reverse_string('abcdefghijklmnopqrstuvwxyz')
    'zyxwvutsrqponmlkjihgfedcba'
 
 View the static methods in the ``StaticClass`` class
 
-.. code:: python
+.. code-block:: pycon
 
    >>> for method in net.lib.StaticClass.GetMethods():
    ...     print(method)
@@ -148,7 +155,7 @@ View the static methods in the ``StaticClass`` class
 
 Use the static ``add_multiple`` method in the ``StaticClass`` class to add five integers
 
-.. code:: python
+.. code-block:: pycon
 
    >>> net.lib.StaticClass.GetMethod('add_multiple').Invoke(None, [1, 2, 3, 4, 5])
    15
@@ -159,7 +166,7 @@ Load a 32-bit Windows ``__stdcall`` library in 32-bit Python, see
 `kernel32.dll <http://www.geoffchappell.com/studies/windows/win32/kernel32/api/>`_. Include the
 ``'windll'`` argument to specify that the calling convention is ``__stdcall``.
 
-.. code:: python
+.. code-block:: pycon
 
    >>> kernel = LoadLibrary('C:/Windows/SysWOW64/kernel32.dll', 'windll')
    >>> kernel
@@ -186,21 +193,23 @@ Load a 64-bit LabVIEW library in 64-bit Python, see :ref:`here <labview-lib>` fo
    Make sure that you specify the appropriate `libtype` when instantiating the
    :class:`~msl.loadlib.load_library.LoadLibrary` class.
 
-.. code:: python
+.. code-block:: pycon
 
    >>> labview = LoadLibrary(EXAMPLES_DIR + '/labview_lib64.dll')
    >>> labview
    <LoadLibrary id=0x2060085bd68 libtype=CDLL path=D:\msl\examples\loadlib\labview_lib64.dll>
+   >>> labview.lib
+   <CDLL 'D:\msl\examples\loadlib\labview_lib64.dll', handle 2a920020 at 0x7e32b77>
 
 Create some data to calculate the mean, variance and standard deviation of
 
-.. code:: python
+.. code-block:: pycon
 
    >>> data = [1, 2, 3, 4, 5, 6, 7, 8, 9]
 
 Convert `data` to a :mod:`ctypes` array and allocate memory for the returned values
 
-.. code:: python
+.. code-block:: pycon
 
    >>> from ctypes import c_double, byref
    >>> x = (c_double * len(data))(*data)
@@ -208,7 +217,7 @@ Convert `data` to a :mod:`ctypes` array and allocate memory for the returned val
 
 Calculate the *sample* (i.e., the third argument is set to 0) standard deviation and variance
 
-.. code:: python
+.. code-block:: pycon
 
    >>> ret = labview.lib.stdev(x, len(data), 0, byref(mean), byref(variance), byref(std))
    >>> mean.value
@@ -220,7 +229,7 @@ Calculate the *sample* (i.e., the third argument is set to 0) standard deviation
 
 Calculate the *population* (i.e., the third argument is set to 1) standard deviation and variance
 
-.. code:: python
+.. code-block:: pycon
 
    >>> ret = labview.lib.stdev(x, len(data), 1, byref(mean), byref(variance), byref(std))
    >>> mean.value
@@ -238,7 +247,7 @@ with the JVM_ through a local network socket that is created by `Py4J <https://w
 
 Load a Java archive, a ``.jar`` file, in a JVM_, see :ref:`here <java-lib-jar>` for the source code.
 
-.. code:: python
+.. code-block:: pycon
 
    >>> jar = LoadLibrary(EXAMPLES_DIR + '/java_lib.jar')
    >>> jar
@@ -248,14 +257,14 @@ Load a Java archive, a ``.jar`` file, in a JVM_, see :ref:`here <java-lib-jar>` 
 
 The Java archive contains a ``nz.msl.examples`` package with two classes, ``MathUtils`` and ``Matrix``
 
-.. code:: python
+.. code-block:: pycon
 
    >>> MathUtils = jar.lib.nz.msl.examples.MathUtils
    >>> Matrix = jar.lib.nz.msl.examples.Matrix
 
 Generate a random number and calculate the square root of a number using the ``MathUtils`` class
 
-.. code:: python
+.. code-block:: pycon
 
    >>> MathUtils.random()
    0.17555846754602522
@@ -265,7 +274,7 @@ Generate a random number and calculate the square root of a number using the ``M
 Use the ``Matrix`` class to calculate the inverse of a 3x3 matrix that is filled with random
 numbers between 0 and 100
 
-.. code:: python
+.. code-block:: pycon
 
    >>> m = Matrix(3, 3, 0.0, 100.0)
    >>> print(m.toString())
@@ -285,7 +294,7 @@ numbers between 0 and 100
 
 Solve a linear system of equations, Ax=b
 
-.. code:: python
+.. code-block:: pycon
 
    >>> A = jar.gateway.new_array(jar.lib.Double, 3, 3)
    >>> coeff = [[3, 2, -1], [7, -2, 4], [-1, 5, 1]]
@@ -305,7 +314,7 @@ Solve a linear system of equations, Ax=b
 
 Show that `x` is a solution by getting `b` back
 
-.. code:: python
+.. code-block:: pycon
 
    >>> for i in range(3):
    ...     val = 0.0
@@ -319,7 +328,7 @@ Show that `x` is a solution by getting `b` back
 
 Shutdown the connection to the JVM_ when you are finished
 
-.. code:: python
+.. code-block:: pycon
 
    >>> jar.gateway.shutdown()
 
@@ -333,7 +342,7 @@ Load Java byte code, a ``.class`` file, in a JVM_, see :ref:`here <java-lib-clas
 
 The Java library contains a ``Trig`` class, which calculates various trigonometric quantities
 
-.. code:: python
+.. code-block:: pycon
 
    >>> Trig = cls.lib.Trig
    >>> Trig
@@ -347,7 +356,7 @@ The Java library contains a ``Trig`` class, which calculates various trigonometr
 
 Once again, shutdown the connection to the JVM_ when you are finished
 
-.. code:: python
+.. code-block:: pycon
 
    >>> cls.gateway.shutdown()
 

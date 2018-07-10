@@ -20,8 +20,8 @@ communicate with the 32-bit library.
    cpp64 <msl.examples.loadlib.cpp64>
    dotnet32 <msl.examples.loadlib.dotnet32>
    dotnet64 <msl.examples.loadlib.dotnet64>
-   dummy32 <msl.examples.loadlib.dummy32>
-   dummy64 <msl.examples.loadlib.dummy64>
+   echo32 <msl.examples.loadlib.echo32>
+   echo64 <msl.examples.loadlib.echo64>
    fortran32 <msl.examples.loadlib.fortran32>
    fortran64 <msl.examples.loadlib.fortran64>
    kernel32 <msl.examples.loadlib.kernel32>

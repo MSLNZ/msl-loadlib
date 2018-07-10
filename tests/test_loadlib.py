@@ -5,13 +5,13 @@ import clr
 import pytest
 
 from msl import loadlib
-from msl.examples.loadlib import Cpp64, Fortran64, Dummy64, DotNet64, EXAMPLES_DIR
+from msl.examples.loadlib import Cpp64, Fortran64, Echo64, DotNet64, EXAMPLES_DIR
 
 eps = 1e-10
 
 c = Cpp64()
 f = Fortran64()
-d = Dummy64(True)
+d = Echo64(True)
 n = DotNet64()
 
 

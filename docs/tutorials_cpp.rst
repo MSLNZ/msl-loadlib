@@ -26,7 +26,7 @@ code of the C++ program is available :ref:`here <cpp-lib>`.
 The following shows that the :ref:`cpp_lib32 <cpp-lib>` library
 cannot be loaded in a 64-bit Python interpreter:
 
-.. code-block:: python
+.. code-block:: pycon
 
    >>> from msl.loadlib import LoadLibrary, IS_PYTHON_64BIT
    >>> from msl.examples.loadlib import EXAMPLES_DIR
@@ -43,7 +43,7 @@ cannot be loaded in a 64-bit Python interpreter:
 
 However, the 64-bit version of the C++ library can be directly loaded in 64-bit Python:
 
-.. code-block:: python
+.. code-block:: pycon
 
    >>> cpp64 = LoadLibrary(EXAMPLES_DIR + '/cpp_lib64')
    >>> cpp64
@@ -54,7 +54,7 @@ However, the 64-bit version of the C++ library can be directly loaded in 64-bit 
 Instead, create a :class:`~msl.examples.loadlib.cpp64.Cpp64` client to communicate with the
 32-bit :ref:`cpp_lib32 <cpp-lib>` library from 64-bit Python:
 
-.. code-block:: python
+.. code-block:: pycon
 
    >>> from msl.examples.loadlib import Cpp64
    >>> cpp = Cpp64()
@@ -65,21 +65,21 @@ Instead, create a :class:`~msl.examples.loadlib.cpp64.Cpp64` client to communica
 
 Add two integers, see :meth:`~msl.examples.loadlib.cpp64.Cpp64.add`:
 
-.. code-block:: python
+.. code-block:: pycon
 
    >>> cpp.add(3, 14)
    17
 
 Subtract two C++ floating-point numbers, see :meth:`~msl.examples.loadlib.cpp64.Cpp64.subtract`:
 
-.. code-block:: python
+.. code-block:: pycon
 
    >>> cpp.subtract(43.2, 3.2)
    40.0
 
 Add or subtract two C++ double-precision numbers, see :meth:`~msl.examples.loadlib.cpp64.Cpp64.add_or_subtract`:
 
-.. code-block:: python
+.. code-block:: pycon
 
    >>> cpp.add_or_subtract(1.1, 2.2, True)
    3.3000000000000003
@@ -88,7 +88,15 @@ Add or subtract two C++ double-precision numbers, see :meth:`~msl.examples.loadl
 
 Multiply a 1D array by a number, see :meth:`~msl.examples.loadlib.cpp64.Cpp64.scalar_multiply`:
 
-.. code-block:: python
+.. attention::
+   The :meth:`~msl.examples.loadlib.cpp64.Cpp64.scalar_multiply` function takes a pointer to an array as an input
+   argument, see :ref:`cpp_lib.h <cpp-lib-header>`. One cannot pass pointers from :class:`~msl.loadlib.client64.Client64`
+   to :class:`~msl.loadlib.server32.Server32` because a 64-bit process cannot share the same memory space as a
+   32-bit process. All 32-bit pointers must be created (using :mod:`ctypes`) in the class that is a subclass of
+   :class:`~msl.loadlib.server32.Server32` and only the **value** that is stored at that address can be returned to
+   :class:`~msl.loadlib.client64.Client64` for use in the 64-bit program.
+
+.. code-block:: pycon
 
    >>> a = [float(val) for val in range(10)]
    >>> a
@@ -99,7 +107,7 @@ Multiply a 1D array by a number, see :meth:`~msl.examples.loadlib.cpp64.Cpp64.sc
 Reverse a string. The memory for the reversed string is allocated in Python,
 see :meth:`~msl.examples.loadlib.cpp64.Cpp64.reverse_string_v1`:
 
-.. code-block:: python
+.. code-block:: pycon
 
    >>> cpp.reverse_string_v1('hello world!')
    '!dlrow olleh'
@@ -107,14 +115,14 @@ see :meth:`~msl.examples.loadlib.cpp64.Cpp64.reverse_string_v1`:
 Reverse a string. The memory for the reversed string is allocated in C++,
 see :meth:`~msl.examples.loadlib.cpp64.Cpp64.reverse_string_v2`:
 
-.. code-block:: python
+.. code-block:: pycon
 
    >>> cpp.reverse_string_v2('uncertainty')
    'ytniatrecnu'
 
 Shutdown the server, see :meth:`~msl.loadlib.client64.Client64.shutdown_server32`:
 
-.. code-block:: python
+.. code-block:: pycon
 
    >>> cpp.shutdown_server32()
 
