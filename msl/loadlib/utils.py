@@ -79,7 +79,7 @@ def is_py4j_installed():
     try:
         import py4j
     except ImportError:
-        logger.warning('Py4j is not installed. Cannot load a JAR file.')
+        logger.warning('Py4j is not installed. Cannot load a JAVA archive or class file.')
         return False
     return True
 
