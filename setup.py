@@ -105,6 +105,11 @@ pytest_runner = ['pytest-runner'] if testing else []
 needs_sphinx = {'doc', 'docs', 'apidoc', 'apidocs', 'build_sphinx'}.intersection(sys.argv)
 sphinx = ['sphinx', 'sphinx_rtd_theme'] if needs_sphinx else []
 
+# fixes issue #11
+install_requires = ['py4j']
+if loadlib.IS_WINDOWS:
+    install_requires.append('pythonnet')
+
 setup(
     name='msl-loadlib',
     version=loadlib.__version__,
@@ -132,7 +137,7 @@ setup(
     ],
     setup_requires=sphinx + pytest_runner,
     tests_require=['pytest-cov', 'pytest', 'pathlib;python_version<"3.4"', 'pythonnet', 'py4j'],
-    install_requires=['py4j', 'pythonnet;platform_system=="Windows"'],
+    install_requires=install_requires,
     cmdclass={'docs': BuildDocs, 'apidocs': ApiDocs},
     packages=find_packages(include=('msl*',)),
     include_package_data=True,
