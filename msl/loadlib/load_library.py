@@ -54,7 +54,7 @@ class LoadLibrary(object):
 
             Default is ``'cdll'``.
 
-            .. note::
+            .. tip::
                Since the ``.jar`` or ``.class`` extension uniquely defines a Java library,
                the `libtype` will automatically be set to ``'java'`` if `path` ends with
                ``.jar`` or ``.class``.
