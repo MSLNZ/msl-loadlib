@@ -31,7 +31,7 @@ class ApiDocs(Command):
         ]
 
         import sphinx
-        if sphinx.version_info[:2] < (1, 7):
+        if sphinx.version_info < (1, 7):
             from sphinx.apidoc import main
         else:
             from sphinx.ext.apidoc import main  # Sphinx also changed the location of apidoc.main
@@ -67,7 +67,7 @@ class BuildDocs(Command):
             './docs/_build/html',  # where to save the output files
         ]
 
-        if sphinx.version_info[:2] < (1, 7):
+        if sphinx.version_info < (1, 7):
             from sphinx import build_main
         else:
             from sphinx.cmd.build import build_main  # Sphinx also changed the location of build_main
@@ -105,6 +105,11 @@ pytest_runner = ['pytest-runner'] if testing else []
 needs_sphinx = {'doc', 'docs', 'apidoc', 'apidocs', 'build_sphinx'}.intersection(sys.argv)
 sphinx = ['sphinx', 'sphinx_rtd_theme'] if needs_sphinx else []
 
+# fixes issue #11
+install_requires = ['py4j']
+if loadlib.IS_WINDOWS:
+    install_requires.append('pythonnet')
+
 setup(
     name='msl-loadlib',
     version=loadlib.__version__,
@@ -125,15 +130,15 @@ setup(
         'Programming Language :: Python :: 2',
         'Programming Language :: Python :: 2.7',
         'Programming Language :: Python :: 3',
-        'Programming Language :: Python :: 3.3',
         'Programming Language :: Python :: 3.4',
         'Programming Language :: Python :: 3.5',
         'Programming Language :: Python :: 3.6',
+        'Programming Language :: Python :: 3.7',
         'Topic :: Scientific/Engineering :: Physics',
     ],
     setup_requires=sphinx + pytest_runner,
     tests_require=['pytest-cov', 'pytest', 'pathlib;python_version<"3.4"', 'pythonnet', 'py4j'],
-    install_requires=['py4j', 'pythonnet;platform_system=="Windows"'],
+    install_requires=install_requires,
     cmdclass={'docs': BuildDocs, 'apidocs': ApiDocs},
     packages=find_packages(include=('msl*',)),
     include_package_data=True,

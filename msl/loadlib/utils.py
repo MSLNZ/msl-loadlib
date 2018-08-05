@@ -79,7 +79,7 @@ def is_py4j_installed():
     try:
         import py4j
     except ImportError:
-        logger.warning('Py4j is not installed. Cannot load a JAR file.')
+        logger.warning('Py4j is not installed. Cannot load a JAVA archive or class file.')
         return False
     return True
 
@@ -127,9 +127,6 @@ def check_dot_net_config(py_exe_path):
 
     if os.path.isfile(config_path):
 
-        with open(config_path, 'r') as fp:
-            lines = fp.readlines()
-
         # use the ElementTree to parse the file
         try:
             tree = ET.parse(config_path)
@@ -154,6 +151,9 @@ def check_dot_net_config(py_exe_path):
         # check if the policy exists
         policy = root.find('startup/[@useLegacyV2RuntimeActivationPolicy]')
         if policy is None:
+            with open(config_path, 'r') as fp:
+                lines = fp.readlines()
+
             lines.insert(-1, NET_FRAMEWORK_FIX)
             with open(config_path, 'w') as fp:
                 fp.writelines(lines)

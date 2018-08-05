@@ -5,8 +5,13 @@ Changelog
 Version 0.4.1.dev0
 ==================
 
+* Added
+
+  - Support for Python 3.7
+
 * Fixed
 
+  - Issue `#11 <https://github.com/MSLNZ/msl-loadlib/issues/11>`_
   - ``utils.wait_for_server()`` raised `NameError: name 'TimeoutError' is not defined` for Python 2.7
   - ``utils.port_in_use()`` raised `UnicodeDecodeError` (`PR #9 <https://github.com/MSLNZ/msl-loadlib/pull/9>`_)
   - ``setup.py`` is now also compatible with Sphinx 1.7+
@@ -14,6 +19,10 @@ Version 0.4.1.dev0
 * Changed
 
   - rename `Dummy` example to `Echo`
+
+* Removed
+
+  - Support for Python 3.3
 
 Version 0.4.0 (2018.02.28)
 ==========================
