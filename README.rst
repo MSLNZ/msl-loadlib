@@ -32,7 +32,12 @@ Alternatively, using the `MSL Package Manager`_ run:
 
    msl install loadlib
 
-To install the dependencies on Linux, please follow the instructions on the
+Optional dependencies:
+
+* `Python for .NET`_
+* Py4J_
+
+To set up your environment on Linux, please follow the instructions on the
 `prerequisites <http://msl-loadlib.readthedocs.io/en/latest/install.html#prerequisites>`_
 section of the documentation.
 
