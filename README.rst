@@ -1,11 +1,8 @@
-======================
-Welcome to MSL-LoadLib
-======================
+===========
+MSL-LoadLib
+===========
 
 |docs| |pypi|
-
-Purpose
--------
 
 This package is used to load a shared library in Python. It is basically just a thin wrapper
 around ctypes_ (for libraries that use the ``__cdecl`` or ``__stdcall`` calling convention),
@@ -121,37 +118,8 @@ Documentation
 
 The documentation for **MSL-LoadLib** can be found `here <http://msl-loadlib.readthedocs.io/en/latest/index.html>`_.
 
-Developers Guide
-----------------
-
-**MSL-LoadLib** uses pytest_ for testing the source code and sphinx_ for creating the documentation.
-
-Run the tests (a coverage_ report is generated in the **htmlcov/index.html** file):
-
-.. code-block:: console
-
-   python setup.py test
-
-Build the documentation, which can be viewed by opening the **docs/_build/html/index.html** file:
-
-.. code-block:: console
-
-   python setup.py docs
-
-Automatically create the API documentation from the docstrings in the source code (uses sphinx-apidoc_):
-
-.. code-block:: console
-
-   python setup.py apidoc
-
-*NOTE: By default, the* **docs/_autosummary** *folder that is created by running the* **apidoc** *command is
-automatically generated (it will overwrite existing files). As such, it is excluded from the repository (i.e., this
-folder is specified in the* **.gitignore** *file). If you want to keep the files located in* **docs/_autosummary** *you
-can rename the folder to be, for example,* **docs/_api** *and then the changes made to the files in the* **docs/_api**
-*folder will be kept and will be included in the repository.*
-
 .. |docs| image:: https://readthedocs.org/projects/msl-loadlib/badge/?version=latest
-   :target: http://msl-loadlib.readthedocs.io/en/latest/?badge=latest
+   :target: http://msl-loadlib.readthedocs.io/en/latest/
    :alt: Documentation Status
    :scale: 100%
 
@@ -161,10 +129,6 @@ can rename the folder to be, for example,* **docs/_api** *and then the changes m
 .. _ctypes: https://docs.python.org/3/library/ctypes.html
 .. _Python for .NET: http://pythonnet.github.io/
 .. _Py4J: https://www.py4j.org/
-.. _pytest: http://doc.pytest.org/en/latest/
-.. _sphinx: http://www.sphinx-doc.org/en/latest/
-.. _sphinx-apidoc: http://www.sphinx-doc.org/en/latest/man/sphinx-apidoc.html
-.. _coverage: http://coverage.readthedocs.io/en/latest/index.html
 .. _ipc: https://en.wikipedia.org/wiki/Inter-process_communication
 .. _Java Virtual Machine: https://en.wikipedia.org/wiki/Java_virtual_machine
 .. _MSL Package Manager: http://msl-package-manager.readthedocs.io/en/latest/?badge=latest
