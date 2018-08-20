@@ -130,4 +130,4 @@ The documentation for **MSL-LoadLib** can be found `here <http://msl-loadlib.rea
 .. _Py4J: https://www.py4j.org/
 .. _ipc: https://en.wikipedia.org/wiki/Inter-process_communication
 .. _Java Virtual Machine: https://en.wikipedia.org/wiki/Java_virtual_machine
-.. _MSL Package Manager: http://msl-package-manager.readthedocs.io/en/latest/?badge=latest
+.. _MSL Package Manager: http://msl-package-manager.readthedocs.io/en/latest/
