@@ -201,3 +201,10 @@ intersphinx_mapping = {
     'python': ('https://docs.python.org/{}'.format(sys.version_info.major), None),
     'py4j': ('https://www.py4j.org/', None),
 }
+
+# warn about all broken links
+nitpicky = True
+# known bad links
+nitpick_ignore = [
+    ('py:class', '_ctypes.Structure'),
+]

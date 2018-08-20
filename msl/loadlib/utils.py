@@ -55,8 +55,8 @@ def is_pythonnet_installed():
     Note
     ----
     For help getting Python for .NET working on a non-Windows operating system look at
-    the :ref:`prerequisites`, the `Mono <http://www.mono-project.com/>`_ project and
-    the `Python for .NET documentation <http://pythonnet.github.io/>`_.
+    the :ref:`prerequisites <loadlib-prerequisites>`, the `Mono <http://www.mono-project.com/>`_ project
+    and the `Python for .NET documentation <http://pythonnet.github.io/>`_.
     """
     try:
         import clr

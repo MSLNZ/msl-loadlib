@@ -29,7 +29,7 @@ Create a :class:`~msl.examples.loadlib.labview64.Labview64` client to communicat
    'D:\\msl\\examples\\loadlib\\labview_lib32.dll'
 
 Calculate the mean and the *sample* variance and standard deviation of some data, see
-:meth:`~msl.examples.loadlib.labview64.labview64.stdev`:
+:meth:`~msl.examples.loadlib.labview64.Labview64.stdev`:
 
 .. code-block:: pycon
 

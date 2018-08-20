@@ -1,3 +1,5 @@
+.. _msl-loadlib-welcome:
+
 ===========
 MSL-LoadLib
 ===========

@@ -1,4 +1,4 @@
-.. _tutorial_cpp:
+.. _loadlib-tutorial-cpp:
 
 ==========================================
 Load a 32-bit C++ library in 64-bit Python
@@ -6,7 +6,7 @@ Load a 32-bit C++ library in 64-bit Python
 
 .. note::
    If you have issues running the example please make sure that you have the
-   :ref:`prerequisites <prerequisites>` installed.
+   :ref:`prerequisites <loadlib-prerequisites>` installed.
 
 This example shows how to access a 32-bit C++ library from a module that is run by a
 64-bit Python interpreter by using `inter-process communication
