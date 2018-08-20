@@ -11,8 +11,7 @@ around ctypes_ (for libraries that use the ``__cdecl`` or ``__stdcall`` calling 
 to communicate with a 32-bit shared library from 64-bit Python.
 
 Tested in Python 2.7, 3.4+. The `examples <http://msl-loadlib.readthedocs.io/en/latest/direct.html>`_
-provided are currently only supported in Windows and Linux. The 32-bit server has not yet been
-created for OSX.
+provided are currently only supported in Windows and Linux.
 
 **MSL-LoadLib** is a pure-python package, but `Python for .NET`_ depends on the .NET Common Language
 Runtime (CLR) on Windows and Mono Runtime on Linux and OSX and Py4J_ depends on having a
