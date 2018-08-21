@@ -1,6 +1,8 @@
 import os
 import sys
 
+import sphinx
+
 # If extensions (or modules to document with autodoc) are in another directory,
 # add these directories to sys.path here. If the directory is relative to the
 # documentation root, use os.path.abspath to make it absolute, like shown here.
@@ -27,11 +29,20 @@ extensions = [
     'sphinx.ext.todo',
 ]
 
-# 'alphabetical', 'bysource', 'groupwise'
-autodoc_member_order = 'bysource'
+# autodoc options
+if sphinx.version_info < (1, 8):
+    # 'alphabetical', 'bysource', 'groupwise'
+    autodoc_member_order = 'bysource'
 
-# 'members', 'undoc-members', 'private-members', 'special-members', 'inherited-members', 'show-inheritance'
-autodoc_default_flags = ['members', 'undoc-members', 'show-inheritance']
+    # 'members', 'undoc-members', 'private-members', 'special-members', 'inherited-members', 'show-inheritance'
+    autodoc_default_flags = ['members', 'undoc-members', 'show-inheritance']
+else:
+    autodoc_default_options = {
+        'members': None,
+        'member-order': 'bysource',
+        'undoc-members': None,
+        'show-inheritance': None,
+    }
 
 # Generate autodoc stubs with summaries from code
 autosummary_generate = True
