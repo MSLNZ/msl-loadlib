@@ -3,7 +3,7 @@ A wrapper around a 32-bit LabVIEW library, :ref:`labview_lib32 <labview-lib>`.
 
 .. attention::
    This example requires that the appropriate
-   `LabVIEW Run-Time Engine <http://www.ni.com/download/labview-run-time-engine-2015/5507/en/>`_ is installed
+   `LabVIEW Run-Time Engine <https://www.ni.com/download/labview-run-time-engine-2015/5507/en/>`_ is installed
    and that the operating system is Windows.
 
 Example of a server that loads a 32-bit shared library, :ref:`labview_lib <labview-lib>`,

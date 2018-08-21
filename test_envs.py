@@ -31,7 +31,7 @@ Show the conda envs that include **py** in the env name *and* exclude those with
 
 .. _here: https://bitbucket.org/hpk42/tox/issues/273/support-conda-envs-when-using-miniconda
 .. _tox: https://tox.readthedocs.io/en/latest/
-.. _conda: http://conda.readthedocs.io/en/latest/
+.. _conda: https://conda.readthedocs.io/en/latest/
 .. _environment: https://conda.io/docs/using/envs.html
 """
 import re

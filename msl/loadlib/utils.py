@@ -20,7 +20,7 @@ NET_FRAMEWORK_DESCRIPTION = """
   useLegacyV2RuntimeActivationPolicy property to be "true". For the Python executable this would be
   a python.exe.config (Windows) or python.config (Unix) configuration file.
 
-  For example, Python for .NET (pythonnet, http://pythonnet.github.io/) only works with .NET 4.0+
+  For example, Python for .NET (pythonnet, https://pythonnet.github.io/) only works with .NET 4.0+
   and therefore it cannot automatically load a shared library that was compiled with .NET <4.0. If
   you try to load the library and a System.IO.FileNotFoundException is raised then that might
   mean that the library is from .NET <4.0.
@@ -29,7 +29,7 @@ NET_FRAMEWORK_DESCRIPTION = """
   that the DLL is located in is not within sys.path, so first make sure that the shared library
   is visible to the Python interpreter.
 
-  See http://support.microsoft.com/kb/2572158 for an overview.
+  See https://support.microsoft.com/kb/2572158 for an overview.
 
   NOTE: To install pythonnet, run:
   $ pip install pythonnet
@@ -45,7 +45,7 @@ NET_FRAMEWORK_FIX = """
 
 
 def is_pythonnet_installed():
-    """Checks if `Python for .NET <http://pythonnet.github.io/>`_ is installed.
+    """Checks if `Python for .NET <https://pythonnet.github.io/>`_ is installed.
 
     Returns
     -------
@@ -55,8 +55,8 @@ def is_pythonnet_installed():
     Note
     ----
     For help getting Python for .NET working on a non-Windows operating system look at
-    the :ref:`prerequisites <loadlib-prerequisites>`, the `Mono <http://www.mono-project.com/>`_ project
-    and the `Python for .NET documentation <http://pythonnet.github.io/>`_.
+    the :ref:`prerequisites <loadlib-prerequisites>`, the `Mono <https://www.mono-project.com/>`_ project
+    and the `Python for .NET documentation <https://pythonnet.github.io/>`_.
     """
     try:
         import clr
@@ -87,12 +87,12 @@ def is_py4j_installed():
 def check_dot_net_config(py_exe_path):
     """Check if the **useLegacyV2RuntimeActivationPolicy** property is enabled.
 
-    By default, `Python for .NET <http://pythonnet.github.io/>`_ only works with .NET
+    By default, `Python for .NET <https://pythonnet.github.io/>`_ only works with .NET
     4.0+ and therefore it cannot automatically load a shared library that was compiled
     with .NET <4.0. This method ensures that the **useLegacyV2RuntimeActivationPolicy**
     property exists in the **<python-executable>.config** file and that it is enabled.
 
-    This `link <http://stackoverflow.com/questions/14508627/>`_ provides an overview
+    This `link <https://stackoverflow.com/questions/14508627/>`_ provides an overview
     explaining why the **useLegacyV2RuntimeActivationPolicy** property is required.
 
     The **<python-executable>.config** file should look like::
@@ -186,7 +186,7 @@ def check_dot_net_config(py_exe_path):
 def port_in_use(port):
     """Uses netstat_ to determine if the network port is in use.
 
-    .. _netstat: http://www.computerhope.com/unix/unetstat.htm
+    .. _netstat: https://www.computerhope.com/unix/unetstat.htm
 
     Parameters
     ----------

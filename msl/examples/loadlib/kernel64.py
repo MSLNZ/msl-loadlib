@@ -1,6 +1,6 @@
 """
 Communicates with `kernel32.dll
-<http://www.geoffchappell.com/studies/windows/win32/kernel32/api/>`_ via
+<https://www.geoffchappell.com/studies/windows/win32/kernel32/api/>`_ via
 the :class:`~.kernel32.Kernel32` class.
 
 Example of a module that can be executed by a 64-bit Python interpreter which can
@@ -15,7 +15,7 @@ is the 32-bit server for `inter-process communication <ipc_>`_.
    example is only valid on a computer running Windows.
 
 .. _ipc: https://en.wikipedia.org/wiki/Inter-process_communication
-.. _kernel: http://www.geoffchappell.com/studies/windows/win32/kernel32/api/
+.. _kernel: https://www.geoffchappell.com/studies/windows/win32/kernel32/api/
 """
 import os
 
@@ -25,7 +25,7 @@ from msl.loadlib import Client64
 class Kernel64(Client64):
     """
     Example of a class that can communicate with the 32-bit `kernel32.dll
-    <http://www.geoffchappell.com/studies/windows/win32/kernel32/api/>`_ library.
+    <https://www.geoffchappell.com/studies/windows/win32/kernel32/api/>`_ library.
 
     This class demonstrates how to communicate with a Windows 32-bit library if an
     instance of this class is created within a 64-bit Python interpreter.

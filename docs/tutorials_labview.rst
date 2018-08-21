@@ -6,7 +6,7 @@ Load a 32-bit LabVIEW library in 64-bit Python
 
 .. attention::
    This example requires that the appropriate
-   `LabVIEW Run-Time Engine <http://www.ni.com/download/labview-run-time-engine-2015/5507/en/>`_ is installed
+   `LabVIEW Run-Time Engine <https://www.ni.com/download/labview-run-time-engine-2015/5507/en/>`_ is installed
    and that the operating system is Windows.
 
 This example shows how to access a 32-bit LabVIEW library from a module that is run by a

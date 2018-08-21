@@ -1,5 +1,5 @@
 # .coveragerc to control coverage.py (which is used by pytest)
-# see http://coverage.readthedocs.io/en/latest/config.html
+# see https://coverage.readthedocs.io/en/latest/config.html
 [run]
 branch = True
 

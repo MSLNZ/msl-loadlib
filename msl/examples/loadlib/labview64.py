@@ -3,7 +3,7 @@ Communicates with :ref:`labview_lib32 <labview-lib>` via the :class:`~.labview32
 
 .. attention::
    This example requires that the appropriate
-   `LabVIEW Run-Time Engine <http://www.ni.com/download/labview-run-time-engine-2015/5507/en/>`_ is installed
+   `LabVIEW Run-Time Engine <https://www.ni.com/download/labview-run-time-engine-2015/5507/en/>`_ is installed
    and that the operating system is Windows.
 
 Example of a module that can be executed within a 64-bit Python interpreter which can

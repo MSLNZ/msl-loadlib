@@ -10,7 +10,7 @@ around ctypes_ (for libraries that use the ``__cdecl`` or ``__stdcall`` calling 
 (for Java ``.jar`` or ``.class`` files). However, the primary advantage is that it is possible
 to communicate with a 32-bit shared library from 64-bit Python.
 
-Tested in Python 2.7, 3.4+. The `examples <http://msl-loadlib.readthedocs.io/en/latest/direct.html>`_
+Tested in Python 2.7, 3.4+. The `examples <https://msl-loadlib.readthedocs.io/en/latest/direct.html>`_
 provided are currently only supported in Windows and Linux.
 
 **MSL-LoadLib** is a pure-python package, but `Python for .NET`_ depends on the .NET Common Language
@@ -38,7 +38,7 @@ Optional dependencies:
 * Py4J_
 
 To set up your environment on Linux, please follow the instructions on the
-`prerequisites <http://msl-loadlib.readthedocs.io/en/latest/install.html#prerequisites>`_
+`prerequisites <https://msl-loadlib.readthedocs.io/en/latest/install.html#prerequisites>`_
 section of the documentation.
 
 Examples
@@ -114,16 +114,16 @@ needs to be closed when you are done using the Java library
 `Inter-process communication <ipc_>`_ is used to access a 32-bit shared library from a module that is
 running within a 64-bit Python interpreter. The procedure uses a client-server protocol where the client
 is a subclass of ``msl.loadlib.Client64`` and the server is a subclass of ``msl.loadlib.Server32``.
-See the `tutorials <http://msl-loadlib.readthedocs.io/en/latest/interprocess_communication.html>`_ for
+See the `tutorials <https://msl-loadlib.readthedocs.io/en/latest/interprocess_communication.html>`_ for
 examples on how to implement `inter-process communication <ipc_>`_.
 
 Documentation
 -------------
 
-The documentation for **MSL-LoadLib** can be found `here <http://msl-loadlib.readthedocs.io/en/latest/index.html>`_.
+The documentation for **MSL-LoadLib** can be found `here <https://msl-loadlib.readthedocs.io/en/latest/index.html>`_.
 
 .. |docs| image:: https://readthedocs.org/projects/msl-loadlib/badge/?version=latest
-   :target: http://msl-loadlib.readthedocs.io/en/latest/
+   :target: https://msl-loadlib.readthedocs.io/en/latest/
    :alt: Documentation Status
    :scale: 100%
 
@@ -131,8 +131,8 @@ The documentation for **MSL-LoadLib** can be found `here <http://msl-loadlib.rea
    :target: https://badge.fury.io/py/msl-loadlib
 
 .. _ctypes: https://docs.python.org/3/library/ctypes.html
-.. _Python for .NET: http://pythonnet.github.io/
+.. _Python for .NET: https://pythonnet.github.io/
 .. _Py4J: https://www.py4j.org/
 .. _ipc: https://en.wikipedia.org/wiki/Inter-process_communication
 .. _Java Virtual Machine: https://en.wikipedia.org/wiki/Java_virtual_machine
-.. _MSL Package Manager: http://msl-package-manager.readthedocs.io/en/latest/
+.. _MSL Package Manager: https://msl-package-manager.readthedocs.io/en/latest/

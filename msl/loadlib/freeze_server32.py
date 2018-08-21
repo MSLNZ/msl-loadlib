@@ -1,5 +1,5 @@
 """
-Creates a `frozen <http://www.pyinstaller.org/>`_ 32-bit server to use for
+Creates a `frozen <https://www.pyinstaller.org/>`_ 32-bit server to use for
 `inter-process communication <https://en.wikipedia.org/wiki/Inter-process_communication>`_.
 
 This module creates a 32-bit executable. The executable starts a 32-bit server to
@@ -9,7 +9,7 @@ calls the library to execute the request and then the server sends a response ba
 to the client.
 
 This module must be run from a 32-bit Python interpreter with both
-`PyInstaller <http://www.pyinstaller.org/>`_ (to create the executable) and
+`PyInstaller <https://www.pyinstaller.org/>`_ (to create the executable) and
 `Python for .NET <https://pypi.python.org/pypi/pythonnet/>`_ (to be able to load .NET
 Framework assemblies) installed.
 """
@@ -36,7 +36,7 @@ def main(spec=None):
     This executable starts a server, :class:`~.server32.Server32`, which hosts a Python
     module that can load a 32-bit library.
 
-    .. _PyInstaller: http://www.pyinstaller.org/
+    .. _PyInstaller: https://www.pyinstaller.org/
     
     Parameters
     ----------

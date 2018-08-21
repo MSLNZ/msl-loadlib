@@ -12,7 +12,7 @@ then you can directly load the library using :class:`~msl.loadlib.load_library.L
 The :ref:`C++ <cpp-lib>` and :ref:`FORTRAN <fortran-lib>` libraries have been compiled in 32-
 and 64-bit Windows and Linux. The :ref:`.NET <dotnet-lib>` library was complied to 32 and 64 bit
 using Microsoft Visual Studio. The
-`kernel32 <http://www.geoffchappell.com/studies/windows/win32/kernel32/api/>`_ library is a 32-bit
+`kernel32 <https://www.geoffchappell.com/studies/windows/win32/kernel32/api/>`_ library is a 32-bit
 library and it is only valid on Windows, since it uses the ``__stdcall`` calling convention.
 The :ref:`LabVIEW <labview-lib>` library was built using 32- and 64-bit LabVIEW on Windows.
 The :ref:`Java <java-lib>` libraries are platform and bitness independent since they run in the JVM_.
@@ -163,7 +163,7 @@ Use the static ``add_multiple`` method in the ``StaticClass`` class to add five 
 Windows __stdcall
 -----------------
 Load a 32-bit Windows ``__stdcall`` library in 32-bit Python, see
-`kernel32.dll <http://www.geoffchappell.com/studies/windows/win32/kernel32/api/>`_. Include the
+`kernel32.dll <https://www.geoffchappell.com/studies/windows/win32/kernel32/api/>`_. Include the
 ``'windll'`` argument to specify that the calling convention is ``__stdcall``.
 
 .. code-block:: pycon

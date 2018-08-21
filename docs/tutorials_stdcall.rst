@@ -59,4 +59,4 @@ Shutdown the server, see :meth:`~msl.loadlib.client64.Client64.shutdown_server32
    when the instance of the subclass is about to be destroyed and therefore you do not have to call
    the :meth:`~msl.loadlib.client64.Client64.shutdown_server32` method to shutdown the server.
 
-.. _kernel32: http://www.geoffchappell.com/studies/windows/win32/kernel32/api/
+.. _kernel32: https://www.geoffchappell.com/studies/windows/win32/kernel32/api/

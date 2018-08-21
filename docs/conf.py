@@ -195,7 +195,6 @@ epub_copyright = copyright
 # A list of files that should not be packed into the epub file.
 epub_exclude_files = ['search.html']
 
-
 # Example configuration for intersphinx: refer to the Python standard library.
 intersphinx_mapping = {
     'python': ('https://docs.python.org/{}'.format(sys.version_info.major), None),
@@ -204,6 +203,7 @@ intersphinx_mapping = {
 
 # warn about all broken links
 nitpicky = True
+
 # known bad links
 nitpick_ignore = [
     ('py:class', '_ctypes.Structure'),

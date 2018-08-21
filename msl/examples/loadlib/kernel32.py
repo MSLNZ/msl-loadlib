@@ -1,6 +1,6 @@
 """
 A wrapper around the 32-bit Windows `kernel32.dll
-<http://www.geoffchappell.com/studies/windows/win32/kernel32/api/>`_ library.
+<https://www.geoffchappell.com/studies/windows/win32/kernel32/api/>`_ library.
 
 Example of a server that loads a 32-bit Windows library, `kernel32.dll <kernel_>`_,
 in a 32-bit Python interpreter to host the library. The corresponding :mod:`~.kernel64`
@@ -16,7 +16,7 @@ is the 64-bit client for `inter-process communication <ipc_>`_.
    this example is only valid on a Windows computer.
 
 .. _ipc: https://en.wikipedia.org/wiki/Inter-process_communication
-.. _kernel: http://www.geoffchappell.com/studies/windows/win32/kernel32/api/
+.. _kernel: https://www.geoffchappell.com/studies/windows/win32/kernel32/api/
 """
 import ctypes
 import datetime
@@ -27,7 +27,7 @@ from msl.loadlib import Server32
 class Kernel32(Server32):
     """
     Example of a class that is a wrapper around the Windows 32-bit `kernel32.dll
-    <http://www.geoffchappell.com/studies/windows/win32/kernel32/api/>`_ library.
+    <https://www.geoffchappell.com/studies/windows/win32/kernel32/api/>`_ library.
 
     Parameters
     ----------

@@ -23,10 +23,10 @@ Dependencies
 
 Compatibility
 -------------
-* The :mod:`~msl.loadlib.start_server32` module has been built in to a `frozen <http://www.pyinstaller.org/>`_
+* The :mod:`~msl.loadlib.start_server32` module has been built in to a `frozen <https://www.pyinstaller.org/>`_
   Python application for Windows and Linux and works with the Python versions listed above. The 32-bit server
   is running on Python 3.6 and therefore all modules that run on the server must use Python 3 syntax.
-* The 32-bit server can be `frozen <http://www.pyinstaller.org/>`_ for other operating systems by running
+* The 32-bit server can be `frozen <https://www.pyinstaller.org/>`_ for other operating systems by running
   the :mod:`~msl.loadlib.freeze_server32` module in the operating system of your choice using a 32-bit
   Python interpreter of your choice.
 
@@ -66,7 +66,7 @@ For example, the following should return the version of Java that is installed:
 
 When loading a shared library it is vital that all dependencies of the library are also available on your
 computer and that the directory of the dependency is also available on your ``PATH``. A helpful utility to use to
-determine the dependencies of a shared library is `Dependency Walker <http://www.dependencywalker.com/>`_.
+determine the dependencies of a shared library is `Dependency Walker <https://www.dependencywalker.com/>`_.
 For finding the dependencies of a .NET library the
 `Dependency Walker for .NET <https://github.com/isindicic/DependencyWalker.Net>`_ is also useful.
 
@@ -93,7 +93,7 @@ and Mono_ (v4.8.0 is specified below):
 
    sudo apt-get install libglib2.0-dev clang
    sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 3FA7E0328081BFF6A14DA29AA6A19B38D3D831EF
-   echo "deb http://download.mono-project.com/repo/ubuntu wheezy/snapshots/4.8.0 main" | sudo tee /etc/apt/sources.list.d/mono-official.list
+   echo "deb https://download.mono-project.com/repo/ubuntu wheezy/snapshots/4.8.0 main" | sudo tee /etc/apt/sources.list.d/mono-official.list
    sudo apt-get update
    sudo apt-get install mono-complete -y
 
@@ -150,8 +150,8 @@ OSX
 The 32-bit server has not been created for OSX nor have the C++/FORTRAN example libraries been
 compiled in OSX.
 
-.. _MSL Package Manager: http://msl-package-manager.readthedocs.io/en/latest/?badge=latest
-.. _Mono: http://www.mono-project.com/
-.. _Python for .NET: http://pythonnet.github.io/
-.. _Java Runtime Environment: http://www.oracle.com/technetwork/java/javase/downloads/index.html
+.. _MSL Package Manager: https://msl-package-manager.readthedocs.io/en/latest/
+.. _Mono: https://www.mono-project.com/
+.. _Python for .NET: https://pythonnet.github.io/
+.. _Java Runtime Environment: https://www.oracle.com/technetwork/java/javase/downloads/index.html
 .. _Py4J: https://www.py4j.org/

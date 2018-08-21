@@ -15,7 +15,7 @@ from msl.loadlib import Server32
 class DotNet32(Server32):
     """
     Example of a class that is a wrapper around a 32-bit .NET Framework library,
-    :ref:`dotnet_lib32.dll <dotnet-lib>`. `Python for .NET <http://pythonnet.github.io/>`_
+    :ref:`dotnet_lib32.dll <dotnet-lib>`. `Python for .NET <https://pythonnet.github.io/>`_
     can handle many native Python data types as input arguments.
 
     Parameters
@@ -252,7 +252,7 @@ class DotNet32(Server32):
 
         Note
         ----
-        The **CLR** package from `Python for .NET <http://pythonnet.github.io/>`_ contains
+        The **CLR** package from `Python for .NET <https://pythonnet.github.io/>`_ contains
         the `System <https://msdn.microsoft.com/en-us/library/system(v=vs.110).aspx>`_
         namespace from the .NET Framework that is required to create and initialize a
         2D matrix.

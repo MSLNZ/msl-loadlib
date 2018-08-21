@@ -18,7 +18,7 @@ class Fortran32(Server32):
 
     This class demonstrates how to send/receive various data types to/from a
     32-bit FORTRAN library via :py:mod:`ctypes`. For a summary of the FORTRAN
-    data types see `here <http://earth.uni-muenster.de/~joergs/doc/f90/unix-um/dfum_034.html>`_.
+    data types see `here <https://earth.uni-muenster.de/~joergs/doc/f90/unix-um/dfum_034.html>`_.
 
     Parameters
     ----------

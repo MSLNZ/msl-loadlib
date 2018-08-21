@@ -23,7 +23,7 @@ the following client-server classes for communicating with a 32-bit library from
    ~msl.loadlib.client64.Client64
    ~msl.loadlib.server32.Server32
 
-the following modules for creating a `frozen <http://www.pyinstaller.org/>`_
+the following modules for creating a `frozen <https://www.pyinstaller.org/>`_
 32-bit server for hosting a 32-bit library
 
 .. autosummary::
