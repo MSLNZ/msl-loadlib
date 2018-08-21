@@ -24,6 +24,7 @@ wheels/
 # Sphinx documentation
 docs/_build/
 docs/_autosummary/
+docs/.doctrees/
 
 # Project settings
 .ropeproject/
