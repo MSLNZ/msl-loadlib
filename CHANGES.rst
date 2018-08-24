@@ -2,11 +2,12 @@
 Changelog
 =========
 
-Version 0.4.1.dev0
-==================
+Version 0.4.1 (2018.08.24)
+==========================
 
 * Added
 
+  - the ``version_info`` namedtuple now includes a *releaselevel*
   - Support for Python 3.7
 
 * Fixed
@@ -18,6 +19,8 @@ Version 0.4.1.dev0
 
 * Changed
 
+  - the frozen server32 executable (for Windows/Linux) now runs on Python 3.6.6
+  - pythonnet is now an optional dependency on Windows and py4j is now optional for all OS
   - rename `Dummy` example to `Echo`
 
 * Removed
