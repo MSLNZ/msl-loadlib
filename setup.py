@@ -109,7 +109,7 @@ sphinx = ['sphinx', 'sphinx_rtd_theme'] if needs_sphinx else []
 
 setup(
     name='msl-loadlib',
-    version=loadlib.__version__,
+    version='{}.{}.{}'.format(*loadlib.version_info[:3]),
     author=loadlib.__author__,
     author_email='joseph.borbely@measurement.govt.nz',
     url='https://github.com/MSLNZ/msl-loadlib',
