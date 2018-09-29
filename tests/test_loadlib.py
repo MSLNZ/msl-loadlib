@@ -199,6 +199,8 @@ def test_namespace_with_dots():
     net = loadlib.LoadLibrary('./tests/namespace_with_dots/Namespace.With.Dots.dll', 'net')
     checker = net.lib.Namespace.With.Dots.Checker()
     assert checker.IsSuccess()
+    repr(net)  # test that the __repr__ and __str__ methods work for a non-unicode path
+    str(net)
 
 
 # def test_labview():
@@ -343,11 +345,15 @@ def test_unicode_path():
     import math
     x = 0.123456
     assert abs(cls.lib.Trig.cos(x) - math.cos(x)) < eps
+    repr(cls)
+    str(cls)
     cls.gateway.shutdown()
 
     net = loadlib.LoadLibrary(u'./tests/uñicödé/Namespace.With.Dots-uñicödé.dll', 'net')
     checker = net.lib.Namespace.With.Dots.Checker()
     assert checker.IsSuccess()
+    repr(net)
+    str(net)
 
     # IMPORTANT: keep the C++ test after loading the unicode version of the .NET DLL
     # When the unicode version of .NET is loaded the `head` gets appended to sys.path, i.e.,
@@ -368,3 +374,5 @@ def test_unicode_path():
     bit = u'64' if loadlib.IS_PYTHON_64BIT else u'32'
     cpp = loadlib.LoadLibrary(u'cpp_lib' + bit + u'-uñicödé')
     assert cpp.lib.add(1, 2) == 3
+    repr(cpp)
+    str(cpp)

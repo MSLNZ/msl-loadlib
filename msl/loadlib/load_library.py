@@ -248,8 +248,8 @@ class LoadLibrary(object):
         logger.debug('Loaded ' + self._path)
 
     def __repr__(self):
-        return '<{} id={:#x} libtype={} path={}>'.format(
-            self.__class__.__name__, id(self), self._lib.__class__.__name__, self._path)
+        path = self._path.encode(_encoding) if IS_PYTHON2 else self._path
+        return '<LoadLibrary libtype={} path={}>'.format(self._lib.__class__.__name__, path)
 
     def __del__(self):
         if self._gateway is not None:
