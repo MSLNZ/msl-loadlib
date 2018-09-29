@@ -1,4 +1,6 @@
+# -*- coding: utf-8 -*-
 import os
+import sys
 import pathlib
 
 import clr
@@ -334,3 +336,35 @@ def test_java():
     assert abs(Trig.atan2(-4.321, x) - math.atan2(-4.321, x)) < eps
 
     cls.gateway.shutdown()
+
+
+def test_unicode_path():
+    cls = loadlib.LoadLibrary(u'./tests/uñicödé/Trig.class')
+    import math
+    x = 0.123456
+    assert abs(cls.lib.Trig.cos(x) - math.cos(x)) < eps
+    cls.gateway.shutdown()
+
+    net = loadlib.LoadLibrary(u'./tests/uñicödé/Namespace.With.Dots-uñicödé.dll', 'net')
+    checker = net.lib.Namespace.With.Dots.Checker()
+    assert checker.IsSuccess()
+
+    # IMPORTANT: keep the C++ test after loading the unicode version of the .NET DLL
+    # When the unicode version of .NET is loaded the `head` gets appended to sys.path, i.e.,
+    #   # the shared library must be available in sys.path
+    #   head, tail = os.path.split(self._path)
+    #   if IS_PYTHON2:
+    #       head = head.decode(_encoding)  <- this is important
+    #   sys.path.append(head)
+    # Without doing head.decode(_encoding) then when loading the unicode version of the C++ DLL
+    # the following error occurred:
+    #   UnicodeDecodeError: 'ascii' codec can't decode byte 0xf1 in position 29: ordinal not in range(128)
+    # This happens because when doing the search for the unicode version of the C++ DLL in Python 2.7, i.e.,
+    #   search_dirs = sys.path + os.environ['PATH'].split(os.pathsep)
+    #   for directory in search_dirs:
+    #       p = os.path.join(directory, _path)  <- raised UnicodeDecodeError
+    # the `directory` equaled the encoded version of `head` and so it raised UnicodeDecodeError
+    sys.path.append(u'./tests/uñicödé')
+    bit = u'64' if loadlib.IS_PYTHON_64BIT else u'32'
+    cpp = loadlib.LoadLibrary(u'cpp_lib' + bit + u'-uñicödé')
+    assert cpp.lib.add(1, 2) == 3

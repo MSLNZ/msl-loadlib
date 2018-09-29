@@ -3,14 +3,17 @@ Load a shared library.
 """
 import os
 import sys
+import locale
 import ctypes
 import ctypes.util
 import logging
 import subprocess
 
-from . import utils, DEFAULT_EXTENSION
+from . import utils, DEFAULT_EXTENSION, IS_PYTHON2
 
 logger = logging.getLogger(__name__)
+
+_encoding = locale.getpreferredencoding()
 
 
 class LoadLibrary(object):
@@ -77,7 +80,8 @@ class LoadLibrary(object):
         self._gateway = None
 
         # fixes Issue #8, if `path` is a <class 'pathlib.Path'> object
-        path = str(path)
+        if hasattr(path, 'as_posix'):
+            path = path.as_posix()
 
         # create a new reference to `path` just in case the
         # DEFAULT_EXTENSION is appended below so that the
@@ -109,7 +113,10 @@ class LoadLibrary(object):
                         success = True
                         break
                 if not success:
-                    raise IOError('Cannot find the shared library "{}"'.format(path))
+                    raise IOError('Cannot find the shared library {!r}'.format(path))
+
+        if IS_PYTHON2:
+            self._path = self._path.encode(_encoding)
 
         libtype = libtype.lower()
         if libtype == 'cdll':
@@ -211,6 +218,8 @@ class LoadLibrary(object):
 
             # the shared library must be available in sys.path
             head, tail = os.path.split(self._path)
+            if IS_PYTHON2:
+                head = head.decode(_encoding)
             sys.path.append(head)
 
             # don't include the library extension
@@ -233,6 +242,10 @@ class LoadLibrary(object):
 
         else:
             raise TypeError('Cannot load libtype={}'.format(libtype))
+
+        if IS_PYTHON2:
+            self._path = self._path.decode(_encoding)
+
         logger.debug('Loaded ' + self._path)
 
     def __repr__(self):
