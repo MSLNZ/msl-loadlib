@@ -2,6 +2,17 @@
 Changelog
 =========
 
+Version 0.4.2.dev0
+==================
+
+* Added
+
+  - support for unicode paths
+
+* Changed
+
+  - the __repr__ method for `LoadLibrary` no longer includes the id as a hex number
+
 Version 0.4.1 (2018.08.24)
 ==========================
 
