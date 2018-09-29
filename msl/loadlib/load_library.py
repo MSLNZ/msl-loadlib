@@ -3,7 +3,6 @@ Load a shared library.
 """
 import os
 import sys
-import locale
 import ctypes
 import ctypes.util
 import logging
@@ -13,7 +12,7 @@ from . import utils, DEFAULT_EXTENSION, IS_PYTHON2
 
 logger = logging.getLogger(__name__)
 
-_encoding = locale.getpreferredencoding()
+_encoding = sys.getfilesystemencoding()
 
 
 class LoadLibrary(object):
