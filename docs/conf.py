@@ -210,6 +210,7 @@ epub_exclude_files = ['search.html']
 intersphinx_mapping = {
     'python': ('https://docs.python.org/{}'.format(sys.version_info.major), None),
     'py4j': ('https://www.py4j.org/', None),
+    'numpy': ('https://docs.scipy.org/doc/numpy/', None),
 }
 
 # warn about all broken links
