@@ -335,6 +335,7 @@ print('The following modules cannot be imported')
 
 # these are mandatory!
 from msl import loadlib
+from msl.examples.loadlib import EXAMPLES_DIR
 import clr
 
 for m in modules:

@@ -83,6 +83,7 @@ def main(spec=None):
             '--name', loadlib.SERVER_FILENAME,
             '--onefile',
             '--clean',
+            '--hidden-import', 'msl.examples.loadlib',
             '--hidden-import', 'clr',
         ])
         cmd.extend(_get_standard_modules())
