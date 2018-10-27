@@ -6,6 +6,8 @@ Access a 32-bit library in 64-bit Python
 This section of the documentation shows examples for how a module running within a
 64-bit Python interpreter can communicate with a 32-bit shared library by using
 `inter-process communication <https://en.wikipedia.org/wiki/Inter-process_communication>`_.
+The method that is used to allow a 32-bit and a 64-bit process to exchange information is
+by use of a file. The :mod:`pickle` module is used to (de)serialize Python objects.
 
 The following table summarizes the example modules that are available.
 
@@ -53,19 +55,20 @@ subclass.
         """A wrapper around a 32-bit C++ library, 'cpp_lib32.dll', that has an 'add' function."""
 
         def __init__(self, host, port, quiet, **kwargs):
-            # Load the 'cpp_lib32' shared-library file using ctypes.CDLL
-            Server32.__init__(self, 'cpp_lib32.dll', 'cdll', host, port, quiet)
+            # Load the 'cpp_lib32' shared-library file using ctypes.CDLL.
+            # The optional kwargs are only used by MyServer and are not passed to Server32.
+            super(MyServer, self).__init__('cpp_lib32.dll', 'cdll', host, port, quiet)
 
         def add(self, a, b):
-            # The Server32 class has a 'lib' attribute that is a reference to the ctypes.CDLL object.
+            # The Server32 class has a 'lib' property that is a reference to the ctypes.CDLL object.
             # The shared library’s 'add' function takes two integers as inputs and returns the sum.
             return self.lib.add(a, b)
 
 Keyword arguments, ``**kwargs``, can be passed to the server either from the client (see,
 :class:`~msl.loadlib.client64.Client64`) or by manually starting the server from the command line
-(see, :class:`~msl.loadlib.start_server32`). However, the data types for the values are not
+(see, :class:`~msl.loadlib.start_server32`). However, the data types for the values of the ``**kwargs`` are not
 preserved (since they are ultimately parsed from the command line). Therefore, all data types for
-each value will be of type :class:`str` at the constructor of the :class:`~msl.loadlib.server32.Server32`
+the *kwargs* values will be of type :class:`str` at the constructor of the :class:`~msl.loadlib.server32.Server32`
 subclass. You must convert each value to the appropriate data type. This ``**kwargs`` variable
 is the only variable that the data type is not preserved for the client-server protocol (see, the
 `"Echo" example <tutorials_echo.html>`_ that shows that data types are preserved between client-server
@@ -77,19 +80,30 @@ request and sends the response back to **MyClient**.
 
 .. code-block:: python
 
+    # my_client.py
+
     from msl.loadlib import Client64
 
     class MyClient(Client64):
         """Send a request to 'MyServer' to execute the 'add' method and get the response."""
 
         def __init__(self):
-            # Specify the name of the Python module to execute on the 32-bit server, i.e., 'my_server.py'
-            Client64.__init__(self, module32='my_server')
+            # Specify the name of the Python module to execute on the 32-bit server (i.e., 'my_server')
+            super(MyClient, self).__init__(module32='my_server')
 
         def add(self, a, b):
             # The Client64 class has a 'request32' method to send a request to the 32-bit server.
             # Send the 'a' and 'b' arguments to the 'add' method in MyServer.
             return self.request32('add', a, b)
+
+The **MyClient** class would then be used as follows
+
+.. code-block:: pycon
+
+   >>> from my_client import MyClient
+   >>> c = MyClient()
+   >>> c.add(1, 2)
+   3
 
 The following examples are provided for communicating with different libraries that were
 compiled in different programming languages or using different calling conventions:
