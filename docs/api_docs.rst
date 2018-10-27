@@ -44,6 +44,7 @@ Package Structure
 
    msl.loadlib <_api/msl.loadlib>
    msl.loadlib.client64 <_api/msl.loadlib.client64>
+   msl.loadlib.exceptions <_api/msl.loadlib.exceptions>
    msl.loadlib.freeze_server32 <_api/msl.loadlib.freeze_server32>
    msl.loadlib.load_library <_api/msl.loadlib.load_library>
    msl.loadlib.server32 <_api/msl.loadlib.server32>
