@@ -28,7 +28,7 @@ class Echo64(Client64):
         Whether to hide :data:`sys.stdout` messages from the client and from the server.
     """
     def __init__(self, quiet=False):
-        Client64.__init__(self, module32='echo32', append_sys_path=os.path.dirname(__file__), quiet=quiet)
+        super(Echo64, self).__init__(module32='echo32', append_sys_path=os.path.dirname(__file__), quiet=quiet)
 
         self._quiet = quiet
         if not quiet:
@@ -60,15 +60,3 @@ class Echo64(Client64):
             for key, value in kwargs32.items():
                 print('\t{}: {} {}'.format(key, type(value), value))
         return args32, kwargs32
-
-
-if __name__ == '__main__':
-
-    echo = Echo64()
-    echo.send_data()
-    echo.send_data(True)
-
-    echo.send_data([1, 2, 3, 4, 5, 6])
-    echo.send_data(data='my string')
-    echo.send_data(x=[1.2, 3.4, 6.1], y=[43.2, 23.6, 12.7])
-    echo.send_data(1.12345, {'my list': [1, 2, 3, 4]}, 0.2j, range(10), x=True, y='hello world!')

@@ -40,8 +40,8 @@ class Fortran32(Server32):
     def __init__(self, host, port, quiet, **kwargs):
         # By not specifying the extension of the library file the server will open
         # the appropriate file based on the operating system.
-        Server32.__init__(self, os.path.join(os.path.dirname(__file__), 'fortran_lib32'),
-                          'cdll', host, port, quiet)
+        super(Fortran32, self).__init__(os.path.join(os.path.dirname(__file__), 'fortran_lib32'),
+                                        'cdll', host, port, quiet)
 
     def sum_8bit(self, a, b):
         """Add two 8-bit signed integers. 

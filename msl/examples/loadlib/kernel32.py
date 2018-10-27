@@ -47,7 +47,7 @@ class Kernel32(Server32):
     :class:`~msl.loadlib.server32.Server32` subclass.
     """
     def __init__(self, host, port, quiet, **kwargs):
-        Server32.__init__(self, 'C:/Windows/SysWOW64/kernel32.dll', 'windll', host, port, quiet)
+        super(Kernel32, self).__init__('C:/Windows/SysWOW64/kernel32.dll', 'windll', host, port, quiet)
 
     def get_time(self):
         """
@@ -77,6 +77,7 @@ class SystemTime(ctypes.Structure):
     .. _SYSTEMTIME: https://msdn.microsoft.com/en-us/library/windows/desktop/ms724950(v=vs.85).aspx
     """
     WORD = ctypes.c_uint16
+
     _fields_ = [('wYear', WORD),
                 ('wMonth', WORD),
                 ('wDayOfWeek', WORD),

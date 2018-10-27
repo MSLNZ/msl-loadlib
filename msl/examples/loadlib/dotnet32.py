@@ -36,8 +36,8 @@ class DotNet32(Server32):
     :class:`~msl.loadlib.server32.Server32` subclass.
     """
     def __init__(self, host, port, quiet, **kwargs):
-        Server32.__init__(self, os.path.join(os.path.dirname(__file__), 'dotnet_lib32.dll'),
-                          'net', host, port, quiet)
+        super(DotNet32, self).__init__(os.path.join(os.path.dirname(__file__), 'dotnet_lib32.dll'),
+                                       'net', host, port, quiet)
 
         self.BasicMath = self.lib.DotNetMSL.BasicMath()
         self.ArrayManipulation = self.lib.DotNetMSL.ArrayManipulation()

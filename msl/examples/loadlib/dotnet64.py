@@ -26,7 +26,7 @@ class DotNet64(Client64):
     def __init__(self):
         # specify the name of the corresponding 32-bit server module, dotnet32, which hosts
         # the 32-bit .NET library -- dotnet_lib32.dll.
-        Client64.__init__(self, module32='dotnet32', append_sys_path=os.path.dirname(__file__))
+        super(DotNet64, self).__init__(module32='dotnet32', append_sys_path=os.path.dirname(__file__))
 
     def get_class_names(self):
         """Return the class names in the library.
@@ -223,21 +223,3 @@ class DotNet64(Client64):
             The strings concatenated together.
         """
         return self.request32('concatenate', a, b, c, d, e)
-
-
-if __name__ == '__main__':
-
-    dll = DotNet64()
-    print(dll.lib32_path)
-    print(dll.get_class_names())
-    print(dll.add_integers(4, 5))
-    print(dll.divide_floats(4., 5.))
-    print(dll.multiply_doubles(872.24, 525.525))
-    print(dll.add_or_subtract(99., 9., True))
-    print(dll.add_or_subtract(99., 9., False))
-    print(dll.scalar_multiply(2., [float(val) for val in range(10)]))
-    print(dll.multiply_matrices([[1., 2., 3.], [4., 5., 6.]], [[1., 2.], [3., 4.], [5., 6.]]))
-    print(dll.reverse_string('New Zealand'))
-    print(dll.add_multiple(1, 2, 3, 4, 5))
-    print(dll.concatenate('the ', 'experiment ', 'worked ', False, 'temporarily'))
-    print(dll.concatenate('the ', 'experiment ', 'worked ', True, 'temporarily'))

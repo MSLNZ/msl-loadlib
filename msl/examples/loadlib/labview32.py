@@ -39,8 +39,8 @@ class Labview32(Server32):
     :class:`~msl.loadlib.server32.Server32` subclass.
     """
     def __init__(self, host, port, quiet, **kwargs):
-        Server32.__init__(self, os.path.join(os.path.dirname(__file__), 'labview_lib32.dll'),
-                          'cdll', host, port, quiet)
+        super(Labview32, self).__init__(os.path.join(os.path.dirname(__file__), 'labview_lib32.dll'),
+                                        'cdll', host, port, quiet)
 
     def stdev(self, x, weighting=0):
         """Calculates the mean, variance and standard deviation of the values in the input `x`.

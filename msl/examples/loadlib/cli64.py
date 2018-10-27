@@ -2,16 +2,16 @@
 Used for testing the CLI argparse.
 """
 import os
+
 from msl.loadlib import Client64
 
 
 class ClientArgParse(Client64):
 
     def __init__(self, append_sys_path, append_environ_path, **kwargs):
-        Client64.__init__(
-            self,
+        super(ClientArgParse, self).__init__(
             'cli32',
-            append_sys_path=[os.path.dirname(__file__)]+append_sys_path,
+            append_sys_path=[os.path.dirname(__file__)] + append_sys_path,
             append_environ_path=append_environ_path,
             **kwargs
         )

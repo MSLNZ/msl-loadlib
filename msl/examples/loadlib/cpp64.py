@@ -27,7 +27,7 @@ class Cpp64(Client64):
     def __init__(self):
         # specify the name of the corresponding 32-bit server module, cpp32, which hosts
         # the 32-bit C++ library -- cpp_lib32.
-        Client64.__init__(self, module32='cpp32', append_sys_path=os.path.dirname(__file__))
+        super(Cpp64, self).__init__(module32='cpp32', append_sys_path=os.path.dirname(__file__))
 
     def add(self, a, b):
         """Add two integers.
@@ -196,29 +196,3 @@ class Cpp64(Client64):
             The estimated circumference of the circle.
         """
         return self.request32('circumference', radius, n)
-
-
-if __name__ == '__main__':
-    import re
-    import inspect
-
-    def display(value):
-        caller = re.findall(r'cpp.\w+', inspect.stack()[1][4][0])
-        print('{} {} {}'.format(caller[0], type(value), value))
-
-    x, y, = 3, 7
-    cpp = Cpp64()
-    print(cpp.lib32_path)
-    display(cpp.add(x, y))
-    display(cpp.subtract(x, y))
-    display(cpp.add_or_subtract(x, y, True))
-    display(cpp.add_or_subtract(x, y, False))
-    display(cpp.scalar_multiply(2., [float(val) for val in range(10)]))
-    display(cpp.reverse_string_v1('hello world!'))
-    display(cpp.reverse_string_v2('uncertainty'))
-
-    fp = FourPoints((0, 0), (0, 1), (1, 1), (1, 0))
-    display(cpp.distance_4_points(fp))
-
-    for i in range(16):
-        display(cpp.circumference(0.5, 2**i))

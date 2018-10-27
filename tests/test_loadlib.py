@@ -392,8 +392,7 @@ def test_unicode_path():
 
     class Cpp64Encoding(loadlib.Client64):
         def __init__(self):
-            loadlib.Client64.__init__(
-                self,
+            super(Cpp64Encoding, self).__init__(
                 module32='cpp32unicode',
                 append_sys_path=os.path.dirname(__file__) + u'/uñicödé',
                 append_environ_path=os.path.dirname(__file__) + u'/uñicödé',

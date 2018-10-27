@@ -33,7 +33,7 @@ class Kernel64(Client64):
     def __init__(self):
         # specify the name of the corresponding 32-bit server module, kernel32, which hosts
         # the Windows 32-bit library -- kernel32.dll
-        Client64.__init__(self, module32='kernel32', append_sys_path=os.path.dirname(__file__))
+        super(Kernel64, self).__init__(module32='kernel32', append_sys_path=os.path.dirname(__file__))
 
     def get_local_time(self):
         """
@@ -51,11 +51,3 @@ class Kernel64(Client64):
             The current date and time.
         """
         return self.request32('get_time')
-
-
-if __name__ == '__main__':
-
-    dll = Kernel64()
-    print(dll.lib32_path)
-    now = dll.get_local_time()
-    print('{} {}'.format(type(now), now))

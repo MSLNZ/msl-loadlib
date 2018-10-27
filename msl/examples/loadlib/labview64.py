@@ -31,7 +31,7 @@ class Labview64(Client64):
     def __init__(self):
         # specify the name of the corresponding 32-bit server module, labview32, which hosts
         # the 32-bit LabVIEW library -- labview_lib32.dll
-        Client64.__init__(self, module32='labview32', append_sys_path=os.path.dirname(__file__))
+        super(Labview64, self).__init__(module32='labview32', append_sys_path=os.path.dirname(__file__))
 
     def stdev(self, x, weighting=0):
         """Calculates the mean, variance and standard deviation of the values in the input `x`.

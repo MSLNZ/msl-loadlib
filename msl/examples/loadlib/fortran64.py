@@ -27,7 +27,7 @@ class Fortran64(Client64):
     def __init__(self):
         # specify the name of the corresponding 32-bit server module, fortran32, which hosts
         # the 32-bit FORTRAN library -- fortran_lib32.
-        Client64.__init__(self, module32='fortran32', append_sys_path=os.path.dirname(__file__))
+        super(Fortran64, self).__init__(module32='fortran32', append_sys_path=os.path.dirname(__file__))
 
     def sum_8bit(self, a, b):
         """Send a request to add two 8-bit signed integers.
@@ -287,31 +287,3 @@ class Fortran64(Client64):
             The result of `a1` * `a2`.
         """
         return self.request32('matrix_multiply', a1, a2)
-
-
-if __name__ == '__main__':
-    import re
-    import inspect
-
-    def display(value):
-        caller = re.findall(r'f.\w+', inspect.stack()[1][4][0])
-        print('{} {} {}'.format(caller[0], type(value), value))
-
-    f = Fortran64()
-    print(f.lib32_path)
-    display(f.sum_8bit(-50, 110))
-    display(f.sum_16bit(2**15-1, -1))
-    display(f.sum_32bit(123456788, 1))
-    display(f.sum_64bit(-2**63, 1))
-    display(f.multiply_float32(1e30, 2e3))
-    display(f.multiply_float64(1e30, 2e3))
-    display(f.is_positive(1e-100))
-    display(f.is_positive(-1e-100))
-    display(f.add_or_subtract(1000, 2000, True))
-    display(f.add_or_subtract(1000, 2000, False))
-    display(f.factorial(127))
-    display(f.standard_deviation([float(val) for val in range(1,10)]))
-    display(f.besselJ0(8))
-    display(f.reverse_string('hello world!'))
-    display(f.add_1D_arrays([float(val) for val in range(1, 10)], [3.0*val for val in range(1, 10)]))
-    display(f.matrix_multiply([[1, 2, 3], [4, 5, 6]], [[1, 2], [3, 4], [5, 6]]))
