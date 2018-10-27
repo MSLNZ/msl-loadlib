@@ -109,8 +109,10 @@ Multiply a 1D array by a number, see :meth:`~msl.examples.loadlib.cpp64.Cpp64.sc
 
 If you have a numpy ndarray in 64-bit Python then you cannot pass the ndarray object to
 :class:`~msl.loadlib.server32.Server32` because the 32-bit server would need to load the ndarray in a 32-bit version
-of numpy and then pass the pointer to the 32-bit numpy array to the 32-bit C++ library. To simplify the procedure we
-can convert the ndarray to a Python :class:`list` using the :meth:`numpy.ndarray.tolist` method
+of numpy (which is not bundled with the 32-bit server, but could be bundled if you ran the
+:mod:`~msl.loadlib.freeze_server32` module and included a 32-bit version of numpy in the frozen executable).
+To simplify the procedure we can convert the ndarray to a Python :class:`list` using the :meth:`numpy.ndarray.tolist`
+method
 
 .. code-block:: pycon
 
