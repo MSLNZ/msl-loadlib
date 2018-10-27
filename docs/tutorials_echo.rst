@@ -25,12 +25,9 @@ The following is a script that illustrates that the data types are preserved:
    echo.send_data(x=[1.2, 3.4, 6.1], y=[43.2, 23.6, 12.7])
    echo.send_data(1.12345, {'my list': [1, 2, 3, 4]}, 0.2j, range(10), x=True, y='hello world!')
 
-Running this script would create the following output
-
-.. note::
-   The black text corresponds to the :class:`~msl.examples.loadlib.echo64.Echo64` :func:`print`
-   statements and the red text to the :class:`~msl.examples.loadlib.echo32.Echo32` :func:`print`
-   statements.
+Running this script would create the following output. The black text corresponds to the
+:class:`~msl.examples.loadlib.echo64.Echo64` :func:`print` statements and the red text to
+the :class:`~msl.examples.loadlib.echo32.Echo32` :func:`print` statements.
 
 .. image:: _static/echo_output.png
 
