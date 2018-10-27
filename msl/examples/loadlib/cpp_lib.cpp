@@ -2,7 +2,7 @@
 // Examples that show how to pass various data types between Python and a C++ library.
 //
 // Compiled using:
-//   g++ cpp_lib.cpp -fPIC -static -shared -o cpp_lib64.so
+//   g++ -c cpp_lib.cpp -fPIC -static -shared -o cpp_lib64.so
 //
 #include <math.h>
 #include "cpp_lib.h"
