@@ -26,7 +26,7 @@ from .exceptions import Server32Error
 _encoding = sys.getfilesystemencoding()
 
 
-class Client64(HTTPConnection):
+class Client64(object):
 
     def __init__(self, module32, host='127.0.0.1', port=None, timeout=5.0, quiet=True,
                  append_sys_path=None, append_environ_path=None, **kwargs):
@@ -156,18 +156,34 @@ class Client64(HTTPConnection):
         utils.wait_for_server(host, port, timeout)
 
         # start the connection
-        HTTPConnection.__init__(self, host, port)
-        self._is_active = True
+        self._conn = HTTPConnection(host, port)
+        self._host, self._port = self._conn.host, self._conn.port
 
+        self._is_active = True
         self._lib32_path = self.request32('LIB32_PATH')
 
     def __repr__(self):
         msg = '<{} '.format(self.__class__.__name__)
         if self._is_active:
             lib = os.path.basename(self._lib32_path)
-            return msg + 'lib={} address={}:{}>'.format(lib, self.host, self.port)
+            return msg + 'lib={} address={}:{}>'.format(lib, self._host, self._port)
         else:
             return msg + 'lib=None address=None:None>'
+
+    @property
+    def host(self):
+        """:class:`str`: The address of the host for the :meth:`~msl.loadlib.client64.Client64.connection`."""
+        return self._host
+
+    @property
+    def port(self):
+        """:class:`int`: The port number of the :meth:`~msl.loadlib.client64.Client64.connection`."""
+        return self._port
+
+    @property
+    def connection(self):
+        """:class:`~http.client.HTTPConnection`: The reference to the connection to the 32-bit server."""
+        return self._conn
 
     @property
     def lib32_path(self):
@@ -207,16 +223,16 @@ class Client64(HTTPConnection):
             raise Server32Error('The 32-bit server is not active')
 
         if method32 == 'SHUTDOWN_SERVER32':
-            self.request('GET', '/SHUTDOWN_SERVER32')
+            self._conn.request('GET', '/SHUTDOWN_SERVER32')
             return
 
         request = '/{}:{}:{}'.format(method32, self._pickle_protocol, self._pickle_temp_file)
         with open(self._pickle_temp_file, 'wb') as f:
             pickle.dump(args, f, protocol=self._pickle_protocol)
             pickle.dump(kwargs, f, protocol=self._pickle_protocol)
-        self.request('GET', request)
+        self._conn.request('GET', request)
 
-        response = self.getresponse()
+        response = self._conn.getresponse()
         if response.status == 200:  # everything is OK
             with open(self._pickle_temp_file, 'rb') as f:
                 result = pickle.load(f)
@@ -239,7 +255,7 @@ class Client64(HTTPConnection):
             self.request32('SHUTDOWN_SERVER32')
             if os.path.isfile(self._pickle_temp_file):
                 os.remove(self._pickle_temp_file)
-            self.close()
+            self._conn.close()
             self._is_active = False
 
     def __del__(self):
