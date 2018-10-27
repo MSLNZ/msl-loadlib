@@ -15,6 +15,7 @@ is the 32-bit server for `inter-process communication <ipc_>`_.
 import os
 
 from msl.loadlib import Client64
+from msl.examples.loadlib.cpp32 import FourPoints
 
 
 class Cpp64(Client64):
@@ -146,6 +147,56 @@ class Cpp64(Client64):
         """
         return self.request32('reverse_string_v2', original)
 
+    def distance_4_points(self, points):
+        """Calculates the total distance connecting 4 :class:`~msl.examples.loadlib.cpp32.Point`\'s.
+
+        See the corresponding 32-bit :meth:`~.cpp32.Cpp32.distance_4_points` method.
+
+        .. attention::
+           This method does not work with if :class:`Cpp64` is running in Python 2.
+           You would have to create the :class:`.FourPoints` object in the 32-bit
+           version of :meth:`~.cpp32.Cpp32.distance_4_points` because there are issues
+           using the :mod:`pickle` module between different major version numbers of
+           Python for :mod:`ctypes` objects.
+
+        Parameters
+        ----------
+        points : :class:`.FourPoints`
+            Since `points` is a struct that is a fixed size we can pass the
+            :class:`ctypes.Structure` object directly from 64-bit Python to
+            the 32-bit Python. The :mod:`ctypes` module on the 32-bit server
+            can load the :mod:`pickle`\'d :class:`ctypes.Structure`.
+
+        Returns
+        -------
+        :class:`float`
+            The total distance connecting the 4 :class:`~.Point`\'s.
+        """
+        if not isinstance(points, FourPoints):
+            raise TypeError('Must pass in a FourPoints object. Got {}'.format(type(points)))
+        return self.request32('distance_4_points', points)
+
+    def circumference(self, radius, n):
+        """Estimates the circumference of a circle.
+
+        This method calls the ``distance_n_points`` function in :ref:`cpp_lib32 <cpp-lib>`.
+
+        See the corresponding 32-bit :meth:`~.cpp32.Cpp32.circumference` method.
+
+        Parameters
+        ----------
+        radius : :class:`float`
+            The radius of the circle.
+        n : :class:`int`
+            The number of points to use to estimate the circumference.
+
+        Returns
+        -------
+        :class:`float`
+            The estimated circumference of the circle.
+        """
+        return self.request32('circumference', radius, n)
+
 
 if __name__ == '__main__':
     import re
@@ -165,3 +216,9 @@ if __name__ == '__main__':
     display(cpp.scalar_multiply(2., [float(val) for val in range(10)]))
     display(cpp.reverse_string_v1('hello world!'))
     display(cpp.reverse_string_v2('uncertainty'))
+
+    fp = FourPoints((0, 0), (0, 1), (1, 1), (1, 0))
+    display(cpp.distance_4_points(fp))
+
+    for i in range(16):
+        display(cpp.circumference(0.5, 2**i))

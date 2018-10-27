@@ -12,6 +12,20 @@
 #   error "Unknown EXPORT semantics"
 #endif
 
+struct Point {
+    double x;
+    double y;
+};
+
+struct FourPoints {
+    Point points[4];
+};
+
+struct NPoints {
+    int n;
+    Point *points;
+};
+
 extern "C" {
 
     // a + b
@@ -31,5 +45,11 @@ extern "C" {
 
     // reverse a string and return it
     EXPORT char* reverse_string_v2(char* original, int n);
+
+    // calculate the total distance connecting 4 Points
+    EXPORT double distance_4_points(FourPoints p);
+
+    // calculate the total distance connecting N Points
+    EXPORT double distance_n_points(NPoints p);
 
 }

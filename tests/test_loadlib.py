@@ -1,13 +1,14 @@
 # -*- coding: utf-8 -*-
 import os
 import sys
+import math
 import pathlib
 
 import clr
 import pytest
 
 from msl import loadlib
-from msl.examples.loadlib import Cpp64, Fortran64, Echo64, DotNet64, EXAMPLES_DIR
+from msl.examples.loadlib import Cpp64, Fortran64, Echo64, DotNet64, EXAMPLES_DIR, FourPoints
 
 eps = 1e-10
 
@@ -96,6 +97,17 @@ def test_cpp():
 
     assert '0987654321' == c.reverse_string_v1('1234567890')
     assert '[abc x|z j 1 *&' == c.reverse_string_v2('&* 1 j z|x cba[')
+
+    if loadlib.IS_PYTHON3:
+        # can't pickle.dump a ctypes.Structure in Python 2 and then
+        # pickle.load it in Python 3 (the interpreter that Server32 is running on)
+        fp = FourPoints((0, 0), (0, 1), (1, 1), (1, 0))
+        assert c.distance_4_points(fp) == 4.0
+
+    assert c.circumference(0.5, 0) == 0.0
+    assert c.circumference(0.5, 2) == 2.0
+    assert c.circumference(0.5, 2**16) == pytest.approx(math.pi)
+    assert c.circumference(1.0, 2**16) == pytest.approx(2.0*math.pi)
 
 
 def test_fortran():
@@ -356,6 +368,7 @@ def test_unicode_path():
     str(net)
 
     # IMPORTANT: keep the C++ test after loading the unicode version of the .NET DLL
+    # because it tests for additional problems that can occur.
     # When the unicode version of .NET is loaded the `head` gets appended to sys.path, i.e.,
     #   # the shared library must be available in sys.path
     #   head, tail = os.path.split(self._path)
@@ -376,3 +389,37 @@ def test_unicode_path():
     assert cpp.lib.add(1, 2) == 3
     repr(cpp)
     str(cpp)
+
+    class Cpp64Encoding(loadlib.Client64):
+        def __init__(self):
+            loadlib.Client64.__init__(
+                self,
+                module32='cpp32unicode',
+                append_sys_path=os.path.dirname(__file__) + u'/uñicödé',
+                append_environ_path=os.path.dirname(__file__) + u'/uñicödé',
+            )
+
+        def add(self, a, b):
+            return self.request32('add', a, b)
+
+    c2 = Cpp64Encoding()
+    assert c2.add(-5, 3) == -2
+
+    with pytest.raises(loadlib.Server32Error):
+        c2.add('hello', 'world')
+
+    try:
+        c2.add('hello', 'world')
+    except loadlib.Server32Error as e:
+        print(e)
+
+    c2.shutdown_server32()
+
+
+def test_Server32Error():
+    try:
+        c.add('hello', 'world')
+    except loadlib.Server32Error as e:
+        assert e.name == 'TypeError'
+        assert e.value.startswith('an integer is required')
+        assert e.traceback.endswith('return self.lib.add(ctypes.c_int32(a), ctypes.c_int32(b))')

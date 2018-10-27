@@ -47,7 +47,7 @@ However, the 64-bit version of the C++ library can be directly loaded in 64-bit 
 
    >>> cpp64 = LoadLibrary(EXAMPLES_DIR + '/cpp_lib64')
    >>> cpp64
-   <LoadLibrary id=0x3b48ca8 libtype=CDLL path=D:\msl\examples\loadlib\cpp_lib64.dll>
+   <LoadLibrary libtype=CDLL path=D:\msl\examples\loadlib\cpp_lib64.dll>
    >>> cpp64.lib.add(3, 14)
    17
 
@@ -59,7 +59,7 @@ Instead, create a :class:`~msl.examples.loadlib.cpp64.Cpp64` client to communica
    >>> from msl.examples.loadlib import Cpp64
    >>> cpp = Cpp64()
    >>> cpp
-   <Cpp64 id=0x38befd0 lib=cpp_lib32.dll address=127.0.0.1:63238>
+   <Cpp64 lib=cpp_lib32.dll address=127.0.0.1:63238>
    >>> cpp.lib32_path
    'D:\\msl\\examples\\loadlib\\cpp_lib32.dll'
 
@@ -146,6 +146,87 @@ see :meth:`~msl.examples.loadlib.cpp64.Cpp64.reverse_string_v2`:
 
    >>> cpp.reverse_string_v2('uncertainty')
    'ytniatrecnu'
+
+.. _cpp-structs-example:
+
+Structs
+-------
+
+It is possible to :mod:`pickle` a :class:`ctypes.Structure` and pass the *struct* between
+:class:`~msl.examples.loadlib.cpp64.Cpp64` and :class:`~msl.examples.loadlib.cpp32.Cpp32` provided
+that the *struct* is a **fixed size** in memory (i.e., the *struct* does not contain any pointers).
+If the *struct* contains pointers then you must create the *struct* within
+:class:`~msl.examples.loadlib.cpp32.Cpp32` and you can only pass **values** between
+:class:`~msl.examples.loadlib.cpp32.Cpp32` and :class:`~msl.examples.loadlib.cpp64.Cpp64` and not
+:mod:`ctypes` **objects**.
+
+.. attention::
+
+   The following will only work if :class:`~msl.examples.loadlib.cpp64.Cpp64` is run using Python 3
+   because :class:`~msl.examples.loadlib.cpp32.Cpp32` is running on Python 3 and there are issues
+   with :mod:`ctypes` and :mod:`pickle` when mixing Python 2 and Python 3.
+
+The :ref:`cpp_lib32 <cpp-lib>` library contains the following structs:
+
+.. code-block:: cpp
+
+    struct Point {
+        double x;
+        double y;
+    };
+
+    struct FourPoints {
+        Point points[4];
+    };
+
+    struct NPoints {
+        int n;
+        Point *points;
+    };
+
+The :meth:`~msl.examples.loadlib.cpp64.Cpp64.distance_4_points` method uses the
+:class:`~msl.examples.loadlib.cpp32.FourPoints` struct to calculate the total distance connecting
+4 :class:`~msl.examples.loadlib.cpp32.Point` structs. Since the :class:`~msl.examples.loadlib.cpp32.FourPoints`
+struct is a **fixed size** it can be created in 64-bit Python, *pickled* and then *unpickled* in
+:class:`~msl.examples.loadlib.cpp32.Cpp32`
+
+.. code-block:: pycon
+
+   >>> from msl.examples.loadlib import FourPoints
+   >>> fp = FourPoints((0, 0), (0, 1), (1, 1), (1, 0))
+   >>> cpp.distance_4_points(fp)
+   4.0
+
+The :meth:`Cpp32.circumference <msl.examples.loadlib.cpp32.Cpp32.circumference>` method uses the
+:class:`~msl.examples.loadlib.cpp32.NPoints` struct to calculate the circumference of a circle using
+*n* :class:`~msl.examples.loadlib.cpp32.Point` structs. Since the :class:`~msl.examples.loadlib.cpp32.NPoints`
+struct is **not a fixed size** it must be created in the
+:meth:`Cpp32.circumference <msl.examples.loadlib.cpp32.Cpp32.circumference>` method. The
+:meth:`Cpp64.circumference <msl.examples.loadlib.cpp64.Cpp64.circumference>` method takes the values of
+the *radius* and *n* as input arguments to pass to the
+:meth:`Cpp32.circumference <msl.examples.loadlib.cpp32.Cpp32.circumference>` method.
+
+.. code-block:: pycon
+
+   >>> for i in range(16):
+   ...     print(cpp.circumference(0.5, 2**i))
+   ...
+   0.0
+   2.0
+   2.82842712474619
+   3.061467458920718
+   3.121445152258052
+   3.1365484905459406
+   3.1403311569547543
+   3.1412772509327787
+   3.141513801144288
+   3.1415729403671087
+   3.141587725277193
+   3.1415914215111314
+   3.1415923455699404
+   3.141592576584724
+   3.1415926343379557
+   3.1415926487759718
 
 Shutdown the server, see :meth:`~msl.loadlib.client64.Client64.shutdown_server32`:
 

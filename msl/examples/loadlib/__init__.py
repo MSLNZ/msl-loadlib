@@ -3,7 +3,7 @@ Example modules showing how to load a 32-bit shared library in 64-bit Python.
 """
 import os
 
-from .cpp32 import Cpp32
+from .cpp32 import Cpp32, FourPoints
 from .cpp64 import Cpp64
 from .dotnet32 import DotNet32
 from .dotnet64 import DotNet64
