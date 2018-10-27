@@ -25,10 +25,9 @@ Compatibility
 -------------
 * The :mod:`~msl.loadlib.start_server32` module has been built in to a `frozen <https://www.pyinstaller.org/>`_
   Python application for Windows and Linux and works with the Python versions listed above. The 32-bit server
-  is running on Python 3.6 and therefore all modules that run on the server must use Python 3 syntax.
-* The 32-bit server can be `frozen <https://www.pyinstaller.org/>`_ for other operating systems by running
-  the :mod:`~msl.loadlib.freeze_server32` module in the operating system of your choice using a 32-bit
-  Python interpreter of your choice.
+  is running on Python 3.x and therefore all modules that run on the server must use Python 3 syntax.
+* You can create a new 32-bit server by running the :mod:`~msl.loadlib.freeze_server32` module in the
+  operating system of your choice and using a 32-bit Python interpreter of your choice.
 
 .. _loadlib-prerequisites:
 
@@ -134,7 +133,7 @@ If you need to load a Java library, a ``.jar`` or ``.class`` file, then you must
 
 .. code-block:: console
 
-   pip install py4j
+   pip3 install py4j
 
 and a `Java Runtime Environment`_
 
