@@ -24,7 +24,7 @@ Create a :class:`~msl.examples.loadlib.labview64.Labview64` client to communicat
    >>> from msl.examples.loadlib import Labview64
    >>> labview = Labview64()
    >>> labview
-   <Labview64 id=0x38f1828 lib=labview_lib32.dll address=127.0.0.1:49952>
+   <Labview64 lib=labview_lib32.dll address=127.0.0.1:49952>
    >>> labview.lib32_path
    'D:\\msl\\examples\\loadlib\\labview_lib32.dll'
 

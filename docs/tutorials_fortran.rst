@@ -47,7 +47,7 @@ However, the 64-bit version of the FORTRAN library can be directly loaded in 64-
 
    >>> f64 = LoadLibrary(EXAMPLES_DIR + '/fortran_lib64')
    >>> f64
-   <LoadLibrary id=0x1798a79 libtype=CDLL path=D:\msl\examples\loadlib\fortran_lib64.dll>
+   <LoadLibrary libtype=CDLL path=D:\msl\examples\loadlib\fortran_lib64.dll>
    >>> from ctypes import byref, c_int8
    >>> f64.lib.sum_8bit(byref(c_int8(-50)), byref(c_int8(110)))
    60
@@ -60,7 +60,7 @@ Instead, create a :class:`~msl.examples.loadlib.fortran64.Fortran64` client to c
    >>> from msl.examples.loadlib import Fortran64
    >>> f = Fortran64()
    >>> f
-   <Fortran64 id=0x1798a7a lib=fortran_lib32.dll address=127.0.0.1:42888>
+   <Fortran64 lib=fortran_lib32.dll address=127.0.0.1:42888>
    >>> f.lib32_path
    'D:\\msl\\examples\\loadlib\\fortran_lib32.dll'
 

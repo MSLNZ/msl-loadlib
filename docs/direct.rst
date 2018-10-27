@@ -6,21 +6,19 @@ Load a library
 If you are loading a 32-bit library in 32-bit Python, or a 64-bit library in 64-bit Python,
 then you can directly load the library using :class:`~msl.loadlib.load_library.LoadLibrary`.
 
-.. note::
-   All of the shared libraries in the examples are included with the **MSL-LoadLib** package.
-
-The :ref:`C++ <cpp-lib>` and :ref:`FORTRAN <fortran-lib>` libraries have been compiled in 32-
-and 64-bit Windows and Linux. The :ref:`.NET <dotnet-lib>` library was complied to 32 and 64 bit
-using Microsoft Visual Studio. The
-`kernel32 <https://www.geoffchappell.com/studies/windows/win32/kernel32/api/>`_ library is a 32-bit
-library and it is only valid on Windows, since it uses the ``__stdcall`` calling convention.
-The :ref:`LabVIEW <labview-lib>` library was built using 32- and 64-bit LabVIEW on Windows.
-The :ref:`Java <java-lib>` libraries are platform and bitness independent since they run in the JVM_.
-
 .. important::
    If you want to load a 32-bit library in 64-bit Python then `inter-process communication
    <https://en.wikipedia.org/wiki/Inter-process_communication>`_ is used to communicate with
    the 32-bit library. See the :ref:`examples <inter-process-communication>` for more details.
+
+All of the shared libraries in the following examples are included with the **MSL-LoadLib** package.
+The :ref:`C++ <cpp-lib>` and :ref:`FORTRAN <fortran-lib>` libraries have been compiled in 32-
+and 64-bit Windows and Linux, using *g++* and *gfortran* respectively. The :ref:`.NET <dotnet-lib>`
+library was complied to 32 and 64 bit using Microsoft Visual Studio. The
+`kernel32 <https://www.geoffchappell.com/studies/windows/win32/kernel32/api/>`_ library is a 32-bit
+library and it is only valid on Windows, since it uses the ``__stdcall`` calling convention.
+The :ref:`LabVIEW <labview-lib>` library was built using 32- and 64-bit LabVIEW on Windows.
+The :ref:`Java <java-lib>` libraries are platform and bitness independent since they run in the JVM_.
 
 The first step is to import the :class:`~msl.loadlib.load_library.LoadLibrary` class
 
@@ -46,7 +44,7 @@ Load a 64-bit C++ library in 64-bit Python, see :ref:`here <cpp-lib>` for the so
 
    >>> cpp = LoadLibrary(EXAMPLES_DIR + '/cpp_lib64')
    >>> cpp
-   <LoadLibrary id=0x2e41810 libtype=CDLL path=D:\msl\examples\loadlib\cpp_lib64.dll>
+   <LoadLibrary libtype=CDLL path=D:\msl\examples\loadlib\cpp_lib64.dll>
    >>> cpp.lib
    <CDLL 'D:\msl\examples\loadlib\cpp_lib64.dll', handle 6f920000 at 0x3e92f90>
 
@@ -66,7 +64,7 @@ Load a 64-bit FORTRAN library in 64-bit Python, see :ref:`here <fortran-lib>` fo
 
    >>> fortran = LoadLibrary(EXAMPLES_DIR + '/fortran_lib64')
    >>> fortran
-   <LoadLibrary id=0x2e46eb0 libtype=CDLL path=D:\msl\examples\loadlib\fortran_lib64.dll>
+   <LoadLibrary libtype=CDLL path=D:\msl\examples\loadlib\fortran_lib64.dll>
    >>> fortran.lib
    <CDLL 'D:\msl\examples\loadlib\fortran_lib64.dll', handle 6f660000 at 0x2e5d470>
 
@@ -91,11 +89,11 @@ the .NET Framework. *To load the 32-bit version in 32-bit Python use* ``'dotnet_
 
    >>> net = LoadLibrary(EXAMPLES_DIR + '/dotnet_lib64.dll', 'net')
    >>> net
-   <LoadLibrary id=0x2e41cf0 libtype=DotNet path=D:\msl\examples\loadlib\dotnet_lib64.dll>
+   <LoadLibrary libtype=DotNet path=D:\msl\examples\loadlib\dotnet_lib64.dll>
    >>> net.assembly
    <System.Reflection.RuntimeAssembly object at 0x03099330>
    >>> net.lib
-   <DotNet id=0x03099C10 path=D:\msl\examples\loadlib\dotnet_lib64.dll>
+   <DotNet path=D:\msl\examples\loadlib\dotnet_lib64.dll>
 
 The :ref:`dotnet_lib64 <dotnet-lib>` library contains a reference to the ``DotNetMSL`` module
 (which is a C# namespace), an instance of the ``StringManipulation`` class and a reference to the
@@ -170,7 +168,7 @@ Load a 32-bit Windows ``__stdcall`` library in 32-bit Python, see
 
    >>> kernel = LoadLibrary('C:/Windows/SysWOW64/kernel32.dll', 'windll')
    >>> kernel
-   <LoadLibrary id=0x30a2bb0 libtype=WinDLL path=C:\Windows\SysWOW64\kernel32.dll>
+   <LoadLibrary libtype=WinDLL path=C:\Windows\SysWOW64\kernel32.dll>
    >>> kernel.lib
    <WinDLL 'C:\Windows\SysWOW64\kernel32.dll', handle 76e70000 at 0x2e63570>
    >>> from msl.examples.loadlib.kernel32 import SystemTime
@@ -197,7 +195,7 @@ Load a 64-bit LabVIEW library in 64-bit Python, see :ref:`here <labview-lib>` fo
 
    >>> labview = LoadLibrary(EXAMPLES_DIR + '/labview_lib64.dll')
    >>> labview
-   <LoadLibrary id=0x2060085bd68 libtype=CDLL path=D:\msl\examples\loadlib\labview_lib64.dll>
+   <LoadLibrary libtype=CDLL path=D:\msl\examples\loadlib\labview_lib64.dll>
    >>> labview.lib
    <CDLL 'D:\msl\examples\loadlib\labview_lib64.dll', handle 2a920020 at 0x7e32b77>
 
@@ -215,7 +213,7 @@ Convert `data` to a :mod:`ctypes` array and allocate memory for the returned val
    >>> x = (c_double * len(data))(*data)
    >>> mean, variance, std = c_double(), c_double(), c_double()
 
-Calculate the *sample* (i.e., the third argument is set to 0) standard deviation and variance
+Calculate the sample standard deviation (i.e., the third argument is set to 0) and variance
 
 .. code-block:: pycon
 
@@ -227,7 +225,7 @@ Calculate the *sample* (i.e., the third argument is set to 0) standard deviation
    >>> std.value
    2.7386127875258306
 
-Calculate the *population* (i.e., the third argument is set to 1) standard deviation and variance
+Calculate the population standard deviation (i.e., the third argument is set to 1) and variance
 
 .. code-block:: pycon
 
@@ -251,7 +249,7 @@ Load a Java archive, a ``.jar`` file, in a JVM_, see :ref:`here <java-lib-jar>` 
 
    >>> jar = LoadLibrary(EXAMPLES_DIR + '/java_lib.jar')
    >>> jar
-   <LoadLibrary id=0x206008993c8 libtype=JVMView path=D:\msl\examples\loadlib\java_lib.jar>
+   <LoadLibrary libtype=JVMView path=D:\msl\examples\loadlib\java_lib.jar>
    >>> jar.gateway
    <py4j.java_gateway.JavaGateway object at 0x000002061A4524E0>
 
@@ -336,7 +334,7 @@ Load Java byte code, a ``.class`` file, in a JVM_, see :ref:`here <java-lib-clas
 
    >>> cls = LoadLibrary(EXAMPLES_DIR + '/Trig.class')
    >>> cls
-   <LoadLibrary id=0x3930e10 libtype=JVMView path=D:\msl\examples\loadlib\Trig.class>
+   <LoadLibrary libtype=JVMView path=D:\msl\examples\loadlib\Trig.class>
    >>> cls.lib
    <py4j.java_gateway.JVMView object at 0x0000000003A89898>
 
