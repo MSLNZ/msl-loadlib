@@ -69,8 +69,8 @@ class Server32(HTTPServer):
         TypeError
             If the value of `libtype` is not supported.
         """
-        HTTPServer.__init__(self, (host, int(port)), RequestHandler)
-        self.quiet = quiet
+        super(Server32, self).__init__((host, int(port)), RequestHandler)
+        self._quiet = bool(quiet)
         self._library = LoadLibrary(path, libtype)
 
     @property
@@ -148,6 +148,11 @@ class Server32(HTTPServer):
         else:
             cmd = "gnome-terminal --command='{exe} --interactive'"
         os.system(cmd.format(exe=exe))
+
+    @property
+    def quiet(self):
+        """:class:`bool`: Whether :data:`sys.stdout` messages are hidden on the server."""
+        return self._quiet
 
 
 class RequestHandler(BaseHTTPRequestHandler):
