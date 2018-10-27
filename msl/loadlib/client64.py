@@ -8,23 +8,27 @@ from 64-bit Python.
 import os
 import sys
 import uuid
+import json
 import tempfile
 import subprocess
 try:
-    import cPickle as pickle
+    import cPickle as pickle  # Python 2
 except ImportError:
     import pickle
 try:
-    from httplib import HTTPConnection, HTTPException  # Python 2
+    from httplib import HTTPConnection  # Python 2
 except ImportError:
-    from http.client import HTTPConnection, HTTPException
+    from http.client import HTTPConnection
 
-from . import utils, SERVER_FILENAME
+from . import utils, SERVER_FILENAME, IS_PYTHON2
+from .exceptions import Server32Error
+
+_encoding = sys.getfilesystemencoding()
 
 
 class Client64(HTTPConnection):
 
-    def __init__(self, module32, host='127.0.0.1', port=None, timeout=10.0, quiet=True,
+    def __init__(self, module32, host='127.0.0.1', port=None, timeout=5.0, quiet=True,
                  append_sys_path=None, append_environ_path=None, **kwargs):
         """Base class for communicating with a 32-bit library from 64-bit Python.
 
@@ -39,13 +43,13 @@ class Client64(HTTPConnection):
         module32 : :class:`str`
             The name of the Python module that is to be imported by the 32-bit server.
         host : :class:`str`, optional
-            The IP address of the 32-bit server. Default is ``'127.0.0.1'``.
+            The address of the 32-bit server. Default is ``'127.0.0.1'``.
         port : :class:`int`, optional
             The port to open on the 32-bit server. Default is :data:`None`, which means
             to automatically find a port that is available.
         timeout : :class:`float`, optional
             The maximum number of seconds to wait to establish a connection to the
-            32-bit server. Default is 10 seconds.
+            32-bit server. Default is 5 seconds.
         quiet : :class:`bool`, optional
             Whether to hide :data:`sys.stdout` messages from the 32-bit server.
             Default is :data:`True`.
@@ -79,7 +83,7 @@ class Client64(HTTPConnection):
             If the frozen executable cannot be found.
         TypeError
             If the data type of `append_sys_path` or `append_environ_path` is invalid.
-        :exc:`~msl.loadlib.utils.ConnectionTimeoutError`
+        :class:`~msl.loadlib.exceptions.ConnectionTimeoutError`
             If the connection to the 32-bit server cannot be established.
         """
 
@@ -115,26 +119,29 @@ class Client64(HTTPConnection):
         ]
 
         # include paths to the 32-bit server's sys.path
-        _append_sys_path = sys.path
+        _append_sys_path = list(sys.path)
         if append_sys_path is not None:
-            if isinstance(append_sys_path, str):
-                _append_sys_path.append(append_sys_path.strip())
+            if isinstance(append_sys_path, str) or (IS_PYTHON2 and isinstance(append_sys_path, unicode)):
+                _append_sys_path.append(append_sys_path)
             elif isinstance(append_sys_path, (list, tuple)):
                 _append_sys_path.extend(append_sys_path)
             else:
                 raise TypeError('append_sys_path must be a str, list or tuple')
-        cmd.extend(['--append-sys-path', ';'.join(_append_sys_path).strip()])
+        if IS_PYTHON2:
+            _append_sys_path = [p.encode(_encoding) if isinstance(p, unicode) else p for p in _append_sys_path]
+        cmd.extend(['--append-sys-path', ';'.join(_append_sys_path)])
 
         # include paths to the 32-bit server's os.environ['PATH']
         if append_environ_path is not None:
-            if isinstance(append_environ_path, str):
-                env_str = append_environ_path.strip()
+            if isinstance(append_environ_path, str) or (IS_PYTHON2 and isinstance(append_sys_path, unicode)):
+                env_paths = [append_environ_path]
             elif isinstance(append_environ_path, (list, tuple)):
-                env_str = ';'.join(append_environ_path).strip()
+                env_paths = append_environ_path
             else:
                 raise TypeError('append_environ_path must be a str, list or tuple')
-            if env_str:
-                cmd.extend(['--append-environ-path', env_str])
+            if IS_PYTHON2:
+                env_paths = [p.encode(_encoding) if isinstance(p, unicode) else p for p in env_paths]
+            cmd.extend(['--append-environ-path', ';'.join(env_paths)])
 
         # include any keyword arguments
         if kwargs:
@@ -155,7 +162,7 @@ class Client64(HTTPConnection):
         self._lib32_path = self.request32('LIB32_PATH')
 
     def __repr__(self):
-        msg = '<{} id={:#x} '.format(self.__class__.__name__, id(self))
+        msg = '<{} '.format(self.__class__.__name__)
         if self._is_active:
             lib = os.path.basename(self._lib32_path)
             return msg + 'lib={} address={}:{}>'.format(lib, self.host, self.port)
@@ -193,11 +200,11 @@ class Client64(HTTPConnection):
 
         Raises
         ------
-        :class:`~http.client.HTTPException`
+        :class:`~msl.loadlib.exceptions.Server32Error`
             If there was an error processing the request on the 32-bit server.
         """
         if not self._is_active:
-            raise HTTPException('The 32-bit server is not active')
+            raise Server32Error('The 32-bit server is not active')
 
         if method32 == 'SHUTDOWN_SERVER32':
             self.request('GET', '/SHUTDOWN_SERVER32')
@@ -214,15 +221,14 @@ class Client64(HTTPConnection):
             with open(self._pickle_temp_file, 'rb') as f:
                 result = pickle.load(f)
             return result
-        raise HTTPException(response.read().decode())
+        raise Server32Error(**json.loads(response.read().decode(encoding='utf-8')))
 
     def shutdown_server32(self):
         """Shutdown the 32-bit server.
         
         This method stops the process that is running the 32-bit server executable
         and it deletes the temporary file that is used to save the serialized 
-        :mod:`pickle`\'d data which is passed between the 32-bit server and the
-        64-bit client.
+        :mod:`pickle`\'d data.
 
         Note
         ----

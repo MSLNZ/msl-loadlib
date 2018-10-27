@@ -97,6 +97,9 @@ class LoadLibrary(object):
         if ext in ('.jar', '.class'):
             libtype = 'java'
 
+        if IS_PYTHON2:
+            _path = _path.encode(_encoding)
+
         self._path = os.path.abspath(_path)
         if not os.path.isfile(self._path):
             # for find_library use the original 'path' value since it may be a library name
@@ -113,9 +116,6 @@ class LoadLibrary(object):
                         break
                 if not success:
                     raise IOError('Cannot find the shared library {!r}'.format(path))
-
-        if IS_PYTHON2:
-            self._path = self._path.encode(_encoding)
 
         libtype = libtype.lower()
         if libtype == 'cdll':
@@ -313,5 +313,4 @@ class DotNet(object):
         self._path = path
 
     def __repr__(self):
-        return '<{} id={:#x} path={}>'.format(
-            self.__class__.__name__, id(self), self._path)
+        return '<{} path={}>'.format(self.__class__.__name__, self._path)

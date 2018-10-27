@@ -7,11 +7,12 @@ from 64-bit Python.
 """
 import os
 import sys
+import json
 import traceback
 import threading
 import subprocess
 try:
-    import cPickle as pickle
+    import cPickle as pickle  # Python 2
 except ImportError:
     import pickle
 try:
@@ -118,7 +119,7 @@ class Server32(HTTPServer):
         -------
         >>> from msl.loadlib import Server32  # doctest: +SKIP
         >>> Server32.version()  # doctest: +SKIP
-        Python 3.6.1 |Continuum Analytics, Inc.| (default, Mar 22 2017, 20:22:29) [MSC v.1900 32 bit (Intel)]       
+        Python 3.6.6 (v3.6.6:4cf1f54eb7, Jun 27 2018, 02:47:15) [MSC v.1900 32 bit (Intel)]
 
         Note
         ----
@@ -180,20 +181,20 @@ class RequestHandler(BaseHTTPRequestHandler):
             self.end_headers()
 
         except Exception:
-            self.send_response(501)
-            self.send_header('Content-type', 'text/plain')
-            self.end_headers()
-
             exc_type, exc_value, exc_traceback = sys.exc_info()
             tb_list = traceback.extract_tb(exc_traceback)
             tb = tb_list[min(len(tb_list)-1, 1)]  # get the Server32 subclass exception
 
-            msg = '\n  File "{}", line {}, in {}'.format(tb[0], tb[1], tb[2])
+            response = {'name': exc_type.__name__, 'value': str(exc_value)}
+            traceback_ = '  File "{}", line {}, in {}'.format(tb[0], tb[1], tb[2])
             if tb[3]:
-                msg += '\n    {}'.format(tb[3])
-            msg += '\n{}: {}'.format(exc_type.__name__, exc_value)
+                traceback_ += '\n    {}'.format(tb[3])
+            response['traceback'] = traceback_
 
-            self.wfile.write(msg.encode())
+            self.send_response(501)
+            self.send_header('Content-type', 'text/plain')
+            self.end_headers()
+            self.wfile.write(json.dumps(response).encode(encoding='utf-8', errors='ignore'))
 
     def log_message(self, fmt, *args):
         """

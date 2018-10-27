@@ -8,6 +8,8 @@ import logging
 import subprocess
 import xml.etree.ElementTree as ET
 
+from .exceptions import ConnectionTimeoutError
+
 logger = logging.getLogger(__name__)
 
 
@@ -214,7 +216,7 @@ def get_available_port():
 
 
 def wait_for_server(host, port, timeout):
-    """Wait for the server to start.
+    """Wait for the 32-bit server to start.
 
     Parameters
     ----------
@@ -227,7 +229,7 @@ def wait_for_server(host, port, timeout):
 
     Raises
     ------
-    :exc:`ConnectionTimeoutError`
+    :class:`~msl.loadlib.exceptions.ConnectionTimeoutError`
         If a timeout occurred.
     """
 
@@ -239,7 +241,3 @@ def wait_for_server(host, port, timeout):
         if time.time() > stop:
             m = 'Timeout after {:.1f} seconds. Could not connect to {}:{}'.format(timeout, host, port)
             raise ConnectionTimeoutError(m)
-
-
-class ConnectionTimeoutError(OSError):
-    """Raised when the connection to the 32-bit server cannot be established."""
