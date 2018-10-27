@@ -7,11 +7,15 @@ Version 0.4.2.dev0
 
 * Added
 
-  - support for unicode paths
+  - examples for working with numpy arrays and C++ structs
+  - support for unicode paths in Python 2
 
 * Changed
 
-  - the __repr__ method for `LoadLibrary` no longer includes the id as a hex number
+  - the `Client64` class now raises `Server32Error` if the 32-bit server raises an exception
+  - the `Client64` class now inherits from `object` and the reference to the `HTTPConnection`
+    is now a property value
+  - the __repr__ methods no longer include the id as a hex number
 
 Version 0.4.1 (2018.08.24)
 ==========================
