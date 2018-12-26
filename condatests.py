@@ -2,7 +2,7 @@
 Run the tests in conda environments.
 
 For more information see:
-  https://msl-package-manager.readthedocs.io/en/latest/new_package_readme.html#create-readme-envstest
+  https://msl-package-manager.readthedocs.io/en/latest/new_package_readme.html#create-readme-condatests
 """
 import os
 import re
@@ -15,6 +15,13 @@ try:
     import configparser
 except ImportError:
     import ConfigParser as configparser  # Python 2
+
+if sys.platform in {'win32', 'cygwin'}:
+    BIN, EXT = '', '.exe'
+else:
+    BIN, EXT = 'bin', ''
+
+EXECUTABLES = {'python', 'pypy', 'pypy3'}
 
 
 def get_conda_envs():
@@ -33,22 +40,22 @@ def get_conda_envs():
     return environs
 
 
-def include(envs, patterns):
-    if not patterns:
+def include(envs, args):
+    if not args.include:
         return envs
     environs = dict()
     for key, value in envs.items():
-        for pattern in patterns:
+        for pattern in args.include:
             if re.search(pattern, key) is not None:
                 environs[key] = value
                 break
     return environs
 
 
-def exclude(envs, patterns):
+def exclude(envs, args):
     environs = envs.copy()
     for key, value in envs.items():
-        for pattern in patterns:
+        for pattern in args.exclude:
             if re.search(pattern, key) is not None:
                 del environs[key]
                 break
@@ -61,9 +68,18 @@ def print_envs(envs):
         print('  {}  ->  {}'.format(key.ljust(max_len), value))
 
 
+def get_executable(env):
+    path = os.path.join(env, BIN)
+    for item in EXECUTABLES:
+        exe = os.path.join(path, item+EXT)
+        if os.path.isfile(exe):
+            return [exe]
+    raise IOError('The only supported executables are: {}'.format(', '.join(EXECUTABLES)))
+
+
 def ini_parser():
     ini = configparser.ConfigParser()
-    ini.read('envstest.ini')
+    ini.read('condatests.ini')
 
     section = 'envs'
     if not ini.has_section(section):
@@ -91,7 +107,7 @@ def main(*args):
         args = ini_parser()
     args = cli_parser(args)
 
-    envs = exclude(include(get_conda_envs(), args.include), args.exclude)
+    envs = exclude(include(get_conda_envs(), args), args)
     if not envs:
         print('There are no conda environments that match the include/exclude criteria')
         return
@@ -106,11 +122,9 @@ def main(*args):
     if typ.startswith('pytest') or typ.startswith('unittest') or typ.startswith('nose'):
         command.insert(0, '-m')
 
-    bin = 'bin' if (sys.platform.startswith('linux') or sys.platform == 'darwin') else ''
-
     for env in envs.values():
-        cmd = [os.path.join(env, bin, 'python')] + command
-        print('\nTesting with: ' + ' '.join(cmd))
+        cmd = get_executable(env) + command
+        print('\nTesting with ' + ' '.join(cmd))
         if subprocess.call(cmd):
             return
 
