@@ -10,6 +10,10 @@ import pytest
 from msl import loadlib
 from msl.examples.loadlib import Cpp64, Fortran64, Echo64, DotNet64, EXAMPLES_DIR, FourPoints
 
+# fixes -> OSError: [WinError -2147417850] Cannot change thread mode after it is set
+# when importing comtypes
+sys.coinit_flags = 0
+
 eps = 1e-10
 
 c = Cpp64()
@@ -422,3 +426,13 @@ def test_Server32Error():
         assert e.name == 'TypeError'
         assert e.value.startswith('an integer is required')
         assert e.traceback.endswith('return self.lib.add(ctypes.c_int32(a), ctypes.c_int32(b))')
+
+
+@pytest.mark.skipif(not loadlib.IS_WINDOWS, reason='comtypes only runs on Windows')
+def test_comtypes():
+    obj = loadlib.LoadLibrary('Scripting.FileSystemObject', 'com')
+    assert hasattr(obj.lib, 'CreateTextFile')
+    del obj
+
+    with pytest.raises(OSError):
+        loadlib.LoadLibrary('ABC.def.GHI', 'com')

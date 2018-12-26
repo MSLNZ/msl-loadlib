@@ -25,7 +25,7 @@ from . import LoadLibrary, SERVER_FILENAME, IS_WINDOWS
 
 class Server32(HTTPServer):
 
-    def __init__(self, path, libtype, host, port, quiet):
+    def __init__(self, path, libtype, host, port, quiet, **kwargs):
         """Base class for loading a 32-bit library in 32-bit Python.
 
         All modules that are to be run on the 32-bit server must contain a class
@@ -49,7 +49,8 @@ class Server32(HTTPServer):
 
                 * ``'cdll'`` -- for a __cdecl library
                 * ``'windll'`` or ``'oledll'`` -- for a __stdcall library (Windows only)
-                * ``'net'`` -- for a .NET library
+                * ``'net'`` -- for Microsoft's .NET Framework (Common Language Runtime)
+                * ``'com'`` -- for a `COM <https://en.wikipedia.org/wiki/Component_Object_Model>`_ library.
 
             .. note::
                Since Java byte code is executed on the JVM_ it does not make sense to
@@ -61,6 +62,8 @@ class Server32(HTTPServer):
             The port to open on the server.
         quiet : :class:`bool`
             Whether to hide :data:`sys.stdout` messages from the server.
+        kwargs
+            Keyword arguments that are passed to :class:`.LoadLibrary`.
 
         Raises
         ------
@@ -71,7 +74,7 @@ class Server32(HTTPServer):
         """
         super(Server32, self).__init__((host, int(port)), RequestHandler)
         self._quiet = bool(quiet)
-        self._library = LoadLibrary(path, libtype)
+        self._library = LoadLibrary(path, libtype=libtype, **kwargs)
 
     @property
     def assembly(self):
@@ -90,7 +93,7 @@ class Server32(HTTPServer):
 
     @property
     def lib(self):
-        """Returns the reference to the 32-bit, loaded-library object.
+        """Returns the reference to the 32-bit, loaded library object.
 
         For example, if `libtype` is
 
@@ -98,6 +101,9 @@ class Server32(HTTPServer):
         * ``'windll'`` then a :class:`~ctypes.WinDLL` object
         * ``'oledll'`` then a :class:`~ctypes.OleDLL` object
         * ``'net'`` then a :class:`~.load_library.DotNet` object
+        * ``'com'`` then the interface pointer returned by comtypes.CreateObject_
+
+        .. _comtypes.CreateObject: https://pythonhosted.org/comtypes/#creating-and-accessing-com-objects
         """
         return self._library.lib
 

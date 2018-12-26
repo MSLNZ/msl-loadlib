@@ -6,14 +6,17 @@ MSL-LoadLib
 
 This package is used to load a shared library in Python. It is basically just a thin wrapper
 around ctypes_ (for libraries that use the ``__cdecl`` or ``__stdcall`` calling convention),
-`Python for .NET`_ (for libraries that use Microsoft's .NET Framework, ``CLR``) and Py4J_
-(for Java ``.jar`` or ``.class`` files). However, the primary advantage is that it is possible
-to communicate with a 32-bit shared library from 64-bit Python.
+`Python for .NET`_ (for libraries that use Microsoft's .NET Framework, ``CLR``), Py4J_
+(for Java ``.jar`` or ``.class`` files) and comtypes_ (for libraries that use the
+`Component Object Model`_).
+
+However, the primary advantage is that it is possible to communicate with a 32-bit shared
+library from 64-bit Python.
 
 Tested in Python 2.7, 3.4+. The `examples <https://msl-loadlib.readthedocs.io/en/latest/direct.html>`_
 provided are currently only supported in Windows and Linux.
 
-**MSL-LoadLib** is a pure-python package, but `Python for .NET`_ depends on the .NET Common Language
+**MSL-LoadLib** is a pure-python package, but, `Python for .NET`_ depends on the .NET Common Language
 Runtime (CLR) on Windows and Mono Runtime on Linux and OSX and Py4J_ depends on having a
 `Java Virtual Machine`_ installed.
 
@@ -36,6 +39,7 @@ Optional dependencies:
 
 * `Python for .NET`_
 * Py4J_
+* comtypes_
 
 To set up your environment on Linux, please follow the instructions on the
 `prerequisites <https://msl-loadlib.readthedocs.io/en/latest/install.html#prerequisites>`_
@@ -92,7 +96,7 @@ in the ``'net'`` argument
 .. code-block:: pycon
 
    >>> net = LoadLibrary(EXAMPLES_DIR + '/dotnet_lib64.dll', 'net')
-   >>> net.lib.StringManipulation.reverse_string('abcdefghijklmnopqrstuvwxyz')
+   >>> net.lib.StringManipulation.reverse_string('abcdefghijklmnopqrstuvwxyz')  # doctest: +SKIP
    'zyxwvutsrqponmlkjihgfedcba'
 
 Load `Java <https://github.com/MSLNZ/msl-loadlib/blob/master/msl/examples/loadlib/Trig.java>`_ byte code
@@ -100,8 +104,8 @@ and call the ``cos`` function
 
 .. code-block:: pycon
 
-   >>> java = LoadLibrary(EXAMPLES_DIR + '/Trig.class')
-   >>> java.lib.Trig.cos(1.234)
+   >>> java = LoadLibrary(EXAMPLES_DIR + '/Trig.class')  # doctest: +SKIP
+   >>> java.lib.Trig.cos(1.234)  # doctest: +SKIP
    0.33046510807172985
 
 Python interacts with the `Java Virtual Machine`_ via a local network socket and therefore the connection
@@ -109,7 +113,27 @@ needs to be closed when you are done using the Java library
 
 .. code-block:: pycon
 
-   >>> java.gateway.shutdown()
+   >>> java.gateway.shutdown()  # doctest: +SKIP
+
+To load a `Component Object Model`_ pass in the library's GUID. *This example will only work on Windows.*
+
+Here we load the FileSystemObject_ and include the ``'com'`` argument to indicate that it is a COM library
+
+.. code-block:: pycon
+
+   >>> com = LoadLibrary('Scripting.FileSystemObject', 'com')  # doctest: +SKIP
+   >>> com  # doctest: +SKIP
+   <LoadLibrary libtype=POINTER(IFileSystem3) path=Scripting.FileSystemObject>
+
+We can then use the library to create, edit and close a text file
+
+.. code-block:: pycon
+
+   >>> fp = com.lib.CreateTextFile('a_new_file.txt')  # doctest: +SKIP
+   >>> fp.WriteLine('This is a test')  # doctest: +SKIP
+   0
+   >>> fp.Close()  # doctest: +SKIP
+   0
 
 `Inter-process communication <ipc_>`_ is used to access a 32-bit shared library from a module that is
 running within a 64-bit Python interpreter. The procedure uses a client-server protocol where the client
@@ -136,3 +160,6 @@ The documentation for **MSL-LoadLib** can be found `here <https://msl-loadlib.re
 .. _ipc: https://en.wikipedia.org/wiki/Inter-process_communication
 .. _Java Virtual Machine: https://en.wikipedia.org/wiki/Java_virtual_machine
 .. _MSL Package Manager: https://msl-package-manager.readthedocs.io/en/latest/
+.. _comtypes: https://pythonhosted.org/comtypes/#
+.. _Component Object Model: https://en.wikipedia.org/wiki/Component_Object_Model
+.. _FileSystemObject: https://docs.microsoft.com/en-us/office/vba/language/reference/user-interface-help/filesystemobject-object

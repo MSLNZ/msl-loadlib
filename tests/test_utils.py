@@ -15,9 +15,10 @@ def test_port_functions():
     assert not utils.port_in_use(utils.get_available_port())
 
 
-def test_pythonnet_py4j_installed():
+def test_pythonnet_py4j_comtypes_installed():
     assert utils.is_pythonnet_installed()
     assert utils.is_py4j_installed()
+    assert utils.is_comtypes_installed()
 
 
 def test_check_dot_net_config():

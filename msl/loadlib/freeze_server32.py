@@ -8,10 +8,12 @@ can communicate with the 32-bit library by sending requests to the server. The s
 calls the library to execute the request and then the server sends a response back
 to the client.
 
-This module must be run from a 32-bit Python interpreter with both
-`PyInstaller <https://www.pyinstaller.org/>`_ (to create the executable) and
+This module must be run from a 32-bit Python interpreter with
+`PyInstaller <https://www.pyinstaller.org/>`_ (to create the executable),
 `Python for .NET <https://pypi.python.org/pypi/pythonnet/>`_ (to be able to load .NET
-Framework assemblies) installed.
+Framework assemblies) and `comtypes <https://pythonhosted.org/comtypes/#>`_ (to be able
+to load a `COM <https://en.wikipedia.org/wiki/Component_Object_Model>`_ library -- only
+required on Windows) installed.
 """
 import os
 import sys
@@ -52,15 +54,26 @@ def main(spec=None):
         import PyInstaller
     except ImportError:
         print('PyInstaller not found, run:')
-        print('$ pip install pyinstaller')
+        print('pip install pyinstaller')
         sys.exit(0)
 
     try:
         import clr
     except ImportError:
         print('pythonnet not found, run:')
-        print('$ pip install pythonnet')
+        print('pip install pythonnet')
         sys.exit(0)
+
+    if loadlib.IS_WINDOWS:
+        try:
+            # fixes -> OSError: [WinError -2147417850] Cannot change thread mode after it is set
+            # when importing comtypes
+            sys.coinit_flags = 0
+            import comtypes
+        except ImportError:
+            print('comtypes not found, run:')
+            print('pip install comtypes')
+            sys.exit(0)
 
     # start the freezing process
 
@@ -86,6 +99,8 @@ def main(spec=None):
             '--hidden-import', 'msl.examples.loadlib',
             '--hidden-import', 'clr',
         ])
+        if loadlib.IS_WINDOWS:
+            cmd.extend(['--hidden-import', 'comtypes'])
         cmd.extend(_get_standard_modules())
         cmd.append(os.path.join(here, 'start_server32.py'))
     else:

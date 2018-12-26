@@ -86,6 +86,24 @@ def is_py4j_installed():
     return True
 
 
+def is_comtypes_installed():
+    """Checks if comtypes_ is installed.
+
+    .. _comtypes: https://pythonhosted.org/comtypes/#
+
+    Returns
+    -------
+    :class:`bool`
+        Whether comtypes_ is installed.
+    """
+    try:
+        from comtypes.client import CreateObject
+    except ImportError:
+        logger.warning('comtypes is not installed. Cannot load a COM object.')
+        return False
+    return True
+
+
 def check_dot_net_config(py_exe_path):
     """Check if the **useLegacyV2RuntimeActivationPolicy** property is enabled.
 
@@ -97,7 +115,9 @@ def check_dot_net_config(py_exe_path):
     This `link <https://stackoverflow.com/questions/14508627/>`_ provides an overview
     explaining why the **useLegacyV2RuntimeActivationPolicy** property is required.
 
-    The **<python-executable>.config** file should look like::
+    The **<python-executable>.config** file should look like
+
+    .. code-block:: xml
 
         <?xml version ="1.0"?>
         <configuration>
