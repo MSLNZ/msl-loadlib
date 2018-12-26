@@ -5,3 +5,4 @@ msl.loadlib.load_library module
     :members:
     :undoc-members:
     :show-inheritance:
+    :member-order: bysource

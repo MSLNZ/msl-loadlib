@@ -5,3 +5,4 @@ msl.loadlib.server32 module
     :members:
     :undoc-members:
     :show-inheritance:
+    :member-order: bysource
