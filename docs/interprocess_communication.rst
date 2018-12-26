@@ -56,7 +56,6 @@ subclass.
 
         def __init__(self, host, port, quiet, **kwargs):
             # Load the 'cpp_lib32' shared-library file using ctypes.CDLL.
-            # The optional kwargs are only used by MyServer and are not passed to Server32.
             super(MyServer, self).__init__('cpp_lib32.dll', 'cdll', host, port, quiet)
 
         def add(self, a, b):
@@ -100,15 +99,16 @@ The **MyClient** class would then be used as follows
 
 .. code-block:: pycon
 
-   >>> from my_client import MyClient
-   >>> c = MyClient()
-   >>> c.add(1, 2)
+   >>> from my_client import MyClient  # doctest: +SKIP
+   >>> c = MyClient()  # doctest: +SKIP
+   >>> c.add(1, 2)  # doctest: +SKIP
    3
 
 The following examples are provided for communicating with different libraries that were
 compiled in different programming languages or using different calling conventions:
 
 .. toctree::
+   :maxdepth: 1
 
    "Echo" <tutorials_echo>
    C++ <tutorials_cpp>

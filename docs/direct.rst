@@ -43,9 +43,9 @@ Load a 64-bit C++ library in 64-bit Python, see :ref:`here <cpp-lib>` for the so
 .. code-block:: pycon
 
    >>> cpp = LoadLibrary(EXAMPLES_DIR + '/cpp_lib64')
-   >>> cpp
+   >>> cpp  # doctest: +SKIP
    <LoadLibrary libtype=CDLL path=D:\msl\examples\loadlib\cpp_lib64.dll>
-   >>> cpp.lib
+   >>> cpp.lib  # doctest: +SKIP
    <CDLL 'D:\msl\examples\loadlib\cpp_lib64.dll', handle 6f920000 at 0x3e92f90>
 
 Call the ``add`` function that calculates the sum of two integers
@@ -63,9 +63,9 @@ Load a 64-bit FORTRAN library in 64-bit Python, see :ref:`here <fortran-lib>` fo
 .. code-block:: pycon
 
    >>> fortran = LoadLibrary(EXAMPLES_DIR + '/fortran_lib64')
-   >>> fortran
+   >>> fortran  # doctest: +SKIP
    <LoadLibrary libtype=CDLL path=D:\msl\examples\loadlib\fortran_lib64.dll>
-   >>> fortran.lib
+   >>> fortran.lib  # doctest: +SKIP
    <CDLL 'D:\msl\examples\loadlib\fortran_lib64.dll', handle 6f660000 at 0x2e5d470>
 
 Call the ``factorial`` function. With a FORTRAN library you must pass values by reference using :mod:`ctypes`,
@@ -88,11 +88,11 @@ the .NET Framework. *To load the 32-bit version in 32-bit Python use* ``'dotnet_
 .. code-block:: pycon
 
    >>> net = LoadLibrary(EXAMPLES_DIR + '/dotnet_lib64.dll', 'net')
-   >>> net
+   >>> net  # doctest: +SKIP
    <LoadLibrary libtype=DotNet path=D:\msl\examples\loadlib\dotnet_lib64.dll>
-   >>> net.assembly
+   >>> net.assembly  # doctest: +SKIP
    <System.Reflection.RuntimeAssembly object at 0x03099330>
-   >>> net.lib
+   >>> net.lib  # doctest: +SKIP
    <DotNet path=D:\msl\examples\loadlib\dotnet_lib64.dll>
 
 The :ref:`dotnet_lib64 <dotnet-lib>` library contains a reference to the ``DotNetMSL`` module
@@ -101,7 +101,7 @@ The :ref:`dotnet_lib64 <dotnet-lib>` library contains a reference to the ``DotNe
 
 .. code-block:: pycon
 
-   >>> for item in dir(net.lib):
+   >>> for item in dir(net.lib):  # doctest: +SKIP
    ...     if not item.startswith('_'):
    ...         print(item, type(getattr(net.lib, item)))
    ...
@@ -125,7 +125,7 @@ Create an instance of the ``ArrayManipulation`` class in the ``DotNetMSL`` names
 
    >>> am = net.lib.DotNetMSL.ArrayManipulation()
    >>> values = am.scalar_multiply(2., [1., 2., 3., 4., 5.])
-   >>> values
+   >>> values  # doctest: +SKIP
    <System.Double[] object at 0x00000000040BB2E8>
    >>> [val for val in values]
    [2.0, 4.0, 6.0, 8.0, 10.0]
@@ -134,7 +134,7 @@ Use the ``reverse_string`` method in the ``StringManipulation`` class to reverse
 
 .. code-block:: pycon
 
-   >>> net.lib.StringManipulation.reverse_string('abcdefghijklmnopqrstuvwxyz')
+   >>> net.lib.StringManipulation.reverse_string('abcdefghijklmnopqrstuvwxyz')  # doctest: +SKIP
    'zyxwvutsrqponmlkjihgfedcba'
 
 View the static methods in the ``StaticClass`` class
@@ -166,16 +166,16 @@ Load a 32-bit Windows ``__stdcall`` library in 32-bit Python, see
 
 .. code-block:: pycon
 
-   >>> kernel = LoadLibrary('C:/Windows/SysWOW64/kernel32.dll', 'windll')
-   >>> kernel
+   >>> kernel = LoadLibrary('C:/Windows/SysWOW64/kernel32.dll', 'windll')  # doctest: +SKIP
+   >>> kernel  # doctest: +SKIP
    <LoadLibrary libtype=WinDLL path=C:\Windows\SysWOW64\kernel32.dll>
-   >>> kernel.lib
+   >>> kernel.lib  # doctest: +SKIP
    <WinDLL 'C:\Windows\SysWOW64\kernel32.dll', handle 76e70000 at 0x2e63570>
-   >>> from msl.examples.loadlib.kernel32 import SystemTime
-   >>> st = SystemTime()
-   >>> from ctypes import pointer
-   >>> ret = kernel.lib.GetLocalTime(pointer(st))
-   >>> '{}-{}-{} {}:{}:{}'.format(st.wYear, st.wMonth, st.wDay, st.wHour, st.wMinute, st.wSecond)
+   >>> from msl.examples.loadlib.kernel32 import SystemTime  # doctest: +SKIP
+   >>> st = SystemTime()  # doctest: +SKIP
+   >>> from ctypes import pointer  # doctest: +SKIP
+   >>> ret = kernel.lib.GetLocalTime(pointer(st))  # doctest: +SKIP
+   >>> '{}-{}-{} {}:{}:{}'.format(st.wYear, st.wMonth, st.wDay, st.wHour, st.wMinute, st.wSecond)  # doctest: +SKIP
    '2017-2-27 17:12:19.288'
 
 See :ref:`here <tutorial_stdcall>` for how to communicate with ``kernel32.dll`` from 64-bit Python.
@@ -187,16 +187,16 @@ Load a 64-bit LabVIEW library in 64-bit Python, see :ref:`here <labview-lib>` fo
 *Run-Time Engine must be installed. The LabVIEW example is only valid on Windows.*
 
 .. note::
-   A LabVIEW library can be built in to a DLL using the ``__cdecl`` or  ``__stdcall`` calling convention.
+   A LabVIEW library can be built into a DLL using the ``__cdecl`` or  ``__stdcall`` calling convention.
    Make sure that you specify the appropriate `libtype` when instantiating the
    :class:`~msl.loadlib.load_library.LoadLibrary` class.
 
 .. code-block:: pycon
 
-   >>> labview = LoadLibrary(EXAMPLES_DIR + '/labview_lib64.dll')
-   >>> labview
+   >>> labview = LoadLibrary(EXAMPLES_DIR + '/labview_lib64.dll')  # doctest: +SKIP
+   >>> labview  # doctest: +SKIP
    <LoadLibrary libtype=CDLL path=D:\msl\examples\loadlib\labview_lib64.dll>
-   >>> labview.lib
+   >>> labview.lib  # doctest: +SKIP
    <CDLL 'D:\msl\examples\loadlib\labview_lib64.dll', handle 2a920020 at 0x7e32b77>
 
 Create some data to calculate the mean, variance and standard deviation of
@@ -217,24 +217,24 @@ Calculate the sample standard deviation (i.e., the third argument is set to 0) a
 
 .. code-block:: pycon
 
-   >>> ret = labview.lib.stdev(x, len(data), 0, byref(mean), byref(variance), byref(std))
-   >>> mean.value
+   >>> ret = labview.lib.stdev(x, len(data), 0, byref(mean), byref(variance), byref(std))  # doctest: +SKIP
+   >>> mean.value  # doctest: +SKIP
    5.0
-   >>> variance.value
+   >>> variance.value  # doctest: +SKIP
    7.5
-   >>> std.value
+   >>> std.value  # doctest: +SKIP
    2.7386127875258306
 
 Calculate the population standard deviation (i.e., the third argument is set to 1) and variance
 
 .. code-block:: pycon
 
-   >>> ret = labview.lib.stdev(x, len(data), 1, byref(mean), byref(variance), byref(std))
-   >>> mean.value
+   >>> ret = labview.lib.stdev(x, len(data), 1, byref(mean), byref(variance), byref(std))  # doctest: +SKIP
+   >>> mean.value  # doctest: +SKIP
    5.0
-   >>> variance.value
+   >>> variance.value  # doctest: +SKIP
    6.666666666666667
-   >>> std.value
+   >>> std.value  # doctest: +SKIP
    2.581988897471611
 
 Java
@@ -247,26 +247,26 @@ Load a Java archive, a ``.jar`` file, in a JVM_, see :ref:`here <java-lib-jar>` 
 
 .. code-block:: pycon
 
-   >>> jar = LoadLibrary(EXAMPLES_DIR + '/java_lib.jar')
-   >>> jar
+   >>> jar = LoadLibrary(EXAMPLES_DIR + '/java_lib.jar')  # doctest: +SKIP
+   >>> jar  # doctest: +SKIP
    <LoadLibrary libtype=JVMView path=D:\msl\examples\loadlib\java_lib.jar>
-   >>> jar.gateway
+   >>> jar.gateway  # doctest: +SKIP
    <py4j.java_gateway.JavaGateway object at 0x000002061A4524E0>
 
 The Java archive contains a ``nz.msl.examples`` package with two classes, ``MathUtils`` and ``Matrix``
 
 .. code-block:: pycon
 
-   >>> MathUtils = jar.lib.nz.msl.examples.MathUtils
-   >>> Matrix = jar.lib.nz.msl.examples.Matrix
+   >>> MathUtils = jar.lib.nz.msl.examples.MathUtils  # doctest: +SKIP
+   >>> Matrix = jar.lib.nz.msl.examples.Matrix  # doctest: +SKIP
 
 Generate a random number and calculate the square root of a number using the ``MathUtils`` class
 
 .. code-block:: pycon
 
-   >>> MathUtils.random()
+   >>> MathUtils.random()  # doctest: +SKIP
    0.17555846754602522
-   >>> MathUtils.sqrt(32.4)
+   >>> MathUtils.sqrt(32.4)  # doctest: +SKIP
    5.692099788303083
 
 Use the ``Matrix`` class to calculate the inverse of a 3x3 matrix that is filled with random
@@ -274,18 +274,18 @@ numbers between 0 and 100
 
 .. code-block:: pycon
 
-   >>> m = Matrix(3, 3, 0.0, 100.0)
-   >>> print(m.toString())
+   >>> m = Matrix(3, 3, 0.0, 100.0)  # doctest: +SKIP
+   >>> print(m.toString())  # doctest: +SKIP
    +5.937661e+01  +5.694407e+01  +5.132319e+01
    +2.443462e+01  +9.051636e+00  +5.500980e+01
    +6.183735e+01  +9.492954e+01  +4.519221e+01
-   >>> m_inverse = m.getInverse()
-   >>> print(m_inverse.toString())
+   >>> m_inverse = m.getInverse()  # doctest: +SKIP
+   >>> print(m_inverse.toString())  # doctest: +SKIP
    +7.446422e-02  -3.556370e-02  -4.127679e-02
    -3.554433e-02  +7.586144e-03  +3.113227e-02
    -2.722735e-02  +3.272723e-02  +1.321192e-02
-   >>> identity = Matrix.multiply(m, m_inverse)
-   >>> print(identity.toString())
+   >>> identity = Matrix.multiply(m, m_inverse)  # doctest: +SKIP
+   >>> print(identity.toString())  # doctest: +SKIP
    +1.000000e+00  +0.000000e+00  +2.220446e-16
    +0.000000e+00  +1.000000e+00  +1.110223e-16
    +0.000000e+00  -4.440892e-16  +1.000000e+00
@@ -294,18 +294,18 @@ Solve a linear system of equations, Ax=b
 
 .. code-block:: pycon
 
-   >>> A = jar.gateway.new_array(jar.lib.Double, 3, 3)
-   >>> coeff = [[3, 2, -1], [7, -2, 4], [-1, 5, 1]]
-   >>> for i in range(3):
+   >>> A = jar.gateway.new_array(jar.lib.Double, 3, 3)  # doctest: +SKIP
+   >>> coeff = [[3, 2, -1], [7, -2, 4], [-1, 5, 1]]  # doctest: +SKIP
+   >>> for i in range(3):  # doctest: +SKIP
    ...     for j in range(3):
    ...         A[i][j] = float(coeff[i][j])
    ...
-   >>> b = jar.gateway.new_array(jar.lib.Double, 3)
-   >>> b[0] = 1.6
-   >>> b[1] = -12.3
-   >>> b[2] = 3.4
-   >>> x = Matrix.solve(Matrix(A), Matrix(b))
-   >>> print(x.toString())
+   >>> b = jar.gateway.new_array(jar.lib.Double, 3)  # doctest: +SKIP
+   >>> b[0] = 1.6  # doctest: +SKIP
+   >>> b[1] = -12.3  # doctest: +SKIP
+   >>> b[2] = 3.4  # doctest: +SKIP
+   >>> x = Matrix.solve(Matrix(A), Matrix(b))  # doctest: +SKIP
+   >>> print(x.toString())  # doctest: +SKIP
    -5.892562e-01
    +8.826446e-01
    -1.602479e+00
@@ -314,7 +314,7 @@ Show that `x` is a solution by getting `b` back
 
 .. code-block:: pycon
 
-   >>> for i in range(3):
+   >>> for i in range(3):  # doctest: +SKIP
    ...     val = 0.0
    ...     for j in range(3):
    ...         val += coeff[i][j]*x.getValue(j,0)
@@ -328,34 +328,85 @@ Shutdown the connection to the JVM_ when you are finished
 
 .. code-block:: pycon
 
-   >>> jar.gateway.shutdown()
+   >>> jar.gateway.shutdown()  # doctest: +SKIP
 
 Load Java byte code, a ``.class`` file, in a JVM_, see :ref:`here <java-lib-class>` for the source code.
 
-   >>> cls = LoadLibrary(EXAMPLES_DIR + '/Trig.class')
-   >>> cls
+.. code-block:: pycon
+
+   >>> cls = LoadLibrary(EXAMPLES_DIR + '/Trig.class')  # doctest: +SKIP
+   >>> cls  # doctest: +SKIP
    <LoadLibrary libtype=JVMView path=D:\msl\examples\loadlib\Trig.class>
-   >>> cls.lib
+   >>> cls.lib  # doctest: +SKIP
    <py4j.java_gateway.JVMView object at 0x0000000003A89898>
 
 The Java library contains a ``Trig`` class, which calculates various trigonometric quantities
 
 .. code-block:: pycon
 
-   >>> Trig = cls.lib.Trig
-   >>> Trig
+   >>> Trig = cls.lib.Trig  # doctest: +SKIP
+   >>> Trig  # doctest: +SKIP
    <py4j.java_gateway.JavaClass object at 0x00000000038EA6A0>
-   >>> Trig.cos(1.2)
+   >>> Trig.cos(1.2)  # doctest: +SKIP
    0.3623577544766736
-   >>> Trig.asin(0.6)
+   >>> Trig.asin(0.6)  # doctest: +SKIP
    0.6435011087932844
-   >>> Trig.tanh(1.3)
+   >>> Trig.tanh(1.3)  # doctest: +SKIP
    0.8617231593133063
 
 Once again, shutdown the connection to the JVM_ when you are finished
 
 .. code-block:: pycon
 
-   >>> cls.gateway.shutdown()
+   >>> cls.gateway.shutdown()  # doctest: +SKIP
+
+COM
+---
+To load a `Component Object Model`_ pass in the library's GUID.
+
+.. note::
+
+   This example will only work on Windows.
+
+Here we load the FileSystemObject_ and include the ``'com'`` argument to indicate that it is a COM library
+
+.. code-block:: pycon
+
+   >>> com = LoadLibrary('Scripting.FileSystemObject', 'com')  # doctest: +SKIP
+   >>> com  # doctest: +SKIP
+   <LoadLibrary libtype=POINTER(IFileSystem3) path=Scripting.FileSystemObject>
+
+We can then use the library to create, edit and close a text file
+
+.. code-block:: pycon
+
+   >>> fp = com.lib.CreateTextFile('a_new_file.txt')  # doctest: +SKIP
+   >>> fp.WriteLine('This is a test')  # doctest: +SKIP
+   0
+   >>> fp.Close()  # doctest: +SKIP
+   0
+
+.. tip::
+
+   If you are importing comtypes_ and you get the following error
+
+   .. code-block:: python
+
+      OSError: [WinError -2147417850] Cannot change thread mode after it is set
+
+   then you can eliminate this error by setting ``sys.coinit_flags = 0`` before
+   importing comtypes_
+
+   For example,
+
+   .. code-block:: python
+
+      import sys
+      sys.coinit_flags = 0
+
+      import comtypes
 
 .. _JVM: https://en.wikipedia.org/wiki/Java_virtual_machine
+.. _FileSystemObject: https://docs.microsoft.com/en-us/office/vba/language/reference/user-interface-help/filesystemobject-object
+.. _comtypes: https://pythonhosted.org/comtypes/#
+.. _Component Object Model: https://en.wikipedia.org/wiki/Component_Object_Model

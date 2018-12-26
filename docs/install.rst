@@ -20,6 +20,7 @@ Dependencies
 * Python 2.7, 3.4+
 * `Python for .NET`_, optional
 * Py4J_, optional
+* comtypes_, optional
 
 Compatibility
 -------------
@@ -68,6 +69,12 @@ computer and that the directory of the dependency is also available on your ``PA
 determine the dependencies of a shared library is `Dependency Walker <https://www.dependencywalker.com/>`_.
 For finding the dependencies of a .NET library the
 `Dependency Walker for .NET <https://github.com/isindicic/DependencyWalker.Net>`_ is also useful.
+
+If you need to load a `Component Object Model`_ then you must install comtypes_
+
+.. code-block:: console
+
+   pip install comtypes
 
 Linux
 ++++++
@@ -161,3 +168,5 @@ compiled in OSX.
 .. _Python for .NET: https://pythonnet.github.io/
 .. _Java Runtime Environment: https://www.oracle.com/technetwork/java/javase/downloads/index.html
 .. _Py4J: https://www.py4j.org/
+.. _comtypes: https://pythonhosted.org/comtypes/#
+.. _Component Object Model: https://en.wikipedia.org/wiki/Component_Object_Model

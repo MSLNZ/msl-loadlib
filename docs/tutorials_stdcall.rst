@@ -18,7 +18,7 @@ Python interpreter:
    >>> from msl.loadlib import LoadLibrary, IS_PYTHON_64BIT
    >>> IS_PYTHON_64BIT
    True
-   >>> k = LoadLibrary('C:/Windows/SysWOW64/kernel32.dll', 'windll')
+   >>> k = LoadLibrary('C:/Windows/SysWOW64/kernel32.dll', 'windll')  # doctest: +SKIP
    Traceback (most recent call last):
      File "<input>", line 1, in <module>
      File "D:\msl\loadlib\load_library.py", line 111, in __init__
@@ -34,9 +34,9 @@ Instead, create a :class:`~msl.examples.loadlib.kernel64.Kernel64` client to com
 
    >>> from msl.examples.loadlib import Kernel64
    >>> k = Kernel64()
-   >>> k
+   >>> k  # doctest: +SKIP
    <Kernel64 lib=kernel32.dll address=127.0.0.1:59481>
-   >>> k.lib32_path
+   >>> k.lib32_path  # doctest: +SKIP
    'C:\\Windows\\SysWOW64\\kernel32.dll'
 
 Call the library to get the current date and time, see
@@ -44,7 +44,7 @@ Call the library to get the current date and time, see
 
 .. code-block:: pycon
 
-   >>> k.get_local_time()
+   >>> k.get_local_time()  # doctest: +SKIP
    datetime.datetime(2017, 2, 3, 16, 37, 5, 351000)
 
 Shutdown the server, see :meth:`~msl.loadlib.client64.Client64.shutdown_server32`:
