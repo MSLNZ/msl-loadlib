@@ -18,7 +18,8 @@ def test_port_functions():
 def test_pythonnet_py4j_comtypes_installed():
     assert utils.is_pythonnet_installed()
     assert utils.is_py4j_installed()
-    assert utils.is_comtypes_installed()
+    if IS_WINDOWS:
+        assert utils.is_comtypes_installed()
 
 
 def test_check_dot_net_config():
