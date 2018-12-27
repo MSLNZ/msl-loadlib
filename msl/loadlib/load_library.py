@@ -251,19 +251,27 @@ class LoadLibrary(object):
             clr.AddReference(os.path.splitext(tail)[0])
 
             # import namespaces, create instances of classes or reference a System.Type[] object
-            dotnet = dict()
-            for t in self._assembly.GetTypes():
-                if t.Namespace is not None:
-                    mod = __import__(t.Namespace)
-                    if mod.__name__ not in dotnet:
-                        dotnet[mod.__name__] = mod
-                else:
-                    try:
-                        dotnet[t.Name] = self._assembly.CreateInstance(t.FullName)
-                    except:
-                        if t.Name not in dotnet:
-                            dotnet[t.Name] = t
-            self._lib = DotNet(dotnet, self._path)
+            try:
+                types = self._assembly.GetTypes()
+            except Exception as e:
+                logger.error(e)
+                logger.error('The LoaderExceptions are:')
+                for item in e.LoaderExceptions:
+                    logger.error('  ' + item.Message)
+            else:
+                dotnet = dict()
+                for t in types:
+                    if t.Namespace is not None:
+                        mod = __import__(t.Namespace)
+                        if mod.__name__ not in dotnet:
+                            dotnet[mod.__name__] = mod
+                    else:
+                        try:
+                            dotnet[t.Name] = self._assembly.CreateInstance(t.FullName)
+                        except:
+                            if t.Name not in dotnet:
+                                dotnet[t.Name] = t
+                self._lib = DotNet(dotnet, self._path)
 
         else:
             raise TypeError('Cannot load libtype={}'.format(libtype))
