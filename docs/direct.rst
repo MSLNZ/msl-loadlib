@@ -43,9 +43,9 @@ Load a 64-bit C++ library in 64-bit Python, see :ref:`here <cpp-lib>` for the so
 .. code-block:: pycon
 
    >>> cpp = LoadLibrary(EXAMPLES_DIR + '/cpp_lib64')
-   >>> cpp  # doctest: +SKIP
+   >>> cpp
    <LoadLibrary libtype=CDLL path=D:\msl\examples\loadlib\cpp_lib64.dll>
-   >>> cpp.lib  # doctest: +SKIP
+   >>> cpp.lib
    <CDLL 'D:\msl\examples\loadlib\cpp_lib64.dll', handle 6f920000 at 0x3e92f90>
 
 Call the ``add`` function that calculates the sum of two integers
@@ -63,9 +63,9 @@ Load a 64-bit FORTRAN library in 64-bit Python, see :ref:`here <fortran-lib>` fo
 .. code-block:: pycon
 
    >>> fortran = LoadLibrary(EXAMPLES_DIR + '/fortran_lib64')
-   >>> fortran  # doctest: +SKIP
+   >>> fortran
    <LoadLibrary libtype=CDLL path=D:\msl\examples\loadlib\fortran_lib64.dll>
-   >>> fortran.lib  # doctest: +SKIP
+   >>> fortran.lib
    <CDLL 'D:\msl\examples\loadlib\fortran_lib64.dll', handle 6f660000 at 0x2e5d470>
 
 Call the ``factorial`` function. With a FORTRAN library you must pass values by reference using :mod:`ctypes`,
@@ -88,11 +88,11 @@ the .NET Framework. *To load the 32-bit version in 32-bit Python use* ``'dotnet_
 .. code-block:: pycon
 
    >>> net = LoadLibrary(EXAMPLES_DIR + '/dotnet_lib64.dll', 'net')
-   >>> net  # doctest: +SKIP
+   >>> net
    <LoadLibrary libtype=DotNet path=D:\msl\examples\loadlib\dotnet_lib64.dll>
-   >>> net.assembly  # doctest: +SKIP
+   >>> net.assembly
    <System.Reflection.RuntimeAssembly object at 0x03099330>
-   >>> net.lib  # doctest: +SKIP
+   >>> net.lib
    <DotNet path=D:\msl\examples\loadlib\dotnet_lib64.dll>
 
 The :ref:`dotnet_lib64 <dotnet-lib>` library contains a reference to the ``DotNetMSL`` module
@@ -101,7 +101,7 @@ The :ref:`dotnet_lib64 <dotnet-lib>` library contains a reference to the ``DotNe
 
 .. code-block:: pycon
 
-   >>> for item in dir(net.lib):  # doctest: +SKIP
+   >>> for item in dir(net.lib):
    ...     if not item.startswith('_'):
    ...         print(item, type(getattr(net.lib, item)))
    ...
@@ -125,7 +125,7 @@ Create an instance of the ``ArrayManipulation`` class in the ``DotNetMSL`` names
 
    >>> am = net.lib.DotNetMSL.ArrayManipulation()
    >>> values = am.scalar_multiply(2., [1., 2., 3., 4., 5.])
-   >>> values  # doctest: +SKIP
+   >>> values
    <System.Double[] object at 0x00000000040BB2E8>
    >>> [val for val in values]
    [2.0, 4.0, 6.0, 8.0, 10.0]
@@ -134,7 +134,7 @@ Use the ``reverse_string`` method in the ``StringManipulation`` class to reverse
 
 .. code-block:: pycon
 
-   >>> net.lib.StringManipulation.reverse_string('abcdefghijklmnopqrstuvwxyz')  # doctest: +SKIP
+   >>> net.lib.StringManipulation.reverse_string('abcdefghijklmnopqrstuvwxyz')
    'zyxwvutsrqponmlkjihgfedcba'
 
 View the static methods in the ``StaticClass`` class
@@ -166,16 +166,16 @@ Load a 32-bit Windows ``__stdcall`` library in 32-bit Python, see
 
 .. code-block:: pycon
 
-   >>> kernel = LoadLibrary('C:/Windows/SysWOW64/kernel32.dll', 'windll')  # doctest: +SKIP
-   >>> kernel  # doctest: +SKIP
+   >>> kernel = LoadLibrary('C:/Windows/SysWOW64/kernel32.dll', 'windll')
+   >>> kernel
    <LoadLibrary libtype=WinDLL path=C:\Windows\SysWOW64\kernel32.dll>
-   >>> kernel.lib  # doctest: +SKIP
+   >>> kernel.lib
    <WinDLL 'C:\Windows\SysWOW64\kernel32.dll', handle 76e70000 at 0x2e63570>
-   >>> from msl.examples.loadlib.kernel32 import SystemTime  # doctest: +SKIP
-   >>> st = SystemTime()  # doctest: +SKIP
-   >>> from ctypes import pointer  # doctest: +SKIP
-   >>> ret = kernel.lib.GetLocalTime(pointer(st))  # doctest: +SKIP
-   >>> '{}-{}-{} {}:{}:{}'.format(st.wYear, st.wMonth, st.wDay, st.wHour, st.wMinute, st.wSecond)  # doctest: +SKIP
+   >>> from msl.examples.loadlib.kernel32 import SystemTime
+   >>> st = SystemTime()
+   >>> from ctypes import pointer
+   >>> ret = kernel.lib.GetLocalTime(pointer(st))
+   >>> '{}-{}-{} {}:{}:{}'.format(st.wYear, st.wMonth, st.wDay, st.wHour, st.wMinute, st.wSecond)
    '2017-2-27 17:12:19'
 
 See :ref:`here <tutorial_stdcall>` for how to communicate with ``kernel32.dll`` from 64-bit Python.
@@ -193,10 +193,10 @@ Load a 64-bit LabVIEW library in 64-bit Python, see :ref:`here <labview-lib>` fo
 
 .. code-block:: pycon
 
-   >>> labview = LoadLibrary(EXAMPLES_DIR + '/labview_lib64.dll')  # doctest: +SKIP
-   >>> labview  # doctest: +SKIP
+   >>> labview = LoadLibrary(EXAMPLES_DIR + '/labview_lib64.dll')
+   >>> labview
    <LoadLibrary libtype=CDLL path=D:\msl\examples\loadlib\labview_lib64.dll>
-   >>> labview.lib  # doctest: +SKIP
+   >>> labview.lib
    <CDLL 'D:\msl\examples\loadlib\labview_lib64.dll', handle 2a920020 at 0x7e32b77>
 
 Create some data to calculate the mean, variance and standard deviation of
@@ -217,24 +217,24 @@ Calculate the sample standard deviation (i.e., the third argument is set to 0) a
 
 .. code-block:: pycon
 
-   >>> ret = labview.lib.stdev(x, len(data), 0, byref(mean), byref(variance), byref(std))  # doctest: +SKIP
-   >>> mean.value  # doctest: +SKIP
+   >>> ret = labview.lib.stdev(x, len(data), 0, byref(mean), byref(variance), byref(std))
+   >>> mean.value
    5.0
-   >>> variance.value  # doctest: +SKIP
+   >>> variance.value
    7.5
-   >>> std.value  # doctest: +SKIP
+   >>> std.value
    2.7386127875258306
 
 Calculate the population standard deviation (i.e., the third argument is set to 1) and variance
 
 .. code-block:: pycon
 
-   >>> ret = labview.lib.stdev(x, len(data), 1, byref(mean), byref(variance), byref(std))  # doctest: +SKIP
-   >>> mean.value  # doctest: +SKIP
+   >>> ret = labview.lib.stdev(x, len(data), 1, byref(mean), byref(variance), byref(std))
+   >>> mean.value
    5.0
-   >>> variance.value  # doctest: +SKIP
+   >>> variance.value
    6.666666666666667
-   >>> std.value  # doctest: +SKIP
+   >>> std.value
    2.581988897471611
 
 Java
@@ -247,26 +247,26 @@ Load a Java archive, a ``.jar`` file, in a JVM_, see :ref:`here <java-lib-jar>` 
 
 .. code-block:: pycon
 
-   >>> jar = LoadLibrary(EXAMPLES_DIR + '/java_lib.jar')  # doctest: +SKIP
-   >>> jar  # doctest: +SKIP
+   >>> jar = LoadLibrary(EXAMPLES_DIR + '/java_lib.jar')
+   >>> jar
    <LoadLibrary libtype=JVMView path=D:\msl\examples\loadlib\java_lib.jar>
-   >>> jar.gateway  # doctest: +SKIP
+   >>> jar.gateway
    <py4j.java_gateway.JavaGateway object at 0x000002061A4524E0>
 
 The Java archive contains a ``nz.msl.examples`` package with two classes, ``MathUtils`` and ``Matrix``
 
 .. code-block:: pycon
 
-   >>> MathUtils = jar.lib.nz.msl.examples.MathUtils  # doctest: +SKIP
-   >>> Matrix = jar.lib.nz.msl.examples.Matrix  # doctest: +SKIP
+   >>> MathUtils = jar.lib.nz.msl.examples.MathUtils
+   >>> Matrix = jar.lib.nz.msl.examples.Matrix
 
 Generate a random number and calculate the square root of a number using the ``MathUtils`` class
 
 .. code-block:: pycon
 
-   >>> MathUtils.random()  # doctest: +SKIP
+   >>> MathUtils.random()
    0.17555846754602522
-   >>> MathUtils.sqrt(32.4)  # doctest: +SKIP
+   >>> MathUtils.sqrt(32.4)
    5.692099788303083
 
 Use the ``Matrix`` class to calculate the inverse of a 3x3 matrix that is filled with random
@@ -274,18 +274,18 @@ numbers between 0 and 100
 
 .. code-block:: pycon
 
-   >>> m = Matrix(3, 3, 0.0, 100.0)  # doctest: +SKIP
-   >>> print(m.toString())  # doctest: +SKIP
+   >>> m = Matrix(3, 3, 0.0, 100.0)
+   >>> print(m.toString())
    +5.937661e+01  +5.694407e+01  +5.132319e+01
    +2.443462e+01  +9.051636e+00  +5.500980e+01
    +6.183735e+01  +9.492954e+01  +4.519221e+01
-   >>> m_inverse = m.getInverse()  # doctest: +SKIP
-   >>> print(m_inverse.toString())  # doctest: +SKIP
+   >>> m_inverse = m.getInverse()
+   >>> print(m_inverse.toString())
    +7.446422e-02  -3.556370e-02  -4.127679e-02
    -3.554433e-02  +7.586144e-03  +3.113227e-02
    -2.722735e-02  +3.272723e-02  +1.321192e-02
-   >>> identity = Matrix.multiply(m, m_inverse)  # doctest: +SKIP
-   >>> print(identity.toString())  # doctest: +SKIP
+   >>> identity = Matrix.multiply(m, m_inverse)
+   >>> print(identity.toString())
    +1.000000e+00  +0.000000e+00  +2.220446e-16
    +0.000000e+00  +1.000000e+00  +1.110223e-16
    +0.000000e+00  -4.440892e-16  +1.000000e+00
@@ -294,18 +294,18 @@ Solve a linear system of equations, Ax=b
 
 .. code-block:: pycon
 
-   >>> A = jar.gateway.new_array(jar.lib.Double, 3, 3)  # doctest: +SKIP
-   >>> coeff = [[3, 2, -1], [7, -2, 4], [-1, 5, 1]]  # doctest: +SKIP
-   >>> for i in range(3):  # doctest: +SKIP
+   >>> A = jar.gateway.new_array(jar.lib.Double, 3, 3)
+   >>> coeff = [[3, 2, -1], [7, -2, 4], [-1, 5, 1]]
+   >>> for i in range(3):
    ...     for j in range(3):
    ...         A[i][j] = float(coeff[i][j])
    ...
-   >>> b = jar.gateway.new_array(jar.lib.Double, 3)  # doctest: +SKIP
-   >>> b[0] = 1.6  # doctest: +SKIP
-   >>> b[1] = -12.3  # doctest: +SKIP
-   >>> b[2] = 3.4  # doctest: +SKIP
-   >>> x = Matrix.solve(Matrix(A), Matrix(b))  # doctest: +SKIP
-   >>> print(x.toString())  # doctest: +SKIP
+   >>> b = jar.gateway.new_array(jar.lib.Double, 3)
+   >>> b[0] = 1.6
+   >>> b[1] = -12.3
+   >>> b[2] = 3.4
+   >>> x = Matrix.solve(Matrix(A), Matrix(b))
+   >>> print(x.toString())
    -5.892562e-01
    +8.826446e-01
    -1.602479e+00
@@ -314,7 +314,7 @@ Show that `x` is a solution by getting `b` back
 
 .. code-block:: pycon
 
-   >>> for i in range(3):  # doctest: +SKIP
+   >>> for i in range(3):
    ...     val = 0.0
    ...     for j in range(3):
    ...         val += coeff[i][j]*x.getValue(j,0)
@@ -328,37 +328,37 @@ Shutdown the connection to the JVM_ when you are finished
 
 .. code-block:: pycon
 
-   >>> jar.gateway.shutdown()  # doctest: +SKIP
+   >>> jar.gateway.shutdown()
 
 Load Java byte code, a ``.class`` file, in a JVM_, see :ref:`here <java-lib-class>` for the source code.
 
 .. code-block:: pycon
 
-   >>> cls = LoadLibrary(EXAMPLES_DIR + '/Trig.class')  # doctest: +SKIP
-   >>> cls  # doctest: +SKIP
+   >>> cls = LoadLibrary(EXAMPLES_DIR + '/Trig.class')
+   >>> cls
    <LoadLibrary libtype=JVMView path=D:\msl\examples\loadlib\Trig.class>
-   >>> cls.lib  # doctest: +SKIP
+   >>> cls.lib
    <py4j.java_gateway.JVMView object at 0x0000000003A89898>
 
 The Java library contains a ``Trig`` class, which calculates various trigonometric quantities
 
 .. code-block:: pycon
 
-   >>> Trig = cls.lib.Trig  # doctest: +SKIP
-   >>> Trig  # doctest: +SKIP
+   >>> Trig = cls.lib.Trig
+   >>> Trig
    <py4j.java_gateway.JavaClass object at 0x00000000038EA6A0>
-   >>> Trig.cos(1.2)  # doctest: +SKIP
+   >>> Trig.cos(1.2)
    0.3623577544766736
-   >>> Trig.asin(0.6)  # doctest: +SKIP
+   >>> Trig.asin(0.6)
    0.6435011087932844
-   >>> Trig.tanh(1.3)  # doctest: +SKIP
+   >>> Trig.tanh(1.3)
    0.8617231593133063
 
 Once again, shutdown the connection to the JVM_ when you are finished
 
 .. code-block:: pycon
 
-   >>> cls.gateway.shutdown()  # doctest: +SKIP
+   >>> cls.gateway.shutdown()
 
 COM
 ---
@@ -375,18 +375,18 @@ it is a COM library
 
 .. code-block:: pycon
 
-   >>> com = LoadLibrary('Scripting.FileSystemObject', 'com')  # doctest: +SKIP
-   >>> com  # doctest: +SKIP
+   >>> com = LoadLibrary('Scripting.FileSystemObject', 'com')
+   >>> com
    <LoadLibrary libtype=POINTER(IFileSystem3) path=Scripting.FileSystemObject>
 
 We can then use the library to create, edit and close a text file
 
 .. code-block:: pycon
 
-   >>> fp = com.lib.CreateTextFile('a_new_file.txt')  # doctest: +SKIP
-   >>> fp.WriteLine('This is a test')  # doctest: +SKIP
+   >>> fp = com.lib.CreateTextFile('a_new_file.txt')
+   >>> fp.WriteLine('This is a test')
    0
-   >>> fp.Close()  # doctest: +SKIP
+   >>> fp.Close()
    0
 
 .. tip::

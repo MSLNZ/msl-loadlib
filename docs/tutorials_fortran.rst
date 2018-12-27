@@ -32,7 +32,7 @@ cannot be loaded in a 64-bit Python interpreter:
    >>> from msl.examples.loadlib import EXAMPLES_DIR
    >>> IS_PYTHON_64BIT
    True
-   >>> f = LoadLibrary(EXAMPLES_DIR + '/fortran_lib32')  # doctest: +SKIP
+   >>> f = LoadLibrary(EXAMPLES_DIR + '/fortran_lib32')
    Traceback (most recent call last):
      File "<input>", line 1, in <module>
      File "D:\msl\loadlib\load_library.py", line 109, in __init__
@@ -46,7 +46,7 @@ However, the 64-bit version of the FORTRAN library can be directly loaded in 64-
 .. code-block:: pycon
 
    >>> f64 = LoadLibrary(EXAMPLES_DIR + '/fortran_lib64')
-   >>> f64  # doctest: +SKIP
+   >>> f64
    <LoadLibrary libtype=CDLL path=D:\msl\examples\loadlib\fortran_lib64.dll>
    >>> from ctypes import byref, c_int8
    >>> f64.lib.sum_8bit(byref(c_int8(-50)), byref(c_int8(110)))
@@ -59,9 +59,9 @@ Instead, create a :class:`~msl.examples.loadlib.fortran64.Fortran64` client to c
 
    >>> from msl.examples.loadlib import Fortran64
    >>> f = Fortran64()
-   >>> f  # doctest: +SKIP
+   >>> f
    <Fortran64 lib=fortran_lib32.dll address=127.0.0.1:42888>
-   >>> f.lib32_path  # doctest: +SKIP
+   >>> f.lib32_path
    'D:\\msl\\examples\\loadlib\\fortran_lib32.dll'
 
 Add two ``int8`` values, see :meth:`~msl.examples.loadlib.fortran64.Fortran64.sum_8bit`:
@@ -89,7 +89,7 @@ Add two ``int64`` values, see :meth:`~msl.examples.loadlib.fortran64.Fortran64.s
 
 .. code-block:: pycon
 
-   >>> f.sum_64bit(-2**63, 1)  # doctest: +SKIP
+   >>> f.sum_64bit(-2**63, 1)
    -9223372036854775807
 
 Multiply two ``float32`` values, see :meth:`~msl.examples.loadlib.fortran64.Fortran64.multiply_float32`:
@@ -153,7 +153,7 @@ Reverse a string, see :meth:`~msl.examples.loadlib.fortran64.Fortran64.reverse_s
 
 .. code-block:: pycon
 
-   >>> f.reverse_string('hello world!')  # doctest: +SKIP
+   >>> f.reverse_string('hello world!')
    '!dlrow olleh'
 
 Add two 1D arrays, see :meth:`~msl.examples.loadlib.fortran64.Fortran64.add_1D_arrays`:

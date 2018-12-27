@@ -22,10 +22,10 @@ Create a :class:`~msl.examples.loadlib.labview64.Labview64` client to communicat
 .. code-block:: pycon
 
    >>> from msl.examples.loadlib import Labview64
-   >>> labview = Labview64()  # doctest: +SKIP
-   >>> labview  # doctest: +SKIP
+   >>> labview = Labview64()
+   >>> labview
    <Labview64 lib=labview_lib32.dll address=127.0.0.1:49952>
-   >>> labview.lib32_path  # doctest: +SKIP
+   >>> labview.lib32_path
    'D:\\msl\\examples\\loadlib\\labview_lib32.dll'
 
 Calculate the mean and the *sample* variance and standard deviation of some data, see
@@ -34,21 +34,21 @@ Calculate the mean and the *sample* variance and standard deviation of some data
 .. code-block:: pycon
 
    >>> data = [1, 2, 3, 4, 5, 6, 7, 8, 9]
-   >>> labview.stdev(data)  # doctest: +SKIP
+   >>> labview.stdev(data)
    (5.0, 7.5, 2.7386127875258306)
 
 Calculate the mean and the *population* variance and standard deviation of data:
 
 .. code-block:: pycon
 
-   >>> labview.stdev(data, 1)  # doctest: +SKIP
+   >>> labview.stdev(data, 1)
    (5.0, 6.666666666666667, 2.581988897471611)
 
 Shutdown the server, see :meth:`~msl.loadlib.client64.Client64.shutdown_server32`:
 
 .. code-block:: pycon
 
-   >>> labview.shutdown_server32()  # doctest: +SKIP
+   >>> labview.shutdown_server32()
 
 .. note::
    When using a subclass of :class:`~msl.loadlib.client64.Client64` in a script, the

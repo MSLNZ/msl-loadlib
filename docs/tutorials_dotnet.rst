@@ -31,7 +31,7 @@ be loaded in a 64-bit Python interpreter:
    >>> from msl.examples.loadlib import EXAMPLES_DIR
    >>> IS_PYTHON_64BIT
    True
-   >>> net = LoadLibrary(EXAMPLES_DIR + '/dotnet_lib32.dll', 'net')  # doctest: +SKIP
+   >>> net = LoadLibrary(EXAMPLES_DIR + '/dotnet_lib32.dll', 'net')
    Traceback (most recent call last):
      File "<input>", line 1, in <module>
      File "D:\msl\loadlib\load_library.py", line 130, in __init__
@@ -45,9 +45,9 @@ However, the 64-bit version of the .NET library can be directly loaded in 64-bit
 .. code-block:: pycon
 
    >>> net = LoadLibrary(EXAMPLES_DIR + '/dotnet_lib64.dll', 'net')
-   >>> net  # doctest: +SKIP
+   >>> net
    <LoadLibrary libtype=DotNet path=D:\msl\examples\loadlib\dotnet_lib64.dll>
-   >>> net.lib.StringManipulation.reverse_string('Hello World!')  # doctest: +SKIP
+   >>> net.lib.StringManipulation.reverse_string('Hello World!')
    '!dlroW olleH'
 
 Instead, create a :class:`~msl.examples.loadlib.dotnet64.DotNet64` client to communicate
@@ -57,9 +57,9 @@ with the 32-bit :ref:`dotnet_lib32.dll <dotnet-lib>` library:
 
    >>> from msl.examples.loadlib import DotNet64
    >>> dn = DotNet64()
-   >>> dn  # doctest: +SKIP
+   >>> dn
    <DotNet64 lib=dotnet_lib32.dll address=127.0.0.1:11051>
-   >>> dn.lib32_path  # doctest: +SKIP
+   >>> dn.lib32_path
    'D:\\msl\\examples\\loadlib\\dotnet_lib32.dll'
 
 Get the names of the classes in the .NET library module, see
@@ -67,7 +67,7 @@ Get the names of the classes in the .NET library module, see
 
 .. code-block:: pycon
 
-   >>> dn.get_class_names()  # doctest: +SKIP
+   >>> dn.get_class_names()
    ['StringManipulation', 'StaticClass', 'DotNetMSL.BasicMath', 'DotNetMSL.ArrayManipulation']
 
 Add two integers, see :meth:`~msl.examples.loadlib.dotnet64.DotNet64.add_integers`:
@@ -123,7 +123,7 @@ Reverse a string, see :meth:`~msl.examples.loadlib.dotnet64.DotNet64.reverse_str
 
 .. code-block:: pycon
 
-   >>> dn.reverse_string('New Zealand')  # doctest: +SKIP
+   >>> dn.reverse_string('New Zealand')
    'dnalaeZ weN'
 
 Call the static methods in the ``StaticClass`` class
@@ -132,9 +132,9 @@ Call the static methods in the ``StaticClass`` class
 
    >>> dn.add_multiple(1, 2, 3, 4, 5)
    15
-   >>> dn.concatenate('the ', 'experiment ', 'worked ', False, 'temporarily')  # doctest: +SKIP
+   >>> dn.concatenate('the ', 'experiment ', 'worked ', False, 'temporarily')
    'the experiment worked '
-   >>> dn.concatenate('the ', 'experiment ', 'worked ', True, 'temporarily')  # doctest: +SKIP
+   >>> dn.concatenate('the ', 'experiment ', 'worked ', True, 'temporarily')
    'the experiment worked temporarily'
 
 Shutdown the server, see :meth:`~msl.loadlib.client64.Client64.shutdown_server32`:

@@ -32,7 +32,7 @@ cannot be loaded in a 64-bit Python interpreter:
    >>> from msl.examples.loadlib import EXAMPLES_DIR
    >>> IS_PYTHON_64BIT
    True
-   >>> cpp = LoadLibrary(EXAMPLES_DIR + '/cpp_lib32')  # doctest: +SKIP
+   >>> cpp = LoadLibrary(EXAMPLES_DIR + '/cpp_lib32')
    Traceback (most recent call last):
      File "<input>", line 1, in <module>
      File "D:\msl\loadlib\load_library.py", line 109, in __init__
@@ -46,7 +46,7 @@ However, the 64-bit version of the C++ library can be directly loaded in 64-bit 
 .. code-block:: pycon
 
    >>> cpp64 = LoadLibrary(EXAMPLES_DIR + '/cpp_lib64')
-   >>> cpp64  # doctest: +SKIP
+   >>> cpp64
    <LoadLibrary libtype=CDLL path=D:\msl\examples\loadlib\cpp_lib64.dll>
    >>> cpp64.lib.add(3, 14)
    17
@@ -58,9 +58,9 @@ Instead, create a :class:`~msl.examples.loadlib.cpp64.Cpp64` client to communica
 
    >>> from msl.examples.loadlib import Cpp64
    >>> cpp = Cpp64()
-   >>> cpp  # doctest: +SKIP
+   >>> cpp
    <Cpp64 lib=cpp_lib32.dll address=127.0.0.1:63238>
-   >>> cpp.lib32_path  # doctest: +SKIP
+   >>> cpp.lib32_path
    'D:\\msl\\examples\\loadlib\\cpp_lib32.dll'
 
 Add two integers, see :meth:`~msl.examples.loadlib.cpp64.Cpp64.add`:
@@ -138,7 +138,7 @@ see :meth:`~msl.examples.loadlib.cpp64.Cpp64.reverse_string_v1`:
 
 .. code-block:: pycon
 
-   >>> cpp.reverse_string_v1('hello world!')  # doctest: +SKIP
+   >>> cpp.reverse_string_v1('hello world!')
    '!dlrow olleh'
 
 Reverse a string. The memory for the reversed string is allocated in C++,
@@ -146,7 +146,7 @@ see :meth:`~msl.examples.loadlib.cpp64.Cpp64.reverse_string_v2`:
 
 .. code-block:: pycon
 
-   >>> cpp.reverse_string_v2('uncertainty')  # doctest: +SKIP
+   >>> cpp.reverse_string_v2('uncertainty')
    'ytniatrecnu'
 
 .. _cpp-structs-example:
@@ -194,9 +194,9 @@ struct is a **fixed size** it can be created in 64-bit Python, *pickled* and the
 
 .. code-block:: pycon
 
-   >>> from msl.examples.loadlib import FourPoints  # doctest: +SKIP
-   >>> fp = FourPoints((0, 0), (0, 1), (1, 1), (1, 0))  # doctest: +SKIP
-   >>> cpp.distance_4_points(fp)  # doctest: +SKIP
+   >>> from msl.examples.loadlib import FourPoints
+   >>> fp = FourPoints((0, 0), (0, 1), (1, 1), (1, 0))
+   >>> cpp.distance_4_points(fp)
    4.0
 
 The :meth:`Cpp32.circumference <msl.examples.loadlib.cpp32.Cpp32.circumference>` method uses the
@@ -210,7 +210,7 @@ the *radius* and *n* as input arguments to pass to the
 
 .. code-block:: pycon
 
-   >>> for i in range(16):  # doctest: +SKIP
+   >>> for i in range(16):
    ...     print(cpp.circumference(0.5, 2**i))
    ...
    0.0

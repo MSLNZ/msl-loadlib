@@ -99,9 +99,9 @@ The **MyClient** class would then be used as follows
 
 .. code-block:: pycon
 
-   >>> from my_client import MyClient  # doctest: +SKIP
-   >>> c = MyClient()  # doctest: +SKIP
-   >>> c.add(1, 2)  # doctest: +SKIP
+   >>> from my_client import MyClient
+   >>> c = MyClient()
+   >>> c.add(1, 2)
    3
 
 The following examples are provided for communicating with different libraries that were

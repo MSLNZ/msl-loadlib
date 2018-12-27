@@ -96,7 +96,7 @@ in the ``'net'`` argument
 .. code-block:: pycon
 
    >>> net = LoadLibrary(EXAMPLES_DIR + '/dotnet_lib64.dll', 'net')
-   >>> net.lib.StringManipulation.reverse_string('abcdefghijklmnopqrstuvwxyz')  # doctest: +SKIP
+   >>> net.lib.StringManipulation.reverse_string('abcdefghijklmnopqrstuvwxyz')
    'zyxwvutsrqponmlkjihgfedcba'
 
 Load `Java <https://github.com/MSLNZ/msl-loadlib/blob/master/msl/examples/loadlib/Trig.java>`_ byte code
@@ -104,8 +104,8 @@ and call the ``cos`` function
 
 .. code-block:: pycon
 
-   >>> java = LoadLibrary(EXAMPLES_DIR + '/Trig.class')  # doctest: +SKIP
-   >>> java.lib.Trig.cos(1.234)  # doctest: +SKIP
+   >>> java = LoadLibrary(EXAMPLES_DIR + '/Trig.class')
+   >>> java.lib.Trig.cos(1.234)
    0.33046510807172985
 
 Python interacts with the `Java Virtual Machine`_ via a local network socket and therefore the connection
@@ -113,7 +113,7 @@ needs to be closed when you are done using the Java library
 
 .. code-block:: pycon
 
-   >>> java.gateway.shutdown()  # doctest: +SKIP
+   >>> java.gateway.shutdown()
 
 To load a `Component Object Model`_ pass in the library's Program ID. *NOTE: This example will only work on Windows.*
 
@@ -121,18 +121,18 @@ Here we load the FileSystemObject_ library and include the ``'com'`` argument to
 
 .. code-block:: pycon
 
-   >>> com = LoadLibrary('Scripting.FileSystemObject', 'com')  # doctest: +SKIP
-   >>> com  # doctest: +SKIP
+   >>> com = LoadLibrary('Scripting.FileSystemObject', 'com')
+   >>> com
    <LoadLibrary libtype=POINTER(IFileSystem3) path=Scripting.FileSystemObject>
 
 We can then use the library to create, edit and close a text file
 
 .. code-block:: pycon
 
-   >>> fp = com.lib.CreateTextFile('a_new_file.txt')  # doctest: +SKIP
-   >>> fp.WriteLine('This is a test')  # doctest: +SKIP
+   >>> fp = com.lib.CreateTextFile('a_new_file.txt')
+   >>> fp.WriteLine('This is a test')
    0
-   >>> fp.Close()  # doctest: +SKIP
+   >>> fp.Close()
    0
 
 `Inter-process communication <ipc_>`_ is used to access a 32-bit shared library from a module that is

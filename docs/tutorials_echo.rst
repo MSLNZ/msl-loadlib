@@ -41,14 +41,14 @@ Or, by using an interactive console, create a :class:`~msl.examples.loadlib.echo
 .. code-block:: pycon
 
    >>> from msl.examples.loadlib import Echo64
-   >>> echo = Echo64()  # doctest: +SKIP
+   >>> echo = Echo64()
    Client running on 3.5.2 |Continuum Analytics, Inc.| (default, Jul  5 2016, 11:41:13) [MSC v.1900 64 bit (AMD64)]
 
 Send a boolean as an argument, see :meth:`~msl.examples.loadlib.echo64.Echo64.send_data`:
 
 .. code-block:: pycon
 
-   >>> result = echo.send_data(True)  # doctest: +SKIP
+   >>> result = echo.send_data(True)
    Are the 64- and 32-bit arguments equal? True
        <class 'bool'> True
 
@@ -56,7 +56,7 @@ Send a boolean as a keyword argument, see :meth:`~msl.examples.loadlib.echo64.Ec
 
 .. code-block:: pycon
 
-   >>> result = echo.send_data(boolean=True)  # doctest: +SKIP
+   >>> result = echo.send_data(boolean=True)
    Are the 64- and 32-bit keyword arguments equal? True
        boolean: <class 'bool'> True
 
@@ -65,7 +65,7 @@ Send multiple data types as arguments and as keyword arguments, see
 
 .. code-block:: pycon
 
-   >>> result = echo.send_data(1.2, {'my list':[1, 2, 3]}, 0.2j, range(10), x=True, y='hello world!')  # doctest: +SKIP
+   >>> result = echo.send_data(1.2, {'my list':[1, 2, 3]}, 0.2j, range(10), x=True, y='hello world!')
    Are the 64- and 32-bit arguments equal? True
         <class 'float'> 1.2
         <class 'dict'> {'my list': [1, 2, 3]}
@@ -80,7 +80,7 @@ Shutdown the server when you are done communicating with the 32-bit library, see
 
 .. code-block:: pycon
 
-   >>> echo.shutdown_server32()  # doctest: +SKIP
+   >>> echo.shutdown_server32()
    Python 3.5.2 |Continuum Analytics, Inc.| (default, Jul  5 2016, 11:45:57) [MSC v.1900 32 bit (Intel)]
    Serving cpp_lib32.dll on http://127.0.0.1:25521
    The 32-bit server received these args:
