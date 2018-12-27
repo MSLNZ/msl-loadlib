@@ -17,23 +17,23 @@ _encoding = sys.getfilesystemencoding()
 
 class LoadLibrary(object):
 
-    def __init__(self, path, libtype='cdll', **kwargs):
+    def __init__(self, path, libtype=None, **kwargs):
         """Load a shared library.
 
         For example, a C/C++, FORTRAN, C#, Java, Delphi, LabVIEW, ActiveX, ... library.
 
-        Based on the value of `libtype`, or on the file extension, this class will
-        load the shared library as a:
+        Based on the value of `libtype` this class will load the shared library as a:
 
             * :class:`~ctypes.CDLL` if `libtype` is ``'cdll'``,
             * :class:`~ctypes.WinDLL` if `libtype` is ``'windll'``,
             * :class:`~ctypes.OleDLL` if `libtype` is ``'oledll'``,
             * `System.Reflection.Assembly <Assembly_>`_ if `libtype` is ``'net'``,
-            * :class:`~.py4j.java_gateway.JavaGateway` if `libtype` is ``'java'``, or a
+            * :class:`~.py4j.java_gateway.JavaGateway` if `libtype` is ``'java'``, or
             * comtypes.CreateObject_ if `libtype` is ``'com'``.
 
         .. _Assembly: https://msdn.microsoft.com/en-us/library/system.reflection.assembly(v=vs.110).aspx
         .. _comtypes.CreateObject: https://pythonhosted.org/comtypes/#creating-and-accessing-com-objects
+        .. _COM: https://en.wikipedia.org/wiki/Component_Object_Model
 
         Parameters
         ----------
@@ -48,8 +48,8 @@ class LoadLibrary(object):
                 3. search :data:`sys.path`, then
                 4. search :data:`os.environ['PATH'] <os.environ>` to find the shared library.
 
-            If loading a `COM <https://en.wikipedia.org/wiki/Component_Object_Model>`_ library
-            then `path` represents the `progid <comtypes.CreateObject_>`_ argument.
+            If loading a COM_ library then `path` represents the `progid <comtypes.CreateObject_>`_
+            argument.
 
         libtype : :class:`str`, optional
             The library type. The following values are currently supported:
@@ -58,16 +58,18 @@ class LoadLibrary(object):
             * ``'windll'`` or ``'oledll'`` -- for a __stdcall calling convention
             * ``'net'`` -- for Microsoft's .NET Framework (Common Language Runtime)
             * ``'java'`` -- for a Java archive, ``.jar``, or Java byte code, ``.class``, file
-            * ``'com'`` -- for a `COM <https://en.wikipedia.org/wiki/Component_Object_Model>`_ library.
+            * ``'com'`` -- for a COM_ library.
 
             Default is ``'cdll'``.
 
             .. tip::
                Since the ``.jar`` or ``.class`` extension uniquely defines a Java library,
-               the `libtype` will automatically be set to ``'java'`` if `path` ends with
-               ``.jar`` or ``.class``.
+               the `libtype` will be automatically set to ``'java'`` if `path` ends with
+               ``.jar`` or ``.class``. If `path` starts with ``'{'`` and ends with ``'}'``
+               then this uniquely defines the Class ID for a COM_ library and so `libtype`
+               will be automatically set to ``'com'``.
 
-        kwargs
+        **kwargs
             Keyword arguments that are passed to the object that loads the library.
 
         Raises
@@ -77,7 +79,6 @@ class LoadLibrary(object):
         TypeError
             If `libtype` is not a supported library type.
         """
-        libtype = libtype.lower()
 
         # a reference to the shared library
         self._lib = None
@@ -92,6 +93,17 @@ class LoadLibrary(object):
         if hasattr(path, 'as_posix'):
             path = path.as_posix()
 
+        # try to automatically determine the libtype
+        if libtype is None:
+            if path.startswith('{') and path.endswith('}'):
+                libtype = 'com'
+            elif path.endswith('.jar') or path.endswith('.class'):
+                libtype = 'java'
+            else:
+                libtype = 'cdll'
+        else:
+            libtype = libtype.lower()
+
         # create a new reference to `path` just in case the
         # DEFAULT_EXTENSION is appended below so that the
         # ctypes.util.find_library function call will use the
@@ -99,13 +111,9 @@ class LoadLibrary(object):
         _path = path
 
         # assume a default extension if no extension was provided
-        ext = os.path.splitext(_path)[1]
-        if not ext:
+        ext = os.path.splitext(path)[1]
+        if libtype != 'java' and libtype != 'com' and not ext:
             _path += DEFAULT_EXTENSION
-
-        # the .jar or .class extension uniquely defines a Java library
-        if ext in ('.jar', '.class') and libtype != 'com':
-            libtype = 'java'
 
         if IS_PYTHON2:
             _path = _path.encode(_encoding)
@@ -128,7 +136,7 @@ class LoadLibrary(object):
                     if not success:
                         raise IOError('Cannot find the shared library {!r}'.format(path))
         else:
-            self._path = path
+            self._path = _path
 
         if libtype == 'cdll':
             self._lib = ctypes.CDLL(self._path, **kwargs)
@@ -138,7 +146,7 @@ class LoadLibrary(object):
             self._lib = ctypes.OleDLL(self._path, **kwargs)
         elif libtype == 'com':
             if not utils.is_comtypes_installed():
-                raise IOError('Cannot load a COM object because comtypes is not installed.\n'
+                raise IOError('Cannot load a COM library because comtypes is not installed.\n'
                               'To install comtypes run: pip install comtypes')
             from comtypes.client import CreateObject
             self._lib = CreateObject(self._path, **kwargs)
