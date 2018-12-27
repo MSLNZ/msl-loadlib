@@ -79,7 +79,6 @@ class LoadLibrary(object):
         TypeError
             If `libtype` is not a supported library type.
         """
-
         # a reference to the shared library
         self._lib = None
 
@@ -88,6 +87,9 @@ class LoadLibrary(object):
 
         # a reference to the Py4J JavaGateway
         self._gateway = None
+
+        if not path:
+            raise ValueError('You must specify the path, got {!r}'.format(path))
 
         # fixes Issue #8, if `path` is a <class 'pathlib.Path'> object
         if hasattr(path, 'as_posix'):
