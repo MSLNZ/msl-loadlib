@@ -121,11 +121,13 @@ class Server32(HTTPServer):
         :class:`str`
             The result of executing ``'Python ' + sys.version`` on the 32-bit server.
 
-        Example
-        -------
-        >>> from msl.loadlib import Server32  # doctest: +SKIP
-        >>> Server32.version()  # doctest: +SKIP
-        Python 3.6.6 (v3.6.6:4cf1f54eb7, Jun 27 2018, 02:47:15) [MSC v.1900 32 bit (Intel)]
+        Examples
+        --------
+        ::
+
+            >>> from msl.loadlib import Server32
+            >>> Server32.version()  # doctest: +SKIP
+            Python 3.6.6 (v3.6.6:4cf1f54eb7, Jun 27 2018, 02:47:15) [MSC v.1900 32 bit (Intel)]
 
         Note
         ----
@@ -143,10 +145,12 @@ class Server32(HTTPServer):
         This method starts an interactive console, in a new terminal, with the 
         Python interpreter on the 32-bit server.
 
-        Example
-        -------
-        >>> from msl.loadlib import Server32  # doctest: +SKIP
-        >>> Server32.interactive_console()  # doctest: +SKIP
+        Examples
+        --------
+        ::
+
+            >>> from msl.loadlib import Server32
+            >>> Server32.interactive_console()  # doctest: +SKIP
         """
         exe = os.path.join(os.path.dirname(__file__), SERVER_FILENAME)
         if IS_WINDOWS:
@@ -162,14 +166,10 @@ class Server32(HTTPServer):
 
 
 class RequestHandler(BaseHTTPRequestHandler):
-    """
-    Handles the request that was sent to the 32-bit server.
-    """
+    """Handles the request that was sent to the 32-bit server."""
 
     def do_GET(self):
-        """
-        Handle a GET request.
-        """
+        """Handle a GET request."""
         request = self.path[1:]
         if request == 'SHUTDOWN_SERVER32':
             threading.Thread(target=self.server.shutdown).start()
