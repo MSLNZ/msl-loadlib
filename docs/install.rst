@@ -70,7 +70,7 @@ determine the dependencies of a shared library is `Dependency Walker <https://ww
 For finding the dependencies of a .NET library the
 `Dependency Walker for .NET <https://github.com/isindicic/DependencyWalker.Net>`_ is also useful.
 
-If you need to load a `Component Object Model`_ then you must install comtypes_
+If you need to load a `Component Object Model`_ library then you must install comtypes_
 
 .. code-block:: console
 

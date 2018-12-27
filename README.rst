@@ -115,9 +115,9 @@ needs to be closed when you are done using the Java library
 
    >>> java.gateway.shutdown()  # doctest: +SKIP
 
-To load a `Component Object Model`_ pass in the library's GUID. *This example will only work on Windows.*
+To load a `Component Object Model`_ pass in the library's Program ID. *NOTE: This example will only work on Windows.*
 
-Here we load the FileSystemObject_ and include the ``'com'`` argument to indicate that it is a COM library
+Here we load the FileSystemObject_ library and include the ``'com'`` argument to indicate that it is a COM library
 
 .. code-block:: pycon
 
