@@ -66,14 +66,15 @@ def main(spec=None):
 
     if loadlib.IS_WINDOWS:
         try:
-            # fixes -> OSError: [WinError -2147417850] Cannot change thread mode after it is set
-            # when importing comtypes
-            sys.coinit_flags = 0
             import comtypes
         except ImportError:
             print('comtypes not found, run:')
             print('pip install comtypes')
             sys.exit(0)
+        except OSError:
+            # OSError: [WinError -2147417850] Cannot change thread mode after it is set
+            # don't care about this error since comtypes is indeed installed
+            pass
 
     # start the freezing process
 
