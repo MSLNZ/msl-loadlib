@@ -176,7 +176,7 @@ Load a 32-bit Windows ``__stdcall`` library in 32-bit Python, see
    >>> from ctypes import pointer  # doctest: +SKIP
    >>> ret = kernel.lib.GetLocalTime(pointer(st))  # doctest: +SKIP
    >>> '{}-{}-{} {}:{}:{}'.format(st.wYear, st.wMonth, st.wDay, st.wHour, st.wMinute, st.wSecond)  # doctest: +SKIP
-   '2017-2-27 17:12:19.288'
+   '2017-2-27 17:12:19'
 
 See :ref:`here <tutorial_stdcall>` for how to communicate with ``kernel32.dll`` from 64-bit Python.
 
@@ -362,13 +362,16 @@ Once again, shutdown the connection to the JVM_ when you are finished
 
 COM
 ---
-To load a `Component Object Model`_ pass in the library's GUID.
+To load a `Component Object Model`_ (COM) library pass in the library's Program ID.
+To view the COM libraries that are available on your computer you can run the
+:func:`~msl.loadlib.utils.get_com_info` function.
 
-.. note::
+.. attention::
 
    This example will only work on Windows.
 
-Here we load the FileSystemObject_ and include the ``'com'`` argument to indicate that it is a COM library
+Here we load the FileSystemObject_ library and include the ``'com'`` argument to indicate that
+it is a COM library
 
 .. code-block:: pycon
 

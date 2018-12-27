@@ -432,7 +432,17 @@ def test_Server32Error():
 def test_comtypes():
     obj = loadlib.LoadLibrary('Scripting.FileSystemObject', 'com')
     assert hasattr(obj.lib, 'CreateTextFile')
-    del obj
+    obj = None
 
     with pytest.raises(OSError):
         loadlib.LoadLibrary('ABC.def.GHI', 'com')
+
+    info = loadlib.utils.get_com_info()
+    for key, value in info.items():
+        if value['ProgID'] == 'Scripting.FileSystemObject':
+            # don't need to specify libtype='com' since the `path`
+            # argument startswith "{" and endswith "}"
+            obj = loadlib.LoadLibrary(key)
+            assert hasattr(obj.lib, 'CreateTextFile')
+            obj = None
+            break

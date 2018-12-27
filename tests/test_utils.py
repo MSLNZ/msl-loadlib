@@ -3,7 +3,7 @@ import xml.etree.ElementTree as ET
 
 import pytest
 
-from msl.loadlib import utils
+from msl.loadlib import utils, IS_WINDOWS
 
 
 def test_timeout():
@@ -76,3 +76,23 @@ def test_check_dot_net_config():
     val, msg = utils.check_dot_net_config(exe)
     assert val == -1
     assert msg.startswith('The root tag in')
+
+
+def test_get_com_info():
+    info = utils.get_com_info()
+    if IS_WINDOWS:
+        assert len(info) > 0
+        for value in info.values():
+            assert 'ProgID' in value
+            assert 'Version' not in value
+    else:
+        assert len(info) == 0
+
+    info = utils.get_com_info('Version')
+    if IS_WINDOWS:
+        assert len(info) > 0
+        for value in info.values():
+            assert 'ProgID' in value
+            assert 'Version' in value
+    else:
+        assert len(info) == 0

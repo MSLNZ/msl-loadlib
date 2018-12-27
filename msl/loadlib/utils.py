@@ -7,6 +7,13 @@ import socket
 import logging
 import subprocess
 import xml.etree.ElementTree as ET
+try:
+    import _winreg as winreg  # Python 2 on Windows
+except ImportError:
+    try:
+        import winreg
+    except ImportError:
+        winreg = None  # non-Windows
 
 from .exceptions import ConnectionTimeoutError
 
@@ -47,18 +54,20 @@ NET_FRAMEWORK_FIX = """
 
 
 def is_pythonnet_installed():
-    """Checks if `Python for .NET <https://pythonnet.github.io/>`_ is installed.
+    """Checks if `Python for .NET`_ is installed.
+
+    .. _Python for .NET: https://pythonnet.github.io/
 
     Returns
     -------
     :class:`bool`
-        Whether Python for .NET is installed.
+        Whether `Python for .NET`_ is installed.
 
     Note
     ----
-    For help getting Python for .NET working on a non-Windows operating system look at
-    the :ref:`prerequisites <loadlib-prerequisites>`, the `Mono <https://www.mono-project.com/>`_ project
-    and the `Python for .NET documentation <https://pythonnet.github.io/>`_.
+    For help getting `Python for .NET`_ installed on a non-Windows operating system look at
+    the :ref:`prerequisites <loadlib-prerequisites>`, the `Mono <https://www.mono-project.com/>`_
+    project and the `Python for .NET documentation <Python for .NET_>`_.
     """
     try:
         import clr
@@ -261,3 +270,71 @@ def wait_for_server(host, port, timeout):
         if time.time() > stop:
             m = 'Timeout after {:.1f} seconds. Could not connect to {}:{}'.format(timeout, host, port)
             raise ConnectionTimeoutError(m)
+
+
+def get_com_info(*additional_keys):
+    """Reads the registry for the COM_ libraries that are available.
+
+    This function is only supported on Windows.
+
+    .. _COM: https://en.wikipedia.org/wiki/Component_Object_Model
+    .. _Class ID: https://docs.microsoft.com/en-us/windows/desktop/com/clsid-key-hklm
+
+    Parameters
+    ----------
+    *additional_keys : :class:`str`
+        The Program ID ('ProgID') key is returned automatically. You can include
+        additional keys (e.g., 'Version', 'InprocHandler32', 'ToolboxBitmap32',
+        'VersionIndependentProgID', ...) if you also want this additional
+        information to be returned for each `Class ID`_.
+
+    Returns
+    -------
+    :class:`dict`
+        The keys are the Class ID's and each value is a :class:`dict`
+        of the information that was requested.
+
+    Examples
+    --------
+    >>> from msl.loadlib import utils
+    >>> info = utils.get_com_info()
+    >>> info = utils.get_com_info('Version', 'ToolboxBitmap32')
+    """
+    if winreg is None:
+        return {}
+
+    logger.debug('Parsing HKEY_CLASSES_ROOT/CLSID...')
+
+    results = {}
+    key = winreg.OpenKey(winreg.HKEY_CLASSES_ROOT, 'CLSID')
+    index = -1
+    while True:
+        index += 1
+        try:
+            clsid = winreg.EnumKey(key, index)
+        except OSError:
+            break
+
+        sub_key = winreg.OpenKey(key, clsid)
+
+        # ProgID is mandatory, if this fails then ignore
+        # this CLSID and go to the next index in the registry
+        try:
+            progid = winreg.QueryValue(sub_key, 'ProgID')
+        except OSError:
+            pass
+        else:
+            results[clsid] = {}
+            results[clsid]['ProgID'] = progid
+
+            for name in additional_keys:
+                try:
+                    results[clsid][name] = winreg.QueryValue(sub_key, name)
+                except OSError:
+                    results[clsid][name] = None
+
+        winreg.CloseKey(sub_key)
+
+    winreg.CloseKey(key)
+
+    return results
