@@ -446,3 +446,11 @@ def test_comtypes():
             assert hasattr(obj.lib, 'CreateTextFile')
             obj = None
             break
+
+
+def test_raises_ValueError():
+    with pytest.raises(ValueError):
+        loadlib.LoadLibrary(None)
+
+    with pytest.raises(ValueError):
+        loadlib.LoadLibrary('')
