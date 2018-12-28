@@ -7,13 +7,18 @@ Version 0.4.2.dev0
 
 * Added
 
-  - examples for working with numpy arrays and C++ structs
+  - support for loading a Component Object Model (COM) library on Windows
+  - the `utils.get_com_info()` function
   - support for unicode paths in Python 2
+  - examples for working with numpy arrays and C++ structs
 
 * Changed
 
+  - if loading a .NET assembly succeeds but calling GetTypes() fails then a detailed error
+    message is logged rather than raising the exception - the value of `lib` will be `None`
+  - the default timeout value when waiting for the 32-bit server to start is now 10 seconds
   - the `Client64` class now raises `Server32Error` if the 32-bit server raises an exception
-  - the `Client64` class now inherits from `object` and the reference to the `HTTPConnection`
+  - the `Client64` class now inherits from `object` and the reference to `HTTPConnection`
     is now a property value
   - the __repr__ methods no longer include the id as a hex number
 
