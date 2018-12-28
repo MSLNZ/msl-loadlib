@@ -115,20 +115,15 @@ needs to be closed when you are done using the Java library
 
    >>> java.gateway.shutdown()
 
-To load a `Component Object Model`_ pass in the library's Program ID. *NOTE: This example will only work on Windows.*
+To load a `Component Object Model`_ (COM) library pass in the library's Program ID.
+*NOTE: This example will only work on Windows.*
 
-Here we load the FileSystemObject_ library and include the ``'com'`` argument to indicate that it is a COM library
+Here we load the FileSystemObject_ library and include the ``'com'`` argument to indicate that
+it is a COM library. We then use the library to create, edit and close a text file
 
 .. code-block:: pycon
 
    >>> com = LoadLibrary('Scripting.FileSystemObject', 'com')
-   >>> com
-   <LoadLibrary libtype=POINTER(IFileSystem3) path=Scripting.FileSystemObject>
-
-We can then use the library to create, edit and close a text file
-
-.. code-block:: pycon
-
    >>> fp = com.lib.CreateTextFile('a_new_file.txt')
    >>> fp.WriteLine('This is a test')
    0
