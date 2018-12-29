@@ -48,33 +48,33 @@ def main(spec=None):
     """
     if loadlib.IS_PYTHON_64BIT:
         print('Must run {} using a 32-bit Python interpreter'.format(os.path.basename(__file__)))
-        sys.exit(0)
+        return
 
+    missing_packages = []
     try:
         import PyInstaller
     except ImportError:
-        print('PyInstaller not found, run:')
-        print('pip install pyinstaller')
-        sys.exit(0)
+        missing_packages.append('pyinstaller')
 
     try:
         import clr
     except ImportError:
-        print('pythonnet not found, run:')
-        print('pip install pythonnet')
-        sys.exit(0)
+        missing_packages.append('pythonnet')
 
     if loadlib.IS_WINDOWS:
         try:
             import comtypes
         except ImportError:
-            print('comtypes not found, run:')
-            print('pip install comtypes')
-            sys.exit(0)
+            missing_packages.append('comtypes')
         except OSError:
             # OSError: [WinError -2147417850] Cannot change thread mode after it is set
             # don't care about this error since comtypes is indeed installed
             pass
+
+    if missing_packages:
+        print('Packages are missing to be able to create the 32-bit server, run:')
+        print('pip install ' + ' '.join(missing_packages))
+        return
 
     # start the freezing process
 
