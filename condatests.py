@@ -16,7 +16,8 @@ try:
 except ImportError:
     import ConfigParser as configparser  # Python 2
 
-if sys.platform in {'win32', 'cygwin'}:
+IS_WINDOWS = sys.platform in {'win32', 'cygwin'}
+if IS_WINDOWS:
     BIN, EXT = '', '.exe'
 else:
     BIN, EXT = 'bin', ''
@@ -71,9 +72,8 @@ def print_envs(envs):
 def get_executable(env):
     path = os.path.join(env, BIN)
     for item in EXECUTABLES:
-        exe = os.path.join(path, item+EXT)
-        if os.path.isfile(exe):
-            return [exe]
+        if os.path.isfile(os.path.join(path, item+EXT)):
+            return [item]
     raise IOError('The only supported executables are: {}'.format(', '.join(EXECUTABLES)))
 
 
@@ -88,7 +88,10 @@ def ini_parser():
     args = list()
     for option in ini.options(section):
         args.append('--' + option)
-        args.extend([value.strip() for value in ini.get(section, option).split(',')])
+        delim = ','
+        if (option != 'command') and (',' not in ini.get(section, option)):
+            delim = None
+        args.extend([value.strip() for value in ini.get(section, option).split(delim)])
     return args
 
 
@@ -122,10 +125,13 @@ def main(*args):
     if typ.startswith('pytest') or typ.startswith('unittest') or typ.startswith('nose'):
         command.insert(0, '-m')
 
-    for env in envs.values():
-        cmd = get_executable(env) + command
-        print('\nTesting with ' + ' '.join(cmd))
-        if subprocess.call(cmd):
+    executable = None if IS_WINDOWS else '/bin/bash'
+    for name, path in envs.items():
+        activate = [] if IS_WINDOWS else ['source']
+        activate.extend(['activate', name, '&&'])
+        cmd = activate + get_executable(path) + command
+        print('\nTesting with the "{}" environment'.format(name))
+        if subprocess.call(' '.join(cmd), shell=True, executable=executable) != 0:
             return
 
     print('\nAll tests passed with the following conda environments:')
