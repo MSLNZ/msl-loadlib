@@ -7,6 +7,7 @@ Version 0.4.2.dev0
 
 * Added
 
+  - ``'clr'`` as an alias for ``'net'`` in `LoadLibrary`
   - support for loading a Component Object Model (COM) library on Windows
   - the `utils.get_com_info()` function
   - support for unicode paths in Python 2

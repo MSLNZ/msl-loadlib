@@ -27,9 +27,15 @@ class LoadLibrary(object):
             * :class:`~ctypes.CDLL` if `libtype` is ``'cdll'``,
             * :class:`~ctypes.WinDLL` if `libtype` is ``'windll'``,
             * :class:`~ctypes.OleDLL` if `libtype` is ``'oledll'``,
-            * `System.Reflection.Assembly <Assembly_>`_ if `libtype` is ``'net'``,
+            * `System.Reflection.Assembly <Assembly_>`_ if `libtype` is ``'net'`` or ``'clr'`` ,
             * :class:`~.py4j.java_gateway.JavaGateway` if `libtype` is ``'java'``, or
             * comtypes.CreateObject_ if `libtype` is ``'com'``.
+
+        .. versionchanged:: 0.4
+           Added support for Java archives
+
+        .. versionchanged:: 0.5
+           Added support for COM_ libraries
 
         .. _Assembly: https://msdn.microsoft.com/en-us/library/system.reflection.assembly(v=vs.110).aspx
         .. _comtypes.CreateObject: https://pythonhosted.org/comtypes/#creating-and-accessing-com-objects
@@ -56,7 +62,7 @@ class LoadLibrary(object):
 
             * ``'cdll'`` -- for a library that uses the __cdecl calling convention
             * ``'windll'`` or ``'oledll'`` -- for a __stdcall calling convention
-            * ``'net'`` -- for Microsoft's .NET Framework (Common Language Runtime)
+            * ``'net'`` or ``'clr'`` -- for Microsoft's .NET Framework (Common Language Runtime)
             * ``'java'`` -- for a Java archive, ``.jar``, or Java byte code, ``.class``, file
             * ``'com'`` -- for a COM_ library.
 
@@ -207,7 +213,7 @@ class LoadLibrary(object):
 
             self._lib = self._gateway.jvm
 
-        elif libtype == 'net':
+        elif libtype == 'net' or libtype == 'clr':
             if not utils.is_pythonnet_installed():
                 raise IOError('Cannot load a .NET Assembly because pythonnet is not installed.\n'
                               'To install pythonnet run: pip install pythonnet')
@@ -323,7 +329,7 @@ class LoadLibrary(object):
             * ``'cdll'`` then a :class:`~ctypes.CDLL` object
             * ``'windll'`` then a :class:`~ctypes.WinDLL` object
             * ``'oledll'`` then a :class:`~ctypes.OleDLL` object
-            * ``'net'`` then a :class:`~.load_library.DotNet` object
+            * ``'net'`` or ``'clr'`` then a :class:`~.load_library.DotNet` object
             * ``'java'`` then a :class:`~py4j.java_gateway.JVMView` object
             * ``'com'`` then the interface pointer returned by comtypes.CreateObject_
         """
