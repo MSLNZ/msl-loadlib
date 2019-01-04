@@ -18,6 +18,8 @@ class Server32Error(HTTPException):
     def __init__(self, value, name=None, traceback=None):
         """Raised when an exception occurs on the 32-bit server.
 
+        .. versionadded:: 0.5
+
         Parameters
         ----------
         value : :class:`str`
