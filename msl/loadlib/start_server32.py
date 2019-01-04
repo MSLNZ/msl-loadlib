@@ -10,6 +10,7 @@ form of `inter-process communication <ipc_>`_.
 """
 from __future__ import print_function
 
+import io
 import os
 import sys
 import code
@@ -170,18 +171,18 @@ def main():
         print('Cannot start the 32-bit server.\n')
         sys.exit(0)
 
-    if not args.quiet:
-        print('Python ' + sys.version)
-        print('Serving {} on http://{}:{}'.format(os.path.basename(app.path), args.host, args.port))
+    if args.quiet:
+        sys.stdout = io.StringIO()
+
+    print('Python ' + sys.version)
+    print('Serving {} on http://{}:{}'.format(os.path.basename(app.path), args.host, args.port))
 
     try:
         app.serve_forever()
     except KeyboardInterrupt:
-        if not args.quiet:
-            print('KeyboardInterrupt', end=' -- ')
+        print('KeyboardInterrupt', end=' -- ')
     finally:
-        if not args.quiet:
-            print('Stopped http://{}:{}'.format(args.host, args.port))
+        print('Stopped http://{}:{}'.format(args.host, args.port))
 
 
 if __name__ == '__main__':
