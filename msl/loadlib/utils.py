@@ -80,6 +80,8 @@ def is_pythonnet_installed():
 def is_py4j_installed():
     """Checks if Py4J_ is installed.
 
+    .. versionadded:: 0.4
+
     .. _Py4J: https://www.py4j.org/index.html#
 
     Returns
@@ -98,6 +100,8 @@ def is_py4j_installed():
 def is_comtypes_installed():
     """Checks if comtypes_ is installed.
 
+    .. versionadded:: 0.5
+
     .. _comtypes: https://pythonhosted.org/comtypes/#
 
     Returns
@@ -106,9 +110,9 @@ def is_comtypes_installed():
         Whether comtypes_ is installed.
     """
     try:
-        from comtypes.client import CreateObject
+        import comtypes
     except ImportError:
-        logger.warning('comtypes is not installed. Cannot load a COM object.')
+        logger.warning('comtypes is not installed. Cannot load a COM library.')
         return False
     return True
 
@@ -277,15 +281,17 @@ def get_com_info(*additional_keys):
 
     This function is only supported on Windows.
 
+    .. versionadded:: 0.5
+
     .. _COM: https://en.wikipedia.org/wiki/Component_Object_Model
     .. _Class ID: https://docs.microsoft.com/en-us/windows/desktop/com/clsid-key-hklm
 
     Parameters
     ----------
-    *additional_keys : :class:`str`
-        The Program ID ('ProgID') key is returned automatically. You can include
-        additional keys (e.g., 'Version', 'InprocHandler32', 'ToolboxBitmap32',
-        'VersionIndependentProgID', ...) if you also want this additional
+    *additional_keys : :class:`str`, optional
+        The Program ID (ProgID) key is returned automatically. You can include
+        additional keys (e.g., Version, InprocHandler32, ToolboxBitmap32,
+        VersionIndependentProgID, ...) if you also want this additional
         information to be returned for each `Class ID`_.
 
     Returns
