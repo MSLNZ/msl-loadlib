@@ -49,7 +49,7 @@ class Server32(HTTPServer):
 
                 * ``'cdll'`` -- for a __cdecl library
                 * ``'windll'`` or ``'oledll'`` -- for a __stdcall library (Windows only)
-                * ``'net'`` -- for Microsoft's .NET Framework (Common Language Runtime)
+                * ``'net'`` or ``'clr'`` -- for Microsoft's .NET Framework (Common Language Runtime)
                 * ``'com'`` -- for a `COM <https://en.wikipedia.org/wiki/Component_Object_Model>`_ library.
 
             .. note::
@@ -61,8 +61,8 @@ class Server32(HTTPServer):
         port : :class:`int`
             The port to open on the server.
         quiet : :class:`bool`
-            Whether to hide :data:`sys.stdout` messages from the server.
-        kwargs
+            Whether to hide :data:`sys.stdout` messages on the server.
+        **kwargs
             Keyword arguments that are passed to :class:`.LoadLibrary`.
 
         Raises
@@ -100,7 +100,7 @@ class Server32(HTTPServer):
         * ``'cdll'`` then a :class:`~ctypes.CDLL` object
         * ``'windll'`` then a :class:`~ctypes.WinDLL` object
         * ``'oledll'`` then a :class:`~ctypes.OleDLL` object
-        * ``'net'`` then a :class:`~.load_library.DotNet` object
+        * ``'net'`` or ``'clr'`` then a :class:`~.load_library.DotNet` object
         * ``'com'`` then the interface pointer returned by comtypes.CreateObject_
 
         .. _comtypes.CreateObject: https://pythonhosted.org/comtypes/#creating-and-accessing-com-objects
@@ -127,7 +127,7 @@ class Server32(HTTPServer):
 
             >>> from msl.loadlib import Server32
             >>> Server32.version()  # doctest: +SKIP
-            Python 3.6.6 (v3.6.6:4cf1f54eb7, Jun 27 2018, 02:47:15) [MSC v.1900 32 bit (Intel)]
+            Python 3.6.8 (tags/v3.6.8:3c6b436a57, Dec 23 2018, 23:31:17) [MSC v.1916 32 bit (Intel)]
 
         Note
         ----
