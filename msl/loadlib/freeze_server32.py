@@ -1,19 +1,21 @@
 """
-Creates a `frozen <https://www.pyinstaller.org/>`_ 32-bit server to use for
+Creates a 32-bit server to use for
 `inter-process communication <https://en.wikipedia.org/wiki/Inter-process_communication>`_.
 
-This module creates a 32-bit executable. The executable starts a 32-bit server to
-host a 32-bit library. A client module running within a 64-bit Python interpreter
-can communicate with the 32-bit library by sending requests to the server. The server
-calls the library to execute the request and then the server sends a response back
-to the client.
+This module must be run from a 32-bit Python interpreter with PyInstaller_ installed.
 
-This module must be run from a 32-bit Python interpreter with
-`PyInstaller <https://www.pyinstaller.org/>`_ (to create the executable),
-`Python for .NET <https://pypi.python.org/pypi/pythonnet/>`_ (to be able to load .NET
-Framework assemblies) and `comtypes <https://pythonhosted.org/comtypes/#>`_ (to be able
-to load a `COM <https://en.wikipedia.org/wiki/Component_Object_Model>`_ library -- only
-required on Windows) installed.
+If you want to re-freeze the 32-bit server, for example, if you want a 32-bit version of
+:mod:`numpy` to be available on the server, then run the following with a 32-bit Python
+interpreter that has the packages that you want to be available on the server installed
+
+.. code-block:: pycon
+
+   >>> from msl.loadlib import freeze_server32
+   >>> freeze_server32.main()
+
+.. _PyInstaller: https://www.pyinstaller.org/
+.. _Python for .NET: https://pypi.python.org/pypi/pythonnet/
+.. _comtypes: https://pythonhosted.org/comtypes/#
 """
 import os
 import sys
@@ -31,20 +33,26 @@ except ImportError:
     from msl import loadlib
 
 
-def main(spec=None):
-    """Creates a `frozen <PyInstaller_>`_ 32-bit Python server.
+def main(spec=None, requires_pythonnet=True, requires_comtypes=True):
+    """Creates a 32-bit Python server.
 
-    Uses PyInstaller_ to create a `frozen <PyInstaller_>`_ 32-bit Python executable.
-    This executable starts a server, :class:`~.server32.Server32`, which hosts a Python
+    Uses PyInstaller_ to create a frozen 32-bit Python executable. This executable
+    starts a 32-bit server, :class:`~.server32.Server32`, which hosts a Python
     module that can load a 32-bit library.
 
-    .. _PyInstaller: https://www.pyinstaller.org/
-    
+    .. versionchanged:: 0.5
+       Added the `requires_pythonnet` and `requires_comtypes` arguments.
+
     Parameters
     ----------
     spec : :class:`str`, optional
         If you want to freeze using a PyInstaller_ .spec file then you can specify the 
-        path to the .spec file. Default is :data:`None`.
+        path to the .spec file.
+    requires_pythonnet : :class:`bool`, optional
+        Whether `Python for .NET`_ must be available on the 32-bit server.
+    requires_comtypes : :class:`bool`, optional
+        Whether comtypes_ must be available on the 32-bit server. If you using a
+        non-Windows operating system then this argument is ignored.
     """
     if loadlib.IS_PYTHON_64BIT:
         print('Must run {} using a 32-bit Python interpreter'.format(os.path.basename(__file__)))
@@ -56,12 +64,13 @@ def main(spec=None):
     except ImportError:
         missing_packages.append('pyinstaller')
 
-    try:
-        import clr
-    except ImportError:
-        missing_packages.append('pythonnet')
+    if requires_pythonnet:
+        try:
+            import clr
+        except ImportError:
+            missing_packages.append('pythonnet')
 
-    if loadlib.IS_WINDOWS:
+    if loadlib.IS_WINDOWS and requires_comtypes:
         try:
             import comtypes
         except ImportError:
@@ -98,9 +107,10 @@ def main(spec=None):
             '--onefile',
             '--clean',
             '--hidden-import', 'msl.examples.loadlib',
-            '--hidden-import', 'clr',
         ])
-        if loadlib.IS_WINDOWS:
+        if requires_pythonnet:
+            cmd.extend(['--hidden-import', 'clr'])
+        if loadlib.IS_WINDOWS and requires_comtypes:
             cmd.extend(['--hidden-import', 'comtypes'])
         cmd.extend(_get_standard_modules())
         cmd.append(os.path.join(here, 'start_server32.py'))
