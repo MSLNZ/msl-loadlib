@@ -49,19 +49,18 @@ class Client64(object):
             to automatically find a port that is available.
         timeout : :class:`float`, optional
             The maximum number of seconds to wait to establish a connection to the
-            32-bit server. Default is 5 seconds.
+            32-bit server. Default is 10 seconds.
         quiet : :class:`bool`, optional
-            Whether to hide :data:`sys.stdout` messages from the 32-bit server.
+            Whether to hide :data:`sys.stdout` messages on the 32-bit server.
             Default is :data:`True`.
         append_sys_path : :class:`str` or :class:`list` of :class:`str`, optional
             Append path(s) to the 32-bit server's :data:`sys.path` variable. The value of
             :data:`sys.path` from the 64-bit process is automatically included,
-            i.e., ``sys.path(32bit) = sys.path(64bit) + append_sys_path``
-            Default is :data:`None`.
+            i.e., ``sys.path(32bit) = sys.path(64bit) + append_sys_path``.
         append_environ_path : :class:`str` or :class:`list` of :class:`str`, optional
             Append path(s) to the 32-bit server's :data:`os.environ['PATH'] <os.environ>`
             variable. This can be useful if the library that is being loaded requires
-            additional libraries that must be available on ``PATH``. Default is :data:`None`.
+            additional libraries that must be available on ``PATH``.
         **kwargs
             Keyword arguments that will be passed to the :class:`~.server32.Server32`
             subclass. The data type of each value is not preserved. It will be a string
@@ -172,12 +171,12 @@ class Client64(object):
 
     @property
     def host(self):
-        """:class:`str`: The address of the host for the :meth:`~msl.loadlib.client64.Client64.connection`."""
+        """:class:`str`: The address of the host for the :attr:`~msl.loadlib.client64.Client64.connection`."""
         return self._host
 
     @property
     def port(self):
-        """:class:`int`: The port number of the :meth:`~msl.loadlib.client64.Client64.connection`."""
+        """:class:`int`: The port number of the :attr:`~msl.loadlib.client64.Client64.connection`."""
         return self._port
 
     @property
@@ -204,15 +203,13 @@ class Client64(object):
         method32 : :class:`str`
             The name of the method to call in the :class:`~.server32.Server32` subclass.
         *args
-            The arguments that the `method32` method in the :class:`~.server32.Server32` 
-            subclass requires.
+            The arguments that the method in the :class:`~.server32.Server32` subclass requires.
         **kwargs
-            The keyword arguments that the `method32` method in the 
-            :class:`~.server32.Server32` subclass requires.
+            The keyword arguments that the method in the :class:`~.server32.Server32` subclass requires.
 
         Returns
         -------
-        The response from the 32-bit server.
+        Whatever is returned by the method of the :class:`~.server32.Server32` subclass.
 
         Raises
         ------
