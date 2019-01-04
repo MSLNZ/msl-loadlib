@@ -61,7 +61,7 @@ def main():
                         help='the port to open on the host [default: 8080]')
 
     parser.add_argument('-q', '--quiet', action='store_true',
-                        help='whether to hide sys.stdout messages from the server '
+                        help='whether to hide sys.stdout messages on the server '
                              '[default: False]')
 
     parser.add_argument('-v', '--version', action='store_true',
@@ -88,13 +88,13 @@ def main():
         sys.path.append(os.path.dirname(args.module))
     if args.append_sys_path is not None:
         for path in args.append_sys_path.split(';'):
-            if len(path) > 0:
+            if path:
                 sys.path.append(os.path.abspath(path))
 
     # include directories in os.environ['PATH']
     if args.append_environ_path is not None:
         for path in args.append_environ_path.split(';'):
-            if len(path) > 0:
+            if path:
                 os.environ['PATH'] += os.pathsep + os.path.abspath(path)
 
     if args.interactive:
@@ -124,7 +124,7 @@ def main():
     if args.module is None:
         print('You must specify a Python module to run on the 32-bit server (i.e., -m my_module)')
         print('Cannot start the 32-bit server.\n')
-        sys.exit(0)
+        sys.exit(-1)
 
     args.module = os.path.basename(args.module)
     if args.module.endswith('.py'):
@@ -134,7 +134,7 @@ def main():
         print('ImportError: ' + args.module)
         print('Cannot perform relative imports.')
         print('Cannot start the 32-bit server.\n')
-        sys.exit(0)
+        sys.exit(-1)
 
     try:
         mod = importlib.import_module(args.module)
@@ -145,7 +145,7 @@ def main():
         for path in sys.path[2:]:  # the first two paths are TEMP folders from the frozen application
             print('  ' + path)
         print('Cannot start the 32-bit server.\n')
-        sys.exit(0)
+        sys.exit(-1)
 
     # ensure that there is a subclass of Server32 in the module
     server32 = None
@@ -159,7 +159,7 @@ def main():
         print('AttributeError: module {}.py'.format(args.module))
         print('Module does not contain a class that is a subclass of Server32')
         print('Cannot start the 32-bit server.\n')
-        sys.exit(0)
+        sys.exit(-1)
 
     try:
         app = server32(args.host, args.port, args.quiet, **kwargs)
@@ -169,7 +169,7 @@ def main():
         print('class {}(Server32):'.format(server32.__name__))
         print('    def __init__(self, host, port, quiet, **kwargs):\n')
         print('Cannot start the 32-bit server.\n')
-        sys.exit(0)
+        sys.exit(-1)
 
     if args.quiet:
         sys.stdout = io.StringIO()
