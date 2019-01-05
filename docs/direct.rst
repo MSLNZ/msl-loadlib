@@ -69,8 +69,8 @@ Load a 64-bit FORTRAN library in 64-bit Python, see :ref:`here <fortran-lib>` fo
    <CDLL 'D:\msl\examples\loadlib\fortran_lib64.dll', handle 6f660000 at 0x2e5d470>
 
 Call the ``factorial`` function. With a FORTRAN library you must pass values by reference using :mod:`ctypes`,
-and, since the returned value is not of type ``int`` we must configure :mod:`ctypes` for a value of type
-``double`` to be returned
+and, since the returned value is not of type :class:`ctypes.c_int` we must configure :mod:`ctypes` for a value
+of type :class:`ctypes.c_double` to be returned
 
 .. code-block:: pycon
 
@@ -83,7 +83,8 @@ Microsoft .NET Framework
 ------------------------
 Load a 64-bit C# library (a .NET Framework) in 64-bit Python, see :ref:`here <dotnet-lib>`
 for the source code. Include the ``'net'`` argument to indicate that the ``.dll`` file is for
-the .NET Framework. *To load the 32-bit version in 32-bit Python use* ``'dotnet_lib32.dll'``.
+the .NET Framework (``'clr'`` is an alias for ``'net'`` and can also be passed in as an argument).
+*To load the 32-bit version in 32-bit Python use* ``'dotnet_lib32.dll'``.
 
 .. code-block:: pycon
 

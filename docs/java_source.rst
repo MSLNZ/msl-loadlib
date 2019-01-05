@@ -3,7 +3,7 @@
 Java
 ====
 
-Source code for the example ``.class`` and ``.jar`` libraries.
+Source code for the example :ref:`.class <java-lib-class>` and :ref:`.jar <java-lib-jar>` libraries.
 
 .. _java-lib-class:
 

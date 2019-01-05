@@ -154,13 +154,12 @@ see :meth:`~msl.examples.loadlib.cpp64.Cpp64.reverse_string_v2`:
 Structs
 -------
 
-It is possible to :mod:`pickle` a :class:`ctypes.Structure` and pass the *struct* between
+It is possible to :mod:`pickle` a :class:`ctypes.Structure` and pass the *struct* object between
 :class:`~msl.examples.loadlib.cpp64.Cpp64` and :class:`~msl.examples.loadlib.cpp32.Cpp32` provided
 that the *struct* is a **fixed size** in memory (i.e., the *struct* does not contain any pointers).
 If the *struct* contains pointers then you must create the *struct* within
-:class:`~msl.examples.loadlib.cpp32.Cpp32` and you can only pass **values** between
-:class:`~msl.examples.loadlib.cpp32.Cpp32` and :class:`~msl.examples.loadlib.cpp64.Cpp64` and not
-:mod:`ctypes` **objects**.
+:class:`~msl.examples.loadlib.cpp32.Cpp32` and you can only pass the **values** of the *struct* between
+:class:`~msl.examples.loadlib.cpp64.Cpp64` and :class:`~msl.examples.loadlib.cpp32.Cpp32`.
 
 .. attention::
 

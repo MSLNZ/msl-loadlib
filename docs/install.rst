@@ -18,15 +18,18 @@ Alternatively, using the `MSL Package Manager`_ run:
 Dependencies
 ------------
 * Python 2.7, 3.4+
-* `Python for .NET`_, optional
-* Py4J_, optional
-* comtypes_, optional
+
+Optional dependencies:
+
+  * `Python for .NET`_
+  * Py4J_
+  * comtypes_
 
 Compatibility
 -------------
 * The :mod:`~msl.loadlib.start_server32` module has been built in to a `frozen <https://www.pyinstaller.org/>`_
   Python application for Windows and Linux and works with the Python versions listed above. The 32-bit server
-  is running on Python 3.x and therefore all modules that run on the server must use Python 3 syntax.
+  is running on Python 3.6 and therefore all modules that run on the server must use Python 3 syntax.
 * You can create a new 32-bit server by running the :mod:`~msl.loadlib.freeze_server32` module in the
   operating system of your choice and using a 32-bit Python interpreter of your choice.
 
@@ -60,21 +63,21 @@ For example, the following should return the version of Java that is installed
 .. code-block:: console
 
    C:\>java -version
-   java version "1.8.0_161"
-   Java(TM) SE Runtime Environment (build 1.8.0_161-b12)
-   Java HotSpot(TM) 64-Bit Server VM (build 25.161-b12, mixed mode)
-
-When loading a shared library it is vital that all dependencies of the library are also available on your
-computer and that the directory of the dependency is also available on your ``PATH``. A helpful utility to use to
-determine the dependencies of a shared library is `Dependency Walker <https://www.dependencywalker.com/>`_.
-For finding the dependencies of a .NET library the
-`Dependency Walker for .NET <https://github.com/isindicic/DependencyWalker.Net>`_ is also useful.
+   java version "10.0.1" 2018-04-17
+   Java(TM) SE Runtime Environment 18.3 (build 10.0.1+10)
+   Java HotSpot(TM) 64-Bit Server VM 18.3 (build 10.0.1+10, mixed mode)
 
 If you need to load a `Component Object Model`_ library then you must install comtypes_
 
 .. code-block:: console
 
    pip install comtypes
+
+When loading a shared library it is vital that all dependencies of the library are also available on your
+computer and that the directory of the dependency is also available on your ``PATH``. A helpful utility to use to
+determine the dependencies of a shared library is `Dependency Walker <http://www.dependencywalker.com/>`_.
+For finding the dependencies of a .NET library the
+`Dependency Walker for .NET <https://github.com/isindicic/DependencyWalker.Net>`_ is also useful.
 
 Linux
 ++++++
@@ -154,9 +157,9 @@ should return the version of Java that is installed
 .. code-block:: console
 
    joe@msl:~$ java -version
-   openjdk version "1.8.0_181"
-   OpenJDK Runtime Environment (build 1.8.0_181-8u181-b13-0ubuntu0.16.04.1-b13)
-   OpenJDK 64-Bit Server VM (build 25.181-b13, mixed mode)
+   openjdk version "1.8.0_191"
+   OpenJDK Runtime Environment (build 1.8.0_191-8u191-b12-0ubuntu0.16.04.1-b12)
+   OpenJDK 64-Bit Server VM (build 25.191-b12, mixed mode)
 
 OSX
 +++
