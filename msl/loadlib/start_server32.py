@@ -179,6 +179,16 @@ def main():
         print('Cannot start the 32-bit server.\n')
         sys.exit(-1)
 
+    if not hasattr(app, '_library'):
+        sys.stdout = sys.__stdout__
+        print('The super() method was never called.')
+        print('The {!r} class must be defined with the following syntax\n'.format(server32.__name__))
+        print('class {}(Server32):'.format(server32.__name__))
+        print('    def __init__(self, host, port, quiet, **kwargs):')
+        print('        super({}, self).__init__(path, libtype, host, port, quiet, **kwargs)\n'.format(server32.__name__))
+        print('Cannot start the 32-bit server.\n')
+        sys.exit(-1)
+
     print('Python ' + sys.version)
     print('Serving {} on http://{}:{}'.format(os.path.basename(app.path), args.host, args.port))
 
