@@ -157,22 +157,27 @@ def main():
 
     if server32 is None:
         print('AttributeError: module {}.py'.format(args.module))
-        print('Module does not contain a class that is a subclass of Server32')
-        print('Cannot start the 32-bit server.\n')
-        sys.exit(-1)
-
-    try:
-        app = server32(args.host, args.port, args.quiet, **kwargs)
-    except TypeError as e:
-        print('TypeError: {}'.format(e))
-        print('The Server32 subclass must be initialized using\n')
-        print('class {}(Server32):'.format(server32.__name__))
-        print('    def __init__(self, host, port, quiet, **kwargs):\n')
+        print('Module does not contain a class that is a subclass of Server32.')
         print('Cannot start the 32-bit server.\n')
         sys.exit(-1)
 
     if args.quiet:
         sys.stdout = io.StringIO()
+
+    try:
+        app = server32(args.host, args.port, args.quiet, **kwargs)
+    except Exception as e:
+        sys.stdout = sys.__stdout__
+        if e.__class__.__name__ == 'TypeError' and '__init__' in str(e):
+            print('TypeError: {}'.format(e))
+            print('The {!r} class must be defined with the following syntax\n'.format(server32.__name__))
+            print('class {}(Server32):'.format(server32.__name__))
+            print('    def __init__(self, host, port, quiet, **kwargs):')
+            print('        super({}, self).__init__(path, libtype, host, port, quiet, **kwargs)\n'.format(server32.__name__))
+        else:
+            print('{}: {}'.format(e.__class__.__name__, e))
+        print('Cannot start the 32-bit server.\n')
+        sys.exit(-1)
 
     print('Python ' + sys.version)
     print('Serving {} on http://{}:{}'.format(os.path.basename(app.path), args.host, args.port))

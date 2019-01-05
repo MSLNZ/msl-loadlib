@@ -41,6 +41,7 @@ htmlcov/
 junit.xml
 coverage.xml
 condatests.ini
+stdout.txt
 
 # MANIFEST.in is now auto-generated based on the platform
 MANIFEST.in

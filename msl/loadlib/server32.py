@@ -72,9 +72,9 @@ class Server32(HTTPServer):
         TypeError
             If the value of `libtype` is not supported.
         """
-        super(Server32, self).__init__((host, int(port)), RequestHandler)
         self._quiet = bool(quiet)
         self._library = LoadLibrary(path, libtype=libtype, **kwargs)
+        super(Server32, self).__init__((host, int(port)), RequestHandler)
 
     @property
     def assembly(self):
