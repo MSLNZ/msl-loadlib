@@ -11,7 +11,7 @@ interpreter that has the packages that you want to be available on the server in
 .. code-block:: pycon
 
    >>> from msl.loadlib import freeze_server32
-   >>> freeze_server32.main()
+   >>> freeze_server32.main()  # doctest: +SKIP
 
 .. _PyInstaller: https://www.pyinstaller.org/
 .. _Python for .NET: https://pypi.python.org/pypi/pythonnet/
