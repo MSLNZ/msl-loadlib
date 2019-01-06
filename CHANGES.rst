@@ -2,26 +2,32 @@
 Changelog
 =========
 
-Version 0.4.2.dev0
-==================
+Version 0.5.0 (2019.01.06)
+==========================
 
 * Added
 
-  - ``'clr'`` as an alias for ``'net'`` in `LoadLibrary`
   - support for loading a Component Object Model (COM) library on Windows
-  - the `utils.get_com_info()` function
+  - the `requires_pythonnet` and `requires_comtypes` kwargs to ``freeze_server32.main()``
+  - ``'clr'`` as an alias for ``'net'`` for the `libtype` parameter in `LoadLibrary`
+  - the ``utils.get_com_info()`` function
   - support for unicode paths in Python 2
   - examples for working with numpy arrays and C++ structs
 
 * Changed
 
-  - if loading a .NET assembly succeeds but calling GetTypes() fails then a detailed error
+  - the frozen server32 executable (for Windows/Linux) now runs on Python 3.6.8
+  - if loading a .NET assembly succeeds but calling `GetTypes()` fails then a detailed error
     message is logged rather than raising the exception - the value of `lib` will be `None`
   - the default timeout value when waiting for the 32-bit server to start is now 10 seconds
   - the `Client64` class now raises `Server32Error` if the 32-bit server raises an exception
   - the `Client64` class now inherits from `object` and the reference to `HTTPConnection`
     is now a property value
-  - the __repr__ methods no longer include the id as a hex number
+  - the `__repr__` methods no longer include the id as a hex number
+
+* Fixed
+
+  - set ``sys.stdout = io.StringIO()`` if `quiet=True` on the server
 
 Version 0.4.1 (2018.08.24)
 ==========================
