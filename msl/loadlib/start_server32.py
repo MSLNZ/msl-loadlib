@@ -18,7 +18,7 @@ import inspect
 import argparse
 import importlib
 
-from msl.loadlib import Server32
+from msl.loadlib import Server32, SERVER_FILENAME
 
 
 def main():
@@ -80,7 +80,7 @@ def main():
 
     if args.version:
         print('Python ' + sys.version)
-        sys.exit(0)
+        return 0
 
     # include directories in sys.path
     sys.path.append(os.path.abspath('.'))
@@ -103,7 +103,7 @@ def main():
         banner = 'Python ' + sys.version
         banner += '\nType exit() or quit() or <CTRL+Z then Enter> to terminate the console.'
         console.interact(banner=banner)
-        sys.exit(0)
+        return 0
 
     # build the keyword-argument dictionary
     kwargs = {}
@@ -121,31 +121,35 @@ def main():
 
     # if you get to this point in the script that means you want to start a server for
     # inter-process communication and therefore args.module must have a value
-    if args.module is None:
-        print('You must specify a Python module to run on the 32-bit server (i.e., -m my_module)')
-        print('Cannot start the 32-bit server.\n')
-        sys.exit(-1)
+    if not args.module:
+        err = 'You must specify a Python module to run on the 32-bit server.\n' \
+              'For example: {} -m my_module.py\n' \
+              'Cannot start the 32-bit server.\n'.format(SERVER_FILENAME)
+        print(err, file=sys.stderr)
+        return -1
 
     args.module = os.path.basename(args.module)
     if args.module.endswith('.py'):
         args.module = args.module[:-3]
 
     if args.module.startswith('.'):
-        print('ImportError: ' + args.module)
-        print('Cannot perform relative imports.')
-        print('Cannot start the 32-bit server.\n')
-        sys.exit(-1)
+        err = 'ImportError: {}\n' \
+              'Cannot perform relative imports.\n' \
+              'Cannot start the 32-bit server.\n'.format(args.module)
+        print(err, file=sys.stderr)
+        return -1
 
     try:
         mod = importlib.import_module(args.module)
     except ImportError as e:
-        print('ImportError: {}'.format(e))
-        print('The missing module must be in sys.path (see the --append-sys-path argument)')
-        print('The paths in sys.path are:')
-        for path in sys.path[2:]:  # the first two paths are TEMP folders from the frozen application
-            print('  ' + path)
-        print('Cannot start the 32-bit server.\n')
-        sys.exit(-1)
+        # the first two paths are TEMP folders from the frozen application
+        paths = '\n  '.join(item for item in sys.path[2:])
+        err = 'ImportError: {}\n' \
+              'The missing module must be in sys.path (see the --append-sys-path option)\n' \
+              'The paths in sys.path are:\n  {}\n' \
+              'Cannot start the 32-bit server.\n'.format(e, paths)
+        print(err, file=sys.stderr)
+        return -1
 
     # ensure that there is a subclass of Server32 in the module
     server32 = None
@@ -156,10 +160,11 @@ def main():
             break
 
     if server32 is None:
-        print('AttributeError: module {}.py'.format(args.module))
-        print('Module does not contain a class that is a subclass of Server32.')
-        print('Cannot start the 32-bit server.\n')
-        sys.exit(-1)
+        err = 'AttributeError: module {}.py\n' \
+              'Module does not contain a class that is a subclass of Server32.\n' \
+              'Cannot start the 32-bit server.\n'.format(args.module)
+        print(err, file=sys.stderr)
+        return -1
 
     if args.quiet:
         sys.stdout = io.StringIO()
@@ -167,27 +172,26 @@ def main():
     try:
         app = server32(args.host, args.port, args.quiet, **kwargs)
     except Exception as e:
-        sys.stdout = sys.__stdout__
+        err = '{}: {}\n'.format(e.__class__.__name__, e)
         if e.__class__.__name__ == 'TypeError' and '__init__' in str(e):
-            print('TypeError: {}'.format(e))
-            print('The {!r} class must be defined with the following syntax\n'.format(server32.__name__))
-            print('class {}(Server32):'.format(server32.__name__))
-            print('    def __init__(self, host, port, quiet, **kwargs):')
-            print('        super({}, self).__init__(path, libtype, host, port, quiet, **kwargs)\n'.format(server32.__name__))
-        else:
-            print('{}: {}'.format(e.__class__.__name__, e))
-        print('Cannot start the 32-bit server.\n')
-        sys.exit(-1)
+            err += 'The \'{0}\' class must be defined with the following syntax:\n\n' \
+                   'class {0}(Server32):\n' \
+                   '    def __init__(self, host, port, quiet, **kwargs):\n' \
+                   '        super({0}, self).__init__(path, libtype, host, port, quiet, **kwargs)\n\n'\
+                .format(server32.__name__)
+        err += 'Cannot start the 32-bit server.\n'
+        print(err, file=sys.stderr)
+        return -1
 
     if not hasattr(app, '_library'):
-        sys.stdout = sys.__stdout__
-        print('The super() method was never called.')
-        print('The {!r} class must be defined with the following syntax\n'.format(server32.__name__))
-        print('class {}(Server32):'.format(server32.__name__))
-        print('    def __init__(self, host, port, quiet, **kwargs):')
-        print('        super({}, self).__init__(path, libtype, host, port, quiet, **kwargs)\n'.format(server32.__name__))
-        print('Cannot start the 32-bit server.\n')
-        sys.exit(-1)
+        err = 'The super() method was never called.\n' \
+              'The \'{0}\' class must be defined with the following syntax:\n\n' \
+              'class {0}(Server32):\n' \
+              '    def __init__(self, host, port, quiet, **kwargs):\n' \
+              '        super({0}, self).__init__(path, libtype, host, port, quiet, **kwargs)\n\n' \
+              'Cannot start the 32-bit server.\n'.format(server32.__name__)
+        print(err, file=sys.stderr)
+        return -1
 
     print('Python ' + sys.version)
     print('Serving {} on http://{}:{}'.format(os.path.basename(app.path), args.host, args.port))
@@ -196,9 +200,11 @@ def main():
         app.serve_forever()
     except KeyboardInterrupt:
         print('KeyboardInterrupt', end=' -- ')
+    except Exception as e:
+        print('{}: {}'.format(e.__class__.__name__, e), file=sys.stderr)
     finally:
         print('Stopped http://{}:{}'.format(args.host, args.port))
 
 
 if __name__ == '__main__':
-    main()
+    sys.exit(main())
