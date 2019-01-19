@@ -10,13 +10,13 @@ from client import Client
 
 
 def _raises(module32):
-    sys.stderr = open('stdout.txt', 'w+')
+    sys.stderr = open('stderr.txt', 'w+')
     with pytest.raises(ConnectionTimeoutError):
         Client(module32)
     sys.stderr.seek(0)
     lines = sys.stderr.readlines()
     sys.stderr.close()
-    os.remove('stdout.txt')
+    os.remove('stderr.txt')
     return lines
 
 
