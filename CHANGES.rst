@@ -5,6 +5,14 @@ Changelog
 Version 0.5.1.dev0
 ==================
 
+* Fixed
+
+  - the 32-bit server prints error messages to `sys.stderr` instead of `sys.stdout`
+  - issue `#15 <https://github.com/MSLNZ/msl-loadlib/issues/15>`_ - terminate the
+    subprocess that starts the 32-bit server and set a value for the `returncode`
+  - issue `#14 <https://github.com/MSLNZ/msl-loadlib/issues/14>`_ - use `os.kill`
+    to stop the 32-bit server
+
 Version 0.5.0 (2019.01.06)
 ==========================
 
