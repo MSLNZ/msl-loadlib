@@ -250,7 +250,10 @@ class Client64(object):
         if self._is_active:
             # kill the 32-bit server - the <signal.SIGKILL 9> constant is not available on Windows
             if self._meta32:
-                os.kill(self._meta32['pid'], 9)
+                try:
+                    os.kill(self._meta32['pid'], 9)
+                except OSError:
+                    pass  # already killed
             if os.path.isfile(self._pickle_temp_file):
                 os.remove(self._pickle_temp_file)
             self._conn.close()
