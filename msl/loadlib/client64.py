@@ -21,7 +21,7 @@ except ImportError:
     from http.client import HTTPConnection
 
 from . import utils, SERVER_FILENAME, IS_PYTHON2
-from .exceptions import Server32Error
+from .exceptions import Server32Error, ConnectionTimeoutError
 
 _encoding = sys.getfilesystemencoding()
 
@@ -85,7 +85,7 @@ class Client64(object):
         :class:`~msl.loadlib.exceptions.ConnectionTimeoutError`
             If the connection to the 32-bit server cannot be established.
         """
-
+        self._meta32 = None
         self._is_active = False
 
         if port is None:
@@ -151,33 +151,35 @@ class Client64(object):
             cmd.append('--quiet')
 
         # start the server, cannot use subprocess.call() because it blocks
-        subprocess.Popen(cmd, stderr=sys.stderr, stdout=sys.stderr)
-        utils.wait_for_server(host, port, timeout)
+        self._proc = subprocess.Popen(cmd, stderr=sys.stderr, stdout=sys.stdout)
+        try:
+            utils.wait_for_server(host, port, timeout)
+        except ConnectionTimeoutError:
+            self._cleanup_subprocess()
+            raise
 
         # start the connection
         self._conn = HTTPConnection(host, port)
-        self._host, self._port = self._conn.host, self._conn.port
-
         self._is_active = True
-        self._lib32_path = self.request32('LIB32_PATH')
+        self._meta32 = self.request32('_SERVER32_METADATA_')
 
     def __repr__(self):
         msg = '<{} '.format(self.__class__.__name__)
         if self._is_active:
-            lib = os.path.basename(self._lib32_path)
-            return msg + 'lib={} address={}:{}>'.format(lib, self._host, self._port)
+            lib = os.path.basename(self._meta32['path'])
+            return msg + 'lib={} address={}:{}>'.format(lib, self._conn.host, self._conn.port)
         else:
-            return msg + 'lib=None address=None:None>'
+            return msg + 'lib=None address=None>'
 
     @property
     def host(self):
         """:class:`str`: The address of the host for the :attr:`~msl.loadlib.client64.Client64.connection`."""
-        return self._host
+        return self._conn.host
 
     @property
     def port(self):
         """:class:`int`: The port number of the :attr:`~msl.loadlib.client64.Client64.connection`."""
-        return self._port
+        return self._conn.port
 
     @property
     def connection(self):
@@ -193,7 +195,7 @@ class Client64(object):
         :class:`str`
             The path to the 32-bit shared-library file.
         """
-        return self._lib32_path
+        return self._meta32['path']
 
     def request32(self, method32, *args, **kwargs):
         """Send a request to the 32-bit server.
@@ -218,10 +220,6 @@ class Client64(object):
         """
         if not self._is_active:
             raise Server32Error('The 32-bit server is not active')
-
-        if method32 == 'SHUTDOWN_SERVER32':
-            self._conn.request('GET', '/SHUTDOWN_SERVER32')
-            return
 
         request = '/{}:{}:{}'.format(method32, self._pickle_protocol, self._pickle_temp_file)
         with open(self._pickle_temp_file, 'wb') as f:
@@ -248,8 +246,11 @@ class Client64(object):
         This method gets called automatically when the :class:`~.client64.Client64`
         object gets destroyed.
         """
+        self._cleanup_subprocess()
         if self._is_active:
-            self.request32('SHUTDOWN_SERVER32')
+            # kill the 32-bit server - the <signal.SIGKILL 9> constant is not available on Windows
+            if self._meta32:
+                os.kill(self._meta32['pid'], 9)
             if os.path.isfile(self._pickle_temp_file):
                 os.remove(self._pickle_temp_file)
             self._conn.close()
@@ -257,3 +258,11 @@ class Client64(object):
 
     def __del__(self):
         self.shutdown_server32()
+
+    def _cleanup_subprocess(self):
+        # first, terminate
+        self._proc.terminate()
+        # second, ensure that the returncode is not None so that the following warning is suppressed
+        #    ResourceWarning: subprocess <pid> is still running
+        # don't care about the actual value of the returncode
+        self._proc.returncode = -1

@@ -9,7 +9,6 @@ import os
 import sys
 import json
 import traceback
-import threading
 import subprocess
 try:
     import cPickle as pickle  # Python 2
@@ -170,38 +169,29 @@ class RequestHandler(BaseHTTPRequestHandler):
 
     def do_GET(self):
         """Handle a GET request."""
-        request = self.path[1:]
-        if request == 'SHUTDOWN_SERVER32':
-            threading.Thread(target=self.server.shutdown).start()
-            return
-
         try:
+            request = self.path[1:]
             method, pickle_protocol, pickle_temp_file = request.split(':', 2)
-            if method == 'LIB32_PATH':
-                response = self.server.path
+            if method == '_SERVER32_METADATA_':
+                response = {'path': self.server.path, 'pid': os.getpid()}
             else:
                 with open(pickle_temp_file, 'rb') as f:
                     args = pickle.load(f)
                     kwargs = pickle.load(f)
                 response = getattr(self.server, method)(*args, **kwargs)
-
             with open(pickle_temp_file, 'wb') as f:
                 pickle.dump(response, f, protocol=int(pickle_protocol))
-
             self.send_response(200)
             self.end_headers()
-
-        except Exception:
+        except:
             exc_type, exc_value, exc_traceback = sys.exc_info()
             tb_list = traceback.extract_tb(exc_traceback)
             tb = tb_list[min(len(tb_list)-1, 1)]  # get the Server32 subclass exception
-
             response = {'name': exc_type.__name__, 'value': str(exc_value)}
             traceback_ = '  File "{}", line {}, in {}'.format(tb[0], tb[1], tb[2])
             if tb[3]:
                 traceback_ += '\n    {}'.format(tb[3])
             response['traceback'] = traceback_
-
             self.send_response(501)
             self.send_header('Content-type', 'text/plain')
             self.end_headers()
