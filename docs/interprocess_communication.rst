@@ -116,3 +116,66 @@ compiled in different programming languages or using different calling conventio
    Microsoft .NET Framework <tutorials_dotnet>
    Windows __stdcall <tutorials_stdcall>
    LabVIEW <tutorials_labview>
+
+.. tip::
+
+    If you find yourself repeatedly implementing each method in your :class:`~msl.loadlib.client64.Client64`
+    subclass in the following way (i.e., you are essentially duplicating the code for each method)
+
+    .. code-block:: python
+
+        from msl.loadlib import Client64
+
+        class LinearAlgebra(Client64):
+
+            def __init__(self):
+                super(LinearAlgebra, self).__init__(module32='linear_algebra_32.py')
+
+            def solve(self, matrix, vector):
+                return self.request32('solve', matrix, vector)
+
+            def eigenvalues(self, matrix):
+                return self.request32('eigenvalues', matrix)
+
+            def stdev(self, data, as_population=True)
+                return self.request32('stdev', data, as_population=as_population)
+
+            def determinant(self, matrix):
+                return self.request32('determinant', matrix)
+
+            def cross_product(self, vector1, vector2):
+                return self.request32('cross_product', vector1, vector2)
+
+    Then you can simplify the implementation by defining your :class:`~msl.loadlib.client64.Client64`
+    subclass as
+
+    .. code-block:: python
+
+        from msl.loadlib import Client64
+
+        class LinearAlgebra(Client64):
+
+            def __init__(self):
+                super(LinearAlgebra, self).__init__(module32='linear_algebra_32.py')
+
+            def __getattr__(self, method32):
+                def send(*args, **kwargs):
+                    return self.request32(method32, *args, **kwargs)
+                return send
+
+    and you will get the same behaviour. If you try to call a method that does not exist on the
+    :class:`~msl.loadlib.server32.Server32` subclass or if you specify the wrong number of
+    arguments or keyword arguments then a :class:`~msl.loadlib.exceptions.Server32Error`
+    will be raised automatically.
+
+    There are situations where you may want to explicitly write some (or all) of the methods in the
+    :class:`~msl.loadlib.client64.Client64` subclass in addition to (or instead of) implementing the
+    :obj:`~object.__getattr__` method, e.g.,
+
+    * you are writing an API for others to use and you want features like autocomplete or
+      docstrings to be available in the IDE that the person using your API is using
+    * you want the :class:`~msl.loadlib.client64.Client64` subclass to do error checking on the
+      ``*args``, ``**kwargs`` and/or on the result from the :class:`~msl.loadlib.server32.Server32` subclass
+    * you want to modify the returned value from a particular :class:`~msl.loadlib.server32.Server32`
+      method, for example, a :class:`list` is returned but you want the corresponding
+      :class:`~msl.loadlib.client64.Client64` method to return a :class:`numpy.ndarray`
