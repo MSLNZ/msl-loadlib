@@ -163,10 +163,10 @@ compiled in different programming languages or using different calling conventio
                     return self.request32(method32, *args, **kwargs)
                 return send
 
-    and you will get the same behaviour. If you try to call a method that does not exist on the
+    and you will get the same behaviour. If you call a method that does not exist on the
     :class:`~msl.loadlib.server32.Server32` subclass or if you specify the wrong number of
     arguments or keyword arguments then a :class:`~msl.loadlib.exceptions.Server32Error`
-    will be raised automatically.
+    will be raised.
 
     There are situations where you may want to explicitly write some (or all) of the methods in the
     :class:`~msl.loadlib.client64.Client64` subclass in addition to (or instead of) implementing the
@@ -175,7 +175,10 @@ compiled in different programming languages or using different calling conventio
     * you are writing an API for others to use and you want features like autocomplete or
       docstrings to be available in the IDE that the person using your API is using
     * you want the :class:`~msl.loadlib.client64.Client64` subclass to do error checking on the
-      ``*args``, ``**kwargs`` and/or on the result from the :class:`~msl.loadlib.server32.Server32` subclass
-    * you want to modify the returned value from a particular :class:`~msl.loadlib.server32.Server32`
+      ``*args``, ``**kwargs`` and/or on the result from the :class:`~msl.loadlib.server32.Server32`
+      subclass (this allows you to have control over the type of :ref:`Exception <bltin-exceptions>`
+      that is raised because if the :class:`~msl.loadlib.server32.Server32` subclass raises an
+      exception then it is a :class:`~msl.loadlib.exceptions.Server32Error`)
+    * you want to modify the returned object from a particular :class:`~msl.loadlib.server32.Server32`
       method, for example, a :class:`list` is returned but you want the corresponding
       :class:`~msl.loadlib.client64.Client64` method to return a :class:`numpy.ndarray`
