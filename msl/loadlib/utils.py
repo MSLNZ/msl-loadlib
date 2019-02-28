@@ -309,38 +309,43 @@ def get_com_info(*additional_keys):
     if winreg is None:
         return {}
 
-    logger.debug('Parsing HKEY_CLASSES_ROOT/CLSID...')
-
     results = {}
-    key = winreg.OpenKey(winreg.HKEY_CLASSES_ROOT, 'CLSID')
-    index = -1
-    while True:
-        index += 1
+    for item in ['CLSID', r'Wow6432Node\CLSID']:
         try:
-            clsid = winreg.EnumKey(key, index)
+            key = winreg.OpenKey(winreg.HKEY_CLASSES_ROOT, item)
         except OSError:
-            break
-
-        sub_key = winreg.OpenKey(key, clsid)
-
-        # ProgID is mandatory, if this fails then ignore
-        # this CLSID and go to the next index in the registry
-        try:
-            progid = winreg.QueryValue(sub_key, 'ProgID')
-        except OSError:
-            pass
+            continue
         else:
-            results[clsid] = {}
-            results[clsid]['ProgID'] = progid
+            logger.debug(r'Parsing HKEY_CLASSES_ROOT\{}\...'.format(item))
 
-            for name in additional_keys:
-                try:
-                    results[clsid][name] = winreg.QueryValue(sub_key, name)
-                except OSError:
-                    results[clsid][name] = None
+        index = -1
+        while True:
+            index += 1
+            try:
+                clsid = winreg.EnumKey(key, index)
+            except OSError:
+                break
 
-        winreg.CloseKey(sub_key)
+            sub_key = winreg.OpenKey(key, clsid)
 
-    winreg.CloseKey(key)
+            # ProgID is mandatory, if this fails then ignore
+            # this CLSID and go to the next index in the registry
+            try:
+                progid = winreg.QueryValue(sub_key, 'ProgID')
+            except OSError:
+                pass
+            else:
+                results[clsid] = {}
+                results[clsid]['ProgID'] = progid
+
+                for name in additional_keys:
+                    try:
+                        results[clsid][name] = winreg.QueryValue(sub_key, name)
+                    except OSError:
+                        results[clsid][name] = None
+            finally:
+                winreg.CloseKey(sub_key)
+
+        winreg.CloseKey(key)
 
     return results
