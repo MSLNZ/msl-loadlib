@@ -28,7 +28,7 @@ _encoding = sys.getfilesystemencoding()
 
 class Client64(object):
 
-    def __init__(self, module32, host='127.0.0.1', port=None, timeout=10.0, quiet=True,
+    def __init__(self, module32, host='127.0.0.1', port=None, timeout=10.0, rpc_timeout=10.0, quiet=True,
                  append_sys_path=None, append_environ_path=None, **kwargs):
         """Base class for communicating with a 32-bit library from 64-bit Python.
 
@@ -50,6 +50,9 @@ class Client64(object):
         timeout : :class:`float`, optional
             The maximum number of seconds to wait to establish a connection to the
             32-bit server. Default is 10 seconds.
+        rpc_timeout : :class:`float`, optional
+            The maximum number of seconds to wait for a RPC response. Defaults to
+            10 seconds.
         quiet : :class:`bool`, optional
             Whether to hide :data:`sys.stdout` messages on the 32-bit server.
             Default is :data:`True`.
@@ -159,7 +162,7 @@ class Client64(object):
             raise
 
         # start the connection
-        self._conn = HTTPConnection(host, port)
+        self._conn = HTTPConnection(host=host, port=port, timeout=rpc_timeout)
         self._is_active = True
         self._meta32 = self.request32('_SERVER32_METADATA_')
 
@@ -189,7 +192,7 @@ class Client64(object):
     @property
     def lib32_path(self):
         """The path to the 32-bit library.
-        
+
         Returns
         -------
         :class:`str`
@@ -236,9 +239,9 @@ class Client64(object):
 
     def shutdown_server32(self):
         """Shutdown the 32-bit server.
-        
+
         This method stops the process that is running the 32-bit server executable
-        and it deletes the temporary file that is used to save the serialized 
+        and it deletes the temporary file that is used to save the serialized
         :mod:`pickle`\'d data.
 
         Note
