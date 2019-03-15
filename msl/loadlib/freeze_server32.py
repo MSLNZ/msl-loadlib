@@ -46,7 +46,7 @@ def main(spec=None, requires_pythonnet=True, requires_comtypes=True):
     Parameters
     ----------
     spec : :class:`str`, optional
-        If you want to freeze using a PyInstaller_ .spec file then you can specify the 
+        If you want to freeze using a PyInstaller_ .spec file then you can specify the
         path to the .spec file.
     requires_pythonnet : :class:`bool`, optional
         Whether `Python for .NET`_ must be available on the 32-bit server.
@@ -89,7 +89,11 @@ def main(spec=None, requires_pythonnet=True, requires_comtypes=True):
 
     here = os.path.abspath(os.path.dirname(__file__))
     cmd = [
-        'pyinstaller',
+        # Specifically invoke pyinstaller in the context of the current
+        # python interpreter. This fixes the issue where the blind `pyinstaller`
+        # invocation points to a 64-bit version.
+        sys.executable,
+        '-m', 'PyInstaller',
         '--distpath', here,
         '--noconfirm',
     ]
