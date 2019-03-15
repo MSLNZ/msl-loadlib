@@ -12,6 +12,13 @@ from . import IS_PYTHON2
 class ConnectionTimeoutError(OSError):
     """Raised when the connection to the 32-bit server cannot be established."""
 
+class ServerExit(Exception):
+    '''
+    Raised by the server thread to inform the HTTPServer it wants to stop.
+    This is much cleaner then just calling terminate() (the server can do
+    cleanup this way).
+    '''
+    pass
 
 class Server32Error(HTTPException):
 

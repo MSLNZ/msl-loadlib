@@ -8,6 +8,7 @@ from 64-bit Python.
 import os
 import sys
 import json
+import time
 import traceback
 import subprocess
 try:
@@ -20,7 +21,7 @@ except ImportError:
     from http.server import HTTPServer, BaseHTTPRequestHandler
 
 from . import LoadLibrary, SERVER_FILENAME, IS_WINDOWS
-
+from .exceptions import ServerExit
 
 class Server32(HTTPServer):
 
@@ -140,8 +141,8 @@ class Server32(HTTPServer):
     @staticmethod
     def interactive_console():
         """Start an interactive console.
-        
-        This method starts an interactive console, in a new terminal, with the 
+
+        This method starts an interactive console, in a new terminal, with the
         Python interpreter on the 32-bit server.
 
         Examples
@@ -164,6 +165,20 @@ class Server32(HTTPServer):
         return self._quiet
 
 
+    def run(self):
+        '''
+        Simple manager to allow the server to do cleanup
+        '''
+        try:
+            self.serve_forever()
+        except ServerExit:
+            print("ServerExit exception!")
+            pass
+        finally:
+            # Clean-up server (close socket, etc.)
+            self.server_close()
+
+
 class RequestHandler(BaseHTTPRequestHandler):
     """Handles the request that was sent to the 32-bit server."""
 
@@ -183,7 +198,17 @@ class RequestHandler(BaseHTTPRequestHandler):
                 pickle.dump(response, f, protocol=int(pickle_protocol))
             self.send_response(200)
             self.end_headers()
-        except:
+        except ServerExit as e:
+            print("ServerExit. Raising", e)
+            self.send_response(200)
+            self.end_headers()
+            # This is horrible, but there's no other way.
+            # See https://stackoverflow.com/a/36017741/268006
+            self.server._BaseServer__shutdown_request = True
+
+        except Exception as e:
+            print("Generic exception: ", e)
+            time.sleep(0.1)
             exc_type, exc_value, exc_traceback = sys.exc_info()
             tb_list = traceback.extract_tb(exc_traceback)
             tb = tb_list[min(len(tb_list)-1, 1)]  # get the Server32 subclass exception
