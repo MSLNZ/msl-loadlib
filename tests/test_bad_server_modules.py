@@ -5,7 +5,7 @@ import pytest
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 from msl.loadlib import ConnectionTimeoutError
 
-sys.path.append(os.path.join(os.path.dirname(__file__), 'servers'))
+sys.path.append(os.path.join(os.path.dirname(__file__), 'bad_servers'))
 from client import Client
 
 
