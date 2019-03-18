@@ -51,3 +51,10 @@ class Server32Error(HTTPException):
     def value(self):
         """:class:`str`: The error message from the 32-bit server."""
         return self._value
+
+
+class ResponseTimeoutError(OSError):
+    """Raised when a timeout occurs while waiting for a response from the 32-bit server.
+
+    .. versionadded:: 0.6
+    """

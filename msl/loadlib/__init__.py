@@ -51,4 +51,6 @@ from . import utils
 from .load_library import LoadLibrary
 from .client64 import Client64
 from .server32 import Server32
-from .exceptions import Server32Error, ConnectionTimeoutError
+from .exceptions import Server32Error
+from .exceptions import ConnectionTimeoutError
+from .exceptions import ResponseTimeoutError

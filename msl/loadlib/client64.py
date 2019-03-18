@@ -9,6 +9,7 @@ import os
 import sys
 import uuid
 import json
+import socket
 import tempfile
 import subprocess
 try:
@@ -21,7 +22,9 @@ except ImportError:
     from http.client import HTTPConnection
 
 from . import utils, SERVER_FILENAME, IS_PYTHON2
-from .exceptions import Server32Error, ConnectionTimeoutError
+from .exceptions import Server32Error
+from .exceptions import ConnectionTimeoutError
+from .exceptions import ResponseTimeoutError
 
 _encoding = sys.getfilesystemencoding()
 
@@ -29,7 +32,7 @@ _encoding = sys.getfilesystemencoding()
 class Client64(object):
 
     def __init__(self, module32, host='127.0.0.1', port=None, timeout=10.0, quiet=True,
-                 append_sys_path=None, append_environ_path=None, **kwargs):
+                 append_sys_path=None, append_environ_path=None, rpc_timeout=None, **kwargs):
         """Base class for communicating with a 32-bit library from 64-bit Python.
 
         Starts a 32-bit server, :class:`~.server32.Server32`, to host a Python module
@@ -37,6 +40,9 @@ class Client64(object):
         a 64-bit Python interpreter and it sends a request to the server which calls
         the 32-bit library to execute the request. The server then provides a
         response back to the client.
+
+        .. versionchanged:: 0.6
+           Added the `rpc_timeout` parameter
 
         Parameters
         ----------
@@ -61,6 +67,14 @@ class Client64(object):
             Append path(s) to the 32-bit server's :data:`os.environ['PATH'] <os.environ>`
             variable. This can be useful if the library that is being loaded requires
             additional libraries that must be available on ``PATH``.
+        rpc_timeout : :class:`float`, optional
+            The maximum number of seconds to wait for a response from the 32-bit server.
+            The `RPC <https://en.wikipedia.org/wiki/Remote_procedure_call>`_ timeout value
+            is used for *all* requests from the server. If you want different requests to
+            have different timeout values then you will need to implement custom timeout
+            handling for each method on the server. Default is :data:`None`, which means
+            to use the default timeout value used by the :mod:`socket` module (which is
+            to *wait forever*).
         **kwargs
             Keyword arguments that will be passed to the :class:`~.server32.Server32`
             subclass. The data type of each value is not preserved. It will be a string
@@ -159,7 +173,8 @@ class Client64(object):
             raise
 
         # start the connection
-        self._conn = HTTPConnection(host, port)
+        self._rpc_timeout = socket.getdefaulttimeout() if rpc_timeout is None else rpc_timeout
+        self._conn = HTTPConnection(host, port=port, timeout=self._rpc_timeout)
         self._is_active = True
         self._meta32 = self.request32('_SERVER32_METADATA_')
 
@@ -217,6 +232,8 @@ class Client64(object):
         ------
         :class:`~msl.loadlib.exceptions.Server32Error`
             If there was an error processing the request on the 32-bit server.
+        :class:`~msl.loadlib.exceptions.ResponseTimeoutError`
+            If a timeout occurs while waiting for the response from the 32-bit server.
         """
         if not self._is_active:
             raise Server32Error('The 32-bit server is not active')
@@ -227,11 +244,22 @@ class Client64(object):
             pickle.dump(kwargs, f, protocol=self._pickle_protocol)
         self._conn.request('GET', request)
 
-        response = self._conn.getresponse()
+        try:
+            response = self._conn.getresponse()
+        except socket.timeout:
+            # TODO avoid raising nested exceptions and use our own exception class
+            # when dropping Python 2.7 support can use "raise ResponseTimeoutError(...) from None"
+            response = None
+
+        if response is None:
+            raise ResponseTimeoutError('Waiting for the response from the {!r} request timed '
+                                       'out after {} seconds'.format(method32, self._rpc_timeout))
+
         if response.status == 200:  # everything is OK
             with open(self._pickle_temp_file, 'rb') as f:
                 result = pickle.load(f)
             return result
+
         raise Server32Error(**json.loads(response.read().decode(encoding='utf-8')))
 
     def shutdown_server32(self):
