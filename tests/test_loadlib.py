@@ -14,7 +14,7 @@ from msl.examples.loadlib import Cpp64, Fortran64, Echo64, DotNet64, EXAMPLES_DI
 # when importing comtypes
 sys.coinit_flags = 0
 
-eps = 1e-10
+eps = 1e-9
 
 c = Cpp64()
 f = Fortran64()
