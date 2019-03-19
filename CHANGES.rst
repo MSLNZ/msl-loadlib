@@ -5,13 +5,29 @@ Changelog
 Version 0.6.0.dev0
 ==================
 
+* Added
+
+  - a `shutdown_handler()` method to `Server32` (PR `#19 <https://github.com/MSLNZ/msl-loadlib/issues/19>`_)
+  - a section to the docs that explains how to re-freeze the 32-bit server
+  - a `kill_timeout` keyword argument to `Client64.shutdown_server32()`
+  - the `rpc_timeout` keyword argument to `Client64` (thanks to @fake-name)
+  - search `HKEY_CLASSES_ROOT\\Wow6432Node\\CLSID` in the Windows Registry for additional ActiveX `ProgID`'s
+
+* Changed
+
+  - the current working directory where the 64-bit Python interpreter was executed from is now
+    automatically appended to ``os.environ['PATH']`` on the 32-bit server
+  - `freeze_server32.py` uses an `ArgumentParser` instead of directly reading from `sys.argv`
+
 * Fixed
 
+  - use ``sys.executable -m PyInstaller`` to create the 32-bit server
+    (part of PR `#18 <https://github.com/MSLNZ/msl-loadlib/issues/18>`_)
   - the 32-bit server prints error messages to `sys.stderr` instead of `sys.stdout`
-  - issue `#15 <https://github.com/MSLNZ/msl-loadlib/issues/15>`_ - terminate the
-    subprocess that starts the 32-bit server and set a value for the `returncode`
+  - issue `#15 <https://github.com/MSLNZ/msl-loadlib/issues/15>`_ - wait for the
+    subprocess that starts the 32-bit server to terminate and set a value for the `returncode`
   - issue `#14 <https://github.com/MSLNZ/msl-loadlib/issues/14>`_ - use `os.kill`
-    to stop the 32-bit server
+    to stop the 32-bit server if it won't stop after `kill_timeout` seconds
 
 Version 0.5.0 (2019.01.06)
 ==========================
