@@ -167,15 +167,17 @@ class Server32(HTTPServer):
         """:class:`bool`: Whether :data:`sys.stdout` messages are hidden on the server."""
         return self._quiet
 
-
     def shutdown_handler(self):
-        '''
+        """
         Empty proxy function that's called immediately prior to the server shutting down.
 
         The intended use case is for the server to do any necessary cleanup, such as stopping
         locally started threads, closing file-handles, etc....
-        '''
+
+        .. versionadded:: 0.6
+        """
         pass
+
 
 class RequestHandler(BaseHTTPRequestHandler):
     """Handles the request that was sent to the 32-bit server."""
