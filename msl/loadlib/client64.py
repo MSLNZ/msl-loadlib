@@ -9,22 +9,34 @@ import os
 import sys
 import uuid
 import json
+import time
 import socket
 import tempfile
+import warnings
 import subprocess
 try:
     import cPickle as pickle  # Python 2
 except ImportError:
     import pickle
 try:
-    from httplib import HTTPConnection  # Python 2
+    from httplib import HTTPConnection, CannotSendRequest  # Python 2
 except ImportError:
-    from http.client import HTTPConnection
+    from http.client import HTTPConnection, CannotSendRequest
 
-from . import utils, SERVER_FILENAME, IS_PYTHON2
-from .exceptions import Server32Error
-from .exceptions import ConnectionTimeoutError
-from .exceptions import ResponseTimeoutError
+from . import (
+    utils,
+    SERVER_FILENAME,
+    IS_PYTHON2
+)
+from .server32 import (
+    METADATA,
+    SHUTDOWN
+)
+from .exceptions import (
+    Server32Error,
+    ConnectionTimeoutError,
+    ResponseTimeoutError
+)
 
 _encoding = sys.getfilesystemencoding()
 
@@ -119,6 +131,8 @@ class Client64(object):
         else:
             self._pickle_protocol = pickle.HIGHEST_PROTOCOL
 
+        self._pickle_info = ':{}:{}'.format(self._pickle_protocol, self._pickle_temp_file)
+
         # make sure that the server32 executable exists
         server_exe = os.path.join(os.path.dirname(__file__), SERVER_FILENAME)
         if not os.path.isfile(server_exe):
@@ -169,14 +183,14 @@ class Client64(object):
         try:
             utils.wait_for_server(host, port, timeout)
         except ConnectionTimeoutError:
-            self._cleanup_subprocess()
+            self._proc.wait()
             raise
 
         # start the connection
         self._rpc_timeout = socket.getdefaulttimeout() if rpc_timeout is None else rpc_timeout
         self._conn = HTTPConnection(host, port=port, timeout=self._rpc_timeout)
         self._is_active = True
-        self._meta32 = self.request32('_SERVER32_METADATA_')
+        self._meta32 = self.request32(METADATA)
 
     def __repr__(self):
         msg = '<{} '.format(self.__class__.__name__)
@@ -238,17 +252,15 @@ class Client64(object):
         if not self._is_active:
             raise Server32Error('The 32-bit server is not active')
 
-        request = '/{}:{}:{}'.format(method32, self._pickle_protocol, self._pickle_temp_file)
         with open(self._pickle_temp_file, 'wb') as f:
             pickle.dump(args, f, protocol=self._pickle_protocol)
             pickle.dump(kwargs, f, protocol=self._pickle_protocol)
-        self._conn.request('GET', request)
+
+        self._request(method32)
 
         try:
             response = self._conn.getresponse()
         except socket.timeout:
-            # TODO avoid raising nested exceptions and use our own exception class
-            # when dropping Python 2.7 support can use "raise ResponseTimeoutError(...) from None"
             response = None
 
         if response is None:
@@ -262,38 +274,65 @@ class Client64(object):
 
         raise Server32Error(**json.loads(response.read().decode(encoding='utf-8')))
 
-    def shutdown_server32(self):
+    def shutdown_server32(self, kill_timeout=10):
         """Shutdown the 32-bit server.
         
-        This method stops the process that is running the 32-bit server executable
-        and it deletes the temporary file that is used to save the serialized 
+        This method shuts down the 32-bit server, closes the client connection
+        and it deletes the temporary file that is used to save the serialized
         :mod:`pickle`\'d data.
+
+        .. versionchanged:: 0.6
+           Added the `kill_timeout` parameter
+
+        Parameters
+        ----------
+        kill_timeout : :class:`float`, optional
+            If the 32-bit server is still running after `kill_timeout` seconds then
+            the server will be killed using brute force. A warning will be issued
+            if the server is killed in this manner.
 
         Note
         ----
-        This method gets called automatically when the :class:`~.client64.Client64`
-        object gets destroyed.
+        This method gets called automatically when the reference count to the
+        :class:`~.client64.Client64` object reaches 0.
         """
-        self._cleanup_subprocess()
         if self._is_active:
-            # kill the 32-bit server - the <signal.SIGKILL 9> constant is not available on Windows
+            # send the shutdown request
+            try:
+                self._request(SHUTDOWN)
+            except CannotSendRequest:
+                # can occur if the previous request raised ResponseTimeoutError
+                # send the shutdown request again
+                self._conn.close()
+                self._conn = HTTPConnection(self.host, port=self.port)
+                self._request(SHUTDOWN)
+
+            # give the server a chance to shutdown gracefully
+            t0 = time.time()
+            while self._proc.poll() is None:
+                time.sleep(0.1)
+                if time.time() - t0 > kill_timeout:
+                    self._proc.terminate()
+                    self._proc.returncode = -1
+                    warnings.warn('killed the 32-bit server using brute force', stacklevel=2)
+                    break
+
+            # the frozen 32-bit server can still block the process from terminating
+            # the <signal.SIGKILL 9> constant is not available on Windows
             if self._meta32:
                 try:
                     os.kill(self._meta32['pid'], 9)
                 except OSError:
-                    pass  # already killed
+                    pass  # the server has already stopped
+
             if os.path.isfile(self._pickle_temp_file):
                 os.remove(self._pickle_temp_file)
+
             self._conn.close()
             self._is_active = False
 
     def __del__(self):
         self.shutdown_server32()
 
-    def _cleanup_subprocess(self):
-        # first, terminate
-        self._proc.terminate()
-        # second, ensure that the returncode is not None so that the following warning is suppressed
-        #    ResourceWarning: subprocess <pid> is still running
-        # don't care about the actual value of the returncode
-        self._proc.returncode = -1
+    def _request(self, method):
+        self._conn.request('GET', method + self._pickle_info)
