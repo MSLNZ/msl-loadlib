@@ -101,7 +101,7 @@ def main(spec=None, requires_pythonnet=True, requires_comtypes=True):
     if spec is None:
         spec_file = '{}.spec'.format(loadlib.SERVER_FILENAME)
         if os.path.exists(spec_file):
-            yn = input('A {0} file exists. You may want to run "python freeze_server32.py {0}"\n'
+            yn = input('A {0} file exists. You may want to run "python freeze_server32.py --spec {0}"\n'
                        'Do you want to continue and overwrite the spec file (y/[n]):'.format(spec_file))
             if yn.lower() not in ('y', 'yes'):
                 print('Aborted.')
@@ -213,10 +213,32 @@ def _get_standard_modules():
 
 
 if __name__ == '__main__':
-    spec = None
-    if len(sys.argv) > 1:
-        if sys.argv[1].endswith('.spec'):
-            spec = sys.argv[1]
-        else:
-            raise IOError('Must pass in a PyInstaller .spec file')
-    main(spec)
+    import argparse
+
+    parser = argparse.ArgumentParser(description='Create the frozen 32-bit server.')
+    parser.add_argument(
+        '-s', '--spec',
+        help='the PyInstaller spec file to use'
+    )
+    parser.add_argument(
+        '--ignore-pythonnet',
+        action='store_true',
+        default=False,
+        help='ignore the error that pythonnet is not installed'
+    )
+    parser.add_argument(
+        '--ignore-comtypes',
+        action='store_true',
+        default=False,
+        help='ignore the error that comtypes is not installed'
+    )
+
+    args = parser.parse_args(sys.argv[1:])
+
+    sys.exit(
+        main(
+            spec=args.spec,
+            requires_pythonnet=not args.ignore_pythonnet,
+            requires_comtypes=not args.ignore_comtypes
+        )
+    )
