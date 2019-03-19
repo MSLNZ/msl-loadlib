@@ -146,29 +146,30 @@ class Client64(object):
         ]
 
         # include paths to the 32-bit server's sys.path
-        _append_sys_path = list(sys.path)
+        sys_path = list(sys.path)
         if append_sys_path is not None:
             if isinstance(append_sys_path, str) or (IS_PYTHON2 and isinstance(append_sys_path, unicode)):
-                _append_sys_path.append(append_sys_path)
+                sys_path.append(append_sys_path)
             elif isinstance(append_sys_path, (list, tuple)):
-                _append_sys_path.extend(append_sys_path)
+                sys_path.extend(append_sys_path)
             else:
                 raise TypeError('append_sys_path must be a str, list or tuple')
         if IS_PYTHON2:
-            _append_sys_path = [p.encode(_encoding) if isinstance(p, unicode) else p for p in _append_sys_path]
-        cmd.extend(['--append-sys-path', ';'.join(_append_sys_path)])
+            sys_path = [p.encode(_encoding) if isinstance(p, unicode) else p for p in sys_path]
+        cmd.extend(['--append-sys-path', ';'.join(sys_path)])
 
         # include paths to the 32-bit server's os.environ['PATH']
+        env_path = [os.getcwd()]
         if append_environ_path is not None:
             if isinstance(append_environ_path, str) or (IS_PYTHON2 and isinstance(append_sys_path, unicode)):
-                env_paths = [append_environ_path]
+                env_path.append(append_environ_path)
             elif isinstance(append_environ_path, (list, tuple)):
-                env_paths = append_environ_path
+                env_path.extend(append_environ_path)
             else:
                 raise TypeError('append_environ_path must be a str, list or tuple')
-            if IS_PYTHON2:
-                env_paths = [p.encode(_encoding) if isinstance(p, unicode) else p for p in env_paths]
-            cmd.extend(['--append-environ-path', ';'.join(env_paths)])
+        if IS_PYTHON2:
+            env_path = [p.encode(_encoding) if isinstance(p, unicode) else p for p in env_path]
+        cmd.extend(['--append-environ-path', ';'.join(env_path)])
 
         # include any keyword arguments
         if kwargs:
