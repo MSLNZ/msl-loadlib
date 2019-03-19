@@ -134,7 +134,7 @@ class Server32(HTTPServer):
 
         Note
         ----
-        This method takes about 1 second to finish because the server executable
+        This method takes about 1 second to finish because the 32-bit server
         needs to start in order to determine the version of the Python interpreter.
         """
         exe = os.path.join(os.path.dirname(__file__), SERVER_FILENAME)
