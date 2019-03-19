@@ -144,8 +144,8 @@ class Server32(HTTPServer):
     @staticmethod
     def interactive_console():
         """Start an interactive console.
-        
-        This method starts an interactive console, in a new terminal, with the 
+
+        This method starts an interactive console, in a new terminal, with the
         Python interpreter on the 32-bit server.
 
         Examples
@@ -168,6 +168,15 @@ class Server32(HTTPServer):
         return self._quiet
 
 
+    def shutdown_handler(self):
+        '''
+        Empty proxy function that's called immediately prior to the server shutting down.
+
+        The intended use case is for the server to do any necessary cleanup, such as stopping
+        locally started threads, closing file-handles, etc....
+        '''
+        pass
+
 class RequestHandler(BaseHTTPRequestHandler):
     """Handles the request that was sent to the 32-bit server."""
 
@@ -178,6 +187,7 @@ class RequestHandler(BaseHTTPRequestHandler):
             if method == METADATA:
                 response = {'path': self.server.path, 'pid': os.getpid()}
             elif method == SHUTDOWN:
+                self.server.shutdown_handler()
                 threading.Thread(target=self.server.shutdown).start()
                 return
             else:
