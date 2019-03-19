@@ -146,6 +146,8 @@ def main(spec=None, requires_pythonnet=True, requires_comtypes=True):
     # create the .NET Framework config file
     loadlib.utils.check_dot_net_config(os.path.join(here, loadlib.SERVER_FILENAME))
 
+    print('Server saved to: ' + os.path.join(here, loadlib.SERVER_FILENAME))
+
 
 def _get_standard_modules():
     """
