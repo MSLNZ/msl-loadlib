@@ -156,7 +156,7 @@ class Client64(object):
                 raise TypeError('append_sys_path must be a str, list or tuple')
         if IS_PYTHON2:
             sys_path = [p.encode(_encoding) if isinstance(p, unicode) else p for p in sys_path]
-        cmd.extend(['--append-sys-path', ';'.join(sys_path)])
+        cmd.extend(['--append-sys-path', os.pathsep.join(sys_path)])
 
         # include paths to the 32-bit server's os.environ['PATH']
         env_path = [os.getcwd()]
@@ -169,7 +169,7 @@ class Client64(object):
                 raise TypeError('append_environ_path must be a str, list or tuple')
         if IS_PYTHON2:
             env_path = [p.encode(_encoding) if isinstance(p, unicode) else p for p in env_path]
-        cmd.extend(['--append-environ-path', ';'.join(env_path)])
+        cmd.extend(['--append-environ-path', os.pathsep.join(env_path)])
 
         # include any keyword arguments
         if kwargs:

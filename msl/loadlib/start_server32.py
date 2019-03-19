@@ -87,13 +87,13 @@ def main():
     if args.module is not None and os.path.dirname(args.module):
         sys.path.append(os.path.dirname(args.module))
     if args.append_sys_path is not None:
-        for path in args.append_sys_path.split(';'):
+        for path in args.append_sys_path.split(os.pathsep):
             if path:
                 sys.path.append(os.path.abspath(path))
 
     # include directories in os.environ['PATH']
     if args.append_environ_path is not None:
-        for path in args.append_environ_path.split(';'):
+        for path in args.append_environ_path.split(os.pathsep):
             if path:
                 os.environ['PATH'] += os.pathsep + os.path.abspath(path)
 
