@@ -42,17 +42,17 @@ def main():
                              'server (the module must contain a class that is a '
                              'subclass of msl.loadlib.Server32)')
 
-    parser.add_argument('-asp', '--append-sys-path', default=None,
+    parser.add_argument('-s', '--append-sys-path', default=None,
                         help=r'append path(s) to the sys.path variable on the 32-bit '
-                             r'server, e.g., -asp D:\path\to\my_scripts, or for '
+                             r'server, e.g., -s D:\path\to\my_scripts, or for '
                              r'multiple paths separate each path by a semi-colon, '
-                             r'e.g., -asp D:\path\to\my_scripts;D:\lib')
+                             r'e.g., -s D:\path\to\my_scripts;D:\lib')
 
-    parser.add_argument('-aep', '--append-environ-path', default=None,
+    parser.add_argument('-e', '--append-environ-path', default=None,
                         help=r"append path(s) to the os.environ['PATH'] variable on "
-                             r"the 32-bit server, e.g., -aep D:\code\bin, or for "
+                             r"the 32-bit server, e.g., -e D:\code\bin, or for "
                              r"multiple paths separate each path by a semi-colon, "
-                             r"e.g., -aep D:\code\bin;D:\lib")
+                             r"e.g., -e D:\code\bin;D:\lib")
 
     parser.add_argument('-H', '--host', default='127.0.0.1',
                         help='the IP address of the host [default: 127.0.0.1]')
@@ -87,13 +87,13 @@ def main():
     if args.module is not None and os.path.dirname(args.module):
         sys.path.append(os.path.dirname(args.module))
     if args.append_sys_path is not None:
-        for path in args.append_sys_path.split(os.pathsep):
+        for path in args.append_sys_path.split(';'):
             if path:
                 sys.path.append(os.path.abspath(path))
 
     # include directories in os.environ['PATH']
     if args.append_environ_path is not None:
-        for path in args.append_environ_path.split(os.pathsep):
+        for path in args.append_environ_path.split(';'):
             if path:
                 os.environ['PATH'] += os.pathsep + os.path.abspath(path)
 
