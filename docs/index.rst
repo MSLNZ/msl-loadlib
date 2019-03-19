@@ -32,6 +32,7 @@ Contents
    Access a 32-bit library in 64-bit Python <interprocess_communication>
    API documentation <api_docs>
    Source code for the example libraries <examples_source_code>
+   Re-freezing the 32-bit server <refreeze>
    License <license>
    Authors <authors>
    Changelog <changelog>
