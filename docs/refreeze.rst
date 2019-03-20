@@ -56,7 +56,10 @@ in your 64-bit version of Python and replace the existing server file.
 
       pip install https://github.com/MSLNZ/msl-loadlib/archive/master.zip
 
-   This may require you to update your version of pip.
+   This may require you to update your version of pip. Only install MSL-LoadLib in this
+   way if you are creating a new server. The servers that are on GitHub are not necessarily
+   synced with the rest of the code that is on GitHub. The updated servers are only uploaded
+   to GitHub when a release is published.
 
 Using the CLI
 -------------
