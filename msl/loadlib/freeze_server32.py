@@ -120,7 +120,7 @@ def main(spec=None, requires_pythonnet=True, requires_comtypes=True):
         cmd.append(os.path.join(here, 'start_server32.py'))
     else:
         cmd.append(spec)
-    subprocess.call(cmd)
+    subprocess.check_call(cmd)
 
     # the --version-file option for pyinstaller does not currently work on Windows, this is a fix
     verpatch = os.path.join(here, 'verpatch.exe')
@@ -132,7 +132,7 @@ def main(spec=None, requires_pythonnet=True, requires_comtypes=True):
                '/s', 'description', 'Access a 32-bit library from 64-bit Python',
                '/s', 'product', 'Python 32-bit server',
                '/s', 'copyright', loadlib.__copyright__]
-        subprocess.call(ver)
+        subprocess.check_call(ver)
 
     # cleanup
     shutil.rmtree('./build/' + loadlib.SERVER_FILENAME)
