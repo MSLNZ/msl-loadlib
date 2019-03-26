@@ -257,7 +257,7 @@ class Client64(object):
             pickle.dump(args, f, protocol=self._pickle_protocol)
             pickle.dump(kwargs, f, protocol=self._pickle_protocol)
 
-        self._request(method32)
+        self._conn.request('GET', method32 + self._pickle_info)
 
         try:
             response = self._conn.getresponse()
@@ -300,13 +300,13 @@ class Client64(object):
         if self._is_active:
             # send the shutdown request
             try:
-                self._request(SHUTDOWN)
+                self._conn.request('POST', SHUTDOWN)
             except CannotSendRequest:
                 # can occur if the previous request raised ResponseTimeoutError
                 # send the shutdown request again
                 self._conn.close()
                 self._conn = HTTPConnection(self.host, port=self.port)
-                self._request(SHUTDOWN)
+                self._conn.request('POST', SHUTDOWN)
 
             # give the server a chance to shutdown gracefully
             t0 = time.time()
@@ -334,6 +334,3 @@ class Client64(object):
 
     def __del__(self):
         self.shutdown_server32()
-
-    def _request(self, method):
-        self._conn.request('GET', method + self._pickle_info)

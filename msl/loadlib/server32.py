@@ -77,7 +77,7 @@ class Server32(HTTPServer):
         """
         self._quiet = bool(quiet)
         self._library = LoadLibrary(path, libtype=libtype, **kwargs)
-        super(Server32, self).__init__((host, int(port)), RequestHandler)
+        super(Server32, self).__init__((host, int(port)), _RequestHandler)
 
     @property
     def assembly(self):
@@ -169,18 +169,18 @@ class Server32(HTTPServer):
 
     def shutdown_handler(self):
         """
-        Empty proxy function that's called immediately prior to the server shutting down.
+        Proxy function that is called immediately prior to the server shutting down.
 
         The intended use case is for the server to do any necessary cleanup, such as stopping
-        locally started threads, closing file-handles, etc....
+        locally started threads, closing file-handles, etc...
 
         .. versionadded:: 0.6
         """
         pass
 
 
-class RequestHandler(BaseHTTPRequestHandler):
-    """Handles the request that was sent to the 32-bit server."""
+class _RequestHandler(BaseHTTPRequestHandler):
+    """Handles a request that was sent to the 32-bit server."""
 
     def do_GET(self):
         """Handle a GET request."""
@@ -188,10 +188,6 @@ class RequestHandler(BaseHTTPRequestHandler):
             method, pickle_protocol, pickle_temp_file = self.path.split(':', 2)
             if method == METADATA:
                 response = {'path': self.server.path, 'pid': os.getpid()}
-            elif method == SHUTDOWN:
-                self.server.shutdown_handler()
-                threading.Thread(target=self.server.shutdown).start()
-                return
             else:
                 with open(pickle_temp_file, 'rb') as f:
                     args = pickle.load(f)
@@ -215,6 +211,12 @@ class RequestHandler(BaseHTTPRequestHandler):
             self.send_header('Content-type', 'text/plain')
             self.end_headers()
             self.wfile.write(json.dumps(response).encode(encoding='utf-8', errors='ignore'))
+
+    def do_POST(self):
+        """Handle a POST request."""
+        if self.path == SHUTDOWN:
+            self.server.shutdown_handler()
+            threading.Thread(target=self.server.shutdown).start()
 
     def log_message(self, fmt, *args):
         """
