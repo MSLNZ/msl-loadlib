@@ -30,7 +30,8 @@ from . import (
 )
 from .server32 import (
     METADATA,
-    SHUTDOWN
+    SHUTDOWN,
+    OK,
 )
 from .exceptions import (
     Server32Error,
@@ -112,13 +113,13 @@ class Client64(object):
             If the connection to the 32-bit server cannot be established.
         """
         self._meta32 = None
-        self._is_active = False
+        self._conn = None
 
         if port is None:
             port = utils.get_available_port()
 
         # the temporary file to use to save the pickle'd data
-        self._pickle_temp_file = os.path.join(tempfile.gettempdir(), str(uuid.uuid4()))
+        self._pickle_path = os.path.join(tempfile.gettempdir(), str(uuid.uuid4())+'.pickle')
 
         # select the highest-level pickle protocol to use based on the version of python
         major, minor = sys.version_info.major, sys.version_info.minor
@@ -130,8 +131,6 @@ class Client64(object):
             self._pickle_protocol = 3
         else:
             self._pickle_protocol = pickle.HIGHEST_PROTOCOL
-
-        self._pickle_info = ':{}:{}'.format(self._pickle_protocol, self._pickle_temp_file)
 
         # make sure that the server32 executable exists
         server_exe = os.path.join(os.path.dirname(__file__), SERVER_FILENAME)
@@ -187,15 +186,21 @@ class Client64(object):
             self._proc.wait()
             raise
 
-        # start the connection
+        # connect to the server
         self._rpc_timeout = socket.getdefaulttimeout() if rpc_timeout is None else rpc_timeout
         self._conn = HTTPConnection(host, port=port, timeout=self._rpc_timeout)
-        self._is_active = True
+
+        # let the server know the info to use for pickling
+        self._conn.request('POST', 'protocol={}&path={}'.format(self._pickle_protocol, self._pickle_path))
+        response = self._conn.getresponse()
+        if response.status != OK:
+            raise Server32Error('Cannot set pickle info')
+
         self._meta32 = self.request32(METADATA)
 
     def __repr__(self):
         msg = '<{} '.format(self.__class__.__name__)
-        if self._is_active:
+        if self._conn:
             lib = os.path.basename(self._meta32['path'])
             return msg + 'lib={} address={}:{}>'.format(lib, self._conn.host, self._conn.port)
         else:
@@ -250,14 +255,14 @@ class Client64(object):
         :class:`~msl.loadlib.exceptions.ResponseTimeoutError`
             If a timeout occurs while waiting for the response from the 32-bit server.
         """
-        if not self._is_active:
+        if self._conn is None:
             raise Server32Error('The 32-bit server is not active')
 
-        with open(self._pickle_temp_file, 'wb') as f:
+        with open(self._pickle_path, 'wb') as f:
             pickle.dump(args, f, protocol=self._pickle_protocol)
             pickle.dump(kwargs, f, protocol=self._pickle_protocol)
 
-        self._conn.request('GET', method32 + self._pickle_info)
+        self._conn.request('GET', method32)
 
         try:
             response = self._conn.getresponse()
@@ -268,8 +273,8 @@ class Client64(object):
             raise ResponseTimeoutError('Waiting for the response from the {!r} request timed '
                                        'out after {} seconds'.format(method32, self._rpc_timeout))
 
-        if response.status == 200:  # everything is OK
-            with open(self._pickle_temp_file, 'rb') as f:
+        if response.status == OK:
+            with open(self._pickle_path, 'rb') as f:
                 result = pickle.load(f)
             return result
 
@@ -297,40 +302,42 @@ class Client64(object):
         This method gets called automatically when the reference count to the
         :class:`~.client64.Client64` object reaches 0.
         """
-        if self._is_active:
-            # send the shutdown request
-            try:
-                self._conn.request('POST', SHUTDOWN)
-            except CannotSendRequest:
-                # can occur if the previous request raised ResponseTimeoutError
-                # send the shutdown request again
-                self._conn.close()
-                self._conn = HTTPConnection(self.host, port=self.port)
-                self._conn.request('POST', SHUTDOWN)
+        if self._conn is None:
+            return
 
-            # give the server a chance to shutdown gracefully
-            t0 = time.time()
-            while self._proc.poll() is None:
-                time.sleep(0.1)
-                if time.time() - t0 > kill_timeout:
-                    self._proc.terminate()
-                    self._proc.returncode = -1
-                    warnings.warn('killed the 32-bit server using brute force', stacklevel=2)
-                    break
-
-            # the frozen 32-bit server can still block the process from terminating
-            # the <signal.SIGKILL 9> constant is not available on Windows
-            if self._meta32:
-                try:
-                    os.kill(self._meta32['pid'], 9)
-                except OSError:
-                    pass  # the server has already stopped
-
-            if os.path.isfile(self._pickle_temp_file):
-                os.remove(self._pickle_temp_file)
-
+        # send the shutdown request
+        try:
+            self._conn.request('POST', SHUTDOWN)
+        except CannotSendRequest:
+            # can occur if the previous request raised ResponseTimeoutError
+            # send the shutdown request again
             self._conn.close()
-            self._is_active = False
+            self._conn = HTTPConnection(self.host, port=self.port)
+            self._conn.request('POST', SHUTDOWN)
+
+        # give the server a chance to shut down gracefully
+        t0 = time.time()
+        while self._proc.poll() is None:
+            time.sleep(0.1)
+            if time.time() - t0 > kill_timeout:
+                self._proc.terminate()
+                self._proc.returncode = -1
+                warnings.warn('killed the 32-bit server using brute force', stacklevel=2)
+                break
+
+        # the frozen 32-bit server can still block the process from terminating
+        # the <signal.SIGKILL 9> constant is not available on Windows
+        if self._meta32:
+            try:
+                os.kill(self._meta32['pid'], 9)
+            except OSError:
+                pass  # the server has already stopped
+
+        if os.path.isfile(self._pickle_path):
+            os.remove(self._pickle_path)
+
+        self._conn.close()
+        self._conn = None
 
     def __del__(self):
         self.shutdown_server32()

@@ -6,6 +6,7 @@ The :class:`~.server32.Server32` class is used in combination with the
 from 64-bit Python.
 """
 import os
+import re
 import sys
 import json
 import traceback
@@ -24,6 +25,8 @@ from . import LoadLibrary, SERVER_FILENAME, IS_WINDOWS
 
 METADATA = '-METADATA-'
 SHUTDOWN = '-SHUTDOWN-'
+OK = 200
+ERROR = 500
 
 
 class Server32(HTTPServer):
@@ -185,18 +188,20 @@ class _RequestHandler(BaseHTTPRequestHandler):
     def do_GET(self):
         """Handle a GET request."""
         try:
-            method, pickle_protocol, pickle_temp_file = self.path.split(':', 2)
-            if method == METADATA:
+            if self.path == METADATA:
                 response = {'path': self.server.path, 'pid': os.getpid()}
             else:
-                with open(pickle_temp_file, 'rb') as f:
+                with open(self.server.pickle_path, 'rb') as f:
                     args = pickle.load(f)
                     kwargs = pickle.load(f)
-                response = getattr(self.server, method)(*args, **kwargs)
-            with open(pickle_temp_file, 'wb') as f:
-                pickle.dump(response, f, protocol=int(pickle_protocol))
-            self.send_response(200)
+                response = getattr(self.server, self.path)(*args, **kwargs)
+
+            with open(self.server.pickle_path, 'wb') as f:
+                pickle.dump(response, f, protocol=self.server.pickle_protocol)
+
+            self.send_response(OK)
             self.end_headers()
+
         except Exception as e:
             print('{}: {}'.format(e.__class__.__name__, e))
             exc_type, exc_value, exc_traceback = sys.exc_info()
@@ -207,8 +212,7 @@ class _RequestHandler(BaseHTTPRequestHandler):
             if tb[3]:
                 traceback_ += '\n    {}'.format(tb[3])
             response['traceback'] = traceback_
-            self.send_response(501)
-            self.send_header('Content-type', 'text/plain')
+            self.send_response(ERROR)
             self.end_headers()
             self.wfile.write(json.dumps(response).encode(encoding='utf-8', errors='ignore'))
 
@@ -217,6 +221,16 @@ class _RequestHandler(BaseHTTPRequestHandler):
         if self.path == SHUTDOWN:
             self.server.shutdown_handler()
             threading.Thread(target=self.server.shutdown).start()
+        else:  # the pickle info
+            match = re.match(r'protocol=(\d+)&path=(.*)', self.path)
+            if match:
+                self.server.pickle_protocol = int(match.group(1))
+                self.server.pickle_path = match.group(2)
+                code = OK
+            else:
+                code = ERROR
+            self.send_response(code)
+            self.end_headers()
 
     def log_message(self, fmt, *args):
         """
