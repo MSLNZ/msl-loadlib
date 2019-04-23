@@ -105,12 +105,12 @@ class Client64(object):
 
         Raises
         ------
+        :class:`~msl.loadlib.exceptions.ConnectionTimeoutError`
+            If the connection to the 32-bit server cannot be established.
         IOError
             If the frozen executable cannot be found.
         TypeError
             If the data type of `append_sys_path` or `append_environ_path` is invalid.
-        :class:`~msl.loadlib.exceptions.ConnectionTimeoutError`
-            If the connection to the 32-bit server cannot be established.
         """
         self._meta32 = None
         self._conn = None
