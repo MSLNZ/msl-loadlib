@@ -133,7 +133,7 @@ class Server32(HTTPServer):
 
             >>> from msl.loadlib import Server32
             >>> Server32.version()  # doctest: +SKIP
-            Python 3.6.8 (tags/v3.6.8:3c6b436a57, Dec 23 2018, 23:31:17) [MSC v.1916 32 bit (Intel)]
+            'Python 3.7.3 (v3.7.3:ef4ec6ed12, Mar 25 2019, 21:26:53) [MSC v.1916 32 bit (Intel)]'
 
         Note
         ----
