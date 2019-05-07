@@ -2,8 +2,8 @@
 Changelog
 =========
 
-Version 0.6.0.dev0
-==================
+Version 0.6.0 (2019.05.07)
+==========================
 
 * Added
 
@@ -15,6 +15,7 @@ Version 0.6.0.dev0
 
 * Changed
 
+  - the frozen server32 executable (for Windows/Linux) now uses Python 3.7.3 and Python.NET 2.4.0
   - rename the optional `-asp` and `-aep` command line arguments to be `-s` and `-e` respectively
   - the current working directory where the 64-bit Python interpreter was executed from is now
     automatically appended to ``os.environ['PATH']`` on the 32-bit server
