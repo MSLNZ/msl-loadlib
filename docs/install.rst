@@ -25,6 +25,31 @@ Optional dependencies:
   * Py4J_
   * comtypes_
 
+You can install MSL-LoadLib and `Python for .NET`_ using:
+
+.. code-block:: console
+
+   pip install msl-loadlib[clr]
+
+MSL-LoadLib and Py4J_:
+
+.. code-block:: console
+
+   pip install msl-loadlib[java]
+
+MSL-LoadLib and comtypes_:
+
+.. code-block:: console
+
+   pip install msl-loadlib[com]
+
+or MSL-LoadLib and all optional dependencies:
+
+.. code-block:: console
+
+   pip install msl-loadlib[all]
+
+
 Compatibility
 -------------
 * The :mod:`~msl.loadlib.start_server32` module has been built in to a `frozen <https://www.pyinstaller.org/>`_
