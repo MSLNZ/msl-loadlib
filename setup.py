@@ -115,7 +115,7 @@ if loadlib.IS_WINDOWS:
 setup(
     name='msl-loadlib',
     version=loadlib.__version__,
-    author='Measurement Standards Laboratory of New Zealand',
+    author=loadlib.__author__,
     author_email='info@measurement.govt.nz',
     url='https://github.com/MSLNZ/msl-loadlib',
     description='Load a shared library (and access a 32-bit library from 64-bit Python)',
