@@ -13,7 +13,7 @@ around ctypes_ (for libraries that use the ``__cdecl`` or ``__stdcall`` calling 
 However, the primary advantage is that it is possible to communicate with a 32-bit shared
 library from 64-bit Python.
 
-Tested in Python 2.7, 3.4+. The `examples <https://msl-loadlib.readthedocs.io/en/latest/direct.html>`_
+Tested in Python 2.7, 3.5+. The `examples <https://msl-loadlib.readthedocs.io/en/latest/direct.html>`_
 provided are currently only supported in Windows and Linux.
 
 **MSL-LoadLib** is a pure-python package, but, `Python for .NET`_ depends on the .NET Common Language

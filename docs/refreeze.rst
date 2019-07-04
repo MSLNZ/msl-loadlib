@@ -6,7 +6,7 @@ Re-freezing the 32-bit server
 
 If you want to make your own 32-bit server you will need
 
-1) a 32-bit version of Python 2.7 or 3.4+ (whatever version you want)
+1) a 32-bit version of Python 2.7 or 3.5+ (whatever version you want)
 2) `PyInstaller <https://www.pyinstaller.org/>`_
 
 Using pip from the 32-bit Python interpreter run

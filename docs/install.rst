@@ -17,7 +17,7 @@ Alternatively, using the `MSL Package Manager`_ run:
 
 Dependencies
 ------------
-* Python 2.7, 3.4+
+* Python 2.7, 3.5+
 
 Optional dependencies:
 
