@@ -121,13 +121,13 @@ The following ensures that the ``netstat`` command is available
    sudo apt install net-tools
 
 If you need to load a Microsoft .NET library then you must install Mono_
-*(NOTE: v5.20.1 was used when embedding pythonnet in the 32-bit server for Linux)*
+*(NOTE: v5.20 was used when embedding pythonnet in the 32-bit server for Linux)*
 
 .. code-block:: console
 
    sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 3FA7E0328081BFF6A14DA29AA6A19B38D3D831EF
    sudo apt install apt-transport-https ca-certificates
-   echo "deb https://download.mono-project.com/repo/ubuntu stable-bionic main" | sudo tee /etc/apt/sources.list.d/mono-official-stable.list
+   echo "deb https://download.mono-project.com/repo/ubuntu stable-bionic/snapshots/5.20 main" | sudo tee /etc/apt/sources.list.d/mono-official-stable.list
    sudo apt update
    sudo apt install mono-complete
 
@@ -144,7 +144,7 @@ and `Python for .NET`_
 
    pip3 install pythonnet
 
-Installing Mono_ v5.20.1.19 and `Python for .NET`_ v2.4.0 on Ubuntu 18.04.2 has been confirmed to work
+Installing Mono_ v5.20.1.34 and `Python for .NET`_ v2.4.0 on Ubuntu 18.04.2 has been confirmed to work
 
 .. code-block:: console
 
@@ -156,7 +156,7 @@ Installing Mono_ v5.20.1.19 and `Python for .NET`_ v2.4.0 on Ubuntu 18.04.2 has 
    Codename:       bionic
 
    joe@msl:~$ mono -V
-   Mono JIT compiler version 5.20.1.19 (tarball Thu Apr 11 09:02:17 UTC 2019)
+   Mono JIT compiler version 5.20.1.34 (tarball Tue Jul 16 22:52:32 UTC 2019)
    Copyright (C) 2002-2014 Novell, Inc, Xamarin Inc and Contributors. www.mono-project.com
        TLS:           __thread
        SIGSEGV:       altstack
