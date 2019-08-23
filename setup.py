@@ -106,11 +106,14 @@ pytest_runner = ['pytest-runner'] if testing else []
 needs_sphinx = {'doc', 'docs', 'apidoc', 'apidocs', 'build_sphinx'}.intersection(sys.argv)
 sphinx = ['sphinx', 'sphinx_rtd_theme'] if needs_sphinx else []
 
-tests_require = ['pytest', 'pytest-cov', 'pythonnet', 'py4j']
-if sys.version_info < (3, 4):
-    tests_require += ['pathlib']
+tests_require = ['pytest-cov', 'pythonnet', 'py4j']
+if sys.version_info[:2] == (2, 7):
+    tests_require.extend(['pytest<=4.6.4', 'pathlib'])
+else:
+    tests_require.append('pytest')
+
 if loadlib.IS_WINDOWS:
-    tests_require += ['comtypes']
+    tests_require.append('comtypes')
 
 setup(
     name='msl-loadlib',
@@ -141,7 +144,7 @@ setup(
     setup_requires=sphinx + pytest_runner,
     tests_require=tests_require,
     install_requires=[],
-    extras_require = {
+    extras_require={
         'clr': ['pythonnet'],
         'java': ['py4j'],
         'com': ['comtypes'],

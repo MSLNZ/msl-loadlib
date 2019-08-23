@@ -251,7 +251,24 @@ def test_namespace_with_dots():
 
 
 def test_java():
-    jar = loadlib.LoadLibrary(EXAMPLES_DIR + '/java_lib.jar')
+    try:
+        jar = loadlib.LoadLibrary(EXAMPLES_DIR + '/java_lib.jar')
+    except OSError as e:
+        # if py4j is located in the .eggs directory and not in the site-packages directory
+        # then the py4j*.jar file cannot be found so we need to create a PY4J_JAR env variable
+        msg = str(e)
+        if 'Create a PY4J_JAR environment variable' not in msg:
+            raise
+
+        import py4j
+        os.environ['PY4J_JAR'] = os.path.join(
+            '.eggs',
+            'py4j-{}-py{}.{}.egg'.format(py4j.__version__, sys.version_info.major, sys.version_info.minor),
+            'share',
+            'py4j',
+            'py4j{}.jar'.format(py4j.__version__)
+        )
+        jar = loadlib.LoadLibrary(EXAMPLES_DIR + '/java_lib.jar')
 
     Math = jar.lib.nz.msl.examples.MathUtils
     Matrix = jar.lib.nz.msl.examples.Matrix
