@@ -5,6 +5,9 @@ Changelog
 Version 0.6.1.dev0
 ==================
 
+* Removed
+
+  - Support for Python 3.4
 
 Version 0.6.0 (2019.05.07)
 ==========================
@@ -16,6 +19,7 @@ Version 0.6.0 (2019.05.07)
   - a `kill_timeout` keyword argument to `Client64.shutdown_server32()`
   - the `rpc_timeout` keyword argument to `Client64` (thanks to @fake-name)
   - search `HKEY_CLASSES_ROOT\\Wow6432Node\\CLSID` in the Windows Registry for additional ActiveX `ProgID`'s
+  - `extras_require` parameter to `setup.py` with keys: `clr`, `java`, `com`, `all`
 
 * Changed
 
