@@ -78,8 +78,7 @@ class BuildDocs(Command):
 
 def read(filename):
     with open(filename) as fp:
-        text = fp.read()
-    return text
+        return fp.read()
 
 
 # auto generate the MANIFEST.in file based on the platform
