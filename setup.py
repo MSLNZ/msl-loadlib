@@ -108,7 +108,7 @@ sphinx = ['sphinx', 'sphinx_rtd_theme'] if needs_sphinx else []
 
 tests_require = ['pytest-cov', 'pythonnet', 'py4j']
 if sys.version_info[:2] == (2, 7):
-    tests_require.extend(['pytest<=4.6.4', 'pathlib'])
+    tests_require.extend(['pytest<5.0', 'pathlib'])
 else:
     tests_require.append('pytest')
 
