@@ -98,10 +98,9 @@ If you need to load a `Component Object Model`_ library then you must install co
    pip install comtypes
 
 When loading a shared library it is vital that all dependencies of the library are also available on your
-computer and that the directory of the dependency is also available on your ``PATH``. A helpful utility to use to
-determine the dependencies of a shared library is `Dependency Walker <http://www.dependencywalker.com/>`_.
-For finding the dependencies of a .NET library the
-`Dependency Walker for .NET <https://github.com/isindicic/DependencyWalker.Net>`_ is also useful.
+computer and that the directory of the dependency is also available on your ``PATH``. A helpful utility to use
+to determine the dependencies of a shared library is Dependencies_ (which is a modern `Dependency Walker`_).
+For finding the dependencies of a .NET library the `Dependency Walker for .NET`_ is also useful.
 
 Linux
 ++++++
@@ -205,3 +204,6 @@ The 32-bit server has not been created for OSX nor have the example libraries be
 .. _Py4J: https://www.py4j.org/
 .. _comtypes: https://pythonhosted.org/comtypes/#
 .. _Component Object Model: https://en.wikipedia.org/wiki/Component_Object_Model
+.. _Dependencies: https://github.com/lucasg/Dependencies
+.. _Dependency Walker: http://www.dependencywalker.com/
+.. _Dependency Walker for .NET: https://github.com/isindicic/DependencyWalker.Net
