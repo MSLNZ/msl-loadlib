@@ -5,6 +5,10 @@ Changelog
 Version 0.6.1.dev0
 ==================
 
+* Added
+
+  - Support for Python 3.8
+
 * Removed
 
   - Support for Python 3.4
