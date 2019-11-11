@@ -253,7 +253,7 @@ def test_namespace_with_dots():
 def test_java():
     try:
         jar = loadlib.LoadLibrary(EXAMPLES_DIR + '/java_lib.jar')
-    except OSError as e:
+    except (IOError, OSError) as e:
         # if py4j is located in the .eggs directory and not in the site-packages directory
         # then the py4j*.jar file cannot be found so we need to create a PY4J_JAR env variable
         msg = str(e)
