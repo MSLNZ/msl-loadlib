@@ -1,8 +1,6 @@
 import os
 import time
 
-import pytest
-
 from msl.loadlib import Client64, Server32, ResponseTimeoutError
 
 RPC_TIMEOUT = 5.0
@@ -42,6 +40,7 @@ class RPCClient(Client64):
 
 
 def test_rpc_timeout():
+    import pytest
     c = RPCClient()
     assert c.no_delay(8, 3) == 11
     assert c.short_delay(-4, 2) == -2
