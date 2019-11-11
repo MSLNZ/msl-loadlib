@@ -51,6 +51,7 @@ def test_invalid_libtype():
         loadlib.LoadLibrary(os.path.join(EXAMPLES_DIR, 'cpp_lib64'), libtype='xxxxxxxx')
 
 
+@pytest.mark.skipif(sys.version_info[:2] == (3, 8) and loadlib.IS_WINDOWS, reason='get a fatal error')
 def test_load_failure_in_wrong_python_bitness():
 
     def check(path, libtype, exception):
