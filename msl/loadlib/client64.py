@@ -121,16 +121,20 @@ class Client64(object):
         # the temporary file to use to save the pickle'd data
         self._pickle_path = os.path.join(tempfile.gettempdir(), str(uuid.uuid4())+'.pickle')
 
-        # select the highest-level pickle protocol to use based on the version of python
-        major, minor = sys.version_info.major, sys.version_info.minor
-        if (major <= 1) or (major == 2 and minor < 3):
-            self._pickle_protocol = 1
-        elif major == 2:
+        # select the pickle protocol to use based on the 64-bit version of Python
+        major, minor = sys.version_info[:2]
+        if major == 2:
             self._pickle_protocol = 2
-        elif (major == 3) and (minor < 4):
+        elif major == 3 and minor < 4:
             self._pickle_protocol = 3
+        elif major == 3 and minor < 8:
+            self._pickle_protocol = 4
         else:
-            self._pickle_protocol = pickle.HIGHEST_PROTOCOL
+            # TODO protocol version 5 was added in Python 3.8 (see PEP 574).
+            #  When pyinstaller, comtypes and pythonnet support Python 3.8
+            #  then the 32-bit server could be frozen using Python 3.8 and
+            #  self._pickle_protocol could be set to 5 in this case.
+            self._pickle_protocol = 4
 
         # make sure that the server32 executable exists
         server_exe = os.path.join(os.path.dirname(__file__), SERVER_FILENAME)
