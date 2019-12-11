@@ -1,5 +1,7 @@
 import os
 import sys
+import tempfile
+
 import pytest
 
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
@@ -10,13 +12,16 @@ from client import Client
 
 
 def _raises(module32):
-    sys.stderr = open('stderr.txt', 'w+')
+    path = os.path.join(tempfile.gettempdir(), 'msl-loadlib-stderr.txt')
+    sys_stderr = sys.stderr  # keep a reference to the original object
+    sys.stderr = open(path, 'w+')
     with pytest.raises(ConnectionTimeoutError):
         Client(module32)
     sys.stderr.seek(0)
     lines = sys.stderr.readlines()
     sys.stderr.close()
-    os.remove('stderr.txt')
+    os.remove(path)
+    sys.stderr = sys_stderr
     return lines
 
 
