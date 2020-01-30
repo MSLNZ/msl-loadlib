@@ -16,6 +16,7 @@ except ImportError:
         winreg = None  # non-Windows
 
 from .exceptions import ConnectionTimeoutError
+from . import IS_MAC
 
 logger = logging.getLogger(__name__)
 
@@ -219,9 +220,7 @@ def check_dot_net_config(py_exe_path):
 
 
 def port_in_use(port):
-    """Uses netstat_ to determine if the network port is in use.
-
-    .. _netstat: https://www.computerhope.com/unix/unetstat.htm
+    """Checks whether the network port is in use.
 
     Parameters
     ----------
@@ -233,10 +232,15 @@ def port_in_use(port):
     :class:`bool`
         Whether the port is in use.
     """
-    p = subprocess.Popen(['netstat', '-an'], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-    # include errors='ignore' for when the header of netstat returns characters that
-    # raise UnicodeDecodeError -- see PR #9
-    return p.communicate()[0].decode(errors='ignore').find(':{} '.format(port)) > 0
+    if IS_MAC:
+        cmd = ['lsof', '-nP', '-iTCP']
+    else:
+        cmd = ['netstat', '-an']
+    p = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    out, err = p.communicate()
+    if err:
+        raise RuntimeError(err.decode(errors='ignore'))
+    return out.find(b':%d ' % port) > 0
 
 
 def get_available_port():
@@ -272,8 +276,9 @@ def wait_for_server(host, port, timeout):
         if port_in_use(port):
             break
         if time.time() > stop:
-            m = 'Timeout after {:.1f} seconds. Could not connect to {}:{}'.format(timeout, host, port)
-            raise ConnectionTimeoutError(m)
+            raise ConnectionTimeoutError(
+                'Timeout after {:.1f} seconds. Could not connect to {}:{}'.format(timeout, host, port)
+            )
 
 
 def get_com_info(*additional_keys):

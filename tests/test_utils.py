@@ -1,4 +1,5 @@
 import os
+import socket
 import xml.etree.ElementTree as ET
 
 import pytest
@@ -12,7 +13,14 @@ def test_timeout():
 
 
 def test_port_functions():
-    assert not utils.port_in_use(utils.get_available_port())
+    port = utils.get_available_port()
+    assert not utils.port_in_use(port)
+    sock = socket.socket()
+    sock.bind(('', port))
+    sock.listen(1)
+    assert utils.port_in_use(port)
+    sock.close()
+    assert not utils.port_in_use(port)
 
 
 def test_pythonnet_py4j_comtypes_installed():
