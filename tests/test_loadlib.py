@@ -16,10 +16,18 @@ sys.coinit_flags = 0
 
 eps = 1e-9
 
-c = Cpp64()
-f = Fortran64()
-d = Echo64(True)
-n = DotNet64()
+c = None
+f = None
+d = None
+n = None
+
+
+def setup_module(module):
+    global c, f, d, n
+    c = Cpp64()
+    f = Fortran64()
+    d = Echo64(True)
+    n = DotNet64()
 
 
 def teardown_module(module):
@@ -220,35 +228,42 @@ def test_namespace_with_dots():
     str(net)
 
 
-# def test_labview():
-#
-#     # this test requires that an appropriate LabVIEW Run-Time Engine is installed
-#
-#     from ctypes import c_double, byref
-#
-#     if loadlib.IS_PYTHON_64BIT:
-#         path = EXAMPLES_DIR + '/labview_lib64.dll'
-#     else:
-#         path = EXAMPLES_DIR + '/labview_lib32.dll'
-#
-#     labview = loadlib.LoadLibrary(path)
-#
-#     data = [1, 2, 3, 4, 5, 6, 7, 8, 9]
-#     x = (c_double * len(data))(*data)
-#
-#     mean, variance, stdev = c_double(), c_double(), c_double()
-#
-#     # weighting to use: 0 -> sample, 1-> population
-#
-#     labview.lib.stdev(x, len(data), 0, byref(mean), byref(variance), byref(stdev))
-#     assert abs(mean.value - 5.0) < eps
-#     assert abs(variance.value - 7.5) < eps
-#     assert abs(stdev.value - 2.73861278752583) < eps
-#
-#     labview.lib.stdev(x, len(data), 1, byref(mean), byref(variance), byref(stdev))
-#     assert abs(mean.value - 5.0) < eps
-#     assert abs(variance.value - 6.66666666666667) < eps
-#     assert abs(stdev.value - 2.58198889747161) < eps
+@pytest.mark.skipif(
+    not any([
+        os.path.isdir(r'C:\Program Files\National Instruments\Shared\LabVIEW Run-Time'),
+        os.path.isdir(r'C:\Program Files (x86)\National Instruments\Shared\LabVIEW Run-Time'),
+    ]),
+    reason='requires labview runtime'
+)
+def test_labview():
+
+    # this test requires that an appropriate LabVIEW Run-Time Engine is installed
+
+    from ctypes import c_double, byref
+
+    if loadlib.IS_PYTHON_64BIT:
+        path = EXAMPLES_DIR + '/labview_lib64.dll'
+    else:
+        path = EXAMPLES_DIR + '/labview_lib32.dll'
+
+    labview = loadlib.LoadLibrary(path)
+
+    data = [1, 2, 3, 4, 5, 6, 7, 8, 9]
+    x = (c_double * len(data))(*data)
+
+    mean, variance, stdev = c_double(), c_double(), c_double()
+
+    # weighting to use: 0 -> sample, 1-> population
+
+    labview.lib.stdev(x, len(data), 0, byref(mean), byref(variance), byref(stdev))
+    assert abs(mean.value - 5.0) < eps
+    assert abs(variance.value - 7.5) < eps
+    assert abs(stdev.value - 2.73861278752583) < eps
+
+    labview.lib.stdev(x, len(data), 1, byref(mean), byref(variance), byref(stdev))
+    assert abs(mean.value - 5.0) < eps
+    assert abs(variance.value - 6.66666666666667) < eps
+    assert abs(stdev.value - 2.58198889747161) < eps
 
 
 def test_java():
@@ -448,22 +463,36 @@ def test_Server32Error():
 
 @pytest.mark.skipif(not loadlib.IS_WINDOWS, reason='comtypes only runs on Windows')
 def test_comtypes():
-    obj = loadlib.LoadLibrary('Scripting.FileSystemObject', 'com')
-    assert hasattr(obj.lib, 'CreateTextFile')
-    obj = None
+    # ctypes in Python 3.7.6 and 3.8.1 raised
+    #  TypeError: item 1 in _argtypes_ passes a union by value, which is unsupported.
+    # when loading some COM objects, see https://bugs.python.org/issue16575
+    #
+    # The 'MediaPlayer.MediaPlayer.1' object does not appear to raise this exception
+    # and the goal of this test function is not to test the internals of comtypes
+    # but LoadLibrary calling the underlying comtypes wrapper properly
+
+    progid = 'MediaPlayer.MediaPlayer.1'
+
+    obj = loadlib.LoadLibrary(progid, 'com')
+    assert obj.lib.IsSoundCardEnabled()
 
     with pytest.raises(OSError):
         loadlib.LoadLibrary('ABC.def.GHI', 'com')
 
     info = loadlib.utils.get_com_info()
+    assert info, 'utils.get_com_info() returned an empty dict'
+
+    found_it = False
     for key, value in info.items():
-        if value['ProgID'] == 'Scripting.FileSystemObject':
-            # don't need to specify libtype='com' since the `path`
-            # argument startswith "{" and endswith "}"
+        if value['ProgID'] == progid:
+            # don't need to specify libtype='com' since the `key`
+            # startswith "{" and endswith "}" which is unique to a COM library
             obj = loadlib.LoadLibrary(key)
-            assert hasattr(obj.lib, 'CreateTextFile')
-            obj = None
+            assert obj.lib.IsSoundCardEnabled()
+            found_it = True
             break
+
+    assert found_it, 'did not find %s in utils.get_com_info() dict' % progid
 
 
 def test_raises_ValueError():
