@@ -2,12 +2,14 @@
 #   eg. server32-windows.exe -m path/to/check_server32_imports.py
 #
 # The following error will be raised, but that's ok
-#   AttributeError: module server32_imports.py
-#   Module does not contain a class that is a subclass of Server32
-#   Cannot start 32-bit server.
+#
+#   AttributeError: module check_server32_imports.py
+#   Module does not contain a class that is a subclass of Server32.
+#   Cannot start the 32-bit server.
+#
 
 
-# modules in Python 3.7.3
+# modules in Python 3.7
 modules = [
     '__future__',
     '__main__',
