@@ -5,13 +5,15 @@ import math
 import pathlib
 from ctypes import *
 
-import clr
-from System import Array, Double
-
 import pytest
 
 from msl import loadlib
 from msl.examples.loadlib import EXAMPLES_DIR, Point, FourPoints, NPoints
+
+if not (loadlib.IS_MAC and sys.version_info[:2] == (3, 8)):
+    # get fatal crash on MacOS & Python 3.8 when importing pythonnet
+    import clr
+    from System import Array, Double
 
 # fixes -> OSError: [WinError -2147417850] Cannot change thread mode after it is set
 # when importing comtypes
@@ -29,7 +31,10 @@ def test_invalid_path():
             loadlib.LoadLibrary(item)
 
 
-@pytest.mark.skipif(sys.version_info[:2] == (3, 8) and loadlib.IS_WINDOWS, reason='get a fatal error')
+@pytest.mark.skipif(
+    (sys.version_info[:2] == (3, 8) and loadlib.IS_WINDOWS) or loadlib.IS_MAC,
+    reason='get a fatal error on Windows and the 32-bit library does not exist on Mac OS'
+)
 def test_load_failure_in_wrong_python_bitness():
 
     def check(path, libtype, exception):
@@ -101,7 +106,8 @@ def test_cpp():
 
     str_in = '&* 1 j z|x cba['
     str_out = lib.reverse_string_v2(create_string_buffer(str_in.encode()), len(str_in))
-    assert '[abc x|z j 1 *&' == str_out.decode()
+    # ignore testing for null termination on different platforms
+    assert '[abc x|z j 1 *&' == str_out[:len(str_in)].decode()
 
     fp = FourPoints((0, 0), (0, 1), (1, 1), (1, 0))
     assert lib.distance_4_points(fp) == pytest.approx(4.0)
@@ -204,6 +210,10 @@ def test_fortran():
     assert 64.0 == pytest.approx(a[1][1])
 
 
+@pytest.mark.skipif(
+    loadlib.IS_MAC and sys.version_info[:2] == (3, 8),
+    reason='get fatal crash on MacOS & Python 3.8 when importing pythonnet'
+)
 def test_dotnet():
     bitness = '64' if loadlib.IS_PYTHON_64BIT else '32'
     path = os.path.join(EXAMPLES_DIR, 'dotnet_lib' + bitness + '.dll')
@@ -462,11 +472,15 @@ def test_unicode_path():
     str(cls)  # this should not raise an exception
     cls.gateway.shutdown()
 
-    net = loadlib.LoadLibrary(u'./tests/uñicödé/Namespace.With.Dots-uñicödé.dll', 'net')
-    checker = net.lib.Namespace.With.Dots.Checker()
-    assert checker.IsSuccess()
-    repr(net)  # this should not raise an exception
-    str(net)  # this should not raise an exception
+    if loadlib.IS_MAC and sys.version_info[:2] == (3, 8):
+        # get fatal crash on MacOS & Python 3.8 when importing pythonnet
+        pass
+    else:
+        net = loadlib.LoadLibrary(u'./tests/uñicödé/Namespace.With.Dots-uñicödé.dll', 'net')
+        checker = net.lib.Namespace.With.Dots.Checker()
+        assert checker.IsSuccess()
+        repr(net)  # this should not raise an exception
+        str(net)  # this should not raise an exception
 
     # IMPORTANT: keep the C++ test after loading the unicode version of the .NET DLL
     # because it tests for additional problems that can occur.
@@ -492,6 +506,10 @@ def test_unicode_path():
     str(cpp)  # this should not raise an exception
 
 
+@pytest.mark.skipif(
+    loadlib.IS_MAC and sys.version_info[:2] == (3, 8),
+    reason='get fatal crash on MacOS & Python 3.8 when importing pythonnet'
+)
 def test_issue7():
     # checks that Issue #7 is fixed
     net = loadlib.LoadLibrary('./tests/namespace_with_dots/Namespace.With.Dots.dll', 'net')

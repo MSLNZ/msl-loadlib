@@ -1,7 +1,9 @@
 import os
 import time
 
-from msl.loadlib import Client64, Server32, ResponseTimeoutError
+import pytest
+
+from msl.loadlib import Client64, Server32, ResponseTimeoutError, IS_MAC
 
 RPC_TIMEOUT = 5.0
 
@@ -39,6 +41,7 @@ class RPCClient(Client64):
         return self.request32('long_delay', a, b)
 
 
+@pytest.mark.skipif(IS_MAC, reason='the 32-bit server for Mac OS does not exist')
 def test_rpc_timeout():
     import pytest
     c = RPCClient()

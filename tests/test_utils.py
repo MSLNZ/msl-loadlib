@@ -1,10 +1,11 @@
 import os
+import sys
 import socket
 import xml.etree.ElementTree as ET
 
 import pytest
 
-from msl.loadlib import utils, IS_WINDOWS
+from msl.loadlib import utils, IS_WINDOWS, IS_MAC
 
 
 def test_timeout():
@@ -23,11 +24,20 @@ def test_port_functions():
     assert not utils.port_in_use(port)
 
 
-def test_pythonnet_py4j_comtypes_installed():
+@pytest.mark.skipif(
+    IS_MAC and sys.version_info[:2] == (3, 8),
+    reason='get fatal crash on MacOS & Python 3.8 when importing pythonnet'
+)
+def test_is_pythonnet_installed():
     assert utils.is_pythonnet_installed()
+
+
+def test_is_py4j_installed():
     assert utils.is_py4j_installed()
-    if IS_WINDOWS:
-        assert utils.is_comtypes_installed()
+
+
+def test_is_comtypes_installed():
+    assert IS_WINDOWS is utils.is_comtypes_installed()
 
 
 def test_check_dot_net_config():

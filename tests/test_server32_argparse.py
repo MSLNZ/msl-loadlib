@@ -5,10 +5,13 @@ os.environ['PATH'] and **kwargs for the 32-bit server.
 import os
 import sys
 
+import pytest
+
 from msl.loadlib import (
     Server32,
     Client64,
     IS_WINDOWS,
+    IS_MAC,
 )
 
 
@@ -50,6 +53,7 @@ class ArgParse64(Client64):
         return self.request32('get_kwarg', key)
 
 
+@pytest.mark.skipif(IS_MAC, reason='the 32-bit server for Mac OS does not exist')
 def test_argparser():
     if IS_WINDOWS:
         append_sys_path = ['C:/home/joe/code', 'C:/Program Files (x86)/Whatever']

@@ -5,6 +5,7 @@ import math
 import pytest
 
 from msl import loadlib
+from msl.loadlib import IS_MAC
 from msl.examples.loadlib import Cpp64, Fortran64, Echo64, DotNet64, FourPoints
 
 c = None
@@ -15,6 +16,8 @@ n = None
 
 def setup_module(module):
     global c, f, d, n
+    if IS_MAC:  # the 32-bit server for Mac OS does not exist
+        return
     c = Cpp64()
     f = Fortran64()
     d = Echo64(True)
@@ -22,12 +25,15 @@ def setup_module(module):
 
 
 def teardown_module(module):
+    if IS_MAC:  # the 32-bit server for Mac OS does not exist
+        return
     c.shutdown_server32()
     f.shutdown_server32()
     d.shutdown_server32()
     n.shutdown_server32()
 
 
+@pytest.mark.skipif(IS_MAC, reason='the 32-bit server for Mac OS does not exist')
 def test_unique_ports():
     for item in [f, d, n]:
         assert c.port != item.port
@@ -36,6 +42,7 @@ def test_unique_ports():
     assert d.port != n.port
 
 
+@pytest.mark.skipif(IS_MAC, reason='the 32-bit server for Mac OS does not exist')
 def test_lib_name():
     def get_name(path):
         return os.path.basename(path).split('.')[0]
@@ -45,10 +52,12 @@ def test_lib_name():
     assert 'dotnet_lib32' == get_name(n.lib32_path)
 
 
+@pytest.mark.skipif(IS_MAC, reason='the 32-bit server for Mac OS does not exist')
 def test_server_version():
     assert loadlib.Server32.version().startswith('Python')
 
 
+@pytest.mark.skipif(IS_MAC, reason='the 32-bit server for Mac OS does not exist')
 def test_cpp():
     assert 3 == c.add(1, 2)
     assert -1002 == c.add(-1000, -2)
@@ -78,6 +87,7 @@ def test_cpp():
     assert c.circumference(1.0, 2**16) == pytest.approx(2.0*math.pi)
 
 
+@pytest.mark.skipif(IS_MAC, reason='the 32-bit server for Mac OS does not exist')
 def test_fortran():
     assert -127 == f.sum_8bit(-2**7, 1)
     assert 32766 == f.sum_16bit(2**15 - 1, -1)
@@ -109,6 +119,7 @@ def test_fortran():
     assert 64.0 == pytest.approx(f_mat[1][1])
 
 
+@pytest.mark.skipif(IS_MAC, reason='the 32-bit server for Mac OS does not exist')
 def test_dummy():
 
     args, kwargs = d.send_data(True)
@@ -132,6 +143,7 @@ def test_dummy():
     assert kwargs['my_dict'] == my_dict
 
 
+@pytest.mark.skipif(IS_MAC, reason='the 32-bit server for Mac OS does not exist')
 def test_dotnet():
 
     names = n.get_class_names()
@@ -166,6 +178,7 @@ def test_dotnet():
     assert 'the experiment worked temporarily' == n.concatenate('the ', 'experiment ', 'worked ', True, 'temporarily')
 
 
+@pytest.mark.skipif(IS_MAC, reason='the 32-bit server for Mac OS does not exist')
 def test_unicode_path():
 
     class Cpp64Encoding(loadlib.Client64):
@@ -193,6 +206,7 @@ def test_unicode_path():
     c2.shutdown_server32()
 
 
+@pytest.mark.skipif(IS_MAC, reason='the 32-bit server for Mac OS does not exist')
 def test_server32_error():
     try:
         c.add('hello', 'world')
