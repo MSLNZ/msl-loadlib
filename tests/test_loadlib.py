@@ -3,60 +3,30 @@ import os
 import sys
 import math
 import pathlib
+from ctypes import *
 
 import clr
+from System import Array, Double
+
 import pytest
 
 from msl import loadlib
-from msl.examples.loadlib import Cpp64, Fortran64, Echo64, DotNet64, EXAMPLES_DIR, FourPoints
+from msl.examples.loadlib import EXAMPLES_DIR, Point, FourPoints, NPoints
 
 # fixes -> OSError: [WinError -2147417850] Cannot change thread mode after it is set
 # when importing comtypes
 sys.coinit_flags = 0
 
-eps = 1e-9
-
-c = None
-f = None
-d = None
-n = None
-
-
-def setup_module(module):
-    global c, f, d, n
-    c = Cpp64()
-    f = Fortran64()
-    d = Echo64(True)
-    n = DotNet64()
-
-
-def teardown_module(module):
-    c.shutdown_server32()
-    f.shutdown_server32()
-    d.shutdown_server32()
-    n.shutdown_server32()
-
-
-def test_unique_ports():
-    for item in [f, d, n]:
-        assert c.port != item.port
-    for item in [d, n]:
-        assert f.port != item.port
-    assert d.port != n.port
-
-
-def test_lib_name():
-    def get_name(path):
-        return os.path.basename(path).split('.')[0]
-
-    assert 'cpp_lib32' == get_name(c.lib32_path)
-    assert 'fortran_lib32' == get_name(f.lib32_path)
-    assert 'dotnet_lib32' == get_name(n.lib32_path)
-
 
 def test_invalid_libtype():
     with pytest.raises(TypeError):
         loadlib.LoadLibrary(os.path.join(EXAMPLES_DIR, 'cpp_lib64'), libtype='xxxxxxxx')
+
+
+def test_invalid_path():
+    for item in [None, '']:
+        with pytest.raises(ValueError):
+            loadlib.LoadLibrary(item)
 
 
 @pytest.mark.skipif(sys.version_info[:2] == (3, 8) and loadlib.IS_WINDOWS, reason='get a fatal error')
@@ -75,157 +45,214 @@ def test_load_failure_in_wrong_python_bitness():
         elif loadlib.IS_LINUX and libtype == 'net':
             # Mono can load a 32/64 bit library in 64/32 bit Python
             net = loadlib.LoadLibrary(path, libtype=libtype)
-            math = net.lib.DotNetMSL.BasicMath()
-            assert 9 == math.add_integers(4, 5)
+            bm = net.lib.DotNetMSL.BasicMath()
+            assert 9 == bm.add_integers(4, 5)
         else:
             raise NotImplementedError
 
-    if loadlib.IS_PYTHON_64BIT:
-        check(os.path.join(EXAMPLES_DIR, 'cpp_lib32'), 'cdll', OSError)
-        check(os.path.join(EXAMPLES_DIR, 'fortran_lib32'), 'cdll', OSError)
-        check(os.path.join(EXAMPLES_DIR, 'dotnet_lib32'), 'net', clr.System.BadImageFormatException)
-    else:
-        check(os.path.join(EXAMPLES_DIR, 'cpp_lib64'), 'cdll', OSError)
-        check(os.path.join(EXAMPLES_DIR, 'fortran_lib64'), 'cdll', OSError)
-        check(os.path.join(EXAMPLES_DIR, 'dotnet_lib64'), 'net', clr.System.BadImageFormatException)
-
-
-def test_server_version():
-    assert loadlib.Server32.version().startswith('Python')
+    suffix = '32' if loadlib.IS_PYTHON_64BIT else '64'
+    check(os.path.join(EXAMPLES_DIR, 'cpp_lib'+suffix), 'cdll', OSError)
+    check(os.path.join(EXAMPLES_DIR, 'fortran_lib'+suffix), 'cdll', OSError)
+    check(os.path.join(EXAMPLES_DIR, 'dotnet_lib'+suffix), 'net', clr.System.BadImageFormatException)
 
 
 def test_cpp():
-    assert 3 == c.add(1, 2)
-    assert -1002 == c.add(-1000, -2)
-    assert abs(10.0 - c.subtract(20.0, 10.0)) < eps
-    assert abs(-10.0 - c.subtract(90.0, 100.0)) < eps
-    assert abs(0.0 - c.add_or_subtract(0.1234, -0.1234, True)) < eps
-    assert abs(100.0 - c.add_or_subtract(123.456, 23.456, False)) < eps
+    bitness = '64' if loadlib.IS_PYTHON_64BIT else '32'
+    path = os.path.join(EXAMPLES_DIR, 'cpp_lib' + bitness)
+    cpp = loadlib.LoadLibrary(path)
 
+    lib = cpp.lib
+    lib.add.argtypes = [c_int, c_int]
+    lib.add.restype = c_int
+    lib.subtract.argtypes = [c_float, c_float]
+    lib.subtract.restype = c_float
+    lib.add_or_subtract.argtypes = [c_double, c_double, c_bool]
+    lib.add_or_subtract.restype = c_double
+    lib.scalar_multiply.argtypes = [c_double, POINTER(c_double), c_int, POINTER(c_double)]
+    lib.scalar_multiply.restype = None
+    lib.reverse_string_v1.argtypes = [c_char_p, c_int, c_char_p]
+    lib.reverse_string_v1.restype = None
+    lib.reverse_string_v2.argtypes = [c_char_p, c_int]
+    lib.reverse_string_v2.restype = c_char_p
+    lib.distance_4_points.argtypes = [FourPoints]
+    lib.distance_4_points.restype = c_double
+    lib.distance_n_points.argtypes = [NPoints]
+    lib.distance_n_points.restype = c_double
+
+    assert 3 == lib.add(1, 2)
+    assert -1002 == lib.add(-1000, -2)
+    assert 10.0 == pytest.approx(lib.subtract(20.0, 10.0))
+    assert -10.0 == pytest.approx(lib.subtract(90.0, 100.0))
+    assert 0.0 == pytest.approx(lib.add_or_subtract(0.1234, -0.1234, True))
+    assert 100.0 == pytest.approx(lib.add_or_subtract(123.456, 23.456, False))
+
+    n = 100
     a = 3.1415926
-    values = [float(x) for x in range(100)]
-    c_values = c.scalar_multiply(a, values)
-    for i in range(len(values)):
-        assert abs(a*values[i] - c_values[i]) < eps
+    values = (c_double * n)(*tuple(x for x in range(n)))
+    out = (c_double * n)()
+    lib.scalar_multiply(a, values, n, out)
+    for i in range(n):
+        assert a * values[i] == pytest.approx(out[i])
 
-    assert '0987654321' == c.reverse_string_v1('1234567890')
-    assert '[abc x|z j 1 *&' == c.reverse_string_v2('&* 1 j z|x cba[')
+    str_in = '1234567890'
+    str_out = create_string_buffer(len(str_in))
+    lib.reverse_string_v1(create_string_buffer(str_in.encode()), len(str_in), str_out)
+    assert '0987654321' == str_out.raw.decode()
 
-    if loadlib.IS_PYTHON3:
-        # can't pickle.dump a ctypes.Structure in Python 2 and then
-        # pickle.load it in Python 3 (the interpreter that Server32 is running on)
-        fp = FourPoints((0, 0), (0, 1), (1, 1), (1, 0))
-        assert c.distance_4_points(fp) == 4.0
+    str_in = '&* 1 j z|x cba['
+    str_out = lib.reverse_string_v2(create_string_buffer(str_in.encode()), len(str_in))
+    assert '[abc x|z j 1 *&' == str_out.decode()
 
-    assert c.circumference(0.5, 0) == 0.0
-    assert c.circumference(0.5, 2) == 2.0
-    assert c.circumference(0.5, 2**16) == pytest.approx(math.pi)
-    assert c.circumference(1.0, 2**16) == pytest.approx(2.0*math.pi)
+    fp = FourPoints((0, 0), (0, 1), (1, 1), (1, 0))
+    assert lib.distance_4_points(fp) == pytest.approx(4.0)
+
+    n = 2**16
+    theta = 0.0
+    delta = (2.0 * math.pi) / float(n)
+    pts = NPoints()
+    pts.n = n
+    pts.points = (Point * n)()
+    for i in range(n):
+        pts.points[i] = Point(math.cos(theta), math.sin(theta))
+        theta += delta
+    assert lib.distance_n_points(pts) == pytest.approx(2.0 * math.pi)
 
 
 def test_fortran():
-    assert -127 == f.sum_8bit(-2**7, 1)
-    assert 32766 == f.sum_16bit(2**15 - 1, -1)
-    assert 123456789 == f.sum_32bit(123456788, 1)
-    assert -9223372036854775807 == f.sum_64bit(-2**63, 1)
-    assert abs(-52487.570494 - f.multiply_float32(40.874, -1284.131)) < 1e-3
-    assert abs(2.31e300 - f.multiply_float64(1.1e100, 2.1e200)) < eps
-    assert f.is_positive(1e-100)
-    assert not f.is_positive(-1e-100)
-    assert 3000 == f.add_or_subtract(1000, 2000, True)
-    assert -1000 == f.add_or_subtract(1000, 2000, False)
-    assert 1 == int(f.factorial(0))
-    assert 1 == int(f.factorial(1))
-    assert 120 == int(f.factorial(5))
-    assert abs(2.73861278752583 - f.standard_deviation([float(val) for val in range(1,10)])) < eps
-    assert abs(0.171650807137 - f.besselJ0(8.0)) < eps
-    assert '!dlrow olleh' == f.reverse_string('hello world!')
+    bitness = '64' if loadlib.IS_PYTHON_64BIT else '32'
+    path = os.path.join(EXAMPLES_DIR, 'fortran_lib' + bitness)
+    fortran = loadlib.LoadLibrary(path)
 
-    a = [float(val) for val in range(1, 1000)]
-    b = [3.0*val for val in range(1, 1000)]
-    f_values = f.add_1D_arrays(a, b)
+    lib = fortran.lib
+    lib.sum_8bit.argtypes = [POINTER(c_int8), POINTER(c_int8)]
+    lib.sum_8bit.restype = c_int8
+    lib.sum_16bit.argtypes = [POINTER(c_int16), POINTER(c_int16)]
+    lib.sum_16bit.restype = c_int16
+    lib.sum_32bit.argtypes = [POINTER(c_int32), POINTER(c_int32)]
+    lib.sum_32bit.restype = c_int32
+    lib.sum_64bit.argtypes = [POINTER(c_int64), POINTER(c_int64)]
+    lib.sum_64bit.restype = c_int64
+    lib.multiply_float32.argtypes = [POINTER(c_float), POINTER(c_float)]
+    lib.multiply_float32.restype = c_float
+    lib.multiply_float64.argtypes = [POINTER(c_double), POINTER(c_double)]
+    lib.multiply_float64.restype = c_double
+    lib.is_positive.argtypes = [POINTER(c_double)]
+    lib.is_positive.restype = c_bool
+    lib.add_or_subtract.argtypes = [POINTER(c_int32), POINTER(c_int32), POINTER(c_bool)]
+    lib.add_or_subtract.restype = c_int32
+    lib.factorial.argtypes = [POINTER(c_int8)]
+    lib.factorial.restype = c_double
+    lib.standard_deviation.argtypes = [POINTER(c_double), POINTER(c_int32)]
+    lib.standard_deviation.restype = c_double
+    lib.besselj0.argtypes = [POINTER(c_double)]
+    lib.besselj0.restype = c_double
+    lib.reverse_string.argtypes = [c_char_p, POINTER(c_int32), c_char_p]
+    lib.reverse_string.restype = None
+    lib.add_1d_arrays.argtypes = [POINTER(c_double), POINTER(c_double), POINTER(c_double), POINTER(c_int32)]
+    lib.add_1d_arrays.restype = None
+    lib.matrix_multiply.argtypes = [c_void_p, c_void_p, POINTER(c_int32), POINTER(c_int32), c_void_p, POINTER(c_int32),
+                                    POINTER(c_int32)]
+    lib.matrix_multiply.restype = None
+
+    assert -127 == lib.sum_8bit(byref(c_int8(-2 ** 7)), byref(c_int8(1)))
+    assert 32766 == lib.sum_16bit(byref(c_int16(2 ** 15 - 1)), byref(c_int16(-1)))
+    assert 123456789 == lib.sum_32bit(byref(c_int32(123456788)), byref(c_int32(1)))
+    assert -9223372036854775807 == lib.sum_64bit(byref(c_int64(-2 ** 63)), byref(c_int64(1)))
+    assert -52487.570494 == pytest.approx(lib.multiply_float32(byref(c_float(40.874)), byref(c_float(-1284.131))))
+    assert 2.31e300 == pytest.approx(lib.multiply_float64(byref(c_double(1.1e100)), byref(c_double(2.1e200))))
+    assert lib.is_positive(byref(c_double(1e-100)))
+    assert not lib.is_positive(byref(c_double(-1e-100)))
+    assert 3000 == lib.add_or_subtract(byref(c_int32(1000)), byref(c_int32(2000)), byref(c_bool(True)))
+    assert -1000 == lib.add_or_subtract(byref(c_int32(1000)), byref(c_int32(2000)), byref(c_bool(False)))
+    assert 1 == int(lib.factorial(byref(c_int8(0))))
+    assert 1 == int(lib.factorial(byref(c_int8(1))))
+    assert 120 == int(lib.factorial(byref(c_int8(5))))
+
+    a = (c_double * 9)(*[float(val) for val in range(1, 10)])
+    assert 2.73861278752583 == pytest.approx(lib.standard_deviation(a, byref(c_int32(9))))
+
+    assert 0.171650807137 == pytest.approx(lib.besselj0(byref(c_double(8.0))))
+
+    str_in = 'hello world!'
+    str_out = create_string_buffer(len(str_in))
+    lib.reverse_string(create_string_buffer(str_in.encode()), byref(c_int32(len(str_in))), str_out)
+    assert '!dlrow olleh' == str_out.raw.decode()
+
+    in1 = (c_double * 999)(*[float(val) for val in range(1, 1000)])
+    in2 = (c_double * 999)(*[3.0 * val for val in range(1, 1000)])
+    assert len(in1) == len(in2)
+    a = (c_double * len(in1))()
+    lib.add_1d_arrays(a, in1, in2, byref(c_int32(len(in1))))
     for i in range(len(a)):
-        assert abs(a[i] + b[i] - f_values[i]) < eps
+        assert in1[i] + in2[i] == pytest.approx(a[i])
 
-    f_mat = f.matrix_multiply([[1., 2., 3.], [4., 5., 6.]], [[1., 2.], [3., 4.], [5., 6.]])
-    assert abs(22.0 - f_mat[0][0]) < eps
-    assert abs(28.0 - f_mat[0][1]) < eps
-    assert abs(49.0 - f_mat[1][0]) < eps
-    assert abs(64.0 - f_mat[1][1]) < eps
-
-
-def test_dummy():
-
-    args, kwargs = d.send_data(True)
-    assert args[0]
-    assert {} == kwargs
-
-    args, kwargs = d.send_data(x=1.0)
-    assert args == ()
-    assert kwargs == {'x': 1.0}
-
-    x = [val for val in range(100)]
-    y = range(9999)
-    my_dict = {'x': x, 'y': y, 'text': 'abcd 1234 wxyz'}
-    args, kwargs = d.send_data(111, 2.3, complex(-1.2, 2.30), (1, 2), x=x, y=y, my_dict=my_dict)
-    assert args[0] == 111
-    assert args[1] == 2.3
-    assert args[2] == complex(-1.2, 2.30)
-    assert args[3] == (1, 2)
-    assert kwargs['x'] == x
-    assert kwargs['y'] == y
-    assert kwargs['my_dict'] == my_dict
+    m1 = [[1., 2., 3.], [4., 5., 6.]]
+    a1 = ((c_double * 2) * 3)()
+    for r in range(2):
+        for c in range(3):
+            a1[c][r] = m1[r][c]
+    m2 = [[1., 2.], [3., 4.], [5., 6.]]
+    a2 = ((c_double * 3) * 2)()
+    for r in range(3):
+        for c in range(2):
+            a2[c][r] = m2[r][c]
+    a = ((c_double * 2) * 2)()
+    lib.matrix_multiply(a, a1, byref(c_int32(2)), byref(c_int32(3)), a2, byref(c_int32(3)), byref(c_int32(2)))
+    assert 22.0 == pytest.approx(a[0][0])
+    assert 49.0 == pytest.approx(a[0][1])
+    assert 28.0 == pytest.approx(a[1][0])
+    assert 64.0 == pytest.approx(a[1][1])
 
 
 def test_dotnet():
+    bitness = '64' if loadlib.IS_PYTHON_64BIT else '32'
+    path = os.path.join(EXAMPLES_DIR, 'dotnet_lib' + bitness + '.dll')
+    net = loadlib.LoadLibrary(path, 'clr')
 
-    names = n.get_class_names()
+    names = ';'.join(str(name) for name in net.assembly.GetTypes()).split(';')
     assert len(names) == 4
     assert 'StringManipulation' in names
     assert 'DotNetMSL.BasicMath' in names
     assert 'DotNetMSL.ArrayManipulation' in names
     assert 'StaticClass' in names
 
-    assert 9 == n.add_integers(4, 5)
-    assert abs(n.divide_floats(4., 5.) - 0.8) < eps
-    assert abs(n.multiply_doubles(872.24, 525.525) - 458383.926) < eps
-    assert abs(n.add_or_subtract(99., 9., True) - 108.0) < eps
-    assert abs(n.add_or_subtract(99., 9., False) - 90.0) < eps
+    BasicMath = net.lib.DotNetMSL.BasicMath()
+    assert 9 == BasicMath.add_integers(4, 5)
+    assert 0.8 == pytest.approx(BasicMath.divide_floats(4., 5.))
+    assert 458383.926 == pytest.approx(BasicMath.multiply_doubles(872.24, 525.525))
+    assert 108.0 == pytest.approx(BasicMath.add_or_subtract(99., 9., True))
+    assert 90.0 == pytest.approx(BasicMath.add_or_subtract(99., 9., False))
 
+    ArrayManipulation = net.lib.DotNetMSL.ArrayManipulation()
     a = 7.13141
     values = [float(x) for x in range(1000)]
-    net_values = n.scalar_multiply(a, values)
+    net_values = ArrayManipulation.scalar_multiply(a, values)
     for i in range(len(values)):
-        assert abs(a*values[i] - net_values[i]) < eps
+        assert a * values[i] == pytest.approx(net_values[i])
 
-    assert n.reverse_string('New Zealand') == 'dnalaeZ weN'
+    a1 = [[1., 2., 3.], [4., 5., 6.]]
+    m1 = Array.CreateInstance(Double, 2, 3)
+    for r in range(2):
+        for c in range(3):
+            m1[r, c] = a1[r][c]
+    a2 = [[1., 2.], [3., 4.], [5., 6.]]
+    m2 = Array.CreateInstance(Double, 3, 2)
+    for r in range(3):
+        for c in range(2):
+            m2[r, c] = a2[r][c]
+    out = ArrayManipulation.multiply_matrices(m1, m2)
+    net_mat = [[out[r, c] for c in range(2)] for r in range(2)]
+    assert 22.0 == pytest.approx(net_mat[0][0])
+    assert 28.0 == pytest.approx(net_mat[0][1])
+    assert 49.0 == pytest.approx(net_mat[1][0])
+    assert 64.0 == pytest.approx(net_mat[1][1])
 
-    net_mat = n.multiply_matrices([[1., 2., 3.], [4., 5., 6.]], [[1., 2.], [3., 4.], [5., 6.]])
-    assert abs(22.0 - net_mat[0][0]) < eps
-    assert abs(28.0 - net_mat[0][1]) < eps
-    assert abs(49.0 - net_mat[1][0]) < eps
-    assert abs(64.0 - net_mat[1][1]) < eps
-
-    assert 33 == n.add_multiple(11, -22, 33, -44, 55)
-    assert 'the experiment worked ' == n.concatenate('the ', 'experiment ', 'worked ', False, 'temporarily')
-    assert 'the experiment worked temporarily' == n.concatenate('the ', 'experiment ', 'worked ', True, 'temporarily')
-
-
-def test_pathlib_object():
-    # checks that Issue #8 is fixed
-    if loadlib.IS_PYTHON_64BIT:
-        loadlib.LoadLibrary(pathlib.Path(os.path.join(EXAMPLES_DIR, 'cpp_lib64')))
-    else:
-        loadlib.LoadLibrary(pathlib.Path(os.path.join(EXAMPLES_DIR, 'cpp_lib32')))
-
-
-def test_namespace_with_dots():
-    # checks that Issue #7 is fixed
-    net = loadlib.LoadLibrary('./tests/namespace_with_dots/Namespace.With.Dots.dll', 'net')
-    checker = net.lib.Namespace.With.Dots.Checker()
-    assert checker.IsSuccess()
-    repr(net)  # test that the __repr__ and __str__ methods work for a non-unicode path
-    str(net)
+    assert 'dnalaeZ weN' == net.lib.StringManipulation.reverse_string('New Zealand')
+    assert 33 == net.lib.StaticClass.GetMethod('add_multiple').Invoke(None, [11, -22, 33, -44, 55])
+    values = ['the ', 'experiment ', 'worked ', False, 'temporarily']
+    assert 'the experiment worked ' == net.lib.StaticClass.GetMethod('concatenate').Invoke(None, values)
+    values = ['the ', 'experiment ', 'worked ', True, 'temporarily']
+    assert 'the experiment worked temporarily' == net.lib.StaticClass.GetMethod('concatenate').Invoke(None, values)
 
 
 @pytest.mark.skipif(
@@ -236,8 +263,6 @@ def test_namespace_with_dots():
     reason='requires labview runtime'
 )
 def test_labview():
-
-    # this test requires that an appropriate LabVIEW Run-Time Engine is installed
 
     from ctypes import c_double, byref
 
@@ -256,14 +281,14 @@ def test_labview():
     # weighting to use: 0 -> sample, 1-> population
 
     labview.lib.stdev(x, len(data), 0, byref(mean), byref(variance), byref(stdev))
-    assert abs(mean.value - 5.0) < eps
-    assert abs(variance.value - 7.5) < eps
-    assert abs(stdev.value - 2.73861278752583) < eps
+    assert mean.value == pytest.approx(5.0)
+    assert variance.value == pytest.approx(7.5)
+    assert stdev.value == pytest.approx(2.73861278752583)
 
     labview.lib.stdev(x, len(data), 1, byref(mean), byref(variance), byref(stdev))
-    assert abs(mean.value - 5.0) < eps
-    assert abs(variance.value - 6.66666666666667) < eps
-    assert abs(stdev.value - 2.58198889747161) < eps
+    assert mean.value == pytest.approx(5.0)
+    assert variance.value == pytest.approx(6.66666666666667)
+    assert stdev.value == pytest.approx(2.58198889747161)
 
 
 def test_java():
@@ -290,7 +315,7 @@ def test_java():
     Matrix = jar.lib.nz.msl.examples.Matrix
 
     assert 0.0 <= Math.random() < 1.0
-    assert abs(Math.sqrt(32.4) - 5.69209978830308) < eps
+    assert Math.sqrt(32.4) == pytest.approx(5.69209978830308)
 
     #
     # check LU decomposition
@@ -303,7 +328,7 @@ def test_java():
     LU = m1.multiply(L, U)
     for i in range(n):
         for j in range(n):
-            assert abs(m1.getValue(i, j) - LU.getValue(i, j)) < eps
+            assert m1.getValue(i, j) == pytest.approx(LU.getValue(i, j))
 
     #
     # check QR decomposition
@@ -316,7 +341,7 @@ def test_java():
     QR = m2.multiply(Q, R)
     for i in range(n):
         for j in range(n):
-            assert abs(m2.getValue(i, j) - QR.getValue(i, j)) < eps
+            assert m2.getValue(i, j) == pytest.approx(QR.getValue(i, j))
 
     #
     # solve Ax=b
@@ -342,7 +367,7 @@ def test_java():
 
     bprime = Matrix.multiply(A, x)
     for i in range(3):
-        assert abs(bprime.getValue(i, 0) - m4[i]) < eps
+        assert bprime.getValue(i, 0) == pytest.approx(m4[i])
 
     #
     # Check inverse
@@ -354,7 +379,7 @@ def test_java():
     identity = Matrix(n)
     for i in range(n):
         for j in range(n):
-            assert abs(identity.getValue(i, j) - m7.getValue(i, j)) < eps
+            assert identity.getValue(i, j) == pytest.approx(m7.getValue(i, j), abs=1e-11)
 
     #
     # Check determinant
@@ -365,7 +390,7 @@ def test_java():
         for j in range(3):
             ja[i][j] = float(a[i][j])
     m8 = Matrix(ja)
-    assert abs(m8.getDeterminant() - (-306)) < eps
+    assert m8.getDeterminant() == pytest.approx((-306))
 
     jar.gateway.shutdown()
 
@@ -375,34 +400,73 @@ def test_java():
     Trig = cls.lib.Trig
 
     x = 0.123456
-    assert abs(Trig.cos(x) - math.cos(x)) < eps
-    assert abs(Trig.cosh(x) - math.cosh(x)) < eps
-    assert abs(Trig.acos(x) - math.acos(x)) < eps
-    assert abs(Trig.sin(x) - math.sin(x)) < eps
-    assert abs(Trig.sinh(x) - math.sinh(x)) < eps
-    assert abs(Trig.asin(x) - math.asin(x)) < eps
-    assert abs(Trig.tan(x) - math.tan(x)) < eps
-    assert abs(Trig.tanh(x) - math.tanh(x)) < eps
-    assert abs(Trig.atan(x) - math.atan(x)) < eps
-    assert abs(Trig.atan2(-4.321, x) - math.atan2(-4.321, x)) < eps
+
+    assert Trig.cos(x) == pytest.approx(math.cos(x))
+    assert Trig.cosh(x) == pytest.approx(math.cosh(x))
+    assert Trig.acos(x) == pytest.approx(math.acos(x))
+    assert Trig.sin(x) == pytest.approx(math.sin(x))
+    assert Trig.sinh(x) == pytest.approx(math.sinh(x))
+    assert Trig.asin(x) == pytest.approx(math.asin(x))
+    assert Trig.tan(x) == pytest.approx(math.tan(x))
+    assert Trig.tanh(x) == pytest.approx(math.tanh(x))
+    assert Trig.atan(x) == pytest.approx(math.atan(x))
+    assert Trig.atan2(-4.321, x) == pytest.approx(math.atan2(-4.321, x))
 
     cls.gateway.shutdown()
+
+
+@pytest.mark.skipif(not loadlib.IS_WINDOWS, reason='comtypes only runs on Windows')
+def test_comtypes():
+    # changes to ctypes in Python 3.7.6 and 3.8.1 caused the following exception
+    #  TypeError: item 1 in _argtypes_ passes a union by value, which is unsupported.
+    # when loading some COM objects, see https://bugs.python.org/issue16575
+    #
+    # The 'MediaPlayer.MediaPlayer.1' object does not appear to raise this exception
+    # and the goal of this test function is not to test the internals of comtypes
+    # but LoadLibrary calling the underlying comtypes wrapper properly
+
+    progid = 'MediaPlayer.MediaPlayer.1'
+
+    obj = loadlib.LoadLibrary(progid, 'com')
+    is_enabled = obj.lib.IsSoundCardEnabled()
+    # don't care whether it is enabled, just that a boolean is returned
+    assert is_enabled is True or is_enabled is False
+
+    with pytest.raises(OSError):
+        loadlib.LoadLibrary('ABC.def.GHI', 'com')
+
+    info = loadlib.utils.get_com_info()
+    assert info, 'utils.get_com_info() returned an empty dict'
+
+    found_it = False
+    for key, value in info.items():
+        if value['ProgID'] == progid:
+            # don't need to specify libtype='com' since the `key`
+            # startswith "{" and endswith "}" which is unique to a COM library
+            obj = loadlib.LoadLibrary(key)
+            is_enabled = obj.lib.IsSoundCardEnabled()
+            # don't care whether it is enabled, just that a boolean is returned
+            assert is_enabled is True or is_enabled is False
+            found_it = True
+            break
+
+    assert found_it, 'did not find %s in utils.get_com_info() dict' % progid
 
 
 def test_unicode_path():
     cls = loadlib.LoadLibrary(u'./tests/uñicödé/Trig.class')
     import math
     x = 0.123456
-    assert abs(cls.lib.Trig.cos(x) - math.cos(x)) < eps
-    repr(cls)
-    str(cls)
+    assert cls.lib.Trig.cos(x) == pytest.approx(math.cos(x))
+    repr(cls)  # this should not raise an exception
+    str(cls)  # this should not raise an exception
     cls.gateway.shutdown()
 
     net = loadlib.LoadLibrary(u'./tests/uñicödé/Namespace.With.Dots-uñicödé.dll', 'net')
     checker = net.lib.Namespace.With.Dots.Checker()
     assert checker.IsSuccess()
-    repr(net)
-    str(net)
+    repr(net)  # this should not raise an exception
+    str(net)  # this should not raise an exception
 
     # IMPORTANT: keep the C++ test after loading the unicode version of the .NET DLL
     # because it tests for additional problems that can occur.
@@ -421,83 +485,23 @@ def test_unicode_path():
     #       p = os.path.join(directory, _path)  <- raised UnicodeDecodeError
     # the `directory` equaled the encoded version of `head` and so it raised UnicodeDecodeError
     sys.path.append(u'./tests/uñicödé')
-    bit = u'64' if loadlib.IS_PYTHON_64BIT else u'32'
-    cpp = loadlib.LoadLibrary(u'cpp_lib' + bit + u'-uñicödé')
+    bitness = u'64' if loadlib.IS_PYTHON_64BIT else u'32'
+    cpp = loadlib.LoadLibrary(u'cpp_lib' + bitness + u'-uñicödé')
     assert cpp.lib.add(1, 2) == 3
-    repr(cpp)
-    str(cpp)
-
-    class Cpp64Encoding(loadlib.Client64):
-        def __init__(self):
-            super(Cpp64Encoding, self).__init__(
-                module32='cpp32unicode',
-                append_sys_path=os.path.dirname(__file__) + u'/uñicödé',
-                append_environ_path=os.path.dirname(__file__) + u'/uñicödé',
-            )
-
-        def add(self, a, b):
-            return self.request32('add', a, b)
-
-    c2 = Cpp64Encoding()
-    assert c2.add(-5, 3) == -2
-
-    with pytest.raises(loadlib.Server32Error):
-        c2.add('hello', 'world')
-
-    try:
-        c2.add('hello', 'world')
-    except loadlib.Server32Error as e:
-        print(e)
-
-    c2.shutdown_server32()
+    repr(cpp)  # this should not raise an exception
+    str(cpp)  # this should not raise an exception
 
 
-def test_Server32Error():
-    try:
-        c.add('hello', 'world')
-    except loadlib.Server32Error as e:
-        assert e.name == 'TypeError'
-        assert e.value.startswith('an integer is required')
-        assert e.traceback.endswith('return self.lib.add(ctypes.c_int32(a), ctypes.c_int32(b))')
+def test_issue7():
+    # checks that Issue #7 is fixed
+    net = loadlib.LoadLibrary('./tests/namespace_with_dots/Namespace.With.Dots.dll', 'net')
+    checker = net.lib.Namespace.With.Dots.Checker()
+    assert checker.IsSuccess()
+    repr(net)  # test that the __repr__ and __str__ methods don't raise an exception
+    str(net)
 
 
-@pytest.mark.skipif(not loadlib.IS_WINDOWS, reason='comtypes only runs on Windows')
-def test_comtypes():
-    # ctypes in Python 3.7.6 and 3.8.1 raised
-    #  TypeError: item 1 in _argtypes_ passes a union by value, which is unsupported.
-    # when loading some COM objects, see https://bugs.python.org/issue16575
-    #
-    # The 'MediaPlayer.MediaPlayer.1' object does not appear to raise this exception
-    # and the goal of this test function is not to test the internals of comtypes
-    # but LoadLibrary calling the underlying comtypes wrapper properly
-
-    progid = 'MediaPlayer.MediaPlayer.1'
-
-    obj = loadlib.LoadLibrary(progid, 'com')
-    assert obj.lib.IsSoundCardEnabled()
-
-    with pytest.raises(OSError):
-        loadlib.LoadLibrary('ABC.def.GHI', 'com')
-
-    info = loadlib.utils.get_com_info()
-    assert info, 'utils.get_com_info() returned an empty dict'
-
-    found_it = False
-    for key, value in info.items():
-        if value['ProgID'] == progid:
-            # don't need to specify libtype='com' since the `key`
-            # startswith "{" and endswith "}" which is unique to a COM library
-            obj = loadlib.LoadLibrary(key)
-            assert obj.lib.IsSoundCardEnabled()
-            found_it = True
-            break
-
-    assert found_it, 'did not find %s in utils.get_com_info() dict' % progid
-
-
-def test_raises_ValueError():
-    with pytest.raises(ValueError):
-        loadlib.LoadLibrary(None)
-
-    with pytest.raises(ValueError):
-        loadlib.LoadLibrary('')
+def test_issue8():
+    # checks that Issue #8 is fixed
+    bitness = '64' if loadlib.IS_PYTHON_64BIT else '32'
+    loadlib.LoadLibrary(pathlib.Path(os.path.join(EXAMPLES_DIR, 'cpp_lib' + bitness)))
