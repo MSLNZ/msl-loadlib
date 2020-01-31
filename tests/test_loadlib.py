@@ -390,7 +390,7 @@ def test_java():
         for j in range(3):
             ja[i][j] = float(a[i][j])
     m8 = Matrix(ja)
-    assert m8.getDeterminant() == pytest.approx((-306))
+    assert m8.getDeterminant() == pytest.approx(-306)
 
     jar.gateway.shutdown()
 
