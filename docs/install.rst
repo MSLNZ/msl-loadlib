@@ -195,7 +195,49 @@ should return the version of Java that is installed
 
 OSX
 +++
-The 32-bit server has not been created for OSX nor have the example libraries been compiled in OSX.
+The 32-bit server has not been created for macOS; however, the :class:`~msl.loadlib.load_library.LoadLibrary`
+class can be used to load a library that uses the ``__cdecl`` calling convention that is the same
+bitness as the Python interpreter, a .NET library or a Java library.
+
+The following assumes that you are using Homebrew_ as your package manager.
+
+It is recommended to update Homebrew_ before installing packages
+
+.. code-block:: console
+
+   brew update
+
+To compile FORTRAN libraries install gcc (which includes gfortran)
+
+.. code-block:: console
+
+   brew install gcc
+
+If you need to load a Microsoft .NET library then you must install Mono_ and the prerequisites
+to build `Python for .NET`_ from source
+
+.. code-block:: console
+
+   brew install pkg-config glib mono
+   pip3 install pycparser
+
+and `Python for .NET`_
+
+.. code-block:: console
+
+   pip3 install pythonnet
+
+If you need to load a Java library, a ``.jar`` or ``.class`` file, then you must install Py4J_
+
+.. code-block:: console
+
+   pip3 install py4j
+
+and a `Java Runtime Environment`_
+
+.. code-block:: console
+
+   brew cask install java
 
 .. _MSL Package Manager: https://msl-package-manager.readthedocs.io/en/latest/
 .. _Mono: https://www.mono-project.com/download/stable/#download-lin
@@ -207,3 +249,4 @@ The 32-bit server has not been created for OSX nor have the example libraries be
 .. _Dependencies: https://github.com/lucasg/Dependencies
 .. _Dependency Walker: http://www.dependencywalker.com/
 .. _Dependency Walker for .NET: https://github.com/isindicic/DependencyWalker.Net
+.. _Homebrew: https://brew.sh/
