@@ -1,9 +1,25 @@
 import os
 import time
 
-import pytest
+from msl.loadlib import Client64, Server32, ResponseTimeoutError, IS_MAC, IS_PYTHON_64BIT
 
-from msl.loadlib import Client64, Server32, ResponseTimeoutError, IS_MAC
+# When the 32-bit Server imports this module on Windows & Python 3.8
+# the following exception is raised due to pytest being imported
+#    ImportError: No module named 'importlib_metadata'
+# The 32-bit server does not require pytest to be imported
+if IS_PYTHON_64BIT:
+    import pytest
+else:
+    class Mark(object):
+        @staticmethod
+        def skipif(condition, reason=None):
+            def func(function):
+                return function
+            return func
+
+    class pytest(object):
+        mark = Mark
+
 
 RPC_TIMEOUT = 5.0
 

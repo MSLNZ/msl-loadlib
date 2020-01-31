@@ -5,14 +5,30 @@ os.environ['PATH'] and **kwargs for the 32-bit server.
 import os
 import sys
 
-import pytest
-
 from msl.loadlib import (
     Server32,
     Client64,
     IS_WINDOWS,
     IS_MAC,
+    IS_PYTHON_64BIT,
 )
+
+# When the 32-bit Server imports this module on Windows & Python 3.8
+# the following exception is raised due to pytest being imported
+#    ImportError: No module named 'importlib_metadata'
+# The 32-bit server does not require pytest to be imported
+if IS_PYTHON_64BIT:
+    import pytest
+else:
+    class Mark(object):
+        @staticmethod
+        def skipif(condition, reason=None):
+            def func(function):
+                return function
+            return func
+
+    class pytest(object):
+        mark = Mark
 
 
 class ArgParse32(Server32):
