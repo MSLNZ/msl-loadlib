@@ -105,7 +105,7 @@ class Client64(object):
 
         Raises
         ------
-        :class:`~msl.loadlib.exceptions.ConnectionTimeoutError`
+        ~msl.loadlib.exceptions.ConnectionTimeoutError
             If the connection to the 32-bit server cannot be established.
         IOError
             If the frozen executable cannot be found.
@@ -254,9 +254,9 @@ class Client64(object):
 
         Raises
         ------
-        :class:`~msl.loadlib.exceptions.Server32Error`
+        ~msl.loadlib.exceptions.Server32Error
             If there was an error processing the request on the 32-bit server.
-        :class:`~msl.loadlib.exceptions.ResponseTimeoutError`
+        ~msl.loadlib.exceptions.ResponseTimeoutError
             If a timeout occurs while waiting for the response from the 32-bit server.
         """
         if self._conn is None:

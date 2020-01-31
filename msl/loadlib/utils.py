@@ -266,7 +266,7 @@ def wait_for_server(host, port, timeout):
 
     Raises
     ------
-    :class:`~msl.loadlib.exceptions.ConnectionTimeoutError`
+    ~msl.loadlib.exceptions.ConnectionTimeoutError
         If a timeout occurred.
     """
 
