@@ -19,26 +19,27 @@ from msl.loadlib import Server32
 
 
 class Labview32(Server32):
-    """A wrapper around the 32-bit LabVIEW library, :ref:`labview_lib32 <labview-lib>`.
 
-    Parameters
-    ----------
-    host : :class:`str`
-        The IP address of the server.
-    port : :class:`int`
-        The port to open on the server.
-    quiet : :class:`bool`
-        Whether to hide :data:`sys.stdout` messages from the server.
-
-    Note
-    ----
-    Any class that is a subclass of :class:`~msl.loadlib.server32.Server32` **MUST**
-    provide three arguments in its constructor: `host`, `port` and `quiet`
-    (in that order) and `**kwargs`. Otherwise the ``server32`` executable, see
-    :class:`~msl.loadlib.start_server32`, cannot create an instance of the
-    :class:`~msl.loadlib.server32.Server32` subclass.
-    """
     def __init__(self, host, port, quiet, **kwargs):
+        """A wrapper around the 32-bit LabVIEW library, :ref:`labview_lib32 <labview-lib>`.
+
+        Parameters
+        ----------
+        host : :class:`str`
+            The IP address of the server.
+        port : :class:`int`
+            The port to open on the server.
+        quiet : :class:`bool`
+            Whether to hide :data:`sys.stdout` messages from the server.
+
+        Note
+        ----
+        Any class that is a subclass of :class:`~msl.loadlib.server32.Server32` **MUST**
+        provide three arguments in its constructor: `host`, `port` and `quiet`
+        (in that order) and `**kwargs`. Otherwise the ``server32`` executable, see
+        :class:`~msl.loadlib.start_server32`, cannot create an instance of the
+        :class:`~msl.loadlib.server32.Server32` subclass.
+        """
         super(Labview32, self).__init__(os.path.join(os.path.dirname(__file__), 'labview_lib32.dll'),
                                         'cdll', host, port, quiet)
 

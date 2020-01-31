@@ -14,30 +14,31 @@ from msl.loadlib import Server32
 
 
 class Fortran32(Server32):
-    """A wrapper around a 32-bit FORTRAN library, :ref:`fortran_lib32 <fortran-lib>`.
 
-    This class demonstrates how to send/receive various data types to/from a
-    32-bit FORTRAN library via :py:mod:`ctypes`. For a summary of the FORTRAN
-    data types see `here <https://earth.uni-muenster.de/~joergs/doc/f90/unix-um/dfum_034.html>`_.
-
-    Parameters
-    ----------
-    host : :class:`str`
-        The IP address of the server.
-    port : :class:`int`
-        The port to open on the server.
-    quiet : :class:`bool`
-        Whether to hide :data:`sys.stdout` messages from the server.
-
-    Note
-    ----
-    Any class that is a subclass of :class:`~msl.loadlib.server32.Server32` **MUST**
-    provide three arguments in its constructor: `host`, `port` and `quiet`
-    (in that order) and `**kwargs`. Otherwise the ``server32`` executable, see
-    :class:`~msl.loadlib.start_server32`, cannot create an instance of the
-    :class:`~msl.loadlib.server32.Server32` subclass.
-    """
     def __init__(self, host, port, quiet, **kwargs):
+        """A wrapper around a 32-bit FORTRAN library, :ref:`fortran_lib32 <fortran-lib>`.
+
+        This class demonstrates how to send/receive various data types to/from a
+        32-bit FORTRAN library via :py:mod:`ctypes`. For a summary of the FORTRAN
+        data types see `here <https://earth.uni-muenster.de/~joergs/doc/f90/unix-um/dfum_034.html>`_.
+
+        Parameters
+        ----------
+        host : :class:`str`
+            The IP address of the server.
+        port : :class:`int`
+            The port to open on the server.
+        quiet : :class:`bool`
+            Whether to hide :data:`sys.stdout` messages from the server.
+
+        Note
+        ----
+        Any class that is a subclass of :class:`~msl.loadlib.server32.Server32` **MUST**
+        provide three arguments in its constructor: `host`, `port` and `quiet`
+        (in that order) and `**kwargs`. Otherwise the ``server32`` executable, see
+        :class:`~msl.loadlib.start_server32`, cannot create an instance of the
+        :class:`~msl.loadlib.server32.Server32` subclass.
+        """
         # By not specifying the extension of the library file the server will open
         # the appropriate file based on the operating system.
         super(Fortran32, self).__init__(os.path.join(os.path.dirname(__file__), 'fortran_lib32'),

@@ -25,28 +25,29 @@ from msl.loadlib import Server32
 
 
 class Kernel32(Server32):
-    """
-    Example of a class that is a wrapper around the Windows 32-bit `kernel32.dll
-    <https://www.geoffchappell.com/studies/windows/win32/kernel32/api/>`_ library.
 
-    Parameters
-    ----------
-    host : :class:`str`
-        The IP address of the server.
-    port : :class:`int`
-        The port to open on the server.
-    quiet : :class:`bool`
-        Whether to hide :data:`sys.stdout` messages from the server.
-
-    Note
-    ----
-    Any class that is a subclass of :class:`~msl.loadlib.server32.Server32` **MUST**
-    provide three arguments in its constructor: `host`, `port` and `quiet`
-    (in that order) and `**kwargs`. Otherwise the ``server32`` executable, see
-    :class:`~msl.loadlib.start_server32`, cannot create an instance of the
-    :class:`~msl.loadlib.server32.Server32` subclass.
-    """
     def __init__(self, host, port, quiet, **kwargs):
+        """
+        Example of a class that is a wrapper around the Windows 32-bit `kernel32.dll
+        <https://www.geoffchappell.com/studies/windows/win32/kernel32/api/>`_ library.
+
+        Parameters
+        ----------
+        host : :class:`str`
+            The IP address of the server.
+        port : :class:`int`
+            The port to open on the server.
+        quiet : :class:`bool`
+            Whether to hide :data:`sys.stdout` messages from the server.
+
+        Note
+        ----
+        Any class that is a subclass of :class:`~msl.loadlib.server32.Server32` **MUST**
+        provide three arguments in its constructor: `host`, `port` and `quiet`
+        (in that order) and `**kwargs`. Otherwise the ``server32`` executable, see
+        :class:`~msl.loadlib.start_server32`, cannot create an instance of the
+        :class:`~msl.loadlib.server32.Server32` subclass.
+        """
         super(Kernel32, self).__init__('C:/Windows/SysWOW64/kernel32.dll', 'windll', host, port, quiet)
 
     def get_time(self):
