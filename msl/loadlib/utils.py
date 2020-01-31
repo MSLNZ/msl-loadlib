@@ -219,8 +219,11 @@ def check_dot_net_config(py_exe_path):
         return 1, msg
 
 
-def port_in_use(port):
+def is_port_in_use(port):
     """Checks whether the network port is in use.
+
+    .. versionchanged:: 0.6.1
+       Renamed from `port_in_use` and added support for macOS.
 
     Parameters
     ----------
@@ -273,7 +276,7 @@ def wait_for_server(host, port, timeout):
     # wait for the server to be running -- essentially this is the subprocess.wait() method
     stop = time.time() + max(0.0, timeout)
     while True:
-        if port_in_use(port):
+        if is_port_in_use(port):
             break
         if time.time() > stop:
             raise ConnectionTimeoutError(

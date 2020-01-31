@@ -112,8 +112,8 @@ Version 0.4.0 (2018.02.28)
 * Changed
 
   - rename ``DotNetContainer`` to ``DotNet``
-  - use :meth:`~socket.socket.bind` to select an available port instead of checking if
-    :meth:`~msl.loadlib.utils.port_in_use`
+  - use ``socket.socket.bind`` to select an available port instead of checking of
+    calling ``utils.port_in_use``
   - moved the static methods to the ``msl.loadlib.utils`` module:
       + Client64.port_in_use -> utils.port_in_use
       + Client64.get_available_port -> utils.get_available_port
