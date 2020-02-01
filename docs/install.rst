@@ -207,7 +207,7 @@ It is recommended to update Homebrew_ before installing packages
 
    brew update
 
-To compile FORTRAN libraries install gcc (which includes gfortran)
+To load a FORTRAN library install gcc (which includes gfortran)
 
 .. code-block:: console
 
@@ -226,6 +226,9 @@ and `Python for .NET`_
 .. code-block:: console
 
    pip3 install pythonnet
+
+If you run in to problems installing `Python for .NET`_ then the best place to find help is on the
+`issues <https://github.com/pythonnet/pythonnet/issues>`_ page of `Python for .NET`_\'s repository.
 
 If you need to load a Java library, a ``.jar`` or ``.class`` file, then you must install Py4J_
 
