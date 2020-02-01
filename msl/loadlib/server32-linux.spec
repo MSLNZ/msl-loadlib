@@ -1,6 +1,6 @@
-# -*- mode: python -*-
+# -*- mode: python ; coding: utf-8 -*-
 
-# Created using Python 3.7.3 and PyInstaller 3.4
+# Created using Python 3.7.5 and PyInstaller 3.6
 
 block_cipher = None
 
@@ -30,5 +30,6 @@ exe = EXE(pyz,
           bootloader_ignore_signals=False,
           strip=False,
           upx=True,
+          upx_exclude=[],
           runtime_tmpdir=None,
           console=True )
