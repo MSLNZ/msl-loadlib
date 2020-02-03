@@ -102,7 +102,7 @@ def main(spec=None, requires_pythonnet=True, requires_comtypes=True):
         spec_file = '{}.spec'.format(loadlib.SERVER_FILENAME)
         if os.path.exists(spec_file):
             yn = input('A {0} file exists. You may want to run "python freeze_server32.py --spec {0}"\n'
-                       'Do you want to continue and overwrite the spec file (y/[n]):'.format(spec_file))
+                       'Do you want to continue and overwrite the spec file (y/[n])? '.format(spec_file))
             if yn.lower() not in ('y', 'yes'):
                 print('Aborted.')
                 return
