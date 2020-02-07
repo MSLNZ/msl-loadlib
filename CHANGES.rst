@@ -7,7 +7,12 @@ Version 0.7.0.dev0
 
 * Added
 
-  - Support for Python 3.8
+  - support for Python 3.8
+  - compiled the C++ and FORTRAN examples for 64-bit macOS
+
+* Changed
+
+  - renamed ``utils.port_in_use()`` to ``utils.is_port_in_use()`` and added support for macOS
 
 * Removed
 
