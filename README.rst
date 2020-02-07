@@ -2,7 +2,7 @@
 MSL-LoadLib
 ===========
 
-|docs| |pypi|
+|docs| |pypi| |travis| |appveyor|
 
 This package is used to load a shared library in Python. It is basically just a thin wrapper
 around ctypes_ (for libraries that use the ``__cdecl`` or ``__stdcall`` calling convention),
@@ -148,6 +148,12 @@ The documentation for **MSL-LoadLib** can be found `here <https://msl-loadlib.re
 
 .. |pypi| image:: https://badge.fury.io/py/msl-loadlib.svg
    :target: https://badge.fury.io/py/msl-loadlib
+
+.. |travis| image:: https://img.shields.io/travis/MSLNZ/msl-loadlib/master.svg?label=Travis-CI
+   :target: https://travis-ci.org/MSLNZ/msl-loadlib
+
+.. |appveyor| image:: https://img.shields.io/appveyor/ci/jborbely/msl-loadlib/master.svg?label=AppVeyor
+   :target: https://ci.appveyor.com/project/jborbely/msl-loadlib/branch/master
 
 .. _ctypes: https://docs.python.org/3/library/ctypes.html
 .. _Python for .NET: https://pythonnet.github.io/

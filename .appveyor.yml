@@ -1,0 +1,31 @@
+environment:
+  matrix:
+    - PYTHON: C:\Python27
+    - PYTHON: C:\Python27-x64
+    - PYTHON: C:\Python35
+    - PYTHON: C:\Python35-x64
+    - PYTHON: C:\Python36
+    - PYTHON: C:\Python36-x64
+    - PYTHON: C:\Python37
+    - PYTHON: C:\Python37-x64
+    # wait for pythonnet to support Python 3.8
+    # - PYTHON: C:\Python38
+    # - PYTHON: C:\Python38-x64
+
+install:
+  - set PATH=%PYTHON%;%PYTHON%\Scripts;%PATH%
+  - python --version
+  - python -m pip install --upgrade pip
+  - python -m pip install --upgrade setuptools wheel
+
+build: off
+
+test_script:
+  - python setup.py tests
+
+after_test:
+  - python setup.py sdist bdist_wheel
+
+artifacts:
+  # bdist_wheel puts your built wheel in the dist directory
+  - path: dist\*
