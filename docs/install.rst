@@ -193,8 +193,8 @@ should return the version of Java that is installed
    OpenJDK Runtime Environment (build 11.0.3+7-Ubuntu-1ubuntu218.04.1)
    OpenJDK 64-Bit Server VM (build 11.0.3+7-Ubuntu-1ubuntu218.04.1, mixed mode, sharing)
 
-OSX
-+++
+macOS
++++++
 The 32-bit server has not been created for macOS; however, the :class:`~msl.loadlib.load_library.LoadLibrary`
 class can be used to load a library that uses the ``__cdecl`` calling convention that is the same
 bitness as the Python interpreter, a .NET library or a Java library.

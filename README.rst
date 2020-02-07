@@ -17,7 +17,7 @@ Tested in Python 2.7, 3.5+. The `examples <https://msl-loadlib.readthedocs.io/en
 provided are currently only supported in Windows and Linux.
 
 **MSL-LoadLib** is a pure-python package, but, `Python for .NET`_ depends on the .NET Common Language
-Runtime (CLR) on Windows and Mono Runtime on Linux and OSX and Py4J_ depends on having a
+Runtime (CLR) on Windows and Mono Runtime on Linux and macOS and Py4J_ depends on having a
 `Java Virtual Machine`_ installed.
 
 Install
