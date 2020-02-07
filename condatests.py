@@ -16,11 +16,11 @@ try:
 except ImportError:
     import ConfigParser as configparser  # Python 2
 
-IS_WINDOWS = sys.platform in {'win32', 'cygwin'}
+IS_WINDOWS = sys.platform == 'win32'
 if IS_WINDOWS:
-    BIN, EXT = '', '.exe'
+    CONDA_DIR, PYTHON_DIR, EXT = 'Scripts', '', '.exe'
 else:
-    BIN, EXT = 'bin', ''
+    CONDA_DIR, PYTHON_DIR, EXT = 'bin', 'bin', ''
 
 EXECUTABLES = {'python', 'pypy', 'pypy3'}
 CREATE_ENV_PREFIX = 'condatestsenv-'
@@ -28,7 +28,24 @@ INI_PATH = 'condatests.ini'
 
 
 def get_conda_envs():
-    p = subprocess.Popen(['conda', 'info', '--json'], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    try:
+        p = subprocess.Popen(['conda', 'info', '--json'], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    except:
+        # if calling this script from a virtual environment then a FileNotFoundError is raised
+        # make sure conda is available
+        base_dir = os.path.dirname(sys.executable)
+        while True:
+            parent_dir = os.path.abspath(os.path.join(base_dir, os.pardir))
+            if len(parent_dir) <= 3:
+                sys.exit('conda is not available on PATH')
+
+            exe = os.path.join(parent_dir, CONDA_DIR, 'conda'+EXT)
+            if os.path.isfile(exe):
+                os.environ['PATH'] += os.pathsep + os.path.dirname(exe)
+                return get_conda_envs()
+
+            base_dir = parent_dir
+
     out, err = p.communicate()
     if err:
         sys.exit(err.decode())
@@ -82,7 +99,7 @@ def print_envs(envs):
 
 
 def get_executable(base_exec_path):
-    path = os.path.join(base_exec_path, BIN)
+    path = os.path.join(base_exec_path, PYTHON_DIR)
     for item in EXECUTABLES:
         if os.path.isfile(os.path.join(path, item+EXT)):
             return [item]
@@ -240,8 +257,8 @@ def main(*args):
             return
 
         activate = [] if IS_WINDOWS else ['source']
-        activate.extend(['activate', name, '&&'])
-        cmd = activate + get_executable(path) + command
+        activate.extend([os.path.join(all_envs['base'], CONDA_DIR, 'activate'), name])
+        cmd = activate + ['&&'] + get_executable(path) + command + ['&&', 'conda', 'deactivate']
         print('Testing with the {!r} environment'.format(name))
         ret = subprocess.call(' '.join(cmd), shell=True, executable=executable)
 
