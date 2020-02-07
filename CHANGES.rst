@@ -2,7 +2,7 @@
 Changelog
 =========
 
-Version 0.6.1.dev0
+Version 0.7.0.dev0
 ==================
 
 * Added

@@ -222,7 +222,7 @@ def check_dot_net_config(py_exe_path):
 def is_port_in_use(port):
     """Checks whether the network port is in use.
 
-    .. versionchanged:: 0.6.1
+    .. versionchanged:: 0.7.0
        Renamed from `port_in_use` and added support for macOS.
 
     Parameters
