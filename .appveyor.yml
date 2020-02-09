@@ -26,14 +26,14 @@ install:
   - python --version
   - python -m pip install --upgrade pip
   - python -m pip install --upgrade setuptools wheel
-  - |
-    IF %BUILD_PYTHONNET%=="true" (
-       git clone https://github.com/pythonnet/pythonnet.git
-       cd pythonnet
-       python setup.py bdist_wheel
-       python -m pip install --no-index --find-links=.\dist\ pythonnet
-       cd ..
-    )
+  - ps: >-
+      IF ($env:BUILD_PYTHONNET -eq "true") {
+        git clone https://github.com/pythonnet/pythonnet.git
+        cd pythonnet
+        python setup.py bdist_wheel
+        python -m pip install --no-index --find-links=.\dist\ pythonnet
+        cd ..
+      }
 
 build: off
 
