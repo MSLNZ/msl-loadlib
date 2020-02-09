@@ -425,7 +425,7 @@ def test_java():
     cls.gateway.shutdown()
 
 
-@pytest.mark.skipif(not loadlib.IS_WINDOWS, reason='comtypes only runs on Windows')
+@pytest.mark.skipif(not loadlib.IS_WINDOWS, reason='comtypes only valid for Windows')
 def test_comtypes():
     # changes to ctypes in Python 3.7.6 and 3.8.1 caused the following exception
     #  TypeError: item 1 in _argtypes_ passes a union by value, which is unsupported.
@@ -438,9 +438,8 @@ def test_comtypes():
     progid = 'MediaPlayer.MediaPlayer.1'
 
     obj = loadlib.LoadLibrary(progid, 'com')
-    is_enabled = obj.lib.IsSoundCardEnabled()
     # don't care whether it is enabled, just that a boolean is returned
-    assert is_enabled is True or is_enabled is False
+    assert isinstance(obj.lib.IsSoundCardEnabled(), bool)
 
     with pytest.raises(OSError):
         loadlib.LoadLibrary('ABC.def.GHI', 'com')
@@ -454,9 +453,7 @@ def test_comtypes():
             # don't need to specify libtype='com' since the `key`
             # startswith "{" and endswith "}" which is unique to a COM library
             obj = loadlib.LoadLibrary(key)
-            is_enabled = obj.lib.IsSoundCardEnabled()
-            # don't care whether it is enabled, just that a boolean is returned
-            assert is_enabled is True or is_enabled is False
+            assert isinstance(obj.lib.IsSoundCardEnabled(), bool)
             found_it = True
             break
 
