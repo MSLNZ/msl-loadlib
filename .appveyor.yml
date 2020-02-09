@@ -1,17 +1,25 @@
 environment:
   matrix:
     - PYTHON: C:\Python27
+      BUILD_PYTHONNET: "false"
     - PYTHON: C:\Python27-x64
+      BUILD_PYTHONNET: "false"
     - PYTHON: C:\Python35
+      BUILD_PYTHONNET: "false"
     - PYTHON: C:\Python35-x64
+      BUILD_PYTHONNET: "false"
     - PYTHON: C:\Python36
+      BUILD_PYTHONNET: "false"
     - PYTHON: C:\Python36-x64
+      BUILD_PYTHONNET: "false"
     - PYTHON: C:\Python37
+      BUILD_PYTHONNET: "false"
     - PYTHON: C:\Python37-x64
+      BUILD_PYTHONNET: "false"
     - PYTHON: C:\Python38
-      BUILD_PYTHONNET: 1
+      BUILD_PYTHONNET: "true"
     - PYTHON: C:\Python38-x64
-      BUILD_PYTHONNET: 1
+      BUILD_PYTHONNET: "true"
 
 install:
   - set PATH=%PYTHON%;%PYTHON%\Scripts;%PATH%
@@ -19,7 +27,7 @@ install:
   - python -m pip install --upgrade pip
   - python -m pip install --upgrade setuptools wheel
   - |
-    IF %BUILD_PYTHONNET%==1 (
+    IF %BUILD_PYTHONNET%=="true" (
        git clone https://github.com/pythonnet/pythonnet.git
        cd pythonnet
        python setup.py bdist_wheel
