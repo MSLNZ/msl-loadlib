@@ -8,15 +8,24 @@ environment:
     - PYTHON: C:\Python36-x64
     - PYTHON: C:\Python37
     - PYTHON: C:\Python37-x64
-    # wait for pythonnet to support Python 3.8
-    # - PYTHON: C:\Python38
-    # - PYTHON: C:\Python38-x64
+    - PYTHON: C:\Python38
+      BUILD_PYTHONNET: 1
+    - PYTHON: C:\Python38-x64
+      BUILD_PYTHONNET: 1
 
 install:
   - set PATH=%PYTHON%;%PYTHON%\Scripts;%PATH%
   - python --version
   - python -m pip install --upgrade pip
   - python -m pip install --upgrade setuptools wheel
+  - |
+    IF %BUILD_PYTHONNET%==1 (
+       git clone https://github.com/pythonnet/pythonnet.git
+       cd pythonnet
+       python setup.py bdist_wheel
+       python -m pip install --no-index --find-links=.\dist\ pythonnet
+       cd ..
+    )
 
 build: off
 
