@@ -2,7 +2,7 @@ language: python
 
 dist: xenial
 
-sudo: false
+sudo: true
 
 matrix:
   include:
@@ -59,15 +59,12 @@ before_install:
     if [ "$TRAVIS_OS_NAME" == "linux" ]; then
       sudo apt update
       sudo apt install software-properties-common build-essential g++ gcc-multilib g++-multilib gfortran libgfortran3:i386 zlib1g:i386 net-tools default-jre -y
-      # sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 3FA7E0328081BFF6A14DA29AA6A19B38D3D831EF
-      # sudo apt install apt-transport-https ca-certificates
-      # echo "deb https://download.mono-project.com/repo/ubuntu stable-bionic/snapshots/5.20 main" | sudo tee /etc/apt/sources.list.d/mono-official-stable.list
-      # sudo apt update
-      # sudo apt install mono-complete
-      sudo apt install libglib2.0-dev clang python3-pip python3-dev
+      sudo apt install libglib2.0-dev clang python3-pip python3-dev -y
     fi
 
 install:
+  - mono --version
+  - java --version
   - python --version
   - python -m pip install --upgrade pip
   - python -m pip install --upgrade setuptools wheel
