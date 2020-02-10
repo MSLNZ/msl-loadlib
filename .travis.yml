@@ -2,7 +2,7 @@ language: python
 
 dist: xenial
 
-sudo: required
+sudo: false
 
 matrix:
   include:
@@ -14,25 +14,33 @@ matrix:
       python: 3.6
     - os: linux
       python: 3.7
-    # wait for pythonnet to support Python 3.8
-    # - os: linux
-    #   python: 3.8
-    - os: osx
-      language: generic
-      env: PYTHON=2.7.17
-    - os: osx
-      language: generic
-      env: PYTHON=3.5.9
-    - os: osx
-      language: generic
-      env: PYTHON=3.6.10
-    - os: osx
-      language: generic
-      env: PYTHON=3.7.6
-    # wait for pythonnet to support Python 3.8
-    # - os: osx
-    #   language: generic
-    #   env: PYTHON=3.8.1
+    - os: linux
+      python: 3.8
+#    - os: osx
+#      language: generic
+#      env: PYTHON=2.7.17
+#    - os: osx
+#      language: generic
+#      env: PYTHON=3.5.9
+#    - os: osx
+#      language: generic
+#      env: PYTHON=3.6.10
+#    - os: osx
+#      language: generic
+#      env: PYTHON=3.7.6
+#    # wait for pythonnet to support Python 3.8
+#    # - os: osx
+#    #   language: generic
+#    #   env: PYTHON=3.8.1
+
+addons:
+  apt:
+    sources:
+      - sourceline: deb https://download.mono-project.com/repo/ubuntu stable-xenial/snapshots/5.20 main
+        key_url: https://keyserver.ubuntu.com/pks/lookup?op=get&search=0xA6A19B38D3D831EF
+    packages:
+      - mono-devel
+      - ca-certificates-mono
 
 before_install:
   - |
@@ -51,11 +59,11 @@ before_install:
     if [ "$TRAVIS_OS_NAME" == "linux" ]; then
       sudo apt update
       sudo apt install software-properties-common build-essential g++ gcc-multilib g++-multilib gfortran libgfortran3:i386 zlib1g:i386 net-tools default-jre -y
-      sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 3FA7E0328081BFF6A14DA29AA6A19B38D3D831EF
-      sudo apt install apt-transport-https ca-certificates
-      echo "deb https://download.mono-project.com/repo/ubuntu stable-bionic/snapshots/5.20 main" | sudo tee /etc/apt/sources.list.d/mono-official-stable.list
-      sudo apt update
-      sudo apt install mono-complete
+      # sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 3FA7E0328081BFF6A14DA29AA6A19B38D3D831EF
+      # sudo apt install apt-transport-https ca-certificates
+      # echo "deb https://download.mono-project.com/repo/ubuntu stable-bionic/snapshots/5.20 main" | sudo tee /etc/apt/sources.list.d/mono-official-stable.list
+      # sudo apt update
+      # sudo apt install mono-complete
       sudo apt install libglib2.0-dev clang python3-pip python3-dev
     fi
 
