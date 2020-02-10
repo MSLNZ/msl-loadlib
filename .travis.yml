@@ -77,12 +77,10 @@ install:
   - |
     if [ "$BUILD_PYTHONNET" == "true" ]; then
       git clone https://github.com/pythonnet/pythonnet.git
-      cd pythonnet
-      sed -i 's/if not enable_shared:/#if not enable_shared:/' setup.py
-      sed -i 's/defines.append("PYTHON_WITHOUT_ENABLE_SHARED")/#defines.append("PYTHON_WITHOUT_ENABLE_SHARED")/' setup.py
+      sed -i 's/if not enable_shared:/#if not enable_shared:/' pythonnet/setup.py
+      sed -i 's/defines.append("PYTHON_WITHOUT_ENABLE_SHARED")/#defines.append("PYTHON_WITHOUT_ENABLE_SHARED")/' pythonnet/setup.py
       python setup.py bdist_wheel
-      python -m pip install --no-index --find-links=./dist/ pythonnet
-      cd ..
+      python -m pip install --no-index --find-links=./pythonnet/dist/ pythonnet
       rm -rf pythonnet
     fi
   - |
