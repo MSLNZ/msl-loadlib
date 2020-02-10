@@ -69,6 +69,7 @@ install:
   - python -m pip install --upgrade pip
   - python -m pip install --upgrade setuptools wheel
   - python -m pip install pycparser
+  - python -m pip install pythonnet
 
 script:
   - python setup.py tests
