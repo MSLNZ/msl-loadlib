@@ -31,10 +31,8 @@ install:
   - python -m pip install --upgrade setuptools wheel
   - IF "%BUILD_PYTHONNET%"=="true" (
       git clone https://github.com/pythonnet/pythonnet.git &&
-      cd pythonnet &&
-      python setup.py bdist_wheel &&
-      python -m pip install --no-index --find-links=.\dist\ pythonnet &&
-      cd ..
+      python pythonnet\setup.py bdist_wheel &&
+      python -m pip install --no-index --find-links=.\pythonnet\dist\ pythonnet
     )
 
 build: off
