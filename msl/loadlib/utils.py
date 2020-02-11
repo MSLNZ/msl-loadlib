@@ -236,7 +236,7 @@ def is_port_in_use(port):
         Whether the port is in use.
     """
     if IS_MAC:
-        cmd = ['lsof', '-nP', '-iTCP']
+        cmd = ['lsof', '-nPw', '-iTCP']
     else:
         cmd = ['netstat', '-an']
     p = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
