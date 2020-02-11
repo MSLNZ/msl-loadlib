@@ -2,7 +2,7 @@ language: python
 
 dist: xenial
 
-sudo: true
+sudo: false
 
 matrix:
   include:
@@ -45,6 +45,14 @@ addons:
     packages:
       - mono-devel
       - ca-certificates-mono
+      - software-properties-common
+      - gcc-multilib
+      - g++-multilib
+      - gfortran
+      - libgfortran3:i386
+      - zlib1g:i386
+      - libglib2.0-dev
+      - clang
 
 before_install:
   - |
@@ -59,12 +67,6 @@ before_install:
       pyenv virtualenv venv
       source /Users/travis/.pyenv/versions/${PYTHON}/envs/venv/bin/activate
     fi
-  - |
-    if [ "$TRAVIS_OS_NAME" == "linux" ]; then
-      sudo apt update
-      sudo apt install software-properties-common build-essential g++ gcc-multilib g++-multilib gfortran libgfortran3:i386 zlib1g:i386 net-tools default-jre -y
-      sudo apt install libglib2.0-dev clang python3-pip python3-dev -y
-    fi
 
 install:
   - mono --version
@@ -77,8 +79,14 @@ install:
     if [ "$BUILD_PYTHONNET" == "true" ]; then
       git clone https://github.com/pythonnet/pythonnet.git
       cd pythonnet
-      sed -i 's/if not enable_shared:/#if not enable_shared:/' setup.py
-      sed -i 's/defines.append("PYTHON_WITHOUT_ENABLE_SHARED")/#defines.append("PYTHON_WITHOUT_ENABLE_SHARED")/' setup.py
+      if [ "$TRAVIS_OS_NAME" == "osx" ]; then
+        sed -i '' 's/if not enable_shared://' setup.py
+        sed -i '' 's/defines.append("PYTHON_WITHOUT_ENABLE_SHARED")//' setup.py
+      fi
+      if [ "$TRAVIS_OS_NAME" == "linux" ]; then
+        sed -i 's/if not enable_shared://' setup.py
+        sed -i 's/defines.append("PYTHON_WITHOUT_ENABLE_SHARED")//' setup.py
+      fi
       python setup.py bdist_wheel
       cd ..
       python -m pip install --no-index --find-links=./pythonnet/dist/ pythonnet
