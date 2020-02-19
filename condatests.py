@@ -244,7 +244,7 @@ def main(*args):
 
     executable = None if IS_WINDOWS else '/bin/bash'
     for name, path in test_envs.items():
-        print()
+        print('')
 
         if name.startswith(CREATE_ENV_PREFIX):
             path = create_env(name, all_envs['base'], args)
