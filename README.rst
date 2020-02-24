@@ -127,7 +127,7 @@ it is a COM library.
 
 If creating the `com` object in the previous command raises
 
-.. code-block:: python
+.. code-block:: console
 
    OSError: [WinError -2147417850] Cannot change thread mode after it is set
 
