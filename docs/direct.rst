@@ -109,6 +109,7 @@ The :ref:`dotnet_lib64 <dotnet-lib>` library contains a reference to the ``DotNe
    DotNetMSL <class 'CLR.ModuleObject'>
    StaticClass <class 'System.RuntimeType'>
    StringManipulation <class '.StringManipulation'>
+   System <class 'CLR.ModuleObject'>
 
 Create an instance of the ``BasicMath`` class in the ``DotNetMSL`` namespace and call the
 ``multiply_doubles`` method
@@ -135,28 +136,14 @@ Use the ``reverse_string`` method in the ``StringManipulation`` class to reverse
 
 .. code-block:: pycon
 
-   >>> net.lib.StringManipulation.reverse_string('abcdefghijklmnopqrstuvwxyz')
+   >>> net.lib.StringManipulation().reverse_string('abcdefghijklmnopqrstuvwxyz')
    'zyxwvutsrqponmlkjihgfedcba'
-
-View the static methods in the ``StaticClass`` class
-
-.. code-block:: pycon
-
-   >>> for method in net.lib.StaticClass.GetMethods():
-   ...     print(method)
-   ...
-   Int32 add_multiple(Int32, Int32, Int32, Int32, Int32)
-   System.String concatenate(System.String, System.String, System.String, Boolean, System.String)
-   System.String ToString()
-   Boolean Equals(System.Object)
-   Int32 GetHashCode()
-   System.Type GetType()
 
 Use the static ``add_multiple`` method in the ``StaticClass`` class to add five integers
 
 .. code-block:: pycon
 
-   >>> net.lib.StaticClass.GetMethod('add_multiple').Invoke(None, [1, 2, 3, 4, 5])
+   >>> net.lib.StaticClass.add_multiple(1, 2, 3, 4, 5)
    15
 
 Windows __stdcall

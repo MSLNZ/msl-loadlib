@@ -10,11 +10,6 @@ import pytest
 from msl import loadlib
 from msl.examples.loadlib import EXAMPLES_DIR, Point, FourPoints, NPoints
 
-if not (loadlib.IS_MAC and sys.version_info[:2] == (3, 8)):
-    # get fatal crash on MacOS & Python 3.8 when importing pythonnet
-    import clr
-    from System import Array, Double
-
 # fixes -> OSError: [WinError -2147417850] Cannot change thread mode after it is set
 # when importing comtypes
 sys.coinit_flags = 0
@@ -55,6 +50,7 @@ def test_load_failure_in_wrong_python_bitness():
         else:
             raise NotImplementedError
 
+    import clr
     suffix = '32' if loadlib.IS_PYTHON_64BIT else '64'
     check(os.path.join(EXAMPLES_DIR, 'cpp_lib'+suffix), 'cdll', OSError)
     check(os.path.join(EXAMPLES_DIR, 'fortran_lib'+suffix), 'cdll', OSError)
@@ -241,12 +237,12 @@ def test_dotnet():
         assert a * values[i] == pytest.approx(net_values[i])
 
     a1 = [[1., 2., 3.], [4., 5., 6.]]
-    m1 = Array.CreateInstance(Double, 2, 3)
+    m1 = net.lib.System.Array.CreateInstance(net.lib.System.Double, 2, 3)
     for r in range(2):
         for c in range(3):
             m1[r, c] = a1[r][c]
     a2 = [[1., 2.], [3., 4.], [5., 6.]]
-    m2 = Array.CreateInstance(Double, 3, 2)
+    m2 = net.lib.System.Array.CreateInstance(net.lib.System.Double, 3, 2)
     for r in range(3):
         for c in range(2):
             m2[r, c] = a2[r][c]
@@ -257,12 +253,10 @@ def test_dotnet():
     assert 49.0 == pytest.approx(net_mat[1][0])
     assert 64.0 == pytest.approx(net_mat[1][1])
 
-    assert 'dnalaeZ weN' == net.lib.StringManipulation.reverse_string('New Zealand')
-    assert 33 == net.lib.StaticClass.GetMethod('add_multiple').Invoke(None, [11, -22, 33, -44, 55])
-    values = ['the ', 'experiment ', 'worked ', False, 'temporarily']
-    assert 'the experiment worked ' == net.lib.StaticClass.GetMethod('concatenate').Invoke(None, values)
-    values = ['the ', 'experiment ', 'worked ', True, 'temporarily']
-    assert 'the experiment worked temporarily' == net.lib.StaticClass.GetMethod('concatenate').Invoke(None, values)
+    assert 'dnalaeZ weN' == net.lib.StringManipulation().reverse_string('New Zealand')
+    assert net.lib.StaticClass.add_multiple(11, -22, 33, -44, 55) == 33
+    assert net.lib.StaticClass.concatenate('a', 'b', 'c', False, 'd') == 'abc'
+    assert net.lib.StaticClass.concatenate('a', 'b', 'c', True, 'd') == 'abcd'
 
 
 @pytest.mark.skipif(
@@ -520,3 +514,45 @@ def test_issue8():
     # checks that Issue #8 is fixed
     bitness = '64' if loadlib.IS_PYTHON_64BIT else '32'
     loadlib.LoadLibrary(pathlib.Path(os.path.join(EXAMPLES_DIR, 'cpp_lib' + bitness)))
+
+
+@pytest.mark.skipif(
+    loadlib.IS_MAC and sys.version_info[:2] == (3, 8),
+    reason='get fatal crash on MacOS & Python 3.8 when importing pythonnet'
+)
+def test_dotnet_nested_namespace():
+    lib = loadlib.LoadLibrary('./tests/nested_namespaces/nested_namespaces.dll', 'clr').lib
+
+    from math import pi
+    assert lib.System.Math.PI == pytest.approx(pi)
+
+    assert lib.A.B.C.Klass().Message() == 'Hello from A.B.C.Klass().Message()'
+    assert lib.A.B.Klass().Message() == 'Hello from A.B.Klass().Message()'
+    assert lib.A.Klass().Message() == 'Hello from A.Klass().Message()'
+
+    assert lib.Messenger().Message() == 'Hello from Messenger.Message()'
+
+    assert lib.Foo.Bar.Baz('my custom message!').Message() == 'my custom message!'
+    assert lib.Foo.Bar.Baz('abc 123').message == 'abc 123'
+
+    # an enum in a namespace
+    assert lib.A.B.C.ErrorCode.Unknown == 0
+    assert lib.A.B.C.ErrorCode.ConnectionLost == 100
+    assert lib.A.B.C.ErrorCode.OutlierReading == 200
+
+    # an enum not in a namespace
+    assert lib.Season.Winter == 0
+    assert lib.Season.Spring == 1
+    assert lib.Season.Summer == 2
+    assert lib.Season.Autumn == 3
+
+    Subtracter = lib.A.B.C.Subtracter(8, 9)
+    assert Subtracter.x == 8
+    assert Subtracter.y == 9
+    assert Subtracter.Subtract() == -1
+
+    # Adder is not defined as a public class but can still be created
+    Adder = lib.System.Activator.CreateInstance(lib.Adder, [82, -27])
+    assert Adder.Add() == 55
+    assert Adder.x == 82
+    assert Adder.y == -27

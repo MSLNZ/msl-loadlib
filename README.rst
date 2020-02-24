@@ -96,7 +96,7 @@ in the ``'net'`` argument
 .. code-block:: pycon
 
    >>> net = LoadLibrary(EXAMPLES_DIR + '/dotnet_lib64.dll', 'net')
-   >>> net.lib.StringManipulation.reverse_string('abcdefghijklmnopqrstuvwxyz')
+   >>> net.lib.StringManipulation().reverse_string('abcdefghijklmnopqrstuvwxyz')
    'zyxwvutsrqponmlkjihgfedcba'
 
 Load `Java <https://github.com/MSLNZ/msl-loadlib/blob/master/msl/examples/loadlib/Trig.java>`_ byte code
@@ -119,11 +119,29 @@ To load a `Component Object Model`_ (COM) library pass in the library's Program 
 *NOTE: This example will only work on Windows.*
 
 Here we load the FileSystemObject_ library and include the ``'com'`` argument to indicate that
-it is a COM library. We then use the library to create, edit and close a text file
+it is a COM library.
 
 .. code-block:: pycon
 
    >>> com = LoadLibrary('Scripting.FileSystemObject', 'com')
+
+If creating the `com` object in the previous command raises
+
+.. code-block:: python
+
+   OSError: [WinError -2147417850] Cannot change thread mode after it is set
+
+then perform the following and try again
+
+.. code-block:: pycon
+
+   >>> import sys
+   >>> sys.coinit_flags = 0
+
+We then use the library to create, edit and close a text file
+
+.. code-block:: pycon
+
    >>> fp = com.lib.CreateTextFile('a_new_file.txt')
    >>> fp.WriteLine('This is a test')
    0

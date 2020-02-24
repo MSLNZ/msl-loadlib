@@ -47,7 +47,7 @@ However, the 64-bit version of the .NET library can be directly loaded in 64-bit
    >>> net = LoadLibrary(EXAMPLES_DIR + '/dotnet_lib64.dll', 'net')
    >>> net
    <LoadLibrary libtype=DotNet path=D:\msl\examples\loadlib\dotnet_lib64.dll>
-   >>> net.lib.StringManipulation.reverse_string('Hello World!')
+   >>> net.lib.StringManipulation().reverse_string('Hello World!')
    '!dlroW olleH'
 
 Instead, create a :class:`~msl.examples.loadlib.dotnet64.DotNet64` client to communicate

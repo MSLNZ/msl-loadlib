@@ -45,13 +45,13 @@ class DotNet32(Server32):
 
     def get_class_names(self):
         """Returns the class names in the library.
-        
+
         See the corresponding 64-bit :meth:`~.dotnet64.DotNet64.get_class_names` method.
-        
+
         Returns
         -------
         :class:`list` of :class:`str`
-            The names of the classes that are available in :ref:`dotnet_lib32.dll <dotnet-lib>`.        
+            The names of the classes that are available in :ref:`dotnet_lib32.dll <dotnet-lib>`.
         """
         return ';'.join(str(name) for name in self.assembly.GetTypes()).split(';')
 
@@ -251,13 +251,6 @@ class DotNet32(Server32):
 
         See the corresponding 64-bit :meth:`~.dotnet64.DotNet64.multiply_matrices` method.
 
-        Note
-        ----
-        The **CLR** package from `Python for .NET <https://pythonnet.github.io/>`_ contains
-        the `System <https://msdn.microsoft.com/en-us/library/system(v=vs.110).aspx>`_
-        namespace from the .NET Framework that is required to create and initialize a
-        2D matrix.
-
         Parameters
         ----------
         a1 : :class:`list` of :class:`list` of :class:`float`
@@ -270,11 +263,6 @@ class DotNet32(Server32):
         :class:`list` of :class:`list` of :class:`float`
              The result of `a1` * `a2`.
         """
-        # System is part of the clr package from Python for .NET.
-        # Therefore, until "import clr" has been performed the System module cannot be imported.
-        # The Server32 class imports clr and so we do not have to do it here.
-        from System import Array, Double
-
         nrows1 = len(a1)
         ncols1 = len(a1[0])
 
@@ -285,12 +273,12 @@ class DotNet32(Server32):
             msg = "Cannot multiply a {}x{} matrix with a {}x{} matrix"
             raise ValueError(msg.format(nrows1, ncols1, nrows2, ncols2))
 
-        m1 = Array.CreateInstance(Double, nrows1, ncols1)
+        m1 = self.lib.System.Array.CreateInstance(self.lib.System.Double, nrows1, ncols1)
         for r in range(nrows1):
             for c in range(ncols1):
                 m1[r, c] = a1[r][c]
 
-        m2 = Array.CreateInstance(Double, nrows2, ncols2)
+        m2 = self.lib.System.Array.CreateInstance(self.lib.System.Double, nrows2, ncols2)
         for r in range(nrows2):
             for c in range(ncols2):
                 m2[r, c] = a2[r][c]
@@ -324,7 +312,7 @@ class DotNet32(Server32):
         :class:`str`
             The string reversed.
         """
-        return self.lib.StringManipulation.reverse_string(original)
+        return self.lib.StringManipulation().reverse_string(original)
 
     def add_multiple(self, a, b, c, d, e):
         """Add multiple integers. *Calls a static method in a static class.*
@@ -358,7 +346,7 @@ class DotNet32(Server32):
         :class:`int`
             The sum of the input arguments.
         """
-        return self.lib.StaticClass.GetMethod('add_multiple').Invoke(None, [a, b, c, d, e])
+        return self.lib.StaticClass.add_multiple(a, b, c, d, e)
 
     def concatenate(self, a, b, c, d, e):
         """Concatenate strings. *Calls a static method in a static class.*
@@ -398,4 +386,4 @@ class DotNet32(Server32):
         :class:`str`
             The strings concatenated together.
         """
-        return self.lib.StaticClass.GetMethod('concatenate').Invoke(None, [a, b, c, d, e])
+        return self.lib.StaticClass.concatenate(a, b, c, d, e)

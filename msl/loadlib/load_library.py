@@ -258,7 +258,9 @@ class LoadLibrary(object):
             # don't include the library extension
             clr.AddReference(os.path.splitext(tail)[0])
 
-            # import namespaces, create instances of classes or reference a System.Type[] object
+            import System
+            dotnet = {'System': System}
+
             try:
                 types = self._assembly.GetTypes()
             except Exception as e:
@@ -267,19 +269,20 @@ class LoadLibrary(object):
                 for item in e.LoaderExceptions:
                     logger.error('  ' + item.Message)
             else:
-                dotnet = dict()
                 for t in types:
-                    if t.Namespace is not None:
-                        mod = __import__(t.Namespace)
-                        if mod.__name__ not in dotnet:
-                            dotnet[mod.__name__] = mod
-                    else:
-                        try:
-                            dotnet[t.Name] = self._assembly.CreateInstance(t.FullName)
-                        except:
-                            if t.Name not in dotnet:
-                                dotnet[t.Name] = t
-                self._lib = DotNet(dotnet, self._path)
+                    try:
+                        if t.Namespace:
+                            obj = __import__(t.Namespace)
+                        else:
+                            obj = getattr(__import__('clr'), t.Name)
+                    except:
+                        obj = t
+                        obj.__name__ = t.Name
+
+                    if obj.__name__ not in dotnet:
+                        dotnet[obj.__name__] = obj
+
+            self._lib = DotNet(dotnet, self._path)
 
         else:
             raise TypeError('Cannot load libtype={}'.format(libtype))
