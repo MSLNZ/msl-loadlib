@@ -18,7 +18,7 @@ except ImportError:
 from .exceptions import ConnectionTimeoutError
 from . import IS_MAC
 
-logger = logging.getLogger(__name__)
+logger = logging.getLogger(__package__)
 
 
 NET_FRAMEWORK_DESCRIPTION = """

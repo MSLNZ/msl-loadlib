@@ -5,12 +5,10 @@ import os
 import sys
 import ctypes
 import ctypes.util
-import logging
 import subprocess
 
 from . import utils, DEFAULT_EXTENSION, IS_PYTHON2
-
-logger = logging.getLogger(__name__)
+from .utils import logger
 
 _encoding = sys.getfilesystemencoding()
 
