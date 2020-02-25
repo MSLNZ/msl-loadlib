@@ -272,10 +272,10 @@ class LoadLibrary(object):
                         if t.Namespace:
                             obj = __import__(t.Namespace)
                         else:
-                            obj = getattr(__import__('clr'), t.Name)
+                            obj = getattr(__import__('clr'), t.FullName)
                     except:
                         obj = t
-                        obj.__name__ = t.Name
+                        obj.__name__ = t.FullName
 
                     if obj.__name__ not in dotnet:
                         dotnet[obj.__name__] = obj
