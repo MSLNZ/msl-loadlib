@@ -35,6 +35,19 @@
                     return x - y;
                 }
             }
+
+            public struct Point
+            {
+                public int X, Y;
+
+                public Point(int x, int y)
+                {
+                    X = x;
+                    Y = y;
+                }
+
+                public override string ToString() => $"Point<X={X}, Y={Y}>";
+            }
         }
         public class Klass
         {
@@ -105,4 +118,24 @@ public enum Season
     Spring,
     Summer,
     Autumn    
+}
+
+public struct Point
+{
+ 
+    public Point(int x, int y)
+    {
+        X = x;
+        Y = y;
+    }
+
+    public int X { get; }
+    public int Y { get; }
+
+}
+
+public struct StructWithoutConstructor
+{
+    public int X;
+    public int Y;
 }

@@ -556,3 +556,35 @@ def test_dotnet_nested_namespace():
     assert Adder.Add() == 55
     assert Adder.x == 82
     assert Adder.y == -27
+
+    # a struct in a nested namespace
+    point = lib.A.B.C.Point()
+    assert point.X == 0
+    assert point.Y == 0
+    assert point.ToString() == 'Point<X=0, Y=0>'
+    point.X = 73
+    point.Y = -21
+    assert point.ToString() == 'Point<X=73, Y=-21>'
+
+    point = lib.A.B.C.Point(-3, 54)
+    assert point.X == -3
+    assert point.Y == 54
+    assert point.ToString() == 'Point<X=-3, Y=54>'
+
+    # a struct not in a namespace
+    point = lib.Point()
+    assert point.X == 0
+    assert point.Y == 0
+
+    point = lib.Point(123, 456)
+    assert point.X == 123
+    assert point.Y == 456
+
+    # still need to create the instance in Python
+    StructWithoutConstructor = lib.StructWithoutConstructor()
+    assert StructWithoutConstructor.X == 0
+    assert StructWithoutConstructor.Y == 0
+    StructWithoutConstructor.X = 1
+    StructWithoutConstructor.Y = -1
+    assert StructWithoutConstructor.X == 1
+    assert StructWithoutConstructor.Y == -1
