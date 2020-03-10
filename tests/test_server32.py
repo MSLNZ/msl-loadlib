@@ -1,11 +1,12 @@
 # -*- coding: utf-8 -*-
 import os
 import math
+import tempfile
 
 import pytest
 
 from msl import loadlib
-from msl.loadlib import IS_MAC
+from msl.loadlib import IS_MAC, IS_WINDOWS
 from msl.examples.loadlib import Cpp64, Fortran64, Echo64, DotNet64, FourPoints
 
 c = None
@@ -214,3 +215,37 @@ def test_server32_error():
         assert e.name == 'TypeError'
         assert e.value.startswith('an integer is required')
         assert e.traceback.endswith('return self.lib.add(ctypes.c_int32(a), ctypes.c_int32(b))')
+
+
+@pytest.mark.skipif(not IS_WINDOWS, reason='comtypes is only supported on Windows')
+def test_ctypes_union_error():
+    # Changes to ctypes in Python 3.7.6 and 3.8.1 caused the following exception
+    #   TypeError: item 1 in _argtypes_ passes a union by value, which is unsupported.
+    # when loading some COM objects, see https://bugs.python.org/issue16575
+    #
+    # Want to make sure that the Python interpreter that the server32-windows.exe
+    # is running on does not raise this TypeError
+
+    class FileSystemObjectClient(loadlib.Client64):
+        def __init__(self):
+            super(FileSystemObjectClient, self).__init__(
+                module32='ctypes_union_error',
+                append_sys_path=os.path.dirname(__file__) + '/ctypes_union_error',
+            )
+
+        def __getattr__(self, method32):
+            def send(*args, **kwargs):
+                return self.request32(method32, *args, **kwargs)
+            return send
+
+    file_system = FileSystemObjectClient()
+    file_system.create_and_write('foo<bar<baz>>')
+    temp_file = file_system.get_temp_file()
+
+    with open(temp_file, mode='rt') as fp:
+        source = fp.read().strip()
+
+    assert source == 'foo<bar<baz>>'
+
+    os.remove(temp_file)
+    file_system.shutdown_server32()
