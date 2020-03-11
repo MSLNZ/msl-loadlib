@@ -50,11 +50,13 @@ def test_load_failure_in_wrong_python_bitness():
         else:
             raise NotImplementedError
 
-    import clr
     suffix = '32' if loadlib.IS_PYTHON_64BIT else '64'
     check(os.path.join(EXAMPLES_DIR, 'cpp_lib'+suffix), 'cdll', OSError)
     check(os.path.join(EXAMPLES_DIR, 'fortran_lib'+suffix), 'cdll', OSError)
-    check(os.path.join(EXAMPLES_DIR, 'dotnet_lib'+suffix), 'net', clr.System.BadImageFormatException)
+    if not loadlib.IS_LINUX and sys.version_info[:2] != (3, 8):
+        # mono encounters a fatal crash
+        import clr
+        check(os.path.join(EXAMPLES_DIR, 'dotnet_lib'+suffix), 'net', clr.System.BadImageFormatException)
 
 
 def test_cpp():
@@ -207,8 +209,8 @@ def test_fortran():
 
 
 @pytest.mark.skipif(
-    loadlib.IS_MAC and sys.version_info[:2] == (3, 8),
-    reason='get fatal crash on MacOS & Python 3.8 when importing pythonnet'
+    (loadlib.IS_LINUX or loadlib.IS_MAC) and sys.version_info[:2] == (3, 8),
+    reason='get fatal crash with mono & Python 3.8 when importing pythonnet'
 )
 def test_dotnet():
     bitness = '64' if loadlib.IS_PYTHON_64BIT else '32'
@@ -463,7 +465,7 @@ def test_unicode_path():
     str(cls)  # this should not raise an exception
     cls.gateway.shutdown()
 
-    if loadlib.IS_MAC and sys.version_info[:2] == (3, 8):
+    if (loadlib.IS_MAC or loadlib.IS_LINUX) and sys.version_info[:2] == (3, 8):
         # get fatal crash on MacOS & Python 3.8 when importing pythonnet
         pass
     else:
@@ -498,8 +500,8 @@ def test_unicode_path():
 
 
 @pytest.mark.skipif(
-    loadlib.IS_MAC and sys.version_info[:2] == (3, 8),
-    reason='get fatal crash on MacOS & Python 3.8 when importing pythonnet'
+    (loadlib.IS_MAC or loadlib.IS_LINUX) and sys.version_info[:2] == (3, 8),
+    reason='get fatal crash with mono and Python 3.8 when importing pythonnet'
 )
 def test_issue7():
     # checks that Issue #7 is fixed
@@ -517,8 +519,8 @@ def test_issue8():
 
 
 @pytest.mark.skipif(
-    loadlib.IS_MAC and sys.version_info[:2] == (3, 8),
-    reason='get fatal crash on MacOS & Python 3.8 when importing pythonnet'
+    (loadlib.IS_MAC or loadlib.IS_LINUX) and sys.version_info[:2] == (3, 8),
+    reason='get fatal crash with mono and Python 3.8 when importing pythonnet'
 )
 def test_dotnet_nested_namespace():
     lib = loadlib.LoadLibrary('./tests/nested_namespaces/nested_namespaces.dll', 'clr').lib
