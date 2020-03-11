@@ -1,5 +1,5 @@
 # Run this script using the server32 executable to see which standard library modules cannot be imported
-#   eg. server32-windows.exe -m path/to/check_server32_imports.py
+#   eg. server32-windows -m ..\..\tests\check_server32_imports.py
 #
 # The following error will be raised, but that's ok
 #
