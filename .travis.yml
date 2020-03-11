@@ -51,6 +51,8 @@ addons:
       - gfortran
       - libgfortran3
       - libgfortran3:i386
+      - lib32gfortran3
+      - libx32gfortran3
       - zlib1g:i386
       - libglib2.0-dev
       - clang
