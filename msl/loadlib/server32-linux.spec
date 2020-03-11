@@ -1,6 +1,6 @@
 # -*- mode: python ; coding: utf-8 -*-
 
-# Created using Python 3.7.5 and PyInstaller 3.6
+# Created using Python 3.7.7 and PyInstaller 3.6
 
 block_cipher = None
 
