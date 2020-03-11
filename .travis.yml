@@ -49,6 +49,7 @@ addons:
       - gcc-multilib
       - g++-multilib
       - gfortran
+      - libgfortran3
       - libgfortran3:i386
       - zlib1g:i386
       - libglib2.0-dev
