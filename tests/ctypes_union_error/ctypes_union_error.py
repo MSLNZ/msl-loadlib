@@ -20,6 +20,7 @@ class FileSystemObjectServer(Server32):
         # are available to Client64 to import are also be available to Server32.
         # Therefore, we won't want this test to fail because the Python
         # environment that is running Client64 has numpy installed.
+        # (This only appeared to be an issue when Client64 runs on Python 3.5)
         for index, item in enumerate(sys.path):
             if item.endswith('site-packages'):
                 sys.path.pop(index)
