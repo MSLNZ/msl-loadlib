@@ -33,7 +33,8 @@ and the directory where the example libraries are located
    >>> from msl.examples.loadlib import EXAMPLES_DIR
 
 .. tip::
-   If the file extension is not specified then a default extension, ``.dll`` (Windows) or ``.so`` (Linux), is used.
+   If the file extension is not specified then a default extension, ``.dll`` (Windows), ``.so`` (Linux)
+   or ``.dylib`` (macOS) is used.
 
 C++
 ---
@@ -83,7 +84,7 @@ Microsoft .NET Framework
 ------------------------
 Load a 64-bit C# library (a .NET Framework) in 64-bit Python, see :ref:`here <dotnet-lib>`
 for the source code. Include the ``'net'`` argument to indicate that the ``.dll`` file is for
-the .NET Framework (``'clr'`` is an alias for ``'net'`` and can also be passed in as an argument).
+the .NET Framework (``'clr'`` is an alias for ``'net'`` and can be used as the `libtype`).
 *To load the 32-bit version in 32-bit Python use* ``'dotnet_lib32.dll'``.
 
 .. code-block:: pycon
@@ -379,14 +380,14 @@ We can then use the library to create, edit and close a text file
 
 .. tip::
 
-   If you are importing comtypes_ and you get the following error
+   If you are loading a COM library and you get the following error
 
-   .. code-block:: python
+   .. code-block:: console
 
       OSError: [WinError -2147417850] Cannot change thread mode after it is set
 
-   then you can eliminate this error by setting ``sys.coinit_flags = 0`` before
-   importing comtypes_
+   then you can remove this error by setting ``sys.coinit_flags = 0`` before
+   loading the library
 
    For example,
 
@@ -394,10 +395,9 @@ We can then use the library to create, edit and close a text file
 
       import sys
       sys.coinit_flags = 0
+      com = LoadLibrary('Scripting.FileSystemObject', 'com')
 
-      import comtypes
 
 .. _JVM: https://en.wikipedia.org/wiki/Java_virtual_machine
 .. _FileSystemObject: https://docs.microsoft.com/en-us/office/vba/language/reference/user-interface-help/filesystemobject-object
-.. _comtypes: https://pythonhosted.org/comtypes/#
 .. _Component Object Model: https://en.wikipedia.org/wiki/Component_Object_Model
