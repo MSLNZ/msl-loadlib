@@ -131,9 +131,9 @@ class Server32(HTTPServer):
         --------
         ::
 
-            >>> from msl.loadlib import Server32
+            >>> from msl.loadlib import Server32  # doctest: +SKIP
             >>> Server32.version()  # doctest: +SKIP
-            'Python 3.7.3 (v3.7.3:ef4ec6ed12, Mar 25 2019, 21:26:53) [MSC v.1916 32 bit (Intel)]'
+            'Python 3.7.7 (tags/v3.7.7:d7c567b08f, Mar 10 2020, 09:44:33) [MSC v.1900 32 bit (Intel)]'
 
         Note
         ----
@@ -155,7 +155,7 @@ class Server32(HTTPServer):
         --------
         ::
 
-            >>> from msl.loadlib import Server32
+            >>> from msl.loadlib import Server32  # doctest: +SKIP
             >>> Server32.interactive_console()  # doctest: +SKIP
         """
         exe = os.path.join(os.path.dirname(__file__), SERVER_FILENAME)
