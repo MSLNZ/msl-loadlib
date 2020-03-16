@@ -101,9 +101,7 @@ public class StringManipulation
 
 }
 
-// A static class cannot be initiated and therefore the object is available in
-// Python as a System.RuntimeType object.
-// see: https://msdn.microsoft.com/en-us/library/system.type(v=vs.110).aspx
+// A static class
 public static class StaticClass
 {
 
