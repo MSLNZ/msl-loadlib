@@ -228,7 +228,7 @@ class Client64(object):
     @property
     def lib32_path(self):
         """The path to the 32-bit library.
-        
+
         Returns
         -------
         :class:`str`
@@ -286,7 +286,7 @@ class Client64(object):
 
     def shutdown_server32(self, kill_timeout=10):
         """Shutdown the 32-bit server.
-        
+
         This method shuts down the 32-bit server, closes the client connection
         and it deletes the temporary file that is used to save the serialized
         :mod:`pickle`\'d data.
