@@ -46,7 +46,7 @@ However, the 64-bit version of the .NET library can be directly loaded in 64-bit
 
    >>> net = LoadLibrary(EXAMPLES_DIR + '/dotnet_lib64.dll', 'net')
    >>> net
-   <LoadLibrary libtype=DotNet path=D:\msl\examples\loadlib\dotnet_lib64.dll>
+   <LoadLibrary libtype=DotNet path=...\dotnet_lib64.dll>
    >>> net.lib.StringManipulation().reverse_string('Hello World!')
    '!dlroW olleH'
 
@@ -58,9 +58,9 @@ with the 32-bit :ref:`dotnet_lib32.dll <dotnet-lib>` library:
    >>> from msl.examples.loadlib import DotNet64
    >>> dn = DotNet64()
    >>> dn
-   <DotNet64 lib=dotnet_lib32.dll address=127.0.0.1:11051>
+   <DotNet64 lib=dotnet_lib32.dll address=127.0.0.1:...>
    >>> dn.lib32_path
-   'D:\\msl\\examples\\loadlib\\dotnet_lib32.dll'
+   '...\dotnet_lib32.dll'
 
 Get the names of the classes in the .NET library module, see
 :meth:`~msl.examples.loadlib.dotnet64.DotNet64.get_class_names`:

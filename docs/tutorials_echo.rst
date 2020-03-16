@@ -42,7 +42,7 @@ Or, by using an interactive console, create a :class:`~msl.examples.loadlib.echo
 
    >>> from msl.examples.loadlib import Echo64
    >>> echo = Echo64()
-   Client running on 3.5.2 |Continuum Analytics, Inc.| (default, Jul  5 2016, 11:41:13) [MSC v.1900 64 bit (AMD64)]
+   Client running on 3.6.10 |Anaconda, Inc.| (default, Jan  7 2020, 15:18:16) [MSC v.1916 64 bit (AMD64)]
 
 Send a boolean as an argument, see :meth:`~msl.examples.loadlib.echo64.Echo64.send_data`:
 
@@ -81,8 +81,8 @@ Shutdown the server when you are done communicating with the 32-bit library, see
 .. code-block:: pycon
 
    >>> echo.shutdown_server32()
-   Python 3.5.2 |Continuum Analytics, Inc.| (default, Jul  5 2016, 11:45:57) [MSC v.1900 32 bit (Intel)]
-   Serving cpp_lib32.dll on http://127.0.0.1:25521
+   Python 3.7.7 (tags/v3.7.7:d7c567b08f, Mar 10 2020, 09:44:33) [MSC v.1900 32 bit (Intel)]
+   Serving cpp_lib32.dll on http://127.0.0.1:...
    The 32-bit server received these args:
         <class 'bool'> True
    The 32-bit server received these args:
@@ -100,7 +100,7 @@ Shutdown the server when you are done communicating with the 32-bit library, see
    The 32-bit server received these kwargs:
        x: <class 'bool'> True
        y: <class 'str'> hello world!
-   Stopped http://127.0.0.1:25521
+   Stopped http://127.0.0.1:...
 
 .. note::
    The server will automatically shutdown when the :class:`~msl.examples.loadlib.echo64.Echo64`

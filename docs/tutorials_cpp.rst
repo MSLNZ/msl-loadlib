@@ -47,7 +47,7 @@ However, the 64-bit version of the C++ library can be directly loaded in 64-bit 
 
    >>> cpp64 = LoadLibrary(EXAMPLES_DIR + '/cpp_lib64')
    >>> cpp64
-   <LoadLibrary libtype=CDLL path=D:\msl\examples\loadlib\cpp_lib64.dll>
+   <LoadLibrary libtype=CDLL path=...\cpp_lib64.dll>
    >>> cpp64.lib.add(3, 14)
    17
 
@@ -59,9 +59,9 @@ Instead, create a :class:`~msl.examples.loadlib.cpp64.Cpp64` client to communica
    >>> from msl.examples.loadlib import Cpp64
    >>> cpp = Cpp64()
    >>> cpp
-   <Cpp64 lib=cpp_lib32.dll address=127.0.0.1:63238>
+   <Cpp64 lib=cpp_lib32.dll address=127.0.0.1:...>
    >>> cpp.lib32_path
-   'D:\\msl\\examples\\loadlib\\cpp_lib32.dll'
+   '...\cpp_lib32.dll'
 
 Add two integers, see :meth:`~msl.examples.loadlib.cpp64.Cpp64.add`:
 

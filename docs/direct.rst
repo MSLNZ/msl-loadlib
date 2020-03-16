@@ -44,9 +44,9 @@ Load a 64-bit C++ library in 64-bit Python, see :ref:`here <cpp-lib>` for the so
 
    >>> cpp = LoadLibrary(EXAMPLES_DIR + '/cpp_lib64')
    >>> cpp
-   <LoadLibrary libtype=CDLL path=D:\msl\examples\loadlib\cpp_lib64.dll>
+   <LoadLibrary libtype=CDLL path=...\cpp_lib64.dll>
    >>> cpp.lib
-   <CDLL 'D:\msl\examples\loadlib\cpp_lib64.dll', handle 6f920000 at 0x3e92f90>
+   <CDLL '...\cpp_lib64.dll', handle ... at ...>
 
 Call the ``add`` function that calculates the sum of two integers
 
@@ -64,9 +64,9 @@ Load a 64-bit FORTRAN library in 64-bit Python, see :ref:`here <fortran-lib>` fo
 
    >>> fortran = LoadLibrary(EXAMPLES_DIR + '/fortran_lib64')
    >>> fortran
-   <LoadLibrary libtype=CDLL path=D:\msl\examples\loadlib\fortran_lib64.dll>
+   <LoadLibrary libtype=CDLL path=...\fortran_lib64.dll>
    >>> fortran.lib
-   <CDLL 'D:\msl\examples\loadlib\fortran_lib64.dll', handle 6f660000 at 0x2e5d470>
+   <CDLL '...\fortran_lib64.dll', handle ... at ...>
 
 Call the ``factorial`` function. With a FORTRAN library you must pass values by reference using :mod:`ctypes`,
 and, since the returned value is not of type :class:`ctypes.c_int` we must configure :mod:`ctypes` for a value
@@ -90,11 +90,11 @@ the .NET Framework (``'clr'`` is an alias for ``'net'`` and can also be passed i
 
    >>> net = LoadLibrary(EXAMPLES_DIR + '/dotnet_lib64.dll', 'net')
    >>> net
-   <LoadLibrary libtype=DotNet path=D:\msl\examples\loadlib\dotnet_lib64.dll>
+   <LoadLibrary libtype=DotNet path=...\dotnet_lib64.dll>
    >>> net.assembly
-   <System.Reflection.RuntimeAssembly object at 0x03099330>
+   <System.Reflection.RuntimeAssembly object at ...>
    >>> net.lib
-   <DotNet path=D:\msl\examples\loadlib\dotnet_lib64.dll>
+   <DotNet path=...\dotnet_lib64.dll>
 
 The :ref:`dotnet_lib64 <dotnet-lib>` library contains a reference to the ``DotNetMSL`` module
 (which is a C# namespace), an instance of the ``StringManipulation`` class and a reference to the
@@ -107,8 +107,8 @@ The :ref:`dotnet_lib64 <dotnet-lib>` library contains a reference to the ``DotNe
    ...         print(item, type(getattr(net.lib, item)))
    ...
    DotNetMSL <class 'CLR.ModuleObject'>
-   StaticClass <class 'System.RuntimeType'>
-   StringManipulation <class '.StringManipulation'>
+   StaticClass <class 'CLR.CLR Metatype'>
+   StringManipulation <class 'CLR.CLR Metatype'>
    System <class 'CLR.ModuleObject'>
 
 Create an instance of the ``BasicMath`` class in the ``DotNetMSL`` namespace and call the
@@ -128,7 +128,7 @@ Create an instance of the ``ArrayManipulation`` class in the ``DotNetMSL`` names
    >>> am = net.lib.DotNetMSL.ArrayManipulation()
    >>> values = am.scalar_multiply(2., [1., 2., 3., 4., 5.])
    >>> values
-   <System.Double[] object at 0x00000000040BB2E8>
+   <System.Double[] object at ...>
    >>> [val for val in values]
    [2.0, 4.0, 6.0, 8.0, 10.0]
 
@@ -158,7 +158,7 @@ Load a 32-bit Windows ``__stdcall`` library in 32-bit Python, see
    >>> kernel
    <LoadLibrary libtype=WinDLL path=C:\Windows\SysWOW64\kernel32.dll>
    >>> kernel.lib
-   <WinDLL 'C:\Windows\SysWOW64\kernel32.dll', handle 76e70000 at 0x2e63570>
+   <WinDLL 'C:\Windows\SysWOW64\kernel32.dll', handle ... at ...>
    >>> from msl.examples.loadlib.kernel32 import SystemTime
    >>> st = SystemTime()
    >>> from ctypes import pointer
@@ -183,9 +183,9 @@ Load a 64-bit LabVIEW library in 64-bit Python, see :ref:`here <labview-lib>` fo
 
    >>> labview = LoadLibrary(EXAMPLES_DIR + '/labview_lib64.dll')
    >>> labview
-   <LoadLibrary libtype=CDLL path=D:\msl\examples\loadlib\labview_lib64.dll>
+   <LoadLibrary libtype=CDLL path=...\labview_lib64.dll>
    >>> labview.lib
-   <CDLL 'D:\msl\examples\loadlib\labview_lib64.dll', handle 2a920020 at 0x7e32b77>
+   <CDLL '...\labview_lib64.dll', handle ... at ...>
 
 Create some data to calculate the mean, variance and standard deviation of
 
@@ -237,9 +237,9 @@ Load a Java archive, a ``.jar`` file, in a JVM_, see :ref:`here <java-lib-jar>` 
 
    >>> jar = LoadLibrary(EXAMPLES_DIR + '/java_lib.jar')
    >>> jar
-   <LoadLibrary libtype=JVMView path=D:\msl\examples\loadlib\java_lib.jar>
+   <LoadLibrary libtype=JVMView path=...\java_lib.jar>
    >>> jar.gateway
-   <py4j.java_gateway.JavaGateway object at 0x000002061A4524E0>
+   <py4j.java_gateway.JavaGateway object at ...>
 
 The Java archive contains a ``nz.msl.examples`` package with two classes, ``MathUtils`` and ``Matrix``
 
@@ -324,9 +324,9 @@ Load Java byte code, a ``.class`` file, in a JVM_, see :ref:`here <java-lib-clas
 
    >>> cls = LoadLibrary(EXAMPLES_DIR + '/Trig.class')
    >>> cls
-   <LoadLibrary libtype=JVMView path=D:\msl\examples\loadlib\Trig.class>
+   <LoadLibrary libtype=JVMView path=...\Trig.class>
    >>> cls.lib
-   <py4j.java_gateway.JVMView object at 0x0000000003A89898>
+   <py4j.java_gateway.JVMView object at ...>
 
 The Java library contains a ``Trig`` class, which calculates various trigonometric quantities
 
@@ -334,7 +334,7 @@ The Java library contains a ``Trig`` class, which calculates various trigonometr
 
    >>> Trig = cls.lib.Trig
    >>> Trig
-   <py4j.java_gateway.JavaClass object at 0x00000000038EA6A0>
+   <py4j.java_gateway.JavaClass object at ...>
    >>> Trig.cos(1.2)
    0.3623577544766736
    >>> Trig.asin(0.6)
