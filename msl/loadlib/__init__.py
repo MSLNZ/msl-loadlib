@@ -34,6 +34,7 @@ IS_PYTHON2 = sys.version_info.major == 2
 IS_PYTHON3 = sys.version_info.major == 3
 """:class:`bool`: Whether Python 3.x is being used."""
 
+# if these values are changed then remember to update setup.py
 if IS_WINDOWS:
     SERVER_FILENAME = 'server32-windows.exe'
     DEFAULT_EXTENSION = '.dll'
