@@ -16,7 +16,7 @@ _v = re.search(r'(\d+)\.(\d+)\.(\d+)[.-]?(.*)', __version__).groups()
 version_info = namedtuple('version_info', 'major minor micro releaselevel')(int(_v[0]), int(_v[1]), int(_v[2]), _v[3])
 """:obj:`~collections.namedtuple`: Contains the version information as a (major, minor, micro, releaselevel) tuple."""
 
-IS_WINDOWS = sys.platform in ['win32', 'cygwin']
+IS_WINDOWS = sys.platform == 'win32'
 """:class:`bool`: Whether the operating system is Windows."""
 
 IS_LINUX = sys.platform.startswith('linux')

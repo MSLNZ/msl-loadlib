@@ -129,7 +129,7 @@ def get_version():
     return init_version + '+' + suffix
 
 
-IS_WINDOWS = sys.platform in ['win32', 'cygwin']
+IS_WINDOWS = sys.platform == 'win32'
 
 # auto generate the MANIFEST.in file depending on the distribution that is being built
 if 'bdist_wheel' in sys.argv and 'sdist' in sys.argv:
