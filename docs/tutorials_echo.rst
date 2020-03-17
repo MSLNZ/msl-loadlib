@@ -25,14 +25,58 @@ The following is a script that illustrates that the data types are preserved:
    echo.send_data(x=[1.2, 3.4, 6.1], y=[43.2, 23.6, 12.7])
    echo.send_data(1.12345, {'my list': [1, 2, 3, 4]}, 0.2j, range(10), x=True, y='hello world!')
 
-Running this script would create the following output. The black text corresponds to the
-:class:`~msl.examples.loadlib.echo64.Echo64` :func:`print` statements and the red text to
-the :class:`~msl.examples.loadlib.echo32.Echo32` :func:`print` statements.
+Running this script would create the following output.
 
-.. image:: _static/echo_output.png
+This output corresponds to the :func:`print` statements in :class:`~msl.examples.loadlib.echo64.Echo64`
+
+.. code-block:: console
+
+    Client running on 3.8.1 (default, Mar  2 2020, 13:06:26) [MSC v.1916 64 bit (AMD64)]
+    Are the 64- and 32-bit arguments equal? True
+        <class 'bool'> True
+    Are the 64- and 32-bit arguments equal? True
+        <class 'list'> [1, 2, 3, 4, 5, 6]
+    Are the 64- and 32-bit keyword arguments equal? True
+        data: <class 'str'> my string
+    Are the 64- and 32-bit keyword arguments equal? True
+        x: <class 'list'> [1.2, 3.4, 6.1]
+        y: <class 'list'> [43.2, 23.6, 12.7]
+    Are the 64- and 32-bit arguments equal? True
+        <class 'float'> 1.12345
+        <class 'dict'> {'my list': [1, 2, 3, 4]}
+        <class 'complex'> 0.2j
+        <class 'range'> range(0, 10)
+    Are the 64- and 32-bit keyword arguments equal? True
+        x: <class 'bool'> True
+        y: <class 'str'> hello world!
+
+and this output is from the :func:`print` statements in :class:`~msl.examples.loadlib.echo32.Echo32`
+
+.. code-block:: console
+
+    Python 3.7.7 (tags/v3.7.7:d7c567b08f, Mar 10 2020, 09:44:33) [MSC v.1900 32 bit (Intel)]
+    Serving 'cpp_lib32.dll' on http://127.0.0.1:52695
+    The 32-bit server received these args:
+        <class 'bool'> True
+    The 32-bit server received these args:
+        <class 'list'> [1, 2, 3, 4, 5, 6]
+    The 32-bit server received these kwargs:
+        data: <class 'str'> my string
+    The 32-bit server received these kwargs:
+        x: <class 'list'> [1.2, 3.4, 6.1]
+        y: <class 'list'> [43.2, 23.6, 12.7]
+    The 32-bit server received these args:
+        <class 'float'> 1.12345
+        <class 'dict'> {'my list': [1, 2, 3, 4]}
+        <class 'complex'> 0.2j
+        <class 'range'> range(0, 10)
+    The 32-bit server received these kwargs:
+        x: <class 'bool'> True
+        y: <class 'str'> hello world!
+    Stopped http://127.0.0.1:52695
 
 Observant readers will notice that the 32-bit server indicated that it is
-*Serving cpp_lib32.dll on http://127.0.0.1:2521*. Even though this is an *echo* example, a library must
+*Serving cpp_lib32.dll on http://127.0.0.1:52695*. Even though this is an *echo* example, a library must
 still be loaded even though it is not being called. The *cpp_lib32.dll* library is loaded to satisfy
 this requirement.
 
@@ -42,7 +86,7 @@ Or, by using an interactive console, create a :class:`~msl.examples.loadlib.echo
 
    >>> from msl.examples.loadlib import Echo64
    >>> echo = Echo64()
-   Client running on 3.6.10 |Anaconda, Inc.| (default, Jan  7 2020, 15:18:16) [MSC v.1916 64 bit (AMD64)]
+   Client running on 3.8.1 (default, Mar  2 2020, 13:06:26) [MSC v.1916 64 bit (AMD64)]
 
 Send a boolean as an argument, see :meth:`~msl.examples.loadlib.echo64.Echo64.send_data`:
 

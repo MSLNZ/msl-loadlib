@@ -13,10 +13,10 @@ then you can directly load the library using :class:`~msl.loadlib.load_library.L
 
 All of the shared libraries in the following examples are included with the **MSL-LoadLib** package.
 The :ref:`C++ <cpp-lib>` and :ref:`FORTRAN <fortran-lib>` libraries have been compiled in 32-
-and 64-bit Windows and Linux, using *g++* and *gfortran* respectively. The :ref:`.NET <dotnet-lib>`
-library was complied to 32 and 64 bit using Microsoft Visual Studio. The
+and 64-bit Windows and Linux and in 64-bit macOS. The :ref:`.NET <dotnet-lib>` library was complied
+in 32- and 64-bit using Microsoft Visual Studio 2017. The
 `kernel32 <https://www.geoffchappell.com/studies/windows/win32/kernel32/api/>`_ library is a 32-bit
-library and it is only valid on Windows, since it uses the ``__stdcall`` calling convention.
+library and it is only valid on Windows (since it uses the ``__stdcall`` calling convention).
 The :ref:`LabVIEW <labview-lib>` library was built using 32- and 64-bit LabVIEW on Windows.
 The :ref:`Java <java-lib>` libraries are platform and bitness independent since they run in the JVM_.
 
@@ -84,7 +84,7 @@ Microsoft .NET Framework
 ------------------------
 Load a 64-bit C# library (a .NET Framework) in 64-bit Python, see :ref:`here <dotnet-lib>`
 for the source code. Include the ``'net'`` argument to indicate that the ``.dll`` file is for
-the .NET Framework (``'clr'`` is an alias for ``'net'`` and can be used as the `libtype`).
+the .NET Framework (NOTE: ``'clr'`` is an alias for ``'net'`` and can also be used as the `libtype`).
 *To load the 32-bit version in 32-bit Python use* ``'dotnet_lib32.dll'``.
 
 .. code-block:: pycon
@@ -98,8 +98,8 @@ the .NET Framework (``'clr'`` is an alias for ``'net'`` and can be used as the `
    <DotNet path=...\dotnet_lib64.dll>
 
 The :ref:`dotnet_lib64 <dotnet-lib>` library contains a reference to the ``DotNetMSL`` module
-(which is a C# namespace), an instance of the ``StringManipulation`` class and a reference to the
-``StaticClass`` class
+(which is a C# namespace), the ``StaticClass`` class, the ``StringManipulation`` class and the
+System_ namespace
 
 .. code-block:: pycon
 
@@ -160,14 +160,14 @@ Load a 32-bit Windows ``__stdcall`` library in 32-bit Python, see
    <LoadLibrary libtype=WinDLL path=C:\Windows\SysWOW64\kernel32.dll>
    >>> kernel.lib
    <WinDLL 'C:\Windows\SysWOW64\kernel32.dll', handle ... at ...>
+   >>> from ctypes import pointer
    >>> from msl.examples.loadlib.kernel32 import SystemTime
    >>> st = SystemTime()
-   >>> from ctypes import pointer
    >>> ret = kernel.lib.GetLocalTime(pointer(st))
    >>> '{}-{}-{} {}:{}:{}'.format(st.wYear, st.wMonth, st.wDay, st.wHour, st.wMinute, st.wSecond)
-   '2017-2-27 17:12:19'
+   '2020-3-17 13:12:19'
 
-See :ref:`here <tutorial_stdcall>` for how to communicate with ``kernel32.dll`` from 64-bit Python.
+See :ref:`here <tutorial_stdcall>` for an example on how to communicate with ``kernel32.dll`` from 64-bit Python.
 
 LabVIEW
 -------
@@ -401,3 +401,4 @@ We can then use the library to create, edit and close a text file
 .. _JVM: https://en.wikipedia.org/wiki/Java_virtual_machine
 .. _FileSystemObject: https://docs.microsoft.com/en-us/office/vba/language/reference/user-interface-help/filesystemobject-object
 .. _Component Object Model: https://en.wikipedia.org/wiki/Component_Object_Model
+.. _System: https://docs.microsoft.com/en-us/dotnet/api/system

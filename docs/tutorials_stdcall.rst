@@ -21,9 +21,9 @@ Python interpreter:
    >>> k = LoadLibrary('C:/Windows/SysWOW64/kernel32.dll', 'windll')
    Traceback (most recent call last):
      File "<input>", line 1, in <module>
-     File "D:\msl\loadlib\load_library.py", line 111, in __init__
+     File "...\msl\loadlib\load_library.py", line 150, in __init__
        self._lib = ctypes.WinDLL(self._path)
-     File "C:\Miniconda3\lib\ctypes\__init__.py", line 348, in __init__
+     File "...\ctypes\__init__.py", line 348, in __init__
        self._handle = _dlopen(self._name, mode)
    OSError: [WinError 193] %1 is not a valid Win32 application
 
@@ -45,7 +45,7 @@ Call the library to get the current date and time, see
 .. code-block:: pycon
 
    >>> k.get_local_time()
-   datetime.datetime(2017, 2, 3, 16, 37, 5, 351000)
+   datetime.datetime(2020, 3, 17, 15, 37, 5, 351000)
 
 Shutdown the server, see :meth:`~msl.loadlib.client64.Client64.shutdown_server32`:
 

@@ -16,7 +16,7 @@ This example shows how to access a 32-bit .NET library from a module that is run
 
 .. tip::
    The `JetBrains dotPeek <https://www.jetbrains.com/decompiler/>`_ program can be used
-   to reliably decompile any .NET assembly into the equivalent C# source code. For example,
+   to reliably decompile a .NET assembly into the equivalent C# source code. For example,
    *peeking* inside the :ref:`dotnet_lib32.dll <dotnet-lib>` library, that the
    :class:`~msl.examples.loadlib.dotnet32.DotNet32` class is a wrapper around, gives
 
@@ -34,7 +34,7 @@ be loaded in a 64-bit Python interpreter:
    >>> net = LoadLibrary(EXAMPLES_DIR + '/dotnet_lib32.dll', 'net')
    Traceback (most recent call last):
      File "<input>", line 1, in <module>
-     File "D:\msl\loadlib\load_library.py", line 130, in __init__
+     File "...\msl\loadlib\load_library.py", line 230, in __init__
        self._assembly = clr.System.Reflection.Assembly.LoadFile(self._path)
    System.BadImageFormatException: Could not load file or assembly 'dotnet_lib32.dll' or one of its dependencies.  is not a valid Win32 application. (Exception from HRESULT: 0x800700C1)
       at System.Reflection.RuntimeAssembly.nLoadFile(String path, Evidence evidence)

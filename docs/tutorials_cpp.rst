@@ -35,9 +35,9 @@ cannot be loaded in a 64-bit Python interpreter:
    >>> cpp = LoadLibrary(EXAMPLES_DIR + '/cpp_lib32')
    Traceback (most recent call last):
      File "<input>", line 1, in <module>
-     File "D:\msl\loadlib\load_library.py", line 109, in __init__
+     File "...\msl\loadlib\load_library.py", line 148, in __init__
        self._lib = ctypes.CDLL(self._path)
-     File "C:\Miniconda3\lib\ctypes\__init__.py", line 348, in __init__
+     File "...\ctypes\__init__.py", line 348, in __init__
        self._handle = _dlopen(self._name, mode)
    OSError: [WinError 193] %1 is not a valid Win32 application
 
