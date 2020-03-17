@@ -12,7 +12,14 @@ Version 0.7.0.dev0
 
 * Changed
 
-  - renamed ``utils.port_in_use()`` to ``utils.is_port_in_use()`` and added support for macOS
+  - the frozen server32 executable (for Windows/Linux) uses Python 3.7.7 and Python.NET 2.4.0
+  - use ``__package__`` as the logger name
+  - renamed ``utils.port_in_use()`` to ``utils.is_port_in_use()`` and added support for
+    checking the status of a port in macOS
+  - changes to how a .NET library is loaded:
+
+      + include the System namespace by default
+      + do not automatically create the class instance
 
 * Removed
 
