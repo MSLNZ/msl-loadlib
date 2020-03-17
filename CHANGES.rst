@@ -5,6 +5,10 @@ Changelog
 Version 0.7.1.dev0
 ==================
 
+* Removed
+
+  - ``'cygwin'`` from the :obj:`~msl.loadlib.IS_WINDOWS` check
+
 
 Version 0.7.0 (2020.03.17)
 ==========================
@@ -16,14 +20,13 @@ Version 0.7.0 (2020.03.17)
 
 * Changed
 
-  - the frozen server32 executable (for Windows/Linux) uses Python 3.7.7 and Python.NET 2.4.0
+  - the frozen server32 executable uses Python 3.7.7 (Windows and Linux), pythonnet 2.4.0 (Windows and Linux)
+    and comtypes 1.1.7 (Windows)
   - use ``__package__`` as the logger name
-  - renamed ``utils.port_in_use()`` to ``utils.is_port_in_use()`` and added support for
+  - renamed ``port_in_use()`` to :obj:`~msl.loadlib.utils.is_port_in_use()` and added support for
     checking the status of a port in macOS
-  - changes to how a .NET library is loaded:
-
-      + include the System namespace by default
-      + do not automatically create the class instance
+  - changes to how a .NET library is loaded: include the System namespace by default,
+    do not automatically create a class instance
 
 * Removed
 
