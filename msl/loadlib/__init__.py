@@ -17,13 +17,13 @@ version_info = namedtuple('version_info', 'major minor micro releaselevel')(int(
 """:obj:`~collections.namedtuple`: Contains the version information as a (major, minor, micro, releaselevel) tuple."""
 
 IS_WINDOWS = sys.platform in ['win32', 'cygwin']
-""":class:`bool`: Whether the Operating System is Windows."""
+""":class:`bool`: Whether the operating system is Windows."""
 
 IS_LINUX = sys.platform.startswith('linux')
-""":class:`bool`: Whether the Operating System is Linux."""
+""":class:`bool`: Whether the operating system is Linux."""
 
 IS_MAC = sys.platform == 'darwin'
-""":class:`bool`: Whether the Operating System is Mac OS X."""
+""":class:`bool`: Whether the operating system is macOS."""
 
 IS_PYTHON_64BIT = sys.maxsize > 2 ** 32
 """:class:`bool`: Whether the Python interpreter is 64-bits."""
