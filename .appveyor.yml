@@ -20,9 +20,9 @@ environment:
     - PYTHON: C:\Python37-x64
       BUILD_PYTHONNET: "false"
     - PYTHON: C:\Python38
-      BUILD_PYTHONNET: "true"
+      BUILD_PYTHONNET: "false"
     - PYTHON: C:\Python38-x64
-      BUILD_PYTHONNET: "true"
+      BUILD_PYTHONNET: "false"
 
 install:
   - set PATH=%PYTHON%;%PYTHON%\Scripts;%PATH%
