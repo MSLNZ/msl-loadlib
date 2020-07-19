@@ -2,8 +2,11 @@ import os
 import re
 import sys
 import subprocess
-from distutils.cmd import Command
-from setuptools import setup, find_packages
+from setuptools import (
+    setup,
+    find_packages,
+    Command,
+)
 
 
 class ApiDocs(Command):
