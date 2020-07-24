@@ -166,7 +166,7 @@ sphinx = ['sphinx', 'sphinx_rtd_theme'] + install_requires if needs_sphinx else 
 
 tests_require = ['pytest-cov', 'pythonnet', 'py4j']
 if sys.version_info[:2] == (2, 7):
-    tests_require.extend(['zipp<2.0', 'pyparsing<3.0', 'pytest<5.0', 'pathlib'])
+    tests_require.extend(['zipp<2.0', 'pyparsing<3.0', 'pytest~=4.6', 'pathlib'])
 else:
     tests_require.append('pytest')
 
