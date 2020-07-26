@@ -46,8 +46,8 @@ addons:
       - mono-devel
       - ca-certificates-mono
       - software-properties-common
-      - gcc-multilib
-      - g++-multilib
+      - gcc-8-multilib
+      - g++-8-multilib
       - gfortran
       - libgfortran3
       - libgfortran3:i386
