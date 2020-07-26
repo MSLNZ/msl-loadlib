@@ -79,7 +79,7 @@ install:
   - python -m pip install --upgrade setuptools wheel
   - python -m pip install --upgrade pycparser
   - |
-    if [ "CLONE_PYTHONNET" == "true" ]; then
+    if [ "$CLONE_PYTHONNET" == "true" ]; then
       git clone https://github.com/pythonnet/pythonnet.git
       cd pythonnet
       if [ "$TRAVIS_OS_NAME" == "osx" ]; then
@@ -96,7 +96,7 @@ install:
       rm -rf pythonnet
     fi
   - |
-    if [ "CLONE_PYTHONNET" == "false" ]; then
+    if [ "$CLONE_PYTHONNET" == "false" ]; then
       python -m pip install pythonnet
     fi
 
