@@ -63,7 +63,7 @@ before_install:
       brew update
       brew outdated pyenv || brew upgrade pyenv
       brew install pyenv-virtualenv gcc pkg-config glib mono
-      brew cask install java gfortran
+      brew cask install java
       pyenv install --list
       pyenv install $PYTHON
       export PYENV_VERSION=$PYTHON
