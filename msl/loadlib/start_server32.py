@@ -60,6 +60,7 @@ def main():
     parser.add_argument('-p', '--port', default=8080,
                         help='the port to open on the host [default: 8080]')
 
+    # TODO the `quiet` flag is deprecated
     parser.add_argument('-q', '--quiet', action='store_true',
                         help='whether to hide sys.stdout messages on the server '
                              '[default: False]')
@@ -124,7 +125,7 @@ def main():
     if not args.module:
         err = 'You must specify a Python module to run on the 32-bit server.\n' \
               'For example: {} -m my_module.py\n' \
-              'Cannot start the 32-bit server.\n'.format(SERVER_FILENAME)
+              'Cannot start the 32-bit server.'.format(SERVER_FILENAME)
         print(err, file=sys.stderr)
         return -1
 
@@ -135,7 +136,7 @@ def main():
     if args.module.startswith('.'):
         err = 'ImportError: {}\n' \
               'Cannot perform relative imports.\n' \
-              'Cannot start the 32-bit server.\n'.format(args.module)
+              'Cannot start the 32-bit server.'.format(args.module)
         print(err, file=sys.stderr)
         return -1
 
@@ -147,7 +148,7 @@ def main():
         err = 'ImportError: {}\n' \
               'The missing module must be in sys.path (see the --append-sys-path option)\n' \
               'The paths in sys.path are:\n  {}\n' \
-              'Cannot start the 32-bit server.\n'.format(e, paths)
+              'Cannot start the 32-bit server.'.format(e, paths)
         print(err, file=sys.stderr)
         return -1
 
@@ -162,7 +163,7 @@ def main():
     if server32 is None:
         err = 'AttributeError: module {}.py\n' \
               'Module does not contain a class that is a subclass of Server32.\n' \
-              'Cannot start the 32-bit server.\n'.format(args.module)
+              'Cannot start the 32-bit server.'.format(args.module)
         print(err, file=sys.stderr)
         return -1
 
@@ -179,7 +180,7 @@ def main():
                    '    def __init__(self, host, port, quiet, **kwargs):\n' \
                    '        super({0}, self).__init__(path, libtype, host, port, quiet, **kwargs)\n\n'\
                 .format(server32.__name__)
-        err += 'Cannot start the 32-bit server.\n'
+        err += 'Cannot start the 32-bit server.'
         print(err, file=sys.stderr)
         return -1
 
@@ -189,7 +190,7 @@ def main():
               'class {0}(Server32):\n' \
               '    def __init__(self, host, port, quiet, **kwargs):\n' \
               '        super({0}, self).__init__(path, libtype, host, port, quiet, **kwargs)\n\n' \
-              'Cannot start the 32-bit server.\n'.format(server32.__name__)
+              'Cannot start the 32-bit server.'.format(server32.__name__)
         print(err, file=sys.stderr)
         return -1
 
