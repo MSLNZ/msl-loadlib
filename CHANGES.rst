@@ -2,8 +2,15 @@
 Changelog
 =========
 
-Version 0.7.1.dev0
+Version 0.8.0.dev0
 ==================
+
+* Changed
+
+  - use PIPE's for stdout and stderr for the 32-bit server
+  - :meth:`~msl.loadlib.client64.Client64.shutdown_server32` now returns the
+    `(stdout, stderr)` streams from the 32-bit subprocess
+  - the `quiet` kwarg for :class:`~msl.loadlib.client64.Client64` is deprecated
 
 * Removed
 
