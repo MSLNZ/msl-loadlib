@@ -44,7 +44,7 @@ _encoding = sys.getfilesystemencoding()
 
 class Client64(object):
 
-    def __init__(self, module32, host='127.0.0.1', port=None, timeout=10.0, quiet=True,
+    def __init__(self, module32, host='127.0.0.1', port=None, timeout=10.0, quiet=None,
                  append_sys_path=None, append_environ_path=None, rpc_timeout=None, **kwargs):
         """Base class for communicating with a 32-bit library from 64-bit Python.
 
@@ -56,6 +56,9 @@ class Client64(object):
 
         .. versionchanged:: 0.6
            Added the `rpc_timeout` parameter
+
+        .. versionchanged:: 0.8
+           The default `quiet` value is now :data:`None`.
 
         Parameters
         ----------
@@ -71,7 +74,7 @@ class Client64(object):
             32-bit server. Default is 10 seconds.
         quiet : :class:`bool`, optional
             Whether to hide :data:`sys.stdout` messages on the 32-bit server.
-            Default is :data:`True`.
+            Default is :data:`None`. *Deprecated and will be removed in version 1.0.*
         append_sys_path : :class:`str` or :class:`list` of :class:`str`, optional
             Append path(s) to the 32-bit server's :data:`sys.path` variable. The value of
             :data:`sys.path` from the 64-bit process is automatically included,
@@ -179,15 +182,25 @@ class Client64(object):
             kw_str = ';'.join('{}={}'.format(key, value) for key, value in kwargs.items())
             cmd.extend(['--kwargs', kw_str])
 
+        # TODO the `quiet` kwarg is deprecated
+        if quiet is not None:
+            warnings.simplefilter('once', DeprecationWarning)
+            warnings.warn(
+                'the `quiet` kwarg for Client64 will be removed in version 1.0',
+                DeprecationWarning,
+                stacklevel=2
+            )
+
         if quiet:
             cmd.append('--quiet')
 
-        # start the server, cannot use subprocess.call() because it blocks
-        self._proc = subprocess.Popen(cmd, stderr=sys.stderr, stdout=sys.stdout)
+        # start the 32-bit server
+        self._proc = subprocess.Popen(cmd, stderr=subprocess.PIPE, stdout=subprocess.PIPE)
         try:
             utils.wait_for_server(host, port, timeout)
-        except ConnectionTimeoutError:
+        except ConnectionTimeoutError as err:
             self._proc.wait()
+            err.reason = self._proc.stderr.read().decode(encoding='utf-8', errors='replace')
             raise
 
         # connect to the server
@@ -282,7 +295,7 @@ class Client64(object):
                 result = pickle.load(f)
             return result
 
-        raise Server32Error(**json.loads(response.read().decode(encoding='utf-8')))
+        raise Server32Error(**json.loads(response.read().decode(encoding='utf-8', errors='replace')))
 
     def shutdown_server32(self, kill_timeout=10):
         """Shutdown the 32-bit server.
@@ -294,6 +307,9 @@ class Client64(object):
         .. versionchanged:: 0.6
            Added the `kill_timeout` parameter
 
+        .. versionchanged:: 0.8
+           Returns the (stdout, stderr) streams from the 32-bit server.
+
         Parameters
         ----------
         kill_timeout : :class:`float`, optional
@@ -301,13 +317,18 @@ class Client64(object):
             the server will be killed using brute force. A warning will be issued
             if the server is killed in this manner.
 
+        Returns
+        -------
+        :class:`tuple`
+            The (stdout, stderr) streams from the 32-bit server.
+
         Note
         ----
         This method gets called automatically when the reference count to the
         :class:`~.client64.Client64` object reaches 0.
         """
         if self._conn is None:
-            return
+            return self._proc.stdout, self._proc.stderr
 
         # send the shutdown request
         try:
@@ -342,6 +363,8 @@ class Client64(object):
 
         self._conn.close()
         self._conn = None
+        return self._proc.stdout, self._proc.stderr
 
     def __del__(self):
-        self.shutdown_server32()
+        if self._conn is not None:
+            self.shutdown_server32()

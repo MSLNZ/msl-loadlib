@@ -10,7 +10,15 @@ from . import IS_PYTHON2
 
 
 class ConnectionTimeoutError(OSError):
-    """Raised when the connection to the 32-bit server cannot be established."""
+
+    def __init__(self, *args, **kwargs):
+        """Raised when the connection to the 32-bit server cannot be established."""
+        self.timeout_message = args[0] if args else 'Timeout'
+        self.reason = ''
+        super(ConnectionTimeoutError, self).__init__(*args, **kwargs)
+
+    def __str__(self):
+        return self.timeout_message + '\n' + self.reason
 
 
 class Server32Error(HTTPException):
