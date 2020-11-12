@@ -53,10 +53,9 @@ def test_load_failure_in_wrong_python_bitness():
     suffix = '32' if loadlib.IS_PYTHON_64BIT else '64'
     check(os.path.join(EXAMPLES_DIR, 'cpp_lib'+suffix), 'cdll', OSError)
     check(os.path.join(EXAMPLES_DIR, 'fortran_lib'+suffix), 'cdll', OSError)
-    if not loadlib.IS_LINUX and sys.version_info[:2] != (3, 8):
-        # mono encounters a fatal crash
+    if not loadlib.IS_LINUX and sys.version_info[:2] != (3, 8):  # mono encounters a fatal crash
         import clr
-        check(os.path.join(EXAMPLES_DIR, 'dotnet_lib'+suffix), 'net', clr.System.BadImageFormatException)
+        check(os.path.join(EXAMPLES_DIR, 'dotnet_lib'+suffix), 'net', clr.System.IO.FileNotFoundException)
 
 
 def test_cpp():
@@ -475,23 +474,6 @@ def test_unicode_path():
         repr(net)  # this should not raise an exception
         str(net)  # this should not raise an exception
 
-    # IMPORTANT: keep the C++ test after loading the unicode version of the .NET DLL
-    # because it tests for additional problems that can occur.
-    # When the unicode version of .NET is loaded the `head` gets appended to sys.path, i.e.,
-    #   # the shared library must be available in sys.path
-    #   head, tail = os.path.split(self._path)
-    #   if IS_PYTHON2:
-    #       head = head.decode(_encoding)  <- this is important
-    #   sys.path.append(head)
-    # Without doing head.decode(_encoding) then when loading the unicode version of the C++ DLL
-    # the following error occurred:
-    #   UnicodeDecodeError: 'ascii' codec can't decode byte 0xf1 in position 29: ordinal not in range(128)
-    # This happens because when doing the search for the unicode version of the C++ DLL in Python 2.7, i.e.,
-    #   search_dirs = sys.path + os.environ['PATH'].split(os.pathsep)
-    #   for directory in search_dirs:
-    #       p = os.path.join(directory, _path)  <- raised UnicodeDecodeError
-    # the `directory` equaled the encoded version of `head` and so it raised UnicodeDecodeError
-    sys.path.append(u'./tests/uñicödé')
     bitness = u'64' if loadlib.IS_PYTHON_64BIT else u'32'
     cpp = loadlib.LoadLibrary(u'cpp_lib' + bitness + u'-uñicödé')
     assert cpp.lib.add(1, 2) == 3

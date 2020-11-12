@@ -217,6 +217,14 @@ class LoadLibrary(object):
                               'To install pythonnet run: pip install pythonnet')
 
             import clr
+
+            # the shared library must be available in sys.path
+            head, tail = os.path.split(self._path)
+            sys.path.insert(0, head)
+
+            # don't include the library extension
+            clr.AddReference(os.path.splitext(tail)[0])
+
             try:
                 # By default, pythonnet can only load libraries that are for .NET 4.0+.
                 #
@@ -246,15 +254,6 @@ class LoadLibrary(object):
                         update_msg += str(err)
                         raise IOError(update_msg)
                 raise IOError('The above "System.IO.FileLoadException" is not handled.\n')
-
-            # the shared library must be available in sys.path
-            head, tail = os.path.split(self._path)
-            if IS_PYTHON2:
-                head = head.decode(_encoding)
-            sys.path.append(head)
-
-            # don't include the library extension
-            clr.AddReference(os.path.splitext(tail)[0])
 
             import System
             dotnet = {'System': System}
