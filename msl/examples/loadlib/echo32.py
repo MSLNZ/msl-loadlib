@@ -60,12 +60,4 @@ class Echo32(Server32):
         :class:`tuple`
             The `args` and `kwargs` that were received.
         """
-        if args and not self.quiet:
-            print('The 32-bit server received these args:')
-            for arg in args:
-                print('\t{} {}'.format(type(arg), arg))
-        if kwargs and not self.quiet:
-            print('The 32-bit server received these kwargs:')
-            for key, value in kwargs.items():
-                print('\t{}: {} {}'.format(key, type(value), value))
         return args, kwargs

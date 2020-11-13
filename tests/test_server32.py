@@ -10,17 +10,17 @@ from msl.examples.loadlib import Cpp64, Fortran64, Echo64, DotNet64, FourPoints
 
 c = None
 f = None
-d = None
+e = None
 n = None
 
 
 def setup_module(module):
-    global c, f, d, n
+    global c, f, e, n
     if IS_MAC:  # the 32-bit server for Mac OS does not exist
         return
     c = Cpp64()
     f = Fortran64()
-    d = Echo64(True)
+    e = Echo64()
     n = DotNet64()
 
 
@@ -29,17 +29,17 @@ def teardown_module(module):
         return
     c.shutdown_server32()
     f.shutdown_server32()
-    d.shutdown_server32()
+    e.shutdown_server32()
     n.shutdown_server32()
 
 
 @pytest.mark.skipif(IS_MAC, reason='the 32-bit server for Mac OS does not exist')
 def test_unique_ports():
-    for item in [f, d, n]:
+    for item in [f, e, n]:
         assert c.port != item.port
-    for item in [d, n]:
+    for item in [e, n]:
         assert f.port != item.port
-    assert d.port != n.port
+    assert e.port != n.port
 
 
 @pytest.mark.skipif(IS_MAC, reason='the 32-bit server for Mac OS does not exist')
@@ -120,20 +120,21 @@ def test_fortran():
 
 
 @pytest.mark.skipif(IS_MAC, reason='the 32-bit server for Mac OS does not exist')
-def test_dummy():
+def test_echo():
 
-    args, kwargs = d.send_data(True)
+    args, kwargs = e.send_data(True)
     assert args[0]
-    assert {} == kwargs
+    assert isinstance(args[0], bool)
+    assert not kwargs
 
-    args, kwargs = d.send_data(x=1.0)
-    assert args == ()
+    args, kwargs = e.send_data(x=1.0)
+    assert not args
     assert kwargs == {'x': 1.0}
 
     x = [val for val in range(100)]
     y = range(9999)
     my_dict = {'x': x, 'y': y, 'text': 'abcd 1234 wxyz'}
-    args, kwargs = d.send_data(111, 2.3, complex(-1.2, 2.30), (1, 2), x=x, y=y, my_dict=my_dict)
+    args, kwargs = e.send_data(111, 2.3, complex(-1.2, 2.30), (1, 2), x=x, y=y, my_dict=my_dict)
     assert args[0] == 111
     assert args[1] == 2.3
     assert args[2] == complex(-1.2, 2.30)
