@@ -54,8 +54,7 @@ def test_load_failure_in_wrong_python_bitness():
     check(os.path.join(EXAMPLES_DIR, 'cpp_lib'+suffix), 'cdll', OSError)
     check(os.path.join(EXAMPLES_DIR, 'fortran_lib'+suffix), 'cdll', OSError)
     if not loadlib.IS_LINUX and sys.version_info[:2] != (3, 8):  # mono encounters a fatal crash
-        import clr
-        check(os.path.join(EXAMPLES_DIR, 'dotnet_lib'+suffix), 'net', clr.System.IO.FileNotFoundException)
+        check(os.path.join(EXAMPLES_DIR, 'dotnet_lib'+suffix), 'net', OSError)
 
 
 def test_cpp():

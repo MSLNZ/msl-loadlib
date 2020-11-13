@@ -43,7 +43,7 @@ be loaded in a 64-bit Python interpreter
    Traceback (most recent call last):
      File "<input>", line 1, in <module>
      File "...\msl\loadlib\load_library.py", line 232, in __init__
-       raise IOError('Are you loading a .NET DLL with the wrong bitness?')
+       raise OSError('Are you loading a .NET DLL with the wrong bitness?')
    OSError: Are you loading a .NET DLL with the wrong bitness?
 
 However, the 64-bit version of the .NET library can be directly loaded in 64-bit Python

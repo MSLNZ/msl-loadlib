@@ -229,7 +229,7 @@ class LoadLibrary(object):
                 # we've already made sure that the file exists above so
                 # this error is most likely a result of loading a .NET
                 # DLL with the wrong bitness
-                raise IOError('Are you loading a .NET DLL with the wrong bitness?')
+                raise OSError('Are you loading a .NET DLL with the wrong bitness?')
 
             try:
                 # By default, pythonnet can only load libraries that are for .NET 4.0+.
