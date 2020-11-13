@@ -24,7 +24,7 @@ code of the FORTRAN program is available :ref:`here <fortran-lib>`.
    of redefining the :ref:`restype <python:ctypes-return-types>` value.
 
 The following shows that the :ref:`fortran_lib32 <fortran-lib>` library
-cannot be loaded in a 64-bit Python interpreter:
+cannot be loaded in a 64-bit Python interpreter
 
 .. code-block:: pycon
 
@@ -41,7 +41,7 @@ cannot be loaded in a 64-bit Python interpreter:
        self._handle = _dlopen(self._name, mode)
    OSError: [WinError 193] %1 is not a valid Win32 application
 
-However, the 64-bit version of the FORTRAN library can be directly loaded in 64-bit Python:
+However, the 64-bit version of the FORTRAN library can be directly loaded in 64-bit Python
 
 .. code-block:: pycon
 
@@ -53,7 +53,7 @@ However, the 64-bit version of the FORTRAN library can be directly loaded in 64-
    60
 
 Instead, create a :class:`~msl.examples.loadlib.fortran64.Fortran64` client to communicate with the
-32-bit :ref:`fortran_lib32 <fortran-lib>` library:
+32-bit :ref:`fortran_lib32 <fortran-lib>` library
 
 .. code-block:: pycon
 
@@ -64,49 +64,49 @@ Instead, create a :class:`~msl.examples.loadlib.fortran64.Fortran64` client to c
    >>> f.lib32_path
    '...\fortran_lib32.dll'
 
-Add two ``int8`` values, see :meth:`~msl.examples.loadlib.fortran64.Fortran64.sum_8bit`:
+Add two ``int8`` values, see :meth:`~msl.examples.loadlib.fortran64.Fortran64.sum_8bit`
 
 .. code-block:: pycon
 
    >>> f.sum_8bit(-50, 110)
    60
 
-Add two ``int16`` values, see :meth:`~msl.examples.loadlib.fortran64.Fortran64.sum_16bit`:
+Add two ``int16`` values, see :meth:`~msl.examples.loadlib.fortran64.Fortran64.sum_16bit`
 
 .. code-block:: pycon
 
    >>> f.sum_16bit(2**15-1, -1)
    32766
 
-Add two ``int32`` values, see :meth:`~msl.examples.loadlib.fortran64.Fortran64.sum_32bit`:
+Add two ``int32`` values, see :meth:`~msl.examples.loadlib.fortran64.Fortran64.sum_32bit`
 
 .. code-block:: pycon
 
    >>> f.sum_32bit(123456788, 1)
    123456789
 
-Add two ``int64`` values, see :meth:`~msl.examples.loadlib.fortran64.Fortran64.sum_64bit`:
+Add two ``int64`` values, see :meth:`~msl.examples.loadlib.fortran64.Fortran64.sum_64bit`
 
 .. code-block:: pycon
 
    >>> f.sum_64bit(-2**63, 1)
    -9223372036854775807
 
-Multiply two ``float32`` values, see :meth:`~msl.examples.loadlib.fortran64.Fortran64.multiply_float32`:
+Multiply two ``float32`` values, see :meth:`~msl.examples.loadlib.fortran64.Fortran64.multiply_float32`
 
 .. code-block:: pycon
 
    >>> f.multiply_float32(1e30, 2e3)
    1.9999999889914546e+33
 
-Multiply two ``float64`` values, see :meth:`~msl.examples.loadlib.fortran64.Fortran64.multiply_float64`:
+Multiply two ``float64`` values, see :meth:`~msl.examples.loadlib.fortran64.Fortran64.multiply_float64`
 
 .. code-block:: pycon
 
    >>> f.multiply_float64(1e30, 2e3)
    2.0000000000000002e+33
 
-Check if a value is positive, see :meth:`~msl.examples.loadlib.fortran64.Fortran64.is_positive`:
+Check if a value is positive, see :meth:`~msl.examples.loadlib.fortran64.Fortran64.is_positive`
 
 .. code-block:: pycon
 
@@ -115,7 +115,7 @@ Check if a value is positive, see :meth:`~msl.examples.loadlib.fortran64.Fortran
    >>> f.is_positive(-1e-100)
    False
 
-Add or subtract two integers, see :meth:`~msl.examples.loadlib.fortran64.Fortran64.add_or_subtract`:
+Add or subtract two integers, see :meth:`~msl.examples.loadlib.fortran64.Fortran64.add_or_subtract`
 
 .. code-block:: pycon
 
@@ -124,7 +124,7 @@ Add or subtract two integers, see :meth:`~msl.examples.loadlib.fortran64.Fortran
    >>> f.add_or_subtract(1000, 2000, False)
    -1000
 
-Calculate the n'th factorial, see :meth:`~msl.examples.loadlib.fortran64.Fortran64.factorial`:
+Calculate the n'th factorial, see :meth:`~msl.examples.loadlib.fortran64.Fortran64.factorial`
 
 .. code-block:: pycon
 
@@ -134,7 +134,7 @@ Calculate the n'th factorial, see :meth:`~msl.examples.loadlib.fortran64.Fortran
    3.012660018457658e+213
 
 Calculate the standard deviation of an list of values, see
-:meth:`~msl.examples.loadlib.fortran64.Fortran64.standard_deviation`:
+:meth:`~msl.examples.loadlib.fortran64.Fortran64.standard_deviation`
 
 .. code-block:: pycon
 
@@ -142,21 +142,21 @@ Calculate the standard deviation of an list of values, see
    2.7386127875258306
 
 Compute the Bessel function of the first kind of order 0 at ``x``, see
-:meth:`~msl.examples.loadlib.fortran64.Fortran64.besselJ0`:
+:meth:`~msl.examples.loadlib.fortran64.Fortran64.besselJ0`
 
 .. code-block:: pycon
 
    >>> f.besselJ0(8.6)
    0.014622991278741278
 
-Reverse a string, see :meth:`~msl.examples.loadlib.fortran64.Fortran64.reverse_string`:
+Reverse a string, see :meth:`~msl.examples.loadlib.fortran64.Fortran64.reverse_string`
 
 .. code-block:: pycon
 
    >>> f.reverse_string('hello world!')
    '!dlrow olleh'
 
-Add two 1D arrays, see :meth:`~msl.examples.loadlib.fortran64.Fortran64.add_1D_arrays`:
+Add two 1D arrays, see :meth:`~msl.examples.loadlib.fortran64.Fortran64.add_1D_arrays`
 
 .. code-block:: pycon
 
@@ -169,7 +169,7 @@ Add two 1D arrays, see :meth:`~msl.examples.loadlib.fortran64.Fortran64.add_1D_a
    >>> f.add_1D_arrays(a, b)
    [1.5, 3.0, 4.5, 6.0, 7.5, 9.0, 10.5, 12.0, 13.5]
 
-Multiply two matrices, see :meth:`~msl.examples.loadlib.fortran64.Fortran64.matrix_multiply`:
+Multiply two matrices, see :meth:`~msl.examples.loadlib.fortran64.Fortran64.matrix_multiply`
 
 .. code-block:: pycon
 
@@ -178,11 +178,13 @@ Multiply two matrices, see :meth:`~msl.examples.loadlib.fortran64.Fortran64.matr
    >>> f.matrix_multiply(m1, m2)
    [[22.0, 28.0], [49.0, 64.0]]
 
-Shutdown the server, see :meth:`~msl.loadlib.client64.Client64.shutdown_server32`:
+Shutdown the 32-bit server when you are done communicating with the 32-bit library
+(the *stdout* and *stderr* streams from the 32-bit server are returned), see
+:meth:`~msl.loadlib.client64.Client64.shutdown_server32`
 
 .. code-block:: pycon
 
-   >>> f.shutdown_server32()
+   >>> stdout, stderr = f.shutdown_server32()
 
 .. note::
    When using a subclass of :class:`~msl.loadlib.client64.Client64` in a script, the

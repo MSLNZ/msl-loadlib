@@ -24,7 +24,7 @@ code of the C++ program is available :ref:`here <cpp-lib>`.
    redefining the :ref:`restype <python:ctypes-return-types>` value.
 
 The following shows that the :ref:`cpp_lib32 <cpp-lib>` library
-cannot be loaded in a 64-bit Python interpreter:
+cannot be loaded in a 64-bit Python interpreter
 
 .. code-block:: pycon
 
@@ -41,7 +41,7 @@ cannot be loaded in a 64-bit Python interpreter:
        self._handle = _dlopen(self._name, mode)
    OSError: [WinError 193] %1 is not a valid Win32 application
 
-However, the 64-bit version of the C++ library can be directly loaded in 64-bit Python:
+However, the 64-bit version of the C++ library can be directly loaded in 64-bit Python
 
 .. code-block:: pycon
 
@@ -52,7 +52,7 @@ However, the 64-bit version of the C++ library can be directly loaded in 64-bit 
    17
 
 Instead, create a :class:`~msl.examples.loadlib.cpp64.Cpp64` client to communicate with the
-32-bit :ref:`cpp_lib32 <cpp-lib>` library from 64-bit Python:
+32-bit :ref:`cpp_lib32 <cpp-lib>` library from 64-bit Python
 
 .. code-block:: pycon
 
@@ -63,21 +63,21 @@ Instead, create a :class:`~msl.examples.loadlib.cpp64.Cpp64` client to communica
    >>> cpp.lib32_path
    '...\cpp_lib32.dll'
 
-Add two integers, see :meth:`~msl.examples.loadlib.cpp64.Cpp64.add`:
+Add two integers, see :meth:`~msl.examples.loadlib.cpp64.Cpp64.add`
 
 .. code-block:: pycon
 
    >>> cpp.add(3, 14)
    17
 
-Subtract two C++ floating-point numbers, see :meth:`~msl.examples.loadlib.cpp64.Cpp64.subtract`:
+Subtract two C++ floating-point numbers, see :meth:`~msl.examples.loadlib.cpp64.Cpp64.subtract`
 
 .. code-block:: pycon
 
    >>> cpp.subtract(43.2, 3.2)
    40.0
 
-Add or subtract two C++ double-precision numbers, see :meth:`~msl.examples.loadlib.cpp64.Cpp64.add_or_subtract`:
+Add or subtract two C++ double-precision numbers, see :meth:`~msl.examples.loadlib.cpp64.Cpp64.add_or_subtract`
 
 .. code-block:: pycon
 
@@ -91,7 +91,7 @@ Add or subtract two C++ double-precision numbers, see :meth:`~msl.examples.loadl
 Arrays
 ------
 
-Multiply a 1D array by a number, see :meth:`~msl.examples.loadlib.cpp64.Cpp64.scalar_multiply`:
+Multiply a 1D array by a number, see :meth:`~msl.examples.loadlib.cpp64.Cpp64.scalar_multiply`
 
 .. attention::
    The :meth:`~msl.examples.loadlib.cpp64.Cpp64.scalar_multiply` function takes a pointer to an array as an input
@@ -134,7 +134,7 @@ Strings
 -------
 
 Reverse a string. The memory for the reversed string is allocated in Python,
-see :meth:`~msl.examples.loadlib.cpp64.Cpp64.reverse_string_v1`:
+see :meth:`~msl.examples.loadlib.cpp64.Cpp64.reverse_string_v1`
 
 .. code-block:: pycon
 
@@ -142,7 +142,7 @@ see :meth:`~msl.examples.loadlib.cpp64.Cpp64.reverse_string_v1`:
    '!dlrow olleh'
 
 Reverse a string. The memory for the reversed string is allocated in C++,
-see :meth:`~msl.examples.loadlib.cpp64.Cpp64.reverse_string_v2`:
+see :meth:`~msl.examples.loadlib.cpp64.Cpp64.reverse_string_v2`
 
 .. code-block:: pycon
 
@@ -167,7 +167,7 @@ If the *struct* contains pointers then you must create the *struct* within
    because :class:`~msl.examples.loadlib.cpp32.Cpp32` is running on Python 3 and there are issues
    with :mod:`ctypes` and :mod:`pickle` when mixing Python 2 and Python 3.
 
-The :ref:`cpp_lib32 <cpp-lib>` library contains the following structs:
+The :ref:`cpp_lib32 <cpp-lib>` library contains the following structs
 
 .. code-block:: cpp
 
@@ -229,11 +229,13 @@ the *radius* and *n* as input arguments to pass to the
    3.1415926343379557
    3.1415926487759718
 
-Shutdown the server, see :meth:`~msl.loadlib.client64.Client64.shutdown_server32`:
+Shutdown the 32-bit server when you are done communicating with the 32-bit library
+(the *stdout* and *stderr* streams from the 32-bit server are returned), see
+:meth:`~msl.loadlib.client64.Client64.shutdown_server32`
 
 .. code-block:: pycon
 
-   >>> cpp.shutdown_server32()
+   >>> stdout, stderr = cpp.shutdown_server32()
 
 .. note::
    When using a subclass of :class:`~msl.loadlib.client64.Client64` in a script, the

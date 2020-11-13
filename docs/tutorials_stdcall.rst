@@ -11,7 +11,7 @@ module that is run by a 64-bit Python interpreter by using `inter-process commun
 :class:`~msl.examples.loadlib.kernel64.Kernel64` is the 64-bit client.
 
 The following shows that the `kernel32 <kernel32_>`_ library cannot be loaded in a 64-bit
-Python interpreter:
+Python interpreter
 
 .. code-block:: pycon
 
@@ -28,7 +28,7 @@ Python interpreter:
    OSError: [WinError 193] %1 is not a valid Win32 application
 
 Instead, create a :class:`~msl.examples.loadlib.kernel64.Kernel64` client to communicate with the
-32-bit `kernel32 <kernel32_>`_ library:
+32-bit `kernel32 <kernel32_>`_ library
 
 .. code-block:: pycon
 
@@ -40,18 +40,20 @@ Instead, create a :class:`~msl.examples.loadlib.kernel64.Kernel64` client to com
    'C:\\Windows\\SysWOW64\\kernel32.dll'
 
 Call the library to get the current date and time, see
-:func:`~msl.examples.loadlib.kernel64.Kernel64.get_local_time`:
+:func:`~msl.examples.loadlib.kernel64.Kernel64.get_local_time`
 
 .. code-block:: pycon
 
    >>> k.get_local_time()
    datetime.datetime(2020, 3, 17, 15, 37, 5, 351000)
 
-Shutdown the server, see :meth:`~msl.loadlib.client64.Client64.shutdown_server32`:
+Shutdown the 32-bit server when you are done communicating with the 32-bit library
+(the *stdout* and *stderr* streams from the 32-bit server are returned), see
+:meth:`~msl.loadlib.client64.Client64.shutdown_server32`
 
 .. code-block:: pycon
 
-   >>> k.shutdown_server32()
+   >>> stdout, stderr = k.shutdown_server32()
 
 .. note::
    When using a subclass of :class:`~msl.loadlib.client64.Client64` in a script, the

@@ -17,7 +17,7 @@ This example shows how to access a 32-bit LabVIEW library from a module that is 
 code of the LabVIEW program is available :ref:`here <labview-lib>`.
 
 Create a :class:`~msl.examples.loadlib.labview64.Labview64` client to communicate with the
-32-bit :ref:`labview_lib32 <labview-lib>` library from 64-bit Python:
+32-bit :ref:`labview_lib32 <labview-lib>` library from 64-bit Python
 
 .. code-block:: pycon
 
@@ -29,7 +29,7 @@ Create a :class:`~msl.examples.loadlib.labview64.Labview64` client to communicat
    '...\labview_lib32.dll'
 
 Calculate the mean and the *sample* variance and standard deviation of some data, see
-:meth:`~msl.examples.loadlib.labview64.Labview64.stdev`:
+:meth:`~msl.examples.loadlib.labview64.Labview64.stdev`
 
 .. code-block:: pycon
 
@@ -37,18 +37,20 @@ Calculate the mean and the *sample* variance and standard deviation of some data
    >>> labview.stdev(data)
    (5.0, 7.5, 2.7386127875258306)
 
-Calculate the mean and the *population* variance and standard deviation of data:
+Calculate the mean and the *population* variance and standard deviation of data
 
 .. code-block:: pycon
 
    >>> labview.stdev(data, 1)
    (5.0, 6.666666666666667, 2.581988897471611)
 
-Shutdown the server, see :meth:`~msl.loadlib.client64.Client64.shutdown_server32`:
+Shutdown the 32-bit server when you are done communicating with the 32-bit library
+(the *stdout* and *stderr* streams from the 32-bit server are returned), see
+:meth:`~msl.loadlib.client64.Client64.shutdown_server32`
 
 .. code-block:: pycon
 
-   >>> labview.shutdown_server32()
+   >>> stdout, stderr = labview.shutdown_server32()
 
 .. note::
    When using a subclass of :class:`~msl.loadlib.client64.Client64` in a script, the

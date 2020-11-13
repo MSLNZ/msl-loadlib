@@ -23,7 +23,7 @@ This example shows how to access a 32-bit .NET library from a module that is run
    .. image:: _static/dotpeek_lib.png
 
 The following shows that the 32-bit :ref:`dotnet_lib32.dll <dotnet-lib>` library cannot
-be loaded in a 64-bit Python interpreter:
+be loaded in a 64-bit Python interpreter
 
 .. code-block:: pycon
 
@@ -33,14 +33,20 @@ be loaded in a 64-bit Python interpreter:
    True
    >>> net = LoadLibrary(EXAMPLES_DIR + '/dotnet_lib32.dll', 'net')
    Traceback (most recent call last):
-     File "<input>", line 1, in <module>
-     File "...\msl\loadlib\load_library.py", line 230, in __init__
-       self._assembly = clr.System.Reflection.Assembly.LoadFile(self._path)
-   System.BadImageFormatException: Could not load file or assembly 'dotnet_lib32.dll' or one of its dependencies.  is not a valid Win32 application. (Exception from HRESULT: 0x800700C1)
-      at System.Reflection.RuntimeAssembly.nLoadFile(String path, Evidence evidence)
-      at System.Reflection.Assembly.LoadFile(String path)
+     File "...\msl\loadlib\load_library.py", line 227, in __init__
+       clr.AddReference(os.path.splitext(tail)[0])
+   System.IO.FileNotFoundException: Unable to find assembly 'dotnet_lib32'.
+      at Python.Runtime.CLRModule.AddReference(String name)
 
-However, the 64-bit version of the .NET library can be directly loaded in 64-bit Python:
+   During handling of the above exception, another exception occurred:
+
+   Traceback (most recent call last):
+     File "<input>", line 1, in <module>
+     File "...\msl\loadlib\load_library.py", line 232, in __init__
+       raise IOError('Are you loading a .NET DLL with the wrong bitness?')
+   OSError: Are you loading a .NET DLL with the wrong bitness?
+
+However, the 64-bit version of the .NET library can be directly loaded in 64-bit Python
 
 .. code-block:: pycon
 
@@ -51,7 +57,7 @@ However, the 64-bit version of the .NET library can be directly loaded in 64-bit
    '!dlroW olleH'
 
 Instead, create a :class:`~msl.examples.loadlib.dotnet64.DotNet64` client to communicate
-with the 32-bit :ref:`dotnet_lib32.dll <dotnet-lib>` library:
+with the 32-bit :ref:`dotnet_lib32.dll <dotnet-lib>` library
 
 .. code-block:: pycon
 
@@ -63,35 +69,35 @@ with the 32-bit :ref:`dotnet_lib32.dll <dotnet-lib>` library:
    '...\dotnet_lib32.dll'
 
 Get the names of the classes in the .NET library module, see
-:meth:`~msl.examples.loadlib.dotnet64.DotNet64.get_class_names`:
+:meth:`~msl.examples.loadlib.dotnet64.DotNet64.get_class_names`
 
 .. code-block:: pycon
 
    >>> dn.get_class_names()
    ['StringManipulation', 'StaticClass', 'DotNetMSL.BasicMath', 'DotNetMSL.ArrayManipulation']
 
-Add two integers, see :meth:`~msl.examples.loadlib.dotnet64.DotNet64.add_integers`:
+Add two integers, see :meth:`~msl.examples.loadlib.dotnet64.DotNet64.add_integers`
 
 .. code-block:: pycon
 
    >>> dn.add_integers(8, 2)
    10
 
-Divide two C# floating-point numbers, see :meth:`~msl.examples.loadlib.dotnet64.DotNet64.divide_floats`:
+Divide two C# floating-point numbers, see :meth:`~msl.examples.loadlib.dotnet64.DotNet64.divide_floats`
 
 .. code-block:: pycon
 
    >>> dn.divide_floats(4., 5.)
    0.8
 
-Multiple two C# double-precision numbers, see :meth:`~msl.examples.loadlib.dotnet64.DotNet64.multiply_doubles`:
+Multiple two C# double-precision numbers, see :meth:`~msl.examples.loadlib.dotnet64.DotNet64.multiply_doubles`
 
 .. code-block:: pycon
 
    >>> dn.multiply_doubles(872.24, 525.525)
    458383.926
 
-Add or subtract two C# double-precision numbers, see :meth:`~msl.examples.loadlib.dotnet64.DotNet64.add_or_subtract`:
+Add or subtract two C# double-precision numbers, see :meth:`~msl.examples.loadlib.dotnet64.DotNet64.add_or_subtract`
 
 .. code-block:: pycon
 
@@ -100,7 +106,7 @@ Add or subtract two C# double-precision numbers, see :meth:`~msl.examples.loadli
    >>> dn.add_or_subtract(99., 9., False)
    90.0
 
-Multiply a 1D array by a number, see :meth:`~msl.examples.loadlib.dotnet64.DotNet64.scalar_multiply`:
+Multiply a 1D array by a number, see :meth:`~msl.examples.loadlib.dotnet64.DotNet64.scalar_multiply`
 
 .. code-block:: pycon
 
@@ -110,7 +116,7 @@ Multiply a 1D array by a number, see :meth:`~msl.examples.loadlib.dotnet64.DotNe
    >>> dn.scalar_multiply(2.0, a)
    [0.0, 2.0, 4.0, 6.0, 8.0, 10.0, 12.0, 14.0, 16.0, 18.0]
 
-Multiply two matrices, see :meth:`~msl.examples.loadlib.dotnet64.DotNet64.multiply_matrices`:
+Multiply two matrices, see :meth:`~msl.examples.loadlib.dotnet64.DotNet64.multiply_matrices`
 
 .. code-block:: pycon
 
@@ -119,7 +125,7 @@ Multiply two matrices, see :meth:`~msl.examples.loadlib.dotnet64.DotNet64.multip
    >>> dn.multiply_matrices(m1, m2)
    [[22.0, 28.0], [49.0, 64.0]]
 
-Reverse a string, see :meth:`~msl.examples.loadlib.dotnet64.DotNet64.reverse_string`:
+Reverse a string, see :meth:`~msl.examples.loadlib.dotnet64.DotNet64.reverse_string`
 
 .. code-block:: pycon
 
@@ -137,11 +143,13 @@ Call the static methods in the ``StaticClass`` class
    >>> dn.concatenate('the ', 'experiment ', 'worked ', True, 'temporarily')
    'the experiment worked temporarily'
 
-Shutdown the server, see :meth:`~msl.loadlib.client64.Client64.shutdown_server32`:
+Shutdown the 32-bit server when you are done communicating with the 32-bit library
+(the *stdout* and *stderr* streams from the 32-bit server are returned), see
+:meth:`~msl.loadlib.client64.Client64.shutdown_server32`
 
 .. code-block:: pycon
 
-   >>> dn.shutdown_server32()
+   >>> stdout, stderr = dn.shutdown_server32()
 
 .. note::
    When using a subclass of :class:`~msl.loadlib.client64.Client64` in a script, the
