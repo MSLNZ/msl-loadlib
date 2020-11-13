@@ -223,13 +223,7 @@ class LoadLibrary(object):
             sys.path.insert(0, head)
 
             # don't include the library extension
-            try:
-                clr.AddReference(os.path.splitext(tail)[0])
-            except clr.System.IO.FileNotFoundException:
-                # we've already made sure that the file exists above so
-                # this error is most likely a result of loading a .NET
-                # DLL with the wrong bitness
-                raise OSError('Are you loading a .NET DLL with the wrong bitness?')
+            clr.AddReference(os.path.splitext(tail)[0])
 
             try:
                 # By default, pythonnet can only load libraries that are for .NET 4.0+.

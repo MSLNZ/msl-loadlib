@@ -38,14 +38,6 @@ be loaded in a 64-bit Python interpreter
    System.IO.FileNotFoundException: Unable to find assembly 'dotnet_lib32'.
       at Python.Runtime.CLRModule.AddReference(String name)
 
-   During handling of the above exception, another exception occurred:
-
-   Traceback (most recent call last):
-     File "<input>", line 1, in <module>
-     File "...\msl\loadlib\load_library.py", line 232, in __init__
-       raise OSError('Are you loading a .NET DLL with the wrong bitness?')
-   OSError: Are you loading a .NET DLL with the wrong bitness?
-
 However, the 64-bit version of the .NET library can be directly loaded in 64-bit Python
 
 .. code-block:: pycon
