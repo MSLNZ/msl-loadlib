@@ -194,8 +194,8 @@ class LoadLibrary(object):
                 cmd.append(os.path.dirname(self._path) + '/')
 
             try:
-                # start the py4j.GatewayServer, cannot use subprocess.call() because it blocks
-                subprocess.Popen(cmd, stderr=sys.stderr, stdout=sys.stdout)
+                # start the py4j.GatewayServer
+                subprocess.Popen(cmd, stderr=subprocess.PIPE, stdout=subprocess.PIPE)
                 err = None
             except IOError as e:
                 err = str(e) + '\nYou must have a Java Runtime Environment installed and available on PATH'

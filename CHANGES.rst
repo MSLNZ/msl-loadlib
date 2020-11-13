@@ -9,7 +9,8 @@ Version 0.8.0.dev0
 
   - call ``clr.AddReference`` before ``clr.System.Reflection.Assembly.LoadFile``
     when loading a .NET DLL
-  - use PIPE's for stdout and stderr for the 32-bit server
+  - use PIPEs for stdout and stderr for the 32-bit server subprocess and
+    for the py4j `GatewayServer`
   - :meth:`~msl.loadlib.client64.Client64.shutdown_server32` now returns the
     `(stdout, stderr)` streams from the 32-bit subprocess
   - the `quiet` kwarg for :class:`~msl.loadlib.client64.Client64` is deprecated
