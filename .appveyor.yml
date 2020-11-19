@@ -35,7 +35,7 @@ install:
   - python -m pip install --upgrade pip
   - python -m pip install --upgrade setuptools wheel
   - IF "%CLONE_PYTHONNET%"=="true" (
-      python -m pip install pycparser
+      python -m pip install pycparser &&
       git clone https://github.com/pythonnet/pythonnet.git &&
       python pythonnet\setup.py bdist_wheel &&
       python -m pip install --no-index --find-links=.\pythonnet\dist\ pythonnet &&
