@@ -537,7 +537,7 @@ def test_dotnet_nested_namespace():
     assert Subtracter.Subtract() == -1
 
     # Adder is not defined as a public class but can still be created
-    Adder = lib.System.Activator.CreateInstance(lib.Adder, [82, -27])
+    Adder = lib.System.Activator.CreateInstance(lib.Adder, 82, -27)
     assert Adder.Add() == 55
     assert Adder.x == 82
     assert Adder.y == -27
