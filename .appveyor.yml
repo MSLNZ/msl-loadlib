@@ -23,6 +23,10 @@ environment:
       CLONE_PYTHONNET: "false"
     - PYTHON: C:\Python38-x64
       CLONE_PYTHONNET: "false"
+    - PYTHON: C:\Python39
+      CLONE_PYTHONNET: "true"
+    - PYTHON: C:\Python39-x64
+      CLONE_PYTHONNET: "true"
 
 install:
   - set PATH=%PYTHON%;%PYTHON%\Scripts;%PATH%
