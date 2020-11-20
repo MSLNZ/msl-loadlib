@@ -225,8 +225,11 @@ class LoadLibrary(object):
             # don't include the library extension
             clr.AddReference(os.path.splitext(tail)[0])
 
+            import System
+            dotnet = {'System': System}
+
             try:
-                # By default, pythonnet can only load libraries that are for .NET 4.0+.
+                # By default, pythonnet can only load libraries that are for .NET 4.0+.3.9
                 #
                 # In order to allow pythonnet to load a library from .NET <4.0 the
                 # useLegacyV2RuntimeActivationPolicy property needs to be enabled
@@ -235,9 +238,9 @@ class LoadLibrary(object):
                 # file that has the property enabled and then notify the user why
                 # loading the library failed and ask them to re-run their Python
                 # script to load the .NET library.
-                self._assembly = clr.System.Reflection.Assembly.LoadFile(self._path)
+                self._assembly = System.Reflection.Assembly.LoadFile(self._path)
 
-            except clr.System.IO.FileLoadException as err:
+            except System.IO.FileLoadException as err:
                 # Example error message that can occur if the library is for .NET <4.0,
                 # and the useLegacyV2RuntimeActivationPolicy is not enabled:
                 #
@@ -254,9 +257,6 @@ class LoadLibrary(object):
                         update_msg += str(err)
                         raise IOError(update_msg)
                 raise IOError('The above "System.IO.FileLoadException" is not handled.\n')
-
-            import System
-            dotnet = {'System': System}
 
             try:
                 types = self._assembly.GetTypes()
