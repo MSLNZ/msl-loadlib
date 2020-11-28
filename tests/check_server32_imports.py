@@ -9,11 +9,10 @@
 #
 
 
-# modules in Python 3.7
+# builtin modules in Python 3.9
 modules = [
     '__future__',
     '__main__',
-    '_dummy_thread',
     '_thread',
     'abc',
     'aifc',
@@ -116,7 +115,6 @@ modules = [
     'distutils.util',
     'distutils.version',
     'doctest',
-    'dummy_threading',
     'email',
     'email.charset',
     'email.contentmanager',
@@ -152,6 +150,7 @@ modules = [
     'getpass',
     'gettext',
     'glob',
+    'graphlib',
     'grp',
     'gzip',
     'hashlib',
@@ -187,7 +186,6 @@ modules = [
     'logging.config',
     'logging.handlers',
     'lzma',
-    'macpath',
     'mailbox',
     'mailcap',
     'marshal',
@@ -202,6 +200,7 @@ modules = [
     'multiprocessing.dummy',
     'multiprocessing.managers',
     'multiprocessing.pool',
+    'multiprocessing.shared_memory',
     'multiprocessing.sharedctypes',
     'netrc',
     'nis',
@@ -276,13 +275,22 @@ modules = [
     'termios',
     'test',
     'test.support',
+    'test.support.bytecode_helper',
     'test.support.script_helper',
+    'test.support.socket_helper'
     'textwrap',
     'threading',
     'time',
     'timeit',
     'tkinter',
+    'tkinter.colorchooser',
+    'tkinter.commondialog',
+    'tkinter.dnd',
+    'tkinter.filedialog',
+    'tkinter.font',
+    'tkinter.messagebox',
     'tkinter.scrolledtext',
+    'tkinter.simpledialog',
     'tkinter.tix',
     'tkinter.ttk',
     'token',
@@ -339,6 +347,7 @@ modules = [
     'zipfile',
     'zipimport',
     'zlib',
+    'zoneinfo',
 ]
 
 print('The following modules cannot be imported')

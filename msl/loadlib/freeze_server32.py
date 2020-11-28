@@ -174,7 +174,7 @@ def _get_standard_modules():
 
     # the frozen application is never meant to create GUIs or to add
     # support for building and installing Python modules
-    ignore_list = ['__main__', 'distutils', 'ensurepip', 'tkinter', 'turtle']
+    ignore_list = ['__main__', 'distutils', 'ensurepip', 'test', 'tkinter', 'turtle']
 
     # some modules are platform specific and got a
     #   RecursionError: maximum recursion depth exceeded
@@ -205,7 +205,7 @@ def _get_standard_modules():
     for module in modules:
         include_module = True
         for mod in ignore_list:
-            if mod in module:
+            if module.startswith(mod):
                 excluded_modules.extend(['--exclude-module', module])
                 include_module = False
                 break
