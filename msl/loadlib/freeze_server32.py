@@ -22,9 +22,9 @@ import sys
 import shutil
 import subprocess
 try:
-    from urllib import urlopen  # Python 2
-except ImportError:
     from urllib.request import urlopen
+except ImportError:  # then Python 2
+    from urllib import urlopen
 
 try:
     from msl import loadlib

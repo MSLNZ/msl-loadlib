@@ -8,12 +8,12 @@ import logging
 import subprocess
 import xml.etree.ElementTree as ET
 try:
-    import _winreg as winreg  # Python 2 on Windows
+    import winreg
 except ImportError:
     try:
-        import winreg
+        import _winreg as winreg  # Python 2 on Windows
     except ImportError:
-        winreg = None  # non-Windows
+        winreg = None  # not Windows
 
 from .exceptions import ConnectionTimeoutError
 from . import IS_MAC

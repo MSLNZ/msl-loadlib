@@ -15,13 +15,11 @@ import tempfile
 import warnings
 import subprocess
 try:
-    import cPickle as pickle  # Python 2
-except ImportError:
-    import pickle
-try:
-    from httplib import HTTPConnection, CannotSendRequest  # Python 2
-except ImportError:
     from http.client import HTTPConnection, CannotSendRequest
+    import pickle
+except ImportError:  # then Python 2
+    import cPickle as pickle
+    from httplib import HTTPConnection, CannotSendRequest
 
 from . import (
     utils,

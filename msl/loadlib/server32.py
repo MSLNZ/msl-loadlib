@@ -13,15 +13,17 @@ import traceback
 import threading
 import subprocess
 try:
-    import cPickle as pickle  # Python 2
-except ImportError:
-    import pickle
-try:
-    from BaseHTTPServer import HTTPServer, BaseHTTPRequestHandler  # Python 2
-except ImportError:
     from http.server import HTTPServer, BaseHTTPRequestHandler
+    import pickle
+except ImportError:  # then Python 2
+    import cPickle as pickle
+    from BaseHTTPServer import HTTPServer, BaseHTTPRequestHandler
 
-from . import LoadLibrary, SERVER_FILENAME, IS_WINDOWS
+from . import (
+    LoadLibrary,
+    SERVER_FILENAME,
+    IS_WINDOWS,
+)
 
 METADATA = '-METADATA-'
 SHUTDOWN = '-SHUTDOWN-'
@@ -69,7 +71,7 @@ class Server32(HTTPServer):
         quiet : :class:`bool`
             Whether to hide :data:`sys.stdout` messages on the server.
         **kwargs
-            Keyword arguments that are passed to :class:`.LoadLibrary`.
+            Keyword arguments are passed to :class:`.LoadLibrary`.
 
         Raises
         ------

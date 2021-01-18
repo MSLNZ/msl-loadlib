@@ -2,9 +2,9 @@
 Exception classes.
 """
 try:
-    from httplib import HTTPException  # Python 2
-except ImportError:
     from http.client import HTTPException
+except ImportError:  # then Python 2
+    from httplib import HTTPException
 
 from . import IS_PYTHON2
 
