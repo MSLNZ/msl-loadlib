@@ -205,7 +205,12 @@ class _RequestHandler(BaseHTTPRequestHandler):
                 with open(self.server.pickle_path, 'rb') as f:
                     args = pickle.load(f)
                     kwargs = pickle.load(f)
-                response = getattr(self.server, self.path)(*args, **kwargs)
+
+                attr = getattr(self.server, self.path)
+                if callable(attr):
+                    response = attr(*args, **kwargs)
+                else:
+                    response = attr
 
             with open(self.server.pickle_path, 'wb') as f:
                 pickle.dump(response, f, protocol=self.server.pickle_protocol)
