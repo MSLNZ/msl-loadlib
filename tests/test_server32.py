@@ -230,7 +230,7 @@ def test_ctypes_union_error():
         def __init__(self):
             super(FileSystemObjectClient, self).__init__(
                 module32='ctypes_union_error',
-                append_sys_path=os.path.dirname(__file__) + '/ctypes_union_error',
+                append_sys_path=os.path.join(os.path.dirname(__file__), 'server32_comtypes'),
             )
 
         def __getattr__(self, method32):
@@ -249,3 +249,24 @@ def test_ctypes_union_error():
 
     os.remove(temp_file)
     file_system.shutdown_server32()
+
+
+@pytest.mark.skipif(not IS_WINDOWS, reason='comtypes is only supported on Windows')
+def test_comtypes():
+
+    class Shell64(loadlib.Client64):
+        def __init__(self):
+            super(Shell64, self).__init__(
+                module32='shell32.py',
+                append_sys_path=os.path.join(os.path.dirname(__file__), 'server32_comtypes'),
+            )
+
+        def environ(self, key):
+            return self.request32('environ', key)
+
+    shell = Shell64()
+
+    for name in ['PROCESSOR_IDENTIFIER', 'NUMBER_OF_PROCESSORS', 'PROCESSOR_ARCHITECTURE']:
+        assert shell.environ(name) == os.environ[name]
+
+    shell.shutdown_server32()
