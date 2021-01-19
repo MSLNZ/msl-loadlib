@@ -111,7 +111,7 @@ todo_include_todos = True
 # The theme to use for HTML and HTML Help pages.  See the documentation for
 # a list of builtin themes.
 #
-on_rtd = os.environ.get('READTHEDOCS') == 'True'
+on_rtd = os.getenv('READTHEDOCS') == 'True'
 if on_rtd:
     html_theme = 'default'
 else:
@@ -210,7 +210,7 @@ epub_exclude_files = ['search.html']
 intersphinx_mapping = {
     'python': ('https://docs.python.org/3', None),
     'py4j': ('https://www.py4j.org/', None),
-    'numpy': ('https://docs.scipy.org/doc/numpy/', None),
+    'numpy': ('https://numpy.org/doc/stable/', None),
 }
 
 # warn about all broken links
