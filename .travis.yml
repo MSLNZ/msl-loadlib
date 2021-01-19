@@ -8,40 +8,35 @@ jobs:
   include:
     - os: linux
       python: 2.7
-      env: CLONE_PYTHONNET="false"
     - os: linux
       python: 3.5
-      env: CLONE_PYTHONNET="false"
     - os: linux
       python: 3.6
-      env: CLONE_PYTHONNET="false"
     - os: linux
       python: 3.7
-      env: CLONE_PYTHONNET="false"
     - os: linux
       python: 3.8
-      env: CLONE_PYTHONNET="false"
     - os: linux
       python: 3.9
       env: CLONE_PYTHONNET="true"
     - os: osx
       language: shell
-      env: PYTHON=2.7.18 CLONE_PYTHONNET="false"
+      env: PYTHON=2.7.18
     - os: osx
       language: shell
-      env: PYTHON=3.5.10 CLONE_PYTHONNET="false"
+      env: PYTHON=3.5.10
     - os: osx
       language: shell
-      env: PYTHON=3.6.12 CLONE_PYTHONNET="false"
+      env: PYTHON=3.6.12
     - os: osx
       language: shell
-      env: PYTHON=3.7.9 CLONE_PYTHONNET="false"
+      env: PYTHON=3.7.9
     - os: osx
       language: shell
-      env: PYTHON=3.8.6 CLONE_PYTHONNET="false"
+      env: PYTHON=3.8.7
     - os: osx
       language: shell
-      env: PYTHON=3.9.0 CLONE_PYTHONNET="true"
+      env: PYTHON=3.9.1 CLONE_PYTHONNET="true"
 
 addons:
   apt:
@@ -84,14 +79,11 @@ install:
   - python --version
   - python -m pip install --upgrade pip
   - python -m pip install --upgrade setuptools wheel
-  - python -m pip install --upgrade pycparser py4j pytest pytest-runner pytest-cov
+  - python -m pip install --upgrade --editable .[tests]
   - |
     if [ "$CLONE_PYTHONNET" == "true" ]; then
       python -m pip install git+https://github.com/pythonnet/pythonnet.git
-    else
-      python -m pip install pythonnet
     fi
-  - python -m pip list
 
 script:
-  - python setup.py tests
+  - python -m pytest
