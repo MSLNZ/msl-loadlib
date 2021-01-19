@@ -19,6 +19,7 @@ except ImportError:
 IS_WINDOWS = sys.platform == 'win32'
 if IS_WINDOWS:
     CONDA_DIR, PYTHON_DIR, EXT = 'Scripts', '', '.exe'
+    # Avoid getting "LookupError: unknown encoding: cp65001"
     if os.environ.get('PYTHONIOENCODING') is None:
         os.environ['PYTHONIOENCODING'] = 'utf-8'
 else:
@@ -135,10 +136,10 @@ def cli_parser(args):
     p.add_argument('-l', '--list', action='store_true', help='list the conda environments that will be used '
                                                              'for the tests and then exit')
     p.add_argument('-s', '--show', action='store_true', help='alias for --list')
-    p.add_argument('-C', '--create', default=[], nargs='+', help='the Python version numbers to use to create '
+    p.add_argument('-c', '--create', default=[], nargs='+', help='the Python version numbers to use to create '
                                                                  'conda environments (e.g., 2 3.6 3.7.2)')
-    p.add_argument('-c', '--command', default='setup.py tests', help='the command to execute with each conda '
-                                                                     'environment [default: python setup.py tests]')
+    p.add_argument('-m', '--command', default='pytest', help='the command to execute with each conda '
+                                                             'environment [default: python -m pytest]')
     p.add_argument('-i', '--include', default=[], nargs='+', help='the conda environments to include (supports regex)')
     p.add_argument('-x', '--exclude', default=[], nargs='+', help='the conda environments to exclude (supports regex)')
     p.add_argument('-f', '--ini', default=INI_PATH, help='the path to the configuration file '
@@ -161,7 +162,9 @@ def create_env(name, base_env_path, args):
 
     test_packages = []
     if 'setup.py' in args.command or 'pytest' in args.command:
-        test_packages.extend(['pytest', 'pytest-cov', 'pytest-runner'])
+        test_packages.extend(['pytest', 'pytest-cov'])
+        if 'setup.py' in args.command:
+            test_packages.append('pytest-runner')
     elif 'nosetests' in args.command:
         test_packages.append('nose')
 
