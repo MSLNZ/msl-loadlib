@@ -10,7 +10,6 @@ form of `inter-process communication <ipc_>`_.
 """
 from __future__ import print_function
 
-import io
 import os
 import sys
 import code
@@ -18,7 +17,10 @@ import inspect
 import argparse
 import importlib
 
-from msl.loadlib import Server32, SERVER_FILENAME
+from msl.loadlib import (
+    Server32,
+    SERVER_FILENAME,
+)
 
 
 def main():
@@ -59,11 +61,6 @@ def main():
 
     parser.add_argument('-p', '--port', default=8080,
                         help='the port to open on the host [default: 8080]')
-
-    # TODO the `quiet` flag is deprecated
-    parser.add_argument('-q', '--quiet', action='store_true',
-                        help='whether to hide sys.stdout messages on the server '
-                             '[default: False]')
 
     parser.add_argument('-v', '--version', action='store_true',
                         help='show the Python version that the server is running on '
@@ -153,60 +150,64 @@ def main():
         return -1
 
     # ensure that there is a subclass of Server32 in the module
-    server32 = None
-    for name in dir(mod):
-        attr = getattr(mod, name)
-        if inspect.isclass(attr) and (name != 'Server32') and issubclass(attr, Server32):
-            server32 = attr
+    cls = None
+    for name, obj in inspect.getmembers(mod, inspect.isclass):
+        if name != 'Server32' and issubclass(obj, Server32):
+            cls = obj
             break
 
-    if server32 is None:
+    if cls is None:
         err = 'AttributeError: module {}.py\n' \
               'Module does not contain a class that is a subclass of Server32.\n' \
               'Cannot start the 32-bit server.'.format(args.module)
         print(err, file=sys.stderr)
         return -1
 
-    if args.quiet:
-        sys.stdout = io.StringIO()
-
+    server, err = None, ''
     try:
-        app = server32(args.host, args.port, args.quiet, **kwargs)
+        server = cls(args.host, args.port, **kwargs)
     except Exception as e:
         err = '{}: {}\n'.format(e.__class__.__name__, e)
-        if e.__class__.__name__ == 'TypeError' and '__init__' in str(e):
-            err += 'The \'{0}\' class must be defined with the following syntax:\n\n' \
-                   'class {0}(Server32):\n' \
-                   '    def __init__(self, host, port, quiet, **kwargs):\n' \
-                   '        super({0}, self).__init__(path, libtype, host, port, quiet, **kwargs)\n\n'\
-                .format(server32.__name__)
-        err += 'Cannot start the 32-bit server.'
+        if e.__class__.__name__ == 'TypeError' and '__init__' in err:
+            # support the old syntax where the Server32 required a 'quiet' argument
+            if "missing 1 required positional argument: 'quiet'" in err:
+                try:
+                    server = cls(args.host, args.port, True, **kwargs)
+                except Exception as e:
+                    err = '{}: {}\n'.format(e.__class__.__name__, e)
+
+    if server is None:
+        err += 'The \'{0}\' class must be defined with the following syntax:\n\n' \
+               'class {0}(Server32):\n' \
+               '    def __init__(self, host, port, **kwargs):\n' \
+               '        super({0}, self).__init__(path, libtype, host, port, **kwargs)\n\n' \
+               'Cannot start the 32-bit server.'.format(cls.__name__)
         print(err, file=sys.stderr)
         return -1
 
-    if not hasattr(app, '_library'):
+    if not hasattr(server, '_library'):
         err = 'The super() method was never called.\n' \
               'The \'{0}\' class must be defined with the following syntax:\n\n' \
               'class {0}(Server32):\n' \
-              '    def __init__(self, host, port, quiet, **kwargs):\n' \
-              '        super({0}, self).__init__(path, libtype, host, port, quiet, **kwargs)\n\n' \
-              'Cannot start the 32-bit server.'.format(server32.__name__)
+              '    def __init__(self, host, port, **kwargs):\n' \
+              '        super({0}, self).__init__(path, libtype, host, port, **kwargs)\n\n' \
+              'Cannot start the 32-bit server.'.format(cls.__name__)
         print(err, file=sys.stderr)
         return -1
 
     print('Python ' + sys.version)
-    print('Serving {!r} on http://{}:{}'.format(os.path.basename(app.path), args.host, args.port))
+    print('Serving {!r} on http://{}:{}'.format(os.path.basename(server.path), args.host, args.port))
 
     try:
-        app.serve_forever()
+        server.serve_forever()
     except KeyboardInterrupt:
         print('KeyboardInterrupt', end=' -- ')
     except Exception as e:
-        # only get here if there is an exception in serve_forever()
-        # error handling for a request is performed by the RequestHandler class
+        # only get here if there is an exception in the serve_forever() code.
+        # error handling for a request is handled by the RequestHandler class
         print('{}: {}'.format(e.__class__.__name__, e), file=sys.stderr)
     finally:
-        app.server_close()
+        server.server_close()
         print('Stopped http://{}:{}'.format(args.host, args.port))
         return 0
 

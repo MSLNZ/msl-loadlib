@@ -26,9 +26,9 @@ RPC_TIMEOUT = 5.0
 
 class RPCServer(Server32):
 
-    def __init__(self, host, port, quiet, **kwargs):
+    def __init__(self, host, port, **kwargs):
         path = os.path.join(os.path.dirname(__file__), '..', 'msl', 'examples', 'loadlib', 'cpp_lib32')
-        super(RPCServer, self).__init__(os.path.abspath(path), 'cdll', host, port, quiet, **kwargs)
+        super(RPCServer, self).__init__(os.path.abspath(path), 'cdll', host, port, **kwargs)
 
     def no_delay(self, a, b):
         return self.lib.add(a, b)

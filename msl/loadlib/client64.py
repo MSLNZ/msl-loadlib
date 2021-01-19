@@ -71,8 +71,7 @@ class Client64(object):
             The maximum number of seconds to wait to establish a connection to the
             32-bit server. Default is 10 seconds.
         quiet : :class:`bool`, optional
-            Whether to hide :data:`sys.stdout` messages on the 32-bit server.
-            Default is :data:`None`. *Deprecated and will be removed in version 1.0.*
+            This keyword argument is no longer used and will be removed in a future release.
         append_sys_path : :class:`str` or :class:`list` of :class:`str`, optional
             Append path(s) to the 32-bit server's :data:`sys.path` variable. The value of
             :data:`sys.path` from the 64-bit process is automatically included,
@@ -90,7 +89,7 @@ class Client64(object):
             to use the default timeout value used by the :mod:`socket` module (which is
             to *wait forever*).
         **kwargs
-            Keyword arguments that will be passed to the :class:`~.server32.Server32`
+            All additional keyword arguments are passed to the :class:`~.server32.Server32`
             subclass. The data type of each value is not preserved. It will be a string
             at the constructor of the :class:`~.server32.Server32` subclass.
 
@@ -184,13 +183,10 @@ class Client64(object):
         if quiet is not None:
             warnings.simplefilter('once', DeprecationWarning)
             warnings.warn(
-                'the `quiet` kwarg for Client64 will be removed in version 1.0',
+                'the `quiet` keyword argument for Client64 is ignored and will be removed in version 0.9',
                 DeprecationWarning,
                 stacklevel=2
             )
-
-        if quiet:
-            cmd.append('--quiet')
 
         # start the 32-bit server
         self._proc = subprocess.Popen(cmd, stderr=subprocess.PIPE, stdout=subprocess.PIPE)

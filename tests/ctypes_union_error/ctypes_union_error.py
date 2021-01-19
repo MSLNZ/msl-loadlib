@@ -13,12 +13,12 @@ from msl.loadlib import Server32
 
 class FileSystemObjectServer(Server32):
 
-    def __init__(self, host, port, quiet, **kwargs):
+    def __init__(self, host, port, **kwargs):
 
         # comtypes will try to import numpy to see if it is available.
         # Since Client64 passes its sys.path to Server32 the modules that
-        # are available to Client64 to import are also be available to Server32.
-        # Therefore, we won't want this test to fail because the Python
+        # are available to Client64 to import are also available to Server32.
+        # Therefore, we don't want this test to fail because the Python
         # environment that is running Client64 has numpy installed.
         # (This only appeared to be an issue when Client64 runs on Python 3.5)
         for index, item in enumerate(sys.path):
@@ -26,7 +26,7 @@ class FileSystemObjectServer(Server32):
                 sys.path.pop(index)
                 break
 
-        super(FileSystemObjectServer, self).__init__('Scripting.FileSystemObject', 'com', host, port, quiet)
+        super(FileSystemObjectServer, self).__init__('Scripting.FileSystemObject', 'com', host, port)
         self.temp_file = os.path.join(tempfile.gettempdir(), 'msl-loadlib-FileSystemObject.txt')
 
     def get_temp_file(self):

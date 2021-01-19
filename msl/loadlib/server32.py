@@ -9,6 +9,7 @@ import os
 import re
 import sys
 import json
+import warnings
 import traceback
 import threading
 import subprocess
@@ -33,7 +34,7 @@ ERROR = 500
 
 class Server32(HTTPServer):
 
-    def __init__(self, path, libtype, host, port, quiet, **kwargs):
+    def __init__(self, path, libtype, host, port, *args, **kwargs):
         """Base class for loading a 32-bit library in 32-bit Python.
 
         All modules that are to be run on the 32-bit server must contain a class
@@ -68,10 +69,10 @@ class Server32(HTTPServer):
             The IP address of the server.
         port : :class:`int`
             The port to open on the server.
-        quiet : :class:`bool`
-            Whether to hide :data:`sys.stdout` messages on the server.
+        *args
+            All additional arguments are currently ignored.
         **kwargs
-            Keyword arguments are passed to :class:`.LoadLibrary`.
+            All keyword arguments are passed to :class:`.LoadLibrary`.
 
         Raises
         ------
@@ -80,7 +81,6 @@ class Server32(HTTPServer):
         TypeError
             If the value of `libtype` is not supported.
         """
-        self._quiet = bool(quiet)
         self._library = LoadLibrary(path, libtype=libtype, **kwargs)
         super(Server32, self).__init__((host, int(port)), _RequestHandler)
 
@@ -169,8 +169,17 @@ class Server32(HTTPServer):
 
     @property
     def quiet(self):
-        """:class:`bool`: Whether :data:`sys.stdout` messages are hidden on the server."""
-        return self._quiet
+        """This attribute is no longer used and it will be removed in a future release.
+
+        Returns :data:`True`.
+        """
+        warnings.simplefilter('once', DeprecationWarning)
+        warnings.warn(
+            'The `quiet` attribute for Server32 will be removed in version 0.9 -- attribute returns True',
+            DeprecationWarning,
+            stacklevel=2
+        )
+        return True
 
     def shutdown_handler(self):
         """

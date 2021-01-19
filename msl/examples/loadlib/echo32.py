@@ -17,7 +17,7 @@ from msl.loadlib import Server32
 
 class Echo32(Server32):
 
-    def __init__(self, host, port, quiet, **kwargs):
+    def __init__(self, host, port, **kwargs):
         """
         Example of a server class that illustrates that Python data types are preserved
         when they are sent from the :class:`~.echo64.Echo64` client to the server.
@@ -28,21 +28,19 @@ class Echo32(Server32):
             The IP address of the server.
         port : :class:`int`
             The port to open on the server.
-        quiet : :class:`bool`
-            Whether to hide :data:`sys.stdout` messages from the server.
 
         Note
         ----
         Any class that is a subclass of :class:`~msl.loadlib.server32.Server32` **MUST**
-        provide three arguments in its constructor: `host`, `port` and `quiet`
-        (in that order) and `**kwargs`. Otherwise the ``server32`` executable, see
+        provide two arguments in its constructor: `host` and `port` (in that order)
+        and `**kwargs`. Otherwise the ``server32`` executable, see
         :class:`~msl.loadlib.start_server32`, cannot create an instance of the
         :class:`~msl.loadlib.server32.Server32` subclass.
         """
         # even though this is a *echo* class that does not call a shared library
         # we still need to provide a library file that exists. Use the C++ library.
         super(Echo32, self).__init__(os.path.join(os.path.dirname(__file__), 'cpp_lib32'),
-                                     'cdll', host, port, quiet)
+                                     'cdll', host, port)
 
     def received_data(self, *args, **kwargs):
         """Process a request from the :meth:`~.echo64.Echo64.send_data` method from

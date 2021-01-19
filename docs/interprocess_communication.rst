@@ -41,9 +41,8 @@ interpreter. This library gets loaded by the **MyServer** class (that is a subcl
 :class:`~msl.loadlib.server32.Server32`) which is running within a 32-bit executable,
 see :mod:`~msl.loadlib.start_server32`. **MyServer** hosts the library at the specified host
 address and port number. Any class that is a subclass of :class:`~msl.loadlib.server32.Server32`
-*must* provide three arguments in its constructor: ``host``, ``port`` and ``quiet``
-(in that order) and ``**kwargs``. Otherwise the 32-bit executable cannot create an instance of the
-subclass.
+*must* provide two arguments in its constructor: ``host`` and ``port`` (in that order) and
+``**kwargs``. Otherwise the 32-bit executable cannot create an instance of the subclass.
 
 .. code-block:: python
 
@@ -54,9 +53,9 @@ subclass.
     class MyServer(Server32):
         """A wrapper around a 32-bit C++ library, 'cpp_lib32.dll', that has an 'add' function."""
 
-        def __init__(self, host, port, quiet, **kwargs):
+        def __init__(self, host, port, **kwargs):
             # Load the 'cpp_lib32' shared-library file using ctypes.CDLL.
-            super(MyServer, self).__init__('cpp_lib32.dll', 'cdll', host, port, quiet)
+            super(MyServer, self).__init__('cpp_lib32.dll', 'cdll', host, port)
 
         def add(self, a, b):
             # The Server32 class has a 'lib' property that is a reference to the ctypes.CDLL object.
