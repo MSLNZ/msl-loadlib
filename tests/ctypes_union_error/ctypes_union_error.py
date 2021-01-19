@@ -21,12 +21,18 @@ class FileSystemObjectServer(Server32):
         # Therefore, we don't want this test to fail because the Python
         # environment that is running Client64 has numpy installed.
         # (This only appeared to be an issue when Client64 runs on Python 3.5)
+        path = None
         for index, item in enumerate(sys.path):
             if item.endswith('site-packages'):
-                sys.path.pop(index)
+                path = sys.path.pop(index)
                 break
 
         super(FileSystemObjectServer, self).__init__('Scripting.FileSystemObject', 'com', host, port)
+
+        # put 'site-packages' back in
+        if path:
+            sys.path.append(path)
+
         self.temp_file = os.path.join(tempfile.gettempdir(), 'msl-loadlib-FileSystemObject.txt')
 
     def get_temp_file(self):
