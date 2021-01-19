@@ -7,8 +7,11 @@ import ctypes
 import ctypes.util
 import subprocess
 
-from . import utils, DEFAULT_EXTENSION, IS_PYTHON2
-from .utils import logger
+from . import (
+    utils,
+    DEFAULT_EXTENSION,
+    IS_PYTHON2,
+)
 
 _encoding = sys.getfilesystemencoding()
 
@@ -261,10 +264,10 @@ class LoadLibrary(object):
             try:
                 types = self._assembly.GetTypes()
             except Exception as e:
-                logger.error(e)
-                logger.error('The LoaderExceptions are:')
+                utils.logger.error(e)
+                utils.logger.error('The LoaderExceptions are:')
                 for item in e.LoaderExceptions:
-                    logger.error('  ' + item.Message)
+                    utils.logger.error('  ' + item.Message)
             else:
                 for t in types:
                     try:
@@ -287,7 +290,7 @@ class LoadLibrary(object):
         if IS_PYTHON2:
             self._path = self._path.decode(_encoding)
 
-        logger.debug('Loaded ' + self._path)
+        utils.logger.debug('Loaded ' + self._path)
 
     def __repr__(self):
         path = self._path.encode(_encoding) if IS_PYTHON2 else self._path
@@ -296,7 +299,7 @@ class LoadLibrary(object):
     def __del__(self):
         if self._gateway is not None:
             self._gateway.shutdown()
-            logger.debug('shutdown py4j.GatewayServer')
+            utils.logger.debug('shutdown py4j.GatewayServer')
 
     @property
     def assembly(self):
