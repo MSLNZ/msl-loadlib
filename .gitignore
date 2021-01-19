@@ -46,9 +46,6 @@ stdout.txt
 # MANIFEST.in is now auto-generated based on the platform
 MANIFEST.in
 
-# ignore all scripts in the junk/ folder
-junk/
-
 # the Eclipse project files for Py4JWrapper
 py4jwrapper/bin/
 py4jwrapper/.classpath
