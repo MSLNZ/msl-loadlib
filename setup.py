@@ -158,20 +158,20 @@ elif 'sdist' in sys.argv:
 
 install_requires = []
 
+tests_require = [
+    'pytest',
+    'pytest-cov',
+    'py4j',
+    'pathlib;python_version<"3.0"',
+    'pythonnet;python_version<"3.9"',
+    'comtypes;sys_platform=="win32"',
+]
+
 testing = {'test', 'tests', 'pytest'}.intersection(sys.argv)
 pytest_runner = ['pytest-runner'] if testing else []
 
 needs_sphinx = {'doc', 'docs', 'apidoc', 'apidocs', 'build_sphinx'}.intersection(sys.argv)
 sphinx = ['sphinx', 'sphinx_rtd_theme'] + install_requires if needs_sphinx else []
-
-tests_require = ['pytest-cov', 'pythonnet', 'py4j']
-if sys.version_info[:2] == (2, 7):
-    tests_require.extend(['zipp<2.0', 'pyparsing<3.0', 'pytest~=4.6', 'pathlib'])
-else:
-    tests_require.append('pytest')
-
-if IS_WINDOWS:
-    tests_require.append('comtypes')
 
 version = get_version()
 
@@ -210,6 +210,7 @@ setup(
         'java': ['py4j'],
         'com': ['comtypes'],
         'all': ['pythonnet', 'py4j', 'comtypes'],
+        'tests': tests_require,
     },
     cmdclass={'docs': BuildDocs, 'apidocs': ApiDocs},
     packages=find_packages(include=('msl*',)),
