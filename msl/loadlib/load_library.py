@@ -33,10 +33,10 @@ class LoadLibrary(object):
             * comtypes.CreateObject_ if `libtype` is ``'com'``.
 
         .. versionchanged:: 0.4
-           Added support for Java archives
+           Added support for Java archives.
 
         .. versionchanged:: 0.5
-           Added support for COM_ libraries
+           Added support for COM_ libraries.
 
         .. _Assembly: https://msdn.microsoft.com/en-us/library/system.reflection.assembly(v=vs.110).aspx
         .. _comtypes.CreateObject: https://pythonhosted.org/comtypes/#creating-and-accessing-com-objects
