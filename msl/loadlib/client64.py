@@ -319,7 +319,7 @@ class Client64(object):
         Note
         ----
         This method gets called automatically when the reference count to the
-        :class:`~.client64.Client64` object reaches 0.
+        :class:`~.client64.Client64` object reaches 0, see :meth:`~object.__del__`.
         """
         if self._conn is None:
             return self._proc.stdout, self._proc.stderr
