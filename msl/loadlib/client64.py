@@ -42,21 +42,22 @@ _encoding = sys.getfilesystemencoding()
 
 class Client64(object):
 
-    def __init__(self, module32, host='127.0.0.1', port=None, timeout=10.0, quiet=None,
-                 append_sys_path=None, append_environ_path=None, rpc_timeout=None, **kwargs):
+    def __init__(self, module32, host='127.0.0.1', port=None, timeout=10.0,
+                 quiet=None, append_sys_path=None, append_environ_path=None,
+                 rpc_timeout=None, protocol=None, **kwargs):
         """Base class for communicating with a 32-bit library from 64-bit Python.
 
-        Starts a 32-bit server, :class:`~.server32.Server32`, to host a Python module
-        that is a wrapper around a 32-bit library. The *client64* module runs within
+        Starts a 32-bit server, :class:`~.server32.Server32`, to host a Python class
+        that is a wrapper around a 32-bit library. :class:`.Client64` runs within
         a 64-bit Python interpreter and it sends a request to the server which calls
         the 32-bit library to execute the request. The server then provides a
         response back to the client.
 
         .. versionchanged:: 0.6
-           Added the `rpc_timeout` parameter
+           Added the `rpc_timeout` argument.
 
         .. versionchanged:: 0.8
-           The default `quiet` value is now :data:`None`.
+           Added the `protocol` argument and the default `quiet` value became :data:`None`.
 
         Parameters
         ----------
@@ -88,6 +89,10 @@ class Client64(object):
             handling for each method on the server. Default is :data:`None`, which means
             to use the default timeout value used by the :mod:`socket` module (which is
             to *wait forever*).
+        protocol : :class:`int`, optional
+            The :mod:`pickle` :ref:`protocol <pickle-protocols>` to use. If not
+            specified then determines the value to use based on the version of
+            Python that the :class:`.Client64` is running in.
         **kwargs
             All additional keyword arguments are passed to the :class:`~.server32.Server32`
             subclass. The data type of each value is not preserved. It will be a string
@@ -121,20 +126,20 @@ class Client64(object):
         # the temporary file to use to save the pickle'd data
         self._pickle_path = os.path.join(tempfile.gettempdir(), str(uuid.uuid4())+'.pickle')
 
-        # select the pickle protocol to use based on the 64-bit version of Python
-        major, minor = sys.version_info[:2]
-        if major == 2:
-            self._pickle_protocol = 2
-        elif major == 3 and minor < 4:
-            self._pickle_protocol = 3
-        elif major == 3 and minor < 8:
-            self._pickle_protocol = 4
+        if protocol is None:
+            # select the pickle protocol to use based on the 64-bit version of Python
+            major, minor = sys.version_info[:2]
+            if major == 2:
+                self._pickle_protocol = 2
+            elif major == 3 and minor < 4:
+                self._pickle_protocol = 3
+            elif major == 3 and minor < 8:
+                self._pickle_protocol = 4
+            else:
+                # TODO protocol version 5 was added in Python 3.8 (see PEP 574).
+                self._pickle_protocol = 4
         else:
-            # TODO protocol version 5 was added in Python 3.8 (see PEP 574).
-            #  When pyinstaller, comtypes and pythonnet support Python 3.8
-            #  then the 32-bit server could be frozen using Python 3.8 and
-            #  self._pickle_protocol could be set to 5 in this case.
-            self._pickle_protocol = 4
+            self._pickle_protocol = protocol
 
         # make sure that the server32 executable exists
         server_exe = os.path.join(os.path.dirname(__file__), SERVER_FILENAME)
@@ -299,7 +304,7 @@ class Client64(object):
         :mod:`pickle`\'d data.
 
         .. versionchanged:: 0.6
-           Added the `kill_timeout` parameter
+           Added the `kill_timeout` argument.
 
         .. versionchanged:: 0.8
            Returns the (stdout, stderr) streams from the 32-bit server.
@@ -319,7 +324,7 @@ class Client64(object):
         Note
         ----
         This method gets called automatically when the reference count to the
-        :class:`~.client64.Client64` object reaches 0, see :meth:`~object.__del__`.
+        :class:`~.client64.Client64` object reaches 0 -- see :meth:`~object.__del__`.
         """
         if self._conn is None:
             return self._proc.stdout, self._proc.stderr
