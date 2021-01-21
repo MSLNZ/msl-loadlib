@@ -1,18 +1,22 @@
-# Run this script using the server32 executable to see which standard library modules cannot be imported
-#   eg. server32-windows -m ..\..\tests\check_server32_imports.py
-#
-# The following error will be raised, but that's ok
-#
-#   AttributeError: module check_server32_imports.py
-#   Module does not contain a class that is a subclass of Server32.
-#   Cannot start the 32-bit server.
-#
+"""
+Run this script using the server32 executable to see which modules from
+the standard library cannot be imported, e.g.,
 
+  server32-windows.exe -m ..\..\tests\check_server32_imports.py
 
-# builtin modules in Python 3.9
+The following error will be displayed when the script exits (but that's ok)
+
+  AttributeError: module check_server32_imports.py
+  Module does not contain a class that is a subclass of Server32.
+  Cannot start the 32-bit server.
+
+"""
+
+# builtin modules in Python 3.7
 modules = [
     '__future__',
     '__main__',
+    '_dummy_thread',
     '_thread',
     'abc',
     'aifc',
@@ -115,6 +119,7 @@ modules = [
     'distutils.util',
     'distutils.version',
     'doctest',
+    'dummy_threading',
     'email',
     'email.charset',
     'email.contentmanager',
@@ -150,7 +155,6 @@ modules = [
     'getpass',
     'gettext',
     'glob',
-    'graphlib',
     'grp',
     'gzip',
     'hashlib',
@@ -186,6 +190,7 @@ modules = [
     'logging.config',
     'logging.handlers',
     'lzma',
+    'macpath',
     'mailbox',
     'mailcap',
     'marshal',
@@ -200,7 +205,6 @@ modules = [
     'multiprocessing.dummy',
     'multiprocessing.managers',
     'multiprocessing.pool',
-    'multiprocessing.shared_memory',
     'multiprocessing.sharedctypes',
     'netrc',
     'nis',
@@ -275,22 +279,13 @@ modules = [
     'termios',
     'test',
     'test.support',
-    'test.support.bytecode_helper',
     'test.support.script_helper',
-    'test.support.socket_helper'
     'textwrap',
     'threading',
     'time',
     'timeit',
     'tkinter',
-    'tkinter.colorchooser',
-    'tkinter.commondialog',
-    'tkinter.dnd',
-    'tkinter.filedialog',
-    'tkinter.font',
-    'tkinter.messagebox',
     'tkinter.scrolledtext',
-    'tkinter.simpledialog',
     'tkinter.tix',
     'tkinter.ttk',
     'token',
@@ -347,7 +342,6 @@ modules = [
     'zipfile',
     'zipimport',
     'zlib',
-    'zoneinfo',
 ]
 
 print('The following modules cannot be imported')
