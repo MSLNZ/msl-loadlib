@@ -49,3 +49,6 @@ MANIFEST.in
 # the Eclipse project files for Py4JWrapper
 py4jwrapper/bin/
 py4jwrapper/.classpath
+
+# created when running the doctests
+a_new_file.txt
