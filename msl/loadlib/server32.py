@@ -133,9 +133,9 @@ class Server32(HTTPServer):
         --------
         ::
 
-            >>> from msl.loadlib import Server32  # doctest: +SKIP
-            >>> Server32.version()  # doctest: +SKIP
-            'Python 3.7.7 (tags/v3.7.7:d7c567b08f, Mar 10 2020, 09:44:33) [MSC v.1900 32 bit (Intel)]'
+            >>> from msl.loadlib import Server32
+            >>> Server32.version()
+            'Python 3.7.9 ...'
 
         Note
         ----
@@ -182,11 +182,10 @@ class Server32(HTTPServer):
         return True
 
     def shutdown_handler(self):
-        """
-        Proxy function that is called immediately prior to the server shutting down.
+        """Proxy function that is called immediately prior to the server shutting down.
 
         The intended use case is for the server to do any necessary cleanup, such as stopping
-        locally started threads, closing file-handles, etc...
+        locally started threads, closing file-handles, etc. before it shuts down.
 
         .. versionadded:: 0.6
         """
