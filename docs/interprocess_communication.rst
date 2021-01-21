@@ -35,14 +35,14 @@ communicate with the 32-bit library.
    ~msl.examples.loadlib.labview32
    ~msl.examples.loadlib.labview64
 
-The following illustrates a minimal usage example. The **cpp_lib32.dll** file is a
-32-bit C++ library that cannot be loaded from a module that is running within a 64-bit Python
-interpreter. This library gets loaded by the **MyServer** class (that is a subclass of
-:class:`~msl.loadlib.server32.Server32`) which is running within a 32-bit executable,
-see :mod:`~msl.loadlib.start_server32`. **MyServer** hosts the library at the specified host
-address and port number. Any class that is a subclass of :class:`~msl.loadlib.server32.Server32`
-*must* provide two arguments in its constructor: ``host`` and ``port`` (in that order) and
-``**kwargs``. Otherwise the 32-bit executable cannot create an instance of the subclass.
+The following illustrates a minimal usage example. The **cpp_lib32.dll** file
+is a 32-bit C++ library that cannot be loaded from a module that is running
+within a 64-bit Python interpreter. This library gets loaded by the **MyServer**
+class which is running within a 32-bit process. **MyServer** hosts the library
+at the specified host address and port number. Any class that is a subclass of
+:class:`~msl.loadlib.server32.Server32` *must* provide two arguments in its
+constructor: ``host`` and ``port``. Including keyword arguments in the
+constructor is optional.
 
 .. code-block:: python
 
@@ -62,19 +62,10 @@ address and port number. Any class that is a subclass of :class:`~msl.loadlib.se
             # The shared library’s 'add' function takes two integers as inputs and returns the sum.
             return self.lib.add(a, b)
 
-Keyword arguments, ``**kwargs``, can be passed to the server either from the client (see,
-:class:`~msl.loadlib.client64.Client64`) or by manually starting the server from the command line
-(see, :class:`~msl.loadlib.start_server32`). However, the data types for the values of the ``**kwargs`` are not
-preserved (since they are ultimately parsed from the command line). Therefore, all data types for
-the *kwargs* values will be of type :class:`str` at the constructor of the :class:`~msl.loadlib.server32.Server32`
-subclass. You must convert each value to the appropriate data type. This ``**kwargs`` variable
-is the only variable that the data type is not preserved for the client-server protocol (see, the
-`"Echo" example <tutorials_echo.html>`_ that shows that data types are preserved between client-server
-method calls).
-
-**MyClient** is a subclass of :class:`~msl.loadlib.client64.Client64` which sends a request to
-**MyServer** to call the ``add`` function in the shared library. **MyServer** processes the
-request and sends the response back to **MyClient**.
+**MyClient** is a subclass of :class:`~msl.loadlib.client64.Client64` which
+sends a request to **MyServer** to call the ``add`` function in the shared
+library. **MyServer** processes the request and sends the response back to
+**MyClient**.
 
 .. code-block:: python
 
@@ -96,12 +87,27 @@ request and sends the response back to **MyClient**.
 
 The **MyClient** class would then be used as follows
 
+.. invisible-code-block: pycon
+
+   >>> import pytest
+   >>> pytest.skip('ignore illustrative MyClient/MyServer example')
+
 .. code-block:: pycon
 
    >>> from my_client import MyClient
    >>> c = MyClient()
    >>> c.add(1, 2)
    3
+
+Keyword arguments, *kwargs*, that the :class:`~msl.loadlib.server32.Server32`
+subclass requires can be passed to the server from the client (see,
+:class:`~msl.loadlib.client64.Client64`). However, the data types for the values
+of the *kwargs* are not preserved (since they are ultimately parsed from the
+command line). Therefore, all data types for the values of the *kwargs* will be
+of type :class:`str` at the constructor of the :class:`~msl.loadlib.server32.Server32`
+subclass. These *kwargs* are the only arguments where the data type is not preserved
+for the client-server protocol. See the `"Echo" <tutorials_echo.html>`_ example
+which shows that data types are preserved between client-server method calls.
 
 The following examples are provided for communicating with different libraries that were
 compiled in different programming languages or using different calling conventions:
@@ -118,8 +124,9 @@ compiled in different programming languages or using different calling conventio
 
 .. tip::
 
-    If you find yourself repeatedly implementing each method in your :class:`~msl.loadlib.client64.Client64`
-    subclass in the following way (i.e., you are essentially duplicating the code for each method)
+    If you find yourself repeatedly implementing each method in your
+    :class:`~msl.loadlib.client64.Client64` subclass in the following way
+    (i.e., you are essentially duplicating the code for each method)
 
     .. code-block:: python
 

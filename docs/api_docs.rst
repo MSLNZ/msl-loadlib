@@ -16,22 +16,21 @@ which has the following class for directly loading a shared library,
 
    ~msl.loadlib.load_library.LoadLibrary
 
-the following client-server classes for communicating with a 32-bit library from 64-bit Python,
+the following client-server classes for communicating with a 32-bit library
+from 64-bit Python,
 
 .. autosummary::
 
    ~msl.loadlib.client64.Client64
    ~msl.loadlib.server32.Server32
 
-the following modules for creating a `frozen <https://www.pyinstaller.org/>`_
-32-bit server for hosting a 32-bit library
+a function to create a frozen_ 32-bit server
 
 .. autosummary::
 
    ~msl.loadlib.freeze_server32
-   ~msl.loadlib.start_server32
 
-and a utilities module with general helper functions
+and some general helper functions
 
 .. autosummary::
 
@@ -57,3 +56,5 @@ Example modules for communicating with a 32-bit library from 64-bit Python
 .. toctree::
 
    _api/msl.examples.loadlib
+
+.. _frozen: https://www.pyinstaller.org/

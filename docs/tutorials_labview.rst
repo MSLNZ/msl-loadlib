@@ -4,29 +4,26 @@
 Load a 32-bit LabVIEW library in 64-bit Python
 ==============================================
 
-.. attention::
-   This example requires that the appropriate
-   `LabVIEW Run-Time Engine <https://www.ni.com/download/labview-run-time-engine-2015/5507/en/>`_ is installed
-   and that the operating system is Windows.
-
-This example shows how to access a 32-bit LabVIEW library from a module that is run by a
-64-bit Python interpreter by using `inter-process communication
-<https://en.wikipedia.org/wiki/Inter-process_communication>`_.
+This example shows how to access a 32-bit LabVIEW library from 64-bit Python.
 :class:`~msl.examples.loadlib.labview32.Labview32` is the 32-bit server and
-:class:`~msl.examples.loadlib.labview64.Labview64` is the 64-bit client. The source
-code of the LabVIEW program is available :ref:`here <labview-lib>`.
+:class:`~msl.examples.loadlib.labview64.Labview64` is the 64-bit client.
+The source code of the LabVIEW program is available :ref:`here <labview-lib>`.
 
-Create a :class:`~msl.examples.loadlib.labview64.Labview64` client to communicate with the
-32-bit :ref:`labview_lib32 <labview-lib>` library from 64-bit Python
+.. attention::
+   This example requires that a 32-bit `LabVIEW Run-Time Engine`_
+   is installed and that the operating system is Windows.
+
+Create a :class:`~msl.examples.loadlib.labview64.Labview64` client to communicate
+with the 32-bit :ref:`labview_lib32 <labview-lib>` library
+
+.. invisible-code-block: pycon
+
+   >>> SKIP_LABVIEW32()
 
 .. code-block:: pycon
 
    >>> from msl.examples.loadlib import Labview64
    >>> labview = Labview64()
-   >>> labview
-   <Labview64 lib=labview_lib32.dll address=127.0.0.1:...>
-   >>> labview.lib32_path
-   '...\labview_lib32.dll'
 
 Calculate the mean and the *sample* variance and standard deviation of some data, see
 :meth:`~msl.examples.loadlib.labview64.Labview64.stdev`
@@ -45,15 +42,9 @@ Calculate the mean and the *population* variance and standard deviation of data
    (5.0, 6.666666666666667, 2.581988897471611)
 
 Shutdown the 32-bit server when you are done communicating with the 32-bit library
-(the *stdout* and *stderr* streams from the 32-bit server are returned), see
-:meth:`~msl.loadlib.client64.Client64.shutdown_server32`
 
 .. code-block:: pycon
 
    >>> stdout, stderr = labview.shutdown_server32()
 
-.. note::
-   When using a subclass of :class:`~msl.loadlib.client64.Client64` in a script, the
-   :meth:`~msl.loadlib.client64.Client64.shutdown_server32` method gets called automatically
-   when the instance of the subclass is about to be destroyed and therefore you do not have to call
-   the :meth:`~msl.loadlib.client64.Client64.shutdown_server32` method to shutdown the server.
+.. _LabVIEW Run-Time Engine: https://www.ni.com/en-nz/support/downloads/software-products/download.labview.html#369481

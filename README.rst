@@ -121,6 +121,10 @@ To load a `Component Object Model`_ (COM) library pass in the library's Program 
 Here we load the FileSystemObject_ library and include the ``'com'`` argument to indicate that
 it is a COM library.
 
+.. invisible-code-block: pycon
+
+   >>> SKIP_IF_NOT_WINDOWS()
+
 .. code-block:: pycon
 
    >>> com = LoadLibrary('Scripting.FileSystemObject', 'com')
@@ -148,6 +152,11 @@ We then use the library to create, edit and close a text file
    >>> fp.Close()
    0
 
+.. invisible-code-block: pycon
+
+   >>> import os
+   >>> os.remove('a_new_file.txt')
+
 `Inter-process communication <ipc_>`_ is used to access a 32-bit shared library from a module that is
 running within a 64-bit Python interpreter. The procedure uses a client-server protocol where the client
 is a subclass of ``msl.loadlib.Client64`` and the server is a subclass of ``msl.loadlib.Server32``.
@@ -159,10 +168,9 @@ Documentation
 
 The documentation for **MSL-LoadLib** can be found `here <https://msl-loadlib.readthedocs.io/en/latest/index.html>`_.
 
-.. |docs| image:: https://readthedocs.org/projects/msl-loadlib/badge/?version=latest
-   :target: https://msl-loadlib.readthedocs.io/en/latest/
+.. |docs| image:: https://readthedocs.org/projects/msl-loadlib/badge/?version=stable
+   :target: https://msl-loadlib.readthedocs.io/en/stable/?badge=stable
    :alt: Documentation Status
-   :scale: 100%
 
 .. |pypi| image:: https://badge.fury.io/py/msl-loadlib.svg
    :target: https://badge.fury.io/py/msl-loadlib

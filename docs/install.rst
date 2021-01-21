@@ -1,9 +1,9 @@
 .. _loadlib-install:
 
-Install MSL-LoadLib
-===================
+Install
+=======
 
-To install **MSL-LoadLib** run:
+To install MSL-LoadLib run:
 
 .. code-block:: console
 
@@ -49,12 +49,13 @@ or MSL-LoadLib and all optional dependencies:
 
    pip install msl-loadlib[all]
 
-
 Compatibility
 -------------
-* The :mod:`~msl.loadlib.start_server32` module has been built in to a `frozen <https://www.pyinstaller.org/>`_
-  Python application for Windows and Linux and works with the Python versions listed above. The 32-bit server
-  is running on Python 3.7 and therefore all modules that run on the server must use Python 3 syntax.
+* The :mod:`~msl.loadlib.start_server32` module has been built into a
+  frozen_ Python application for Windows and Linux and works with the
+  Python versions listed above. The 32-bit server is running with a
+  Python 3 interpreter and therefore all modules that run on the server
+  must use Python 3 syntax.
 * You can create a new 32-bit server. See :ref:`refreeze` for more details.
 
 .. _loadlib-prerequisites:
@@ -64,49 +65,58 @@ Prerequisites
 
 Windows
 +++++++
-64-bit Windows already comes with `WoW64 <https://en.wikipedia.org/wiki/WoW64>`_ to run 32-bit software and
-therefore no prerequisites are required to load ``__cdecl`` or ``__stdcall`` libraries. However,
-the library might have its own dependencies, such as a particular Visual C++ Redistributable, that may need
-to be installed.
+64-bit Windows already comes with WoW64_ to run 32-bit software and therefore
+no prerequisites are required to load ``__cdecl`` or ``__stdcall`` libraries.
+However, the library might have its own dependencies, such as a particular
+Visual C++ Redistributable, that may need to be installed.
 
-If you need to load a Microsoft .NET library then you must install `Python for .NET`_
+If you need to load a Microsoft .NET library then you must install
+`Python for .NET`_
 
 .. code-block:: console
 
    pip install pythonnet
 
-If you need to load a Java library, a ``.jar`` or ``.class`` file, then you must install Py4J_
+If you need to load a Java library (i.e., a ``.jar`` or ``.class`` file)
+then you must install Py4J_
 
 .. code-block:: console
 
    pip install py4j
 
-and a `Java Runtime Environment`_ and ensure that the ``java`` executable is available on your ``PATH``.
-For example, the following should return the version of Java that is installed
+and a `Java Runtime Environment`_ and ensure that the ``java`` executable
+is available on your ``PATH``. For example, the following should return the
+version of Java that is installed
 
 .. code-block:: console
 
    C:\>java --version
-   java 13.0.2 2020-01-14
-   Java(TM) SE Runtime Environment (build 13.0.2+8)
-   Java HotSpot(TM) 64-Bit Server VM (build 13.0.2+8, mixed mode, sharing)
+   java 15.0.1 2020-10-20
+   Java(TM) SE Runtime Environment (build 15.0.1+9-18)
+   Java HotSpot(TM) 64-Bit Server VM (build 15.0.1+9-18, mixed mode, sharing)
 
-If you need to load a `Component Object Model`_ library then you must install comtypes_
+If you need to load a `Component Object Model`_ library then you must
+install comtypes_
 
 .. code-block:: console
 
    pip install comtypes
 
-When loading a shared library it is vital that all dependencies of the library are also available on your
-computer and that the directory of the dependency is also available on your ``PATH``. A helpful utility to use
-to determine the dependencies of a shared library is Dependencies_ (which is a modern `Dependency Walker`_).
-For finding the dependencies of a .NET library the `Dependency Walker for .NET`_ is also useful.
+.. tip::
+
+   When loading a shared library it is vital that all dependencies of the
+   library are also on your computer and that the directory of the dependency
+   is also available on your ``PATH``. A helpful utility to use to determine
+   the dependencies of a shared library is Dependencies_ (which is a modern
+   `Dependency Walker`_). For finding the dependencies of a .NET library the
+   `Dependency Walker for .NET`_ can also be helpful.
 
 Linux
 ++++++
-Before using **MSL-LoadLib** on Linux the following packages are required.
+Before using MSL-LoadLib on Linux the following packages are required.
 
-Install the packages that are needed to run a 32-bit binary on 64-bit Linux and to load C/C++ and FORTRAN libraries
+Install the packages that are needed to run a 32-bit binary on 64-bit Linux
+and to load C/C++ and FORTRAN libraries
 
 .. code-block:: console
 
@@ -119,9 +129,18 @@ The following ensures that the ``netstat`` command is available
 
    sudo apt install net-tools
 
-If you need to load a Microsoft .NET library then you must install Mono_. The following illustrates
-how to install Mono_ v5.20 on Ubuntu 18.04. *(NOTE: v5.20 was used when embedding pythonnet in*
-*the 32-bit server for Linux)*
+If you need to load a Microsoft .NET library then you must install Mono_.
+The following illustrates how to install Mono_ v5.20 on Ubuntu 18.04.
+
+.. attention::
+
+   Mono_ v5.20 was installed when embedding pythonnet in the 32-bit server
+   and therefore that version must also be installed in 64-bit Linux
+   if you want to load a 32-bit library. You can :ref:`refreeze <refreeze>`
+   the 32-bit server using a different Mono_ version; however, be sure to
+   follow the status of `issue 1210`_. You can install any version of Mono_
+   that is supported by `Python for .NET`_ in 64-bit Linux if you do not
+   need to load a 32-bit .NET library.
 
 .. code-block:: console
 
@@ -144,11 +163,13 @@ and then install `Python for .NET`_
 
    pip3 install pythonnet
 
-Installing Mono_ v5.20.1.34 and `Python for .NET`_ v2.4.0 on Ubuntu 18.04 has been confirmed to work.
-If you run in to problems installing `Python for .NET`_ then the best place to find help is on the
-`issues <https://github.com/pythonnet/pythonnet/issues>`_ page of `Python for .NET`_\'s repository.
+Installing Mono_ v5.20.1.34 and `Python for .NET`_ v2.4.0 on Ubuntu 18.04 has
+been confirmed to work. If you run in to problems installing `Python for .NET`_
+then the best place to find help is on the issues_ page of `Python for .NET`_\'s
+repository.
 
-If you need to load a Java library, a ``.jar`` or ``.class`` file, then you must install Py4J_
+If you need to load a Java library (i.e., a ``.jar`` or ``.class`` file)
+then you must install Py4J_
 
 .. code-block:: console
 
@@ -160,20 +181,21 @@ and a `Java Runtime Environment`_
 
    sudo apt install default-jre
 
-and ensure that the ``java`` executable is available on your ``PATH``. For example, the following
-should return the version of Java that is installed
+and ensure that the ``java`` executable is available on your ``PATH``.
+For example, the following should return the version of Java that is installed
 
 .. code-block:: console
 
    $ java --version
-   openjdk 11.0.6 2020-01-14
-   OpenJDK Runtime Environment (build 11.0.6+10-post-Ubuntu-1ubuntu118.04.1)
-   OpenJDK 64-Bit Server VM (build 11.0.6+10-post-Ubuntu-1ubuntu118.04.1, mixed mode, sharing)
+   openjdk 11.0.9.1 2020-11-04
+   OpenJDK Runtime Environment (build 11.0.9.1+1-Ubuntu-0ubuntu1.18.04)
+   OpenJDK 64-Bit Server VM (build 11.0.9.1+1-Ubuntu-0ubuntu1.18.04, mixed mode, sharing)
 
 macOS
 +++++
-The 32-bit server has not been created for macOS, however, the :class:`~msl.loadlib.load_library.LoadLibrary`
-class can be used to load a library that uses the ``__cdecl`` calling convention that is the same
+The 32-bit server has not been created for macOS, however, the
+:class:`~msl.loadlib.load_library.LoadLibrary` class can be used to load a
+library that uses the ``__cdecl`` calling convention that is the same
 bitness as the Python interpreter, a .NET library or a Java library.
 
 The following assumes that you are using Homebrew_ as your package manager.
@@ -190,8 +212,8 @@ To load a C/C++ or FORTRAN library install gcc (which includes gfortran)
 
    brew install gcc
 
-If you need to load a Microsoft .NET library then you must install Mono_ and the prerequisites
-to build `Python for .NET`_ from source
+If you need to load a Microsoft .NET library then you must install Mono_
+and the prerequisites to build `Python for .NET`_ from source
 
 .. code-block:: console
 
@@ -204,10 +226,11 @@ and `Python for .NET`_
 
    pip3 install pythonnet
 
-If you run in to problems installing `Python for .NET`_ then the best place to find help is on the
-`issues <https://github.com/pythonnet/pythonnet/issues>`_ page of `Python for .NET`_\'s repository.
+If you run in to problems installing `Python for .NET`_ then the best place
+to find help is on the issues_ page of `Python for .NET`_\'s repository.
 
-If you need to load a Java library, a ``.jar`` or ``.class`` file, then you must install Py4J_
+If you need to load a Java library (i.e., a ``.jar`` or ``.class`` file)
+then you must install Py4J_
 
 .. code-block:: console
 
@@ -219,14 +242,18 @@ and a `Java Runtime Environment`_
 
    brew cask install java
 
-.. _MSL Package Manager: https://msl-package-manager.readthedocs.io/en/latest/
-.. _Mono: https://www.mono-project.com/download/stable/
+.. _MSL Package Manager: https://msl-package-manager.readthedocs.io/en/stable/
 .. _Python for .NET: https://pythonnet.github.io/
-.. _Java Runtime Environment: https://www.oracle.com/technetwork/java/javase/downloads/index.html
 .. _Py4J: https://www.py4j.org/
 .. _comtypes: https://pythonhosted.org/comtypes/#
+.. _frozen: https://www.pyinstaller.org/
+.. _WoW64: https://en.wikipedia.org/wiki/WoW64
+.. _Java Runtime Environment: https://www.oracle.com/technetwork/java/javase/downloads/index.html
 .. _Component Object Model: https://en.wikipedia.org/wiki/Component_Object_Model
 .. _Dependencies: https://github.com/lucasg/Dependencies
 .. _Dependency Walker: http://www.dependencywalker.com/
 .. _Dependency Walker for .NET: https://github.com/isindicic/DependencyWalker.Net
+.. _Mono: https://www.mono-project.com/download/stable/
+.. _issues: https://github.com/pythonnet/pythonnet/issues
+.. _issue 1210: https://github.com/pythonnet/pythonnet/issues/1210
 .. _Homebrew: https://brew.sh/

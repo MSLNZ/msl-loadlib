@@ -4,61 +4,34 @@
 Load a 32-bit .NET library in 64-bit Python
 ===========================================
 
-.. note::
-   If you have issues running the example please make sure that you have the
-   :ref:`prerequisites <loadlib-prerequisites>` installed.
-
-This example shows how to access a 32-bit .NET library from a module that is run by a
-64-bit Python interpreter by using `inter-process communication
-<https://en.wikipedia.org/wiki/Inter-process_communication>`_.
+This example shows how to access a 32-bit .NET library from 64-bit Python.
 :class:`~msl.examples.loadlib.dotnet32.DotNet32` is the 32-bit server and
 :class:`~msl.examples.loadlib.dotnet64.DotNet64` is the 64-bit client.
+The source code of the C# program is available :ref:`here <dotnet-lib>`.
+
+.. note::
+   If you have issues running the example please make sure that you have the
+   :ref:`prerequisites <loadlib-prerequisites>` installed for your operating system.
 
 .. tip::
-   The `JetBrains dotPeek <https://www.jetbrains.com/decompiler/>`_ program can be used
-   to reliably decompile a .NET assembly into the equivalent C# source code. For example,
-   *peeking* inside the :ref:`dotnet_lib32.dll <dotnet-lib>` library, that the
+   The `JetBrains dotPeek`_ program can be used to decompile a .NET assembly into
+   the equivalent source code. For example, *peeking* inside the
+   :ref:`dotnet_lib32.dll <dotnet-lib>` library, that the
    :class:`~msl.examples.loadlib.dotnet32.DotNet32` class is a wrapper around, gives
 
    .. image:: _static/dotpeek_lib.png
 
-The following shows that the 32-bit :ref:`dotnet_lib32.dll <dotnet-lib>` library cannot
-be loaded in a 64-bit Python interpreter
-
-.. code-block:: pycon
-
-   >>> from msl.loadlib import LoadLibrary, IS_PYTHON_64BIT
-   >>> from msl.examples.loadlib import EXAMPLES_DIR
-   >>> IS_PYTHON_64BIT
-   True
-   >>> net = LoadLibrary(EXAMPLES_DIR + '/dotnet_lib32.dll', 'net')
-   Traceback (most recent call last):
-     File "...\msl\loadlib\load_library.py", line 227, in __init__
-       clr.AddReference(os.path.splitext(tail)[0])
-   System.IO.FileNotFoundException: Unable to find assembly 'dotnet_lib32'.
-      at Python.Runtime.CLRModule.AddReference(String name)
-
-However, the 64-bit version of the .NET library can be directly loaded in 64-bit Python
-
-.. code-block:: pycon
-
-   >>> net = LoadLibrary(EXAMPLES_DIR + '/dotnet_lib64.dll', 'net')
-   >>> net
-   <LoadLibrary libtype=DotNet path=...\dotnet_lib64.dll>
-   >>> net.lib.StringManipulation().reverse_string('Hello World!')
-   '!dlroW olleH'
-
-Instead, create a :class:`~msl.examples.loadlib.dotnet64.DotNet64` client to communicate
+Create a :class:`~msl.examples.loadlib.dotnet64.DotNet64` client to communicate
 with the 32-bit :ref:`dotnet_lib32.dll <dotnet-lib>` library
+
+.. invisible-code-block: pycon
+
+   >>> SKIP_IF_MACOS()
 
 .. code-block:: pycon
 
    >>> from msl.examples.loadlib import DotNet64
    >>> dn = DotNet64()
-   >>> dn
-   <DotNet64 lib=dotnet_lib32.dll address=127.0.0.1:...>
-   >>> dn.lib32_path
-   '...\dotnet_lib32.dll'
 
 Get the names of the classes in the .NET library module, see
 :meth:`~msl.examples.loadlib.dotnet64.DotNet64.get_class_names`
@@ -75,21 +48,24 @@ Add two integers, see :meth:`~msl.examples.loadlib.dotnet64.DotNet64.add_integer
    >>> dn.add_integers(8, 2)
    10
 
-Divide two C# floating-point numbers, see :meth:`~msl.examples.loadlib.dotnet64.DotNet64.divide_floats`
+Divide two C# floating-point numbers, see
+:meth:`~msl.examples.loadlib.dotnet64.DotNet64.divide_floats`
 
 .. code-block:: pycon
 
    >>> dn.divide_floats(4., 5.)
    0.8
 
-Multiple two C# double-precision numbers, see :meth:`~msl.examples.loadlib.dotnet64.DotNet64.multiply_doubles`
+Multiple two C# double-precision numbers, see
+:meth:`~msl.examples.loadlib.dotnet64.DotNet64.multiply_doubles`
 
 .. code-block:: pycon
 
    >>> dn.multiply_doubles(872.24, 525.525)
    458383.926
 
-Add or subtract two C# double-precision numbers, see :meth:`~msl.examples.loadlib.dotnet64.DotNet64.add_or_subtract`
+Add or subtract two C# double-precision numbers, see
+:meth:`~msl.examples.loadlib.dotnet64.DotNet64.add_or_subtract`
 
 .. code-block:: pycon
 
@@ -98,7 +74,8 @@ Add or subtract two C# double-precision numbers, see :meth:`~msl.examples.loadli
    >>> dn.add_or_subtract(99., 9., False)
    90.0
 
-Multiply a 1D array by a number, see :meth:`~msl.examples.loadlib.dotnet64.DotNet64.scalar_multiply`
+Multiply a 1D array by a number, see
+:meth:`~msl.examples.loadlib.dotnet64.DotNet64.scalar_multiply`
 
 .. code-block:: pycon
 
@@ -108,7 +85,8 @@ Multiply a 1D array by a number, see :meth:`~msl.examples.loadlib.dotnet64.DotNe
    >>> dn.scalar_multiply(2.0, a)
    [0.0, 2.0, 4.0, 6.0, 8.0, 10.0, 12.0, 14.0, 16.0, 18.0]
 
-Multiply two matrices, see :meth:`~msl.examples.loadlib.dotnet64.DotNet64.multiply_matrices`
+Multiply two matrices, see
+:meth:`~msl.examples.loadlib.dotnet64.DotNet64.multiply_matrices`
 
 .. code-block:: pycon
 
@@ -117,7 +95,8 @@ Multiply two matrices, see :meth:`~msl.examples.loadlib.dotnet64.DotNet64.multip
    >>> dn.multiply_matrices(m1, m2)
    [[22.0, 28.0], [49.0, 64.0]]
 
-Reverse a string, see :meth:`~msl.examples.loadlib.dotnet64.DotNet64.reverse_string`
+Reverse a string, see
+:meth:`~msl.examples.loadlib.dotnet64.DotNet64.reverse_string`
 
 .. code-block:: pycon
 
@@ -136,15 +115,9 @@ Call the static methods in the ``StaticClass`` class
    'the experiment worked temporarily'
 
 Shutdown the 32-bit server when you are done communicating with the 32-bit library
-(the *stdout* and *stderr* streams from the 32-bit server are returned), see
-:meth:`~msl.loadlib.client64.Client64.shutdown_server32`
 
 .. code-block:: pycon
 
    >>> stdout, stderr = dn.shutdown_server32()
 
-.. note::
-   When using a subclass of :class:`~msl.loadlib.client64.Client64` in a script, the
-   :meth:`~msl.loadlib.client64.Client64.shutdown_server32` method gets called automatically
-   when the instance of the subclass is about to be destroyed and therefore you do not have to call
-   the :meth:`~msl.loadlib.client64.Client64.shutdown_server32` method to shutdown the server.
+.. _JetBrains dotPeek: https://www.jetbrains.com/decompiler/
