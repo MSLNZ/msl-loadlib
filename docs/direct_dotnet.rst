@@ -20,12 +20,6 @@ indicate that the ``.dll`` file is for the .NET Framework.
    >>> from msl.loadlib import LoadLibrary
    >>> from msl.examples.loadlib import EXAMPLES_DIR
    >>> net = LoadLibrary(EXAMPLES_DIR + '/dotnet_lib64.dll', 'net')
-   >>> net
-   <LoadLibrary libtype=DotNet path=...dotnet_lib64.dll>
-   >>> net.assembly
-   <System.Reflection.RuntimeAssembly object at ...>
-   >>> net.lib
-   <DotNet path=...dotnet_lib64.dll>
 
 The :ref:`dotnet_lib64 <dotnet-lib>` library contains a reference to the
 ``DotNetMSL`` module (which is a C# namespace), the ``StaticClass`` class,

@@ -14,10 +14,6 @@ Load a 64-bit C++ library in 64-bit Python (view the :ref:`C++ source code <cpp-
    >>> from msl.loadlib import LoadLibrary
    >>> from msl.examples.loadlib import EXAMPLES_DIR
    >>> cpp = LoadLibrary(EXAMPLES_DIR + '/cpp_lib64')
-   >>> cpp
-   <LoadLibrary libtype=CDLL path=...cpp_lib64.dll>
-   >>> cpp.lib
-   <CDLL '...cpp_lib64.dll', handle ... at ...>
 
 Call the ``add`` function to calculate the sum of two integers
 

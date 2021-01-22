@@ -15,10 +15,6 @@ Load a 64-bit FORTRAN library in 64-bit Python (view the
    >>> from msl.loadlib import LoadLibrary
    >>> from msl.examples.loadlib import EXAMPLES_DIR
    >>> fortran = LoadLibrary(EXAMPLES_DIR + '/fortran_lib64')
-   >>> fortran
-   <LoadLibrary libtype=CDLL path=...fortran_lib64.dll>
-   >>> fortran.lib
-   <CDLL '...fortran_lib64.dll', handle ... at ...>
 
 Call the ``factorial`` function. With a FORTRAN library you must pass values by
 reference using :mod:`ctypes`, and, since the returned value is not of type
