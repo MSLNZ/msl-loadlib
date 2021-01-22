@@ -169,7 +169,7 @@ Documentation
 The documentation for **MSL-LoadLib** can be found `here <https://msl-loadlib.readthedocs.io/en/latest/index.html>`_.
 
 .. |docs| image:: https://readthedocs.org/projects/msl-loadlib/badge/?version=stable
-   :target: https://msl-loadlib.readthedocs.io/en/stable/?badge=stable
+   :target: https://msl-loadlib.readthedocs.io/en/stable/
    :alt: Documentation Status
 
 .. |pypi| image:: https://badge.fury.io/py/msl-loadlib.svg
