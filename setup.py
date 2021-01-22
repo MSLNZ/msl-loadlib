@@ -159,7 +159,7 @@ elif 'sdist' in sys.argv:
 install_requires = []
 
 tests_require = [
-    'pytest',
+    'pytest>=4.4',  # >=4.4 to support the "-p conftest" option
     'pytest-cov',
     'py4j',
     'pathlib;python_version<"3.0"',
