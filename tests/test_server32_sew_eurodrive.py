@@ -2,10 +2,10 @@ import os
 
 import pytest
 
-from msl.loadlib import IS_MAC, Client64
+from msl.loadlib import IS_MAC, IS_LINUX, Client64
 
 
-@pytest.mark.skipif(IS_MAC, reason='the 32-bit server for Mac OS does not exist')
+@pytest.mark.skipif(IS_MAC or IS_LINUX, reason='only valid on Windows')
 def test_sew_eurodrive():
     """
     The reason for creating this test case was discussed through email.
