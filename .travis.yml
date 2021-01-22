@@ -82,7 +82,7 @@ install:
   - python -m pip install --upgrade --editable .[tests]
   - |
     if [ "$CLONE_PYTHONNET" == "true" ]; then
-      python -m pip install git+https://github.com/pythonnet/pythonnet.git
+      python -m pip install git+https://github.com/pythonnet/pythonnet.git@c81c3c3db7fcc403d5f4e8298b320240829daab29
     fi
 
 script:

@@ -24,7 +24,7 @@ install:
   - python -m pip install --upgrade pip
   - python -m pip install --upgrade setuptools wheel
   - IF "%CLONE_PYTHONNET%"=="true" (
-      python -m pip install git+https://github.com/pythonnet/pythonnet.git
+      python -m pip install git+https://github.com/pythonnet/pythonnet.git@c81c3c3db7fcc403d5f4e8298b320240829daab2
     )
 
 build: off
@@ -33,7 +33,7 @@ test_script:
   - python -m pytest
 
 after_test:
-  - python setup.py sdist bdist_wheel
+  - python setup.py sdist
 
 artifacts:
   - path: dist\*
