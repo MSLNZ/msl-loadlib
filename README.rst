@@ -4,21 +4,18 @@ MSL-LoadLib
 
 |docs| |pypi| |travis| |appveyor|
 
-This package is used to load a shared library in Python. It is basically just a thin wrapper
-around ctypes_ (for libraries that use the ``__cdecl`` or ``__stdcall`` calling convention),
-`Python for .NET`_ (for libraries that use Microsoft's .NET Framework, ``CLR``), Py4J_
-(for Java ``.jar`` or ``.class`` files) and comtypes_ (for libraries that use the
-`Component Object Model`_).
+This package loads a shared library in Python. It is basically just a thin wrapper
+around ctypes_ (for libraries that use the ``__cdecl`` or ``__stdcall`` calling
+convention), `Python for .NET`_ (for libraries that use Microsoft's .NET Framework,
+``CLR``), Py4J_ (for Java ``.jar`` or ``.class`` files) and comtypes_ (for
+libraries that use the `Component Object Model`_).
 
-However, the primary advantage is that it is possible to communicate with a 32-bit shared
+However, the primary advantage is that it is possible to communicate with a 32-bit
 library from 64-bit Python.
 
-Tested in Python 2.7, 3.5+. The `examples <https://msl-loadlib.readthedocs.io/en/latest/direct.html>`_
-provided are currently only supported in Windows and Linux.
-
-**MSL-LoadLib** is a pure-python package, but, `Python for .NET`_ depends on the .NET Common Language
-Runtime (CLR) on Windows and Mono Runtime on Linux and macOS and Py4J_ depends on having a
-`Java Virtual Machine`_ installed.
+MSL-LoadLib is a pure-python package, but, `Python for .NET`_ depends on the .NET
+Common Language Runtime (CLR) on Windows and Mono Runtime on Linux and macOS and
+Py4J_ depends on having a `Java Virtual Machine`_ installed.
 
 Install
 -------
@@ -48,23 +45,26 @@ section of the documentation.
 Examples
 --------
 
-If you are loading a 64-bit library in 64-bit Python, or a 32-bit library in 32-bit Python,
-then you can directly load the library using ``LoadLibrary``.
+If you are loading a 64-bit library in 64-bit Python (or a 32-bit library in
+32-bit Python), then you can directly load the library using ``LoadLibrary``.
 
-The following examples load a 64-bit library in a 64-bit Python interpreter. If you are using a 32-bit
-Python interpreter then replace the **64** with **32** in the filename.
+The following examples load a 64-bit library in a 64-bit Python interpreter.
+If you are using a 32-bit Python interpreter then replace the **64** with **32**
+in the filename.
 
-Import the ``LoadLibrary`` class and the directory where the example libraries are located
+Import the ``LoadLibrary`` class and the directory where the example libraries
+are located
 
 .. code-block:: pycon
 
    >>> from msl.loadlib import LoadLibrary
    >>> from msl.examples.loadlib import EXAMPLES_DIR
 
-If the file extension is not included then a default extension, ``.dll`` (Windows) or ``.so`` (Linux), is used.
+If the file extension is not included then a default extension,
+``.dll`` (Windows) or ``.so`` (Linux), is used.
 
-Load a `C++ <https://github.com/MSLNZ/msl-loadlib/blob/master/msl/examples/loadlib/cpp_lib.cpp>`_ library
-and call the ``add`` function
+Load a `C++ <https://github.com/MSLNZ/msl-loadlib/blob/master/msl/examples/loadlib/cpp_lib.cpp>`_
+library and call the ``add`` function
 
 .. code-block:: pycon
 
@@ -79,8 +79,9 @@ library and call the ``factorial`` function
 
    >>> fortran = LoadLibrary(EXAMPLES_DIR + '/fortran_lib64')
 
-With a FORTRAN library you must pass values by reference using ctypes_, and, since the returned value is not
-of type ``int`` we must configure ctypes_ for a value of type ``double`` to be returned
+With a FORTRAN library you must pass values by reference using ctypes_, and, since
+the returned value is not of type ``int`` we must configure ctypes_ for a value
+of type ``double`` to be returned
 
 .. code-block:: pycon
 
@@ -89,9 +90,9 @@ of type ``int`` we must configure ctypes_ for a value of type ``double`` to be r
    >>> fortran.lib.factorial(byref(c_int(37)))
    1.3763753091226343e+43
 
-Load a `.NET <https://github.com/MSLNZ/msl-loadlib/blob/master/msl/examples/loadlib/dotnet_lib.cs>`_ library
-and call the ``reverse_string`` function, we must specify that the library type is a .NET library by passing
-in the ``'net'`` argument
+Load a `.NET <https://github.com/MSLNZ/msl-loadlib/blob/master/msl/examples/loadlib/dotnet_lib.cs>`_
+library and call the ``reverse_string`` function, we must specify that the library
+type is a .NET library by passing in the ``'net'`` argument
 
 .. code-block:: pycon
 
@@ -99,8 +100,8 @@ in the ``'net'`` argument
    >>> net.lib.StringManipulation().reverse_string('abcdefghijklmnopqrstuvwxyz')
    'zyxwvutsrqponmlkjihgfedcba'
 
-Load `Java <https://github.com/MSLNZ/msl-loadlib/blob/master/msl/examples/loadlib/Trig.java>`_ byte code
-and call the ``cos`` function
+Load `Java <https://github.com/MSLNZ/msl-loadlib/blob/master/msl/examples/loadlib/Trig.java>`_
+byte code and call the ``cos`` function
 
 .. code-block:: pycon
 
@@ -108,8 +109,8 @@ and call the ``cos`` function
    >>> java.lib.Trig.cos(1.234)
    0.33046510807172985
 
-Python interacts with the `Java Virtual Machine`_ via a local network socket and therefore the connection
-needs to be closed when you are done using the Java library
+Python interacts with the `Java Virtual Machine`_ via a local network socket and
+therefore the connection needs to be closed when you are done using the Java library
 
 .. code-block:: pycon
 
@@ -118,8 +119,8 @@ needs to be closed when you are done using the Java library
 To load a `Component Object Model`_ (COM) library pass in the library's Program ID.
 *NOTE: This example will only work on Windows.*
 
-Here we load the FileSystemObject_ library and include the ``'com'`` argument to indicate that
-it is a COM library.
+Here we load the FileSystemObject_ library and include the ``'com'`` argument to
+indicate that it is a COM library.
 
 .. invisible-code-block: pycon
 
@@ -157,16 +158,18 @@ We then use the library to create, edit and close a text file
    >>> import os
    >>> os.remove('a_new_file.txt')
 
-`Inter-process communication <ipc_>`_ is used to access a 32-bit shared library from a module that is
-running within a 64-bit Python interpreter. The procedure uses a client-server protocol where the client
-is a subclass of ``msl.loadlib.Client64`` and the server is a subclass of ``msl.loadlib.Server32``.
-See the `tutorials <https://msl-loadlib.readthedocs.io/en/latest/interprocess_communication.html>`_ for
-examples on how to implement `inter-process communication <ipc_>`_.
+`Inter-process communication <ipc_>`_ is used to access a 32-bit shared library
+from a module that is running within a 64-bit Python interpreter. The procedure
+uses a client-server protocol where the client is a subclass of ``msl.loadlib.Client64``
+and the server is a subclass of ``msl.loadlib.Server32``. See the
+`tutorials <https://msl-loadlib.readthedocs.io/en/latest/interprocess_communication.html>`_
+for examples on how to implement `inter-process communication <ipc_>`_.
 
 Documentation
 -------------
 
-The documentation for **MSL-LoadLib** can be found `here <https://msl-loadlib.readthedocs.io/en/latest/index.html>`_.
+The documentation for **MSL-LoadLib** can be found
+`here <https://msl-loadlib.readthedocs.io/en/latest/index.html>`_.
 
 .. |docs| image:: https://readthedocs.org/projects/msl-loadlib/badge/?version=stable
    :target: https://msl-loadlib.readthedocs.io/en/stable/
