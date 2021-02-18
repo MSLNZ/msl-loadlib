@@ -162,8 +162,8 @@ tests_require = [
     'pytest>=4.4',  # >=4.4 to support the "-p conftest" option
     'pytest-cov',
     'py4j',
+    'pythonnet',
     'pathlib;python_version<"3.0"',
-    'pythonnet;python_version<"3.9"',
     'comtypes;sys_platform=="win32"',
 ]
 
