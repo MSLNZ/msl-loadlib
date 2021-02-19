@@ -66,6 +66,10 @@ If the file extension is not included then a default extension,
 Load a `C++ <https://github.com/MSLNZ/msl-loadlib/blob/master/msl/examples/loadlib/cpp_lib.cpp>`_
 library and call the ``add`` function
 
+.. invisible-code-block: pycon
+
+   >>> SKIP_IF_32BIT()
+
 .. code-block:: pycon
 
    >>> cpp = LoadLibrary(EXAMPLES_DIR + '/cpp_lib64')
