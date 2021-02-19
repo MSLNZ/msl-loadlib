@@ -162,6 +162,7 @@ tests_require = [
     'pytest>=4.4',  # >=4.4 to support the "-p conftest" option
     'pytest-cov',
     'py4j',
+    'numpy',  # needed for [doctest] tutorials_cpp_array.rst
     'pythonnet',
     'pathlib;python_version<"3.0"',
     'comtypes;sys_platform=="win32"',
