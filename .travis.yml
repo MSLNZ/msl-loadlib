@@ -79,6 +79,7 @@ install:
   - python --version
   - python -m pip install --upgrade pip
   - python -m pip install --upgrade setuptools wheel
+  - python -m pip install --upgrade pycparser
   - |
     if [ "$CLONE_PYTHONNET" == "true" ]; then
       python -m pip install git+https://github.com/pythonnet/pythonnet.git@c81c3c3db7fcc403d5f4e8298b320240829daab29
