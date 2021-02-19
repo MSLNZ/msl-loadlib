@@ -7,7 +7,7 @@ try:
 except ImportError:
     pass
 
-from msl.loadlib import Server32, Client64, Server32Error
+from msl.loadlib import Server32, Client64, Server32Error, IS_MAC
 from msl.examples.loadlib import EXAMPLES_DIR
 
 
@@ -33,6 +33,7 @@ class Bounce64(Client64):
         return self.request32('bounce', *args, **kwargs)
 
 
+@pytest.mark.skipif(IS_MAC, reason='the 32-bit server for macOS does not exist')
 def test_protocol():
     args = (None, True, False, 1, -2.0, 5-6j, [1, [2., 'hello']], {'one': '1', 'two': 2})
     kwargs = {

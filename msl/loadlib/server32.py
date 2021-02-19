@@ -129,6 +129,11 @@ class Server32(HTTPServer):
         :class:`str`
             The result of executing ``'Python ' + sys.version`` on the 32-bit server.
 
+
+        .. invisible-code-block: pycon
+
+           >>> SKIP_IF_MACOS()
+
         Examples
         --------
         ::

@@ -2,7 +2,12 @@ from __future__ import print_function
 import os
 import sys
 
-from msl.loadlib import Server32, Client64
+try:
+    import pytest  # the 32-bit server does not need to have access to it
+except ImportError:
+    pass
+
+from msl.loadlib import Server32, Client64, IS_MAC
 from msl.examples.loadlib import EXAMPLES_DIR
 
 
@@ -20,6 +25,7 @@ class Print64(Client64):
         super(Print64, self).__init__(__file__, path=EXAMPLES_DIR)
 
 
+@pytest.mark.skipif(IS_MAC, reason='the 32-bit server for macOS does not exist')
 def test_shutdown_server32():
 
     p = Print64()

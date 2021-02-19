@@ -7,7 +7,7 @@ try:
 except ImportError:
     pass
 
-from msl.loadlib import Server32, Client64, Server32Error
+from msl.loadlib import Server32, Client64, Server32Error, IS_MAC
 from msl.examples.loadlib import EXAMPLES_DIR
 
 
@@ -70,6 +70,7 @@ class Property64(Client64):
         return self.request32('multiple')
 
 
+@pytest.mark.skipif(IS_MAC, reason='the 32-bit server for macOS does not exist')
 def test_request_property():
     p = Property64()
     assert p.subtract(100, 100) == 0
