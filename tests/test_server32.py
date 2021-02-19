@@ -266,7 +266,7 @@ def test_comtypes():
 
     shell = Shell64()
 
-    for name in ['PROCESSOR_IDENTIFIER', 'NUMBER_OF_PROCESSORS', 'PROCESSOR_ARCHITECTURE']:
+    for name in ['PROCESSOR_IDENTIFIER', 'NUMBER_OF_PROCESSORS']:
         assert shell.environ(name) == os.environ[name]
 
     shell.shutdown_server32()
