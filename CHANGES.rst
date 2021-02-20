@@ -2,34 +2,36 @@
 Changelog
 =========
 
-Version 0.8.0.dev0
-==================
+Version 0.8.0 (2021.02.20)
+==========================
 
 * Added
 
   - support for Python 3.9
   - the `protocol` keyword argument to :class:`~msl.loadlib.client64.Client64`
   - the ability to request non-callable attributes from the 32-bit server class
-    (e.g., methods that use the @property decorator and class/instance parameters)
+    (e.g., methods that use the `@property` decorator and class/instance variables)
 
 * Changed
 
   - ``server32-windows.exe`` uses Python 3.7.10, pythonnet 2.5.2 and comtypes 1.1.8
-  - ``server32-linux`` uses Python 3.7.10, pythonnet 2.4.0
+  - ``server32-linux`` uses Python 3.7.10 and pythonnet 2.4.0
     (there are problems with later versions of pythonnet on 32-bit linux, see issue
     `#1210 <https://github.com/pythonnet/pythonnet/issues/1210>`_ for more details)
   - call ``clr.AddReference`` before ``clr.System.Reflection.Assembly.LoadFile``
     when loading a .NET library
-  - use PIPEs for `stdout` and `stderr` for the 32-bit server subprocess and
+  - use PIPE's for `stdout` and `stderr` for the 32-bit server subprocess and
     for the py4j `GatewayServer`
   - :meth:`~msl.loadlib.client64.Client64.shutdown_server32` now returns the
     `(stdout, stderr)` streams from the 32-bit server subprocess
-  - the `quiet` kwarg for :class:`~msl.loadlib.client64.Client64` is deprecated
+  - the `quiet` keyword argument for :class:`~msl.loadlib.client64.Client64` is
+    deprecated
 
 * Fixed
 
-  - an ``UnsupportedOperation: fileno`` exception was raised when running within the
-    Spyder IDE (issue `#21 <https://github.com/MSLNZ/msl-loadlib/issues/21>`_)
+  - issue `#21 <https://github.com/MSLNZ/msl-loadlib/issues/21>`_ - an
+    ``UnsupportedOperation: fileno`` exception was raised when running within the
+    Spyder IDE
 
 * Removed
 
