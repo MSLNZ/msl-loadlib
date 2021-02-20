@@ -27,10 +27,10 @@ jobs:
       env: PYTHON=3.5.10
     - os: osx
       language: shell
-      env: PYTHON=3.6.12
+      env: PYTHON=3.6.13
     - os: osx
       language: shell
-      env: PYTHON=3.7.9
+      env: PYTHON=3.7.10
     - os: osx
       language: shell
       env: PYTHON=3.8.7
