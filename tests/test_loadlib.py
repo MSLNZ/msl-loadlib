@@ -26,7 +26,7 @@ def test_invalid_path():
             loadlib.LoadLibrary(item)
 
 
-@pytest.mark.skipif(loadlib.IS_MAC, reason='the 32-bit library does not exist on Mac OS')
+@pytest.mark.skipif(loadlib.IS_MAC, reason='the 32-bit library does not exist on macOS')
 def test_load_failure_in_wrong_python_bitness():
 
     def check(path, libtype, exception):
@@ -421,7 +421,7 @@ def test_java():
     cls.gateway.shutdown()
 
 
-@pytest.mark.skipif(not loadlib.IS_WINDOWS, reason='comtypes only valid for Windows')
+@pytest.mark.skipif(not loadlib.IS_WINDOWS, reason='comtypes is only supported on Windows')
 def test_comtypes():
     # changes to ctypes in Python 3.7.6 and 3.8.1 caused the following exception
     #  TypeError: item 1 in _argtypes_ passes a union by value, which is unsupported.

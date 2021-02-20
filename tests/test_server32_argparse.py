@@ -69,7 +69,7 @@ class ArgParse64(Client64):
         return self.request32('get_kwarg', key)
 
 
-@pytest.mark.skipif(IS_MAC, reason='the 32-bit server for Mac OS does not exist')
+@pytest.mark.skipif(IS_MAC, reason='the 32-bit server for macOS does not exist')
 def test_argparser():
     if IS_WINDOWS:
         append_sys_path = ['C:/home/joe/code', 'C:/Program Files (x86)/Whatever']
