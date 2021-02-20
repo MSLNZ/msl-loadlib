@@ -3,9 +3,17 @@ import os
 from ctypes import c_float
 
 try:
-    import pytest  # the 32-bit server does not need to have access to it
-except ImportError:
-    pass
+    import pytest
+except ImportError:  # the 32-bit server does not need pytest installed
+    class Mark(object):
+        @staticmethod
+        def skipif(condition, reason=None):
+            def func(function):
+                return function
+            return func
+
+    class pytest(object):
+        mark = Mark
 
 from msl.loadlib import Server32, Client64, Server32Error, IS_MAC
 from msl.examples.loadlib import EXAMPLES_DIR
