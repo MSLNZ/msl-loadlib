@@ -220,19 +220,25 @@ class LoadLibrary(object):
                               'To install pythonnet run: pip install pythonnet')
 
             import clr
+            import System
+            dotnet = {'System': System}
 
             # the shared library must be available in sys.path
             head, tail = os.path.split(self._path)
             sys.path.insert(0, head)
 
-            # don't include the library extension
-            clr.AddReference(os.path.splitext(tail)[0])
-
-            import System
-            dotnet = {'System': System}
+            try:
+                # don't include the library extension
+                clr.AddReference(os.path.splitext(tail)[0])
+            except System.IO.FileNotFoundException:
+                # The file must exist since its existence is checked above.
+                # There must be another reason why loading the DLL raises this
+                # error. Calling LoadFile (below) provides more information
+                # in the error message.
+                pass
 
             try:
-                # By default, pythonnet can only load libraries that are for .NET 4.0+.3.9
+                # By default, pythonnet can only load libraries that are for .NET 4.0+
                 #
                 # In order to allow pythonnet to load a library from .NET <4.0 the
                 # useLegacyV2RuntimeActivationPolicy property needs to be enabled
@@ -250,7 +256,7 @@ class LoadLibrary(object):
                 # " Mixed mode assembly is built against version 'v2.0.50727' of the
                 #  runtime and cannot be loaded in the 4.0 runtime without additional
                 #  configuration information. "
-                if str(err).startswith('Mixed mode assembly'):
+                if str(err).startswith('Mixed mode assembly is built against version'):
                     status, msg = utils.check_dot_net_config(sys.executable)
                     if not status == 0:
                         raise IOError(msg)
