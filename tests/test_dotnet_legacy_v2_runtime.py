@@ -7,7 +7,10 @@ from subprocess import (
 
 import pytest
 
-from msl.loadlib import LoadLibrary
+from msl.loadlib import (
+    LoadLibrary,
+    IS_WINDOWS,
+)
 
 config_path = sys.executable + '.config'
 
@@ -18,6 +21,7 @@ def teardown_module():
         os.remove(config_path)
 
 
+@pytest.mark.skipif(not IS_WINDOWS, reason='only valid on Windows')
 def test_framework_3_5():
     # The python.exe.config file must exist before the Python interpreter
     # starts in order for pythonnet to load a library from .NET <4.0. That
