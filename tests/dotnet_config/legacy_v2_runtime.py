@@ -1,6 +1,5 @@
 import os
 import sys
-import math
 import random
 
 path = os.path.abspath(os.path.join(os.path.dirname(__file__), os.pardir, os.pardir))
@@ -22,10 +21,6 @@ libtype = 'clr' if random.random() > 0.5 else 'net'
 net = LoadLibrary(path, libtype)
 
 if net.lib.SpelNetLib.SpelAxis.X != 1:
-    sys.exit('net.lib.SpelNetLib.SpelAxis.X != 1')
-
-atan = net.lib.SpelNetLib.Spel().Atan(1e9)
-if abs(math.pi / 2.0 - atan) > 1e-6:
-    sys.exit('Atan: {} != Pi/2'.format(atan))
+    sys.exit('SpelAxis.X != 1')
 
 print('SUCCESS')
