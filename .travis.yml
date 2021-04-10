@@ -33,10 +33,10 @@ jobs:
       env: PYTHON=3.7.10
     - os: osx
       language: shell
-      env: PYTHON=3.8.7
+      env: PYTHON=3.8.9
     - os: osx
       language: shell
-      env: PYTHON=3.9.1 CLONE_PYTHONNET="false"
+      env: PYTHON=3.9.4 CLONE_PYTHONNET="false"
 
 addons:
   apt:
