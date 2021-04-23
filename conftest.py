@@ -37,11 +37,11 @@ def doctest_skipif(doctest_namespace):
         bit32 = lambda: pytest.skip('requires 64-bit Python')
 
     if not os.path.isdir(r'C:\Program Files\National Instruments\Shared\LabVIEW Run-Time'):
-        no_labview64 = lambda: pytest.skip('requires a 64-bit LabVIEW runtime')
+        no_labview64 = lambda: pytest.skip('requires 64-bit LabVIEW runtime')
     else:
         no_labview64 = lambda: None
 
-    no_labview32 = lambda: pytest.skip('requires a 32-bit LabVIEW runtime -- not even checking if installed')
+    no_labview32 = lambda: pytest.skip('requires 32-bit LabVIEW runtime -- not even checking if installed')
 
     doctest_namespace['SKIP_IF_PYTHON_2'] = py2
     doctest_namespace['SKIP_IF_PYTHON_LESS_THAN_3_6'] = less_36
