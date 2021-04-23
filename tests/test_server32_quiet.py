@@ -1,6 +1,3 @@
-"""
-Make sure that the old syntax where Server32 required a `quiet` argument is still valid.
-"""
 import os
 import subprocess
 
@@ -52,9 +49,8 @@ class Quiet64(Client64):
 
 @pytest.mark.skipif(IS_MAC, reason='the 32-bit server for macOS does not exist')
 def test_quiet_argument():
-
+    # Make sure that the old syntax where Server32 required a `quiet` argument is still valid.
     q = Quiet64(one=1, array=[1., -2.2, 3e9], ex_dir=EXAMPLES_DIR)
-
     assert q.add(-5, 2) == -3
     assert q.kwargs() == {'one': '1', 'array': '[1.0, -2.2, 3000000000.0]', 'ex_dir': EXAMPLES_DIR}
 
