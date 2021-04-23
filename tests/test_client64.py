@@ -1,11 +1,15 @@
+import gc
+
 import pytest
 
 from msl.loadlib import Client64, IS_MAC
 from msl.examples.loadlib import Cpp64
 
+skipif_macos = pytest.mark.skipif(IS_MAC, reason='the 32-bit server for macOS does not exist')
 
-@pytest.mark.skipif(IS_MAC, reason='the 32-bit server for macOS does not exist')
-def test_unclosed_pipe_warning(recwarn):
+
+@skipif_macos
+def test_unclosed_pipe_warning_1(recwarn):
     # recwarn is a built-in pytest fixture that records all warnings emitted by test functions
 
     # The following warnings should not be written to stderr for the unclosed subprocess PIPE's
@@ -13,6 +17,20 @@ def test_unclosed_pipe_warning(recwarn):
     #   sys:1: ResourceWarning: unclosed file <_io.BufferedReader name=4>
 
     Cpp64()
+    gc.collect()
+    assert recwarn.list == []
+
+
+@skipif_macos
+def test_unclosed_pipe_warning_2(recwarn):
+    for _ in range(3):
+        cpp = Cpp64()
+        out, err = cpp.shutdown_server32()
+        for _ in range(10):
+            out.close()
+            err.close()
+        del cpp
+    gc.collect()
     assert recwarn.list == []
 
 
