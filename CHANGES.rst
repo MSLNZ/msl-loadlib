@@ -5,6 +5,14 @@ Changelog
 Version 0.8.1 (in development)
 ==============================
 
+* Fixed
+
+  - ``Client64.__del__`` could have written a warning to stderr indicating
+    that it has no ``self._conn`` attribute existed
+  - ``sys:1: ResourceWarning: unclosed file <_io.BufferedReader name=...>``
+    warnings could be written to stderr when a ``Client64`` was destroyed
+  - issue `#23 <https://github.com/MSLNZ/msl-loadlib/issues/23>`_ - the
+    ``useLegacyV2RuntimeActivationPolicy`` property was not created
 
 Version 0.8.0 (2021.02.20)
 ==========================
@@ -40,7 +48,6 @@ Version 0.8.0 (2021.02.20)
 * Removed
 
   - ``cygwin`` from the :obj:`~msl.loadlib.IS_WINDOWS` check
-
 
 Version 0.7.0 (2020.03.17)
 ==========================
