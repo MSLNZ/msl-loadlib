@@ -1,9 +1,10 @@
 import pytest
 
-from msl.loadlib import Client64
+from msl.loadlib import Client64, IS_MAC
 from msl.examples.loadlib import Cpp64
 
 
+@pytest.mark.skipif(IS_MAC, reason='the 32-bit server for macOS does not exist')
 def test_unclosed_pipe_warning(recwarn):
     # recwarn is a built-in pytest fixture that records all warnings emitted by test functions
 
