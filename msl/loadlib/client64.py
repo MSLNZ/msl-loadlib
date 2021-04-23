@@ -365,5 +365,7 @@ class Client64(object):
         return self._proc.stdout, self._proc.stderr
 
     def __del__(self):
-        if self._conn is not None:
-            self.shutdown_server32()
+        if hasattr(self, '_conn'):
+            out, err = self.shutdown_server32()
+            out.close()
+            err.close()
