@@ -63,7 +63,7 @@ are located
 If the file extension is not included then a default extension,
 ``.dll`` (Windows) or ``.so`` (Linux), is used.
 
-Load a `C++ <https://github.com/MSLNZ/msl-loadlib/blob/master/msl/examples/loadlib/cpp_lib.cpp>`_
+Load a `C++ <https://github.com/MSLNZ/msl-loadlib/blob/main/msl/examples/loadlib/cpp_lib.cpp>`_
 library and call the ``add`` function
 
 .. invisible-code-block: pycon
@@ -76,7 +76,7 @@ library and call the ``add`` function
    >>> cpp.lib.add(1, 2)
    3
 
-Load a `FORTRAN <https://github.com/MSLNZ/msl-loadlib/blob/master/msl/examples/loadlib/fortran_lib.f90>`_
+Load a `FORTRAN <https://github.com/MSLNZ/msl-loadlib/blob/main/msl/examples/loadlib/fortran_lib.f90>`_
 library and call the ``factorial`` function
 
 .. code-block:: pycon
@@ -94,7 +94,7 @@ of type ``double`` to be returned
    >>> fortran.lib.factorial(byref(c_int(37)))
    1.3763753091226343e+43
 
-Load a `.NET <https://github.com/MSLNZ/msl-loadlib/blob/master/msl/examples/loadlib/dotnet_lib.cs>`_
+Load a `.NET <https://github.com/MSLNZ/msl-loadlib/blob/main/msl/examples/loadlib/dotnet_lib.cs>`_
 library and call the ``reverse_string`` function, we must specify that the library
 type is a .NET library by passing in the ``'net'`` argument
 
@@ -104,7 +104,7 @@ type is a .NET library by passing in the ``'net'`` argument
    >>> net.lib.StringManipulation().reverse_string('abcdefghijklmnopqrstuvwxyz')
    'zyxwvutsrqponmlkjihgfedcba'
 
-Load `Java <https://github.com/MSLNZ/msl-loadlib/blob/master/msl/examples/loadlib/Trig.java>`_
+Load `Java <https://github.com/MSLNZ/msl-loadlib/blob/main/msl/examples/loadlib/Trig.java>`_
 byte code and call the ``cos`` function
 
 .. code-block:: pycon
@@ -182,11 +182,11 @@ The documentation for **MSL-LoadLib** can be found
 .. |pypi| image:: https://badge.fury.io/py/msl-loadlib.svg
    :target: https://badge.fury.io/py/msl-loadlib
 
-.. |travis| image:: https://img.shields.io/travis/MSLNZ/msl-loadlib/master.svg?label=Travis-CI
+.. |travis| image:: https://img.shields.io/travis/MSLNZ/msl-loadlib/main.svg?label=Travis-CI
    :target: https://travis-ci.org/MSLNZ/msl-loadlib
 
-.. |appveyor| image:: https://img.shields.io/appveyor/ci/jborbely/msl-loadlib/master.svg?label=AppVeyor
-   :target: https://ci.appveyor.com/project/jborbely/msl-loadlib/branch/master
+.. |appveyor| image:: https://img.shields.io/appveyor/ci/jborbely/msl-loadlib/main.svg?label=AppVeyor
+   :target: https://ci.appveyor.com/project/jborbely/msl-loadlib/branch/main
 
 .. _ctypes: https://docs.python.org/3/library/ctypes.html
 .. _Python for .NET: https://pythonnet.github.io/
