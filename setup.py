@@ -1,6 +1,7 @@
 import os
 import re
 import sys
+import tempfile
 import subprocess
 from setuptools import (
     setup,
@@ -96,7 +97,7 @@ def get_version():
     if 'dev' not in init_version:
         return init_version
 
-    if ('develop' in sys.argv) or (os.path.join('msl-loadlib', 'setup.py') in sys.argv[0]):
+    if 'develop' in sys.argv or not __file__.startswith(os.path.realpath(tempfile.gettempdir())):
         # then installing in editable (develop) mode
         #   python setup.py develop
         #   pip install -e .
@@ -125,7 +126,7 @@ def get_version():
 
         suffix = sha1[:7]
 
-    if init_version.endswith(suffix):
+    if not suffix or init_version.endswith(suffix):
         return init_version
 
     # following PEP-440, the local version identifier starts with '+'
