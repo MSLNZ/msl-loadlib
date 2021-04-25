@@ -190,8 +190,8 @@ def install_packages(env_name, packages_or_files):
     packages.extend(files)
 
     print('Installing {} in the {!r} environment'.format(', '.join(packages), env_name))
-    p = subprocess.Popen(['conda', 'install', '--name', env_name, '--yes'] + packages,
-                         stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    cmd = ['conda', 'install', '--name', env_name, '--channel', 'conda-forge', '--yes']
+    p = subprocess.Popen(cmd + packages, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     out, err = p.communicate()
     err = err.decode()
     if not err.lstrip().startswith('==> WARNING: A newer version of conda exists. <=='):
