@@ -186,11 +186,52 @@ class Server32(HTTPServer):
         )
         return True
 
+    @staticmethod
+    def remove_site_packages_64bit():
+        """Remove the site-packages directory from the 64-bit process.
+
+        By default the site-packages directory of the 64-bit process is
+        included in :attr:`sys.path` of the 32-bit process. Having the
+        64-bit site-packages directory available can sometimes cause issues.
+        For example, comtypes imports numpy so if numpy is installed in the
+        64-bit process then comtypes will import the 64-bit version of numpy
+        in the 32-bit process. Depending on the version of Python and/or numpy
+        this can cause the 32-bit server to crash.
+
+        .. versionadded:: 0.9
+
+        Examples
+        --------
+        ::
+
+        class FileSystem(Server32):
+
+            def __init__(self, host, port, **kwargs):
+
+                # remove the site-packages directory before calling the super() function
+                path = Server32.remove_site_packages_64bit()
+
+                super(FileSystem, self).__init__('Scripting.FileSystemObject', 'com', host, port)
+
+                # optional, add the site-packages directory back into sys.path
+                sys.path.append(path)
+
+        Returns
+        -------
+        :class:`str`
+            The path of the site-packages directory that was removed. Can be an
+            empty string if the directory was not found in :attr:`sys.path`.
+        """
+        for index, path in enumerate(sys.path):
+            if path.endswith('site-packages'):
+                return sys.path.pop(index)
+        return ''
+
     def shutdown_handler(self):
         """Proxy function that is called immediately prior to the server shutting down.
 
         The intended use case is for the server to do any necessary cleanup, such as stopping
-        locally started threads, closing file-handles, etc. before it shuts down.
+        locally started threads or closing file handles before it shuts down.
 
         .. versionadded:: 0.6
         """

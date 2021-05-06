@@ -52,5 +52,5 @@ def test_framework_3_5():
 
     # the above tests also depend on LoadLibrary raising IOError
     # if the DLL file does not exist
-    with pytest.raises(IOError, match='Cannot find the shared library'):
+    with pytest.raises(IOError, match=r"Cannot find '.*legacy_v2_runtime.dll' for libtype='cdll'"):
         LoadLibrary(os.path.join(root_dir, 'legacy_v2_runtime.dll'))
