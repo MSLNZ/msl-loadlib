@@ -112,7 +112,7 @@ class Client64(object):
         ------
         ~msl.loadlib.exceptions.ConnectionTimeoutError
             If the connection to the 32-bit server cannot be established.
-        IOError
+        OSError
             If the frozen executable cannot be found.
         TypeError
             If the data type of `append_sys_path` or `append_environ_path` is invalid.
@@ -144,7 +144,7 @@ class Client64(object):
         # make sure that the server32 executable exists
         server_exe = os.path.join(os.path.dirname(__file__), SERVER_FILENAME)
         if not os.path.isfile(server_exe):
-            raise IOError('Cannot find ' + server_exe)
+            raise OSError('Cannot find ' + server_exe)
 
         cmd = [
             server_exe,

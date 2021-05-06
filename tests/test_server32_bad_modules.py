@@ -43,13 +43,13 @@ def test_bad_super_init():
 
 @skipif_macos
 def test_bad_lib_path():
-    with pytest.raises(ConnectionTimeoutError, match=r'Cannot find the shared library'):
+    with pytest.raises(ConnectionTimeoutError, match=r"Cannot find 'doesnotexist' for libtype='cdll'"):
         Client('bad_lib_path')
 
 
 @skipif_macos
 def test_bad_lib_type():
-    with pytest.raises(ConnectionTimeoutError, match=r'Cannot load libtype=invalid'):
+    with pytest.raises(ConnectionTimeoutError, match=r"Cannot load libtype='invalid'"):
         Client('bad_lib_type')
 
 

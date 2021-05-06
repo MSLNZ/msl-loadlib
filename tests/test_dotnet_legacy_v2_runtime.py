@@ -50,7 +50,7 @@ def test_framework_3_5():
     assert not stderr
     assert stdout.rstrip() == b'SUCCESS'
 
-    # the above tests also depend on LoadLibrary raising IOError
+    # the above tests also depend on LoadLibrary raising OSError
     # if the DLL file does not exist
-    with pytest.raises(IOError, match=r"Cannot find '.*legacy_v2_runtime.dll' for libtype='cdll'"):
+    with pytest.raises(OSError, match=r"Cannot find '.*legacy_v2_runtime.dll' for libtype='cdll'"):
         LoadLibrary(os.path.join(root_dir, 'legacy_v2_runtime.dll'))

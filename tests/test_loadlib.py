@@ -12,13 +12,13 @@ from msl.examples.loadlib import EXAMPLES_DIR, Point, FourPoints, NPoints
 
 
 def test_invalid_libtype():
-    with pytest.raises(TypeError):
-        loadlib.LoadLibrary(os.path.join(EXAMPLES_DIR, 'cpp_lib64'), libtype='xxxxxxxx')
+    with pytest.raises(ValueError, match=', '.join(loadlib.LoadLibrary.LIBTYPES)):
+        loadlib.LoadLibrary('does-not-matter', libtype='xxxxxxxx')
 
 
 def test_invalid_path():
     for item in [None, '']:
-        with pytest.raises(ValueError):
+        with pytest.raises(ValueError, match=r'You must specify the path'):
             loadlib.LoadLibrary(item)
 
 

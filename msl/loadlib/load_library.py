@@ -18,6 +18,8 @@ _encoding = sys.getfilesystemencoding()
 
 class LoadLibrary(object):
 
+    LIBTYPES = ['cdll', 'windll', 'oledll', 'net', 'clr', 'java', 'com']
+
     def __init__(self, path, libtype=None, **kwargs):
         """Load a shared library.
 
@@ -81,10 +83,10 @@ class LoadLibrary(object):
 
         Raises
         ------
-        IOError
+        OSError
             If the shared library cannot be loaded.
-        TypeError
-            If `libtype` is not a supported library type.
+        ValueError
+            If the value of `libtype` is not supported.
         """
         # a reference to the shared library
         self._lib = None
@@ -112,6 +114,12 @@ class LoadLibrary(object):
                 libtype = 'cdll'
         else:
             libtype = libtype.lower()
+
+        if libtype not in LoadLibrary.LIBTYPES:
+            raise ValueError(
+                'Cannot load libtype={!r}.\n'
+                'Must be one of: {}'.format(libtype, ', '.join(LoadLibrary.LIBTYPES))
+            )
 
         # create a new reference to `path` just in case the
         # DEFAULT_EXTENSION is appended below so that the
@@ -143,7 +151,7 @@ class LoadLibrary(object):
                             success = True
                             break
                     if not success:
-                        raise IOError('Cannot find the shared library {!r}'.format(path))
+                        raise OSError("Cannot find '{}' for libtype='{}'".format(path, libtype))
         else:
             self._path = _path
 
@@ -155,14 +163,14 @@ class LoadLibrary(object):
             self._lib = ctypes.OleDLL(self._path, **kwargs)
         elif libtype == 'com':
             if not utils.is_comtypes_installed():
-                raise IOError('Cannot load a COM library because comtypes is not installed.\n'
-                              'To install comtypes run: pip install comtypes')
+                raise OSError('Cannot load a COM library because comtypes is not installed.\n'
+                              'Run: pip install comtypes')
             from comtypes.client import CreateObject
             self._lib = CreateObject(self._path, **kwargs)
         elif libtype == 'java':
             if not utils.is_py4j_installed():
-                raise IOError('Cannot load a Java file because Py4J is not installed.\n'
-                              'To install Py4J run: pip install py4j')
+                raise OSError('Cannot load a Java file because Py4J is not installed.\n'
+                              'Run: pip install py4j')
 
             from py4j.version import __version__
             from py4j.java_gateway import JavaGateway, GatewayParameters
@@ -181,7 +189,7 @@ class LoadLibrary(object):
                 if not os.path.isfile(py4j_jar):
                     py4j_jar = os.environ.get('PY4J_JAR', '')  # then check the environment variable
                     if not os.path.isfile(py4j_jar):
-                        raise IOError('Cannot find {0}\nCreate a PY4J_JAR environment '
+                        raise OSError('Cannot find {0}\nCreate a PY4J_JAR environment '
                                       'variable to be equal to the full path to {0}'.format(filename))
 
             # build the java command
@@ -200,11 +208,11 @@ class LoadLibrary(object):
                 # start the py4j.GatewayServer
                 subprocess.Popen(cmd, stderr=subprocess.PIPE, stdout=subprocess.PIPE)
                 err = None
-            except IOError as e:
+            except OSError as e:
                 err = str(e) + '\nYou must have a Java Runtime Environment installed and available on PATH'
 
             if err:
-                raise IOError(err)
+                raise OSError(err)
 
             utils.wait_for_server(address, port, 5.0)
 
@@ -216,8 +224,8 @@ class LoadLibrary(object):
 
         elif libtype == 'net' or libtype == 'clr':
             if not utils.is_pythonnet_installed():
-                raise IOError('Cannot load a .NET Assembly because pythonnet is not installed.\n'
-                              'To install pythonnet run: pip install pythonnet')
+                raise OSError('Cannot load a .NET Assembly because pythonnet is not installed.\n'
+                              'Run: pip install pythonnet')
 
             import clr
             import System
@@ -259,13 +267,13 @@ class LoadLibrary(object):
                 if str(err).startswith('Mixed mode assembly is built against version'):
                     status, msg = utils.check_dot_net_config(sys.executable)
                     if not status == 0:
-                        raise IOError(msg)
+                        raise OSError(msg)
                     else:
                         update_msg = 'Checking .NET config returned "{}" '.format(msg)
                         update_msg += 'and still cannot load library.\n'
                         update_msg += str(err)
-                        raise IOError(update_msg)
-                raise IOError('The above "System.IO.FileLoadException" is not handled.\n')
+                        raise OSError(update_msg)
+                raise OSError('The above "System.IO.FileLoadException" is not handled.\n')
 
             try:
                 types = self._assembly.GetTypes()
@@ -291,7 +299,7 @@ class LoadLibrary(object):
             self._lib = DotNet(dotnet, self._path)
 
         else:
-            raise TypeError('Cannot load libtype={}'.format(libtype))
+            assert False, 'Should not get here -- contact developers'
 
         if IS_PYTHON2:
             self._path = self._path.decode(_encoding)
