@@ -16,6 +16,12 @@ _v = re.search(r'(\d+)\.(\d+)\.(\d+)[.-]?(.*)', __version__).groups()
 version_info = namedtuple('version_info', 'major minor micro releaselevel')(int(_v[0]), int(_v[1]), int(_v[2]), _v[3])
 """:obj:`~collections.namedtuple`: Contains the version information as a (major, minor, micro, releaselevel) tuple."""
 
+if not hasattr(sys, 'coinit_flags'):
+    # Configure comtypes to use COINIT_MULTITHREADED when it is imported.
+    # This avoids the following exception from being raised:
+    #   [WinError -2147417850] Cannot change thread mode after it is set
+    sys.coinit_flags = 0x0
+
 IS_WINDOWS = sys.platform == 'win32'
 """:class:`bool`: Whether the operating system is Windows."""
 

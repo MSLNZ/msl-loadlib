@@ -10,10 +10,6 @@ import pytest
 from msl import loadlib
 from msl.examples.loadlib import EXAMPLES_DIR, Point, FourPoints, NPoints
 
-# fixes -> OSError: [WinError -2147417850] Cannot change thread mode after it is set
-# when importing comtypes
-sys.coinit_flags = 0
-
 
 def test_invalid_libtype():
     with pytest.raises(TypeError):

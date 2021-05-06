@@ -353,8 +353,6 @@ import clr
 
 if loadlib.IS_WINDOWS:
     import sys
-    # fixes -> OSError: [WinError -2147417850] Cannot change thread mode after it is set
-    sys.coinit_flags = 0
     import comtypes
 
 for m in modules:

@@ -50,25 +50,6 @@ Verify that the file exists and that the text is correct
    >>> import os
    >>> os.remove('a_new_file.txt')
 
-.. tip::
-
-   If you are loading a COM library and you get the following error
-
-   .. code-block:: console
-
-      OSError: [WinError -2147417850] Cannot change thread mode after it is set
-
-   then you can remove this error by setting ``sys.coinit_flags = 0`` before
-   loading the library
-
-   For example,
-
-   .. code-block:: python
-
-      import sys
-      sys.coinit_flags = 0
-      com = LoadLibrary('Scripting.FileSystemObject', 'com')
-
 .. _Component Object Model: https://en.wikipedia.org/wiki/Component_Object_Model
 .. _FileSystemObject: https://docs.microsoft.com/en-us/office/vba/language/reference/user-interface-help/filesystemobject-object
 .. _CreateTextFile: https://docs.microsoft.com/en-us/office/vba/language/reference/user-interface-help/createtextfile-method
