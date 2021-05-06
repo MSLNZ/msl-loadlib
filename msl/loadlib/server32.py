@@ -180,7 +180,7 @@ class Server32(HTTPServer):
         """
         warnings.simplefilter('once', DeprecationWarning)
         warnings.warn(
-            'The `quiet` attribute for Server32 will be removed in version 0.9 -- attribute returns True',
+            'The `quiet` attribute for Server32 will be removed in a future release -- always returns True',
             DeprecationWarning,
             stacklevel=2
         )
