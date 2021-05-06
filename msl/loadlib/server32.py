@@ -52,14 +52,9 @@ class Server32(HTTPServer):
         Parameters
         ----------
         path : :class:`str`
-            The path to the 32-bit library.
+            The path to the 32-bit library. See :class:`.LoadLibrary` for more details.
         libtype : :class:`str`
-            The library type to use for the calling convention. One of the following:
-
-                * ``'cdll'`` -- for a __cdecl library
-                * ``'windll'`` or ``'oledll'`` -- for a __stdcall library (Windows only)
-                * ``'net'`` or ``'clr'`` -- for Microsoft's .NET Framework (Common Language Runtime)
-                * ``'com'`` -- for a `COM <https://en.wikipedia.org/wiki/Component_Object_Model>`_ library.
+            The library type. See :class:`.LoadLibrary` for more details.
 
             .. note::
                Since Java byte code is executed on the JVM_ it does not make sense to
@@ -73,15 +68,11 @@ class Server32(HTTPServer):
             All additional arguments are currently ignored.
         **kwargs
             All keyword arguments are passed to :class:`.LoadLibrary`.
-
-        Raises
-        ------
-        IOError
-            If the shared library cannot be loaded.
-        TypeError
-            If the value of `libtype` is not supported.
         """
         self._library = LoadLibrary(path, libtype=libtype, **kwargs)
+        self._assembly = self._library.assembly
+        self._lib = self._library.lib
+        self._path = self._library.path
         super(Server32, self).__init__((host, int(port)), _RequestHandler)
 
     @property
@@ -97,7 +88,7 @@ class Server32(HTTPServer):
         .. _NET: https://msdn.microsoft.com/en-us/library/system.reflection.assembly(v=vs.110).aspx
         .. _JetBrains dotPeek: https://www.jetbrains.com/decompiler/
         """
-        return self._library.assembly
+        return self._assembly
 
     @property
     def lib(self):
@@ -113,12 +104,12 @@ class Server32(HTTPServer):
 
         .. _comtypes.CreateObject: https://pythonhosted.org/comtypes/#creating-and-accessing-com-objects
         """
-        return self._library.lib
+        return self._lib
 
     @property
     def path(self):
         """:class:`str`: The path to the shared library file."""
-        return self._library.path
+        return self._path
 
     @staticmethod
     def version():
