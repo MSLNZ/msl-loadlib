@@ -218,6 +218,19 @@ class Server32(HTTPServer):
                 return sys.path.pop(index)
         return ''
 
+    @staticmethod
+    def is_running():
+        """Check if a module is running within the 32-bit server.
+
+        .. versionadded:: 0.9
+
+        Returns
+        -------
+        :class:`bool`
+            Whether the calling module is running within the 32-bit server.
+        """
+        return sys.executable.endswith(SERVER_FILENAME)
+
     def shutdown_handler(self):
         """Proxy function that is called immediately prior to the server shutting down.
 
