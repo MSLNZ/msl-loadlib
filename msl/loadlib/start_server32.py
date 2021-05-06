@@ -169,31 +169,36 @@ def main():
         print(err, file=sys.stderr)
         return -1
 
-    server, err = None, ''
+    server, error = None, None
     try:
         server = cls(args.host, args.port, **kwargs)
     except Exception as e:
-        err = '{}: {}\n'.format(e.__class__.__name__, e)
-        if e.__class__.__name__ == 'TypeError' and '__init__' in err:
-            # support the old syntax where the Server32 required a 'quiet' argument
-            if "missing 1 required positional argument: 'quiet'" in err:
-                try:
-                    server = cls(args.host, args.port, True, **kwargs)
-                except Exception as e:
-                    err = '{}: {}\n'.format(e.__class__.__name__, e)
+        # support the old syntax where the Server32 required a 'quiet' argument
+        if "missing 1 required positional argument: 'quiet'" in str(e):
+            try:
+                server = cls(args.host, args.port, True, **kwargs)
+            except Exception as e:
+                error = e
+        else:
+            error = e
 
-    if server is None:
-        err += 'The \'{0}\' class must be defined with the following syntax:\n\n' \
-               'class {0}(Server32):\n' \
-               '    def __init__(self, host, port, **kwargs):\n' \
-               '        super({0}, self).__init__(path, libtype, host, port, **kwargs)\n\n' \
-               'Cannot start the 32-bit server.'.format(cls.__name__)
+    if error is not None:
+        err = 'Instantiating the 32-bit server raised the following exception:\n' \
+              '  {}: {}\n'.format(error.__class__.__name__, error)
+
+        if error.__class__.__name__ == 'TypeError' and '__init__' in str(error):
+            err += 'Check that the \'{0}\' class is defined with the following syntax:\n\n' \
+                   'class {0}(Server32):\n' \
+                   '    def __init__(self, host, port, **kwargs):\n' \
+                   '        super({0}, self).__init__(path, libtype, host, port, **kwargs)\n\n'.format(cls.__name__)
+
+        err += 'Cannot start the 32-bit server.'
         print(err, file=sys.stderr)
         return -1
 
     if not hasattr(server, '_library'):
-        err = 'The super() method was never called.\n' \
-              'The \'{0}\' class must be defined with the following syntax:\n\n' \
+        err = 'The super() function was never called in the Server32 subclass.\n' \
+              'Check that the \'{0}\' class is defined with the following syntax:\n\n' \
               'class {0}(Server32):\n' \
               '    def __init__(self, host, port, **kwargs):\n' \
               '        super({0}, self).__init__(path, libtype, host, port, **kwargs)\n\n' \
