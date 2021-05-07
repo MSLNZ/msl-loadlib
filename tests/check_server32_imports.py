@@ -346,13 +346,14 @@ modules = [
 
 print('The following modules cannot be imported')
 
-# these are mandatory!
+# these are mandatory
 from msl import loadlib
+from msl.loadlib import LoadLibrary, Client64, Server32
+from msl.loadlib.activex import Application, WS_CHILD
 from msl.examples.loadlib import EXAMPLES_DIR
 import clr
 
 if loadlib.IS_WINDOWS:
-    import sys
     import comtypes
 
 for m in modules:
