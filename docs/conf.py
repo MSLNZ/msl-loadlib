@@ -219,4 +219,5 @@ nitpicky = True
 # known bad links
 nitpick_ignore = [
     ('py:class', '_ctypes.Structure'),
+    ('py:class', 'System.Windows.Forms.Form'),
 ]

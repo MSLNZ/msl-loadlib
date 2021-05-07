@@ -18,21 +18,13 @@ _encoding = sys.getfilesystemencoding()
 
 class LoadLibrary(object):
 
-    LIBTYPES = ['cdll', 'windll', 'oledll', 'net', 'clr', 'java', 'com']
+    LIBTYPES = ['cdll', 'windll', 'oledll', 'net', 'clr', 'java', 'com', 'activex']
+    """The library types that are supported."""
 
     def __init__(self, path, libtype=None, **kwargs):
         """Load a shared library.
 
         For example, a C/C++, FORTRAN, C#, Java, Delphi, LabVIEW, ActiveX, ... library.
-
-        Based on the value of `libtype` this class will load the shared library as a:
-
-            * :class:`~ctypes.CDLL` if `libtype` is ``'cdll'``,
-            * :class:`~ctypes.WinDLL` if `libtype` is ``'windll'``,
-            * :class:`~ctypes.OleDLL` if `libtype` is ``'oledll'``,
-            * `System.Reflection.Assembly <Assembly_>`_ if `libtype` is ``'net'`` or ``'clr'`` ,
-            * :class:`~.py4j.java_gateway.JavaGateway` if `libtype` is ``'java'``, or
-            * comtypes.CreateObject_ if `libtype` is ``'com'``.
 
         .. versionchanged:: 0.4
            Added support for Java archives.
@@ -40,9 +32,13 @@ class LoadLibrary(object):
         .. versionchanged:: 0.5
            Added support for COM_ libraries.
 
-        .. _Assembly: https://msdn.microsoft.com/en-us/library/system.reflection.assembly(v=vs.110).aspx
+        .. versionchanged:: 0.9
+           Added support for ActiveX_ libraries.
+
+        .. _Assembly: https://docs.microsoft.com/en-us/dotnet/api/system.reflection.assembly
         .. _comtypes.CreateObject: https://pythonhosted.org/comtypes/#creating-and-accessing-com-objects
         .. _COM: https://en.wikipedia.org/wiki/Component_Object_Model
+        .. _ActiveX: https://en.wikipedia.org/wiki/ActiveX
 
         Parameters
         ----------
@@ -57,8 +53,9 @@ class LoadLibrary(object):
                 3. search :data:`sys.path`, then
                 4. search :data:`os.environ['PATH'] <os.environ>` to find the shared library.
 
-            If loading a COM_ library then `path` represents the `progid <comtypes.CreateObject_>`_
-            argument.
+            If loading a COM_ library then `path` is either the `ProgID`, e.g.
+            ``"InternetExplorer.Application"``, or the `CLSID`, e.g.
+            ``"{2F7860A2-1473-4D75-827D-6C4E27600CAC}"``.
 
         libtype : :class:`str`, optional
             The library type. The following values are currently supported:
@@ -67,19 +64,28 @@ class LoadLibrary(object):
             * ``'windll'`` or ``'oledll'`` -- for a __stdcall calling convention
             * ``'net'`` or ``'clr'`` -- for Microsoft's .NET Framework (Common Language Runtime)
             * ``'java'`` -- for a Java archive, ``.jar``, or Java byte code, ``.class``, file
-            * ``'com'`` -- for a COM_ library.
+            * ``'com'`` -- for a COM_ library
+            * ``'activex'`` -- for an ActiveX_ library
 
             Default is ``'cdll'``.
 
             .. tip::
                Since the ``.jar`` or ``.class`` extension uniquely defines a Java library,
                the `libtype` will be automatically set to ``'java'`` if `path` ends with
-               ``.jar`` or ``.class``. If `path` starts with ``'{'`` and ends with ``'}'``
-               then this uniquely defines the Class ID for a COM_ library and so `libtype`
-               will be automatically set to ``'com'``.
+               ``.jar`` or ``.class``.
 
         **kwargs
-            Keyword arguments that are passed to the object that loads the library.
+            All additional keyword arguments are passed to the object that loads the library.
+
+            If `libtype` is
+
+                * ``'cdll'`` then :class:`~ctypes.CDLL`
+                * ``'windll'`` then :class:`~ctypes.WinDLL`
+                * ``'oledll'`` then :class:`~ctypes.OleDLL`
+                * ``'net'`` or ``'clr'`` then all keyword arguments are ignored
+                * ``'java'`` then :class:`~.py4j.java_gateway.JavaGateway`
+                * ``'com'`` then comtypes.CreateObject_
+                * ``'activex'`` then :meth:`Application.load <msl.loadlib.activex.Application.load>`
 
         Raises
         ------
@@ -106,9 +112,7 @@ class LoadLibrary(object):
 
         # try to automatically determine the libtype
         if libtype is None:
-            if path.startswith('{') and path.endswith('}'):
-                libtype = 'com'
-            elif path.endswith('.jar') or path.endswith('.class'):
+            if path.endswith('.jar') or path.endswith('.class'):
                 libtype = 'java'
             else:
                 libtype = 'cdll'
@@ -129,13 +133,13 @@ class LoadLibrary(object):
 
         # assume a default extension if no extension was provided
         ext = os.path.splitext(path)[1]
-        if libtype != 'java' and libtype != 'com' and not ext:
+        if not ext and libtype not in ['java', 'com', 'activex']:
             _path += DEFAULT_EXTENSION
 
         if IS_PYTHON2:
             _path = _path.encode(_encoding)
 
-        if libtype != 'com':
+        if libtype not in ['com', 'activex']:
             self._path = os.path.abspath(_path)
             if not os.path.isfile(self._path):
                 # for find_library use the original 'path' value since it may be a library name
@@ -163,14 +167,34 @@ class LoadLibrary(object):
             self._lib = ctypes.OleDLL(self._path, **kwargs)
         elif libtype == 'com':
             if not utils.is_comtypes_installed():
-                raise OSError('Cannot load a COM library because comtypes is not installed.\n'
-                              'Run: pip install comtypes')
+                raise OSError(
+                    'Cannot load a COM library because comtypes is not installed.\n'
+                    'Run: pip install comtypes'
+                )
+
+            from comtypes import GUID
             from comtypes.client import CreateObject
-            self._lib = CreateObject(self._path, **kwargs)
+
+            try:
+                clsid = GUID.from_progid(self._path)
+            except (TypeError, OSError):
+                clsid = None
+
+            if clsid is None:
+                raise OSError("Cannot find '{}' for libtype='com'".format(path))
+
+            self._lib = CreateObject(clsid, **kwargs)
+
+        elif libtype == 'activex':
+            from .activex import Application
+            self._lib = Application.load(self._path, **kwargs)
+
         elif libtype == 'java':
             if not utils.is_py4j_installed():
-                raise OSError('Cannot load a Java file because Py4J is not installed.\n'
-                              'Run: pip install py4j')
+                raise OSError(
+                    'Cannot load a Java file because Py4J is not installed.\n'
+                    'Run: pip install py4j'
+                )
 
             from py4j.version import __version__
             from py4j.java_gateway import JavaGateway, GatewayParameters
@@ -189,8 +213,10 @@ class LoadLibrary(object):
                 if not os.path.isfile(py4j_jar):
                     py4j_jar = os.environ.get('PY4J_JAR', '')  # then check the environment variable
                     if not os.path.isfile(py4j_jar):
-                        raise OSError('Cannot find {0}\nCreate a PY4J_JAR environment '
-                                      'variable to be equal to the full path to {0}'.format(filename))
+                        raise OSError(
+                            'Cannot find {0}\nCreate a PY4J_JAR environment '
+                            'variable to be equal to the full path to {0}'.format(filename)
+                        )
 
             # build the java command
             wrapper = os.path.join(os.path.dirname(__file__), 'py4j-wrapper.jar')
@@ -224,8 +250,10 @@ class LoadLibrary(object):
 
         elif libtype == 'net' or libtype == 'clr':
             if not utils.is_pythonnet_installed():
-                raise OSError('Cannot load a .NET Assembly because pythonnet is not installed.\n'
-                              'Run: pip install pythonnet')
+                raise OSError(
+                    'Cannot load a .NET Assembly because pythonnet is not installed.\n'
+                    'Run: pip install pythonnet'
+                )
 
             import clr
             import System
@@ -318,12 +346,12 @@ class LoadLibrary(object):
     @property
     def assembly(self):
         """
-        Returns a reference to the `.NET Runtime Assembly <Assembly_>`_ object, only if
-        the shared library is a .NET Framework, otherwise returns :data:`None`.
+        Returns a reference to the `.NET Runtime Assembly <Assembly_>`_ object if
+        the shared library is a .NET Framework otherwise returns :data:`None`.
 
         .. tip::
            The `JetBrains dotPeek`_ program can be used to reliably decompile any
-           .NET Assembly in to the equivalent source code.
+           .NET Assembly into the equivalent source code.
 
         .. _JetBrains dotPeek: https://www.jetbrains.com/decompiler/
         """
@@ -348,7 +376,7 @@ class LoadLibrary(object):
             * ``'oledll'`` then a :class:`~ctypes.OleDLL` object
             * ``'net'`` or ``'clr'`` then a :class:`~.load_library.DotNet` object
             * ``'java'`` then a :class:`~py4j.java_gateway.JVMView` object
-            * ``'com'`` then the interface pointer returned by comtypes.CreateObject_
+            * ``'com'`` or ``'activex'`` then an interface pointer to the COM_ object
         """
         return self._lib
 
@@ -366,7 +394,7 @@ class DotNet(object):
         Do not instantiate this class directly.
 
         .. _namespace: https://msdn.microsoft.com/en-us/library/z2kcy19k.aspx
-        .. _System.Type: https://msdn.microsoft.com/en-us/library/system.type(v=vs.110).aspx
+        .. _System.Type: https://docs.microsoft.com/en-us/dotnet/api/system.type
         """
         self.__dict__.update(dot_net_dict)
         self._path = path

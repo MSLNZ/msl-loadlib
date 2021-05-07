@@ -442,9 +442,7 @@ def test_comtypes():
     found_it = False
     for key, value in info.items():
         if value['ProgID'] == progid:
-            # don't need to specify libtype='com' since the `key`
-            # startswith "{" and endswith "}" which is unique to a COM library
-            obj = loadlib.LoadLibrary(key)
+            obj = loadlib.LoadLibrary(key, 'com')
             assert isinstance(obj.lib.IsSoundCardEnabled(), bool)
             found_it = True
             break

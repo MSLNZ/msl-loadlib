@@ -63,7 +63,7 @@ class Server32(HTTPServer):
         host : :class:`str`
             The IP address of the server.
         port : :class:`int`
-            The port to open on the server.
+            The port to run the server on.
         *args
             All additional arguments are currently ignored.
         **kwargs
@@ -78,31 +78,31 @@ class Server32(HTTPServer):
     @property
     def assembly(self):
         """
-        Returns a reference to the `.NET Runtime Assembly <NET_>`_ object, *only if
-        the shared library is a .NET Framework*, otherwise returns :data:`None`.
+        Returns a reference to the `.NET Runtime Assembly <NET_>`_ object if
+        the shared library is a .NET Framework otherwise returns :data:`None`.
 
         .. tip::
            The `JetBrains dotPeek`_ program can be used to reliably decompile any
-           .NET Assembly in to the equivalent source code.
+           .NET Assembly into the equivalent source code.
 
-        .. _NET: https://msdn.microsoft.com/en-us/library/system.reflection.assembly(v=vs.110).aspx
+        .. _NET: https://docs.microsoft.com/en-us/dotnet/api/system.reflection.assembly
         .. _JetBrains dotPeek: https://www.jetbrains.com/decompiler/
         """
         return self._assembly
 
     @property
     def lib(self):
-        """Returns the reference to the 32-bit, loaded library object.
+        """Returns the reference to the 32-bit, loaded-library object.
 
         For example, if `libtype` is
 
-        * ``'cdll'`` then a :class:`~ctypes.CDLL` object
-        * ``'windll'`` then a :class:`~ctypes.WinDLL` object
-        * ``'oledll'`` then a :class:`~ctypes.OleDLL` object
-        * ``'net'`` or ``'clr'`` then a :class:`~.load_library.DotNet` object
-        * ``'com'`` then the interface pointer returned by comtypes.CreateObject_
+            * ``'cdll'`` then a :class:`~ctypes.CDLL` object
+            * ``'windll'`` then a :class:`~ctypes.WinDLL` object
+            * ``'oledll'`` then a :class:`~ctypes.OleDLL` object
+            * ``'net'`` or ``'clr'`` then a :class:`~.load_library.DotNet` object
+            * ``'com'`` or ``'activex'`` then an interface pointer to the COM_ object
 
-        .. _comtypes.CreateObject: https://pythonhosted.org/comtypes/#creating-and-accessing-com-objects
+        .. _COM: https://en.wikipedia.org/wiki/Component_Object_Model
         """
         return self._lib
 
@@ -182,7 +182,7 @@ class Server32(HTTPServer):
         """Remove the site-packages directory from the 64-bit process.
 
         By default the site-packages directory of the 64-bit process is
-        included in :attr:`sys.path` of the 32-bit process. Having the
+        included in :data:`sys.path` of the 32-bit process. Having the
         64-bit site-packages directory available can sometimes cause issues.
         For example, comtypes imports numpy so if numpy is installed in the
         64-bit process then comtypes will import the 64-bit version of numpy
@@ -195,23 +195,23 @@ class Server32(HTTPServer):
         --------
         ::
 
-        class FileSystem(Server32):
+            class FileSystem(Server32):
 
-            def __init__(self, host, port, **kwargs):
+                def __init__(self, host, port, **kwargs):
 
-                # remove the site-packages directory before calling the super() function
-                path = Server32.remove_site_packages_64bit()
+                    # remove the site-packages directory before calling the super() function
+                    path = Server32.remove_site_packages_64bit()
 
-                super(FileSystem, self).__init__('Scripting.FileSystemObject', 'com', host, port)
+                    super(FileSystem, self).__init__('Scripting.FileSystemObject', 'com', host, port)
 
-                # optional, add the site-packages directory back into sys.path
-                sys.path.append(path)
+                    # optional, add the site-packages directory back into sys.path
+                    sys.path.append(path)
 
         Returns
         -------
         :class:`str`
             The path of the site-packages directory that was removed. Can be an
-            empty string if the directory was not found in :attr:`sys.path`.
+            empty string if the directory was not found in :data:`sys.path`.
         """
         for index, path in enumerate(sys.path):
             if path.endswith('site-packages'):

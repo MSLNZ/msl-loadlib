@@ -30,11 +30,17 @@ a function to create a frozen_ 32-bit server
 
    ~msl.loadlib.freeze_server32
 
-and some general helper functions
+some general helper functions
 
 .. autosummary::
 
    ~msl.loadlib.utils
+
+and a module for interacting with ActiveX libraries
+
+.. autosummary::
+
+   ~msl.loadlib.activex
 
 Package Structure
 -----------------
@@ -42,6 +48,7 @@ Package Structure
 .. toctree::
 
    msl.loadlib <_api/msl.loadlib>
+   msl.loadlib.activex <_api/msl.loadlib.activex>
    msl.loadlib.client64 <_api/msl.loadlib.client64>
    msl.loadlib.exceptions <_api/msl.loadlib.exceptions>
    msl.loadlib.freeze_server32 <_api/msl.loadlib.freeze_server32>
