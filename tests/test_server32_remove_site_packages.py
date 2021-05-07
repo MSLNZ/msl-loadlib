@@ -50,6 +50,5 @@ class Site64(Client64):
 def test_remove_site_packages_64bit():
     s = Site64()
     path = s.remove()
-    assert isinstance(path, str)
     assert path in sys.path
     assert not s.contains(path)
