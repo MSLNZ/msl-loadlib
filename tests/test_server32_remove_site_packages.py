@@ -14,7 +14,7 @@ except ImportError:  # the 32-bit server does not need pytest installed
     class pytest(object):
         mark = Mark
 
-from msl.loadlib import Server32, Client64, IS_MAC
+from msl.loadlib import Server32, Client64, IS_MAC, IS_PYTHON2
 from msl.examples.loadlib import EXAMPLES_DIR
 
 
@@ -50,5 +50,10 @@ class Site64(Client64):
 def test_remove_site_packages_64bit():
     s = Site64()
     path = s.remove()
-    assert path in sys.path
+    assert path
+    if IS_PYTHON2:
+        # get rid of the UnicodeWarning that gets printed by pytest
+        assert path.encode() in sys.path
+    else:
+        assert path in sys.path
     assert not s.contains(path)
