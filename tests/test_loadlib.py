@@ -433,12 +433,13 @@ def test_comtypes():
     # don't care whether it is enabled, just that a boolean is returned
     assert isinstance(obj.lib.IsSoundCardEnabled(), bool)
 
-    with pytest.raises(OSError):
+    with pytest.raises(OSError, match=r"Cannot find 'ABC.def.GHI' for libtype='com'"):
         loadlib.LoadLibrary('ABC.def.GHI', 'com')
 
     info = loadlib.utils.get_com_info()
-    assert info, 'utils.get_com_info() returned an empty dict'
+    assert info
 
+    # load by CLSID
     found_it = False
     for key, value in info.items():
         if value['ProgID'] == progid:
