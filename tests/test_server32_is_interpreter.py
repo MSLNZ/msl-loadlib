@@ -40,7 +40,7 @@ class Running64(Client64):
 
 
 @pytest.mark.skipif(IS_MAC, reason='the 32-bit server for macOS does not exist')
-def test_remove_site_packages_64bit():
+def test_running_on_server():
     r = Running64()
     is_interpreter = r.is_interpreter()
     assert isinstance(is_interpreter, bool)
