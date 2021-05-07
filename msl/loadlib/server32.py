@@ -195,16 +195,20 @@ class Server32(HTTPServer):
         --------
         ::
 
+            import sys
+            from msl.loadlib import Server32
+
             class FileSystem(Server32):
 
                 def __init__(self, host, port, **kwargs):
 
-                    # remove the site-packages directory before calling the super() function
+                    # remove the site-packages directory that was passed from 64-bit Python
+                    # before calling the super() function to load the COM library
                     path = Server32.remove_site_packages_64bit()
 
                     super(FileSystem, self).__init__('Scripting.FileSystemObject', 'com', host, port)
 
-                    # optional, add the site-packages directory back into sys.path
+                    # optional: add the site-packages directory back into sys.path
                     sys.path.append(path)
 
         Returns
@@ -222,7 +226,7 @@ class Server32(HTTPServer):
     def is_interpreter():
         """Check if code is running on the 32-bit server.
 
-        If the same module is being executed by both
+        If the same module is executed by both
         :class:`~msl.loadlib.client64.Client64` and :class:`.Server32`
         then there may be only parts of the code that should be executed
         by the correct bitness of the Python interpreter.
@@ -233,6 +237,18 @@ class Server32(HTTPServer):
         -------
         :class:`bool`
             Whether the code is running on the 32-bit server.
+
+        Examples
+        --------
+        ::
+
+            import sys
+            from msl.loadlib import Server32
+
+            if Server32.is_interpreter():
+                # this only gets executed on the 32-bit server
+                assert sys.maxsize < 2**32
+
         """
         return sys.executable.endswith(SERVER_FILENAME)
 
