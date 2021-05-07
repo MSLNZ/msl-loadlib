@@ -26,8 +26,8 @@ class Running32(Server32):
         )
 
     @staticmethod
-    def running():
-        return Server32.is_running()
+    def is_interpreter():
+        return Server32.is_interpreter()
 
 
 class Running64(Client64):
@@ -35,14 +35,14 @@ class Running64(Client64):
     def __init__(self):
         super(Running64, self).__init__(__file__, ex_dir=EXAMPLES_DIR)
 
-    def running(self):
-        return self.request32('running')
+    def is_interpreter(self):
+        return self.request32('is_interpreter')
 
 
 @pytest.mark.skipif(IS_MAC, reason='the 32-bit server for macOS does not exist')
 def test_remove_site_packages_64bit():
     r = Running64()
-    is_running = r.running()
-    assert isinstance(is_running, bool)
-    assert is_running
-    assert not Server32.is_running()  # this test module is not running on the 32-bit server
+    is_interpreter = r.is_interpreter()
+    assert isinstance(is_interpreter, bool)
+    assert is_interpreter
+    assert not Server32.is_interpreter()  # this test module is not running on the 32-bit server

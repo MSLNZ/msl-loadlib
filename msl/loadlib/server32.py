@@ -219,15 +219,20 @@ class Server32(HTTPServer):
         return ''
 
     @staticmethod
-    def is_running():
-        """Check if a module is running within the 32-bit server.
+    def is_interpreter():
+        """Check if code is running on the 32-bit server.
+
+        If the same module is being executed by both
+        :class:`~msl.loadlib.client64.Client64` and :class:`.Server32`
+        then there may be only parts of the code that should be executed
+        by the correct bitness of the Python interpreter.
 
         .. versionadded:: 0.9
 
         Returns
         -------
         :class:`bool`
-            Whether the calling module is running within the 32-bit server.
+            Whether the code is running on the 32-bit server.
         """
         return sys.executable.endswith(SERVER_FILENAME)
 
