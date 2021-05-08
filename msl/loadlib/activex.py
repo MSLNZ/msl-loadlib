@@ -13,13 +13,11 @@ try:
     import System
     clr.AddReference('System.Windows.Forms')
     import System.Windows.Forms as Forms
-    from System.Threading import ApartmentState, Thread, ThreadStart
 except:
     clr = None
 
     class Forms(object):
         Form = object
-        """Represents a window or dialog box that makes up an application's user interface."""
 
 try:
     from comtypes import (
@@ -138,9 +136,14 @@ class Application(Forms.Form):
             as the `sink`.
         interface
             The interface to use.
+
+        Returns
+        -------
+        The connection object.
         """
         cxn = GetEvents(source, sink or self, interface=interface)
         self._event_connections.append(cxn)
+        return cxn
 
     @staticmethod
     def create_panel():
@@ -253,35 +256,3 @@ class Application(Forms.Form):
             raise OSError('AtlAxGetControl {}'.format(ctypes.WinError()))
 
         return GetBestInterface(unknown)
-
-    def run_in_thread(self, app=None, state=None, join=True):
-        """Run an application in a new thread.
-
-        Parameters
-        ----------
-        app
-            The application to run in a new thread. If not specified then
-            uses the calling application instance.
-        state : :class:`int`, optional
-            Sets the apartment state of a thread before it is started.
-            For more details see
-            `state <https://docs.microsoft.com/en-us/dotnet/api/system.threading.thread.setapartmentstate>`_.
-            Default is a single-threaded apartment.
-        join : :class:`bool`, optional
-            Whether to block the calling thread until the new thread terminates.
-        """
-        if app is None:
-            app = self
-
-        if state is None:
-            state = ApartmentState.STA
-
-        def app_thread():
-            Forms.Application.Run(app)
-            app.Dispose()
-
-        thread = Thread(ThreadStart(app_thread))
-        thread.SetApartmentState(state)
-        thread.Start()
-        if join:
-            thread.Join()
