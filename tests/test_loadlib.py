@@ -451,6 +451,25 @@ def test_comtypes():
     assert found_it, 'did not find %s in utils.get_com_info() dict' % progid
 
 
+@pytest.mark.skipif(not loadlib.IS_WINDOWS, reason='comtypes is only supported on Windows')
+def test_activex_raises():
+    from msl.loadlib.activex import Application
+
+    with pytest.raises(OSError, match=r"Cannot find 'ABC' for libtype='activex'"):
+        loadlib.LoadLibrary('ABC', 'activex')
+
+    with pytest.raises(OSError, match=r"Cannot find 'ABC' for libtype='activex'"):
+        Application.load('ABC')
+
+    progid = 'MediaPlayer.MediaPlayer.1'
+
+    for item in [0, [], 'xxx']:
+        with pytest.raises(OSError, match=r'Cannot create a Handle'):
+            loadlib.LoadLibrary(progid, 'activex', parent=item)
+        with pytest.raises(OSError, match=r'Cannot create a Handle'):
+            Application.load(progid, parent=item)
+
+
 def test_unicode_path():
     cls = loadlib.LoadLibrary(u'./tests/uñicödé/Trig.class')
     import math
