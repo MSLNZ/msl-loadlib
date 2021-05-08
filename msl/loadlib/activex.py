@@ -124,21 +124,22 @@ class Application(Forms.Form):
 
         self._event_connections = []
 
-    def handle_events(self, sink, source=None, interface=None):
+    def handle_events(self, source, sink=None, interface=None):
         """Handle events from an ActiveX object.
 
         Parameters
         ----------
+        source
+            The ActiveX object that emits events.
         sink
             The object that handles the events. The `sink` must
             define methods with the same names as the ActiveX event names.
-        source
-            An ActiveX object that sends events. If not specified then
-            uses the calling application instance as the `source`.
+            If not specified then uses the calling application instance
+            as the `sink`.
         interface
             The interface to use.
         """
-        cxn = GetEvents(source or self, sink, interface=interface)
+        cxn = GetEvents(source, sink or self, interface=interface)
         self._event_connections.append(cxn)
 
     @staticmethod
