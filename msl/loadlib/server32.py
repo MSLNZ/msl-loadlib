@@ -252,6 +252,24 @@ class Server32(HTTPServer):
         """
         return sys.executable.endswith(SERVER_FILENAME)
 
+    @staticmethod
+    def examples_dir():
+        """Get the directory where the example libraries are located.
+
+        .. versionadded:: 0.9
+
+        Returns
+        -------
+        :class:`str`
+            The directory where the example libraries are located.
+        """
+        if Server32.is_interpreter():
+            root = os.path.dirname(sys.executable)
+        else:
+            root = os.path.dirname(__file__)
+        path = os.path.join(root, os.pardir, 'examples', 'loadlib')
+        return os.path.abspath(path)
+
     def shutdown_handler(self):
         """Proxy function that is called immediately prior to the server shutting down.
 
