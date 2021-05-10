@@ -54,8 +54,11 @@ constructor is optional.
         """A wrapper around a 32-bit C++ library, 'cpp_lib32.dll', that has an 'add' function."""
 
         def __init__(self, host, port, **kwargs):
-            # Load the 'cpp_lib32' shared-library file using ctypes.CDLL.
+            # Load the 'cpp_lib32' shared-library file using ctypes.CDLL
             super(MyServer, self).__init__('cpp_lib32.dll', 'cdll', host, port)
+
+            # Define a constant
+            self.constant = 1.2
 
         def add(self, a, b):
             # The Server32 class has a 'lib' property that is a reference to the ctypes.CDLL object.
@@ -64,8 +67,8 @@ constructor is optional.
 
 **MyClient** is a subclass of :class:`~msl.loadlib.client64.Client64` which
 sends a request to **MyServer** to call the ``add`` function in the shared
-library. **MyServer** processes the request and sends the response back to
-**MyClient**.
+library and to get the value of ``constant``. **MyServer** processes the request
+and sends the response back to **MyClient**.
 
 .. code-block:: python
 
@@ -85,6 +88,10 @@ library. **MyServer** processes the request and sends the response back to
             # Send the 'a' and 'b' arguments to the 'add' method in MyServer.
             return self.request32('add', a, b)
 
+        def constant(self):
+            # Get the value of the constant.
+            return self.request32('constant')
+
 The **MyClient** class would then be used as follows
 
 .. invisible-code-block: pycon
@@ -98,6 +105,8 @@ The **MyClient** class would then be used as follows
    >>> c = MyClient()
    >>> c.add(1, 2)
    3
+   >>> c.constant()
+   1.2
 
 Keyword arguments, *kwargs*, that the :class:`~msl.loadlib.server32.Server32`
 subclass requires can be passed to the server from the client (see,
@@ -164,9 +173,9 @@ compiled in different programming languages or using different calling conventio
             def __init__(self):
                 super(LinearAlgebra, self).__init__(module32='linear_algebra_32.py')
 
-            def __getattr__(self, method32):
+            def __getattr__(self, name):
                 def send(*args, **kwargs):
-                    return self.request32(method32, *args, **kwargs)
+                    return self.request32(name, *args, **kwargs)
                 return send
 
     and you will get the same behaviour. If you call a method that does not exist on the

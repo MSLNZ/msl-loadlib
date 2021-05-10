@@ -248,13 +248,14 @@ class Client64(object):
         """
         return self._meta32['path']
 
-    def request32(self, method32, *args, **kwargs):
+    def request32(self, name, *args, **kwargs):
         """Send a request to the 32-bit server.
 
         Parameters
         ----------
-        method32 : :class:`str`
-            The name of the method to call in the :class:`~.server32.Server32` subclass.
+        name : :class:`str`
+            The name of an attribute of the :class:`~.server32.Server32` subclass.
+            The name can be a method, property or any attribute.
         *args
             The arguments that the method in the :class:`~.server32.Server32` subclass requires.
         **kwargs
@@ -278,7 +279,7 @@ class Client64(object):
             pickle.dump(args, f, protocol=self._pickle_protocol)
             pickle.dump(kwargs, f, protocol=self._pickle_protocol)
 
-        self._conn.request('GET', method32)
+        self._conn.request('GET', name)
 
         try:
             response = self._conn.getresponse()
@@ -286,8 +287,10 @@ class Client64(object):
             response = None
 
         if response is None:
-            raise ResponseTimeoutError('Waiting for the response from the {!r} request timed '
-                                       'out after {} seconds'.format(method32, self._rpc_timeout))
+            raise ResponseTimeoutError(
+                'Waiting for the response from the {!r} request timed '
+                'out after {} seconds'.format(name, self._rpc_timeout)
+            )
 
         if response.status == OK:
             with open(self._pickle_path, 'rb') as f:

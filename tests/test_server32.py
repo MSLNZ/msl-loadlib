@@ -236,9 +236,9 @@ def test_comtypes_ctypes_union_error():
                 append_sys_path=os.path.join(os.path.dirname(__file__), 'server32_comtypes'),
             )
 
-        def __getattr__(self, method32):
+        def __getattr__(self, name):
             def send(*args, **kwargs):
-                return self.request32(method32, *args, **kwargs)
+                return self.request32(name, *args, **kwargs)
             return send
 
     file_system = FileSystemObjectClient()
