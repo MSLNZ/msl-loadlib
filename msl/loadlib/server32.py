@@ -290,7 +290,7 @@ class _RequestHandler(BaseHTTPRequestHandler):
             if self.path == METADATA:
                 response = {'path': self.server.path, 'pid': os.getpid()}
             else:
-                with open(self.server.pickle_path, 'rb') as f:
+                with open(self.server.pickle_path, mode='rb') as f:
                     args = pickle.load(f)
                     kwargs = pickle.load(f)
 
@@ -300,7 +300,7 @@ class _RequestHandler(BaseHTTPRequestHandler):
                 else:
                     response = attr
 
-            with open(self.server.pickle_path, 'wb') as f:
+            with open(self.server.pickle_path, mode='wb') as f:
                 pickle.dump(response, f, protocol=self.server.pickle_protocol)
 
             self.send_response(OK)

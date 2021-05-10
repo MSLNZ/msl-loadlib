@@ -275,7 +275,7 @@ class Client64(object):
         if self._conn is None:
             raise Server32Error('The 32-bit server is not active')
 
-        with open(self._pickle_path, 'wb') as f:
+        with open(self._pickle_path, mode='wb') as f:
             pickle.dump(args, f, protocol=self._pickle_protocol)
             pickle.dump(kwargs, f, protocol=self._pickle_protocol)
 
@@ -293,7 +293,7 @@ class Client64(object):
             )
 
         if response.status == OK:
-            with open(self._pickle_path, 'rb') as f:
+            with open(self._pickle_path, mode='rb') as f:
                 result = pickle.load(f)
             return result
 
