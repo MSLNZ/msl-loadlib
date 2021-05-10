@@ -25,9 +25,8 @@ class Running32(Server32):
             'cdll', host, port
         )
 
-    @staticmethod
-    def is_interpreter():
-        return Server32.is_interpreter()
+    def interpreter(self):
+        return self.is_interpreter()
 
 
 class Running64(Client64):
@@ -35,14 +34,23 @@ class Running64(Client64):
     def __init__(self):
         super(Running64, self).__init__(__file__, ex_dir=EXAMPLES_DIR)
 
+    def interpreter(self):
+        return self.request32('interpreter')
+
     def is_interpreter(self):
         return self.request32('is_interpreter')
 
 
 @pytest.mark.skipif(IS_MAC, reason='the 32-bit server for macOS does not exist')
-def test_running_on_server():
+def test_is_interpreter():
     r = Running64()
+
+    interpreter = r.interpreter()
+    assert isinstance(interpreter, bool)
+    assert interpreter
+
     is_interpreter = r.is_interpreter()
     assert isinstance(is_interpreter, bool)
     assert is_interpreter
+
     assert not Server32.is_interpreter()  # this test module is not running on the 32-bit server
