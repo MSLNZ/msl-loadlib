@@ -35,7 +35,7 @@ communicate with the 32-bit library.
    ~msl.examples.loadlib.labview32
    ~msl.examples.loadlib.labview64
 
-The following illustrates a minimal usage example. The **cpp_lib32.dll** file
+The following illustrates a minimal usage example. The **my_lib.dll** file
 is a 32-bit C++ library that cannot be loaded from a module that is running
 within a 64-bit Python interpreter. This library gets loaded by the **MyServer**
 class which is running within a 32-bit process. **MyServer** hosts the library
@@ -51,23 +51,24 @@ constructor is optional.
     from msl.loadlib import Server32
 
     class MyServer(Server32):
-        """A wrapper around a 32-bit C++ library, 'cpp_lib32.dll', that has an 'add' function."""
+        """A wrapper around a 32-bit C++ library, 'my_lib.dll', that has an 'add' function."""
 
         def __init__(self, host, port, **kwargs):
-            # Load the 'cpp_lib32' shared-library file using ctypes.CDLL
-            super(MyServer, self).__init__('cpp_lib32.dll', 'cdll', host, port)
+            # Load the 'my_lib' shared-library file using ctypes.CDLL
+            super(MyServer, self).__init__('my_lib.dll', 'cdll', host, port)
 
-            # Define a constant
-            self.constant = 1.2
+            # The Server32 class has a 'lib' property that is a reference to the ctypes.CDLL object
+
+            # Call the version function from the library
+            self.version = self.lib.version()
 
         def add(self, a, b):
-            # The Server32 class has a 'lib' property that is a reference to the ctypes.CDLL object.
-            # The shared library’s 'add' function takes two integers as inputs and returns the sum.
+            # The shared library's 'add' function takes two integers as inputs and returns the sum
             return self.lib.add(a, b)
 
 **MyClient** is a subclass of :class:`~msl.loadlib.client64.Client64` which
 sends a request to **MyServer** to call the ``add`` function in the shared
-library and to get the value of ``constant``. **MyServer** processes the request
+library and to get the value of ``version``. **MyServer** processes the request
 and sends the response back to **MyClient**.
 
 .. code-block:: python
@@ -77,20 +78,20 @@ and sends the response back to **MyClient**.
     from msl.loadlib import Client64
 
     class MyClient(Client64):
-        """Send a request to 'MyServer' to execute the 'add' method and get the response."""
+        """Send a request to 'MyServer'."""
 
         def __init__(self):
             # Specify the name of the Python module to execute on the 32-bit server (i.e., 'my_server')
             super(MyClient, self).__init__(module32='my_server')
 
         def add(self, a, b):
-            # The Client64 class has a 'request32' method to send a request to the 32-bit server.
-            # Send the 'a' and 'b' arguments to the 'add' method in MyServer.
+            # The Client64 class has a 'request32' method to send a request to the 32-bit server
+            # Send the 'a' and 'b' arguments to the 'add' method in MyServer
             return self.request32('add', a, b)
 
-        def constant(self):
-            # Get the value of the constant.
-            return self.request32('constant')
+        def version(self):
+            # Get the version
+            return self.request32('version')
 
 The **MyClient** class would then be used as follows
 
@@ -105,8 +106,8 @@ The **MyClient** class would then be used as follows
    >>> c = MyClient()
    >>> c.add(1, 2)
    3
-   >>> c.constant()
-   1.2
+   >>> c.version()
+   '1.2'
 
 Keyword arguments, *kwargs*, that the :class:`~msl.loadlib.server32.Server32`
 subclass requires can be passed to the server from the client (see,
