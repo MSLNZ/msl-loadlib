@@ -10,6 +10,8 @@ import pytest
 from msl import loadlib
 from msl.examples.loadlib import EXAMPLES_DIR, Point, FourPoints, NPoints
 
+from conftest import has_labview_runtime
+
 
 def test_invalid_libtype():
     with pytest.raises(ValueError, match=', '.join(loadlib.LoadLibrary.LIBTYPES)):
@@ -257,15 +259,8 @@ def test_dotnet():
     assert net.lib.StaticClass.concatenate('a', 'b', 'c', True, 'd') == 'abcd'
 
 
-@pytest.mark.skipif(
-    not any([
-        os.path.isdir(r'C:\Program Files\National Instruments\Shared\LabVIEW Run-Time'),
-        os.path.isdir(r'C:\Program Files (x86)\National Instruments\Shared\LabVIEW Run-Time'),
-    ]),
-    reason='requires labview runtime'
-)
+@pytest.mark.skipif(not has_labview_runtime(), reason='requires LabVIEW Run-Time Engine')
 def test_labview():
-
     from ctypes import c_double, byref
 
     if loadlib.IS_PYTHON_64BIT:

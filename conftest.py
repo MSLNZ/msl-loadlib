@@ -6,6 +6,23 @@ import pytest
 from msl import loadlib
 
 
+def has_labview_runtime():
+    if loadlib.IS_PYTHON_64BIT:
+        root = r'C:\Program Files\National Instruments\Shared\LabVIEW Run-Time'
+    else:
+        root = r'C:\Program Files (x86)\National Instruments\Shared\LabVIEW Run-Time'
+
+    if not os.path.isdir(root):
+        return False
+
+    for item in os.listdir(root):
+        path = os.path.join(root, item, 'lvrt.dll')
+        if os.path.isfile(path):
+            return True
+
+    return False
+
+
 @pytest.fixture(autouse=True)
 def doctest_skipif(doctest_namespace):
 
@@ -36,12 +53,12 @@ def doctest_skipif(doctest_namespace):
         bit64 = lambda: None
         bit32 = lambda: pytest.skip('requires 64-bit Python')
 
-    if not os.path.isdir(r'C:\Program Files\National Instruments\Shared\LabVIEW Run-Time'):
-        no_labview64 = lambda: pytest.skip('requires 64-bit LabVIEW runtime')
-    else:
+    if loadlib.IS_PYTHON_64BIT and has_labview_runtime():
         no_labview64 = lambda: None
+    else:
+        no_labview64 = lambda: pytest.skip('requires 64-bit LabVIEW Run-Time Engine')
 
-    no_labview32 = lambda: pytest.skip('requires 32-bit LabVIEW runtime -- not even checking if installed')
+    no_labview32 = lambda: pytest.skip('requires 32-bit LabVIEW Run-Time Engine -- not even checking if installed')
 
     doctest_namespace['SKIP_IF_PYTHON_2'] = py2
     doctest_namespace['SKIP_IF_PYTHON_LESS_THAN_3_6'] = less_36
