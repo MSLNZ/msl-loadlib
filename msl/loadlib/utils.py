@@ -357,3 +357,80 @@ def get_com_info(*additional_keys):
         winreg.CloseKey(key)
 
     return results
+
+
+def generate_com_wrapper(lib, out_dir=None):
+    """Generate a Python wrapper module around a COM library.
+
+    For more information see `Accessing type libraries`_.
+
+    .. versionadded:: 0.9
+
+    .. _Accessing type libraries: https://pythonhosted.org/comtypes/#accessing-type-libraries
+
+    Parameters
+    ----------
+    lib
+        Can be any of the following
+
+            * a :class:`~msl.loadlib.load_library.LoadLibrary` object
+            * the `ProgID` or `CLSID` of a registered COM library as a :class:`str`
+            * a COM pointer instance
+            * an ITypeLib COM pointer instance
+            * a path to a library file (.tlb, .exe or .dll) as a :class:`str`
+            * a :class:`tuple` or :class:`list` specifying the GUID of a library,
+              a major and a minor version number, plus optionally an LCID number,
+              e.g., (guid, major, minor, lcid=0)
+            * an object with ``_reg_libid_`` and ``_reg_version_`` attributes
+
+    out_dir : :class:`str`, optional
+        The output directory to save the wrapper to. If not specified then
+        saves it to the ``../site-packages/comtypes/gen`` directory.
+
+    Returns
+    -------
+    The wrapper module that was generated.
+    """
+    if not is_comtypes_installed():
+        raise OSError(
+            'Cannot create a COM wrapper because comtypes is not installed, run\n'
+            '  pip install comtypes'
+        )
+
+    import comtypes.client
+
+    mod = None
+
+    # cache the value of gen_dir to reset it later
+    cached_gen_dir = comtypes.client.gen_dir
+    if out_dir is not None:
+        gen_dir = os.path.abspath(out_dir)
+        if not os.path.isdir(gen_dir):
+            os.makedirs(gen_dir)
+        comtypes.client.gen_dir = gen_dir
+
+    def from_pointer(p):
+        info = p.GetTypeInfo(0)
+        type_lib, index = info.GetContainingTypeLib()
+        return comtypes.client.GetModule(type_lib)
+
+    try:
+        mod = comtypes.client.GetModule(lib)
+    except OSError:
+        pass
+    except AttributeError as e:
+        if str(e).startswith("'LoadLibrary'"):
+            mod = from_pointer(lib.lib)
+        elif hasattr(lib, '__com_interface__'):
+            mod = from_pointer(lib)
+        else:
+            raise
+
+    if not mod and isinstance(lib, str):
+        obj = comtypes.client.CreateObject(lib)
+        mod = from_pointer(obj)
+
+    if out_dir is not None:
+        comtypes.client.gen_dir = cached_gen_dir
+
+    return mod
