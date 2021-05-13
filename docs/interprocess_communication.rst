@@ -11,11 +11,11 @@ by use of a file. The :mod:`pickle` module is used to (de)serialize Python objec
 
 The following table summarizes the example modules that are available.
 
-Modules that end in **32** contain a class that is a subclass of
+Modules that end in *32* contain a class that is a subclass of
 :class:`~msl.loadlib.server32.Server32`. This subclass is a wrapper around
 a 32-bit library and is hosted on a 32-bit server.
 
-Modules that end in **64** contain a class that is a subclass of
+Modules that end in *64* contain a class that is a subclass of
 :class:`~msl.loadlib.client64.Client64`. This subclass sends a request to
 the corresponding :class:`~msl.loadlib.server32.Server32` subclass to
 communicate with the 32-bit library.
@@ -35,11 +35,11 @@ communicate with the 32-bit library.
    ~msl.examples.loadlib.labview32
    ~msl.examples.loadlib.labview64
 
-The following illustrates a minimal usage example. The **my_lib.dll** file
+The following illustrates a minimal usage example. The *my_lib.dll* file
 is a 32-bit C++ library that cannot be loaded from a module that is running
-within a 64-bit Python interpreter. This library gets loaded by the **MyServer**
-class which is running within a 32-bit process. **MyServer** hosts the library
-at the specified host address and port number. Any class that is a subclass of
+within a 64-bit Python interpreter. This library gets loaded by the *MyServer*
+class which is running within a 32-bit process. *MyServer* hosts the library
+at a specified host address and port number. Any class that is a subclass of
 :class:`~msl.loadlib.server32.Server32` *must* provide two arguments in its
 constructor: ``host`` and ``port``. Including keyword arguments in the
 constructor is optional.
@@ -51,7 +51,7 @@ constructor is optional.
     from msl.loadlib import Server32
 
     class MyServer(Server32):
-        """A wrapper around a 32-bit C++ library, 'my_lib.dll', that has an 'add' function."""
+        """Wrapper around a 32-bit C++ library 'my_lib.dll' that has an 'add' and 'version' function."""
 
         def __init__(self, host, port, **kwargs):
             # Load the 'my_lib' shared-library file using ctypes.CDLL
@@ -66,10 +66,10 @@ constructor is optional.
             # The shared library's 'add' function takes two integers as inputs and returns the sum
             return self.lib.add(a, b)
 
-**MyClient** is a subclass of :class:`~msl.loadlib.client64.Client64` which
-sends a request to **MyServer** to call the ``add`` function in the shared
-library and to get the value of ``version``. **MyServer** processes the request
-and sends the response back to **MyClient**.
+*MyClient* is a subclass of :class:`~msl.loadlib.client64.Client64` which
+sends a request to *MyServer* to call the ``add`` function in the shared
+library and to get the value of ``version``. *MyServer* processes the request
+and sends the response back to *MyClient*.
 
 .. code-block:: python
 
@@ -78,7 +78,7 @@ and sends the response back to **MyClient**.
     from msl.loadlib import Client64
 
     class MyClient(Client64):
-        """Send a request to 'MyServer'."""
+        """Call a function in 'my_lib.dll' via the 'MyServer' wrapper."""
 
         def __init__(self):
             # Specify the name of the Python module to execute on the 32-bit server (i.e., 'my_server')
@@ -93,7 +93,7 @@ and sends the response back to **MyClient**.
             # Get the version
             return self.request32('version')
 
-The **MyClient** class would then be used as follows
+The *MyClient* class would then be used as follows
 
 .. invisible-code-block: pycon
 
@@ -107,7 +107,7 @@ The **MyClient** class would then be used as follows
    >>> c.add(1, 2)
    3
    >>> c.version()
-   '1.2'
+   1
 
 Keyword arguments, *kwargs*, that the :class:`~msl.loadlib.server32.Server32`
 subclass requires can be passed to the server from the client (see,
