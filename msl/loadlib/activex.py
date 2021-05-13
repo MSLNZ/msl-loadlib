@@ -105,6 +105,10 @@ class Application(Forms.Form):
         .. _Form: https://docs.microsoft.com/en-us/dotnet/api/system.windows.forms.form
         .. _pythonnet: https://pypi.org/project/pythonnet/
 
+        .. invisible-code-block: pycon
+
+           >>> SKIP_IF_NOT_WINDOWS()
+
         Examples
         --------
         >>> from msl.loadlib.activex import Application
