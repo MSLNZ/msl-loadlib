@@ -5,14 +5,28 @@ Changelog
 Version 0.9.0 (in development)
 ==============================
 
+* Added
+
+  - support for loading an ActiveX library
+  - the following static methods to `Server32`:
+    :meth:`~msl.loadlib.server32.Server32.remove_site_packages_64bit`,
+    :meth:`~msl.loadlib.server32.Server32.is_interpreter`,
+    :meth:`~msl.loadlib.server32.Server32.examples_dir`
+  - the :func:`~msl.loadlib.utils.generate_com_wrapper` function
+
+* Changed
+
+  - the ``sys.coinit_flags`` attribute is now set to ``COINIT_MULTITHREADED``
+    (only if this attribute was not already defined prior to importing `msl.loadlib`)
+
 * Fixed
 
   - ``Client64.__del__`` could have written a warning to stderr indicating
-    that it has no ``self._conn`` attribute existed
+    that no ``self._conn`` attribute existed
   - ``sys:1: ResourceWarning: unclosed file <_io.BufferedReader name=...>``
-    warnings could be written to stderr when a ``Client64`` was destroyed
+    warnings could be written to stderr when a `Client64` object is destroyed
   - issue `#23 <https://github.com/MSLNZ/msl-loadlib/issues/23>`_ - the
-    ``useLegacyV2RuntimeActivationPolicy`` property was not created
+    ``useLegacyV2RuntimeActivationPolicy`` property was no longer created
 
 Version 0.8.0 (2021.02.20)
 ==========================
@@ -80,7 +94,7 @@ Version 0.6.0 (2019.05.07)
   - a section to the docs that explains how to re-freeze the 32-bit server
   - a `kill_timeout` keyword argument to `Client64.shutdown_server32()`
   - the `rpc_timeout` keyword argument to `Client64` (thanks to @fake-name)
-  - search `HKEY_CLASSES_ROOT\\Wow6432Node\\CLSID` in the Windows Registry for additional ActiveX `ProgID`'s
+  - search `HKEY_CLASSES_ROOT\\Wow6432Node\\CLSID` in the Windows Registry for additional COM `ProgID`'s
   - `extras_require` parameter to `setup.py` with keys: `clr`, `java`, `com`, `all`
 
 * Changed
