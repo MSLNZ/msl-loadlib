@@ -65,5 +65,5 @@ def test_cli_quiet_flag():
 
     lines = err.splitlines()
     assert lines[0] == b'You must specify a Python module to run on the 32-bit server.'
-    assert lines[1] == b'For example: ' + SERVER_FILENAME.encode() + b' -m my_module.py'
+    assert lines[1] == b'For example: ' + SERVER_FILENAME.encode() + b' -m my_module'
     assert lines[2] == b'Cannot start the 32-bit server.'

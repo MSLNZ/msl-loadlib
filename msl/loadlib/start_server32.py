@@ -127,7 +127,7 @@ def main():
     # inter-process communication and therefore args.module must have a value
     if not args.module:
         err = 'You must specify a Python module to run on the 32-bit server.\n' \
-              'For example: {} -m my_module.py\n' \
+              'For example: {} -m my_module\n' \
               'Cannot start the 32-bit server.'.format(SERVER_FILENAME)
         print(err, file=sys.stderr)
         return -1

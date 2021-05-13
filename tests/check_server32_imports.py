@@ -2,7 +2,7 @@
 Run this script using the server32 executable to see which modules from
 the standard library cannot be imported, e.g.,
 
-  server32-windows.exe -m ..\..\tests\check_server32_imports.py
+  server32-windows.exe -m ..\..\tests\check_server32_imports
 
 The following error will be displayed when the script exits (but that's ok)
 
