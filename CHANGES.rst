@@ -2,8 +2,13 @@
 Changelog
 =========
 
-Version 0.9.0 (in development)
-==============================
+Version 0.9.0 (2021.05.13)
+==========================
+
+* The 32-bit server is frozen with the following versions
+
+  - ``server32-windows.exe`` -- Python 3.7.10, pythonnet 2.5.2, comtypes 1.1.10
+  - ``server32-linux``  -- Python 3.7.10, pythonnet 2.4.0
 
 * Added
 
