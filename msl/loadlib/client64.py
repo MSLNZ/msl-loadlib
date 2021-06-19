@@ -198,8 +198,11 @@ class Client64(object):
         try:
             utils.wait_for_server(host, port, timeout)
         except ConnectionTimeoutError as err:
-            self._proc.wait()
-            err.reason = self._proc.stderr.read().decode(encoding='utf-8', errors='replace')
+            self._wait(timeout=0, stacklevel=4)
+            # if the subprocess was killed then self._wait sets returncode to -2
+            if self._proc.returncode != -2:
+                stderr = self._proc.stderr.read()
+                err.reason = stderr.decode(encoding='utf-8', errors='replace')
             raise
 
         # connect to the server
@@ -342,15 +345,8 @@ class Client64(object):
             self._conn = HTTPConnection(self.host, port=self.port)
             self._conn.request('POST', SHUTDOWN)
 
-        # give the server a chance to shut down gracefully
-        t0 = time.time()
-        while self._proc.poll() is None:
-            time.sleep(0.1)
-            if time.time() - t0 > kill_timeout:
-                self._proc.terminate()
-                self._proc.returncode = -1
-                warnings.warn('killed the 32-bit server using brute force', stacklevel=2)
-                break
+        # give the frozen 32-bit server a chance to shut down gracefully
+        self._wait(timeout=kill_timeout, stacklevel=3)
 
         # the frozen 32-bit server can still block the process from terminating
         # the <signal.SIGKILL 9> constant is not available on Windows
@@ -372,3 +368,14 @@ class Client64(object):
             out, err = self.shutdown_server32()
             out.close()
             err.close()
+
+    def _wait(self, timeout=10., stacklevel=3):
+        # give the 32-bit server a chance to shut down gracefully
+        t0 = time.time()
+        while self._proc.poll() is None:
+            time.sleep(0.1)
+            if time.time() - t0 > timeout:
+                self._proc.terminate()
+                self._proc.returncode = -2
+                warnings.warn('killed the 32-bit server using brute force', stacklevel=stacklevel)
+                break
