@@ -119,6 +119,7 @@ class Client64(object):
         """
         self._meta32 = None
         self._conn = None
+        self._proc = None
 
         if port is None:
             port = utils.get_available_port()
@@ -364,7 +365,7 @@ class Client64(object):
         return self._proc.stdout, self._proc.stderr
 
     def __del__(self):
-        if hasattr(self, '_conn'):
+        if self._proc is not None:
             out, err = self.shutdown_server32()
             out.close()
             err.close()
