@@ -529,16 +529,32 @@ def test_dotnet_nested_namespace():
     assert lib.Foo.Bar.Baz('my custom message!').Message() == 'my custom message!'
     assert lib.Foo.Bar.Baz('abc 123').message == 'abc 123'
 
-    # an enum in a namespace
-    assert lib.A.B.C.ErrorCode.Unknown == 0
-    assert lib.A.B.C.ErrorCode.ConnectionLost == 100
-    assert lib.A.B.C.ErrorCode.OutlierReading == 200
+    # pythonnet 3.0+ disabled implicit conversion from C# enums to Python int and back.
+    # One must now either use enum members (e.g. MyEnum.Option), or use enum constructor
+    # (e.g. MyEnum(42) or MyEnum(42, True) when MyEnum does not have a member with value 42).
+    import clr
+    if int(clr.__version__.split('.')[0]) < 3:
+        # an enum in a namespace
+        assert lib.A.B.C.ErrorCode.Unknown == 0
+        assert lib.A.B.C.ErrorCode.ConnectionLost == 100
+        assert lib.A.B.C.ErrorCode.OutlierReading == 200
 
-    # an enum not in a namespace
-    assert lib.Season.Winter == 0
-    assert lib.Season.Spring == 1
-    assert lib.Season.Summer == 2
-    assert lib.Season.Autumn == 3
+        # an enum not in a namespace
+        assert lib.Season.Winter == 0
+        assert lib.Season.Spring == 1
+        assert lib.Season.Summer == 2
+        assert lib.Season.Autumn == 3
+    else:
+        # an enum in a namespace
+        assert lib.A.B.C.ErrorCode.Unknown == lib.A.B.C.ErrorCode(0)
+        assert lib.A.B.C.ErrorCode.ConnectionLost == lib.A.B.C.ErrorCode(100)
+        assert lib.A.B.C.ErrorCode.OutlierReading == lib.A.B.C.ErrorCode(200)
+
+        # an enum not in a namespace
+        assert lib.Season.Winter == lib.Season(0)
+        assert lib.Season.Spring == lib.Season(1)
+        assert lib.Season.Summer == lib.Season(2)
+        assert lib.Season.Autumn == lib.Season(3)
 
     Subtracter = lib.A.B.C.Subtracter(8, 9)
     assert Subtracter.x == 8
