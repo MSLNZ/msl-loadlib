@@ -30,6 +30,8 @@ def test_invalid_path():
 
 @pytest.mark.skipif(loadlib.IS_MAC, reason='the 32-bit libraries do not exist for macOS')
 def test_load_failure_in_wrong_python_bitness():
+    import clr
+    import System
 
     def check(path, libtype, exception):
         if libtype == 'net':
@@ -52,13 +54,11 @@ def test_load_failure_in_wrong_python_bitness():
     suffix = '32' if loadlib.IS_PYTHON_64BIT else '64'
     check(os.path.join(EXAMPLES_DIR, 'cpp_lib'+suffix), 'cdll', OSError)
     check(os.path.join(EXAMPLES_DIR, 'fortran_lib'+suffix), 'cdll', OSError)
-    if not loadlib.IS_LINUX and sys.version_info[:2] != (3, 8):  # mono encounters a fatal crash
-        import clr
-        check(
-            os.path.join(EXAMPLES_DIR, 'dotnet_lib'+suffix),
-            'net',
-            (clr.System.IO.FileNotFoundException,  clr.System.BadImageFormatException)
-        )
+    check(
+        os.path.join(EXAMPLES_DIR, 'dotnet_lib'+suffix),
+        'net',
+        (System.IO.FileNotFoundException,  System.BadImageFormatException)
+    )
 
 
 def test_cpp():
