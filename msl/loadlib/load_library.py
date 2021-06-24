@@ -274,7 +274,7 @@ class LoadLibrary(object):
             try:
                 # don't include the library extension
                 clr.AddReference(os.path.splitext(tail)[0])
-            except System.IO.FileNotFoundException:
+            except (System.IO.FileNotFoundException, System.IO.FileLoadException):
                 # The file must exist since its existence is checked above.
                 # There must be another reason why loading the DLL raises this
                 # error. Calling LoadFile (below) provides more information
