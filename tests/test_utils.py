@@ -12,7 +12,6 @@ from msl.loadlib import (
     utils,
     IS_WINDOWS,
     IS_MAC,
-    IS_LINUX,
 )
 
 
@@ -33,8 +32,8 @@ def test_port_functions():
 
 
 @pytest.mark.skipif(
-    (IS_MAC or IS_LINUX) and sys.version_info[:2] == (3, 8),
-    reason='get fatal crash with mono and Python 3.8 when importing pythonnet'
+    (IS_MAC and sys.version_info[:2] < (3, 6) and len(str(os.getenv('GITHUB_ACTIONS', ''))) > 0),
+    reason='pythonnet was uninstalled'
 )
 def test_is_pythonnet_installed():
     assert utils.is_pythonnet_installed()

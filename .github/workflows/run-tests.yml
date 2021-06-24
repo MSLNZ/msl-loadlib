@@ -1,0 +1,77 @@
+name: Tests
+
+on: [push, pull_request]
+
+env:
+  PY_COLORS: 1
+  COLUMNS: 130
+
+jobs:
+  test:
+    name: Test
+    runs-on: ${{ matrix.os }}-latest
+
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: [2.7, 3.5, 3.6, 3.7, 3.8, 3.9]
+        os: [windows, ubuntu, macos]
+        architecture: [x64]
+        include:
+          - python-version: 2.7
+            os: windows
+            architecture: x86
+          - python-version: 3.5
+            os: windows
+            architecture: x86
+          - python-version: 3.6
+            os: windows
+            architecture: x86
+          - python-version: 3.7
+            os: windows
+            architecture: x86
+          - python-version: 3.8
+            os: windows
+            architecture: x86
+          - python-version: 3.9
+            os: windows
+            architecture: x86
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+      - name: Install system dependencies (Ubuntu)
+        if: ${{ matrix.os == 'ubuntu' }}
+        run: |
+          sudo dpkg --add-architecture i386
+          sudo apt-get update
+          sudo apt-get install -y libgfortran5:i386
+      - name: Set up Mono (macOS)
+        if: ${{ matrix.os == 'macos' }}
+        uses: maxim-lobanov/setup-xamarin@v1
+        with:
+          mono-version: latest
+      - name: Mono version (non Windows)
+        if: ${{ matrix.os != 'windows' }}
+        run: mono --version
+      - name: Java version
+        run: java -version
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v2
+        with:
+          python-version: ${{ matrix.python-version }}
+          architecture: ${{ matrix.architecture }}
+      - name: Install dependencies and package
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install --upgrade setuptools wheel
+          python -m pip install --upgrade pycparser
+          python -m pip install --upgrade --editable .[tests]
+      - name: Install pythonnet from commit (macOS, Python >= 3.6)
+        if: ${{ matrix.os == 'macos' && matrix.python-version != '2.7' && matrix.python-version != '3.5' }}
+        run: python -m pip install --upgrade git+https://github.com/pythonnet/pythonnet.git@ea61b038c0f26854787638f6e29b5c2027894927
+      - name: Uninstall pythonnet (macOS, Python < 3.6)
+        if: ${{ matrix.os == 'macos' && (matrix.python-version == '2.7' || matrix.python-version == '3.5') }}
+        run: python -m pip uninstall --yes pythonnet
+      - name: Run tests
+        run: python -m pytest
