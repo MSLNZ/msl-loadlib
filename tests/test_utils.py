@@ -6,6 +6,7 @@ import tempfile
 import xml.etree.ElementTree as ET
 
 import pytest
+from conftest import skipif_not_windows
 
 from msl.loadlib import (
     utils,
@@ -43,8 +44,9 @@ def test_is_py4j_installed():
     assert utils.is_py4j_installed()
 
 
+@skipif_not_windows
 def test_is_comtypes_installed():
-    assert IS_WINDOWS is utils.is_comtypes_installed()
+    assert utils.is_comtypes_installed()
 
 
 def test_check_dot_net_config():
@@ -124,7 +126,7 @@ def test_get_com_info():
         assert len(info) == 0
 
 
-@pytest.mark.skipif(not IS_WINDOWS, reason='comtypes is only supported on Windows')
+@skipif_not_windows
 def test_generate_com_wrapper():
     import comtypes.client
     from msl.loadlib import LoadLibrary

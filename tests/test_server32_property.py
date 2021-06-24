@@ -1,33 +1,27 @@
-# Make sure that non-callable attributes can be requested from the 32-bit server.
 import os
 from ctypes import c_float
 
-try:
+from msl.loadlib import (
+    Server32,
+    Client64,
+    Server32Error,
+)
+
+if Server32.is_interpreter():
+    def skipif_no_server32(*args):
+        pass
+else:
     import pytest
-except ImportError:  # the 32-bit server does not need pytest installed
-    class Mark(object):
-        @staticmethod
-        def skipif(condition, reason=None):
-            def func(function):
-                return function
-            return func
-
-    class pytest(object):
-        mark = Mark
-
-from msl.loadlib import Server32, Client64, Server32Error, IS_MAC
-from msl.examples.loadlib import EXAMPLES_DIR
+    from conftest import skipif_no_server32
 
 
 class Property32(Server32):
 
     CONSTANT = 2
 
-    def __init__(self, host, port, **kwargs):
-        super(Property32, self).__init__(
-            os.path.join(kwargs['ex_dir'], 'cpp_lib32'),
-            'cdll', host, port
-        )
+    def __init__(self, host, port):
+        path = os.path.join(Server32.examples_dir(), 'cpp_lib32')
+        super(Property32, self).__init__(path, 'cdll', host, port)
 
         self.three = self.lib.add(1, 2)
 
@@ -51,7 +45,7 @@ class Property32(Server32):
 class Property64(Client64):
 
     def __init__(self):
-        super(Property64, self).__init__(__file__, ex_dir=EXAMPLES_DIR)
+        super(Property64, self).__init__(__file__)
 
         self.CONSTANT = self.request32('CONSTANT')
         self.three = self.request32('three')
@@ -78,7 +72,7 @@ class Property64(Client64):
         return self.request32('multiple')
 
 
-@pytest.mark.skipif(IS_MAC, reason='the 32-bit server for macOS does not exist')
+@skipif_no_server32
 def test_request_property():
     p = Property64()
     assert p.subtract(100, 100) == 0

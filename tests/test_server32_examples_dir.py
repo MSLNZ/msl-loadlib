@@ -1,20 +1,13 @@
 import os
 
-try:
-    import pytest
-except ImportError:  # the 32-bit server does not need pytest installed
-    class Mark(object):
-        @staticmethod
-        def skipif(condition, reason=None):
-            def func(function):
-                return function
-            return func
-
-    class pytest(object):
-        mark = Mark
-
-from msl.loadlib import Server32, Client64, IS_MAC
+from msl.loadlib import Server32, Client64
 from msl.examples.loadlib import EXAMPLES_DIR
+
+if Server32.is_interpreter():
+    def skipif_no_server32(*args):
+        pass
+else:
+    from conftest import skipif_no_server32
 
 
 class Ex32(Server32):
@@ -42,7 +35,7 @@ class Ex64(Client64):
         return self.request32('ex_dir')
 
 
-@pytest.mark.skipif(IS_MAC, reason='the 32-bit server for macOS does not exist')
+@skipif_no_server32
 def test_examples_dir():
     assert Server32.examples_dir() == EXAMPLES_DIR
 

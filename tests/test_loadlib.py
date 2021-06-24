@@ -10,7 +10,11 @@ import pytest
 from msl import loadlib
 from msl.examples.loadlib import EXAMPLES_DIR, Point, FourPoints, NPoints
 
-from conftest import has_labview_runtime
+from conftest import (
+    skipif_no_comtypes,
+    skipif_no_labview_runtime,
+    skipif_no_pythonnet,
+)
 
 
 def test_invalid_libtype():
@@ -24,7 +28,7 @@ def test_invalid_path():
             loadlib.LoadLibrary(item)
 
 
-@pytest.mark.skipif(loadlib.IS_MAC, reason='the 32-bit library does not exist on macOS')
+@pytest.mark.skipif(loadlib.IS_MAC, reason='the 32-bit libraries do not exist for macOS')
 def test_load_failure_in_wrong_python_bitness():
 
     def check(path, libtype, exception):
@@ -206,10 +210,7 @@ def test_fortran():
     assert 64.0 == pytest.approx(a[1][1])
 
 
-@pytest.mark.skipif(
-    (loadlib.IS_LINUX or loadlib.IS_MAC) and sys.version_info[:2] == (3, 8),
-    reason='get fatal crash with mono & Python 3.8 when importing pythonnet'
-)
+@skipif_no_pythonnet
 def test_dotnet():
     bitness = '64' if loadlib.IS_PYTHON_64BIT else '32'
     path = os.path.join(EXAMPLES_DIR, 'dotnet_lib' + bitness + '.dll')
@@ -259,7 +260,7 @@ def test_dotnet():
     assert net.lib.StaticClass.concatenate('a', 'b', 'c', True, 'd') == 'abcd'
 
 
-@pytest.mark.skipif(not has_labview_runtime(), reason='requires LabVIEW Run-Time Engine')
+@skipif_no_labview_runtime
 def test_labview():
     from ctypes import c_double, byref
 
@@ -412,7 +413,7 @@ def test_java():
     cls.gateway.shutdown()
 
 
-@pytest.mark.skipif(not loadlib.IS_WINDOWS, reason='comtypes is only supported on Windows')
+@skipif_no_comtypes
 def test_comtypes():
     # changes to ctypes in Python 3.7.6 and 3.8.1 caused the following exception
     #  TypeError: item 1 in _argtypes_ passes a union by value, which is unsupported.
@@ -446,7 +447,7 @@ def test_comtypes():
     assert found_it, 'did not find %s in utils.get_com_info() dict' % progid
 
 
-@pytest.mark.skipif(not loadlib.IS_WINDOWS, reason='comtypes is only supported on Windows')
+@skipif_no_comtypes
 def test_activex_raises():
     from msl.loadlib.activex import Application
 
@@ -491,10 +492,7 @@ def test_unicode_path():
     str(cpp)  # this should not raise an exception
 
 
-@pytest.mark.skipif(
-    (loadlib.IS_MAC or loadlib.IS_LINUX) and sys.version_info[:2] == (3, 8),
-    reason='get fatal crash with mono and Python 3.8 when importing pythonnet'
-)
+@skipif_no_pythonnet
 def test_issue7():
     # checks that Issue #7 is fixed
     net = loadlib.LoadLibrary('./tests/namespace_with_dots/Namespace.With.Dots.dll', 'net')
@@ -510,10 +508,7 @@ def test_issue8():
     loadlib.LoadLibrary(pathlib.Path(os.path.join(EXAMPLES_DIR, 'cpp_lib' + bitness)))
 
 
-@pytest.mark.skipif(
-    (loadlib.IS_MAC or loadlib.IS_LINUX) and sys.version_info[:2] == (3, 8),
-    reason='get fatal crash with mono and Python 3.8 when importing pythonnet'
-)
+@skipif_no_pythonnet
 def test_dotnet_nested_namespace():
     lib = loadlib.LoadLibrary('./tests/nested_namespaces/nested_namespaces.dll', 'clr').lib
 

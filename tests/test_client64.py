@@ -2,13 +2,13 @@ import gc
 
 import pytest
 
-from msl.loadlib import Client64, IS_MAC
+from msl.loadlib import Client64
 from msl.examples.loadlib import Cpp64
 
-skipif_macos = pytest.mark.skipif(IS_MAC, reason='the 32-bit server for macOS does not exist')
+from conftest import skipif_no_server32
 
 
-@skipif_macos
+@skipif_no_server32
 def test_unclosed_pipe_warning_1(recwarn):
     # recwarn is a built-in pytest fixture that records all warnings emitted by test functions
 
@@ -21,7 +21,7 @@ def test_unclosed_pipe_warning_1(recwarn):
     assert recwarn.list == []
 
 
-@skipif_macos
+@skipif_no_server32
 def test_unclosed_pipe_warning_2(recwarn):
     for _ in range(3):
         cpp = Cpp64()

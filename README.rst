@@ -55,6 +55,10 @@ in the filename.
 Import the ``LoadLibrary`` class and the directory where the example libraries
 are located
 
+.. invisible-code-block: pycon
+
+   >>> SKIP_README_ALL()
+
 .. code-block:: pycon
 
    >>> from msl.loadlib import LoadLibrary
@@ -65,10 +69,6 @@ If the file extension is not included then a default extension,
 
 Load a `C++ <https://github.com/MSLNZ/msl-loadlib/blob/main/msl/examples/loadlib/cpp_lib.cpp>`_
 library and call the ``add`` function
-
-.. invisible-code-block: pycon
-
-   >>> SKIP_IF_32BIT()
 
 .. code-block:: pycon
 
@@ -94,16 +94,6 @@ of type ``double`` to be returned
    >>> fortran.lib.factorial(byref(c_int(37)))
    1.3763753091226343e+43
 
-Load a `.NET <https://github.com/MSLNZ/msl-loadlib/blob/main/msl/examples/loadlib/dotnet_lib.cs>`_
-library and call the ``reverse_string`` function, we must specify that the library
-type is a .NET library by passing in the ``'net'`` argument
-
-.. code-block:: pycon
-
-   >>> net = LoadLibrary(EXAMPLES_DIR + '/dotnet_lib64.dll', 'net')
-   >>> net.lib.StringManipulation().reverse_string('abcdefghijklmnopqrstuvwxyz')
-   'zyxwvutsrqponmlkjihgfedcba'
-
 Load `Java <https://github.com/MSLNZ/msl-loadlib/blob/main/msl/examples/loadlib/Trig.java>`_
 byte code and call the ``cos`` function
 
@@ -120,6 +110,20 @@ therefore the connection needs to be closed when you are done using the Java lib
 
    >>> java.gateway.shutdown()
 
+Load a `.NET <https://github.com/MSLNZ/msl-loadlib/blob/main/msl/examples/loadlib/dotnet_lib.cs>`_
+library and call the ``reverse_string`` function, we must specify that the library
+type is a .NET library by passing in the ``'net'`` argument
+
+.. invisible-code-block: pycon
+
+   >>> SKIP_README_DOTNET()
+
+.. code-block:: pycon
+
+   >>> net = LoadLibrary(EXAMPLES_DIR + '/dotnet_lib64.dll', 'net')
+   >>> net.lib.StringManipulation().reverse_string('abcdefghijklmnopqrstuvwxyz')
+   'zyxwvutsrqponmlkjihgfedcba'
+
 To load a `Component Object Model`_ (COM) library pass in the library's Program ID.
 *NOTE: This example will only work on Windows.*
 
@@ -128,7 +132,7 @@ indicate that it is a COM library.
 
 .. invisible-code-block: pycon
 
-   >>> SKIP_IF_NOT_WINDOWS()
+   >>> SKIP_README_COM()
 
 .. code-block:: pycon
 

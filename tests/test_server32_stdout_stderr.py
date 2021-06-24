@@ -2,27 +2,24 @@ from __future__ import print_function
 import os
 import sys
 
-try:
-    import pytest
-except ImportError:  # the 32-bit server does not need pytest installed
-    class Mark(object):
-        @staticmethod
-        def skipif(condition, reason=None):
-            def func(function):
-                return function
-            return func
+from msl.loadlib import (
+    Server32,
+    Client64,
+)
 
-    class pytest(object):
-        mark = Mark
-
-from msl.loadlib import Server32, Client64, IS_MAC
-from msl.examples.loadlib import EXAMPLES_DIR
+if Server32.is_interpreter():
+    def skipif_no_server32(*args):
+        pass
+else:
+    from conftest import skipif_no_server32
 
 
 class Print32(Server32):
 
-    def __init__(self, host, port, path=None):
-        super(Print32, self).__init__(os.path.join(path, 'cpp_lib32'), 'cdll', host, port)
+    def __init__(self, host, port):
+        path = os.path.join(Server32.examples_dir(), 'cpp_lib32')
+        super(Print32, self).__init__(path, 'cdll', host, port)
+
         print('this is a message')
         print('there is a problem', file=sys.stderr)
 
@@ -30,10 +27,10 @@ class Print32(Server32):
 class Print64(Client64):
 
     def __init__(self):
-        super(Print64, self).__init__(__file__, path=EXAMPLES_DIR)
+        super(Print64, self).__init__(__file__)
 
 
-@pytest.mark.skipif(IS_MAC, reason='the 32-bit server for macOS does not exist')
+@skipif_no_server32
 def test_shutdown_server32():
 
     p = Print64()

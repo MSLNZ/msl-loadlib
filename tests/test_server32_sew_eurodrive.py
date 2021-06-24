@@ -1,11 +1,11 @@
 import os
 
-import pytest
+from msl.loadlib import Client64
 
-from msl.loadlib import IS_MAC, IS_LINUX, Client64
+from conftest import skipif_not_windows
 
 
-@pytest.mark.skipif(IS_MAC or IS_LINUX, reason='only valid on Windows')
+@skipif_not_windows
 def test_sew_eurodrive():
     """
     The reason for creating this test case was discussed through email.

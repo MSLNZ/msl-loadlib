@@ -3,12 +3,12 @@ import sys
 
 import pytest
 
-from msl.loadlib import ConnectionTimeoutError, IS_MAC
+from msl.loadlib import ConnectionTimeoutError
+
+from conftest import skipif_no_server32
 
 sys.path.append(os.path.join(os.path.dirname(__file__), 'bad_servers'))
 from client import Client
-
-skipif_macos = pytest.mark.skipif(IS_MAC, reason='the 32-bit server for macOS does not exist')
 
 
 def check(module_name, match):
@@ -28,46 +28,46 @@ def check(module_name, match):
             break  # then this test was successful
 
 
-@skipif_macos
+@skipif_no_server32
 def test_no_server32_subclass():
     check('no_server32_subclass', r'Module does not contain a class that is a subclass of Server32')
 
 
-@skipif_macos
+@skipif_no_server32
 def test_no_init():
     check('no_init', r'class NoInit\(Server32\):')
 
 
-@skipif_macos
+@skipif_no_server32
 def test_bad_init_args():
     check('bad_init_args', r'class BadInitArgs\(Server32\):')
 
 
-@skipif_macos
+@skipif_no_server32
 def test_no_super():
     check('no_super', r'class NoSuper\(Server32\):')
 
 
-@skipif_macos
+@skipif_no_server32
 def test_bad_super_init():
     check('bad_super_init', r'class BadSuperInit\(Server32\):')
 
 
-@skipif_macos
+@skipif_no_server32
 def test_bad_lib_path():
     check('bad_lib_path', r"Cannot find 'doesnotexist' for libtype='cdll'")
 
 
-@skipif_macos
+@skipif_no_server32
 def test_bad_lib_type():
     check('bad_lib_type', r"Cannot load libtype='invalid'")
 
 
-@skipif_macos
+@skipif_no_server32
 def test_unexpected_error():
     check('unexpected_error', r'ZeroDivisionError')
 
 
-@skipif_macos
+@skipif_no_server32
 def test_wrong_bitness():
     check('wrong_bitness', r'Failed to load')

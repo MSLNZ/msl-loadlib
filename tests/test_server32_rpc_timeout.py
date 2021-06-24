@@ -1,24 +1,18 @@
 import os
 import time
 
-from msl.loadlib import Client64, Server32, ResponseTimeoutError, IS_MAC, IS_PYTHON_64BIT
+from msl.loadlib import (
+    Client64,
+    Server32,
+    ResponseTimeoutError,
+)
 
-# When the 32-bit Server imports this module on Windows & Python 3.8
-# the following exception is raised due to pytest being imported
-#    ImportError: No module named 'importlib_metadata'
-# The 32-bit server does not require pytest to be imported
-if IS_PYTHON_64BIT:
-    import pytest
+if Server32.is_interpreter():
+    def skipif_no_server32(*args):
+        pass
 else:
-    class Mark(object):
-        @staticmethod
-        def skipif(condition, reason=None):
-            def func(function):
-                return function
-            return func
-
-    class pytest(object):
-        mark = Mark
+    import pytest
+    from conftest import skipif_no_server32
 
 
 RPC_TIMEOUT = 5.0
@@ -26,9 +20,9 @@ RPC_TIMEOUT = 5.0
 
 class RPCServer(Server32):
 
-    def __init__(self, host, port, **kwargs):
-        path = os.path.join(os.path.dirname(__file__), '..', 'msl', 'examples', 'loadlib', 'cpp_lib32')
-        super(RPCServer, self).__init__(os.path.abspath(path), 'cdll', host, port, **kwargs)
+    def __init__(self, host, port):
+        path = os.path.join(Server32.examples_dir(), 'cpp_lib32')
+        super(RPCServer, self).__init__(path, 'cdll', host, port)
 
     def no_delay(self, a, b):
         return self.lib.add(a, b)
@@ -45,7 +39,7 @@ class RPCServer(Server32):
 class RPCClient(Client64):
 
     def __init__(self):
-        super(RPCClient, self).__init__(module32=__file__, rpc_timeout=RPC_TIMEOUT)
+        super(RPCClient, self).__init__(__file__, rpc_timeout=RPC_TIMEOUT)
 
     def no_delay(self, a, b):
         return self.request32('no_delay', a, b)
@@ -57,9 +51,8 @@ class RPCClient(Client64):
         return self.request32('long_delay', a, b)
 
 
-@pytest.mark.skipif(IS_MAC, reason='the 32-bit server for macOS does not exist')
+@skipif_no_server32
 def test_rpc_timeout():
-    import pytest
     c = RPCClient()
     assert c.no_delay(8, 3) == 11
     assert c.short_delay(-4, 2) == -2

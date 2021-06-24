@@ -1,30 +1,24 @@
 import os
 import sys
 
-try:
-    import pytest
-except ImportError:  # the 32-bit server does not need pytest installed
-    class Mark(object):
-        @staticmethod
-        def skipif(condition, reason=None):
-            def func(function):
-                return function
-            return func
+from msl.loadlib import (
+    Server32,
+    Client64,
+    IS_PYTHON2,
+)
 
-    class pytest(object):
-        mark = Mark
-
-from msl.loadlib import Server32, Client64, IS_MAC, IS_PYTHON2
-from msl.examples.loadlib import EXAMPLES_DIR
+if Server32.is_interpreter():
+    def skipif_no_server32(*args):
+        pass
+else:
+    from conftest import skipif_no_server32
 
 
 class Site32(Server32):
 
-    def __init__(self, host, port, **kwargs):
-        super(Site32, self).__init__(
-            os.path.join(kwargs['ex_dir'], 'cpp_lib32'),
-            'cdll', host, port
-        )
+    def __init__(self, host, port):
+        path = os.path.join(Server32.examples_dir(), 'cpp_lib32')
+        super(Site32, self).__init__(path, 'cdll', host, port)
 
     def remove(self):
         return self.remove_site_packages_64bit()
@@ -37,7 +31,7 @@ class Site32(Server32):
 class Site64(Client64):
 
     def __init__(self):
-        super(Site64, self).__init__(__file__, ex_dir=EXAMPLES_DIR)
+        super(Site64, self).__init__(__file__)
 
     def remove(self):
         return self.request32('remove')
@@ -46,8 +40,8 @@ class Site64(Client64):
         return self.request32('contains', path)
 
 
-@pytest.mark.skipif(IS_MAC, reason='the 32-bit server for macOS does not exist')
-def test_remove_site_packages_64bit():
+@skipif_no_server32
+def test_remove():
     s = Site64()
     path = s.remove()
     assert path

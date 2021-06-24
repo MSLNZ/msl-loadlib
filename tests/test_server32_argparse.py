@@ -9,33 +9,20 @@ from msl.loadlib import (
     Server32,
     Client64,
     IS_WINDOWS,
-    IS_MAC,
-    IS_PYTHON_64BIT,
 )
 
-# When the 32-bit Server imports this module on Windows & Python 3.8
-# the following exception is raised due to pytest being imported
-#    ImportError: No module named 'importlib_metadata'
-# The 32-bit server does not require pytest to be imported
-if IS_PYTHON_64BIT:
-    import pytest
+if Server32.is_interpreter():
+    def skipif_no_server32(*args):
+        pass
 else:
-    class Mark(object):
-        @staticmethod
-        def skipif(condition, reason=None):
-            def func(function):
-                return function
-            return func
-
-    class pytest(object):
-        mark = Mark
+    from conftest import skipif_no_server32
 
 
 class ArgParse32(Server32):
 
     def __init__(self, host, port, **kwargs):
         # load any dll since it won't be called
-        path = os.path.join(os.path.dirname(__file__), os.pardir, 'msl', 'examples', 'loadlib', 'cpp_lib32')
+        path = os.path.join(Server32.examples_dir(), 'cpp_lib32')
         super(ArgParse32, self).__init__(path, 'cdll', host, port)
         self.kwargs = kwargs
 
@@ -69,7 +56,7 @@ class ArgParse64(Client64):
         return self.request32('get_kwarg', key)
 
 
-@pytest.mark.skipif(IS_MAC, reason='the 32-bit server for macOS does not exist')
+@skipif_no_server32
 def test_argparser():
     if IS_WINDOWS:
         append_sys_path = ['C:/home/joe/code', 'C:/Program Files (x86)/Whatever']

@@ -1,30 +1,21 @@
 import os
 import subprocess
 
-try:
-    import pytest
-except ImportError:  # the 32-bit server does not need pytest installed
-    class Mark(object):
-        @staticmethod
-        def skipif(condition, reason=None):
-            def func(function):
-                return function
-            return func
-
-    class pytest(object):
-        mark = Mark
-
-from msl.loadlib import Server32, Client64, SERVER_FILENAME, IS_MAC
+from msl.loadlib import Server32, Client64, SERVER_FILENAME
 from msl.examples.loadlib import EXAMPLES_DIR
+
+if Server32.is_interpreter():
+    def skipif_no_server32(*args):
+        pass
+else:
+    from conftest import skipif_no_server32
 
 
 class Quiet32(Server32):
 
     def __init__(self, host, port, quiet, **kwargs):
-        super(Quiet32, self).__init__(
-            os.path.join(kwargs['ex_dir'], 'cpp_lib32'),
-            'cdll', host, port, quiet
-        )
+        path = os.path.join(Server32.examples_dir(), 'cpp_lib32')
+        super(Quiet32, self).__init__(path, 'cdll', host, port, quiet)
         self._kwargs = kwargs
 
     def add(self, a, b):
@@ -47,7 +38,7 @@ class Quiet64(Client64):
         return self.request32('kwargs')
 
 
-@pytest.mark.skipif(IS_MAC, reason='the 32-bit server for macOS does not exist')
+@skipif_no_server32
 def test_quiet_argument():
     # Make sure that the old syntax where Server32 required a `quiet` argument is still valid.
     q = Quiet64(one=1, array=[1., -2.2, 3e9], ex_dir=EXAMPLES_DIR)
@@ -55,7 +46,7 @@ def test_quiet_argument():
     assert q.kwargs() == {'one': '1', 'array': '[1.0, -2.2, 3000000000.0]', 'ex_dir': EXAMPLES_DIR}
 
 
-@pytest.mark.skipif(IS_MAC, reason='the 32-bit server for macOS does not exist')
+@skipif_no_server32
 def test_cli_quiet_flag():
     cmd = [os.path.join(os.path.dirname(__file__), os.pardir, 'msl', 'loadlib', SERVER_FILENAME), '--quiet']
     p = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE)

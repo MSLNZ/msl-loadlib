@@ -8,16 +8,18 @@ from msl import loadlib
 from msl.loadlib import IS_MAC, IS_WINDOWS
 from msl.examples.loadlib import Cpp64, Fortran64, Echo64, DotNet64, FourPoints
 
+from conftest import (
+    skipif_no_server32,
+    skipif_not_windows,
+)
+
 c = None
 f = None
 e = None
 n = None
 
-skipif_macos = pytest.mark.skipif(IS_MAC, reason='the 32-bit server for macOS does not exist')
-skipif_no_comtypes = pytest.mark.skipif(not IS_WINDOWS, reason='comtypes is only supported on Windows')
 
-
-def setup_module(module):
+def setup_module():
     global c, f, e, n
     if IS_MAC:  # the 32-bit server for macOS does not exist
         return
@@ -27,7 +29,7 @@ def setup_module(module):
     n = DotNet64()
 
 
-def teardown_module(module):
+def teardown_module():
     if IS_MAC:  # the 32-bit server for macOS does not exist
         return
     c.shutdown_server32()
@@ -36,7 +38,7 @@ def teardown_module(module):
     n.shutdown_server32()
 
 
-@skipif_macos
+@skipif_no_server32
 def test_unique_ports():
     for item in [f, e, n]:
         assert c.port != item.port
@@ -45,7 +47,7 @@ def test_unique_ports():
     assert e.port != n.port
 
 
-@skipif_macos
+@skipif_no_server32
 def test_lib_name():
     def get_name(path):
         return os.path.basename(path).split('.')[0]
@@ -55,12 +57,12 @@ def test_lib_name():
     assert 'dotnet_lib32' == get_name(n.lib32_path)
 
 
-@skipif_macos
+@skipif_no_server32
 def test_server_version():
     assert loadlib.Server32.version().startswith('Python')
 
 
-@skipif_macos
+@skipif_no_server32
 def test_cpp():
     assert 3 == c.add(1, 2)
     assert -1002 == c.add(-1000, -2)
@@ -90,7 +92,7 @@ def test_cpp():
     assert c.circumference(1.0, 2**16) == pytest.approx(2.0*math.pi)
 
 
-@skipif_macos
+@skipif_no_server32
 def test_fortran():
     assert -127 == f.sum_8bit(-2**7, 1)
     assert 32766 == f.sum_16bit(2**15 - 1, -1)
@@ -122,7 +124,7 @@ def test_fortran():
     assert 64.0 == pytest.approx(f_mat[1][1])
 
 
-@skipif_macos
+@skipif_no_server32
 def test_echo():
 
     args, kwargs = e.send_data(True)
@@ -147,7 +149,7 @@ def test_echo():
     assert kwargs['my_dict'] == my_dict
 
 
-@skipif_macos
+@skipif_not_windows
 def test_dotnet():
 
     names = n.get_class_names()
@@ -182,7 +184,7 @@ def test_dotnet():
     assert 'the experiment worked temporarily' == n.concatenate('the ', 'experiment ', 'worked ', True, 'temporarily')
 
 
-@skipif_macos
+@skipif_no_server32
 def test_unicode_path():
 
     class Cpp64Encoding(loadlib.Client64):
@@ -210,7 +212,7 @@ def test_unicode_path():
     c2.shutdown_server32()
 
 
-@skipif_macos
+@skipif_no_server32
 def test_server32_error():
     try:
         c.add('hello', 'world')
@@ -220,7 +222,7 @@ def test_server32_error():
         assert e.traceback.endswith('return self.lib.add(ctypes.c_int32(a), ctypes.c_int32(b))')
 
 
-@skipif_no_comtypes
+@skipif_not_windows
 def test_comtypes_ctypes_union_error():
     # Changes to ctypes in Python 3.7.6 and 3.8.1 caused the following exception
     #   TypeError: item 1 in _argtypes_ passes a union by value, which is unsupported.
@@ -254,7 +256,7 @@ def test_comtypes_ctypes_union_error():
     file_system.shutdown_server32()
 
 
-@skipif_no_comtypes
+@skipif_not_windows
 def test_comtypes_shell32():
 
     class Shell64(loadlib.Client64):
@@ -275,7 +277,7 @@ def test_comtypes_shell32():
     shell.shutdown_server32()
 
 
-@skipif_no_comtypes
+@skipif_not_windows
 def test_activex():
 
     class ActiveX(loadlib.Client64):
