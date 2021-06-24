@@ -98,7 +98,7 @@ The *MyClient* class would then be used as follows
 .. invisible-code-block: pycon
 
    >>> import pytest
-   >>> pytest.skip('ignore illustrative MyClient/MyServer example')
+   >>> pytest.skip('ignore MyClient/MyServer example')
 
 .. code-block:: pycon
 
