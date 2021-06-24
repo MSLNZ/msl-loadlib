@@ -466,7 +466,7 @@ def test_activex_raises():
             Application.load(progid, parent=item)
 
 
-def test_unicode_path():
+def test_unicode_path_java():
     cls = loadlib.LoadLibrary(u'./tests/uñicödé/Trig.class')
     import math
     x = 0.123456
@@ -475,16 +475,17 @@ def test_unicode_path():
     str(cls)  # this should not raise an exception
     cls.gateway.shutdown()
 
-    if (loadlib.IS_MAC or loadlib.IS_LINUX) and sys.version_info[:2] == (3, 8):
-        # get fatal crash on MacOS & Python 3.8 when importing pythonnet
-        pass
-    else:
-        net = loadlib.LoadLibrary(u'./tests/uñicödé/Namespace.With.Dots-uñicödé.dll', 'net')
-        checker = net.lib.Namespace.With.Dots.Checker()
-        assert checker.IsSuccess()
-        repr(net)  # this should not raise an exception
-        str(net)  # this should not raise an exception
 
+@skipif_no_pythonnet
+def test_unicode_path_dotnet():
+    net = loadlib.LoadLibrary(u'./tests/uñicödé/Namespace.With.Dots-uñicödé.dll', 'net')
+    checker = net.lib.Namespace.With.Dots.Checker()
+    assert checker.IsSuccess()
+    repr(net)  # this should not raise an exception
+    str(net)  # this should not raise an exception
+
+
+def test_unicode_path_cpp():
     bitness = u'64' if loadlib.IS_PYTHON_64BIT else u'32'
     cpp = loadlib.LoadLibrary(u'cpp_lib' + bitness + u'-uñicödé')
     assert cpp.lib.add(1, 2) == 3
