@@ -26,7 +26,11 @@ def setup_module():
     c = Cpp64()
     f = Fortran64()
     e = Echo64()
-    n = DotNet64()
+    if IS_WINDOWS:
+        # stop testing on linux because of pythonnet issue #1210
+        # mono 5.20 is getting too old, but it is the latest version
+        # that works with pythonnet 2.4.0 and 32-bit linux
+        n = DotNet64()
 
 
 def teardown_module():
@@ -35,16 +39,17 @@ def teardown_module():
     c.shutdown_server32()
     f.shutdown_server32()
     e.shutdown_server32()
-    n.shutdown_server32()
+    if n is not None:
+        n.shutdown_server32()
 
 
 @skipif_no_server32
 def test_unique_ports():
-    for item in [f, e, n]:
-        assert c.port != item.port
-    for item in [e, n]:
-        assert f.port != item.port
-    assert e.port != n.port
+    for obj1 in [c, f, e, n]:
+        for obj2 in [c, f, e, n]:
+            if obj1 is None or obj2 is None or obj1 is obj2:
+                continue
+            assert obj1.port != obj2.port
 
 
 @skipif_no_server32
@@ -54,7 +59,8 @@ def test_lib_name():
 
     assert 'cpp_lib32' == get_name(c.lib32_path)
     assert 'fortran_lib32' == get_name(f.lib32_path)
-    assert 'dotnet_lib32' == get_name(n.lib32_path)
+    if n is not None:
+        assert 'dotnet_lib32' == get_name(n.lib32_path)
 
 
 @skipif_no_server32
