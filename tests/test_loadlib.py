@@ -377,7 +377,7 @@ def test_java():
     identity = Matrix(n)
     for i in range(n):
         for j in range(n):
-            assert identity.getValue(i, j) == pytest.approx(m7.getValue(i, j), abs=1e-9)
+            assert identity.getValue(i, j) == pytest.approx(m7.getValue(i, j), abs=1e-8)
 
     #
     # Check determinant
