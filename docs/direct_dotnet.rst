@@ -13,7 +13,7 @@ indicate that the ``.dll`` file is for the .NET Framework.
 
 .. invisible-code-block: pycon
 
-   >>> SKIP_IF_32BIT()
+   >>> SKIP_IF_32BIT() or SKIP_DIRECT_DOTNET()
 
 .. code-block:: pycon
 

@@ -71,8 +71,10 @@ def doctest_skipif(doctest_namespace):
 
     if os.getenv('GITHUB_ACTIONS') and sys.version_info[:2] < (3, 6) and loadlib.IS_MAC:
         readme_dotnet = lambda: pytest.skip('skipped at .NET test')
+        direct_dotnet = lambda: pytest.skip('macOS, Python < 3.6 and on GitHub Actions')
     else:
         readme_dotnet = lambda: None
+        direct_dotnet = lambda: None
 
     doctest_namespace['SKIP_IF_PYTHON_2'] = py2
     doctest_namespace['SKIP_IF_PYTHON_LESS_THAN_3_6'] = less_36
@@ -85,6 +87,7 @@ def doctest_skipif(doctest_namespace):
     doctest_namespace['SKIP_README_COM'] = readme_com
     doctest_namespace['SKIP_README_DOTNET'] = readme_dotnet
     doctest_namespace['SKIP_README_ALL'] = readme_all
+    doctest_namespace['SKIP_DIRECT_DOTNET'] = direct_dotnet
 
 
 skipif_no_comtypes = pytest.mark.skipif(
