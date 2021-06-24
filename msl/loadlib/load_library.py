@@ -230,17 +230,25 @@ class LoadLibrary(object):
             else:  # it is a .class file
                 cmd.append(os.path.dirname(self._path) + '/')
 
+            err = None
             try:
                 # start the py4j.GatewayServer
                 subprocess.Popen(cmd, stderr=subprocess.PIPE, stdout=subprocess.PIPE)
-                err = None
             except OSError as e:
-                err = str(e) + '\nYou must have a Java Runtime Environment installed and available on PATH'
+                err = str(e).rstrip()
+                err += '\nYou must have a Java Runtime Environment installed and available on PATH'
 
             if err:
                 raise OSError(err)
 
-            utils.wait_for_server(address, port, 5.0)
+            try:
+                utils.wait_for_server(address, port, 10.0)
+            except OSError as e:
+                err = str(e).rstrip()
+                err += '\nCould not start the Py4J GatewayServer'
+
+            if err:
+                raise OSError(err)
 
             self._gateway = JavaGateway(
                 gateway_parameters=GatewayParameters(address=address, port=port, **kwargs)
