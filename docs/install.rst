@@ -115,13 +115,17 @@ Linux
 ++++++
 Before using MSL-LoadLib on Linux the following packages are required.
 
-Install the packages that are needed to run a 32-bit binary on 64-bit Linux
-and to load C/C++ and FORTRAN libraries
+Install the packages that are required to load C/C++ and FORTRAN libraries
+
+.. note::
+   The following packages are required to run the examples that are included
+   with MSL-LoadLib when it is installed. The dependencies for the C/C++ or
+   FORTRAN library that you want to load may be different.
 
 .. code-block:: console
 
    sudo apt update
-   sudo apt install software-properties-common build-essential g++ gcc-multilib g++-multilib gfortran libgfortran3 libgfortran3:i386 lib32gfortran3 libx32gfortran3 zlib1g:i386
+   sudo apt install g++ gfortran g++:i386 libgfortran5:i386
 
 The following ensures that the ``netstat`` command is available
 
