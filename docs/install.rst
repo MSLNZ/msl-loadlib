@@ -125,7 +125,7 @@ Install the packages that are required to load C/C++ and FORTRAN libraries
 .. code-block:: console
 
    sudo apt update
-   sudo apt install g++ gfortran g++:i386 libgfortran5:i386
+   sudo apt install g++ gfortran libgfortran5 g++:i386 libgfortran5:i386
 
 The following ensures that the ``netstat`` command is available
 
