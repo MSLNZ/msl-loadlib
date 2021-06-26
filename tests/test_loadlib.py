@@ -594,3 +594,27 @@ def test_dotnet_nested_namespace():
     StructWithoutConstructor.Y = -1
     assert StructWithoutConstructor.X == 1
     assert StructWithoutConstructor.Y == -1
+
+
+def test_py4j_jar_environment_variable():
+    original = os.environ.get('PY4J_JAR', '')
+
+    # the file does not exist
+    os.environ['PY4J_JAR'] = __file__ + 'abc'
+    with pytest.raises(OSError, match=r'the full path to the py4j[\d.]+.jar file is invalid'):
+        loadlib.LoadLibrary(EXAMPLES_DIR + '/java_lib.jar')
+
+    # a valid folder, but expect a path to the py4j<version>.jar file
+    os.environ['PY4J_JAR'] = os.path.dirname(__file__)
+    with pytest.raises(OSError, match=r'the full path to the py4j[\d.]+.jar file is invalid'):
+        loadlib.LoadLibrary(EXAMPLES_DIR + '/java_lib.jar')
+
+    # a valid file but not a py4j<version>.jar file
+    os.environ['PY4J_JAR'] = __file__
+    with pytest.raises(OSError, match=r'the full path to the py4j[\d.]+.jar file is invalid'):
+        loadlib.LoadLibrary(EXAMPLES_DIR + '/java_lib.jar')
+
+    os.environ['PY4J_JAR'] = original
+    java = loadlib.LoadLibrary(EXAMPLES_DIR + '/java_lib.jar')
+    assert 0.0 <= java.lib.nz.msl.examples.MathUtils.random() < 1.0
+    java.gateway.shutdown()

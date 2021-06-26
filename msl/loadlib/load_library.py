@@ -203,18 +203,27 @@ class LoadLibrary(object):
             address = kwargs.pop('address', '127.0.0.1')
             port = kwargs.pop('port', utils.get_available_port())
 
-            # find the py4j JAR (needed to import py4j.GatewayServer on the Java side)
-            root = os.path.dirname(sys.executable)
-            filename = 'py4j'+__version__+'.jar'
-            for item in [root, os.path.dirname(root), os.path.join(os.path.expanduser('~'), '.local')]:
-                py4j_jar = os.path.join(item, 'share', 'py4j', filename)
-                if os.path.isfile(py4j_jar):
-                    break
-            if not os.path.isfile(py4j_jar):
-                raise OSError(
-                    'Cannot find {0}\nCreate a PY4J_JAR environment '
-                    'variable to be equal to the full path to {0}'.format(filename)
-                )
+            # find the py4j*.jar file (needed to import the py4j.GatewayServer on the Java side)
+            filename = 'py4j' + __version__ + '.jar'
+            py4j_jar = os.environ.get('PY4J_JAR')
+            if py4j_jar:
+                if not os.path.isfile(py4j_jar) or os.path.basename(py4j_jar) != filename:
+                    raise OSError(
+                        'A PY4J_JAR environment variable exists, '
+                        'but the full path to the {} file is invalid\n'
+                        'PY4J_JAR={}'.format(filename, py4j_jar)
+                    )
+            else:
+                root = os.path.dirname(sys.executable)
+                for item in [root, os.path.dirname(root), os.path.join(os.path.expanduser('~'), '.local')]:
+                    py4j_jar = os.path.join(item, 'share', 'py4j', filename)
+                    if os.path.isfile(py4j_jar):
+                        break
+                if not os.path.isfile(py4j_jar):
+                    raise OSError(
+                        'Cannot find {0}\nCreate a PY4J_JAR environment '
+                        'variable to be equal to the full path to {0}'.format(filename)
+                    )
 
             # build the java command
             wrapper = os.path.join(os.path.dirname(__file__), 'py4j-wrapper.jar')
