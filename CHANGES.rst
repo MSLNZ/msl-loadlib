@@ -5,6 +5,20 @@ Changelog
 Version 0.9.1 (in development)
 ==============================
 
+* Added
+
+  - ``~/.local/share/py4j`` to the search paths when looking for the
+    ``py4j<version>.jar`` file
+
+* Changed
+
+  - the example libraries for FORTRAN now depend on `libgfortran5` on linux
+
+* Fixed
+
+  - issue `#24 <https://github.com/MSLNZ/msl-loadlib/issues/24>`_ - starting
+    the 32-bit server could block forever by not honouring the timeout
+
 Version 0.9.0 (2021.05.13)
 ==========================
 
