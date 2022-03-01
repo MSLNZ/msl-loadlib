@@ -12,9 +12,15 @@ formats:
   - epub
   - pdf
 
+build:
+  os: ubuntu-20.04
+  tools:
+    python: "3.9"
+
 python:
-  version: 3.7
   install:
     - method: pip
       path: .
+      extra_requirements:
+        - docs
   system_packages: false
