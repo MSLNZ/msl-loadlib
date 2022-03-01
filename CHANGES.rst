@@ -19,7 +19,7 @@ Version 0.9.1 (in development)
   - issue `#24 <https://github.com/MSLNZ/msl-loadlib/issues/24>`_ - starting
     the 32-bit server could block forever by not honouring the timeout
 
-Version 0.9.0 (2021.05.13)
+Version 0.9.0 (2021-05-13)
 ==========================
 
 * The 32-bit server is frozen with the following versions
@@ -50,7 +50,7 @@ Version 0.9.0 (2021.05.13)
   - issue `#23 <https://github.com/MSLNZ/msl-loadlib/issues/23>`_ - the
     ``useLegacyV2RuntimeActivationPolicy`` property was no longer created
 
-Version 0.8.0 (2021.02.20)
+Version 0.8.0 (2021-02-20)
 ==========================
 
 * Added
@@ -85,7 +85,7 @@ Version 0.8.0 (2021.02.20)
 
   - ``cygwin`` from the :obj:`~msl.loadlib.IS_WINDOWS` check
 
-Version 0.7.0 (2020.03.17)
+Version 0.7.0 (2020-03-17)
 ==========================
 
 * Added
@@ -107,7 +107,7 @@ Version 0.7.0 (2020.03.17)
 
   - Support for Python 3.4
 
-Version 0.6.0 (2019.05.07)
+Version 0.6.0 (2019-05-07)
 ==========================
 
 * Added
@@ -137,7 +137,7 @@ Version 0.6.0 (2019.05.07)
   - issue `#14 <https://github.com/MSLNZ/msl-loadlib/issues/14>`_ - use `os.kill`
     to stop the 32-bit server if it won't stop after `kill_timeout` seconds
 
-Version 0.5.0 (2019.01.06)
+Version 0.5.0 (2019-01-06)
 ==========================
 
 * Added
@@ -164,7 +164,7 @@ Version 0.5.0 (2019.01.06)
 
   - set ``sys.stdout = io.StringIO()`` if `quiet=True` on the server
 
-Version 0.4.1 (2018.08.24)
+Version 0.4.1 (2018-08-24)
 ==========================
 
 * Added
@@ -189,7 +189,7 @@ Version 0.4.1 (2018.08.24)
 
   - Support for Python 3.3
 
-Version 0.4.0 (2018.02.28)
+Version 0.4.0 (2018-02-28)
 ==========================
 
 * Added
@@ -215,7 +215,7 @@ Version 0.4.0 (2018.02.28)
       + LoadLibrary.check_dot_net_config -> utils.check_dot_net_config
       + LoadLibrary.is_pythonnet_installed -> utils.is_pythonnet_installed
 
-Version 0.3.2 (2017.10.18)
+Version 0.3.2 (2017-10-18)
 ==========================
 
 * Added
@@ -231,13 +231,13 @@ Version 0.3.2 (2017.10.18)
   - replaced ``FileNotFoundError`` with ``IOError`` (for Python 2.7 support)
   - recompile cpp_lib\*.dll and fortran_lib\*.dll to not depend on external dependencies
 
-Version 0.3.1 (2017.05.15)
+Version 0.3.1 (2017-05-15)
 ==========================
 - fix ReadTheDocs build error -- AttributeError: module 'site' has no attribute 'getsitepackages'
 - strip whitespace from append_sys_path and append_environ_path
 - make pythonnet a required dependency only for Windows
 
-Version 0.3.0 (2017.05.09)
+Version 0.3.0 (2017-05-09)
 ==========================
 *NOTE: This release breaks backward compatibility*
 
@@ -247,20 +247,20 @@ Version 0.3.0 (2017.05.09)
 - Server32.interactive_console() works on Windows and Linux
 - edit documentation (thanks to @karna48 for the pull request)
 
-Version 0.2.3 (2017.04.11)
+Version 0.2.3 (2017-04-11)
 ==========================
 - the frozen server32 executable (for Windows/Linux) now uses Python v3.6.1 and Python.NET v2.3.0
 - include ctypes.util.find_library and sys.path when searching for shared library
 
-Version 0.2.2 (2017.03.03)
+Version 0.2.2 (2017-03-03)
 ==========================
 - refreeze server32 executables
 
-Version 0.2.1 (2017.03.02)
+Version 0.2.1 (2017-03-02)
 ==========================
 - fix releaselevel bug
 
-Version 0.2.0 (2017.03.02)
+Version 0.2.0 (2017-03-02)
 ==========================
 - examples now working in Linux
 - fix MSL namespace
@@ -269,6 +269,6 @@ Version 0.2.0 (2017.03.02)
 - edit docstrings and documentation
 - many bug fixes
 
-Version 0.1.0 (2017.02.15)
+Version 0.1.0 (2017-02-15)
 ==========================
 - Initial release
