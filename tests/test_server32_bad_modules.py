@@ -1,5 +1,10 @@
 import os
 import sys
+try:
+    ConnectionRefusedError
+except NameError:  # Python 2
+    import socket
+    ConnectionRefusedError = socket.error
 
 import pytest
 
