@@ -11,6 +11,7 @@ from . import (
     utils,
     DEFAULT_EXTENSION,
     IS_PYTHON2,
+    IS_WINDOWS,
 )
 
 _encoding = sys.getfilesystemencoding()
@@ -240,7 +241,8 @@ class LoadLibrary(object):
             err = None
             try:
                 # start the py4j.GatewayServer
-                subprocess.Popen(cmd, stderr=subprocess.PIPE, stdout=subprocess.PIPE)
+                flags = 0x08000000 if IS_WINDOWS else 0  # CREATE_NO_WINDOW = 0x08000000
+                subprocess.Popen(cmd, stderr=subprocess.PIPE, stdout=subprocess.PIPE, creationflags=flags)
             except OSError as e:
                 err = str(e).rstrip()
                 err += '\nYou must have a Java Runtime Environment installed and available on PATH'

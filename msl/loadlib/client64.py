@@ -24,7 +24,8 @@ except ImportError:  # then Python 2
 from . import (
     utils,
     SERVER_FILENAME,
-    IS_PYTHON2
+    IS_PYTHON2,
+    IS_WINDOWS,
 )
 from .server32 import (
     METADATA,
@@ -195,7 +196,8 @@ class Client64(object):
             )
 
         # start the 32-bit server
-        self._proc = subprocess.Popen(cmd, stderr=subprocess.PIPE, stdout=subprocess.PIPE)
+        flags = 0x08000000 if IS_WINDOWS else 0  # CREATE_NO_WINDOW = 0x08000000
+        self._proc = subprocess.Popen(cmd, stderr=subprocess.PIPE, stdout=subprocess.PIPE, creationflags=flags)
         try:
             utils.wait_for_server(host, port, timeout)
         except ConnectionTimeoutError as err:

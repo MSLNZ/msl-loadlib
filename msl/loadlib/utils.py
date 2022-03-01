@@ -16,7 +16,10 @@ except ImportError:
         winreg = None  # not Windows
 
 from .exceptions import ConnectionTimeoutError
-from . import IS_MAC
+from . import (
+    IS_MAC,
+    IS_WINDOWS,
+)
 
 logger = logging.getLogger(__package__)
 
@@ -239,7 +242,8 @@ def is_port_in_use(port):
         cmd = ['lsof', '-nPw', '-iTCP']
     else:
         cmd = ['netstat', '-an']
-    p = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    flags = 0x08000000 if IS_WINDOWS else 0  # CREATE_NO_WINDOW = 0x08000000
+    p = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, creationflags=flags)
     out, err = p.communicate()
     if err:
         raise RuntimeError(err.decode(errors='ignore'))
