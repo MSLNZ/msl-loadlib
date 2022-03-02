@@ -558,13 +558,13 @@ def test_dotnet_nested_namespace():
     assert Subtracter.Subtract() == -1
 
     # Adder is not defined as a public class but can still be created
-    Adder = lib.System.Activator.CreateInstance(lib.Adder, 82, -27)
+    Adder = lib.System.Activator.CreateInstance(lib.Adder, lib.System.Int32(82), lib.System.Int32(-27))
     assert Adder.Add() == 55
     assert Adder.x == 82
     assert Adder.y == -27
 
     # a struct in a nested namespace
-    point = lib.A.B.C.Point()
+    point = lib.A.B.C.Point(0, 0)
     assert point.X == 0
     assert point.Y == 0
     assert point.ToString() == 'Point<X=0, Y=0>'
@@ -578,10 +578,6 @@ def test_dotnet_nested_namespace():
     assert point.ToString() == 'Point<X=-3, Y=54>'
 
     # a struct not in a namespace
-    point = lib.Point()
-    assert point.X == 0
-    assert point.Y == 0
-
     point = lib.Point(123, 456)
     assert point.X == 123
     assert point.Y == 456
