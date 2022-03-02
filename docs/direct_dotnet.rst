@@ -13,7 +13,7 @@ indicate that the ``.dll`` file is for the .NET Framework.
 
 .. invisible-code-block: pycon
 
-   >>> SKIP_IF_32BIT() or SKIP_DIRECT_DOTNET()
+   >>> SKIP_IF_32BIT()
 
 .. code-block:: pycon
 
@@ -24,18 +24,6 @@ indicate that the ``.dll`` file is for the .NET Framework.
 The :ref:`dotnet_lib64 <dotnet-lib>` library contains a reference to the
 ``DotNetMSL`` module (which is a C# namespace), the ``StaticClass`` class,
 the ``StringManipulation`` class and the System_ namespace
-
-.. code-block:: pycon
-
-   >>> for item in dir(net.lib):
-   ...     if not item.startswith('_'):
-   ...         attr = getattr(net.lib, item)
-   ...         print('{} {}'.format(item, type(attr)))
-   ...
-   DotNetMSL <class 'CLR.ModuleObject'>
-   StaticClass <class 'CLR.CLR Metatype'>
-   StringManipulation <class 'CLR.CLR Metatype'>
-   System <class 'CLR.ModuleObject'>
 
 Create an instance of the ``BasicMath`` class in the ``DotNetMSL`` namespace
 and call the ``multiply_doubles`` method
