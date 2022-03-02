@@ -62,20 +62,20 @@ five integers
    >>> net.lib.StaticClass.add_multiple(1, 2, 3, 4, 5)
    15
 
-Once can create objects from the System_ namespace, for example,
+One can create objects from the System_ namespace, for example,
 
 .. code-block:: pycon
 
    >>> System = net.lib.System
 
-to create a 32-bit signed integer
+to create a 32-bit signed integer,
 
 .. code-block:: pycon
 
    >>> System.Int32(9)
    <System.Int32 object at ...>
 
-or a one-dimensional Array_ of the specified Type_ and length, with zero-based indexing
+or, a one-dimensional Array_ of the specified Type_ and length
 
 .. code-block:: pycon
 
