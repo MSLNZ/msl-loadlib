@@ -241,7 +241,7 @@ class LoadLibrary(object):
             err = None
             try:
                 # start the py4j.GatewayServer
-                flags = 0  # 0x08000000 if IS_WINDOWS else 0  # CREATE_NO_WINDOW = 0x08000000
+                flags = 0x08000000 if IS_WINDOWS else 0  # fixes issue 31, CREATE_NO_WINDOW = 0x08000000
                 subprocess.Popen(cmd, stderr=subprocess.PIPE, stdout=subprocess.PIPE, creationflags=flags)
             except OSError as e:
                 err = str(e).rstrip()
