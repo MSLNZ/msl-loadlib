@@ -69,8 +69,10 @@ def doctest_skipif(doctest_namespace):
 
     no_labview32 = lambda: pytest.skip('not checking if 32-bit LabVIEW is installed')
 
-    if (loadlib.IS_MAC and sys.version_info[:2] < (3, 6)) or \
-            (loadlib.IS_WINDOWS and not loadlib.IS_PYTHON_64BIT and sys.version_info[:2] > (3, 9)):
+    if (len(str(os.getenv('GITHUB_ACTIONS', ''))) > 0 and
+            (loadlib.IS_MAC and sys.version_info[:2] < (3, 6))) or \
+            (loadlib.IS_WINDOWS and not loadlib.IS_PYTHON_64BIT and sys.version_info[:2] > (3, 9)) or \
+            (not loadlib.IS_WINDOWS and sys.version_info[:2] > (3, 9)):
         readme_dotnet = lambda: pytest.skip('skipped at .NET test')
         fatal_crash_pythonnet = lambda: pytest.skip('get a fatal crash with pythonnet')
     else:

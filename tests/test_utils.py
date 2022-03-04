@@ -35,7 +35,8 @@ def test_port_functions():
 @pytest.mark.skipif(
     (len(str(os.getenv('GITHUB_ACTIONS', ''))) > 0 and
      ((IS_MAC and sys.version_info[:2] < (3, 6)) or
-      (IS_WINDOWS and not IS_PYTHON_64BIT and sys.version_info[:2] == (3, 10)))
+      (IS_WINDOWS and not IS_PYTHON_64BIT and sys.version_info[:2] > (3, 9)) or
+      (not IS_WINDOWS and sys.version_info[:2] > (3, 9)))
     ),
     reason='pythonnet was uninstalled'
 )
