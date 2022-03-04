@@ -12,6 +12,7 @@ from msl.loadlib import (
     utils,
     IS_WINDOWS,
     IS_MAC,
+    IS_PYTHON_64BIT,
 )
 
 
@@ -32,7 +33,10 @@ def test_port_functions():
 
 
 @pytest.mark.skipif(
-    (IS_MAC and sys.version_info[:2] < (3, 6) and len(str(os.getenv('GITHUB_ACTIONS', ''))) > 0),
+    (len(str(os.getenv('GITHUB_ACTIONS', ''))) > 0 and
+     ((IS_MAC and sys.version_info[:2] < (3, 6)) or
+      (IS_WINDOWS and not IS_PYTHON_64BIT and sys.version_info[:2] == (3, 10)))
+    ),
     reason='pythonnet was uninstalled'
 )
 def test_is_pythonnet_installed():

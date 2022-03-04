@@ -28,6 +28,7 @@ def test_invalid_path():
             loadlib.LoadLibrary(item)
 
 
+@skipif_no_pythonnet
 @pytest.mark.skipif(loadlib.IS_MAC, reason='the 32-bit libraries do not exist for macOS')
 def test_load_failure_in_wrong_python_bitness():
     import clr

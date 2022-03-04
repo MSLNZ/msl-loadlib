@@ -6,7 +6,10 @@ from subprocess import (
 )
 
 import pytest
-from conftest import skipif_not_windows
+from conftest import (
+    skipif_not_windows,
+    skipif_no_pythonnet,
+)
 
 from msl.loadlib import LoadLibrary
 
@@ -19,6 +22,7 @@ def teardown_module():
 
 
 @skipif_not_windows
+@skipif_no_pythonnet
 def test_framework_3_5():
     # The python.exe.config file must exist before the Python interpreter
     # starts in order for pythonnet to load a library from .NET <4.0. That
