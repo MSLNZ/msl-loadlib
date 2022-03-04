@@ -242,7 +242,7 @@ def is_port_in_use(port):
         cmd = ['lsof', '-nPw', '-iTCP']
     else:
         cmd = ['netstat', '-an']
-    flags = 0x08000000 if IS_WINDOWS else 0  # CREATE_NO_WINDOW = 0x08000000
+    flags = 0  # 0x08000000 if IS_WINDOWS else 0  # CREATE_NO_WINDOW = 0x08000000
     p = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, creationflags=flags)
     out, err = p.communicate()
     if err:
