@@ -69,6 +69,14 @@ def doctest_skipif(doctest_namespace):
 
     no_labview32 = lambda: pytest.skip('not checking if 32-bit LabVIEW is installed')
 
+    if (loadlib.IS_MAC and sys.version_info[:2] < (3, 6)) or \
+            (loadlib.IS_WINDOWS and not loadlib.IS_PYTHON_64BIT and sys.version_info[:2] > (3, 9)):
+        readme_dotnet = lambda: pytest.skip('skipped at .NET test')
+        direct_dotnet = lambda: pytest.skip('get a fatal crash with pythonnet')
+    else:
+        readme_dotnet = lambda: None
+        direct_dotnet = lambda: None
+
     doctest_namespace['SKIP_IF_PYTHON_2'] = py2
     doctest_namespace['SKIP_IF_PYTHON_LESS_THAN_3_6'] = less_36
     doctest_namespace['SKIP_IF_NOT_WINDOWS'] = not_windows
@@ -77,8 +85,10 @@ def doctest_skipif(doctest_namespace):
     doctest_namespace['SKIP_IF_32BIT'] = bit32
     doctest_namespace['SKIP_IF_LABVIEW64_NOT_INSTALLED'] = no_labview64
     doctest_namespace['SKIP_LABVIEW32'] = no_labview32
+    doctest_namespace['SKIP_README_DOTNET'] = readme_dotnet
     doctest_namespace['SKIP_README_COM'] = readme_com
     doctest_namespace['SKIP_README_ALL'] = readme_all
+    doctest_namespace['SKIP_IF_DIRECT_DOTNET'] = direct_dotnet
 
 
 skipif_no_comtypes = pytest.mark.skipif(

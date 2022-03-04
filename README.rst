@@ -114,6 +114,10 @@ Load a `.NET <https://github.com/MSLNZ/msl-loadlib/blob/main/msl/examples/loadli
 library and call the ``reverse_string`` function, we must specify that the library
 type is a .NET library by passing in the ``'net'`` argument
 
+.. invisible-code-block: pycon
+
+   >>> SKIP_README_DOTNET()
+
 .. code-block:: pycon
 
    >>> net = LoadLibrary(EXAMPLES_DIR + '/dotnet_lib64.dll', 'net')
