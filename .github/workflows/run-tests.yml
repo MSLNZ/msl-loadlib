@@ -69,8 +69,8 @@ jobs:
           python -m pip install --upgrade pip
           python -m pip install --upgrade setuptools wheel
           python -m pip install --upgrade pycparser
-      - name: Install pythonnet from a commit (Python 3.10)
-        if: ${{ matrix.python-version == '3.10' }}
+      - name: Install pythonnet from a commit (Python 3.9+)
+        if: ${{ matrix.python-version == '3.9' || matrix.python-version == '3.10' }}
         run: python -m pip install --upgrade git+https://github.com/pythonnet/pythonnet.git@76378845d6749a31ea9de187db634c48c2e82a9f
       - name: Install msl-loadlib
         run: |
