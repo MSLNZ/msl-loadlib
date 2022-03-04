@@ -48,9 +48,11 @@ def test_is_py4j_installed():
     assert utils.is_py4j_installed()
 
 
-@skipif_not_windows
 def test_is_comtypes_installed():
-    assert utils.is_comtypes_installed()
+    if IS_WINDOWS:
+        assert utils.is_comtypes_installed()
+    else:
+        assert not utils.is_comtypes_installed()
 
 
 def test_check_dot_net_config():
