@@ -107,7 +107,7 @@ class Application(Forms.Form):
 
         .. invisible-code-block: pycon
 
-           >>> SKIP_IF_NOT_WINDOWS()
+           >>> SKIP_IF_NOT_WINDOWS() or SKIP_IF_FATAL_CRASH_PYTHONNET()
 
         Examples
         --------

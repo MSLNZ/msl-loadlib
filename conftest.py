@@ -72,10 +72,10 @@ def doctest_skipif(doctest_namespace):
     if (loadlib.IS_MAC and sys.version_info[:2] < (3, 6)) or \
             (loadlib.IS_WINDOWS and not loadlib.IS_PYTHON_64BIT and sys.version_info[:2] > (3, 9)):
         readme_dotnet = lambda: pytest.skip('skipped at .NET test')
-        direct_dotnet = lambda: pytest.skip('get a fatal crash with pythonnet')
+        fatal_crash_pythonnet = lambda: pytest.skip('get a fatal crash with pythonnet')
     else:
         readme_dotnet = lambda: None
-        direct_dotnet = lambda: None
+        fatal_crash_pythonnet = lambda: None
 
     doctest_namespace['SKIP_IF_PYTHON_2'] = py2
     doctest_namespace['SKIP_IF_PYTHON_LESS_THAN_3_6'] = less_36
@@ -88,7 +88,7 @@ def doctest_skipif(doctest_namespace):
     doctest_namespace['SKIP_README_DOTNET'] = readme_dotnet
     doctest_namespace['SKIP_README_COM'] = readme_com
     doctest_namespace['SKIP_README_ALL'] = readme_all
-    doctest_namespace['SKIP_IF_DIRECT_DOTNET'] = direct_dotnet
+    doctest_namespace['SKIP_IF_FATAL_CRASH_PYTHONNET'] = fatal_crash_pythonnet
 
 
 skipif_no_comtypes = pytest.mark.skipif(
