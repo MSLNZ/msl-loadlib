@@ -11,6 +11,19 @@ except ImportError:
 from msl import loadlib
 
 
+def add_py4j_in_eggs():
+    # if py4j is located in the .eggs directory and not in the site-packages directory
+    # then the py4j*.jar file cannot be found, so we need to create a PY4J_JAR env variable
+    import py4j
+    os.environ['PY4J_JAR'] = os.path.join(
+        '.eggs',
+        'py4j-{}-py{}.{}.egg'.format(py4j.__version__, sys.version_info.major, sys.version_info.minor),
+        'share',
+        'py4j',
+        'py4j{}.jar'.format(py4j.__version__)
+    )
+
+
 def has_labview_runtime():
     if loadlib.IS_PYTHON_64BIT:
         root = r'C:\Program Files\National Instruments\Shared\LabVIEW Run-Time'
