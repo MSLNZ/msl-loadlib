@@ -27,10 +27,10 @@ def test_invalid_libtype():
         loadlib.LoadLibrary('does-not-matter', libtype='xxxxxxxx')
 
 
-def test_invalid_path():
-    for item in [None, '']:
-        with pytest.raises(ValueError, match=r'You must specify the path'):
-            loadlib.LoadLibrary(item)
+@pytest.mark.parametrize('path', [None, ''])
+def test_invalid_path(path):
+    with pytest.raises(ValueError, match=r'You must specify the path'):
+        loadlib.LoadLibrary(path)
 
 
 @skipif_no_pythonnet
