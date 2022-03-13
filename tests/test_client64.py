@@ -34,26 +34,24 @@ def test_unclosed_pipe_warning_2(recwarn):
     assert recwarn.list == []
 
 
-def test_unraisable_exception_warning():
-    # The point of this test is to verify that the PytestUnraisableExceptionWarning
-    # does not get written to the terminal at the end of this test.
-    #
-    # This test will always pass (so it is deceptive) but what the user must
-    # pay attention to is whether a warning message similar to the following
-    # is displayed in the "warnings summary" of pytest:
-    #
-    # Exception ignored in: <function Client64.__del__ at 0x000001BFBD402B80>
-    # Traceback (most recent call last):
-    #   File "...client64.py", line 368, in __del__
-    #     if self._conn is not None:
-    # AttributeError: 'DivZero' object has no attribute '_conn'
-    #
-    # For more details see:
-    # https://docs.pytest.org/en/stable/usage.html#warning-about-unraisable-exceptions-and-unhandled-thread-exceptions
+def test_bad_del():
+    # Make sure that the following exception is not raised in Client64.__del__
+    #   AttributeError: 'BadDel' object has no attribute '_conn'"""
 
-    class DivZero(Client64):
+    class BadDel(Client64):
         def __init__(self):
-            1/0
+            pass
 
-    with pytest.raises(ZeroDivisionError):
-        DivZero()
+    b = BadDel()
+    b.__del__()
+    del b
+
+    # the following will raise the error because the
+    # Client64 class was not instantiated
+
+    with pytest.raises(AttributeError, match='_conn'):
+        BadDel().request32('request')
+
+    with pytest.raises(AttributeError, match='_conn'):
+        with BadDel():
+            pass

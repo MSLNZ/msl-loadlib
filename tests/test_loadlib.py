@@ -615,3 +615,26 @@ def test_py4j_jar_environment_variable():
     java = loadlib.LoadLibrary(EXAMPLES_DIR + '/java_lib.jar')
     assert 0.0 <= java.lib.nz.msl.examples.MathUtils.random() < 1.0
     java.gateway.shutdown()
+
+
+def test_bad_del():
+    # Make sure that the following exception is not raised in LoadLibrary.__del__
+    #   AttributeError: 'BadDel' object has no attribute '_gateway'
+
+    class BadDel(loadlib.LoadLibrary):
+        def __init__(self):
+            pass
+
+    b = BadDel()
+    b.__del__()
+    del b
+
+    # the following will raise the error because the
+    # LoadLibrary class was not instantiated
+
+    with pytest.raises(AttributeError, match='_gateway'):
+        g = BadDel().gateway
+
+    with pytest.raises(AttributeError, match='_gateway'):
+        with BadDel():
+            pass

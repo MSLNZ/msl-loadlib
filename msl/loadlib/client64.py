@@ -220,6 +220,10 @@ class Client64(object):
 
         self._meta32 = self.request32(METADATA)
 
+    def __del__(self):
+        if hasattr(self, '_conn'):
+            self._cleanup()
+
     def __repr__(self):
         msg = '<{} '.format(self.__class__.__name__)
         if self._conn:
@@ -227,6 +231,12 @@ class Client64(object):
             return msg + 'lib={} address={}:{}>'.format(lib, self._conn.host, self._conn.port)
         else:
             return msg + 'lib=None address=None>'
+
+    def __enter__(self):
+        return self
+
+    def __exit__(self, *exc):
+        self._cleanup()
 
     @property
     def host(self):
@@ -366,12 +376,6 @@ class Client64(object):
         self._conn = None
         return self._proc.stdout, self._proc.stderr
 
-    def __del__(self):
-        if hasattr(self, '_proc') and self._proc is not None:
-            out, err = self.shutdown_server32()
-            out.close()
-            err.close()
-
     def _wait(self, timeout=10., stacklevel=3):
         # give the 32-bit server a chance to shut down gracefully
         t0 = time.time()
@@ -382,3 +386,8 @@ class Client64(object):
                 self._proc.returncode = -2
                 warnings.warn('killed the 32-bit server using brute force', stacklevel=stacklevel)
                 break
+
+    def _cleanup(self):
+        out, err = self.shutdown_server32()
+        out.close()
+        err.close()

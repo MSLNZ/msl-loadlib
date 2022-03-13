@@ -351,14 +351,31 @@ class LoadLibrary(object):
 
         utils.logger.debug('Loaded ' + self._path)
 
+    def __del__(self):
+        if hasattr(self, '_gateway'):
+            self.cleanup()
+
     def __repr__(self):
         path = self._path.encode(_encoding) if IS_PYTHON2 else self._path
         return '<LoadLibrary libtype={} path={}>'.format(self._lib.__class__.__name__, path)
 
-    def __del__(self):
-        if self._gateway is not None:
+    def __enter__(self):
+        return self
+
+    def __exit__(self, *exc):
+        self.cleanup()
+
+    def cleanup(self):
+        """Clean up references to the library.
+
+        .. versionadded:: 0.10.0
+        """
+        self._assembly = None
+        self._lib = None
+        if self._gateway:
             self._gateway.shutdown()
-            utils.logger.debug('shutdown py4j.GatewayServer')
+            self._gateway = None
+            utils.logger.debug('shutdown Py4J.GatewayServer')
 
     @property
     def assembly(self):
