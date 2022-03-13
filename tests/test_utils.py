@@ -36,8 +36,7 @@ def test_is_pythonnet_installed():
     # importing pythonnet under these conditions causes a fatal crash
     if len(str(os.getenv('GITHUB_ACTIONS', ''))) > 0 and \
             ((IS_MAC and sys.version_info[:2] < (3, 6)) or
-             (IS_WINDOWS and not IS_PYTHON_64BIT and sys.version_info[:2] > (3, 9)) or
-             (not IS_WINDOWS and sys.version_info[:2] > (3, 9))):
+             (IS_WINDOWS and not IS_PYTHON_64BIT and sys.version_info[:2] > (3, 9))):
         assert not utils.is_pythonnet_installed()
     else:
         assert utils.is_pythonnet_installed()
