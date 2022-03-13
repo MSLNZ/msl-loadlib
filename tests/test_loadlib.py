@@ -261,6 +261,8 @@ def test_dotnet():
     assert net.lib.StaticClass.concatenate('a', 'b', 'c', False, 'd') == 'abc'
     assert net.lib.StaticClass.concatenate('a', 'b', 'c', True, 'd') == 'abcd'
 
+    net.cleanup()
+
 
 @skipif_no_labview_runtime
 def test_labview():
@@ -474,6 +476,7 @@ def test_unicode_path_dotnet():
     assert checker.IsSuccess()
     repr(net)  # this should not raise an exception
     str(net)  # this should not raise an exception
+    net.cleanup()
 
 
 def test_unicode_path_cpp():
@@ -492,6 +495,7 @@ def test_issue7():
     assert checker.IsSuccess()
     repr(net)  # test that the __repr__ and __str__ methods don't raise an exception
     str(net)
+    net.cleanup()
 
 
 def test_issue8():
@@ -502,7 +506,8 @@ def test_issue8():
 
 @skipif_no_pythonnet
 def test_dotnet_nested_namespace():
-    lib = loadlib.LoadLibrary('./tests/nested_namespaces/nested_namespaces.dll', 'clr').lib
+    net = loadlib.LoadLibrary('./tests/nested_namespaces/nested_namespaces.dll', 'clr')
+    lib = net.lib
 
     from math import pi
     assert lib.System.Math.PI == pytest.approx(pi)
@@ -581,6 +586,8 @@ def test_dotnet_nested_namespace():
     StructWithoutConstructor.Y = -1
     assert StructWithoutConstructor.X == 1
     assert StructWithoutConstructor.Y == -1
+
+    net.cleanup()
 
 
 def test_py4j_jar_environment_variable():

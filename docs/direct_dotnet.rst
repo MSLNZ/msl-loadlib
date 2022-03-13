@@ -88,6 +88,10 @@ or, a one-dimensional Array_ of the specified Type_
    >>> list(array)
    [-1, 1, 2, 3, 4, 5, 6, 7, 8, 9]
 
+.. invisible-code-block: pycon
+
+   >>> net.cleanup()  # See: https://github.com/pythonnet/pythonnet/issues/1683
+
 .. _System: https://docs.microsoft.com/en-us/dotnet/api/system
 .. _Array: https://docs.microsoft.com/en-us/dotnet/api/system.array?view=net-6.0
 .. _Type: https://docs.microsoft.com/en-us/dotnet/api/system.type?view=net-6.0

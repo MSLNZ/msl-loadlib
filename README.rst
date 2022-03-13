@@ -124,6 +124,10 @@ type is a .NET library by passing in the ``'net'`` argument
    >>> net.lib.StringManipulation().reverse_string('abcdefghijklmnopqrstuvwxyz')
    'zyxwvutsrqponmlkjihgfedcba'
 
+.. invisible-code-block: pycon
+
+   >>> net.cleanup()  # See: https://github.com/pythonnet/pythonnet/issues/1683
+
 To load a `Component Object Model`_ (COM) library pass in the library's Program ID.
 *NOTE: This example will only work on Windows.*
 
