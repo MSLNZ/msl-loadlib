@@ -33,38 +33,25 @@ def test_invalid_path(path):
         loadlib.LoadLibrary(path)
 
 
-@skipif_no_pythonnet
 @pytest.mark.skipif(loadlib.IS_MAC, reason='the 32-bit libraries do not exist for macOS')
-def test_load_failure_in_wrong_python_bitness():
-    import clr
-    import System
-
-    def check(path, libtype, exception):
-        if libtype == 'net':
-            path += '.dll'
-        else:
-            path += loadlib.DEFAULT_EXTENSION
-        assert os.path.isfile(path)
-
-        if loadlib.IS_WINDOWS or libtype != 'net':
-            with pytest.raises(exception):
-                loadlib.LoadLibrary(path, libtype=libtype)
-        elif loadlib.IS_LINUX and libtype == 'net':
-            # Mono can load a 32/64 bit library in 64/32 bit Python
-            net = loadlib.LoadLibrary(path, libtype=libtype)
-            bm = net.lib.DotNetMSL.BasicMath()
-            assert 9 == bm.add_integers(4, 5)
-        else:
-            raise NotImplementedError
-
+@pytest.mark.parametrize('filename', ['cpp_lib', 'fortran_lib'])
+def test_wrong_bitness(filename):
     suffix = '32' if loadlib.IS_PYTHON_64BIT else '64'
-    check(os.path.join(EXAMPLES_DIR, 'cpp_lib'+suffix), 'cdll', OSError)
-    check(os.path.join(EXAMPLES_DIR, 'fortran_lib'+suffix), 'cdll', OSError)
-    check(
-        os.path.join(EXAMPLES_DIR, 'dotnet_lib'+suffix),
-        'net',
-        (System.IO.FileNotFoundException,  System.BadImageFormatException)
-    )
+    path = os.path.join(EXAMPLES_DIR, 'cpp_lib'+suffix)
+    path += loadlib.DEFAULT_EXTENSION
+    assert os.path.isfile(path)
+    with pytest.raises(OSError):
+        loadlib.LoadLibrary(path)
+
+
+@skipif_no_pythonnet
+@pytest.mark.skipif(loadlib.IS_WINDOWS, reason='requires mono runtime')
+@pytest.mark.parametrize('filename', ['dotnet_lib32.dll', 'dotnet_lib64.dll'])
+def test_mono_bitness_independent(filename):
+    path = os.path.join(EXAMPLES_DIR, filename)
+    net = loadlib.LoadLibrary(path, libtype='clr')
+    assert 9 == net.lib.DotNetMSL.BasicMath().add_integers(4, 5)
+    net.cleanup()
 
 
 def test_cpp():
