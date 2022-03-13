@@ -62,31 +62,31 @@ five integers
    >>> net.lib.StaticClass.add_multiple(1, 2, 3, 4, 5)
    15
 
-One can create objects from the System_ namespace, for example,
+One can create objects from the System_ namespace,
 
 .. code-block:: pycon
 
    >>> System = net.lib.System
 
-to create a 32-bit signed integer,
+ for example, to create a 32-bit signed integer,
 
 .. code-block:: pycon
 
    >>> System.Int32(9)
    <System.Int32 object at ...>
 
-or, a one-dimensional Array_ of the specified Type_ and length
+or, a one-dimensional Array_ of the specified Type_
 
 .. code-block:: pycon
 
-   >>> array = System.Array.CreateInstance(System.Double, 10)
+   >>> array = System.Array[int](list(range(10)))
    >>> array
-   <System.Double[] object at ...>
+   <System.Int32[] object at ...>
    >>> list(array)
-   [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
-   >>> array[0] = 1.23
+   [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
+   >>> array[0] = -1
    >>> list(array)
-   [1.23, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+   [-1, 1, 2, 3, 4, 5, 6, 7, 8, 9]
 
 .. _System: https://docs.microsoft.com/en-us/dotnet/api/system
 .. _Array: https://docs.microsoft.com/en-us/dotnet/api/system.array?view=net-6.0
