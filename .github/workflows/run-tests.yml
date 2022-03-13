@@ -44,13 +44,13 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v2
       - name: Install system dependencies (Ubuntu)
-        if: ${{ matrix.os == 'ubuntu-latest' }}
+        if: ${{ matrix.os == 'ubuntu' }}
         run: |
           sudo dpkg --add-architecture i386
           sudo apt-get update
           sudo apt-get install -y libgfortran5:i386
       - name: Set up Mono (macOS)
-        if: ${{ matrix.os == 'macos-latest' }}
+        if: ${{ matrix.os == 'macos' }}
         uses: maxim-lobanov/setup-xamarin@v1
         with:
           mono-version: latest
@@ -75,7 +75,7 @@ jobs:
       - name: Install msl-loadlib
         run: python -m pip install --upgrade --editable .[tests]
       - name: Uninstall pythonnet (get a fatal crash)
-        if: ${{ (matrix.os == 'macos-latest' && (matrix.python-version == '2.7' || matrix.python-version == '3.5')) || (matrix.architecture == 'x86' && (matrix.python-version == '3.9' || matrix.python-version == '3.10')) }}
+        if: ${{ (matrix.os == 'macos' && (matrix.python-version == '2.7' || matrix.python-version == '3.5')) || (matrix.architecture == 'x86' && (matrix.python-version == '3.9' || matrix.python-version == '3.10')) }}
         run: python -m pip uninstall --yes pythonnet
       - name: Run tests
         run: python -m pytest
