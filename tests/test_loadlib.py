@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 import os
-import sys
 import math
 import pathlib
 from ctypes import *
@@ -8,7 +7,12 @@ from ctypes import *
 import pytest
 
 from msl import loadlib
-from msl.examples.loadlib import EXAMPLES_DIR, Point, FourPoints, NPoints
+from msl.examples.loadlib import (
+    EXAMPLES_DIR,
+    Point,
+    FourPoints,
+    NPoints,
+)
 
 from conftest import (
     skipif_no_comtypes,
@@ -385,8 +389,6 @@ def test_java():
 
     jar.gateway.shutdown()
 
-    import math
-
     cls = loadlib.LoadLibrary(EXAMPLES_DIR + '/Trig.class')
     Trig = cls.lib.Trig
 
@@ -461,7 +463,6 @@ def test_activex_raises():
 
 def test_unicode_path_java():
     cls = loadlib.LoadLibrary(u'./tests/uñicödé/Trig.class')
-    import math
     x = 0.123456
     assert cls.lib.Trig.cos(x) == pytest.approx(math.cos(x))
     repr(cls)  # this should not raise an exception
@@ -509,8 +510,7 @@ def test_dotnet_nested_namespace():
     net = loadlib.LoadLibrary('./tests/nested_namespaces/nested_namespaces.dll', 'clr')
     lib = net.lib
 
-    from math import pi
-    assert lib.System.Math.PI == pytest.approx(pi)
+    assert lib.System.Math.PI == pytest.approx(math.pi)
 
     assert lib.A.B.C.Klass().Message() == 'Hello from A.B.C.Klass().Message()'
     assert lib.A.B.Klass().Message() == 'Hello from A.B.Klass().Message()'
