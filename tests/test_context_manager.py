@@ -56,6 +56,9 @@ def test_cpp():
     for _ in range(10):
         library.cleanup()
 
+    assert 'libtype=NoneType' in str(library)
+    assert 'libtype=NoneType' in repr(library)
+
 
 @skipif_no_pythonnet
 def test_dotnet():
@@ -75,6 +78,9 @@ def test_dotnet():
     # can still call this (even multiple times)
     for _ in range(10):
         library.cleanup()
+
+    assert 'libtype=NoneType' in str(library)
+    assert 'libtype=NoneType' in repr(library)
 
 
 def test_java(caplog):
@@ -103,6 +109,9 @@ def test_java(caplog):
     for _ in range(10):
         library.cleanup()
 
+    assert 'libtype=NoneType' in str(library)
+    assert 'libtype=NoneType' in repr(library)
+
 
 @skipif_no_server32
 def test_client():
@@ -126,3 +135,6 @@ def test_client():
     out, err = cpp.shutdown_server32()
     assert out.closed
     assert err.closed
+
+    assert 'lib=None address=None' in str(cpp)
+    assert 'lib=None address=None' in repr(cpp)
