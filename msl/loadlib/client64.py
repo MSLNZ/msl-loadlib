@@ -372,6 +372,7 @@ class Client64(object):
         if os.path.isfile(self._pickle_path):
             os.remove(self._pickle_path)
 
+        self._conn.sock.shutdown(socket.SHUT_RDWR)
         self._conn.close()
         self._conn = None
         return self._proc.stdout, self._proc.stderr
