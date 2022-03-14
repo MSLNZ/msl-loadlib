@@ -9,20 +9,22 @@ from conftest import skipif_no_server32
 
 
 @skipif_no_server32
-def test_unclosed_pipe_warning_1(recwarn):
+def test_unclosed_warnings_1(recwarn):
     # recwarn is a built-in pytest fixture that records all warnings emitted by test functions
 
     # The following warnings should not be written to stderr for the unclosed subprocess PIPE's
     #   sys:1: ResourceWarning: unclosed file <_io.BufferedReader name=3>
     #   sys:1: ResourceWarning: unclosed file <_io.BufferedReader name=4>
+    # nor for unclosed sockets
+    #   ResourceWarning: unclosed <socket.socket ...>
 
     Cpp64()
     gc.collect()
-    assert recwarn.list == []
+    assert len(recwarn) == 0
 
 
 @skipif_no_server32
-def test_unclosed_pipe_warning_2(recwarn):
+def test_unclosed_warnings_2(recwarn):
     for _ in range(3):
         cpp = Cpp64()
         out, err = cpp.shutdown_server32()
@@ -31,7 +33,7 @@ def test_unclosed_pipe_warning_2(recwarn):
             err.close()
         del cpp
     gc.collect()
-    assert recwarn.list == []
+    assert len(recwarn) == 0
 
 
 def test_bad_del():

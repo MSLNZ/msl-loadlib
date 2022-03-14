@@ -276,12 +276,17 @@ def wait_for_server(host, port, timeout):
     ~msl.loadlib.exceptions.ConnectionTimeoutError
         If a timeout occurred.
     """
-
-    # wait for the server to be running -- essentially this is the subprocess.wait() method
     stop = time.time() + max(0.0, timeout)
     while True:
-        if is_port_in_use(port):
-            break
+        try:
+            s = socket.create_connection((host, port), timeout=timeout)
+            s.shutdown(socket.SHUT_RDWR)
+            s.close()
+            del s
+            return
+        except:
+            pass
+
         if time.time() > stop:
             raise ConnectionTimeoutError(
                 'Timeout after {:.1f} seconds. Could not connect to {}:{}'.format(timeout, host, port)
