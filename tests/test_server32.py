@@ -27,9 +27,8 @@ def setup_module():
     f = Fortran64()
     e = Echo64()
     if IS_WINDOWS:
-        # stop testing on linux because of pythonnet issue #1210
-        # mono 5.20 is getting too old, but it is the latest version
-        # that works with pythonnet 2.4.0 and 32-bit linux
+        # stop testing on 64-bit linux because Mono can load
+        # both 32-bit and 64-bit libraries
         n = DotNet64()
 
 
