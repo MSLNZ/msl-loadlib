@@ -37,8 +37,7 @@ def test_invalid_path(path):
 @pytest.mark.parametrize('filename', ['cpp_lib', 'fortran_lib'])
 def test_wrong_bitness(filename):
     suffix = '32' if loadlib.IS_PYTHON_64BIT else '64'
-    path = os.path.join(EXAMPLES_DIR, 'cpp_lib'+suffix)
-    path += loadlib.DEFAULT_EXTENSION
+    path = os.path.join(EXAMPLES_DIR, filename+suffix+loadlib.DEFAULT_EXTENSION)
     assert os.path.isfile(path)
     with pytest.raises(OSError):
         loadlib.LoadLibrary(path)
