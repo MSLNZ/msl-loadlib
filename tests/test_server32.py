@@ -5,7 +5,7 @@ import math
 import pytest
 
 from msl import loadlib
-from msl.loadlib import IS_MAC, IS_WINDOWS
+from msl.loadlib import IS_MAC, IS_WINDOWS, ConnectionTimeoutError
 from msl.examples.loadlib import Cpp64, Fortran64, Echo64, DotNet64, FourPoints
 
 from conftest import (
@@ -319,9 +319,17 @@ def test_activex():
         def error2(self):
             return self.request32('error2')
 
-    ax = ActiveX()
+    try:
+        ax = ActiveX()
+    except ConnectionTimeoutError:
+        # this test is buggy on GitHub Actions
+        if len(str(os.getenv('GITHUB_ACTIONS', ''))) > 0:
+            pytest.xfail('randomly fails on GitHub Actions')
+            return
+        else:
+            raise
 
-    # don't care about if the value is True or False only that it is a boolean
+    # don't care whether the value is True or False only that it is a boolean
     assert isinstance(ax.this(), bool)
     assert isinstance(ax.static(), bool)
     assert isinstance(ax.create(), bool)
