@@ -278,14 +278,8 @@ def wait_for_server(host, port, timeout):
     """
     stop = time.time() + max(0.0, timeout)
     while True:
-        try:
-            s = socket.create_connection((host, port), timeout=timeout)
-            s.shutdown(socket.SHUT_RDWR)
-            s.close()
-            del s
+        if is_port_in_use(port):
             return
-        except:
-            pass
 
         if time.time() > stop:
             raise ConnectionTimeoutError(
