@@ -61,7 +61,50 @@ def test_wrong_bitness_dotnet():
 def test_mono_bitness_independent(filename):
     path = os.path.join(EXAMPLES_DIR, filename)
     net = loadlib.LoadLibrary(path, libtype='clr')
-    assert 9 == net.lib.DotNetMSL.BasicMath().add_integers(4, 5)
+
+    names = ';'.join(str(name) for name in net.assembly.GetTypes()).split(';')
+    assert len(names) == 4
+    assert 'StringManipulation' in names
+    assert 'DotNetMSL.BasicMath' in names
+    assert 'DotNetMSL.ArrayManipulation' in names
+    assert 'StaticClass' in names
+
+    BasicMath = net.lib.DotNetMSL.BasicMath()
+    assert 9 == BasicMath.add_integers(4, 5)
+    assert 0.8 == pytest.approx(BasicMath.divide_floats(4., 5.))
+    assert 458383.926 == pytest.approx(BasicMath.multiply_doubles(872.24, 525.525))
+    assert 108.0 == pytest.approx(BasicMath.add_or_subtract(99., 9., True))
+    assert 90.0 == pytest.approx(BasicMath.add_or_subtract(99., 9., False))
+
+    ArrayManipulation = net.lib.DotNetMSL.ArrayManipulation()
+    a = 7.13141
+    values = [float(x) for x in range(1000)]
+    net_values = ArrayManipulation.scalar_multiply(a, values)
+    for i in range(len(values)):
+        assert a * values[i] == pytest.approx(net_values[i])
+
+    a1 = [[1., 2., 3.], [4., 5., 6.]]
+    m1 = net.lib.System.Array.CreateInstance(net.lib.System.Double, 2, 3)
+    for r in range(2):
+        for c in range(3):
+            m1[r, c] = a1[r][c]
+    a2 = [[1., 2.], [3., 4.], [5., 6.]]
+    m2 = net.lib.System.Array.CreateInstance(net.lib.System.Double, 3, 2)
+    for r in range(3):
+        for c in range(2):
+            m2[r, c] = a2[r][c]
+    out = ArrayManipulation.multiply_matrices(m1, m2)
+    net_mat = [[out[r, c] for c in range(2)] for r in range(2)]
+    assert 22.0 == pytest.approx(net_mat[0][0])
+    assert 28.0 == pytest.approx(net_mat[0][1])
+    assert 49.0 == pytest.approx(net_mat[1][0])
+    assert 64.0 == pytest.approx(net_mat[1][1])
+
+    assert 'dnalaeZ weN' == net.lib.StringManipulation().reverse_string('New Zealand')
+    assert net.lib.StaticClass.add_multiple(11, -22, 33, -44, 55) == 33
+    assert net.lib.StaticClass.concatenate('a', 'b', 'c', False, 'd') == 'abc'
+    assert net.lib.StaticClass.concatenate('a', 'b', 'c', True, 'd') == 'abcd'
+
     net.cleanup()
 
 
