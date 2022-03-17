@@ -292,6 +292,7 @@ def test_activex():
             super(ActiveX, self).__init__(
                 module32='activex_media_player.py',
                 append_sys_path=os.path.join(os.path.dirname(__file__), 'server32_comtypes'),
+                timeout=30,
             )
 
         def this(self):
