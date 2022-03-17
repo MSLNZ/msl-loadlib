@@ -44,6 +44,7 @@ def test_wrong_bitness(filename):
         loadlib.LoadLibrary(path)
 
 
+@skipif_no_pythonnet
 @skipif_not_windows
 def test_wrong_bitness_dotnet():
     import clr
