@@ -19,6 +19,7 @@ from conftest import (
     skipif_no_labview_runtime,
     skipif_no_pythonnet,
     add_py4j_in_eggs,
+    skipif_not_windows,
 )
 
 
@@ -41,6 +42,17 @@ def test_wrong_bitness(filename):
     assert os.path.isfile(path)
     with pytest.raises(OSError):
         loadlib.LoadLibrary(path)
+
+
+@skipif_not_windows
+def test_wrong_bitness_dotnet():
+    import clr
+    import System
+    suffix = '32' if loadlib.IS_PYTHON_64BIT else '64'
+    path = os.path.join(EXAMPLES_DIR, 'dotnet_lib'+suffix+'.dll')
+    assert os.path.isfile(path)
+    with pytest.raises(System.BadImageFormatException):
+        loadlib.LoadLibrary(path, libtype='net')
 
 
 @skipif_no_pythonnet
