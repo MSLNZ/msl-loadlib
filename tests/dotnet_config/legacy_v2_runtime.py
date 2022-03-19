@@ -4,6 +4,7 @@ import random
 
 import clr
 
+# make sure 'msl.loadlib' is available on PATH before importing it
 path = os.path.abspath(os.path.join(os.path.dirname(__file__), os.pardir, os.pardir))
 sys.path.insert(0, path)
 
@@ -14,23 +15,17 @@ from msl.loadlib import (
 
 bitness = 'x64' if IS_PYTHON_64BIT else 'x86'
 filename = 'legacy_v2_runtime_{}.dll'.format(bitness)
-path = os.path.abspath(os.path.join(os.path.dirname(__file__), filename))
+path = os.path.join(os.path.dirname(__file__), 'legacy_v2_runtime', filename)
 
 # this is not necessary, just wanted to randomly select
 # one of the supported .NET libtype's
 libtype = 'clr' if random.random() > 0.5 else 'net'
 
-net = LoadLibrary(path, libtype)
+net = LoadLibrary(path, libtype=libtype)
 
-# pythonnet 3.0+ disabled implicit conversion from C# enums to Python int and back.
-# One must now either use enum members (e.g. MyEnum.Option), or use enum constructor
-# (e.g. MyEnum(42) or MyEnum(42, True) when MyEnum does not have a member with value 42).
-
-if int(clr.__version__.split('.')[0]) < 3:
-    if net.lib.SpelNetLib.SpelAxis.X != 1:
-        sys.exit('error accessing enum "net.lib.SpelNetLib.SpelAxis.X"')
-else:
-    if net.lib.SpelNetLib.SpelAxis.X != net.lib.SpelNetLib.SpelAxis(1):
-        sys.exit('error accessing enum "net.lib.SpelNetLib.SpelAxis.X"')
+expected = 'Microsoft Visual Studio 2005 (Version 8.0.50727.42); Microsoft .NET Framework (Version 2.0.50727)'
+environment = net.lib.legacy.Build().Environment()
+if environment != expected:
+    sys.exit('{!r} != {!r}'.format(environment, expected))
 
 print('SUCCESS')
