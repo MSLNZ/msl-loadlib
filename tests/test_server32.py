@@ -5,7 +5,7 @@ import math
 import pytest
 
 from msl import loadlib
-from msl.loadlib import IS_MAC, IS_WINDOWS, ConnectionTimeoutError
+from msl.loadlib import IS_MAC, IS_WINDOWS
 from msl.examples.loadlib import Cpp64, Fortran64, Echo64, DotNet64, FourPoints
 
 from conftest import (
