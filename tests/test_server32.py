@@ -318,15 +318,7 @@ def test_activex():
         def error2(self):
             return self.request32('error2')
 
-    try:
-        ax = ActiveX()
-    except ConnectionTimeoutError:
-        # this test is buggy on GitHub Actions
-        if len(str(os.getenv('GITHUB_ACTIONS', ''))) > 0:
-            pytest.xfail('randomly fails on GitHub Actions')
-            return
-        else:
-            raise
+    ax = ActiveX()
 
     # don't care whether the value is True or False only that it is a boolean
     assert isinstance(ax.this(), bool)
