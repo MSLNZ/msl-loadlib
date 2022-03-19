@@ -17,7 +17,7 @@ except ImportError:
 
 from .exceptions import ConnectionTimeoutError
 from . import (
-    IS_MAC,
+    IS_LINUX,
     IS_WINDOWS,
 )
 
@@ -231,7 +231,10 @@ def check_dot_net_config(py_exe_path):
 
 
 def is_port_in_use(port):
-    """Checks whether the network port is in use.
+    """Checks whether the TCP port is in use.
+
+    .. versionchanged:: 0.10.0
+       Only check TCP ports (instead of both TCP and UDP ports).
 
     .. versionchanged:: 0.7.0
        Renamed from `port_in_use` and added support for macOS.
@@ -244,13 +247,16 @@ def is_port_in_use(port):
     Returns
     -------
     :class:`bool`
-        Whether the port is in use.
+        Whether the TCP port is in use.
     """
-    if IS_MAC:
-        cmd = ['lsof', '-nPw', '-iTCP']
+    flags = 0
+    if IS_WINDOWS:
+        flags = 0x08000000  # fixes issue 31, CREATE_NO_WINDOW = 0x08000000
+        cmd = ['netstat', '-a', '-n', '-p', 'TCP']
+    elif IS_LINUX:
+        cmd = ['netstat', '-ant']
     else:
-        cmd = ['netstat', '-an']
-    flags = 0x08000000 if IS_WINDOWS else 0  # fixes issue 31, CREATE_NO_WINDOW = 0x08000000
+        cmd = ['lsof', '-nPw', '-iTCP']
     p = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, creationflags=flags)
     out, err = p.communicate()
     if err:
