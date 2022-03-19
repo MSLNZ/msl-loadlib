@@ -28,19 +28,19 @@ NET_FRAMEWORK_DESCRIPTION = """
 <!--
   Created by the MSL-LoadLib package.
 
-  By default, applications that target the .NET Framework version 4.0+ cannot load assemblies from
-  previous .NET Framework versions. You must add and modify the "app".config file and set the
-  useLegacyV2RuntimeActivationPolicy property to be "true". For the Python executable this would be
-  a python.exe.config (Windows) or python.config (Unix) configuration file.
+  By default, applications that target the .NET Framework version 4.0+ cannot load
+  assemblies from previous .NET Framework versions. You must add and modify the
+  <app>.config file and set the useLegacyV2RuntimeActivationPolicy property to be
+  "true". For the Python executable this would be a python.exe.config (Windows) 
+  or python.config (Linux) configuration file.
 
-  For example, Python for .NET (pythonnet, https://pythonnet.github.io/) only works with .NET 4.0+
-  and therefore it cannot automatically load a shared library that was compiled with .NET <4.0. If
-  you try to load the library and a System.IO.FileNotFoundException is raised then that might
-  mean that the library is from .NET <4.0.
+  Python for .NET (https://pythonnet.github.io/) works with .NET 4.0+ and 
+  therefore it cannot automatically load a shared library that was compiled with
+  .NET < 4.0. If you try to load the library and a System.IO.FileLoadException is
+  raised then that might mean that the library is from .NET < 4.0.
 
-  Additionally, the System.IO.FileNotFoundException exception will also be raised if the folder
-  that the DLL is located in is not within sys.path, so first make sure that the shared library
-  is visible to the Python interpreter.
+  The System.IO.FileLoadException exception could also be raised if the directory
+  that the DLL is located in, or a dependency of the library, is not within PATH. 
 
   See https://support.microsoft.com/kb/2572158 for an overview.
 
