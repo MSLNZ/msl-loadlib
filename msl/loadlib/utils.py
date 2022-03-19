@@ -124,7 +124,7 @@ def is_comtypes_installed():
 def check_dot_net_config(py_exe_path):
     """Check if the **useLegacyV2RuntimeActivationPolicy** property is enabled.
 
-    By default, `Python for .NET <https://pythonnet.github.io/>`_ only works with .NET
+    By default, `Python for .NET <https://pythonnet.github.io/>`_ works with .NET
     4.0+ and therefore it cannot automatically load a shared library that was compiled
     with .NET <4.0. This method ensures that the **useLegacyV2RuntimeActivationPolicy**
     property exists in the **<python-executable>.config** file and that it is enabled.
@@ -136,7 +136,7 @@ def check_dot_net_config(py_exe_path):
 
     .. code-block:: xml
 
-        <?xml version ="1.0"?>
+        <?xml version="1.0" encoding="utf-8" ?>
         <configuration>
             <startup useLegacyV2RuntimeActivationPolicy="true">
                 <supportedRuntime version="v4.0" />
@@ -147,7 +147,7 @@ def check_dot_net_config(py_exe_path):
     Parameters
     ----------
     py_exe_path : :class:`str`
-        The path to the Python executable.
+        The path to a Python executable.
 
     Returns
     -------
@@ -170,55 +170,63 @@ def check_dot_net_config(py_exe_path):
         try:
             tree = ET.parse(config_path)
         except ET.ParseError:
-            msg = 'Invalid XML file ' + config_path
-            msg += '\nCannot create useLegacyV2RuntimeActivationPolicy property.'
+            msg = 'Invalid XML file {}\n' \
+                  'Cannot create the useLegacyV2RuntimeActivationPolicy ' \
+                  'property.\n'.format(config_path)
             logger.warning(msg)
             return -1, msg
 
         root = tree.getroot()
 
-        if not root.tag == 'configuration':
-            msg = 'The root tag in {} is "{}".\n'.format(config_path, root.tag)
-            msg += 'It must be "configuration" in order to create a .NET Framework config file '
-            msg += 'to enable the useLegacyV2RuntimeActivationPolicy property.\n'
-            msg += 'To load an assembly from a .NET Framework version < 4.0 the '
-            msg += 'following must be in {}:\n'.format(config_path)
-            msg += '<configuration>' + NET_FRAMEWORK_FIX + '</configuration>\n'
+        if root.tag != 'configuration':
+            msg = 'The root tag in {config_path} is <{tag}>.\n' \
+                  'It must be <configuration> in order to create a .NET Framework config\n' \
+                  'file which enables the useLegacyV2RuntimeActivationPolicy property.\n' \
+                  'To load an assembly from a .NET Framework version < 4.0 the following\n' \
+                  'must be in {config_path}\n\n' \
+                  '<configuration>{fix}</configuration>\n'.format(
+                config_path=config_path, tag=root.tag, fix=NET_FRAMEWORK_FIX)
             logger.warning(msg)
             return -1, msg
 
         # check if the policy exists
         policy = root.find('startup/[@useLegacyV2RuntimeActivationPolicy]')
         if policy is None:
-            with open(config_path, 'r') as fp:
+            with open(config_path, mode='rt') as fp:
                 lines = fp.readlines()
 
             lines.insert(-1, NET_FRAMEWORK_FIX)
-            with open(config_path, 'w') as fp:
+            with open(config_path, mode='wt') as fp:
                 fp.writelines(lines)
-            msg = 'Added the useLegacyV2RuntimeActivationPolicy property to ' + config_path
-            msg += '\nTry again to see if Python can now load the .NET library.\n'
+            msg = 'Added the useLegacyV2RuntimeActivationPolicy property to\n' \
+                  '{config_path}\n' \
+                  'Try again to see if Python can now load the .NET library.\n'.format(
+                config_path=config_path)
             return 1, msg
         else:
             if not policy.attrib['useLegacyV2RuntimeActivationPolicy'].lower() == 'true':
-                msg = 'The useLegacyV2RuntimeActivationPolicy in {} is False\n'.format(config_path)
-                msg += 'Cannot load an assembly from a .NET Framework version < 4.0.'
+                msg = 'The useLegacyV2RuntimeActivationPolicy in\n' \
+                      '{config_path}\n' \
+                      'is "false". Cannot load an assembly from a .NET Framework ' \
+                      'version < 4.0.\n'.format(config_path=config_path)
                 logger.warning(msg)
                 return -1, msg
             return 0, 'The useLegacyV2RuntimeActivationPolicy property is enabled'
 
     else:
-        with open(config_path, 'w') as f:
-            f.write('<?xml version ="1.0"?>')
+        with open(config_path, mode='wt') as f:
+            f.write('<?xml version="1.0" encoding="utf-8" ?>')
             f.write(NET_FRAMEWORK_DESCRIPTION)
             f.write('<configuration>')
             f.write(NET_FRAMEWORK_FIX)
             f.write('</configuration>\n')
-        msg = 'The library appears to be from a .NET Framework version < 4.0.\n'
-        msg += 'The useLegacyV2RuntimeActivationPolicy property was added to {}\n'.format(config_path)
-        msg += 'to fix the "System.IO.FileLoadException: Mixed mode assembly..." error.\n'
-        msg += 'Rerun the script, or shutdown and restart the interactive console, to see\n'
-        msg += 'if Python can now load the .NET library.\n'
+
+        msg = 'The library appears to be from a .NET Framework version < 4.0.\n' \
+              'The useLegacyV2RuntimeActivationPolicy property was added to\n' \
+              '{config_path}\n' \
+              'to fix the "System.IO.FileLoadException: Mixed mode assembly..." error.\n' \
+              'Rerun the script, or restart the interactive console, to see if\n' \
+              'Python can now load the .NET library.\n'.format(config_path=config_path)
         return 1, msg
 
 

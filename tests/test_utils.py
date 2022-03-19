@@ -77,7 +77,7 @@ def test_check_dot_net_config():
     exe = os.path.join(base, 'set_to_false.exe')
     val, msg = utils.check_dot_net_config(exe)
     assert val == -1
-    assert 'False' in msg
+    assert 'is "false"' in msg
 
     # the startup element does not exist, it gets inserted
     exe = os.path.join(base, 'startup_element_does_not_exist.exe')
