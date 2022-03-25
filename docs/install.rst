@@ -3,13 +3,13 @@
 Install
 =======
 
-To install MSL-LoadLib run:
+To install MSL-LoadLib run
 
 .. code-block:: console
 
    pip install msl-loadlib
 
-Alternatively, using the `MSL Package Manager`_ run:
+Alternatively, using the `MSL Package Manager`_ run
 
 .. code-block:: console
 
@@ -25,25 +25,25 @@ Optional dependencies:
   * Py4J_
   * comtypes_
 
-You can install MSL-LoadLib and `Python for .NET`_ using:
+You can install MSL-LoadLib and `Python for .NET`_ using,
 
 .. code-block:: console
 
    pip install msl-loadlib[clr]
 
-MSL-LoadLib and Py4J_:
+MSL-LoadLib and Py4J_,
 
 .. code-block:: console
 
    pip install msl-loadlib[java]
 
-MSL-LoadLib and comtypes_:
+MSL-LoadLib and comtypes_,
 
 .. code-block:: console
 
    pip install msl-loadlib[com]
 
-or MSL-LoadLib and all optional dependencies:
+or MSL-LoadLib and all optional dependencies
 
 .. code-block:: console
 
@@ -52,8 +52,8 @@ or MSL-LoadLib and all optional dependencies:
 Compatibility
 -------------
 * The :mod:`~msl.loadlib.start_server32` module has been built into a
-  frozen_ Python application for Windows and Linux and works with the
-  Python versions listed above. The 32-bit server is running with a
+  frozen_ Python executable for Windows and Linux and works with the
+  Python versions listed above. The 32-bit server is running on a
   Python 3 interpreter and therefore all modules that run on the server
   must use Python 3 syntax.
 * You can create a new 32-bit server. See :ref:`refreeze` for more details.
@@ -78,19 +78,19 @@ If you need to load a Microsoft .NET library then you must install
    pip install pythonnet
 
 If you need to load a Java library (i.e., a ``.jar`` or ``.class`` file)
-then you must install Py4J_
+then you must install Py4J_,
 
 .. code-block:: console
 
    pip install py4j
 
-and a `Java Runtime Environment`_ and ensure that the ``java`` executable
-is available on your ``PATH``. For example, the following should return the
+a `Java Runtime Environment`_, and ensure that the ``java`` executable
+is available on the PATH_ variable. For example, the following should return the
 version of Java that is installed
 
 .. code-block:: console
 
-   C:\>java --version
+   C:\Users\username>java -version
    java 15.0.1 2020-10-20
    Java(TM) SE Runtime Environment (build 15.0.1+9-18)
    Java HotSpot(TM) 64-Bit Server VM (build 15.0.1+9-18, mixed mode, sharing)
@@ -105,56 +105,37 @@ install comtypes_
 .. tip::
 
    When loading a shared library it is vital that all dependencies of the
-   library are also on your computer and that the directory of the dependency
-   is also available on your ``PATH``. A helpful utility to use to determine
-   the dependencies of a shared library is Dependencies_ (which is a modern
-   `Dependency Walker`_). For finding the dependencies of a .NET library the
-   `Dependency Walker for .NET`_ can also be helpful.
+   library are also on the computer and that the directory that the dependency
+   is located in is available on the PATH_ variable. A helpful utility to
+   determine the dependencies of a shared library on Windows is Dependencies_
+   (which is a modern `Dependency Walker`_). For finding the dependencies of a
+   .NET library the `Dependency Walker for .NET`_ can also be helpful.
 
 Linux
 ++++++
-Before using MSL-LoadLib on Linux the following packages are required.
+Before using MSL-LoadLib on Linux, the following packages are required.
 
-Install the packages that are required to load C/C++ and FORTRAN libraries
+Install the packages that are required to load 32-bit and 64-bit C/C++
+and FORTRAN libraries
 
-.. note::
+.. attention::
+
    The following packages are required to run the examples that are included
    with MSL-LoadLib when it is installed. The dependencies for the C/C++ or
    FORTRAN library that you want to load may be different.
 
 .. code-block:: console
 
-   sudo apt update
    sudo apt install g++ gfortran libgfortran5 zlib1g:i386 libstdc++6:i386 libgfortran5:i386
 
-The following ensures that the ``netstat`` command is available
+The following ensures that the ss_ command is available
 
 .. code-block:: console
 
-   sudo apt install net-tools
+   sudo apt install iproute2
 
-If you need to load a Microsoft .NET library then you must install Mono_.
-The following illustrates how to install Mono_ v5.20 on Ubuntu 18.04.
-
-.. attention::
-
-   Mono_ v5.20 was installed when embedding pythonnet in the 32-bit server
-   and therefore that version must also be installed in 64-bit Linux
-   if you want to load a 32-bit library. You can :ref:`refreeze <refreeze>`
-   the 32-bit server using a different Mono_ version; however, be sure to
-   follow the status of `issue 1210`_. You can install any version of Mono_
-   that is supported by `Python for .NET`_ in 64-bit Linux if you do not
-   need to load a 32-bit .NET library.
-
-.. code-block:: console
-
-   sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 3FA7E0328081BFF6A14DA29AA6A19B38D3D831EF
-   sudo apt install apt-transport-https ca-certificates
-   echo "deb https://download.mono-project.com/repo/ubuntu stable-bionic/snapshots/5.20 main" | sudo tee /etc/apt/sources.list.d/mono-official-stable.list
-   sudo apt update
-   sudo apt install mono-complete
-
-The prerequisites to build `Python for .NET`_ from source must also be installed
+If you need to load a Microsoft .NET library then you must install Mono_,
+the prerequisites to build `Python for .NET`_ from source,
 
 .. code-block:: console
 
@@ -167,13 +148,18 @@ and then install `Python for .NET`_
 
    pip3 install pythonnet
 
-Installing Mono_ v5.20.1.34 and `Python for .NET`_ v2.4.0 on Ubuntu 18.04 has
-been confirmed to work. If you run in to problems installing `Python for .NET`_
-then the best place to find help is on the issues_ page of `Python for .NET`_\'s
-repository.
+.. attention::
+
+   As of version 0.10.0 of MSL-LoadLib, pythonnet is no longer available
+   on the 32-bit server for Linux. Mono can load both 32-bit and 64-bit
+   libraries and therefore a 32-bit .NET library can be loaded directly
+   via :class:`~msl.loadlib.load_library.LoadLibrary` on 64-bit Linux.
+
+If you have problems installing `Python for .NET`_ then the best place
+to find help is on the issues_ page of `Python for .NET`_\'s repository.
 
 If you need to load a Java library (i.e., a ``.jar`` or ``.class`` file)
-then you must install Py4J_
+then you must install Py4J_,
 
 .. code-block:: console
 
@@ -185,19 +171,16 @@ and a `Java Runtime Environment`_
 
    sudo apt install default-jre
 
-and ensure that the ``java`` executable is available on your ``PATH``.
-For example, the following should return the version of Java that is installed
+.. tip::
 
-.. code-block:: console
-
-   $ java --version
-   openjdk 11.0.9.1 2020-11-04
-   OpenJDK Runtime Environment (build 11.0.9.1+1-Ubuntu-0ubuntu1.18.04)
-   OpenJDK 64-Bit Server VM (build 11.0.9.1+1-Ubuntu-0ubuntu1.18.04, mixed mode, sharing)
+   When loading a shared library it is vital that all dependencies of the
+   library are also on the computer and that the directory that the dependency
+   is located in is available on the PATH_ variable. A helpful utility to
+   determine the dependencies of a shared library on Unix is ldd_.
 
 macOS
 +++++
-The 32-bit server has not been created for macOS, however, the
+The 32-bit server has not been created for macOS; however, the
 :class:`~msl.loadlib.load_library.LoadLibrary` class can be used to load a
 library that uses the ``__cdecl`` calling convention that is the same
 bitness as the Python interpreter, a .NET library or a Java library.
@@ -216,25 +199,25 @@ To load a C/C++ or FORTRAN library install gcc (which includes gfortran)
 
    brew install gcc
 
-If you need to load a Microsoft .NET library then you must install Mono_
-and the prerequisites to build `Python for .NET`_ from source
+If you need to load a Microsoft .NET library then you must install Mono_,
+the prerequisites to build `Python for .NET`_ from source,
 
 .. code-block:: console
 
    brew install pkg-config glib mono
    pip3 install pycparser
 
-and `Python for .NET`_
+and then install `Python for .NET`_
 
 .. code-block:: console
 
    pip3 install pythonnet
 
-If you run in to problems installing `Python for .NET`_ then the best place
+If you have problems installing `Python for .NET`_ then the best place
 to find help is on the issues_ page of `Python for .NET`_\'s repository.
 
 If you need to load a Java library (i.e., a ``.jar`` or ``.class`` file)
-then you must install Py4J_
+then you must install Py4J_,
 
 .. code-block:: console
 
@@ -250,7 +233,7 @@ and a `Java Runtime Environment`_
 .. _Python for .NET: https://pythonnet.github.io/
 .. _Py4J: https://www.py4j.org/
 .. _comtypes: https://pythonhosted.org/comtypes/#
-.. _frozen: https://www.pyinstaller.org/
+.. _frozen: https://pyinstaller.readthedocs.io/en/stable/
 .. _WoW64: https://en.wikipedia.org/wiki/WoW64
 .. _Java Runtime Environment: https://www.oracle.com/technetwork/java/javase/downloads/index.html
 .. _Component Object Model: https://en.wikipedia.org/wiki/Component_Object_Model
@@ -261,3 +244,6 @@ and a `Java Runtime Environment`_
 .. _issues: https://github.com/pythonnet/pythonnet/issues
 .. _issue 1210: https://github.com/pythonnet/pythonnet/issues/1210
 .. _Homebrew: https://brew.sh/
+.. _ss: https://man7.org/linux/man-pages/man8/ss.8.html
+.. _ldd: https://man7.org/linux/man-pages/man1/ldd.1.html
+.. _PATH: https://en.wikipedia.org/wiki/PATH_(variable)
