@@ -235,6 +235,7 @@ def is_port_in_use(port):
 
     .. versionchanged:: 0.10.0
        Only check TCP ports (instead of both TCP and UDP ports).
+       Uses the ``ss`` command instead of ``netstat`` on Linux.
 
     .. versionchanged:: 0.7.0
        Renamed from `port_in_use` and added support for macOS.
@@ -254,7 +255,7 @@ def is_port_in_use(port):
         flags = 0x08000000  # fixes issue 31, CREATE_NO_WINDOW = 0x08000000
         cmd = ['netstat', '-a', '-n', '-p', 'TCP']
     elif IS_LINUX:
-        cmd = ['netstat', '-ant']
+        cmd = ['ss', '-ant']
     else:
         cmd = ['lsof', '-nPw', '-iTCP']
     p = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, creationflags=flags)
