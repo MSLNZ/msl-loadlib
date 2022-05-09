@@ -98,6 +98,7 @@ def main(spec=None, requires_pythonnet=True, requires_comtypes=True):
         '--noconfirm',
     ]
 
+    version_info_file = None
     if spec is None:
         spec_file = '{}.spec'.format(loadlib.SERVER_FILENAME)
         if os.path.exists(spec_file):
@@ -106,6 +107,13 @@ def main(spec=None, requires_pythonnet=True, requires_comtypes=True):
             if yn.lower() not in ('y', 'yes'):
                 print('Aborted.')
                 return
+
+        if loadlib.IS_WINDOWS:
+            version_info_file = _create_version_info_file(here)
+            cmd.extend([
+                '--version-file', version_info_file
+            ])
+
         cmd.extend([
             '--name', loadlib.SERVER_FILENAME,
             '--onefile',
@@ -122,18 +130,6 @@ def main(spec=None, requires_pythonnet=True, requires_comtypes=True):
         cmd.append(spec)
     subprocess.check_call(cmd)
 
-    # the --version-file option for pyinstaller does not currently work on Windows, this is a fix
-    verpatch = os.path.join(here, 'verpatch.exe')
-    if loadlib.IS_WINDOWS and os.path.isfile(verpatch):
-        ver = [verpatch,
-               os.path.join(here, loadlib.SERVER_FILENAME),
-               '/va', '{0}.{1}.{2}'.format(*loadlib.version_info) + '.0',
-               '/pv', '{0}.{1}.{2}.{4}'.format(*sys.version_info),
-               '/s', 'description', 'Access a 32-bit library from 64-bit Python',
-               '/s', 'product', 'Python 32-bit server',
-               '/s', 'copyright', loadlib.__copyright__]
-        subprocess.check_call(ver)
-
     # cleanup
     shutil.rmtree('./build/' + loadlib.SERVER_FILENAME)
     if not os.listdir('./build'):
@@ -142,6 +138,8 @@ def main(spec=None, requires_pythonnet=True, requires_comtypes=True):
         # pyinstaller is able to include Python.Runtime.dll and Python.Runtime.dll.config
         # automatically in the build, so we don't need to keep the .spec file
         os.remove(loadlib.SERVER_FILENAME + '.spec')
+    if version_info_file:
+        os.remove(version_info_file)
 
     # create the .NET Framework config file
     loadlib.utils.check_dot_net_config(os.path.join(here, loadlib.SERVER_FILENAME))
@@ -212,6 +210,58 @@ def _get_standard_modules():
         if include_module:
             included_modules.extend(['--hidden-import', module])
     return included_modules + excluded_modules
+
+
+def _create_version_info_file(root_path):
+    text = """# UTF-8
+#
+# For more details about fixed file info 'ffi' see:
+# https://docs.microsoft.com/en-us/windows/win32/api/verrsrc/ns-verrsrc-vs_fixedfileinfo
+# For language and charset parameters see:
+# https://docs.microsoft.com/en-us/windows/win32/menurc/stringfileinfo-block
+VSVersionInfo(
+  ffi=FixedFileInfo(
+    filevers=({loadlib_major}, {loadlib_minor}, {loadlib_micro}, 0),
+    prodvers=({py_major}, {py_minor}, {py_micro}, 0),
+    mask=0x3f,
+    flags=0x0,
+    OS=0x40004,
+    fileType=0x1,
+    subtype=0x0,
+    date=(0, 0)
+    ),
+  kids=[
+    StringFileInfo(
+      [
+      StringTable(
+        '000004B0',
+        [StringStruct('CompanyName', '{author}'),
+        StringStruct('FileDescription', 'Access a 32-bit library from 64-bit Python'),
+        StringStruct('FileVersion', '{loadlib_major}.{loadlib_minor}.{loadlib_micro}.0'),
+        StringStruct('InternalName', '{filename}'),
+        StringStruct('LegalCopyright', '\xc2{copyright}'),
+        StringStruct('OriginalFilename', '{filename}'),
+        StringStruct('ProductName', 'Python'),
+        StringStruct('ProductVersion', '{py_major}.{py_minor}.{py_micro}.0')])
+      ]), 
+    VarFileInfo([VarStruct('Translation', [0, 1200])])
+  ]
+)
+""".format(
+        loadlib_major=loadlib.version_info.major,
+        loadlib_minor=loadlib.version_info.minor,
+        loadlib_micro=loadlib.version_info.micro,
+        py_major=sys.version_info.major,
+        py_minor=sys.version_info.minor,
+        py_micro=sys.version_info.micro,
+        filename=loadlib.SERVER_FILENAME,
+        copyright=loadlib.__copyright__,
+        author=loadlib.__author__,
+    )
+    save_to = os.path.join(root_path, 'file_version_info.txt')
+    with open(save_to, mode='wt') as fp:
+        fp.write(text)
+    return save_to
 
 
 if __name__ == '__main__':
