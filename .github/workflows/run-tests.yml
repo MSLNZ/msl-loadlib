@@ -77,5 +77,11 @@ jobs:
       - name: Uninstall pythonnet (get a fatal crash)
         if: ${{ matrix.os == 'macos' && (matrix.python-version == '2.7' || matrix.python-version == '3.5') }}
         run: python -m pip uninstall --yes pythonnet
-      - name: Run tests
+      - name: Run tests (Windows)
+        if: ${{ matrix.os == 'windows' }}
+        run: |
+          python -m pip install --upgrade pytest-rerunfailures
+          python -m pytest --reruns 3 --only-rerun ConnectionTimeoutError
+      - name: Run tests (non Windows)
+        if: ${{ matrix.os != 'windows' }}
         run: python -m pytest
