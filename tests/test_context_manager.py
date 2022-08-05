@@ -99,7 +99,7 @@ def test_java(caplog):
 
     record = caplog.records[0]
     assert record.levelname == 'DEBUG'
-    assert record.msg == 'Loaded ' + library.path
+    assert record.msg == 'Loaded %s'
 
     record = caplog.records[1]
     assert record.levelname == 'DEBUG'
