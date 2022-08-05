@@ -31,7 +31,7 @@ def main():
     allowed, run the executable with the ``--help`` flag (or click here_ to view
     the source code of the :class:`argparse.ArgumentParser` implementation).
 
-    .. _here: https://msl-loadlib.readthedocs.io/en/latest/_modules/msl/loadlib/start_server32.html#main
+    .. _here: https://msl-loadlib.readthedocs.io/en/stable/_modules/msl/loadlib/start_server32.html#main
     """
     parser = argparse.ArgumentParser(
         description='Starts a 32-bit Python interpreter which allows for inter-process communication'

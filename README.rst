@@ -39,7 +39,7 @@ Optional dependencies:
 * comtypes_
 
 To set up your environment on Linux, please follow the instructions on the
-`prerequisites <https://msl-loadlib.readthedocs.io/en/latest/install.html#prerequisites>`_
+`prerequisites <https://msl-loadlib.readthedocs.io/en/stable/install.html#prerequisites>`_
 section of the documentation.
 
 Examples
@@ -161,16 +161,16 @@ We then use the library to create, edit and close a text file
 from a module that is running within a 64-bit Python interpreter. The procedure
 uses a client-server protocol where the client is a subclass of ``msl.loadlib.Client64``
 and the server is a subclass of ``msl.loadlib.Server32``. See the
-`tutorials <https://msl-loadlib.readthedocs.io/en/latest/interprocess_communication.html>`_
+`tutorials <https://msl-loadlib.readthedocs.io/en/stable/interprocess_communication.html>`_
 for examples on how to implement `inter-process communication <ipc_>`_.
 
 Documentation
 -------------
 
 The documentation for **MSL-LoadLib** can be found
-`here <https://msl-loadlib.readthedocs.io/en/latest/index.html>`_.
+`here <https://msl-loadlib.readthedocs.io/en/stable/index.html>`_.
 
-.. |docs| image:: https://readthedocs.org/projects/msl-loadlib/badge/?version=stable
+.. |docs| image:: https://readthedocs.org/projects/msl-loadlib/badge/?version=latest
    :target: https://msl-loadlib.readthedocs.io/en/stable/
    :alt: Documentation Status
 
@@ -185,7 +185,7 @@ The documentation for **MSL-LoadLib** can be found
 .. _Py4J: https://www.py4j.org/
 .. _ipc: https://en.wikipedia.org/wiki/Inter-process_communication
 .. _Java Virtual Machine: https://en.wikipedia.org/wiki/Java_virtual_machine
-.. _MSL Package Manager: https://msl-package-manager.readthedocs.io/en/latest/
+.. _MSL Package Manager: https://msl-package-manager.readthedocs.io/en/stable/
 .. _comtypes: https://pythonhosted.org/comtypes/#
 .. _Component Object Model: https://en.wikipedia.org/wiki/Component_Object_Model
 .. _FileSystemObject: https://docs.microsoft.com/en-us/office/vba/language/reference/user-interface-help/filesystemobject-object
