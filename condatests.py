@@ -106,7 +106,7 @@ def get_executable(base_exec_path):
     for item in EXECUTABLES:
         if os.path.isfile(os.path.join(path, item+EXT)):
             return [item]
-    raise IOError('The only supported executables are: {}'.format(', '.join(EXECUTABLES)))
+    raise OSError('The only supported executables are: {}'.format(', '.join(EXECUTABLES)))
 
 
 def ini_parser(path):
