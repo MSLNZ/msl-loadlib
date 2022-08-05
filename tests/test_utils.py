@@ -85,7 +85,7 @@ def test_check_dot_net_config():
     <something>7</something>
 </configuration>
 """
-    with open(cfg, 'w') as f:
+    with open(cfg, mode='wt') as f:
         f.write(cfg_string)
     val, msg = utils.check_dot_net_config(exe)
     assert val == 1
