@@ -342,7 +342,7 @@ public class Matrix {
    * Computes the QR Factorization matrices using a modified 
    * Gram–Schmidt process.<p>
    * 
-   * @see http://www.inf.ethz.ch/personal/gander/papers/qrneu.pdf
+   * @see https://people.inf.ethz.ch/gander/papers/qrneu.pdf
    */
   private void makeQR() {
     

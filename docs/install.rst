@@ -238,7 +238,7 @@ and a `Java Runtime Environment`_
 .. _Java Runtime Environment: https://www.oracle.com/technetwork/java/javase/downloads/index.html
 .. _Component Object Model: https://en.wikipedia.org/wiki/Component_Object_Model
 .. _Dependencies: https://github.com/lucasg/Dependencies
-.. _Dependency Walker: http://www.dependencywalker.com/
+.. _Dependency Walker: https://www.dependencywalker.com/
 .. _Dependency Walker for .NET: https://github.com/isindicic/DependencyWalker.Net
 .. _Mono: https://www.mono-project.com/download/stable/
 .. _issues: https://github.com/pythonnet/pythonnet/issues
