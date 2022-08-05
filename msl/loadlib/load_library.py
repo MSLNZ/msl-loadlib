@@ -326,7 +326,7 @@ class LoadLibrary(object):
                 utils.logger.error(e)
                 utils.logger.error('The LoaderExceptions are:')
                 for item in e.LoaderExceptions:
-                    utils.logger.error('  ' + item.Message)
+                    utils.logger.error('  %s', item.Message)
             else:
                 for t in types:
                     try:
@@ -349,7 +349,7 @@ class LoadLibrary(object):
         if IS_PYTHON2:
             self._path = self._path.decode(_encoding)
 
-        utils.logger.debug('Loaded ' + self._path)
+        utils.logger.debug('Loaded %s', self._path)
 
     def __del__(self):
         if hasattr(self, '_gateway'):

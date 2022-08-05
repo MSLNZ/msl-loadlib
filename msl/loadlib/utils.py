@@ -342,7 +342,7 @@ def get_com_info(*additional_keys):
         except OSError:
             continue
         else:
-            logger.debug(r'Parsing HKEY_CLASSES_ROOT\{}\...'.format(item))
+            logger.debug(r'Parsing HKEY_CLASSES_ROOT\%s\...', item)
 
         index = -1
         while True:
