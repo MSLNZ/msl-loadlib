@@ -223,7 +223,7 @@ def test_server32_error():
         c.add('hello', 'world')
     except loadlib.Server32Error as e:
         assert e.name == 'TypeError'
-        assert e.value.startswith('an integer is required')
+        assert e.value.endswith('cannot be interpreted as an integer')
         assert e.traceback.endswith('return self.lib.add(ctypes.c_int32(a), ctypes.c_int32(b))')
 
 
