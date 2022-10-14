@@ -49,10 +49,11 @@ def main(spec=None, requires_pythonnet=True, requires_comtypes=True):
         If you want to freeze using a PyInstaller_ .spec file then you can specify the
         path to the .spec file.
     requires_pythonnet : :class:`bool`, optional
-        Whether `Python for .NET`_ must be available on the 32-bit server.
+        Whether `Python for .NET`_ must be available on the frozen 32-bit server.
+        This argument is ignored for a non-Windows operating system.
     requires_comtypes : :class:`bool`, optional
-        Whether comtypes_ must be available on the 32-bit server. If you using a
-        non-Windows operating system then this argument is ignored.
+        Whether comtypes_ must be available on the frozen 32-bit server.
+        This argument is ignored for a non-Windows operating system.
     """
     if loadlib.IS_PYTHON_64BIT:
         print('Must run {} using a 32-bit Python interpreter'.format(os.path.basename(__file__)))
@@ -64,7 +65,7 @@ def main(spec=None, requires_pythonnet=True, requires_comtypes=True):
     except ImportError:
         missing_packages.append('pyinstaller')
 
-    if requires_pythonnet:
+    if loadlib.IS_WINDOWS and requires_pythonnet:
         try:
             import clr
         except ImportError:
@@ -120,7 +121,7 @@ def main(spec=None, requires_pythonnet=True, requires_comtypes=True):
             '--clean',
             '--hidden-import', 'msl.examples.loadlib',
         ])
-        if requires_pythonnet:
+        if loadlib.IS_WINDOWS and requires_pythonnet:
             cmd.extend(['--hidden-import', 'clr'])
         if loadlib.IS_WINDOWS and requires_comtypes:
             cmd.extend(['--hidden-import', 'comtypes'])
