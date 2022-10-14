@@ -208,7 +208,7 @@ def main():
 
     try:
         server.serve_forever()
-    except KeyboardInterrupt:
+    except (SystemExit, KeyboardInterrupt):
         pass
     except Exception as e:
         # only get here if there is an exception in the serve_forever() code.
