@@ -145,10 +145,9 @@ def _get_standard_modules():
     Returns a list of standard python modules to include and exclude in the
     frozen application.
 
-    PyInstaller does not automatically bundle all of the standard Python modules
-    into the frozen application. This
-    method parses the 'docs.python.org' website for the list of standard Python
-    modules that are available.
+    PyInstaller does not automatically bundle all the standard Python modules
+    into the frozen application. This method parses the 'docs.python.org'
+    website for the list of standard Python modules that are available.
 
     The 'pyinstaller --exclude-module' option ensures that the module is
     excluded from the frozen application.
@@ -163,9 +162,10 @@ def _get_standard_modules():
         A list of modules to be included and excluded.
     """
 
-    # the frozen application is never meant to create GUIs or to add
+    # the frozen application is not meant to create GUIs or to add
     # support for building and installing Python modules
-    ignore_list = ['__main__', 'distutils', 'ensurepip', 'test', 'tkinter', 'turtle', 'lib2to3']
+    ignore_list = ['__main__', 'distutils', 'ensurepip', 'idlelib', 'lib2to3'
+                   'test', 'tkinter', 'turtle']
 
     # some modules are platform specific and got a
     #   RecursionError: maximum recursion depth exceeded
