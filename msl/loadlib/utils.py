@@ -76,7 +76,6 @@ def is_pythonnet_installed():
     try:
         import clr
     except ImportError:
-        logger.warning('Python for .NET <pythonnet> is not installed. Cannot load a .NET library.')
         return False
     return True
 
@@ -96,7 +95,6 @@ def is_py4j_installed():
     try:
         import py4j
     except ImportError:
-        logger.warning('Py4j is not installed. Cannot load a JAVA archive or class file.')
         return False
     return True
 
@@ -116,7 +114,6 @@ def is_comtypes_installed():
     try:
         import comtypes
     except ImportError:
-        logger.warning('comtypes is not installed. Cannot load a COM library.')
         return False
     return True
 
