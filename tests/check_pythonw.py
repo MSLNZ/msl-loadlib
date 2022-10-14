@@ -1,7 +1,7 @@
 """
 Checks that running a script with pythonw.exe does not
 1) create a new console
-2) the console that pythonw.exe is executing on does not "flash"
+2) the console that pythonw.exe is executing in does not "flash"
 """
 import os
 import sys
@@ -10,11 +10,9 @@ import sys
 path = os.path.abspath(os.path.join(os.path.dirname(__file__), os.pardir))
 sys.path.insert(0, path)
 
+from msl.examples.loadlib import Cpp64
+from msl.examples.loadlib import EXAMPLES_DIR
 from msl.loadlib import LoadLibrary
-from msl.examples.loadlib import (
-    EXAMPLES_DIR,
-    Cpp64,
-)
 
 if os.path.basename(sys.executable) != 'pythonw.exe':
     raise RuntimeError(
@@ -22,8 +20,13 @@ if os.path.basename(sys.executable) != 'pythonw.exe':
         '  pythonw.exe ' + __file__
     )
 
-with LoadLibrary(os.path.join(EXAMPLES_DIR, 'Trig.class')) as java:
-    pass
+sys.stdout = open(__file__[:-3]+'.txt', mode='wt')
+sys.stderr = sys.stdout
 
-with Cpp64():
-    pass
+with LoadLibrary(os.path.join(EXAMPLES_DIR, 'Trig.class')) as java:
+    print(java)
+
+with Cpp64() as cpp:
+    print(cpp)
+
+print('You should delete this file')

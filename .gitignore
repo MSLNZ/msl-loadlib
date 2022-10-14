@@ -42,6 +42,7 @@ junit.xml
 coverage.xml
 condatests.ini
 stdout.txt
+/tests/check_pythonw.txt
 
 # MANIFEST.in is now auto-generated based on the platform
 MANIFEST.in
