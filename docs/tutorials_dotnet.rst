@@ -53,8 +53,8 @@ Divide two C# floating-point numbers, see
 
 .. code-block:: pycon
 
-   >>> dn.divide_floats(4., 5.)
-   0.8
+   >>> dn.divide_floats(3., 2.)
+   1.5
 
 Multiple two C# double-precision numbers, see
 :meth:`~msl.examples.loadlib.dotnet64.DotNet64.multiply_doubles`
