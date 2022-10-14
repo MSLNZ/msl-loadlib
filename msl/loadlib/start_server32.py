@@ -211,12 +211,13 @@ def main():
     except (SystemExit, KeyboardInterrupt):
         pass
     except Exception as e:
-        # only get here if there is an exception in the serve_forever() code.
-        # error handling for a request is handled by the RequestHandler class
-        print('{}: {}'.format(e.__class__.__name__, e), file=sys.stderr)
+        # Can only get here if starting the server raised an exception.
+        # Error handling for a request is handled by the RequestHandler class.
+        print('Starting the 32-bit server raised the following exception,\n' \
+              '  {}: {}'.format(e.__class__.__name__, e), file=sys.stderr)
+        return -1
     finally:
         server.server_close()
-        return 0
 
 
 if __name__ == '__main__':
