@@ -46,8 +46,8 @@ def main(spec=None, requires_pythonnet=True, requires_comtypes=True):
     Parameters
     ----------
     spec : :class:`str`, optional
-        If you want to freeze using a PyInstaller_ .spec file then you can specify the
-        path to the .spec file.
+        The path to a PyInstaller_ .spec file to use to create the frozen
+        32-bit server.
     requires_pythonnet : :class:`bool`, optional
         Whether `Python for .NET`_ must be available on the frozen 32-bit server.
         This argument is ignored for a non-Windows operating system.
@@ -101,14 +101,6 @@ def main(spec=None, requires_pythonnet=True, requires_comtypes=True):
 
     version_info_file = None
     if spec is None:
-        spec_file = '{}.spec'.format(loadlib.SERVER_FILENAME)
-        if os.path.exists(spec_file):
-            yn = input('A {0} file exists. You may want to run "python freeze_server32.py --spec {0}"\n'
-                       'Do you want to continue and overwrite the spec file (y/[n])? '.format(spec_file))
-            if yn.lower() not in ('y', 'yes'):
-                print('Aborted.')
-                return
-
         if loadlib.IS_WINDOWS:
             version_info_file = _create_version_info_file(here)
             cmd.extend([
@@ -135,12 +127,12 @@ def main(spec=None, requires_pythonnet=True, requires_comtypes=True):
     shutil.rmtree('./build/' + loadlib.SERVER_FILENAME)
     if not os.listdir('./build'):
         shutil.rmtree('./build')
-    if loadlib.IS_WINDOWS:
-        # pyinstaller is able to include Python.Runtime.dll and Python.Runtime.dll.config
-        # automatically in the build, so we don't need to keep the .spec file
-        os.remove(loadlib.SERVER_FILENAME + '.spec')
     if version_info_file:
         os.remove(version_info_file)
+    try:
+        os.remove(loadlib.SERVER_FILENAME + '.spec')
+    except OSError:
+        pass
 
     # create the .NET Framework config file
     loadlib.utils.check_dot_net_config(os.path.join(here, loadlib.SERVER_FILENAME))
