@@ -73,7 +73,7 @@ class Server32(HTTPServer):
         self._assembly = self._library.assembly
         self._lib = self._library.lib
         self._path = self._library.path
-        super(Server32, self).__init__((host, int(port)), _RequestHandler)
+        super(Server32, self).__init__((host, int(port)), _RequestHandler, bind_and_activate=False)
 
     @property
     def assembly(self):

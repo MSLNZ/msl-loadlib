@@ -207,6 +207,8 @@ def main():
         return -1
 
     try:
+        server.server_bind()
+        server.server_activate()
         server.serve_forever()
     except (SystemExit, KeyboardInterrupt):
         pass
