@@ -37,6 +37,21 @@ def check(module_name, match):
 
 
 @skipif_no_server32
+def test_no_module():
+    check('', r'specify a Python module')
+
+
+@skipif_no_server32
+def test_relative_import():
+    check('.relative', r'Cannot perform relative imports')
+
+
+@skipif_no_server32
+def test_import_error():
+    check('doesnotexist', r'module must be in sys.path')
+
+
+@skipif_no_server32
 def test_no_server32_subclass():
     check('no_server32_subclass', r'Module does not contain a class that is a subclass of Server32')
 
