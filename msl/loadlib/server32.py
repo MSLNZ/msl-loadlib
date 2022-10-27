@@ -288,7 +288,11 @@ class _RequestHandler(BaseHTTPRequestHandler):
         """Handle a GET request."""
         try:
             if self.path == METADATA:
-                response = {'path': self.server.path, 'pid': os.getpid()}
+                response = {
+                    'path': self.server.path,
+                    'pid': os.getpid(),
+                    'unfrozen_dir': sys._MEIPASS,
+                }
             else:
                 with open(self.server.pickle_path, mode='rb') as f:
                     args = pickle.load(f)
