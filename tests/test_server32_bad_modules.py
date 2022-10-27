@@ -20,7 +20,10 @@ def check(module_name, match):
     # This test module is a bit buggy.
     # Sometimes we get a ConnectionRefusedError that we want to ignore.
     attempts = 1
-    max_attempts = 3
+
+    # Set max_attempts to 1 to see if calling server_bind() and server_activate()
+    # immediately before serve_forever() fixed the ConnectionRefusedError
+    max_attempts = 1
     while True:
         try:
             with pytest.raises(ConnectionTimeoutError, match=match):
