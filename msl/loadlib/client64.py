@@ -318,8 +318,8 @@ class Client64(object):
     def shutdown_server32(self, kill_timeout=10):
         """Shutdown the 32-bit server.
 
-        This method shuts down the 32-bit server, closes the client connection
-        and it deletes the temporary file that is used to save the serialized
+        This method shuts down the 32-bit server, closes the client connection,
+        and deletes the temporary file that is used to save the serialized
         :mod:`pickle`\'d data.
 
         .. versionchanged:: 0.6
