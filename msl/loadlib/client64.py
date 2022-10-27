@@ -190,7 +190,7 @@ class Client64(object):
         if quiet is not None:
             warnings.simplefilter('once', DeprecationWarning)
             warnings.warn(
-                'the `quiet` keyword argument for Client64 is ignored and will be removed in version 0.9',
+                "the 'quiet' keyword argument for Client64 is ignored and will be removed in a future release",
                 DeprecationWarning,
                 stacklevel=2
             )
