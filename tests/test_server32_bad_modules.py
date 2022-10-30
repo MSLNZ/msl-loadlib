@@ -48,6 +48,12 @@ def test_relative_import():
 
 @skipif_no_server32
 def test_import_error():
+    # the module import_error.py exists, but the module imports a package that does not exist
+    check('import_error', r"No module named 'missing'")
+
+
+@skipif_no_server32
+def test_import_error2():
     check('doesnotexist', r'module must be in sys.path')
 
 
@@ -64,6 +70,11 @@ def test_no_init():
 @skipif_no_server32
 def test_bad_init_args():
     check('bad_init_args', r'class BadInitArgs\(Server32\):')
+
+
+@skipif_no_server32
+def test_bad_init_args2():
+    check('bad_init_args2', r"missing 2 required positional arguments: 'quiet' and 'extra'\s+Check that")
 
 
 @skipif_no_server32
@@ -89,6 +100,16 @@ def test_bad_lib_type():
 @skipif_no_server32
 def test_unexpected_error():
     check('unexpected_error', r'ZeroDivisionError')
+
+
+@skipif_no_server32
+def test_unexpected_error2():
+    check('unexpected_error2', r'TypeError: unsupported operand')
+
+
+@skipif_no_server32
+def test_unexpected_error3():
+    check('unexpected_error3', r"NameError: name 'y' is not defined")
 
 
 @skipif_no_server32
