@@ -18,7 +18,10 @@ class ConnectionTimeoutError(OSError):
         super(ConnectionTimeoutError, self).__init__(*args, **kwargs)
 
     def __str__(self):
-        return self.timeout_message + '\n' + self.reason
+        msg = u'{}\n{}'.format(self.timeout_message, self.reason)
+        if IS_PYTHON2:
+            return msg.encode('utf-8')
+        return msg
 
 
 class Server32Error(HTTPException):
