@@ -147,11 +147,11 @@ def main():
     try:
         mod = importlib.import_module(args.module)
     except ImportError as e:
-        # the first two paths are TEMP folders from the frozen application
-        paths = '\n  '.join(item for item in sys.path[2:])
+        # ignore the folders from the unfrozen application
+        paths = '\n  '.join(item for item in sys.path if not item.startswith(sys._MEIPASS))
         err = 'ImportError: {}\n' \
               'The missing module must be in sys.path (see the --append-sys-path option)\n' \
-              'The paths in sys.path are:\n  {}\n' \
+              'The paths in sys.path are:\n  {}\n\n' \
               'Cannot start the 32-bit server.'.format(e, paths)
         print(err, file=sys.stderr)
         return -1
