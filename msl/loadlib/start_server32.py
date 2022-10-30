@@ -15,6 +15,7 @@ import sys
 import code
 import inspect
 import argparse
+import traceback
 import importlib
 
 from msl.loadlib import (
@@ -154,6 +155,11 @@ def main():
               'Cannot start the 32-bit server.'.format(e, paths)
         print(err, file=sys.stderr)
         return -1
+    except Exception:
+        err = 'Importing {!r} on the 32-bit server raised the following exception:\n\n' \
+              '{}\nCannot start the 32-bit server.'.format(args.module, traceback.format_exc())
+        print(err, file=sys.stderr)
+        return -1
 
     # ensure that there is a subclass of Server32 in the module
     cls = None
@@ -169,7 +175,7 @@ def main():
         print(err, file=sys.stderr)
         return -1
 
-    server, error = None, None
+    server, error, tb = None, None, None
     try:
         server = cls(args.host, args.port, **kwargs)
     except Exception as e:
@@ -179,15 +185,16 @@ def main():
                 server = cls(args.host, args.port, True, **kwargs)
             except Exception as e:
                 error = e
+                tb = traceback.format_exc()
         else:
             error = e
+            tb = traceback.format_exc()
 
     if error is not None:
-        err = 'Instantiating the 32-bit server raised the following exception:\n' \
-              '  {}: {}\n'.format(error.__class__.__name__, error)
+        err = 'Instantiating {!r} raised the following exception:\n\n{}\n'.format(cls.__name__, tb)
 
         if error.__class__.__name__ == 'TypeError' and '__init__' in str(error):
-            err += 'Check that the \'{0}\' class is defined with the following syntax:\n\n' \
+            err += 'Check that the {0!r} class is defined with the following syntax\n\n' \
                    'class {0}(Server32):\n' \
                    '    def __init__(self, host, port, **kwargs):\n' \
                    '        super({0}, self).__init__(path, libtype, host, port, **kwargs)\n\n'.format(cls.__name__)
@@ -198,7 +205,7 @@ def main():
 
     if not hasattr(server, '_library'):
         err = 'The super() function was never called in the Server32 subclass.\n' \
-              'Check that the \'{0}\' class is defined with the following syntax:\n\n' \
+              'Check that the {0!r} class is defined with the following syntax\n\n' \
               'class {0}(Server32):\n' \
               '    def __init__(self, host, port, **kwargs):\n' \
               '        super({0}, self).__init__(path, libtype, host, port, **kwargs)\n\n' \
@@ -212,11 +219,11 @@ def main():
         server.serve_forever()
     except (SystemExit, KeyboardInterrupt):
         pass
-    except Exception as e:
-        # Can only get here if starting the server raised an exception.
+    except Exception:
+        # Can only get here if starting the HTTPServer raised an exception.
         # Error handling for a request is handled by the RequestHandler class.
-        print('Starting the 32-bit server raised the following exception,\n' \
-              '  {}: {}'.format(e.__class__.__name__, e), file=sys.stderr)
+        print('Binding, activating and starting the HTTPServer raised the following exception\n'
+              '{}'.format(traceback.format_exc()), file=sys.stderr)
         return -1
     finally:
         server.server_close()
