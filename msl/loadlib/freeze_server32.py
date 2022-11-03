@@ -86,21 +86,20 @@ def main(spec=None, requires_pythonnet=True, requires_comtypes=True):
         print('pip install ' + ' '.join(missing_packages))
         return
 
-    # start the freezing process
-
     here = os.path.abspath(os.path.dirname(__file__))
-    cmd = [
-        # Specifically invoke pyinstaller in the context of the current
-        # python interpreter. This fixes the issue where the blind `pyinstaller`
-        # invocation points to a 64-bit version.
-        sys.executable,
-        '-m', 'PyInstaller',
-        '--distpath', here,
-        '--noconfirm',
-    ]
+
+    # Specifically invoke pyinstaller in the context of the current python interpreter.
+    # This fixes the issue where the blind `pyinstaller` invocation points to a 64-bit version.
+    cmd = [sys.executable, '-m', 'PyInstaller']
 
     version_info_file = None
     if spec is None:
+        cmd.extend([
+            '--distpath', here,
+            '--python-option', 'u',
+            '--noconfirm',
+        ])
+
         if loadlib.IS_WINDOWS:
             version_info_file = _create_version_info_file(here)
             cmd.extend([
