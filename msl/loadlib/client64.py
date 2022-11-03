@@ -232,8 +232,10 @@ class Client64(object):
         self._meta32 = self.request32(METADATA)
 
     def __del__(self):
-        if hasattr(self, '_conn'):
+        try:
             self._cleanup()
+        except:
+            pass
 
     def __repr__(self):
         msg = '<{} '.format(self.__class__.__name__)

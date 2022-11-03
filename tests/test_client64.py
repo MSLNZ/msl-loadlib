@@ -38,7 +38,7 @@ def test_unclosed_warnings_2(recwarn):
 
 def test_bad_del():
     # Make sure that the following exception is not raised in Client64.__del__
-    #   AttributeError: 'BadDel' object has no attribute '_conn'"""
+    #   AttributeError: 'BadDel' object has no attribute '_conn'
 
     class BadDel(Client64):
         def __init__(self):
@@ -48,12 +48,9 @@ def test_bad_del():
     b.__del__()
     del b
 
-    # the following will raise the error because the
-    # Client64 class was not instantiated
+    with BadDel():
+        pass
 
+    # this should raise AttributeError because super() was not called in BadDel
     with pytest.raises(AttributeError, match='_conn'):
         BadDel().request32('request')
-
-    with pytest.raises(AttributeError, match='_conn'):
-        with BadDel():
-            pass
