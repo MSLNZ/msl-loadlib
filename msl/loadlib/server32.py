@@ -131,7 +131,7 @@ class Server32(HTTPServer):
 
             >>> from msl.loadlib import Server32
             >>> Server32.version()
-            'Python 3.10.8 ...'
+            'Python 3.11.0 ...'
 
         Note
         ----

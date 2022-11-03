@@ -12,7 +12,7 @@ The following error will be displayed when the script exits (but that's ok)
 
 """
 
-# Builtin modules in Python 3.10 (https://docs.python.org/3/py-modindex.html)
+# Builtin modules in Python 3.11 (https://docs.python.org/3/py-modindex.html)
 # (module-name, operating-system-dependency)
 modules = [
     ('__future__', ''),
@@ -31,7 +31,6 @@ modules = [
     ('base64', ''),
     ('bdb', ''),
     ('binascii', ''),
-    ('binhex', ''),
     ('bisect', ''),
     ('builtins', ''),
     ('bz2', ''),
@@ -80,7 +79,6 @@ modules = [
     ('distutils.command', ''),
     ('distutils.command.bdist', ''),
     ('distutils.command.bdist_dumb', ''),
-    ('distutils.command.bdist_msi', ''),
     ('distutils.command.bdist_packager', ''),
     ('distutils.command.bdist_rpm', ''),
     ('distutils.command.build', ''),
@@ -175,6 +173,7 @@ modules = [
     ('importlib.machinery', ''),
     ('importlib.metadata', ''),
     ('importlib.resources', ''),
+    ('importlib.resources.abc', ''),
     ('importlib.util', ''),
     ('inspect', ''),
     ('io', ''),
@@ -301,6 +300,7 @@ modules = [
     ('tkinter.ttk', ''),
     ('token', ''),
     ('tokenize', ''),
+    ('tomllib', ''),
     ('trace', ''),
     ('traceback', ''),
     ('tracemalloc', ''),
@@ -331,6 +331,7 @@ modules = [
     ('wsgiref.handlers', ''),
     ('wsgiref.headers', ''),
     ('wsgiref.simple_server', ''),
+    ('wsgiref.types', ''),
     ('wsgiref.util', ''),
     ('wsgiref.validate', ''),
     ('xdrlib', ''),
@@ -360,8 +361,11 @@ print('The following modules cannot be imported')
 
 # these are mandatory
 from msl import loadlib
-from msl.loadlib import LoadLibrary, Client64, Server32
-from msl.loadlib.activex import Application, WS_CHILD
+from msl.loadlib import LoadLibrary
+from msl.loadlib import Client64
+from msl.loadlib import Server32
+from msl.loadlib.activex import Application
+from msl.loadlib.activex import WS_CHILD
 from msl.examples.loadlib import EXAMPLES_DIR
 
 if loadlib.IS_WINDOWS:
