@@ -205,7 +205,16 @@ class Client64(object):
         except ConnectionTimeoutError as err:
             self._wait(timeout=0, stacklevel=4)
             # if the subprocess was killed then self._wait sets returncode to -2
-            if self._proc.returncode != -2:
+            if self._proc.returncode == -2:
+                self._cleanup_zombie_and_files()
+                stdout = self._proc.stdout.read()
+                if not stdout:
+                    err.reason = 'You can add print() statements to {!r} ' \
+                                 'to help debug the issue'.format(module32)
+                else:
+                    decoded = stdout.decode(encoding='utf-8', errors='replace')
+                    err.reason = 'stdout from {!r} is:\n{}'.format(module32, decoded)
+            else:
                 stderr = self._proc.stderr.read()
                 err.reason = stderr.decode(encoding='utf-8', errors='replace')
             raise
