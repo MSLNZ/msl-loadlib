@@ -17,6 +17,7 @@ import inspect
 import argparse
 import traceback
 import importlib
+import tempfile
 
 from msl.loadlib import (
     Server32,
@@ -143,6 +144,10 @@ def main():
               'Cannot start the 32-bit server.'.format(args.module)
         print(err, file=sys.stderr)
         return -1
+
+    f = os.path.join(tempfile.gettempdir(), 'msl-loadlib-{}-{}.txt'.format(args.host, args.port))
+    with open(f, mode='wt') as fp:
+        fp.write('{}\n{}'.format(os.getpid(), sys._MEIPASS))
 
     try:
         mod = importlib.import_module(args.module)

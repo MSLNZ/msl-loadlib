@@ -7,9 +7,9 @@ from 64-bit Python.
 """
 import os
 import sys
-import uuid
 import json
 import time
+import shutil
 import socket
 import tempfile
 import warnings
@@ -118,15 +118,17 @@ class Client64(object):
         TypeError
             If the data type of `append_sys_path` or `append_environ_path` is invalid.
         """
-        self._meta32 = None
+        self._meta32 = {}
         self._conn = None
         self._proc = None
 
         if port is None:
             port = utils.get_available_port()
 
-        # the temporary file to use to save the pickle'd data
-        self._pickle_path = os.path.join(tempfile.gettempdir(), str(uuid.uuid4())+'.pickle')
+        # the temporary files
+        f = os.path.join(tempfile.gettempdir(), 'msl-loadlib-{}-{}'.format(host, port))
+        self._pickle_path = f + '.pickle'
+        self._meta_path = f + '.txt'
 
         if protocol is None:
             # select the pickle protocol to use based on the 64-bit version of Python
@@ -361,16 +363,7 @@ class Client64(object):
         # give the frozen 32-bit server a chance to shut down gracefully
         self._wait(timeout=kill_timeout, stacklevel=3)
 
-        # the frozen 32-bit server can still block the process from terminating
-        # the <signal.SIGKILL 9> constant is not available on Windows
-        if self._meta32:
-            try:
-                os.kill(self._meta32['pid'], 9)
-            except OSError:
-                pass  # the server has already stopped
-
-        if os.path.isfile(self._pickle_path):
-            os.remove(self._pickle_path)
+        self._cleanup_zombie_and_files()
 
         self._conn.sock.shutdown(socket.SHUT_RDWR)
         self._conn.close()
@@ -389,6 +382,46 @@ class Client64(object):
                 break
 
     def _cleanup(self):
-        out, err = self.shutdown_server32()
-        out.close()
-        err.close()
+        try:
+            out, err = self.shutdown_server32()
+            out.close()
+            err.close()
+        except AttributeError:
+            pass
+
+        try:
+            self._cleanup_zombie_and_files()
+        except AttributeError:
+            pass
+
+    def _cleanup_zombie_and_files(self):
+        try:
+            os.remove(self._pickle_path)
+        except OSError:
+            pass
+
+        if self._meta32:
+            pid = self._meta32['pid']
+            unfrozen_dir = self._meta32['unfrozen_dir']
+        else:
+            try:
+                with open(self._meta_path, mode='rt') as fp:
+                    lines = fp.readlines()
+            except (IOError, OSError, NameError):
+                return
+            else:
+                pid, unfrozen_dir = int(lines[0]), lines[1]
+
+        try:
+            # the <signal.SIGKILL 9> constant is not available on Windows
+            os.kill(pid, 9)
+        except OSError:
+            pass  # the server has already stopped
+
+        # cleans up PyInstaller issue #2379 if the server was killed
+        shutil.rmtree(unfrozen_dir, ignore_errors=True)
+
+        try:
+            os.remove(self._meta_path)
+        except OSError:
+            pass
