@@ -90,10 +90,10 @@ version of Java that is installed
 
 .. code-block:: console
 
-   C:\Users\username>java -version
-   java 15.0.1 2020-10-20
-   Java(TM) SE Runtime Environment (build 15.0.1+9-18)
-   Java HotSpot(TM) 64-Bit Server VM (build 15.0.1+9-18, mixed mode, sharing)
+   C:\Users\username>java --version
+   java 19 2022-09-20
+   Java(TM) SE Runtime Environment (build 19+36-2238)
+   Java HotSpot(TM) 64-Bit Server VM (build 19+36-2238, mixed mode, sharing)
 
 If you need to load a `Component Object Model`_ library then you must
 install comtypes_
@@ -134,15 +134,8 @@ The following ensures that the ss_ command is available
 
    sudo apt install iproute2
 
-If you need to load a Microsoft .NET library then you must install Mono_,
-the prerequisites to build `Python for .NET`_ from source,
-
-.. code-block:: console
-
-   sudo apt install libglib2.0-dev clang python3-pip python3-dev
-   pip3 install pycparser
-
-and then install `Python for .NET`_
+If you need to load a Microsoft .NET library then you must install Mono_
+(see `here <Mono_>`_ for instructions) and `Python for .NET`_
 
 .. code-block:: console
 
@@ -150,13 +143,29 @@ and then install `Python for .NET`_
 
 .. attention::
 
+   If your version of Python is < 3.7, wheels for pythonnet are not available on PyPI
+   and you must build `Python for .NET`_ from source. First, install the build dependencies,
+
+   .. code-block:: console
+
+      sudo apt install libglib2.0-dev clang python3-pip python3-dev
+      pip3 install pycparser
+
+   and then install `Python for .NET`_
+
+   .. code-block:: console
+
+      pip3 install pythonnet
+
+   If you have problems installing `Python for .NET`_ then the best place
+   to find help is on the issues_ page of `Python for .NET`_\'s repository.
+
+.. important::
+
    As of version 0.10.0 of MSL-LoadLib, pythonnet is no longer available
    on the 32-bit server for Linux. Mono can load both 32-bit and 64-bit
    libraries and therefore a 32-bit .NET library can be loaded directly
    via :class:`~msl.loadlib.load_library.LoadLibrary` on 64-bit Linux.
-
-If you have problems installing `Python for .NET`_ then the best place
-to find help is on the issues_ page of `Python for .NET`_\'s repository.
 
 If you need to load a Java library (i.e., a ``.jar`` or ``.class`` file)
 then you must install Py4J_,
@@ -200,21 +209,35 @@ To load a C/C++ or FORTRAN library install gcc (which includes gfortran)
    brew install gcc
 
 If you need to load a Microsoft .NET library then you must install Mono_,
-the prerequisites to build `Python for .NET`_ from source,
 
 .. code-block:: console
 
-   brew install pkg-config glib mono
-   pip3 install pycparser
+   brew install mono
 
-and then install `Python for .NET`_
+and `Python for .NET`_
 
 .. code-block:: console
 
    pip3 install pythonnet
 
-If you have problems installing `Python for .NET`_ then the best place
-to find help is on the issues_ page of `Python for .NET`_\'s repository.
+.. attention::
+
+   If your version of Python is < 3.7, wheels for pythonnet are not available on PyPI
+   and you must build `Python for .NET`_ from source. First, install the build dependencies,
+
+   .. code-block:: console
+
+      brew install pkg-config glib
+      pip3 install pycparser
+
+   and then install `Python for .NET`_
+
+   .. code-block:: console
+
+      pip3 install pythonnet
+
+   If you have problems installing `Python for .NET`_ then the best place
+   to find help is on the issues_ page of `Python for .NET`_\'s repository.
 
 If you need to load a Java library (i.e., a ``.jar`` or ``.class`` file)
 then you must install Py4J_,
