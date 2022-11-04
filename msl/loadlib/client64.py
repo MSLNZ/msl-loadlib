@@ -140,8 +140,7 @@ class Client64(object):
             elif major == 3 and minor < 8:
                 self._pickle_protocol = 4
             else:
-                # TODO protocol version 5 was added in Python 3.8 (see PEP 574).
-                self._pickle_protocol = 4
+                self._pickle_protocol = 5
         else:
             self._pickle_protocol = protocol
 
