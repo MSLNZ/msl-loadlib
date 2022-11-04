@@ -180,7 +180,7 @@ def check_dot_net_config(py_exe_path):
                   'To load an assembly from a .NET Framework version < 4.0 the following\n' \
                   'must be in {config_path}\n\n' \
                   '<configuration>{fix}</configuration>\n'.format(
-                config_path=config_path, tag=root.tag, fix=NET_FRAMEWORK_FIX)
+                   config_path=config_path, tag=root.tag, fix=NET_FRAMEWORK_FIX)
             logger.warning(msg)
             return -1, msg
 
@@ -196,7 +196,7 @@ def check_dot_net_config(py_exe_path):
             msg = 'Added the useLegacyV2RuntimeActivationPolicy property to\n' \
                   '{config_path}\n' \
                   'Try again to see if Python can now load the .NET library.\n'.format(
-                config_path=config_path)
+                   config_path=config_path)
             return 1, msg
         else:
             if not policy.attrib['useLegacyV2RuntimeActivationPolicy'].lower() == 'true':
