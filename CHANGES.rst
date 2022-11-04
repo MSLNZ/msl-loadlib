@@ -7,6 +7,7 @@ Version 0.9.1 (in development)
 
 * Added
 
+  - Support for Python 3.11
   - Support for Python 3.10
   - :class:`~msl.loadlib.load_library.LoadLibrary` and :class:`~msl.loadlib.client64.Client64`
     can be used as a context manager (:ref:`with`)
