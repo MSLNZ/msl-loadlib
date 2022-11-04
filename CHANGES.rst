@@ -5,6 +5,11 @@ Changelog
 Version 0.9.1 (in development)
 ==============================
 
+* The 32-bit server is frozen with the following versions
+
+  - ``server32-windows.exe`` -- Python 3.11.0, pythonnet 3.0.1, comtypes 1.1.14
+  - ``server32-linux`` -- Python 3.11.0 (built with GLIBC 2.27)
+
 * Added
 
   - Support for Python 3.11
