@@ -7,15 +7,23 @@ Version 0.9.1 (in development)
 
 * Added
 
+  - Support for Python 3.10
+  - :class:`~msl.loadlib.load_library.LoadLibrary` and :class:`~msl.loadlib.client64.Client64`
+    can be used as a context manager (:ref:`with`)
+  - :meth:`LoadLibrary.cleanup() <msl.loadlib.load_library.LoadLibrary.cleanup>` method
   - ``~/.local/share/py4j`` to the search paths when looking for the
     ``py4j<version>.jar`` file
 
 * Changed
 
+  - :func:`~msl.loadlib.utils.is_port_in_use` only checks TCP ports and
+    it uses the ``ss`` command instead of ``netstat`` on linux
   - the example libraries for FORTRAN now depend on `libgfortran5` on linux
 
 * Fixed
 
+  - issue `#31 <https://github.com/MSLNZ/msl-loadlib/issues/31>`_ - suppress
+    console popups when using ``pythonw.exe``
   - issue `#24 <https://github.com/MSLNZ/msl-loadlib/issues/24>`_ - starting
     the 32-bit server could block forever by not honouring the timeout
 
