@@ -14,7 +14,7 @@ However, the primary advantage is that it is possible to communicate with a 32-b
 library from 64-bit Python.
 
 MSL-LoadLib is a pure-python package, but, `Python for .NET`_ depends on the .NET
-Common Language Runtime (CLR) on Windows and Mono Runtime on Linux and macOS and
+Common Language Runtime (CLR) on Windows and Mono Runtime on Linux/macOS, and
 Py4J_ depends on having a `Java Virtual Machine`_ installed.
 
 Install
@@ -65,7 +65,7 @@ are located
    >>> from msl.examples.loadlib import EXAMPLES_DIR
 
 If the file extension is not included then a default extension,
-``.dll`` (Windows) or ``.so`` (Linux), is used.
+``.dll`` (Windows), ``.so`` (Linux) or ``.dylib`` (macOS), is used.
 
 Load a `C++ <https://github.com/MSLNZ/msl-loadlib/blob/main/msl/examples/loadlib/cpp_lib.cpp>`_
 library and call the ``add`` function
