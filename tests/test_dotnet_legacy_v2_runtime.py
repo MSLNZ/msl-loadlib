@@ -1,16 +1,12 @@
 import os
 import sys
-from subprocess import (
-    Popen,
-    PIPE,
-)
+from subprocess import PIPE
+from subprocess import Popen
 
 import pytest
-from conftest import (
-    skipif_not_windows,
-    skipif_no_pythonnet,
-)
 
+from conftest import skipif_no_pythonnet
+from conftest import skipif_not_windows
 from msl.loadlib import LoadLibrary
 
 config_path = sys.executable + '.config'

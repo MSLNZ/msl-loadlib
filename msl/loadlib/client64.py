@@ -5,38 +5,34 @@ The :class:`~.server32.Server32` class is used in combination with the
 :class:`~.client64.Client64` class to communicate with a 32-bit shared library
 from 64-bit Python.
 """
-import os
-import sys
 import json
-import time
+import os
 import shutil
 import socket
-import tempfile
-import warnings
 import subprocess
+import sys
+import tempfile
+import time
+import warnings
 try:
-    from http.client import HTTPConnection, CannotSendRequest
+    from http.client import CannotSendRequest
+    from http.client import HTTPConnection
     import pickle
 except ImportError:  # then Python 2
+    from httplib import CannotSendRequest
+    from httplib import HTTPConnection
     import cPickle as pickle
-    from httplib import HTTPConnection, CannotSendRequest
 
-from . import (
-    utils,
-    SERVER_FILENAME,
-    IS_PYTHON2,
-    IS_WINDOWS,
-)
-from .server32 import (
-    METADATA,
-    SHUTDOWN,
-    OK,
-)
-from .exceptions import (
-    Server32Error,
-    ConnectionTimeoutError,
-    ResponseTimeoutError
-)
+from . import IS_PYTHON2
+from . import IS_WINDOWS
+from . import SERVER_FILENAME
+from . import utils
+from .exceptions import ConnectionTimeoutError
+from .exceptions import ResponseTimeoutError
+from .exceptions import Server32Error
+from .server32 import METADATA
+from .server32 import OK
+from .server32 import SHUTDOWN
 
 _encoding = sys.getfilesystemencoding()
 

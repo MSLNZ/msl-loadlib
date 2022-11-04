@@ -20,14 +20,10 @@ except:
         Form = object
 
 try:
-    from comtypes import (
-        IUnknown,
-        GUID,
-    )
-    from comtypes.client import (
-        GetEvents,
-        GetBestInterface,
-    )
+    from comtypes import GUID
+    from comtypes import IUnknown
+    from comtypes.client import GetBestInterface
+    from comtypes.client import GetEvents
 except:
     GUID = None
 

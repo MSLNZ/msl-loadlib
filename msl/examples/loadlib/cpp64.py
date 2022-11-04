@@ -14,8 +14,8 @@ is the 32-bit server for `inter-process communication <ipc_>`_.
 """
 import os
 
-from msl.loadlib import Client64
 from msl.examples.loadlib.cpp32 import FourPoints
+from msl.loadlib import Client64
 
 
 class Cpp64(Client64):

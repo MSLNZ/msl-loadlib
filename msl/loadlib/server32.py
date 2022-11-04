@@ -5,26 +5,26 @@ The :class:`~.server32.Server32` class is used in combination with the
 :class:`~.client64.Client64` class to communicate with a 32-bit shared library
 from 64-bit Python.
 """
+import json
 import os
 import re
-import sys
-import json
-import warnings
-import traceback
-import threading
 import subprocess
+import sys
+import threading
+import traceback
+import warnings
 try:
-    from http.server import HTTPServer, BaseHTTPRequestHandler
+    from http.server import BaseHTTPRequestHandler
+    from http.server import HTTPServer
     import pickle
 except ImportError:  # then Python 2
+    from BaseHTTPServer import BaseHTTPRequestHandler
+    from BaseHTTPServer import HTTPServer
     import cPickle as pickle
-    from BaseHTTPServer import HTTPServer, BaseHTTPRequestHandler
 
-from . import (
-    LoadLibrary,
-    SERVER_FILENAME,
-    IS_WINDOWS,
-)
+from . import IS_WINDOWS
+from . import LoadLibrary
+from . import SERVER_FILENAME
 
 METADATA = '-METADATA-'
 SHUTDOWN = '-SHUTDOWN-'

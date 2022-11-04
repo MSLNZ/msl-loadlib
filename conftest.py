@@ -7,7 +7,6 @@ try:
 except ImportError:
     clr = None
 
-
 from msl import loadlib
 
 

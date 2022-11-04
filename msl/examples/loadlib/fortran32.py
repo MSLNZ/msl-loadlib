@@ -7,8 +7,8 @@ module can be executed by a 64-bit Python interpreter and the :class:`~.fortran6
 class can send a request to the :class:`~.fortran32.Fortran32` class which calls the 32-bit
 library to execute the request and then return the response from the library.
 """
-import os
 import ctypes
+import os
 
 from msl.loadlib import Server32
 

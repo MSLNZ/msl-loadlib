@@ -13,7 +13,8 @@ a request to the :class:`~.labview32.Labview32` class which calls the 32-bit lib
 request and then return the response from the library.
 """
 import os
-from ctypes import c_double, byref
+from ctypes import byref
+from ctypes import c_double
 
 from msl.loadlib import Server32
 

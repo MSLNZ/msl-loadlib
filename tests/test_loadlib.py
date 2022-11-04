@@ -1,26 +1,33 @@
 # -*- coding: utf-8 -*-
-import os
 import math
+import os
 import pathlib
-from ctypes import *
+from ctypes import POINTER
+from ctypes import byref
+from ctypes import c_bool
+from ctypes import c_char_p
+from ctypes import c_double
+from ctypes import c_float
+from ctypes import c_int
+from ctypes import c_int16
+from ctypes import c_int32
+from ctypes import c_int64
+from ctypes import c_int8
+from ctypes import c_void_p
+from ctypes import create_string_buffer
 
 import pytest
 
+from conftest import add_py4j_in_eggs
+from conftest import skipif_no_comtypes
+from conftest import skipif_no_labview_runtime
+from conftest import skipif_no_pythonnet
+from conftest import skipif_not_windows
 from msl import loadlib
-from msl.examples.loadlib import (
-    EXAMPLES_DIR,
-    Point,
-    FourPoints,
-    NPoints,
-)
-
-from conftest import (
-    skipif_no_comtypes,
-    skipif_no_labview_runtime,
-    skipif_no_pythonnet,
-    add_py4j_in_eggs,
-    skipif_not_windows,
-)
+from msl.examples.loadlib import EXAMPLES_DIR
+from msl.examples.loadlib import FourPoints
+from msl.examples.loadlib import NPoints
+from msl.examples.loadlib import Point
 
 
 def test_invalid_libtype():

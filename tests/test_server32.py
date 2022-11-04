@@ -1,17 +1,19 @@
 # -*- coding: utf-8 -*-
-import os
 import math
+import os
 
 import pytest
 
+from conftest import skipif_no_server32
+from conftest import skipif_not_windows
 from msl import loadlib
-from msl.loadlib import IS_MAC, IS_WINDOWS
-from msl.examples.loadlib import Cpp64, Fortran64, Echo64, DotNet64, FourPoints
-
-from conftest import (
-    skipif_no_server32,
-    skipif_not_windows,
-)
+from msl.examples.loadlib import Cpp64
+from msl.examples.loadlib import DotNet64
+from msl.examples.loadlib import Echo64
+from msl.examples.loadlib import Fortran64
+from msl.examples.loadlib import FourPoints
+from msl.loadlib import IS_MAC
+from msl.loadlib import IS_WINDOWS
 
 c = None
 f = None

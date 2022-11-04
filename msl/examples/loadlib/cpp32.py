@@ -7,9 +7,9 @@ can be executed by a 64-bit Python interpreter and the :class:`~.cpp64.Cpp64` cl
 a request to the :class:`~.cpp32.Cpp32` class which calls the 32-bit library to execute the
 request and then return the response from the library.
 """
-import os
-import math
 import ctypes
+import math
+import os
 
 from msl.loadlib import Server32
 

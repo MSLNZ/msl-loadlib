@@ -1,6 +1,6 @@
 import os
-import sys
 import random
+import sys
 
 import clr
 
@@ -8,10 +8,8 @@ import clr
 path = os.path.abspath(os.path.join(os.path.dirname(__file__), os.pardir, os.pardir))
 sys.path.insert(0, path)
 
-from msl.loadlib import (
-    IS_PYTHON_64BIT,
-    LoadLibrary,
-)
+from msl.loadlib import IS_PYTHON_64BIT
+from msl.loadlib import LoadLibrary
 
 bitness = 'x64' if IS_PYTHON_64BIT else 'x86'
 filename = 'legacy_v2_runtime_{}.dll'.format(bitness)

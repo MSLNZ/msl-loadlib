@@ -1,9 +1,7 @@
 import os
 
-from msl.loadlib import (
-    Server32,
-    Client64,
-)
+from msl.loadlib import Client64
+from msl.loadlib import Server32
 
 if Server32.is_interpreter():
     def skipif_no_server32(*args):

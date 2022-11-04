@@ -1,19 +1,16 @@
 import os
-import sys
-import socket
 import shutil
+import socket
+import sys
 import tempfile
 import xml.etree.ElementTree as ET
 
 import pytest
-from conftest import skipif_not_windows
 
-from msl.loadlib import (
-    utils,
-    IS_WINDOWS,
-    IS_MAC,
-    IS_PYTHON_64BIT,
-)
+from conftest import skipif_not_windows
+from msl.loadlib import IS_MAC
+from msl.loadlib import IS_WINDOWS
+from msl.loadlib import utils
 
 
 def test_timeout():

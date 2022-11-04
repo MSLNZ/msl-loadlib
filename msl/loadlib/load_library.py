@@ -1,18 +1,16 @@
 """
 Load a shared library.
 """
-import os
-import sys
 import ctypes
 import ctypes.util
+import os
 import subprocess
+import sys
 
-from . import (
-    utils,
-    DEFAULT_EXTENSION,
-    IS_PYTHON2,
-    IS_WINDOWS,
-)
+from . import DEFAULT_EXTENSION
+from . import IS_PYTHON2
+from . import IS_WINDOWS
+from . import utils
 
 _encoding = sys.getfilesystemencoding()
 

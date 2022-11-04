@@ -1,11 +1,11 @@
 """
 Common functions used by the **MSL-LoadLib** package.
 """
-import os
-import time
-import socket
 import logging
+import os
+import socket
 import subprocess
+import time
 import xml.etree.ElementTree as ET
 try:
     import winreg
@@ -15,11 +15,9 @@ except ImportError:
     except ImportError:
         winreg = None  # not Windows
 
+from . import IS_LINUX
+from . import IS_WINDOWS
 from .exceptions import ConnectionTimeoutError
-from . import (
-    IS_LINUX,
-    IS_WINDOWS,
-)
 
 logger = logging.getLogger(__package__)
 

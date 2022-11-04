@@ -1,4 +1,5 @@
-from msl.loadlib import LoadLibrary, Server32
+from msl.loadlib import LoadLibrary
+from msl.loadlib import Server32
 
 # comtypes on the 32-bit server will try to import numpy
 # remove site-packages before importing msl.loadlib.activex

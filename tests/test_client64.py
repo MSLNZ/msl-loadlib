@@ -2,10 +2,9 @@ import gc
 
 import pytest
 
-from msl.loadlib import Client64
-from msl.examples.loadlib import Cpp64
-
 from conftest import skipif_no_server32
+from msl.examples.loadlib import Cpp64
+from msl.loadlib import Client64
 
 
 @skipif_no_server32

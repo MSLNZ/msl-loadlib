@@ -1,8 +1,7 @@
 import os
 
-from msl.loadlib import Client64
-
 from conftest import skipif_not_windows
+from msl.loadlib import Client64
 
 
 @skipif_not_windows

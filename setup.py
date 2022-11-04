@@ -2,11 +2,10 @@ import os
 import re
 import sys
 from subprocess import check_output
-from setuptools import (
-    setup,
-    find_packages,
-    Command,
-)
+
+from setuptools import Command
+from setuptools import find_packages
+from setuptools import setup
 
 
 class ApiDocs(Command):

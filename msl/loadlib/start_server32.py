@@ -10,19 +10,17 @@ form of `inter-process communication <ipc_>`_.
 """
 from __future__ import print_function
 
+import argparse
+import code
+import importlib
+import inspect
 import os
 import sys
-import code
-import inspect
-import argparse
-import traceback
-import importlib
 import tempfile
+import traceback
 
-from msl.loadlib import (
-    Server32,
-    SERVER_FILENAME,
-)
+from msl.loadlib import SERVER_FILENAME
+from msl.loadlib import Server32
 
 
 def main():

@@ -18,9 +18,9 @@ interpreter that has the packages that you want to be available on the server in
 .. _comtypes: https://pythonhosted.org/comtypes/#
 """
 import os
-import sys
 import shutil
 import subprocess
+import sys
 try:
     from urllib.request import urlopen
 except ImportError:  # then Python 2
