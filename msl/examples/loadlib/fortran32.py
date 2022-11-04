@@ -529,7 +529,7 @@ class Fortran32(Server32):
         Note
         ----
         FORTRAN stores multi-dimensional arrays in `column-major order <order_>`_, as
-        opposed to `row-major order <order_>`_ for C (Python) arrays. Therefore the
+        opposed to `row-major order <order_>`_ for C (Python) arrays. Therefore, the
         input matrices need to be transposed before sending the matrices to FORTRAN
         and also the result needs to be transposed before returning the result.
 

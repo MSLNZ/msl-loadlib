@@ -46,7 +46,7 @@ class Client64(object):
 
         Starts a 32-bit server, :class:`~.server32.Server32`, to host a Python class
         that is a wrapper around a 32-bit library. :class:`.Client64` runs within
-        a 64-bit Python interpreter and it sends a request to the server which calls
+        a 64-bit Python interpreter, and it sends a request to the server which calls
         the 32-bit library to execute the request. The server then provides a
         response back to the client.
 

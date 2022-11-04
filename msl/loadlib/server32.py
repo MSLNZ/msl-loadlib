@@ -165,7 +165,7 @@ class Server32(HTTPServer):
 
     @property
     def quiet(self):
-        """This attribute is no longer used and it will be removed in a future release.
+        """This attribute is no longer used, it will be removed in a future release.
 
         Returns :data:`True`.
         """
@@ -181,7 +181,7 @@ class Server32(HTTPServer):
     def remove_site_packages_64bit():
         """Remove the site-packages directory from the 64-bit process.
 
-        By default the site-packages directory of the 64-bit process is
+        By default, the site-packages directory of the 64-bit process is
         included in :data:`sys.path` of the 32-bit process. Having the
         64-bit site-packages directory available can sometimes cause issues.
         For example, comtypes imports numpy so if numpy is installed in the
