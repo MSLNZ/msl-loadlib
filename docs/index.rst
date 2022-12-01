@@ -32,6 +32,7 @@ Contents
    API documentation <api_docs>
    Source code for the example libraries <examples_source_code>
    Re-freezing the 32-bit server <refreeze>
+   FAQ <faq>
    License <license>
    Authors <authors>
    Changelog <changelog>
