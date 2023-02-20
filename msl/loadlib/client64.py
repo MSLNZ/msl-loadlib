@@ -140,10 +140,21 @@ class Client64(object):
         else:
             self._pickle_protocol = protocol
 
-        # make sure that the server32 executable exists
-        server_exe = os.path.join(os.path.dirname(__file__), SERVER_FILENAME)
-        if not os.path.isfile(server_exe):
-            raise OSError('Cannot find ' + server_exe)
+        # Find the server32 executable. Some people are using PyInstaller to
+        # freeze msl-loadlib, so check a few locations for the executable.
+        dirs = [os.path.dirname(__file__), os.getcwd()]
+        if getattr(sys, 'frozen', False) and hasattr(sys, '_MEIPASS'):
+            dirs.append(sys._MEIPASS)
+
+        server_exe = None
+        for d in dirs:
+            f = os.path.join(d, SERVER_FILENAME)
+            if os.path.isfile(f):
+                server_exe = f
+                break
+
+        if server_exe is None:
+            raise OSError('Cannot find ' + os.path.join(dirs[0], SERVER_FILENAME))
 
         cmd = [
             server_exe,
