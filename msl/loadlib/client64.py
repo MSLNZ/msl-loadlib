@@ -140,11 +140,19 @@ class Client64(object):
         else:
             self._pickle_protocol = protocol
 
-        # Find the server32 executable. Some people are using PyInstaller to
-        # freeze msl-loadlib, so check a few locations for the executable.
-        dirs = [os.path.dirname(__file__), os.getcwd()]
-        if getattr(sys, 'frozen', False) and hasattr(sys, '_MEIPASS'):
-            dirs.append(sys._MEIPASS)
+        # Find the 32-bit server executable.
+        # Check a few locations in case msl-loadlib is frozen.
+        dirs = [os.path.dirname(__file__)]
+        if getattr(sys, 'frozen', False):
+            # PyInstaller location for data files
+            if hasattr(sys, '_MEIPASS'):
+                dirs.append(sys._MEIPASS)
+
+            # cx_Freeze location for data files
+            dirs.append(os.path.dirname(sys.executable))
+
+            # the current working directory
+            dirs.append(os.getcwd())
 
         server_exe = None
         for d in dirs:
@@ -154,7 +162,12 @@ class Client64(object):
                 break
 
         if server_exe is None:
-            raise OSError('Cannot find ' + os.path.join(dirs[0], SERVER_FILENAME))
+            if len(dirs) == 1:
+                raise OSError('Cannot find ' + os.path.join(dirs[0], SERVER_FILENAME))
+            else:
+                directories = '\n  '.join(sorted(set(dirs)))
+                raise OSError('Cannot find {!r} in any of the following directories:'
+                              '\n  {}'.format(SERVER_FILENAME, directories))
 
         cmd = [
             server_exe,
