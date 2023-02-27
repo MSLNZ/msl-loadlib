@@ -5,6 +5,7 @@ import pytest
 from conftest import skipif_no_server32
 from msl.examples.loadlib import Cpp64
 from msl.loadlib import Client64
+from msl.loadlib import SERVER_FILENAME
 
 
 @skipif_no_server32
@@ -53,3 +54,8 @@ def test_bad_del():
     # this should raise AttributeError because super() was not called in BadDel
     with pytest.raises(AttributeError, match='_conn'):
         BadDel().request32('request')
+
+
+def test_invalid_server32_dir():
+    with pytest.raises(OSError, match=r'^Cannot find {}$'.format(SERVER_FILENAME)):
+        Client64(__file__, server32_dir='')

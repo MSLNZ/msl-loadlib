@@ -41,7 +41,7 @@ class Client64(object):
 
     def __init__(self, module32, host='127.0.0.1', port=None, timeout=10.0,
                  quiet=None, append_sys_path=None, append_environ_path=None,
-                 rpc_timeout=None, protocol=None, **kwargs):
+                 rpc_timeout=None, protocol=None, server32_dir=None, **kwargs):
         """Base class for communicating with a 32-bit library from 64-bit Python.
 
         Starts a 32-bit server, :class:`~.server32.Server32`, to host a Python class
@@ -55,6 +55,9 @@ class Client64(object):
 
         .. versionchanged:: 0.8
            Added the `protocol` argument and the default `quiet` value became :data:`None`.
+
+        .. versionchanged:: 0.10
+           Added the `server32_dir` argument.
 
         Parameters
         ----------
@@ -90,6 +93,8 @@ class Client64(object):
             The :mod:`pickle` :ref:`protocol <pickle-protocols>` to use. If not
             specified then determines the value to use based on the version of
             Python that the :class:`.Client64` is running in.
+        server32_dir : :class:`str`, optional
+            The directory where the frozen 32-bit server is located.
         **kwargs
             All additional keyword arguments are passed to the :class:`~.server32.Server32`
             subclass. The data type of each value is not preserved. It will be a string
@@ -142,7 +147,7 @@ class Client64(object):
 
         # Find the 32-bit server executable.
         # Check a few locations in case msl-loadlib is frozen.
-        dirs = [os.path.dirname(__file__)]
+        dirs = [os.path.dirname(__file__)] if server32_dir is None else [server32_dir]
         if getattr(sys, 'frozen', False):
             # PyInstaller location for data files
             if hasattr(sys, '_MEIPASS'):

@@ -45,8 +45,14 @@ and enter
 Specify the appropriate keyword arguments to the
 :func:`~msl.loadlib.freeze_server32.main` function.
 
-Copy the ``server32-*`` file to the folder where you have MSL-LoadLib installed
-in your 64-bit version of Python to replace the existing server file.
+You have two options to use the newly-frozen server:
+
+1) Copy the ``server32-*`` file to the ``../site-packages/msl/loadlib`` directory
+where you have MSL-LoadLib installed in your 64-bit version of Python to replace
+the existing server file.
+
+2) Specify the directory where the ``server32-*`` file is located as the value
+of the `server32_dir` keyword argument in :class:`~msl.loadlib.client64.Client64`.
 
 Using the CLI
 -------------
