@@ -123,6 +123,10 @@ where you must replace the leading ``..`` prefix with the parent directories
 to the file (i.e., specify the absolute path to the file). On Linux, replace
 ``server32-windows.exe;.`` with ``server32-linux:.``
 
+If the server is loading a .NET library that was compiled with .NET < 4.0, you
+must also add the ``server32-windows.exe.config`` data file. Otherwise, you do
+not need to add this config file.
+
 cx-Freeze_ appears to automatically bundle the 32-bit server (tested with cx-Freeze_
 version 6.14.5) so there may not be anything you need to do. If the `server32`
 executable is not bundled, you can specify the absolute path to the `server32`
