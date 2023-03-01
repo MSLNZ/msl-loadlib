@@ -24,26 +24,25 @@ Using pip from the 32-bit Python interpreter run
 
        pip install pythonnet comtypes numpy
 
-You have two options on how create the server
+You have two options to create the 32-bit server
 
 1) :ref:`refreeze-api`
 
 2) :ref:`refreeze-cli`
 
-and you have two options on how to use the newly-frozen server
+and you have two options to use the newly-created server
 
 1. Copy the ``server32-*`` file to the ``../site-packages/msl/loadlib`` directory
 where you have MSL-LoadLib installed in your 64-bit version of Python to replace
 the existing server file.
 
 2. Specify the directory where the ``server32-*`` file is located as the value
-of the `server32_dir` keyword argument in :class:`~msl.loadlib.client64.Client64`.
+of the ``server32_dir`` keyword argument in :class:`~msl.loadlib.client64.Client64`.
 
 .. _refreeze-api:
 
 Using the API
 -------------
-
 Launch an Interactive Console using the 32-bit Python interpreter
 
 .. code-block:: console
@@ -66,7 +65,6 @@ Specify the appropriate keyword arguments to the
 
 Using the CLI
 -------------
-
 In this example, the GitHub repository is cloned and the server is created from
 the command line. Make sure that invoking `python` on your terminal uses the
 32-bit Python interpreter or specify the full path to the 32-bit Python interpreter
