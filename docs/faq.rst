@@ -117,7 +117,7 @@ option
 
 .. code-block:: console
 
-   pyinstaller --add-data "..\Lib\site-packages\msl\loadlib\server32-windows.exe;."
+   pyinstaller --add-data "..\site-packages\msl\loadlib\server32-windows.exe;."
 
 where you must replace the leading ``..`` prefix with the parent directories
 to the file (i.e., specify the absolute path to the file). On Linux, replace
