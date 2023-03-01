@@ -33,7 +33,7 @@ except ImportError:
     from msl import loadlib
 
 
-def main(spec=None, requires_pythonnet=True, requires_comtypes=True):
+def main(spec=None, requires_pythonnet=True, requires_comtypes=True, dest=None):
     """Creates a 32-bit Python server.
 
     Uses PyInstaller_ to create a frozen 32-bit Python executable. This executable
@@ -42,6 +42,9 @@ def main(spec=None, requires_pythonnet=True, requires_comtypes=True):
 
     .. versionchanged:: 0.5
        Added the `requires_pythonnet` and `requires_comtypes` arguments.
+
+    .. versionchanged:: 0.10
+       Added the `dest` argument.
 
     Parameters
     ----------
@@ -54,6 +57,8 @@ def main(spec=None, requires_pythonnet=True, requires_comtypes=True):
     requires_comtypes : :class:`bool`, optional
         Whether comtypes_ must be available on the frozen 32-bit server.
         This argument is ignored for a non-Windows operating system.
+    dest : :class:`str`, optional
+        The destination directory to save the server to.
     """
     if loadlib.IS_PYTHON_64BIT:
         print('Must run {} using a 32-bit Python interpreter'.format(os.path.basename(__file__)))
@@ -88,34 +93,44 @@ def main(spec=None, requires_pythonnet=True, requires_comtypes=True):
 
     here = os.path.abspath(os.path.dirname(__file__))
 
+    if dest is not None:
+        dist_path = os.path.abspath(dest)
+    else:
+        dist_path = os.getcwd()
+
+    work_path = './tmp-mslloadlibfreezing'
+
+    if os.path.isdir(work_path):
+        shutil.rmtree(work_path)
+    os.mkdir(work_path)
+
     # Specifically invoke pyinstaller in the context of the current python interpreter.
     # This fixes the issue where the blind `pyinstaller` invocation points to a 64-bit version.
-    cmd = [sys.executable, '-m', 'PyInstaller']
+    cmd = [sys.executable, '-m', 'PyInstaller',
+           '--distpath', dist_path,
+           '--workpath', work_path,
+           '--python-option', 'u',
+           '--noconfirm',
+           '--clean']
 
-    version_info_file = None
     if spec is None:
-        cmd.extend([
-            '--distpath', here,
-            '--python-option', 'u',
-            '--noconfirm',
-        ])
+        cmd.extend(['--specpath', work_path])
 
         if loadlib.IS_WINDOWS:
-            version_info_file = _create_version_info_file(here)
-            cmd.extend([
-                '--version-file', version_info_file
-            ])
+            cmd.extend(['--version-file', _create_version_info_file(work_path)])
 
         cmd.extend([
             '--name', loadlib.SERVER_FILENAME,
             '--onefile',
-            '--clean',
             '--hidden-import', 'msl.examples.loadlib',
         ])
+
         if loadlib.IS_WINDOWS and requires_pythonnet:
             cmd.extend(['--hidden-import', 'clr'])
+
         if loadlib.IS_WINDOWS and requires_comtypes:
             cmd.extend(['--hidden-import', 'comtypes'])
+
         cmd.extend(_get_standard_modules())
         cmd.append(os.path.join(here, 'start_server32.py'))
     else:
@@ -123,20 +138,12 @@ def main(spec=None, requires_pythonnet=True, requires_comtypes=True):
     subprocess.check_call(cmd)
 
     # cleanup
-    shutil.rmtree('./build/' + loadlib.SERVER_FILENAME)
-    if not os.listdir('./build'):
-        shutil.rmtree('./build')
-    if version_info_file:
-        os.remove(version_info_file)
-    try:
-        os.remove(loadlib.SERVER_FILENAME + '.spec')
-    except OSError:
-        pass
+    shutil.rmtree(work_path)
 
     # create the .NET Framework config file
-    loadlib.utils.check_dot_net_config(os.path.join(here, loadlib.SERVER_FILENAME))
+    loadlib.utils.check_dot_net_config(os.path.join(dist_path, loadlib.SERVER_FILENAME))
 
-    print('Server saved to: ' + os.path.join(here, loadlib.SERVER_FILENAME))
+    print('Server saved to ' + os.path.join(dist_path, loadlib.SERVER_FILENAME))
 
 
 def _get_standard_modules():
@@ -250,10 +257,10 @@ VSVersionInfo(
         copyright=loadlib.__copyright__,
         author=loadlib.__author__,
     )
-    save_to = os.path.join(root_path, 'file_version_info.txt')
-    with open(save_to, mode='wt') as fp:
+    filename = 'file_version_info.txt'
+    with open(os.path.join(root_path, filename), mode='wt') as fp:
         fp.write(text)
-    return save_to
+    return filename
 
 
 if __name__ == '__main__':
@@ -263,6 +270,10 @@ if __name__ == '__main__':
     parser.add_argument(
         '-s', '--spec',
         help='the PyInstaller spec file to use'
+    )
+    parser.add_argument(
+        '-d', '--dest',
+        help='the destination directory to save the server to'
     )
     parser.add_argument(
         '--ignore-pythonnet',
@@ -283,6 +294,7 @@ if __name__ == '__main__':
         main(
             spec=args.spec,
             requires_pythonnet=not args.ignore_pythonnet,
-            requires_comtypes=not args.ignore_comtypes
+            requires_comtypes=not args.ignore_comtypes,
+            dest=args.dest,
         )
     )

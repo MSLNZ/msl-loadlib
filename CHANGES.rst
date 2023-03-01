@@ -12,6 +12,7 @@ Version 0.9.1 (in development)
 
 * Added
 
+  - can now specify the destination directory when freezing the 32-bit server
   - the `server32_dir` keyword argument to :class:`~msl.loadlib.client64.Client64`
     (fixes issue `#35 <https://github.com/MSLNZ/msl-loadlib/issues/35>`_)
   - Support for Python 3.11
