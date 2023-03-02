@@ -213,8 +213,8 @@ def test_unicode_path():
 
     try:
         c2.add('hello', 'world')
-    except loadlib.Server32Error as e:
-        print(e)  # must not raise an error
+    except loadlib.Server32Error as err:
+        print(err)  # must not raise an error
 
     c2.shutdown_server32()
 
@@ -223,10 +223,10 @@ def test_unicode_path():
 def test_server32_error():
     try:
         c.add('hello', 'world')
-    except loadlib.Server32Error as e:
-        assert e.name == 'TypeError'
-        assert e.value.endswith('cannot be interpreted as an integer')
-        assert e.traceback.endswith('return self.lib.add(ctypes.c_int32(a), ctypes.c_int32(b))')
+    except loadlib.Server32Error as err:
+        assert err.name == 'ArgumentError'
+        assert err.value.endswith("<class 'TypeError'>: wrong type")
+        assert err.traceback.endswith('return self.lib.add(a, b)')
 
 
 @skipif_not_windows

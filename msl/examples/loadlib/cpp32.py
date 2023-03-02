@@ -67,7 +67,10 @@ class Cpp32(Server32):
         :class:`int`
             The sum of `a` and `b`.
         """
-        return self.lib.add(ctypes.c_int32(a), ctypes.c_int32(b))
+        # restype and argtypes could be defined in the __init__ method
+        self.lib.add.restype = ctypes.c_int32
+        self.lib.add.argtypes = [ctypes.c_int32, ctypes.c_int32]
+        return self.lib.add(a, b)
 
     def subtract(self, a, b):
         """Subtract two floating-point numbers *('float' refers to the C++ data type)*.
@@ -94,8 +97,10 @@ class Cpp32(Server32):
         :class:`float`
             The difference between `a` and `b`.
         """
+        # restype and argtypes could be defined in the __init__ method
         self.lib.subtract.restype = ctypes.c_float
-        return self.lib.subtract(ctypes.c_float(a), ctypes.c_float(b))
+        self.lib.subtract.argtypes = [ctypes.c_float, ctypes.c_float]
+        return self.lib.subtract(a, b)
 
     def add_or_subtract(self, a, b, do_addition):
         """Add or subtract two double-precision numbers *('double' refers to the C++ data type)*.
@@ -128,8 +133,10 @@ class Cpp32(Server32):
         :class:`float`
             Either `a` + `b` if `do_addition` is :data:`True` else `a` - `b`.
         """
+        # restype and argtypes could be defined in the __init__ method
         self.lib.add_or_subtract.restype = ctypes.c_double
-        return self.lib.add_or_subtract(ctypes.c_double(a), ctypes.c_double(b), do_addition)
+        self.lib.add_or_subtract.argtypes = [ctypes.c_double, ctypes.c_double, ctypes.c_bool]
+        return self.lib.add_or_subtract(a, b, do_addition)
 
     def scalar_multiply(self, a, xin):
         """Multiply each element in an array by a number.
@@ -158,16 +165,20 @@ class Cpp32(Server32):
         :class:`list` of :class:`float`
             A new array with each element in `xin` multiplied by `a`.
         """
-        n = len(xin)
-        xout = (ctypes.c_double * n)()  # allocate memory
-
+        # restype and argtypes could be defined in the __init__ method
         self.lib.scalar_multiply.restype = None
+        self.lib.scalar_multiply.argtypes = [
+            ctypes.c_double,
+            ctypes.POINTER(ctypes.c_double),
+            ctypes.c_int32,
+            ctypes.POINTER(ctypes.c_double),
+        ]
 
-        self.lib.scalar_multiply(ctypes.c_double(float(a)),
-                                 (ctypes.c_double * n)(*xin),
-                                 ctypes.c_int32(n),
-                                 ctypes.byref(xout))
-        return [value for value in xout]
+        n = len(xin)
+        c_xin = (ctypes.c_double * n)(*xin)  # convert input array to ctypes
+        c_xout = (ctypes.c_double * n)()  # allocate memory for output array
+        self.lib.scalar_multiply(a, c_xin, n, c_xout)
+        return [value for value in c_xout]
 
     def reverse_string_v1(self, original):
         """Reverse a string (version 1).
@@ -197,15 +208,13 @@ class Cpp32(Server32):
         :class:`str`
             The string reversed.
         """
-        n = len(original)
-
-        # use create_string_buffer since 'rev' gets modified in the library
-        rev = ctypes.create_string_buffer(n)
-
+        # restype and argtypes could be defined in the __init__ method
         self.lib.reverse_string_v1.restype = None
-        self.lib.reverse_string_v1(ctypes.c_char_p(original.encode()),
-                                   ctypes.c_int32(n),
-                                   rev)
+        self.lib.reverse_string_v1.argtypes = [ctypes.c_char_p, ctypes.c_int32, ctypes.c_char_p]
+
+        n = len(original)
+        rev = ctypes.create_string_buffer(n)
+        self.lib.reverse_string_v1(original.encode(), n, rev)
         return rev.raw.decode()
 
     def reverse_string_v2(self, original):
@@ -238,13 +247,15 @@ class Cpp32(Server32):
         :class:`str`
             The string reversed.
         """
-        n = len(original)
+        # restype and argtypes could be defined in the __init__ method
         self.lib.reverse_string_v2.restype = ctypes.c_char_p
-        rev = self.lib.reverse_string_v2(ctypes.c_char_p(original.encode()),
-                                         ctypes.c_int32(n))
+        self.lib.reverse_string_v2.argtypes = [ctypes.c_char_p, ctypes.c_int32]
+
+        n = len(original)
+        rev = self.lib.reverse_string_v2(original.encode(), n)
         return ctypes.string_at(rev, n).decode()
 
-    def distance_4_points(self, points):
+    def distance_4_points(self, four_points):
         """Calculates the total distance connecting 4 :class:`~.Point`\'s.
 
         The corresponding C++ code is
@@ -263,7 +274,7 @@ class Cpp32(Server32):
 
         Parameters
         ----------
-        points : :class:`.FourPoints`
+        four_points : :class:`.FourPoints`
             The points to use to calculate the total distance.
 
         Returns
@@ -272,7 +283,7 @@ class Cpp32(Server32):
             The total distance connecting the 4 :class:`~.Point`\'s.
         """
         self.lib.distance_4_points.restype = ctypes.c_double
-        return self.lib.distance_4_points(points)
+        return self.lib.distance_4_points(four_points)
 
     def circumference(self, radius, n):
         """Estimates the circumference of a circle.
@@ -309,6 +320,10 @@ class Cpp32(Server32):
         :class:`float`
             The estimated circumference of the circle.
         """
+        # restype and argtypes could be defined in the __init__ method
+        self.lib.distance_n_points.restype = ctypes.c_double
+        self.lib.distance_n_points.argtypes = [NPoints]
+
         theta = 0.0
         delta = (2.0*math.pi)/float(n) if n != 0 else 0
 
@@ -318,8 +333,6 @@ class Cpp32(Server32):
         for i in range(n):
             pts.points[i] = Point(radius*math.cos(theta), radius*math.sin(theta))
             theta += delta
-
-        self.lib.distance_n_points.restype = ctypes.c_double
         return self.lib.distance_n_points(pts)
 
 
