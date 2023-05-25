@@ -409,7 +409,13 @@ class Client64(object):
         # give the 32-bit server a chance to shut down gracefully
         t0 = time.time()
         while self._proc.poll() is None:
-            time.sleep(0.1)
+            try:
+                time.sleep(0.1)
+            except OSError:
+                # could be raised while Python is shutting down
+                #   OSError: [WinError 6] The handle is invalid
+                pass
+
             if time.time() - t0 > timeout:
                 self._proc.terminate()
                 self._proc.returncode = -2
