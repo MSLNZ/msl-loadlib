@@ -28,8 +28,8 @@ If you have a :class:`numpy.ndarray` in 64-bit Python then you cannot pass the
 ndarray object to :class:`~msl.loadlib.server32.Server32` because the 32-bit
 server would need to load the ndarray in a 32-bit version of numpy (which is
 not included by default in the 32-bit server, but could be -- see :ref:`refreeze`
-for more details). To simplify the procedure we can convert the ndarray to a
-Python :class:`list` using the :meth:`numpy.ndarray.tolist` method
+for more details). To simplify the procedure you could convert the ndarray to a
+:class:`list` using the :meth:`numpy.ndarray.tolist` method
 
 .. code-block:: pycon
 
@@ -38,9 +38,18 @@ Python :class:`list` using the :meth:`numpy.ndarray.tolist` method
    >>> cpp.scalar_multiply(3.1, a.tolist())
    [0.0, 3.1, 6.2, 9.3, 12.4, 15.5, 18.6, 21.7, 24.8]
 
+or you could use the builtin :class:`array.array` class
+
+.. code-block:: pycon
+
+   >>> from array import array
+   >>> b = array('d', a.tobytes())
+   >>> cpp.scalar_multiply(3.1, b)
+   [0.0, 3.1, 6.2, 9.3, 12.4, 15.5, 18.6, 21.7, 24.8]
+
 If you want the returned value from `scalar_multiply` to be a numpy ndarray then use
 
 .. code-block:: pycon
 
-   >>> np.array(cpp.scalar_multiply(3.1, a.tolist()))
+   >>> np.array(cpp.scalar_multiply(3.1, b))
    array([ 0. ,  3.1,  6.2,  9.3, 12.4, 15.5, 18.6, 21.7, 24.8])
