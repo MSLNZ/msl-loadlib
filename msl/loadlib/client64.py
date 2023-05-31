@@ -234,7 +234,9 @@ class Client64(object):
                 stdout = self._proc.stdout.read()
                 if not stdout:
                     err.reason = 'If you add print() statements to {!r}\n' \
-                                 'the statements that are executed will be displayed here'.format(module32)
+                                 'the statements that are executed will be displayed here.\n' \
+                                 'Limit the total number of characters that are written to stdout to be < 4096\n' \
+                                 'to avoid potential blocking when reading the stdout PIPE buffer.'.format(module32)
                 else:
                     decoded = stdout.decode(encoding='utf-8', errors='replace')
                     err.reason = 'stdout from {!r} is:\n{}'.format(module32, decoded)
