@@ -105,11 +105,12 @@ install comtypes_
 .. tip::
 
    When loading a shared library it is vital that all dependencies of the
-   library are also on the computer and that the directory that the dependency
-   is located in is available on the PATH_ variable. A helpful utility to
+   library are also on the computer and that the directory that the dependencies
+   are located in is available on the PATH_ variable. A helpful utility to
    determine the dependencies of a shared library on Windows is Dependencies_
-   (which is a modern `Dependency Walker`_). For finding the dependencies of a
-   .NET library the `Dependency Walker for .NET`_ can also be helpful.
+   (which is a modern `Dependency Walker`_). Microsoft also provides the
+   DUMPBIN_ tool. For finding the dependencies of a .NET library the
+   `Dependency Walker for .NET`_ can also be helpful.
 
 Linux
 ++++++
@@ -270,3 +271,4 @@ and a `Java Runtime Environment`_
 .. _ss: https://man7.org/linux/man-pages/man8/ss.8.html
 .. _ldd: https://man7.org/linux/man-pages/man1/ldd.1.html
 .. _PATH: https://en.wikipedia.org/wiki/PATH_(variable)
+.. _DUMPBIN: https://learn.microsoft.com/en-us/cpp/build/reference/dependents?view=msvc-170
