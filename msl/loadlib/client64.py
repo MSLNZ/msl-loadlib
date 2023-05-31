@@ -233,8 +233,8 @@ class Client64(object):
                 self._cleanup_zombie_and_files()
                 stdout = self._proc.stdout.read()
                 if not stdout:
-                    err.reason = 'You can add print() statements to {!r} ' \
-                                 'to help debug the issue'.format(module32)
+                    err.reason = 'If you add print() statements to {!r}, ' \
+                                 'the messages will be displayed here'.format(module32)
                 else:
                     decoded = stdout.decode(encoding='utf-8', errors='replace')
                     err.reason = 'stdout from {!r} is:\n{}'.format(module32, decoded)
