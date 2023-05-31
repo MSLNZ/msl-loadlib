@@ -431,8 +431,8 @@ def generate_com_wrapper(lib, out_dir=None):
         mod = comtypes.client.GetModule(lib)
     except OSError:
         pass
-    except AttributeError as e:
-        if str(e).startswith("'LoadLibrary'"):
+    except (AttributeError, TypeError) as e:
+        if 'LoadLibrary' in str(e):
             mod = from_pointer(lib.lib)
         elif hasattr(lib, '__com_interface__'):
             mod = from_pointer(lib)

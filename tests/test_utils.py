@@ -193,9 +193,9 @@ def test_generate_com_wrapper():
 
         assert comtypes.client.gen_dir.endswith('site-packages\\comtypes\\gen')
 
-        # a non-LoadLib object should still raise AttributeError
+        # a non-LoadLib object should still raise and error
         for obj in [dict(), None, True]:
-            with pytest.raises(AttributeError):
+            with pytest.raises((AttributeError, TypeError)):
                 utils.generate_com_wrapper(obj)
 
         assert comtypes.client.gen_dir.endswith('site-packages\\comtypes\\gen')
