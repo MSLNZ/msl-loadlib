@@ -377,7 +377,10 @@ class Client64(object):
         Returns
         -------
         :class:`tuple`
-            The (stdout, stderr) streams from the 32-bit server.
+            The (stdout, stderr) streams from the 32-bit server. Limit the total
+            number of characters that are written to either stdout or stderr on
+            the 32-bit server to be < 4096. This will avoid potential blocking
+            when reading the stdout and stderr PIPE buffers.
 
         Note
         ----
