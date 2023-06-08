@@ -9,7 +9,7 @@ This release will be the last to support Python 2.7, 3.5, 3.6 and 3.7
 * The 32-bit server is frozen with the following versions
 
   - ``server32-windows.exe`` -- Python 3.11.4, pythonnet 3.0.1, comtypes 1.2.0
-  - ``server32-linux`` -- Python 3.11.0 (built with GLIBC 2.27)
+  - ``server32-linux`` -- Python 3.11.4 (built with GLIBC 2.27)
 
 * Added
 
