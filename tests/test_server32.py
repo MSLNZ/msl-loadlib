@@ -225,7 +225,7 @@ def test_server32_error():
         c.add('hello', 'world')
     except loadlib.Server32Error as err:
         assert err.name == 'ArgumentError'
-        assert err.value.endswith("<class 'TypeError'>: wrong type")
+        assert err.value.endswith("TypeError: wrong type")
         assert err.traceback.endswith('return self.lib.add(a, b)')
 
 
