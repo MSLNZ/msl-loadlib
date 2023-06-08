@@ -2,8 +2,9 @@
 Changelog
 =========
 
-Version 0.9.1 (in development)
-==============================
+Version 0.10.0 (in development)
+===============================
+This release will be the last to support Python 2.7, 3.5, 3.6 and 3.7
 
 * The 32-bit server is frozen with the following versions
 
@@ -15,8 +16,7 @@ Version 0.9.1 (in development)
   - can now specify the destination directory when freezing the 32-bit server
   - the `server32_dir` keyword argument to :class:`~msl.loadlib.client64.Client64`
     (fixes issue `#35 <https://github.com/MSLNZ/msl-loadlib/issues/35>`_)
-  - Support for Python 3.11
-  - Support for Python 3.10
+  - Support for Python 3.10 and 3.11
   - :class:`~msl.loadlib.load_library.LoadLibrary` and :class:`~msl.loadlib.client64.Client64`
     can be used as a context manager (:ref:`with`)
   - :meth:`LoadLibrary.cleanup() <msl.loadlib.load_library.LoadLibrary.cleanup>` method
