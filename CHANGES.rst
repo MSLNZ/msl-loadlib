@@ -2,8 +2,8 @@
 Changelog
 =========
 
-Version 0.10.0 (in development)
-===============================
+Version 0.10.0 (2023-06-16)
+===========================
 This release will be the last to support Python 2.7, 3.5, 3.6 and 3.7
 
 * The 32-bit server is frozen with the following versions
