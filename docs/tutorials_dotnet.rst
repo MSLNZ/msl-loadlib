@@ -26,7 +26,7 @@ with the 32-bit :ref:`dotnet_lib32.dll <dotnet-lib>` library
 
 .. invisible-code-block: pycon
 
-   >>> SKIP_IF_NOT_WINDOWS() or SKIP_IF_WINDOWS_GITHUB_ACTIONS()
+   >>> SKIP_IF_NOT_WINDOWS() or XFAIL_WINDOWS_GITHUB_ACTIONS()
 
 .. code-block:: pycon
 
