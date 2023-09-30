@@ -196,17 +196,12 @@ tests_require = [
     'py4j',
     'numpy',  # needed for [doctest] tutorials_cpp_array.rst
     'pythonnet',
-    'pathlib;python_version<"3.0"',
     'comtypes;sys_platform=="win32"',
 ]
 
 docs_require = ['sphinx', 'sphinx-rtd-theme']
 
 testing = {'test', 'tests', 'pytest'}.intersection(sys.argv)
-pytest_runner = ['pytest-runner'] if testing else []
-
-needs_sphinx = {'doc', 'docs', 'apidoc', 'apidocs', 'build_sphinx'}.intersection(sys.argv)
-sphinx = docs_require + install_requires if needs_sphinx else []
 
 init_original = 'msl/loadlib/__init__.py'
 init_backup = init_original + '.backup'
@@ -229,12 +224,7 @@ setup(
         'License :: OSI Approved :: MIT License',
         'Operating System :: OS Independent',
         'Programming Language :: Python',
-        'Programming Language :: Python :: 2',
-        'Programming Language :: Python :: 2.7',
         'Programming Language :: Python :: 3',
-        'Programming Language :: Python :: 3.5',
-        'Programming Language :: Python :: 3.6',
-        'Programming Language :: Python :: 3.7',
         'Programming Language :: Python :: 3.8',
         'Programming Language :: Python :: 3.9',
         'Programming Language :: Python :: 3.10',
@@ -242,7 +232,6 @@ setup(
         'Topic :: Software Development',
         'Topic :: Scientific/Engineering',
     ],
-    setup_requires=sphinx + pytest_runner,
     tests_require=tests_require,
     install_requires=install_requires,
     extras_require={
