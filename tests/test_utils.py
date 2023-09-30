@@ -21,11 +21,10 @@ def test_timeout():
 def test_port_functions():
     port = utils.get_available_port()
     assert not utils.is_port_in_use(port)
-    sock = socket.socket()
-    sock.bind(('', port))
-    sock.listen(1)
-    assert utils.is_port_in_use(port)
-    sock.close()
+    with socket.socket() as sock:
+        sock.bind(('', port))
+        sock.listen(1)
+        assert utils.is_port_in_use(port)
     assert not utils.is_port_in_use(port)
 
 

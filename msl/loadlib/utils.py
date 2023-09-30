@@ -255,10 +255,9 @@ def is_port_in_use(port):
 
 def get_available_port():
     """:class:`int`: Returns a port number that is available."""
-    sock = socket.socket()
-    sock.bind(('', 0))  # get any available port
-    port = sock.getsockname()[1]
-    sock.close()
+    with socket.socket() as sock:
+        sock.bind(('', 0))
+        port = sock.getsockname()[1]
     return port
 
 
