@@ -246,6 +246,11 @@ setup(
     cmdclass={'docs': BuildDocs, 'apidocs': ApiDocs},
     packages=find_namespace_packages(include=('msl*',)),
     include_package_data=True,
+    entry_points={
+        'console_scripts': [
+            'freeze32 = msl.loadlib.freeze_server32:_cli',
+        ],
+    },
 )
 
 if os.path.isfile(init_backup):
