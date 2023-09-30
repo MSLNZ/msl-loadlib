@@ -14,6 +14,7 @@ indicate that the ``.dll`` file is for the .NET Framework.
 .. invisible-code-block: pycon
 
    >>> SKIP_IF_32BIT() or SKIP_IF_NO_PYTHONNET()
+   >>> XFAIL_ON_GITHUB_ACTIONS()
 
 .. code-block:: pycon
 
