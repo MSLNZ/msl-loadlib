@@ -194,8 +194,8 @@ def test_unicode_path():
         def __init__(self):
             super(Cpp64Encoding, self).__init__(
                 module32='cpp32unicode',
-                append_sys_path=os.path.dirname(__file__) + u'/uñicödé',
-                append_environ_path=os.path.dirname(__file__) + u'/uñicödé',
+                append_sys_path=os.path.dirname(__file__) + '/uñicödé',
+                append_environ_path=os.path.dirname(__file__) + '/uñicödé',
             )
 
         def add(self, a, b):

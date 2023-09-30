@@ -510,7 +510,7 @@ def test_activex_raises():
 
 
 def test_unicode_path_java():
-    cls = loadlib.LoadLibrary(u'./tests/uñicödé/Trig.class')
+    cls = loadlib.LoadLibrary('./tests/uñicödé/Trig.class')
     x = 0.123456
     assert cls.lib.Trig.cos(x) == pytest.approx(math.cos(x))
     repr(cls)  # this should not raise an exception
@@ -520,7 +520,7 @@ def test_unicode_path_java():
 
 @skipif_no_pythonnet
 def test_unicode_path_dotnet():
-    net = loadlib.LoadLibrary(u'./tests/uñicödé/Namespace.With.Dots-uñicödé.dll', 'net')
+    net = loadlib.LoadLibrary('./tests/uñicödé/Namespace.With.Dots-uñicödé.dll', 'net')
     checker = net.lib.Namespace.With.Dots.Checker()
     assert checker.IsSuccess()
     repr(net)  # this should not raise an exception
@@ -529,8 +529,8 @@ def test_unicode_path_dotnet():
 
 
 def test_unicode_path_cpp():
-    bitness = u'64' if loadlib.IS_PYTHON_64BIT else u'32'
-    cpp = loadlib.LoadLibrary(u'cpp_lib' + bitness + u'-uñicödé')
+    bitness = '64' if loadlib.IS_PYTHON_64BIT else '32'
+    cpp = loadlib.LoadLibrary(f'cpp_lib{bitness}-uñicödé')
     assert cpp.lib.add(1, 2) == 3
     repr(cpp)  # this should not raise an exception
     str(cpp)  # this should not raise an exception
