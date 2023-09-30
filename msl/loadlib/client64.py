@@ -423,7 +423,7 @@ class Client64:
             try:
                 with open(self._meta_path, mode='rt') as fp:
                     lines = fp.readlines()
-            except (IOError, OSError, NameError):
+            except (OSError, NameError):
                 return
             else:
                 pid, unfrozen_dir = int(lines[0]), lines[1]
