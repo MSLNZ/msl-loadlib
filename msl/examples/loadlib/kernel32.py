@@ -46,7 +46,7 @@ class Kernel32(Server32):
         :class:`~msl.loadlib.start_server32`, cannot create an instance of the
         :class:`~msl.loadlib.server32.Server32` subclass.
         """
-        super(Kernel32, self).__init__('C:/Windows/SysWOW64/kernel32.dll', 'windll', host, port)
+        super().__init__('C:/Windows/SysWOW64/kernel32.dll', 'windll', host, port)
 
     def get_time(self):
         """

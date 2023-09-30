@@ -17,7 +17,7 @@ def test_sew_eurodrive():
     class SEWEuroDrive64(Client64):
 
         def __init__(self):
-            super(SEWEuroDrive64, self).__init__(
+            super().__init__(
                 os.path.join(os.path.dirname(__file__), 'sew_eurodrive', 'sew32.py')
             )
 

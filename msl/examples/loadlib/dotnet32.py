@@ -35,8 +35,8 @@ class DotNet32(Server32):
         :class:`~msl.loadlib.start_server32`, cannot create an instance of the
         :class:`~msl.loadlib.server32.Server32` subclass.
         """
-        super(DotNet32, self).__init__(os.path.join(os.path.dirname(__file__), 'dotnet_lib32.dll'),
-                                       'net', host, port)
+        path = os.path.join(os.path.dirname(__file__), 'dotnet_lib32.dll')
+        super().__init__(path, 'net', host, port)
 
         self.BasicMath = self.lib.DotNetMSL.BasicMath()
         self.ArrayManipulation = self.lib.DotNetMSL.ArrayManipulation()

@@ -23,7 +23,7 @@ class FileSystemObjectServer(Server32):
         # (This only appeared to be an issue when Client64 runs on Python 3.5)
         path = Server32.remove_site_packages_64bit()
 
-        super(FileSystemObjectServer, self).__init__('Scripting.FileSystemObject', 'com', host, port)
+        super().__init__('Scripting.FileSystemObject', 'com', host, port)
 
         # put 'site-packages' back in
         if path:

@@ -21,7 +21,7 @@ class Shell32(Server32):
         # (This only appeared to be an issue when Client64 runs on Python 3.5)
         Server32.remove_site_packages_64bit()
 
-        super(Shell32, self).__init__('WScript.Shell', 'com', host, port)
+        super().__init__('WScript.Shell', 'com', host, port)
 
         self._environ = self.lib.Environment('System')
 

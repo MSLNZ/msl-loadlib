@@ -26,7 +26,7 @@ class DotNet64(Client64):
     def __init__(self):
         # specify the name of the corresponding 32-bit server module, dotnet32, which hosts
         # the 32-bit .NET library -- dotnet_lib32.dll.
-        super(DotNet64, self).__init__(module32='dotnet32', append_sys_path=os.path.dirname(__file__))
+        super().__init__(module32='dotnet32', append_sys_path=os.path.dirname(__file__))
 
     def get_class_names(self):
         """Return the class names in the library.

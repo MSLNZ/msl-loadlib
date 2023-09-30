@@ -18,7 +18,7 @@ class Ex32(Server32):
         # was incorrect, so the fact that the server starts already
         # demonstrates that this test passes
         path = os.path.join(Server32.examples_dir(), 'cpp_lib32')
-        super(Ex32, self).__init__(path, 'cdll', host, port)
+        super().__init__(path, 'cdll', host, port)
 
     def ex_dir(self):
         return self.examples_dir()
@@ -27,7 +27,7 @@ class Ex32(Server32):
 class Ex64(Client64):
 
     def __init__(self):
-        super(Ex64, self).__init__(__file__)
+        super().__init__(__file__)
 
     def examples_dir(self):
         return self.request32('examples_dir')

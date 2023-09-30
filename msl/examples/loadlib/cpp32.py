@@ -39,8 +39,8 @@ class Cpp32(Server32):
         """
         # By not specifying the extension of the library file the server will open
         # the appropriate file based on the operating system.
-        super(Cpp32, self).__init__(os.path.join(os.path.dirname(__file__), 'cpp_lib32'),
-                                    'cdll', host, port)
+        path = os.path.join(os.path.dirname(__file__), 'cpp_lib32')
+        super().__init__(path, 'cdll', host, port)
 
     def add(self, a, b):
         """Add two integers.
@@ -382,7 +382,7 @@ class FourPoints(ctypes.Structure):
         point4 : :class:`tuple` of :class:`int`
             The fourth point as an (x, y) ordered pair.
         """
-        super(FourPoints, self).__init__()
+        super().__init__()
         self.points = (Point * 4)(point1, point2, point3, point4)
 
 

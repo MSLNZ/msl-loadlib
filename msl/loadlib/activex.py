@@ -112,7 +112,7 @@ class Application(Forms.Form):
         >>> app.create_panel()
         <System.Windows.Forms.Panel object at ...>
         """
-        super(Application, self).__init__()
+        super().__init__()
 
         if clr is None:
             raise RuntimeError(

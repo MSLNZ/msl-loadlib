@@ -23,7 +23,7 @@ class Echo64(Client64):
         preserved when they are sent to the :class:`~.echo32.Echo32` server
         and back again.
         """
-        super(Echo64, self).__init__(module32='echo32', append_sys_path=os.path.dirname(__file__))
+        super().__init__(module32='echo32', append_sys_path=os.path.dirname(__file__))
 
     def send_data(self, *args, **kwargs):
         """Send a request to execute the :meth:`~.echo32.Echo32.received_data`

@@ -27,7 +27,7 @@ class Cpp64(Client64):
     def __init__(self):
         # specify the name of the corresponding 32-bit server module, cpp32, which hosts
         # the 32-bit C++ library -- cpp_lib32.
-        super(Cpp64, self).__init__(module32='cpp32', append_sys_path=os.path.dirname(__file__))
+        super().__init__(module32='cpp32', append_sys_path=os.path.dirname(__file__))
 
     def add(self, a, b):
         """Add two integers.

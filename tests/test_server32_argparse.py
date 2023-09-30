@@ -21,7 +21,7 @@ class ArgParse32(Server32):
     def __init__(self, host, port, **kwargs):
         # load any dll since it won't be called
         path = os.path.join(Server32.examples_dir(), 'cpp_lib32')
-        super(ArgParse32, self).__init__(path, 'cdll', host, port)
+        super().__init__(path, 'cdll', host, port)
         self.kwargs = kwargs
 
     def is_in_sys_path(self, path):
@@ -37,7 +37,7 @@ class ArgParse32(Server32):
 class ArgParse64(Client64):
 
     def __init__(self, append_sys_path, append_environ_path, **kwargs):
-        super(ArgParse64, self).__init__(
+        super().__init__(
             __file__,
             append_sys_path=append_sys_path,
             append_environ_path=append_environ_path,

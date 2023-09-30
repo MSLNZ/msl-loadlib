@@ -27,7 +27,7 @@ class Fortran64(Client64):
     def __init__(self):
         # specify the name of the corresponding 32-bit server module, fortran32, which hosts
         # the 32-bit FORTRAN library -- fortran_lib32.
-        super(Fortran64, self).__init__(module32='fortran32', append_sys_path=os.path.dirname(__file__))
+        super().__init__(module32='fortran32', append_sys_path=os.path.dirname(__file__))
 
     def sum_8bit(self, a, b):
         """Send a request to add two 8-bit signed integers.

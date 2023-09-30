@@ -19,7 +19,7 @@ class Property32(Server32):
 
     def __init__(self, host, port):
         path = os.path.join(Server32.examples_dir(), 'cpp_lib32')
-        super(Property32, self).__init__(path, 'cdll', host, port)
+        super().__init__(path, 'cdll', host, port)
 
         self.three = self.lib.add(1, 2)
 
@@ -43,7 +43,7 @@ class Property32(Server32):
 class Property64(Client64):
 
     def __init__(self):
-        super(Property64, self).__init__(__file__)
+        super().__init__(__file__)
 
         self.CONSTANT = self.request32('CONSTANT')
         self.three = self.request32('three')

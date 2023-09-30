@@ -193,7 +193,7 @@ def test_unicode_path():
     class Cpp64Encoding(loadlib.Client64):
         def __init__(self):
             dir_name = os.path.dirname(__file__)
-            super(Cpp64Encoding, self).__init__(
+            super().__init__(
                 module32='cpp32unicode',
                 append_sys_path=f'{dir_name}/uñicödé',
                 append_environ_path=f'{dir_name}/uñicödé',
@@ -237,7 +237,7 @@ def test_comtypes_ctypes_union_error():
 
     class FileSystemObjectClient(loadlib.Client64):
         def __init__(self):
-            super(FileSystemObjectClient, self).__init__(
+            super().__init__(
                 module32='ctypes_union_error',
                 append_sys_path=os.path.join(os.path.dirname(__file__), 'server32_comtypes'),
             )
@@ -265,7 +265,7 @@ def test_comtypes_shell32():
 
     class Shell64(loadlib.Client64):
         def __init__(self):
-            super(Shell64, self).__init__(
+            super().__init__(
                 module32='shell32.py',
                 append_sys_path=os.path.join(os.path.dirname(__file__), 'server32_comtypes'),
             )
@@ -287,7 +287,7 @@ def test_activex():
     class ActiveX(loadlib.Client64):
 
         def __init__(self):
-            super(ActiveX, self).__init__(
+            super().__init__(
                 module32='activex_media_player.py',
                 append_sys_path=os.path.join(os.path.dirname(__file__), 'server32_comtypes'),
                 timeout=30,

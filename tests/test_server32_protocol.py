@@ -18,7 +18,7 @@ class Bounce32(Server32):
 
     def __init__(self, host, port):
         path = os.path.join(Server32.examples_dir(), 'cpp_lib32')
-        super(Bounce32, self).__init__(path, 'cdll', host, port)
+        super().__init__(path, 'cdll', host, port)
 
     def bounce(self, *args, **kwargs):
         return args, kwargs
@@ -27,7 +27,7 @@ class Bounce32(Server32):
 class Bounce64(Client64):
 
     def __init__(self, protocol):
-        super(Bounce64, self).__init__(__file__, protocol=protocol)
+        super().__init__(__file__, protocol=protocol)
 
     def bounce(self, *args, **kwargs):
         return self.request32('bounce', *args, **kwargs)

@@ -39,8 +39,8 @@ class Echo32(Server32):
         """
         # even though this is a *echo* class that does not call a shared library
         # we still need to provide a library file that exists. Use the C++ library.
-        super(Echo32, self).__init__(os.path.join(os.path.dirname(__file__), 'cpp_lib32'),
-                                     'cdll', host, port)
+        path = os.path.join(os.path.dirname(__file__), 'cpp_lib32')
+        super().__init__(path, 'cdll', host, port)
 
     def received_data(self, *args, **kwargs):
         """Process a request from the :meth:`~.echo64.Echo64.send_data` method from

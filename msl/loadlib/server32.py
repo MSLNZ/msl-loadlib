@@ -13,7 +13,6 @@ import subprocess
 import sys
 import threading
 import traceback
-import warnings
 from http.server import BaseHTTPRequestHandler
 from http.server import HTTPServer
 
@@ -68,7 +67,7 @@ class Server32(HTTPServer):
         self._assembly = self._library.assembly
         self._lib = self._library.lib
         self._path = self._library.path
-        super(Server32, self).__init__((host, int(port)), _RequestHandler, bind_and_activate=False)
+        super().__init__((host, int(port)), _RequestHandler, bind_and_activate=False)
 
     @property
     def assembly(self):
@@ -187,7 +186,7 @@ class Server32(HTTPServer):
                     # before calling the super() function to load the COM library
                     path = Server32.remove_site_packages_64bit()
 
-                    super(FileSystem, self).__init__('Scripting.FileSystemObject', 'com', host, port)
+                    super().__init__('Scripting.FileSystemObject', 'com', host, port)
 
                     # optional: add the site-packages directory back into sys.path
                     sys.path.append(path)

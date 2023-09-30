@@ -27,7 +27,7 @@ def test_instantiating():
 
     class Issue24(Client64):
         def __init__(self):
-            super(Issue24, self).__init__(__file__, timeout=2)
+            super().__init__(__file__, timeout=2)
 
     with pytest.warns(UserWarning, match=r'killed the 32-bit server using brute force'):
         with pytest.raises(ConnectionTimeoutError, match=r'mock skipif_no_server32\s+import time\s+now go to sleep'):

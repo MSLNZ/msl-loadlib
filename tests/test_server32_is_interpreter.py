@@ -14,7 +14,7 @@ class Running32(Server32):
 
     def __init__(self, host, port):
         path = os.path.join(Server32.examples_dir(), 'cpp_lib32')
-        super(Running32, self).__init__(path, 'cdll', host, port)
+        super().__init__(path, 'cdll', host, port)
 
     def interpreter(self):
         return self.is_interpreter()
@@ -23,7 +23,7 @@ class Running32(Server32):
 class Running64(Client64):
 
     def __init__(self):
-        super(Running64, self).__init__(__file__)
+        super().__init__(__file__)
 
     def interpreter(self):
         return self.request32('interpreter')

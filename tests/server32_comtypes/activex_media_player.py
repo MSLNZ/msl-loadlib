@@ -14,7 +14,7 @@ prog_id = 'MediaPlayer.MediaPlayer.1'
 class ActiveX(Server32):
 
     def __init__(self, host, port, **kwargs):
-        super(ActiveX, self).__init__(prog_id, 'activex', host, port)
+        super().__init__(prog_id, 'activex', host, port)
 
     def this(self):
         return self.lib.IsSoundCardEnabled()

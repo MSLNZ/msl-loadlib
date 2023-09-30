@@ -17,7 +17,7 @@ class Print32(Server32):
 
     def __init__(self, host, port, **kwargs):
         path = os.path.join(Server32.examples_dir(), 'cpp_lib32')
-        super(Print32, self).__init__(path, 'cdll', host, port)
+        super().__init__(path, 'cdll', host, port)
 
         if kwargs['show'] == 'True':
             print('this is a message')
@@ -32,7 +32,7 @@ class Print32(Server32):
 class Print64(Client64):
 
     def __init__(self, show):
-        super(Print64, self).__init__(__file__, show=show)
+        super().__init__(__file__, show=show)
 
     def write(self, n, stdout):
         return self.request32('write', n, stdout)

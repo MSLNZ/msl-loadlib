@@ -16,7 +16,7 @@ class ShutdownHangs(Server32):
 
     def __init__(self, host, port):
         path = os.path.join(Server32.examples_dir(), 'cpp_lib32')
-        super(ShutdownHangs, self).__init__(path, 'cdll', host, port)
+        super().__init__(path, 'cdll', host, port)
 
     def add(self, x, y):
         return self.lib.add(x, y)
@@ -31,7 +31,7 @@ def test_killed():
     class Hangs(Client64):
 
         def __init__(self):
-            super(Hangs, self).__init__(__file__)
+            super().__init__(__file__)
 
         def add(self, x, y):
             return self.request32('add', x, y)

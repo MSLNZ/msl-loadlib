@@ -39,8 +39,8 @@ class Labview32(Server32):
         :class:`~msl.loadlib.start_server32`, cannot create an instance of the
         :class:`~msl.loadlib.server32.Server32` subclass.
         """
-        super(Labview32, self).__init__(os.path.join(os.path.dirname(__file__), 'labview_lib32.dll'),
-                                        'cdll', host, port)
+        path = os.path.join(os.path.dirname(__file__), 'labview_lib32.dll')
+        super().__init__(path, 'cdll', host, port)
 
     def stdev(self, x, weighting=0):
         """Calculates the mean, variance and standard deviation of the values in the input `x`.
