@@ -28,8 +28,6 @@ from .server32 import METADATA
 from .server32 import OK
 from .server32 import SHUTDOWN
 
-_encoding = sys.getfilesystemencoding()
-
 
 class Client64:
 
@@ -208,11 +206,9 @@ class Client64:
                                   f'Limit the total number of characters that are written to stdout to be < 4096\n'
                                   f'to avoid potential blocking when reading the stdout PIPE buffer.')
                 else:
-                    decoded = stdout.decode(encoding='utf-8', errors='replace')
-                    err.reason = f'stdout from {module32!r} is:\n{decoded}'
+                    err.reason = f'stdout from {module32!r} is:\n{stdout.decode()}'
             else:
-                stderr = self._proc.stderr.read()
-                err.reason = stderr.decode(encoding='utf-8', errors='replace')
+                err.reason = self._proc.stderr.read().decode()
             raise
 
         # connect to the server
@@ -322,7 +318,7 @@ class Client64:
                 result = pickle.load(f)
             return result
 
-        raise Server32Error(**json.loads(response.read().decode(encoding='utf-8', errors='replace')))
+        raise Server32Error(**json.loads(response.read().decode()))
 
     def shutdown_server32(self, kill_timeout=10):
         """Shutdown the 32-bit server.

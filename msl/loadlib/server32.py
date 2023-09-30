@@ -302,7 +302,7 @@ class _RequestHandler(BaseHTTPRequestHandler):
             response['traceback'] = traceback_
             self.send_response(ERROR)
             self.end_headers()
-            self.wfile.write(json.dumps(response).encode(encoding='utf-8', errors='ignore'))
+            self.wfile.write(json.dumps(response).encode())
 
     def do_POST(self):
         """Handle a POST request."""
