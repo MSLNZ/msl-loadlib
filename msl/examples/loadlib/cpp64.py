@@ -152,13 +152,6 @@ class Cpp64(Client64):
 
         See the corresponding 32-bit :meth:`~.cpp32.Cpp32.distance_4_points` method.
 
-        .. attention::
-           This method does not work with if :class:`Cpp64` is running in Python 2.
-           You would have to create the :class:`.FourPoints` object in the 32-bit
-           version of :meth:`~.cpp32.Cpp32.distance_4_points` because there are issues
-           using the :mod:`pickle` module between different major version numbers of
-           Python for :mod:`ctypes` objects.
-
         Parameters
         ----------
         points : :class:`.FourPoints`
