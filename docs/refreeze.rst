@@ -68,10 +68,10 @@ To see the help for `freeze32`, run
 
    freeze32 --help
 
-For example, if you want to include you own package and data files, you would run
+For example, if you want to include your own package and data files, you would run
 
 .. code-block:: console
 
-   freeze32 --packages my_package --data ./mydata/lib32.dll
+   freeze32 --packages my_package --data .\mydata\lib32.dll
 
 .. _PyInstaller: https://www.pyinstaller.org/
