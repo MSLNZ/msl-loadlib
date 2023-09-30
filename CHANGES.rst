@@ -11,7 +11,7 @@ Version 1.0.0 (in development)
 
 * Changed
 
-  - use :PEP:`420` implicit namespace package
+  - convert to a :PEP:`420` implicit namespace package
   - the `requires_pythonnet` and `requires_comtypes` arguments to
     :func:`freeze_server32.main() <msl.loadlib.freeze_server32.main>`
     were removed and the `packages` and `data` arguments were added
