@@ -79,11 +79,11 @@ def doctest_skipif(doctest_namespace):
         no_pythonnet = lambda: None
 
     if loadlib.IS_WINDOWS and os.getenv('GITHUB_ACTIONS') == 'true':
-        win32_github_actions = lambda: pytest.mark.xfail(True, reason='flaky test on Windows and GA')
+        win32_github_actions = lambda: pytest.skip('flaky test on Windows and GA')
     else:
         win32_github_actions = lambda: None
 
-    doctest_namespace['XFAIL_WINDOWS_GITHUB_ACTIONS'] = win32_github_actions
+    doctest_namespace['SKIP_IF_WINDOWS_GITHUB_ACTIONS'] = win32_github_actions
     doctest_namespace['SKIP_IF_NOT_WINDOWS'] = not_windows
     doctest_namespace['SKIP_IF_MACOS'] = is_mac
     doctest_namespace['SKIP_IF_64BIT'] = bit64
