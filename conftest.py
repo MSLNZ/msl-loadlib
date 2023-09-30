@@ -43,16 +43,6 @@ def has_labview_runtime():
 @pytest.fixture(autouse=True)
 def doctest_skipif(doctest_namespace):
 
-    if loadlib.IS_PYTHON2:
-        py2 = lambda: pytest.skip('requires Python 3')
-    else:
-        py2 = lambda: None
-
-    if sys.version_info[:2] < (3, 6):
-        less_36 = lambda: pytest.skip('ignore Python <3.6 since dict does not preserve insertion order')
-    else:
-        less_36 = lambda: None
-
     if not loadlib.IS_WINDOWS:
         not_windows = lambda: pytest.skip('not Windows')
         readme_com = lambda: pytest.skip('skipped at COM test')
@@ -88,8 +78,6 @@ def doctest_skipif(doctest_namespace):
         readme_dotnet = lambda: None
         no_pythonnet = lambda: None
 
-    doctest_namespace['SKIP_IF_PYTHON_2'] = py2
-    doctest_namespace['SKIP_IF_PYTHON_LESS_THAN_3_6'] = less_36
     doctest_namespace['SKIP_IF_NOT_WINDOWS'] = not_windows
     doctest_namespace['SKIP_IF_MACOS'] = is_mac
     doctest_namespace['SKIP_IF_64BIT'] = bit64

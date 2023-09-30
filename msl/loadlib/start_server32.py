@@ -8,8 +8,6 @@ form of `inter-process communication <ipc_>`_.
 
 .. _ipc: https://en.wikipedia.org/wiki/Inter-process_communication
 """
-from __future__ import print_function
-
 import argparse
 import code
 import importlib

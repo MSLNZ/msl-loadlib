@@ -42,7 +42,7 @@ can be created in 64-bit Python, *pickled* and then *unpickled* in
 
 .. invisible-code-block: pycon
 
-   >>> SKIP_IF_PYTHON_2() or SKIP_IF_MACOS()
+   >>> SKIP_IF_MACOS()
    >>> from msl.examples.loadlib import Cpp64
    >>> cpp = Cpp64()
 

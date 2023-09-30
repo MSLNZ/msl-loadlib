@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 import ctypes
 
 from msl.loadlib import Server32

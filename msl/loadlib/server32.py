@@ -7,20 +7,15 @@ from 64-bit Python.
 """
 import json
 import os
+import pickle
 import re
 import subprocess
 import sys
 import threading
 import traceback
 import warnings
-try:
-    from http.server import BaseHTTPRequestHandler
-    from http.server import HTTPServer
-    import pickle
-except ImportError:  # then Python 2
-    from BaseHTTPServer import BaseHTTPRequestHandler
-    from BaseHTTPServer import HTTPServer
-    import cPickle as pickle
+from http.server import BaseHTTPRequestHandler
+from http.server import HTTPServer
 
 from . import IS_WINDOWS
 from . import LoadLibrary

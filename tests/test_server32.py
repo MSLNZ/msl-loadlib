@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 import math
 import os
 
@@ -87,11 +86,8 @@ def test_cpp():
     assert '0987654321' == c.reverse_string_v1('1234567890')
     assert '[abc x|z j 1 *&' == c.reverse_string_v2('&* 1 j z|x cba[')
 
-    if loadlib.IS_PYTHON3:
-        # can't pickle.dump a ctypes.Structure in Python 2 and then
-        # pickle.load it in Python 3 (the interpreter that Server32 is running on)
-        fp = FourPoints((0, 0), (0, 1), (1, 1), (1, 0))
-        assert c.distance_4_points(fp) == 4.0
+    fp = FourPoints((0, 0), (0, 1), (1, 1), (1, 0))
+    assert c.distance_4_points(fp) == 4.0
 
     assert c.circumference(0.5, 0) == 0.0
     assert c.circumference(0.5, 2) == 2.0

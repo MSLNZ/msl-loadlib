@@ -2,7 +2,6 @@ import os
 import sys
 
 from msl.loadlib import Client64
-from msl.loadlib import IS_PYTHON2
 from msl.loadlib import Server32
 
 if Server32.is_interpreter():
@@ -43,9 +42,5 @@ def test_remove():
     s = Site64()
     path = s.remove()
     assert path
-    if IS_PYTHON2:
-        # get rid of the UnicodeWarning that gets printed by pytest
-        assert path.encode() in sys.path
-    else:
-        assert path in sys.path
+    assert path in sys.path
     assert not s.contains(path)

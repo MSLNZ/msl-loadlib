@@ -10,10 +10,7 @@ import xml.etree.ElementTree as ET
 try:
     import winreg
 except ImportError:
-    try:
-        import _winreg as winreg  # Python 2 on Windows
-    except ImportError:
-        winreg = None  # not Windows
+    winreg = None  # not Windows
 
 from . import IS_LINUX
 from . import IS_WINDOWS

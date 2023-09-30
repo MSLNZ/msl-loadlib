@@ -16,7 +16,7 @@ try:
 except:
     clr = None
 
-    class Forms(object):
+    class Forms:
         Form = object
 
 try:

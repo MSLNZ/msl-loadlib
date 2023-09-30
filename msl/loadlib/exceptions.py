@@ -1,12 +1,7 @@
 """
 Exception classes.
 """
-try:
-    from http.client import HTTPException
-except ImportError:  # then Python 2
-    from httplib import HTTPException
-
-from . import IS_PYTHON2
+from http.client import HTTPException
 
 
 class ConnectionTimeoutError(OSError):
@@ -18,10 +13,7 @@ class ConnectionTimeoutError(OSError):
         super(ConnectionTimeoutError, self).__init__(*args, **kwargs)
 
     def __str__(self):
-        msg = u'{}\n{}'.format(self.timeout_message, self.reason)
-        if IS_PYTHON2:
-            return msg.encode('utf-8')
-        return msg
+        return '{}\n{}'.format(self.timeout_message, self.reason)
 
 
 class Server32Error(HTTPException):
@@ -40,9 +32,7 @@ class Server32Error(HTTPException):
         traceback : :class:`str`, optional
             The exception traceback.
         """
-        msg = u'\n{}\n{}: {}'.format(traceback, name, value) if name else value
-        if IS_PYTHON2:
-            msg = msg.encode('utf-8')
+        msg = '\n{}\n{}: {}'.format(traceback, name, value) if name else value
         super(Server32Error, self).__init__(msg)
         self._name = name
         self._value = value

@@ -8,14 +8,11 @@ import subprocess
 import sys
 
 from . import DEFAULT_EXTENSION
-from . import IS_PYTHON2
 from . import IS_WINDOWS
 from . import utils
 
-_encoding = sys.getfilesystemencoding()
 
-
-class LoadLibrary(object):
+class LoadLibrary:
 
     LIBTYPES = ['cdll', 'windll', 'oledll', 'net', 'clr', 'java', 'com', 'activex']
     """The library types that are supported."""
@@ -134,9 +131,6 @@ class LoadLibrary(object):
         ext = os.path.splitext(path)[1]
         if not ext and libtype not in ['java', 'com', 'activex']:
             _path += DEFAULT_EXTENSION
-
-        if IS_PYTHON2:
-            _path = _path.encode(_encoding)
 
         if libtype not in ['com', 'activex']:
             self._path = os.path.abspath(_path)
@@ -344,9 +338,6 @@ class LoadLibrary(object):
         else:
             assert False, 'Should not get here -- contact developers'
 
-        if IS_PYTHON2:
-            self._path = self._path.decode(_encoding)
-
         utils.logger.debug('Loaded %s', self._path)
 
     def __del__(self):
@@ -354,8 +345,7 @@ class LoadLibrary(object):
             self.cleanup()
 
     def __repr__(self):
-        path = self._path.encode(_encoding) if IS_PYTHON2 else self._path
-        return '<LoadLibrary libtype={} path={}>'.format(self._lib.__class__.__name__, path)
+        return '<LoadLibrary libtype={} path={}>'.format(self._lib.__class__.__name__, self._path)
 
     def __enter__(self):
         return self
@@ -418,7 +408,7 @@ class LoadLibrary(object):
         return self._path
 
 
-class DotNet(object):
+class DotNet:
 
     def __init__(self, dot_net_dict, path):
         """Contains the namespace_ modules, classes and `System.Type`_ objects of a .NET Assembly.

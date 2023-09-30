@@ -7,6 +7,7 @@ from 64-bit Python.
 """
 import json
 import os
+import pickle
 import shutil
 import socket
 import subprocess
@@ -14,16 +15,9 @@ import sys
 import tempfile
 import time
 import warnings
-try:
-    from http.client import CannotSendRequest
-    from http.client import HTTPConnection
-    import pickle
-except ImportError:  # then Python 2
-    from httplib import CannotSendRequest
-    from httplib import HTTPConnection
-    import cPickle as pickle
+from http.client import CannotSendRequest
+from http.client import HTTPConnection
 
-from . import IS_PYTHON2
 from . import IS_WINDOWS
 from . import SERVER_FILENAME
 from . import utils
@@ -37,7 +31,7 @@ from .server32 import SHUTDOWN
 _encoding = sys.getfilesystemencoding()
 
 
-class Client64(object):
+class Client64:
 
     def __init__(self, module32, host='127.0.0.1', port=None, timeout=10.0,
                  quiet=None, append_sys_path=None, append_environ_path=None,
@@ -131,19 +125,7 @@ class Client64(object):
         self._pickle_path = f + '.pickle'
         self._meta_path = f + '.txt'
 
-        if protocol is None:
-            # select the pickle protocol to use based on the 64-bit version of Python
-            major, minor = sys.version_info[:2]
-            if major == 2:
-                self._pickle_protocol = 2
-            elif major == 3 and minor < 4:
-                self._pickle_protocol = 3
-            elif major == 3 and minor < 8:
-                self._pickle_protocol = 4
-            else:
-                self._pickle_protocol = 5
-        else:
-            self._pickle_protocol = protocol
+        self._pickle_protocol = 5 if protocol is None else protocol
 
         # Find the 32-bit server executable.
         # Check a few locations in case msl-loadlib is frozen.
@@ -184,27 +166,23 @@ class Client64(object):
         # include paths to the 32-bit server's sys.path
         sys_path = list(sys.path)
         if append_sys_path is not None:
-            if isinstance(append_sys_path, str) or (IS_PYTHON2 and isinstance(append_sys_path, unicode)):
+            if isinstance(append_sys_path, str):
                 sys_path.append(append_sys_path)
             elif isinstance(append_sys_path, (list, tuple)):
                 sys_path.extend(append_sys_path)
             else:
                 raise TypeError('append_sys_path must be a str, list or tuple')
-        if IS_PYTHON2:
-            sys_path = [p.encode(_encoding) if isinstance(p, unicode) else p for p in sys_path]
         cmd.extend(['--append-sys-path', ';'.join(sys_path)])  # don't replace ';' with os.pathsep
 
         # include paths to the 32-bit server's os.environ['PATH']
         env_path = [os.getcwd()]
         if append_environ_path is not None:
-            if isinstance(append_environ_path, str) or (IS_PYTHON2 and isinstance(append_sys_path, unicode)):
+            if isinstance(append_environ_path, str):
                 env_path.append(append_environ_path)
             elif isinstance(append_environ_path, (list, tuple)):
                 env_path.extend(append_environ_path)
             else:
                 raise TypeError('append_environ_path must be a str, list or tuple')
-        if IS_PYTHON2:
-            env_path = [p.encode(_encoding) if isinstance(p, unicode) else p for p in env_path]
         cmd.extend(['--append-environ-path', ';'.join(env_path)])  # don't replace ';' with os.pathsep
 
         # include any keyword arguments

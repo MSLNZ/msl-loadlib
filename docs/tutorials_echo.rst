@@ -15,7 +15,7 @@ Create an :class:`~msl.examples.loadlib.echo64.Echo64` object
 
 .. invisible-code-block: pycon
 
-   >>> SKIP_IF_MACOS() or SKIP_IF_PYTHON_LESS_THAN_3_6()
+   >>> SKIP_IF_MACOS()
 
 .. code-block:: pycon
 
