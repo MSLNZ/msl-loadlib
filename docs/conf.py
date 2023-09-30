@@ -1,8 +1,6 @@
 import os
 import sys
 
-import sphinx
-
 # If extensions (or modules to document with autodoc) are in another directory,
 # add these directories to sys.path here. If the directory is relative to the
 # documentation root, use os.path.abspath to make it absolute, like shown here.
@@ -27,22 +25,16 @@ extensions = [
     'sphinx.ext.coverage',
     'sphinx.ext.napoleon',
     'sphinx.ext.todo',
+    'sphinx_rtd_theme',
 ]
 
 # autodoc options
-if sphinx.version_info[:2] < (1, 8):
-    # 'alphabetical', 'bysource', 'groupwise'
-    autodoc_member_order = 'bysource'
-
-    # 'members', 'undoc-members', 'private-members', 'special-members', 'inherited-members', 'show-inheritance'
-    autodoc_default_flags = ['members', 'undoc-members', 'show-inheritance']
-else:
-    autodoc_default_options = {
-        'members': None,
-        'member-order': 'bysource',
-        'undoc-members': None,
-        'show-inheritance': None,
-    }
+autodoc_default_options = {
+    'members': None,
+    'member-order': 'bysource',
+    'undoc-members': None,
+    'show-inheritance': None,
+}
 
 # Generate autodoc stubs with summaries from code
 autosummary_generate = True
@@ -111,11 +103,7 @@ todo_include_todos = True
 # The theme to use for HTML and HTML Help pages.  See the documentation for
 # a list of builtin themes.
 #
-on_rtd = os.getenv('READTHEDOCS') == 'True'
-if on_rtd:
-    html_theme = 'default'
-else:
-    html_theme = 'sphinx_rtd_theme'
+html_theme = 'sphinx_rtd_theme'
 
 # Theme options are theme-specific and customize the look and feel of a theme
 # further.  For a list of options available for each theme, see the
