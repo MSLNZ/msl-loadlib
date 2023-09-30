@@ -155,20 +155,18 @@ elif 'bdist_wheel' in sys.argv or 'install' in sys.argv:
         server32_suffix, extn = 'windows.exe', '.dll'
         if 'bdist_wheel' in sys.argv:
             if sys.maxsize > 2 ** 32:
-                sys.argv.extend(['--universal', '--plat-name', 'win_amd64'])
+                sys.argv.extend(['--plat-name', 'win_amd64'])
             else:
-                sys.argv.extend(['--universal', '--plat-name', 'win32'])
+                sys.argv.extend(['--plat-name', 'win32'])
     elif sys.platform.startswith('linux'):
         server32_suffix, extn = 'linux', '.so'
         if 'bdist_wheel' in sys.argv:
             if sys.maxsize > 2 ** 32:
-                sys.argv.extend(['--universal', '--plat-name', 'manylinux1_x86_64'])
+                sys.argv.extend(['--plat-name', 'manylinux1_x86_64'])
             else:
-                sys.argv.extend(['--universal', '--plat-name', 'manylinux1_i686'])
+                sys.argv.extend(['--plat-name', 'manylinux1_i686'])
     elif sys.platform == 'darwin':
         server32_suffix, extn = None, '.dylib'
-        if 'bdist_wheel' in sys.argv:
-            sys.argv.append('--universal')
     else:
         server32_suffix, extn = None, None
 
