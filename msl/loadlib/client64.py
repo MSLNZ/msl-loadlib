@@ -208,7 +208,7 @@ class Client64:
                 else:
                     err.reason = f'stdout from {module32!r} is:\n{stdout.decode()}'
             else:
-                err.reason = self._proc.stderr.read().decode()
+                err.reason = self._proc.stderr.read().decode(errors='ignore')
             raise
 
         # connect to the server
