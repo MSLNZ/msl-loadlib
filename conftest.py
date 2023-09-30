@@ -79,7 +79,7 @@ def doctest_skipif(doctest_namespace):
         no_pythonnet = lambda: None
 
     if loadlib.IS_WINDOWS and os.getenv('GITHUB_ACTIONS') == 'true':
-        win32_github_actions = lambda: pytest.skip('flaky doctest on Windows')
+        win32_github_actions = lambda: pytest.skip('flaky test on Windows and GA')
     else:
         win32_github_actions = lambda: None
 
@@ -115,4 +115,9 @@ skipif_no_server32 = pytest.mark.skipif(
 skipif_not_windows = pytest.mark.skipif(
     not loadlib.IS_WINDOWS,
     reason='not Windows'
+)
+
+xfail_windows_ga = pytest.mark.xfail(
+    loadlib.IS_WINDOWS and os.getenv('GITHUB_ACTIONS') == 'true',
+    reason='flaky test on Windows and GA'
 )

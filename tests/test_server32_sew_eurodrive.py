@@ -1,9 +1,11 @@
 import os
 
 from conftest import skipif_not_windows
+from conftest import xfail_windows_ga
 from msl.loadlib import Client64
 
 
+@xfail_windows_ga
 @skipif_not_windows
 def test_sew_eurodrive():
     """

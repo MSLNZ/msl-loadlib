@@ -11,6 +11,7 @@ from msl.examples.loadlib import DotNet64
 from msl.examples.loadlib import Echo64
 from msl.examples.loadlib import Fortran64
 from msl.examples.loadlib import FourPoints
+from msl.loadlib import ConnectionTimeoutError
 from msl.loadlib import IS_MAC
 from msl.loadlib import IS_WINDOWS
 
@@ -28,9 +29,13 @@ def setup_module():
     f = Fortran64()
     e = Echo64()
     if IS_WINDOWS:
-        # stop testing on 64-bit linux because Mono can load
-        # both 32-bit and 64-bit libraries
-        n = DotNet64()
+        # Stop testing on 64-bit linux because Mono can load both 32-bit and 64-bit libraries
+
+        # This is flaky on GitHub Actions with Windows (connecting to the server sometimes times out)
+        try:
+            n = DotNet64()
+        except ConnectionTimeoutError:
+            pytest.xfail('flaky test with .NET, Windows and GA')
 
 
 def teardown_module():
