@@ -1,94 +1,74 @@
 """
-Creates a 32-bit server to use for
+Create a 32-bit server to use for
 `inter-process communication <https://en.wikipedia.org/wiki/Inter-process_communication>`_.
-
-This module must be run from a 32-bit Python interpreter with PyInstaller_ installed.
-
-If you want to re-freeze the 32-bit server, for example, if you want a 32-bit version of
-:mod:`numpy` to be available on the server, then run the following with a 32-bit Python
-interpreter that has the packages that you want to be available on the server installed
-
-.. code-block:: pycon
-
-   >>> from msl.loadlib import freeze_server32
-   >>> freeze_server32.main()  # doctest: +SKIP
-
-.. _PyInstaller: https://www.pyinstaller.org/
-.. _Python for .NET: https://pypi.python.org/pypi/pythonnet/
-.. _comtypes: https://pythonhosted.org/comtypes/#
 """
 import os
-import shutil
-import subprocess
 import sys
-try:
-    from urllib.request import urlopen
-except ImportError:  # then Python 2
-    from urllib import urlopen
+from importlib import import_module
+from subprocess import check_call
+from tempfile import TemporaryDirectory
+from urllib.request import urlopen
 
-try:
-    from msl import loadlib
-except ImportError:
-    sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..')))
-    from msl import loadlib
+from msl import loadlib
 
 
-def main(spec=None, requires_pythonnet=True, requires_comtypes=True, dest=None):
-    """Creates a 32-bit Python server.
+def main(spec=None, dest=None, packages=None, data=None):
+    """Create a frozen 32-bit server.
 
-    Uses PyInstaller_ to create a frozen 32-bit Python executable. This executable
-    starts a 32-bit server, :class:`~.server32.Server32`, which hosts a Python
-    module that can load a 32-bit library.
+    This function must be run from a 32-bit Python interpreter with `PyInstaller`_ installed.
 
-    .. versionchanged:: 0.5
-       Added the `requires_pythonnet` and `requires_comtypes` arguments.
+    Uses `PyInstaller`_ to create a frozen 32-bit Python executable. This
+    executable starts a 32-bit server, :class:`~.server32.Server32`, which
+    hosts a Python module that can load a 32-bit library.
+
+    If a value for `spec` is specified, then `packages` or `data` cannot
+    be specified.
+
+    .. versionchanged:: 1.0
+       Removed the `requires_pythonnet` and `requires_comtypes` arguments.
+       Added the `packages` and `data` arguments.
 
     .. versionchanged:: 0.10
        Added the `dest` argument.
 
+    .. versionchanged:: 0.5
+       Added the `requires_pythonnet` and `requires_comtypes` arguments.
+
+    .. _PyInstaller: https://www.pyinstaller.org/
+
     Parameters
     ----------
     spec : :class:`str`, optional
-        The path to a PyInstaller_ .spec file to use to create the frozen
-        32-bit server.
-    requires_pythonnet : :class:`bool`, optional
-        Whether `Python for .NET`_ must be available on the frozen 32-bit server.
-        This argument is ignored for a non-Windows operating system.
-    requires_comtypes : :class:`bool`, optional
-        Whether comtypes_ must be available on the frozen 32-bit server.
-        This argument is ignored for a non-Windows operating system.
+        The path to a :ref:`spec file <using spec files>` to use to create
+        the frozen 32-bit server.
     dest : :class:`str`, optional
-        The destination directory to save the server to.
+        The destination directory to save the 32-bit server to. Default is
+        the current directory.
+    packages : :class:`str` or :class:`list` of :class:`str`, optional
+        The names of additional packages to bundle with the 32-bit server.
+    data : :class:`str` or :class:`list` of :class:`str`, optional
+        The path(s) to additional data files, or directories containing data
+        files, to be added to the frozen 32-bit server. Each value should be
+        in the form `source:dest_dir`, where `:dest_dir` is optional. `source`
+        is the path to a file (or a directory of files) to add. `dest_dir`
+        is an optional destination directory, relative to the top-level
+        directory of the frozen 32-bit server, to add the file(s) to. If
+        `dest_dir` is not specified, the file(s) will be added to the
+        top-level directory of the 32-bit server.
     """
     if loadlib.IS_PYTHON_64BIT:
-        print('Must run {} using a 32-bit Python interpreter'.format(os.path.basename(__file__)))
+        print('Must freeze the server using a 32-bit Python interpreter', file=sys.stderr)
         return
 
-    missing_packages = []
     try:
-        import PyInstaller
+        from PyInstaller import __version__ as pyinstaller_version  # noqa
     except ImportError:
-        missing_packages.append('pyinstaller')
+        print('PyInstaller must be installed to create the 32-bit server, run:\n'
+              'pip install pyinstaller', file=sys.stderr)
+        return
 
-    if loadlib.IS_WINDOWS and requires_pythonnet:
-        try:
-            import clr
-        except ImportError:
-            missing_packages.append('pythonnet')
-
-    if loadlib.IS_WINDOWS and requires_comtypes:
-        try:
-            import comtypes
-        except ImportError:
-            missing_packages.append('comtypes')
-        except OSError:
-            # OSError: [WinError -2147417850] Cannot change thread mode after it is set
-            # don't care about this error since comtypes is indeed installed
-            pass
-
-    if missing_packages:
-        print('Packages are missing to be able to create the 32-bit server, run:')
-        print('pip install ' + ' '.join(missing_packages))
+    if spec and (packages or data):
+        print('Cannot specify a spec file and packages/data', file=sys.stderr)
         return
 
     here = os.path.abspath(os.path.dirname(__file__))
@@ -98,23 +78,21 @@ def main(spec=None, requires_pythonnet=True, requires_comtypes=True, dest=None):
     else:
         dist_path = os.getcwd()
 
-    work_path = './tmp-mslloadlibfreezing'
-
-    if os.path.isdir(work_path):
-        shutil.rmtree(work_path)
-    os.mkdir(work_path)
+    tmp_dir = TemporaryDirectory(ignore_cleanup_errors=True)
+    work_path = tmp_dir.name
+    server_path = os.path.join(dist_path, loadlib.SERVER_FILENAME)
 
     # Specifically invoke pyinstaller in the context of the current python interpreter.
     # This fixes the issue where the blind `pyinstaller` invocation points to a 64-bit version.
     cmd = [sys.executable, '-m', 'PyInstaller',
            '--distpath', dist_path,
            '--workpath', work_path,
-           '--python-option', 'u',
            '--noconfirm',
            '--clean']
 
     if spec is None:
-        cmd.extend(['--specpath', work_path])
+        cmd.extend(['--specpath', work_path,
+                    '--python-option', 'u'])
 
         if loadlib.IS_WINDOWS:
             cmd.extend(['--version-file', _create_version_info_file(work_path)])
@@ -125,25 +103,65 @@ def main(spec=None, requires_pythonnet=True, requires_comtypes=True, dest=None):
             '--hidden-import', 'msl.examples.loadlib',
         ])
 
-        if loadlib.IS_WINDOWS and requires_pythonnet:
-            cmd.extend(['--hidden-import', 'clr'])
+        if packages:
+            if isinstance(packages, str):
+                packages = [packages]
 
-        if loadlib.IS_WINDOWS and requires_comtypes:
-            cmd.extend(['--hidden-import', 'comtypes'])
+            sys.path.append(os.getcwd())
+
+            missing = []
+            for package in packages:
+                try:
+                    import_module(package)
+                except ImportError:
+                    missing.append(package)
+                else:
+                    cmd.extend(['--hidden-import', package])
+
+            if missing:
+                print(f'Packages are missing to be able to create the 32-bit server, run:\n'
+                      f'pip install {" ".join(missing)}', file=sys.stderr)
+                return
 
         cmd.extend(_get_standard_modules())
+
+        if data:
+            major, *rest = pyinstaller_version.split('.')
+            sep = os.pathsep if int(major) < 6 else ':'
+
+            if isinstance(data, str):
+                data = [data]
+
+            for item in data:
+                s = item.split(':')
+                if len(s) == 1:
+                    src = s[0]
+                    dst = '.'
+                elif len(s) == 2:
+                    src = s[0]
+                    dst = s[1] or '.'
+                else:
+                    print(f'Invalid data format {item!r}', file=sys.stderr)
+                    return
+
+                src = os.path.abspath(src)
+                if not os.path.exists(src):
+                    print(f'Cannot find {src!r}', file=sys.stderr)
+                    return
+
+                cmd.extend(['--add-data', f'{src}{sep}{dst}'])
+
         cmd.append(os.path.join(here, 'start_server32.py'))
     else:
         cmd.append(spec)
-    subprocess.check_call(cmd)
 
-    # cleanup
-    shutil.rmtree(work_path)
+    check_call(cmd)
 
-    # create the .NET Framework config file
-    loadlib.utils.check_dot_net_config(os.path.join(dist_path, loadlib.SERVER_FILENAME))
+    # maybe create the .NET Framework config file
+    if packages and ('pythonnet' in packages or 'clr' in packages):
+        loadlib.utils.check_dot_net_config(server_path)
 
-    print('Server saved to ' + os.path.join(dist_path, loadlib.SERVER_FILENAME))
+    print(f'Server saved to {server_path}')
 
 
 def _get_standard_modules():
@@ -170,8 +188,16 @@ def _get_standard_modules():
 
     # the frozen application is not meant to create GUIs or to add
     # support for building and installing Python modules
-    ignore_list = ['__main__', 'distutils', 'ensurepip', 'idlelib', 'lib2to3'
-                   'test', 'tkinter', 'turtle']
+    ignore_list = [
+        '__main__',
+        'distutils',
+        'ensurepip',
+        'idlelib',
+        'lib2to3',
+        'test',
+        'tkinter',
+        'turtle'
+    ]
 
     # some modules are platform specific and got a
     #   RecursionError: maximum recursion depth exceeded
@@ -263,29 +289,45 @@ VSVersionInfo(
     return filename
 
 
-if __name__ == '__main__':
+def _cli():
     import argparse
 
-    parser = argparse.ArgumentParser(description='Create the frozen 32-bit server.')
+    parser = argparse.ArgumentParser(
+        description='Create a frozen 32-bit server.',
+        formatter_class=argparse.RawTextHelpFormatter,
+    )
+
     parser.add_argument(
         '-s', '--spec',
-        help='the PyInstaller spec file to use'
+        help='the path to a PyInstaller .spec file'
     )
     parser.add_argument(
         '-d', '--dest',
-        help='the destination directory to save the server to'
+        help='the destination directory to save the 32-bit server to\n'
+             '(Default is the current directory)'
     )
     parser.add_argument(
-        '--ignore-pythonnet',
-        action='store_true',
-        default=False,
-        help='ignore the error that pythonnet is not installed'
+        '-p', '--packages',
+        nargs='*',
+        help='the names of packages to bundle with the 32-bit server\n'
+             'Examples:\n'
+             '  --packages mypackage\n'
+             '  --packages mypackage numpy'
     )
     parser.add_argument(
-        '--ignore-comtypes',
-        action='store_true',
-        default=False,
-        help='ignore the error that comtypes is not installed'
+        '-D', '--data',
+        nargs='*',
+        help='additional data files to bundle with the 32-bit server\n'
+             '(The format is "source:dest_dir", where source is the\n'
+             'path to a file (or a directory of files) to add and dest_dir\n'
+             'is an optional destination directory, relative to the\n'
+             'top-level directory of the frozen 32-bit server, to add\n'
+             'the file(s) to. If dest_dir is not specified, the file(s)\n'
+             'will be added to the top-level directory of the 32-bit server)\n'
+             'Examples:\n'
+             '  --data mydata\n'
+             '  --data mydata/lib1.dll mydata/bin/lib2.dll:bin\n'
+             '  --data mypackage/lib32.dll:mypackage'
     )
 
     args = parser.parse_args(sys.argv[1:])
@@ -293,8 +335,8 @@ if __name__ == '__main__':
     sys.exit(
         main(
             spec=args.spec,
-            requires_pythonnet=not args.ignore_pythonnet,
-            requires_comtypes=not args.ignore_comtypes,
             dest=args.dest,
+            packages=args.packages,
+            data=args.data,
         )
     )

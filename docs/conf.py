@@ -212,6 +212,7 @@ intersphinx_mapping = {
     'python': ('https://docs.python.org/3', None),
     'py4j': ('https://www.py4j.org/', None),
     'numpy': ('https://numpy.org/doc/stable/', None),
+    'pyinstaller': ('https://pyinstaller.org/en/stable', None),
 }
 
 # warn about all broken links

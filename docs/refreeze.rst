@@ -1,28 +1,30 @@
 .. _refreeze:
 
-==============================
-Re-freezing the 32-bit server
-==============================
+=============================
+Create a custom 32-bit server
+=============================
 
-If you want to make your own 32-bit server you will need
+If you want to create a custom 32-bit server, you will need
 
-1) a 32-bit version of Python 2.7 or 3.5+ (whatever version you want)
-2) `PyInstaller <https://www.pyinstaller.org/>`_
+* a 32-bit version of Python (version 3.8 or later) installed
+* `PyInstaller`_ installed in the 32-bit Python environment (ideally, you would
+  use a :PEP:`virtual environment <405>` to install the necessary packages to
+  create the server)
 
-Using pip from the 32-bit Python interpreter run
+Some reasons why you may want to create a custom 32-bit server are that you want to
+
+* run the server on a different version of Python,
+* install a different version of comtypes or pythonnet (on Windows),
+* install additional packages on the server (e.g., numpy, my_custom_package),
+* embed your own data files in the frozen server
+
+Using pip from a 32-bit Python interpreter, run
 
 .. code-block:: console
 
    pip install msl-loadlib pyinstaller
 
-.. note::
-
-   If you want to include additional packages, for example,
-   pythonnet, comtypes, numpy, etc. run
-
-    .. code-block:: console
-
-       pip install pythonnet comtypes numpy
+You may want to install additional packages as well.
 
 You have two options to create the 32-bit server
 
@@ -43,47 +45,33 @@ of the ``server32_dir`` keyword argument in :class:`~msl.loadlib.client64.Client
 
 Using the API
 -------------
-Launch an Interactive Console using the 32-bit Python interpreter
+Create a script that calls the :func:`freeze_server32.main() <msl.loadlib.freeze_server32.main>`
+function with the appropriate keyword arguments, for example,
 
-.. code-block:: console
+.. code-block:: python
 
-   python
+    from msl.loadlib import freeze_server32
+    freeze_server32.main(packages='numpy')
 
-and enter
-
-.. code-block:: pycon
-
-   >>> from msl.loadlib import freeze_server32
-   >>> freeze_server32.main()  # doctest: +SKIP
-   ... PyInstaller logging messages ...
-   Server saved to ...
-
-Specify the appropriate keyword arguments to the
-:func:`~msl.loadlib.freeze_server32.main` function.
+and run your script using the 32-bit Python interpreter.
 
 .. _refreeze-cli:
 
 Using the CLI
 -------------
-In this example, the GitHub repository is cloned and the server is created from
-the command line. Make sure that invoking `python` on your terminal uses the
-32-bit Python interpreter or specify the full path to the 32-bit Python interpreter
-that you want to use.
+When MSL-LoadLib is installed, a console script is included (named `freeze32`) that
+may be executed from the command line to create a new frozen 32-bit server.
+
+To see the help for `freeze32`, run
 
 .. code-block:: console
 
-   git clone https://github.com/MSLNZ/msl-loadlib.git
-   cd msl-loadlib/msl/loadlib
-   python freeze_server32.py
+   freeze32 --help
 
-To see the help for the `freeze_server32.py` module run
+For example, if you want to include you own package and data files, you would run
 
 .. code-block:: console
 
-   python freeze_server32.py --help
+   freeze32 --packages my_package --data ./mydata/lib32.dll
 
-For example, if you wanted to bypass the error that pythonnet is not installed run
-
-.. code-block:: console
-
-   python freeze_server32.py --ignore-pythonnet
+.. _PyInstaller: https://www.pyinstaller.org/

@@ -1,10 +1,19 @@
-=========
-Changelog
-=========
+=============
+Release Notes
+=============
 
 Version 1.0.0 (in development)
 ==============================
 
+* Added
+
+  - ``freeze32`` console script to create a new 32-bit server
+
+* Changed
+
+  - the `requires_pythonnet` and `requires_comtypes` arguments to
+    :func:`freeze_server32.main() <msl.loadlib.freeze_server32.main>`
+    were removed and the `packages` and `data` arguments were added
 
 Version 0.10.0 (2023-06-16)
 ===========================

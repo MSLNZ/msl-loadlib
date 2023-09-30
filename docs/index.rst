@@ -29,13 +29,13 @@ Contents
    Install <install>
    Load a library <direct>
    Access a 32-bit library in 64-bit Python <interprocess_communication>
-   API documentation <api_docs>
+   API <api_docs>
+   Create a custom 32-bit server <refreeze>
    Source code for the example libraries <examples_source_code>
-   Re-freezing the 32-bit server <refreeze>
    FAQ <faq>
    License <license>
    Authors <authors>
-   Changelog <changelog>
+   Release notes <changelog>
 
 .. _Python for .NET: https://pythonnet.github.io/
 .. _Py4J: https://www.py4j.org/

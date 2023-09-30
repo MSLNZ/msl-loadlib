@@ -109,7 +109,7 @@ Running the above script will output:
 
 Freezing the MSL-LoadLib package
 --------------------------------
-If you want to use PyInstaller_ or cx-Freeze_ to bundle msl-loadlib in a frozen
+If you want to use PyInstaller_ or cx-Freeze_ to bundle MSL-LoadLib in a frozen
 application, the 32-bit server must be added as a data file.
 
 For example, using PyInstaller_ on Windows you would include an ``--add-data``
@@ -117,11 +117,11 @@ option
 
 .. code-block:: console
 
-   pyinstaller --add-data "..\site-packages\msl\loadlib\server32-windows.exe;."
+   pyinstaller --add-data "..\site-packages\msl\loadlib\server32-windows.exe:."
 
 where you must replace the leading ``..`` prefix with the parent directories
 to the file (i.e., specify the absolute path to the file). On Linux, replace
-``server32-windows.exe;.`` with ``server32-linux:.``
+``server32-windows.exe:.`` with ``server32-linux:.``
 
 If the server is loading a .NET library that was compiled with .NET < 4.0, you
 must also add the ``server32-windows.exe.config`` data file. Otherwise, you do
@@ -131,6 +131,8 @@ cx-Freeze_ appears to automatically bundle the 32-bit server (tested with cx-Fre
 version 6.14.5) so there may not be anything you need to do. If the `server32`
 executable is not bundled, you can specify the absolute path to the `server32`
 executable as the ``include_files`` option for the ``build_exe`` command.
+
+You may also wish to :ref:`refreeze` and add your custom server to your application.
 
 .. _PyInstaller: https://pyinstaller.org/en/stable/
 .. _cx-Freeze: https://cx-freeze.readthedocs.io/en/latest/index.html
