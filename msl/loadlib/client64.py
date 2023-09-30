@@ -34,7 +34,7 @@ _encoding = sys.getfilesystemencoding()
 class Client64:
 
     def __init__(self, module32, host='127.0.0.1', port=None, timeout=10.0,
-                 quiet=None, append_sys_path=None, append_environ_path=None,
+                 append_sys_path=None, append_environ_path=None,
                  rpc_timeout=None, protocol=None, server32_dir=None, **kwargs):
         """Base class for communicating with a 32-bit library from 64-bit Python.
 
@@ -53,6 +53,9 @@ class Client64:
         .. versionchanged:: 0.10
            Added the `server32_dir` argument.
 
+        .. versionchanged:: 1.0
+           Removed the deprecated `quiet` argument.
+
         Parameters
         ----------
         module32 : :class:`str`
@@ -65,8 +68,6 @@ class Client64:
         timeout : :class:`float`, optional
             The maximum number of seconds to wait to establish a connection to the
             32-bit server. Default is 10 seconds.
-        quiet : :class:`bool`, optional
-            This keyword argument is no longer used and will be removed in a future release.
         append_sys_path : :class:`str` or :class:`list` of :class:`str`, optional
             Append path(s) to the 32-bit server's :data:`sys.path` variable. The value of
             :data:`sys.path` from the 64-bit process is automatically included,
@@ -189,15 +190,6 @@ class Client64:
         if kwargs:
             kw_str = ';'.join('{}={}'.format(key, value) for key, value in kwargs.items())
             cmd.extend(['--kwargs', kw_str])
-
-        # TODO the `quiet` kwarg is deprecated
-        if quiet is not None:
-            warnings.simplefilter('once', DeprecationWarning)
-            warnings.warn(
-                "the 'quiet' keyword argument for Client64 is ignored and will be removed in a future release",
-                DeprecationWarning,
-                stacklevel=2
-            )
 
         # start the 32-bit server
         flags = 0x08000000 if IS_WINDOWS else 0  # fixes issue 31, CREATE_NO_WINDOW = 0x08000000

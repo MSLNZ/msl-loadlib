@@ -15,6 +15,11 @@ Version 1.0.0 (in development)
     :func:`freeze_server32.main() <msl.loadlib.freeze_server32.main>`
     were removed and the `packages` and `data` arguments were added
 
+* Removed
+
+  - the deprecated `quiet` parameter
+
+
 Version 0.10.0 (2023-06-16)
 ===========================
 This release will be the last to support Python 2.7, 3.5, 3.6 and 3.7

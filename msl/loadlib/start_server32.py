@@ -72,9 +72,6 @@ def main():
                              'of the msl.loadlib.Server32 subclass as "key=value;" '
                              'pairs, e.g., -k a=-2;b=3.14;c=whatever;d=[1,2,3]')
 
-    parser.add_argument('-q', '--quiet', action='store_true',
-                        help='ignored and will be removed in a future release')
-
     args = parser.parse_args()
 
     if args.version:
@@ -117,9 +114,6 @@ def main():
                 value = item_split[1].strip()
             if len(key) > 0:
                 kwargs[key] = value
-
-    if args.quiet:
-        print('DeprecationWarning: the --quiet flag is ignored and will be removed in a future release')
 
     # if you get to this point in the script that means you want to start a server for
     # inter-process communication and therefore args.module must have a value
@@ -180,16 +174,8 @@ def main():
     try:
         server = cls(args.host, args.port, **kwargs)
     except Exception as e:
-        # support the old syntax where the Server32 required a 'quiet' argument
-        if "missing 1 required positional argument: 'quiet'" in str(e):
-            try:
-                server = cls(args.host, args.port, True, **kwargs)
-            except Exception as e:
-                error = e
-                tb = traceback.format_exc()
-        else:
-            error = e
-            tb = traceback.format_exc()
+        error = e
+        tb = traceback.format_exc()
 
     if error is not None:
         err = 'Instantiating {!r} raised the following exception:\n\n{}\n'.format(cls.__name__, tb)

@@ -158,20 +158,6 @@ class Server32(HTTPServer):
             cmd = "gnome-terminal --command='{exe} --interactive'"
         os.system(cmd.format(exe=exe))
 
-    @property
-    def quiet(self):
-        """This attribute is no longer used, it will be removed in a future release.
-
-        Returns :data:`True`.
-        """
-        warnings.simplefilter('once', DeprecationWarning)
-        warnings.warn(
-            'The `quiet` attribute for Server32 will be removed in a future release -- always returns True',
-            DeprecationWarning,
-            stacklevel=2
-        )
-        return True
-
     @staticmethod
     def remove_site_packages_64bit():
         """Remove the site-packages directory from the 64-bit process.

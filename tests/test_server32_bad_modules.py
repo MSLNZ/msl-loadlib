@@ -73,7 +73,7 @@ def test_bad_init_args():
 
 @skipif_no_server32
 def test_bad_init_args2():
-    check('bad_init_args2', r"missing 2 required positional arguments: 'quiet' and 'extra'\s+Check that")
+    check('bad_init_args2', r"missing 1 required positional argument: 'extra'")
 
 
 @skipif_no_server32
