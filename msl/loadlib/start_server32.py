@@ -118,9 +118,9 @@ def main():
     # if you get to this point in the script that means you want to start a server for
     # inter-process communication and therefore args.module must have a value
     if not args.module:
-        err = 'You must specify a Python module to run on the 32-bit server.\n' \
-              'For example: {} -m my_module\n' \
-              'Cannot start the 32-bit server.'.format(SERVER_FILENAME)
+        err = (f'You must specify a Python module to run on the 32-bit server.\n'
+               f'For example: {SERVER_FILENAME} -m my_module\n'
+               f'Cannot start the 32-bit server.')
         print(err, file=sys.stderr)
         return -1
 
@@ -129,30 +129,32 @@ def main():
         args.module = args.module[:-3]
 
     if args.module.startswith('.'):
-        err = 'ImportError: {}\n' \
-              'Cannot perform relative imports.\n' \
-              'Cannot start the 32-bit server.'.format(args.module)
+        err = (f'ImportError: {args.module}\n'
+               f'Cannot perform relative imports.\n'
+               f'Cannot start the 32-bit server.')
         print(err, file=sys.stderr)
         return -1
 
-    f = os.path.join(tempfile.gettempdir(), 'msl-loadlib-{}-{}.txt'.format(args.host, args.port))
+    f = os.path.join(tempfile.gettempdir(), f'msl-loadlib-{args.host}-{args.port}.txt')
     with open(f, mode='wt') as fp:
-        fp.write('{}\n{}'.format(os.getpid(), sys._MEIPASS))
+        fp.write(f'{os.getpid()}\n{sys._MEIPASS}')  # noqa: sys._MEIPASS exists
 
     try:
         mod = importlib.import_module(args.module)
     except ImportError as e:
         # ignore the folders from the unfrozen application
-        paths = '\n  '.join(item for item in sys.path if not item.startswith(sys._MEIPASS))
-        err = 'ImportError: {}\n' \
-              'The missing module must be in sys.path (see the --append-sys-path option)\n' \
-              'The paths in sys.path are:\n  {}\n\n' \
-              'Cannot start the 32-bit server.'.format(e, paths)
+        paths = '\n  '.join(item for item in sys.path
+                            if not item.startswith(sys._MEIPASS))  # noqa: sys._MEIPASS exists
+        err = (f'ImportError: {e}\n'
+               f'The missing module must be in sys.path (see the --append-sys-path option)\n'
+               f'The paths in sys.path are:\n  {paths}\n\n'
+               f'Cannot start the 32-bit server.')
         print(err, file=sys.stderr)
         return -1
-    except Exception:
-        err = 'Importing {!r} on the 32-bit server raised the following exception:\n\n' \
-              '{}\nCannot start the 32-bit server.'.format(args.module, traceback.format_exc())
+    except:  # noqa: PEP 8: E722 do not use bare 'except'
+        err = (f'Importing {args.module!r} on the 32-bit server raised '
+               f'the following exception:\n\n{traceback.format_exc()}\n'
+               f'Cannot start the 32-bit server.')
         print(err, file=sys.stderr)
         return -1
 
@@ -164,9 +166,9 @@ def main():
             break
 
     if cls is None:
-        err = 'AttributeError: module {}.py\n' \
-              'Module does not contain a class that is a subclass of Server32.\n' \
-              'Cannot start the 32-bit server.'.format(args.module)
+        err = (f'AttributeError: module {args.module}.py\n'
+               f'Module does not contain a class that is a subclass of Server32.\n'
+               f'Cannot start the 32-bit server.')
         print(err, file=sys.stderr)
         return -1
 
@@ -178,25 +180,26 @@ def main():
         tb = traceback.format_exc()
 
     if error is not None:
-        err = 'Instantiating {!r} raised the following exception:\n\n{}\n'.format(cls.__name__, tb)
-
+        err = f'Instantiating {cls.__name__!r} raised the following exception:\n\n{tb}\n'
         if error.__class__.__name__ == 'TypeError' and '__init__' in str(error):
-            err += 'Check that the {0!r} class is defined with the following syntax\n\n' \
-                   'class {0}(Server32):\n' \
-                   '    def __init__(self, host, port, **kwargs):\n' \
-                   '        super({0}, self).__init__(path, libtype, host, port, **kwargs)\n\n'.format(cls.__name__)
+            name = cls.__name__
+            err += (f'Check that the {name!r} class is defined with the following syntax\n\n'
+                    f'class {name}(Server32):\n'
+                    f'    def __init__(self, host, port, **kwargs):\n'
+                    f'        super().__init__(path, libtype, host, port, **kwargs)\n\n')
 
         err += 'Cannot start the 32-bit server.'
         print(err, file=sys.stderr)
         return -1
 
     if not hasattr(server, '_library'):
-        err = 'The super() function was never called in the Server32 subclass.\n' \
-              'Check that the {0!r} class is defined with the following syntax\n\n' \
-              'class {0}(Server32):\n' \
-              '    def __init__(self, host, port, **kwargs):\n' \
-              '        super({0}, self).__init__(path, libtype, host, port, **kwargs)\n\n' \
-              'Cannot start the 32-bit server.'.format(cls.__name__)
+        name = cls.__name__
+        err = (f'The super() function was never called in the Server32 subclass.\n'
+               f'Check that the {name!r} class is defined with the following syntax\n\n'
+               f'class {name}(Server32):\n'
+               f'    def __init__(self, host, port, **kwargs):\n'
+               f'        super().__init__(path, libtype, host, port, **kwargs)\n\n'
+               f'Cannot start the 32-bit server.')
         print(err, file=sys.stderr)
         return -1
 
@@ -206,11 +209,11 @@ def main():
         server.serve_forever()
     except (SystemExit, KeyboardInterrupt):
         pass
-    except Exception:
+    except:  # noqa: PEP 8: E722 do not use bare 'except'
         # Can only get here if starting the HTTPServer raised an exception.
         # Error handling for a request is handled by the RequestHandler class.
-        print('Binding, activating and starting the HTTPServer raised the following exception\n'
-              '{}'.format(traceback.format_exc()), file=sys.stderr)
+        print(f'Binding, activating and starting the HTTPServer raised the '
+              f'following exception\n{traceback.format_exc()}', file=sys.stderr)
         return -1
     finally:
         server.server_close()

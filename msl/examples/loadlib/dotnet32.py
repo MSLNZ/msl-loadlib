@@ -268,8 +268,8 @@ class DotNet32(Server32):
         ncols2 = len(a2[0])
 
         if not ncols1 == nrows2:
-            msg = "Cannot multiply a {}x{} matrix with a {}x{} matrix"
-            raise ValueError(msg.format(nrows1, ncols1, nrows2, ncols2))
+            raise ValueError(f'Cannot multiply a {nrows1}x{ncols1} matrix '
+                             f'with a {nrows2}x{ncols2} matrix')
 
         m1 = self.lib.System.Array.CreateInstance(self.lib.System.Double, nrows1, ncols1)
         for r in range(nrows1):

@@ -267,7 +267,7 @@ def test_fortran():
 @skipif_no_pythonnet
 def test_dotnet():
     bitness = '64' if loadlib.IS_PYTHON_64BIT else '32'
-    path = os.path.join(EXAMPLES_DIR, 'dotnet_lib' + bitness + '.dll')
+    path = os.path.join(EXAMPLES_DIR, f'dotnet_lib{bitness}.dll')
     net = loadlib.LoadLibrary(path, 'clr')
 
     names = ';'.join(str(name) for name in net.assembly.GetTypes()).split(';')
@@ -321,9 +321,9 @@ def test_labview():
     from ctypes import c_double, byref
 
     if loadlib.IS_PYTHON_64BIT:
-        path = EXAMPLES_DIR + '/labview_lib64.dll'
+        path = f'{EXAMPLES_DIR}/labview_lib64.dll'
     else:
-        path = EXAMPLES_DIR + '/labview_lib32.dll'
+        path = f'{EXAMPLES_DIR}/labview_lib32.dll'
 
     labview = loadlib.LoadLibrary(path)
 
@@ -347,12 +347,12 @@ def test_labview():
 
 def test_java():
     try:
-        jar = loadlib.LoadLibrary(EXAMPLES_DIR + '/java_lib.jar')
-    except (IOError, OSError) as e:
+        jar = loadlib.LoadLibrary(f'{EXAMPLES_DIR}/java_lib.jar')
+    except OSError as e:
         if 'Create a PY4J_JAR environment variable' not in str(e):
             raise
         add_py4j_in_eggs()
-        jar = loadlib.LoadLibrary(EXAMPLES_DIR + '/java_lib.jar')
+        jar = loadlib.LoadLibrary(f'{EXAMPLES_DIR}/java_lib.jar')
 
     Math = jar.lib.nz.msl.examples.MathUtils
     Matrix = jar.lib.nz.msl.examples.Matrix
@@ -437,7 +437,7 @@ def test_java():
 
     jar.gateway.shutdown()
 
-    cls = loadlib.LoadLibrary(EXAMPLES_DIR + '/Trig.class')
+    cls = loadlib.LoadLibrary(f'{EXAMPLES_DIR}/Trig.class')
     Trig = cls.lib.Trig
 
     x = 0.123456
@@ -642,22 +642,22 @@ def test_py4j_jar_environment_variable():
     original = os.environ.get('PY4J_JAR', '')
 
     # the file does not exist
-    os.environ['PY4J_JAR'] = __file__ + 'abc'
-    with pytest.raises(OSError, match=r'the full path to the py4j[\d.]+.jar file is invalid'):
-        loadlib.LoadLibrary(EXAMPLES_DIR + '/java_lib.jar')
+    os.environ['PY4J_JAR'] = f'{__file__}abc'
+    with pytest.raises(OSError, match=r'the full path to py4j[\d.]+.jar is invalid'):
+        loadlib.LoadLibrary(f'{EXAMPLES_DIR}/java_lib.jar')
 
     # a valid folder, but expect a path to the py4j<version>.jar file
     os.environ['PY4J_JAR'] = os.path.dirname(__file__)
-    with pytest.raises(OSError, match=r'the full path to the py4j[\d.]+.jar file is invalid'):
-        loadlib.LoadLibrary(EXAMPLES_DIR + '/java_lib.jar')
+    with pytest.raises(OSError, match=r'the full path to py4j[\d.]+.jar is invalid'):
+        loadlib.LoadLibrary(f'{EXAMPLES_DIR}/java_lib.jar')
 
     # a valid file but not a py4j<version>.jar file
     os.environ['PY4J_JAR'] = __file__
-    with pytest.raises(OSError, match=r'the full path to the py4j[\d.]+.jar file is invalid'):
-        loadlib.LoadLibrary(EXAMPLES_DIR + '/java_lib.jar')
+    with pytest.raises(OSError, match=r'the full path to py4j[\d.]+.jar is invalid'):
+        loadlib.LoadLibrary(f'{EXAMPLES_DIR}/java_lib.jar')
 
     os.environ['PY4J_JAR'] = original
-    java = loadlib.LoadLibrary(EXAMPLES_DIR + '/java_lib.jar')
+    java = loadlib.LoadLibrary(f'{EXAMPLES_DIR}/java_lib.jar')
     assert 0.0 <= java.lib.nz.msl.examples.MathUtils.random() < 1.0
     java.gateway.shutdown()
 

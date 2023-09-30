@@ -16,10 +16,10 @@ def add_py4j_in_eggs():
     import py4j
     os.environ['PY4J_JAR'] = os.path.join(
         '.eggs',
-        'py4j-{}-py{}.{}.egg'.format(py4j.__version__, sys.version_info.major, sys.version_info.minor),
+        f'py4j-{py4j.__version__}-py{sys.version_info.major}.{sys.version_info.minor}.egg',
         'share',
         'py4j',
-        'py4j{}.jar'.format(py4j.__version__)
+        f'py4j{py4j.__version__}.jar'
     )
 
 

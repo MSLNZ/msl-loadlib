@@ -53,13 +53,13 @@ def test_check_dot_net_config():
 
     # create the .config file
     exe = os.path.join(base, 'no_config_exists.exe')
-    cfg = exe + '.config'
+    cfg = f'{exe}.config'
     assert os.path.isfile(exe)
     assert not os.path.isfile(cfg)
     val, msg = utils.check_dot_net_config(exe)
     assert val == 1
     assert msg.startswith('The library appears to be from a .NET Framework version < 4.0')
-    assert os.path.isfile(exe + '.config')
+    assert os.path.isfile(f'{exe}.config')
 
     # the useLegacyV2RuntimeActivationPolicy was already enabled
     val, msg = utils.check_dot_net_config(exe)
@@ -76,7 +76,7 @@ def test_check_dot_net_config():
 
     # the startup element does not exist, it gets inserted
     exe = os.path.join(base, 'startup_element_does_not_exist.exe')
-    cfg = exe + '.config'
+    cfg = f'{exe}.config'
     cfg_string = """<?xml version ="1.0"?>
 <configuration>
     <something>7</something>

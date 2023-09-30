@@ -377,5 +377,5 @@ for name, os in modules:
     try:
         __import__(name)
     except ImportError:
-        print('  {} {}'.format(name, os))
+        print(f'  {name} {os}')
 print('')

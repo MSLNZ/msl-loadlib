@@ -209,7 +209,7 @@ class Application(Forms.Form):
             clsid = None
 
         if clsid is None:
-            raise OSError("Cannot find '{}' for libtype='activex'".format(activex_id))
+            raise OSError(f"Cannot find {activex_id!r} for libtype='activex'")
 
         if parent is not None:
             try:
@@ -218,7 +218,7 @@ class Application(Forms.Form):
                 parent_handle = None
 
             if parent_handle is None:
-                raise OSError('Cannot create a Handle from the parent {}'.format(type(parent)))
+                raise OSError(f'Cannot create a Handle from the parent {type(parent)}')
         else:
             parent_handle = None
 
@@ -247,12 +247,12 @@ class Application(Forms.Form):
         )
 
         if hwnd == 0:
-            raise OSError('CreateWindowExA {}'.format(ctypes.WinError()))
+            raise OSError(f'CreateWindowExA {ctypes.WinError()}')
 
         # get the interface to the ActiveX control
         unknown = ctypes.POINTER(IUnknown)()
         ret = ctypes.windll.atl.AtlAxGetControl(hwnd, ctypes.byref(unknown))
         if ret != 0:
-            raise OSError('AtlAxGetControl {}'.format(ctypes.WinError()))
+            raise OSError(f'AtlAxGetControl {ctypes.WinError()}')
 
         return GetBestInterface(unknown)

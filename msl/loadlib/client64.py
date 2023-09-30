@@ -122,9 +122,9 @@ class Client64:
             port = utils.get_available_port()
 
         # the temporary files
-        f = os.path.join(tempfile.gettempdir(), 'msl-loadlib-{}-{}'.format(host, port))
-        self._pickle_path = f + '.pickle'
-        self._meta_path = f + '.txt'
+        f = os.path.join(tempfile.gettempdir(), f'msl-loadlib-{host}-{port}')
+        self._pickle_path = f'{f}.pickle'
+        self._meta_path = f'{f}.txt'
 
         self._pickle_protocol = 5 if protocol is None else protocol
 
@@ -151,11 +151,11 @@ class Client64:
 
         if server_exe is None:
             if len(dirs) == 1:
-                raise OSError('Cannot find ' + os.path.join(dirs[0], SERVER_FILENAME))
+                raise OSError(f'Cannot find {os.path.join(dirs[0], SERVER_FILENAME)}')
             else:
                 directories = '\n  '.join(sorted(set(dirs)))
-                raise OSError('Cannot find {!r} in any of the following directories:'
-                              '\n  {}'.format(SERVER_FILENAME, directories))
+                raise OSError(f'Cannot find {SERVER_FILENAME!r} in any of the '
+                              f'following directories:\n  {directories}')
 
         cmd = [
             server_exe,
@@ -188,7 +188,7 @@ class Client64:
 
         # include any keyword arguments
         if kwargs:
-            kw_str = ';'.join('{}={}'.format(key, value) for key, value in kwargs.items())
+            kw_str = ';'.join(f'{k}={v}' for k, v in kwargs.items())
             cmd.extend(['--kwargs', kw_str])
 
         # start the 32-bit server
@@ -203,13 +203,13 @@ class Client64:
                 self._cleanup_zombie_and_files()
                 stdout = self._proc.stdout.read()
                 if not stdout:
-                    err.reason = 'If you add print() statements to {!r}\n' \
-                                 'the statements that are executed will be displayed here.\n' \
-                                 'Limit the total number of characters that are written to stdout to be < 4096\n' \
-                                 'to avoid potential blocking when reading the stdout PIPE buffer.'.format(module32)
+                    err.reason = (f'If you add print() statements to {module32!r}\n'
+                                  f'the statements that are executed will be displayed here.\n'
+                                  f'Limit the total number of characters that are written to stdout to be < 4096\n'
+                                  f'to avoid potential blocking when reading the stdout PIPE buffer.')
                 else:
                     decoded = stdout.decode(encoding='utf-8', errors='replace')
-                    err.reason = 'stdout from {!r} is:\n{}'.format(module32, decoded)
+                    err.reason = f'stdout from {module32!r} is:\n{decoded}'
             else:
                 stderr = self._proc.stderr.read()
                 err.reason = stderr.decode(encoding='utf-8', errors='replace')
@@ -220,7 +220,7 @@ class Client64:
         self._conn = HTTPConnection(host, port=port, timeout=self._rpc_timeout)
 
         # let the server know the info to use for pickling
-        self._conn.request('POST', 'protocol={}&path={}'.format(self._pickle_protocol, self._pickle_path))
+        self._conn.request('POST', f'protocol={self._pickle_protocol}&path={self._pickle_path}')
         response = self._conn.getresponse()
         if response.status != OK:
             raise Server32Error('Cannot set pickle info')
@@ -234,12 +234,12 @@ class Client64:
             pass
 
     def __repr__(self):
-        msg = '<{} '.format(self.__class__.__name__)
+        header = f'<{self.__class__.__name__}'
         if self._conn:
             lib = os.path.basename(self._meta32['path'])
-            return msg + 'lib={} address={}:{}>'.format(lib, self._conn.host, self._conn.port)
+            return f'{header} lib={lib} address={self._conn.host}:{self._conn.port}>'
         else:
-            return msg + 'lib=None address=None>'
+            return f'{header} lib=None address=None>'
 
     def __enter__(self):
         return self
@@ -313,8 +313,8 @@ class Client64:
 
         if response is None:
             raise ResponseTimeoutError(
-                'Waiting for the response from the {!r} request timed '
-                'out after {} seconds'.format(name, self._rpc_timeout)
+                f'Waiting for the response from the {name!r} request timed '
+                f'out after {self._rpc_timeout} second(s)'
             )
 
         if response.status == OK:

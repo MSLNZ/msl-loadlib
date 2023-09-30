@@ -13,7 +13,7 @@ class ConnectionTimeoutError(OSError):
         super(ConnectionTimeoutError, self).__init__(*args, **kwargs)
 
     def __str__(self):
-        return '{}\n{}'.format(self.timeout_message, self.reason)
+        return f'{self.timeout_message}\n{self.reason}'
 
 
 class Server32Error(HTTPException):
@@ -32,7 +32,7 @@ class Server32Error(HTTPException):
         traceback : :class:`str`, optional
             The exception traceback.
         """
-        msg = '\n{}\n{}: {}'.format(traceback, name, value) if name else value
+        msg = f'\n{traceback}\n{name}: {value}' if name else value
         super(Server32Error, self).__init__(msg)
         self._name = name
         self._value = value

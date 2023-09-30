@@ -192,10 +192,11 @@ def test_unicode_path():
 
     class Cpp64Encoding(loadlib.Client64):
         def __init__(self):
+            dir_name = os.path.dirname(__file__)
             super(Cpp64Encoding, self).__init__(
                 module32='cpp32unicode',
-                append_sys_path=os.path.dirname(__file__) + '/uñicödé',
-                append_environ_path=os.path.dirname(__file__) + '/uñicödé',
+                append_sys_path=f'{dir_name}/uñicödé',
+                append_environ_path=f'{dir_name}/uñicödé',
             )
 
         def add(self, a, b):

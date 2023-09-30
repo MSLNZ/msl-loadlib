@@ -100,7 +100,7 @@ class LoadLibrary:
         self._gateway = None
 
         if not path:
-            raise ValueError('You must specify the path, got {!r}'.format(path))
+            raise ValueError(f'You must specify the path, got {path!r}')
 
         # fixes Issue #8, if `path` is a <class 'pathlib.Path'> object
         if hasattr(path, 'as_posix'):
@@ -116,10 +116,9 @@ class LoadLibrary:
             libtype = libtype.lower()
 
         if libtype not in LoadLibrary.LIBTYPES:
-            raise ValueError(
-                'Cannot load libtype={!r}.\n'
-                'Must be one of: {}'.format(libtype, ', '.join(LoadLibrary.LIBTYPES))
-            )
+            libs = ', '.join(LoadLibrary.LIBTYPES)
+            raise ValueError(f'Cannot load libtype={libtype!r}.\n'
+                             f'Must be one of: {libs}')
 
         # create a new reference to `path` just in case the
         # DEFAULT_EXTENSION is appended below so that the
@@ -148,7 +147,7 @@ class LoadLibrary:
                             success = True
                             break
                     if not success:
-                        raise OSError("Cannot find '{}' for libtype='{}'".format(path, libtype))
+                        raise OSError(f'Cannot find {path!r} for libtype={libtype!r}')
         else:
             self._path = _path
 
@@ -174,7 +173,7 @@ class LoadLibrary:
                 clsid = None
 
             if clsid is None:
-                raise OSError("Cannot find '{}' for libtype='com'".format(path))
+                raise OSError(f"Cannot find {path!r} for libtype='com'")
 
             self._lib = CreateObject(clsid, **kwargs)
 
@@ -197,15 +196,13 @@ class LoadLibrary:
             port = kwargs.pop('port', utils.get_available_port())
 
             # find the py4j*.jar file (needed to import the py4j.GatewayServer on the Java side)
-            filename = 'py4j' + __version__ + '.jar'
+            filename = f'py4j{__version__}.jar'
             py4j_jar = os.environ.get('PY4J_JAR')
             if py4j_jar:
                 if not os.path.isfile(py4j_jar) or os.path.basename(py4j_jar) != filename:
-                    raise OSError(
-                        'A PY4J_JAR environment variable exists, '
-                        'but the full path to the {} file is invalid\n'
-                        'PY4J_JAR={}'.format(filename, py4j_jar)
-                    )
+                    raise OSError(f'A PY4J_JAR environment variable exists, '
+                                  f'but the full path to {filename} is invalid\n'
+                                  f'PY4J_JAR={py4j_jar}')
             else:
                 root = os.path.dirname(sys.executable)
                 for item in [root, os.path.dirname(root), os.path.join(os.path.expanduser('~'), '.local')]:
@@ -213,14 +210,13 @@ class LoadLibrary:
                     if os.path.isfile(py4j_jar):
                         break
                 if not os.path.isfile(py4j_jar):
-                    raise OSError(
-                        'Cannot find {0}\nCreate a PY4J_JAR environment '
-                        'variable to be equal to the full path to {0}'.format(filename)
-                    )
+                    raise OSError(f'Cannot find {filename}\n'
+                                  f'Create a PY4J_JAR environment variable '
+                                  f'to be equal to the full path to {filename}')
 
             # build the java command
             wrapper = os.path.join(os.path.dirname(__file__), 'py4j-wrapper.jar')
-            cmd = ['java', '-cp', py4j_jar + os.pathsep + wrapper, 'Py4JWrapper', str(port)]
+            cmd = ['java', '-cp', f'{py4j_jar}{os.pathsep}{wrapper}', 'Py4JWrapper', str(port)]
 
             # from the URLClassLoader documentation:
             #   Any URL that ends with a '/' is assumed to refer to a directory. Otherwise, the URL
@@ -228,7 +224,7 @@ class LoadLibrary:
             if ext == '.jar':
                 cmd.append(self._path)
             else:  # it is a .class file
-                cmd.append(os.path.dirname(self._path) + '/')
+                cmd.append(f'{os.path.dirname(self._path)}/')
 
             err = None
             try:
@@ -306,10 +302,8 @@ class LoadLibrary:
                     if not status == 0:
                         raise OSError(msg)
                     else:
-                        update_msg = 'Checking .NET config returned "{}" '.format(msg)
-                        update_msg += 'and still cannot load library.\n'
-                        update_msg += str(err)
-                        raise OSError(update_msg)
+                        raise OSError(f'Checking .NET config returned {msg!r} and still '
+                                      f'cannot load the library.\n{err}')
                 raise OSError('The above "System.IO.FileLoadException" is not handled.\n')
 
             try:
@@ -345,7 +339,7 @@ class LoadLibrary:
             self.cleanup()
 
     def __repr__(self):
-        return '<LoadLibrary libtype={} path={}>'.format(self._lib.__class__.__name__, self._path)
+        return f'<LoadLibrary libtype={self._lib.__class__.__name__} path={self._path}>'
 
     def __enter__(self):
         return self
@@ -422,4 +416,4 @@ class DotNet:
         self._path = path
 
     def __repr__(self):
-        return '<{} path={}>'.format(self.__class__.__name__, self._path)
+        return f'<{self.__class__.__name__} path={self._path}>'

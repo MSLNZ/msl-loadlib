@@ -53,7 +53,7 @@ def test_cpp():
 
 @skipif_no_pythonnet
 def test_dotnet():
-    path = os.path.join(EXAMPLES_DIR, 'dotnet_lib' + suffix + '.dll')
+    path = os.path.join(EXAMPLES_DIR, f'dotnet_lib{suffix}.dll')
     with LoadLibrary(path, libtype='net') as library:
         assert isinstance(library.assembly, library.lib.System.Reflection.Assembly)
         assert library.assembly is not None

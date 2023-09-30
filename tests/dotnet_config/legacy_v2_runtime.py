@@ -12,7 +12,7 @@ from msl.loadlib import IS_PYTHON_64BIT
 from msl.loadlib import LoadLibrary
 
 bitness = 'x64' if IS_PYTHON_64BIT else 'x86'
-filename = 'legacy_v2_runtime_{}.dll'.format(bitness)
+filename = f'legacy_v2_runtime_{bitness}.dll'
 path = os.path.join(os.path.dirname(__file__), 'legacy_v2_runtime', filename)
 
 # this is not necessary, just wanted to randomly select
@@ -24,6 +24,6 @@ net = LoadLibrary(path, libtype=libtype)
 expected = 'Microsoft Visual Studio 2005 (Version 8.0.50727.42); Microsoft .NET Framework (Version 2.0.50727)'
 environment = net.lib.legacy.Build().Environment()
 if environment != expected:
-    sys.exit('{!r} != {!r}'.format(environment, expected))
+    sys.exit(f'{environment!r} != {expected!r}')
 
 print('SUCCESS')

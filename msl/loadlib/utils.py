@@ -154,7 +154,7 @@ def check_dot_net_config(py_exe_path):
         A message describing the outcome.
     """
 
-    config_path = py_exe_path + '.config'
+    config_path = f'{py_exe_path}.config'
 
     if os.path.isfile(config_path):
 
@@ -162,22 +162,20 @@ def check_dot_net_config(py_exe_path):
         try:
             tree = ET.parse(config_path)
         except ET.ParseError:
-            msg = 'Invalid XML file {}\n' \
-                  'Cannot create the useLegacyV2RuntimeActivationPolicy ' \
-                  'property.\n'.format(config_path)
+            msg = (f'Invalid XML file {config_path}\n'
+                   f'Cannot create the useLegacyV2RuntimeActivationPolicy property.\n')
             logger.warning(msg)
             return -1, msg
 
         root = tree.getroot()
 
         if root.tag != 'configuration':
-            msg = 'The root tag in {config_path} is <{tag}>.\n' \
-                  'It must be <configuration> in order to create a .NET Framework config\n' \
-                  'file which enables the useLegacyV2RuntimeActivationPolicy property.\n' \
-                  'To load an assembly from a .NET Framework version < 4.0 the following\n' \
-                  'must be in {config_path}\n\n' \
-                  '<configuration>{fix}</configuration>\n'.format(
-                   config_path=config_path, tag=root.tag, fix=NET_FRAMEWORK_FIX)
+            msg = (f'The root tag in {config_path} is <{root.tag}>.\n'
+                   f'It must be <configuration> in order to create a .NET Framework config\n'
+                   f'file which enables the useLegacyV2RuntimeActivationPolicy property.\n'
+                   f'To load an assembly from a .NET Framework version < 4.0 the following\n'
+                   f'must be in {config_path}\n\n'
+                   f'<configuration>{NET_FRAMEWORK_FIX}</configuration>\n')
             logger.warning(msg)
             return -1, msg
 
@@ -190,17 +188,15 @@ def check_dot_net_config(py_exe_path):
             lines.insert(-1, NET_FRAMEWORK_FIX)
             with open(config_path, mode='wt') as fp:
                 fp.writelines(lines)
-            msg = 'Added the useLegacyV2RuntimeActivationPolicy property to\n' \
-                  '{config_path}\n' \
-                  'Try again to see if Python can now load the .NET library.\n'.format(
-                   config_path=config_path)
+            msg = (f'Added the useLegacyV2RuntimeActivationPolicy property to\n'
+                   f'{config_path}\n'
+                   f'Try again to see if Python can now load the .NET library.\n')
             return 1, msg
         else:
             if not policy.attrib['useLegacyV2RuntimeActivationPolicy'].lower() == 'true':
-                msg = 'The useLegacyV2RuntimeActivationPolicy in\n' \
-                      '{config_path}\n' \
-                      'is "false". Cannot load an assembly from a .NET Framework ' \
-                      'version < 4.0.\n'.format(config_path=config_path)
+                msg = (f'The useLegacyV2RuntimeActivationPolicy in\n{config_path}\n'
+                       f'is "false". Cannot load an assembly from a .NET Framework '
+                       f'version < 4.0.\n')
                 logger.warning(msg)
                 return -1, msg
             return 0, 'The useLegacyV2RuntimeActivationPolicy property is enabled'
@@ -213,12 +209,12 @@ def check_dot_net_config(py_exe_path):
             f.write(NET_FRAMEWORK_FIX)
             f.write('</configuration>\n')
 
-        msg = 'The library appears to be from a .NET Framework version < 4.0.\n' \
-              'The useLegacyV2RuntimeActivationPolicy property was added to\n' \
-              '{config_path}\n' \
-              'to fix the "System.IO.FileLoadException: Mixed mode assembly..." error.\n' \
-              'Rerun the script, or restart the interactive console, to see if\n' \
-              'Python can now load the .NET library.\n'.format(config_path=config_path)
+        msg = (f'The library appears to be from a .NET Framework version < 4.0.\n'
+               f'The useLegacyV2RuntimeActivationPolicy property was added to\n'
+               f'{config_path}\n'
+               f'to fix the "System.IO.FileLoadException: Mixed mode assembly..." error.\n'
+               f'Rerun the script, or restart the interactive console, to see if\n'
+               f'Python can now load the .NET library.\n')
         return 1, msg
 
 
@@ -289,9 +285,8 @@ def wait_for_server(host, port, timeout):
             return
 
         if time.time() > stop:
-            raise ConnectionTimeoutError(
-                'Timeout after {:.1f} seconds. Could not connect to {}:{}'.format(timeout, host, port)
-            )
+            raise ConnectionTimeoutError(f'Timeout after {timeout:.1f} second(s). '
+                                         f'Could not connect to {host}:{port}')
 
 
 def get_com_info(*additional_keys):

@@ -57,5 +57,5 @@ def test_bad_del():
 
 
 def test_invalid_server32_dir():
-    with pytest.raises(OSError, match=r'^Cannot find {}$'.format(SERVER_FILENAME)):
+    with pytest.raises(OSError, match=rf'^Cannot find {SERVER_FILENAME}$'):
         Client64(__file__, server32_dir='')

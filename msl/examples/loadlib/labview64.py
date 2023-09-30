@@ -58,4 +58,4 @@ class Labview64(Client64):
         w = int(weighting)
         if w == 0 or w == 1:
             return self.request32('stdev', x, w)
-        raise ValueError('The weighting must be either 0 or 1. Got {}'.format(w))
+        raise ValueError(f'The weighting must be either 0 or 1. Got {w}')

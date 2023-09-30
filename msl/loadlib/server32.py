@@ -153,10 +153,10 @@ class Server32(HTTPServer):
         """
         exe = os.path.join(os.path.dirname(__file__), SERVER_FILENAME)
         if IS_WINDOWS:
-            cmd = 'start "msl.loadlib.Server32 || interactive console" "{exe}" --interactive'
+            cmd = f'start "msl.loadlib.Server32 || interactive console" "{exe}" --interactive'
         else:
-            cmd = "gnome-terminal --command='{exe} --interactive'"
-        os.system(cmd.format(exe=exe))
+            cmd = f"gnome-terminal --command='{exe} --interactive'"
+        os.system(cmd)
 
     @staticmethod
     def remove_site_packages_64bit():
@@ -291,15 +291,14 @@ class _RequestHandler(BaseHTTPRequestHandler):
             self.send_response(OK)
             self.end_headers()
 
-        except Exception as e:
-            print('{}: {}'.format(e.__class__.__name__, e))
+        except:  # noqa: PEP 8: E722 do not use bare 'except'
             exc_type, exc_value, exc_traceback = sys.exc_info()
             tb_list = traceback.extract_tb(exc_traceback)
             tb = tb_list[min(len(tb_list)-1, 1)]  # get the Server32 subclass exception
             response = {'name': exc_type.__name__, 'value': str(exc_value)}
-            traceback_ = '  File {!r}, line {}, in {}'.format(tb[0], tb[1], tb[2])
+            traceback_ = f'  File {tb[0]!r}, line {tb[1]}, in {tb[2]}'
             if tb[3]:
-                traceback_ += '\n    {}'.format(tb[3])
+                traceback_ += f'\n    {tb[3]}'
             response['traceback'] = traceback_
             self.send_response(ERROR)
             self.end_headers()

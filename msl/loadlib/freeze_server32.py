@@ -212,7 +212,7 @@ def _get_standard_modules():
         os_ignore_list = []
 
     modules = []
-    url = 'https://docs.python.org/{0}.{1}/py-modindex.html'.format(*sys.version_info)
+    url = f'https://docs.python.org/{sys.version_info.major}.{sys.version_info.minor}/py-modindex.html'
     for s in urlopen(url).read().decode().split('#module-')[1:]:
         m = s.split('"><code')
         add_module = True
@@ -238,7 +238,7 @@ def _get_standard_modules():
 
 
 def _create_version_info_file(root_path):
-    text = """# UTF-8
+    text = f"""# UTF-8
 #
 # For more details about fixed file info 'ffi' see:
 # https://docs.microsoft.com/en-us/windows/win32/api/verrsrc/ns-verrsrc-vs_fixedfileinfo
@@ -246,8 +246,8 @@ def _create_version_info_file(root_path):
 # https://docs.microsoft.com/en-us/windows/win32/menurc/stringfileinfo-block
 VSVersionInfo(
   ffi=FixedFileInfo(
-    filevers=({loadlib_major}, {loadlib_minor}, {loadlib_micro}, 0),
-    prodvers=({py_major}, {py_minor}, {py_micro}, 0),
+    filevers=({loadlib.version_info.major}, {loadlib.version_info.minor}, {loadlib.version_info.micro}, 0),
+    prodvers=({sys.version_info.major}, {sys.version_info.minor}, {sys.version_info.micro}, 0),
     mask=0x3f,
     flags=0x0,
     OS=0x40004,
@@ -260,29 +260,19 @@ VSVersionInfo(
       [
       StringTable(
         '000004B0',
-        [StringStruct('CompanyName', '{author}'),
+        [StringStruct('CompanyName', '{loadlib.__author__}'),
         StringStruct('FileDescription', 'Access a 32-bit library from 64-bit Python'),
-        StringStruct('FileVersion', '{loadlib_major}.{loadlib_minor}.{loadlib_micro}.0'),
-        StringStruct('InternalName', '{filename}'),
-        StringStruct('LegalCopyright', '\xc2{copyright}'),
-        StringStruct('OriginalFilename', '{filename}'),
+        StringStruct('FileVersion', '{loadlib.version_info.major}.{loadlib.version_info.minor}.{loadlib.version_info.micro}.0'),
+        StringStruct('InternalName', '{loadlib.SERVER_FILENAME}'),
+        StringStruct('LegalCopyright', '\xc2{loadlib.__copyright__}'),
+        StringStruct('OriginalFilename', '{loadlib.SERVER_FILENAME}'),
         StringStruct('ProductName', 'Python'),
-        StringStruct('ProductVersion', '{py_major}.{py_minor}.{py_micro}.0')])
+        StringStruct('ProductVersion', '{sys.version_info.major}.{sys.version_info.minor}.{sys.version_info.micro}.0')])
       ]), 
     VarFileInfo([VarStruct('Translation', [0, 1200])])
   ]
 )
-""".format(
-        loadlib_major=loadlib.version_info.major,
-        loadlib_minor=loadlib.version_info.minor,
-        loadlib_micro=loadlib.version_info.micro,
-        py_major=sys.version_info.major,
-        py_minor=sys.version_info.minor,
-        py_micro=sys.version_info.micro,
-        filename=loadlib.SERVER_FILENAME,
-        copyright=loadlib.__copyright__,
-        author=loadlib.__author__,
-    )
+"""
     filename = 'file_version_info.txt'
     with open(os.path.join(root_path, filename), mode='wt') as fp:
         fp.write(text)
