@@ -11,12 +11,14 @@ Version 1.0.0 (in development)
 
 * Changed
 
+  - use :PEP:`420` implicit namespace package
   - the `requires_pythonnet` and `requires_comtypes` arguments to
     :func:`freeze_server32.main() <msl.loadlib.freeze_server32.main>`
     were removed and the `packages` and `data` arguments were added
 
 * Removed
 
+  - support for Python 2.7, 3.5, 3.6 and 3.7
   - the deprecated `quiet` parameter
 
 
