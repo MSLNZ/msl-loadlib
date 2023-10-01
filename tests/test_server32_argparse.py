@@ -6,7 +6,6 @@ import os
 import sys
 
 from msl.loadlib import Client64
-from msl.loadlib import IS_WINDOWS
 from msl.loadlib import Server32
 
 if Server32.is_interpreter():
@@ -14,6 +13,7 @@ if Server32.is_interpreter():
         pass
 else:
     from conftest import skipif_no_server32
+    from msl.loadlib.constants import IS_WINDOWS
 
 
 class ArgParse32(Server32):

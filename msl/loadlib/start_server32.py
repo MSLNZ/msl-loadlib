@@ -17,8 +17,8 @@ import sys
 import tempfile
 import traceback
 
-from msl.loadlib import SERVER_FILENAME
 from msl.loadlib import Server32
+from msl.loadlib.constants import SERVER_FILENAME
 
 
 def main():

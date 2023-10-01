@@ -10,9 +10,9 @@ from conftest import skipif_no_pythonnet
 from conftest import skipif_no_server32
 from msl.examples.loadlib import Cpp64
 from msl.examples.loadlib import EXAMPLES_DIR
-from msl.loadlib import DEFAULT_EXTENSION
-from msl.loadlib import IS_PYTHON_64BIT
 from msl.loadlib import LoadLibrary
+from msl.loadlib.constants import DEFAULT_EXTENSION
+from msl.loadlib.constants import IS_PYTHON_64BIT
 from msl.loadlib.load_library import DotNet
 from msl.loadlib.utils import logger
 

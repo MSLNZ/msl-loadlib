@@ -18,9 +18,9 @@ import warnings
 from http.client import CannotSendRequest
 from http.client import HTTPConnection
 
-from . import IS_WINDOWS
-from . import SERVER_FILENAME
 from . import utils
+from .constants import IS_WINDOWS
+from .constants import SERVER_FILENAME
 from .exceptions import ConnectionTimeoutError
 from .exceptions import ResponseTimeoutError
 from .exceptions import Server32Error

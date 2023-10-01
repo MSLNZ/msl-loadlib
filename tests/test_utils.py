@@ -8,9 +8,9 @@ import xml.etree.ElementTree as ET
 import pytest
 
 from conftest import skipif_not_windows
-from msl.loadlib import IS_MAC
-from msl.loadlib import IS_WINDOWS
 from msl.loadlib import utils
+from msl.loadlib.constants import IS_MAC
+from msl.loadlib.constants import IS_WINDOWS
 
 
 def test_timeout():
@@ -91,7 +91,7 @@ def test_check_dot_net_config():
     assert root.find('startup').attrib['useLegacyV2RuntimeActivationPolicy'].lower() == 'true'
     os.remove(cfg)
 
-    # the config file exists but it is not a valid XML file
+    # the config file exists, but it is not a valid XML file
     exe = os.path.join(base, 'invalid_xml.exe')
     val, msg = utils.check_dot_net_config(exe)
     assert val == -1

@@ -5,7 +5,7 @@ import pytest
 from conftest import skipif_no_server32
 from msl.examples.loadlib import Cpp64
 from msl.loadlib import Client64
-from msl.loadlib import SERVER_FILENAME
+from msl.loadlib.constants import SERVER_FILENAME
 
 
 @skipif_no_server32

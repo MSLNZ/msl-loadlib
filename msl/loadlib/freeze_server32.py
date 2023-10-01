@@ -10,6 +10,7 @@ from tempfile import TemporaryDirectory
 from urllib.request import urlopen
 
 from msl import loadlib
+from msl.loadlib import constants
 
 
 def main(spec=None, dest=None, packages=None, data=None):
@@ -56,7 +57,7 @@ def main(spec=None, dest=None, packages=None, data=None):
         `dest_dir` is not specified, the file(s) will be added to the
         top-level directory of the 32-bit server.
     """
-    if loadlib.IS_PYTHON_64BIT:
+    if constants.IS_PYTHON_64BIT:
         print('Must freeze the server using a 32-bit Python interpreter', file=sys.stderr)
         return
 
@@ -80,7 +81,7 @@ def main(spec=None, dest=None, packages=None, data=None):
 
     tmp_dir = TemporaryDirectory(ignore_cleanup_errors=True)
     work_path = tmp_dir.name
-    server_path = os.path.join(dist_path, loadlib.SERVER_FILENAME)
+    server_path = os.path.join(dist_path, constants.SERVER_FILENAME)
 
     # Specifically invoke pyinstaller in the context of the current python interpreter.
     # This fixes the issue where the blind `pyinstaller` invocation points to a 64-bit version.
@@ -94,11 +95,11 @@ def main(spec=None, dest=None, packages=None, data=None):
         cmd.extend(['--specpath', work_path,
                     '--python-option', 'u'])
 
-        if loadlib.IS_WINDOWS:
+        if constants.IS_WINDOWS:
             cmd.extend(['--version-file', _create_version_info_file(work_path)])
 
         cmd.extend([
-            '--name', loadlib.SERVER_FILENAME,
+            '--name', constants.SERVER_FILENAME,
             '--onefile',
             '--hidden-import', 'msl.examples.loadlib',
         ])
@@ -202,11 +203,11 @@ def _get_standard_modules():
     # some modules are platform specific and got a
     #   RecursionError: maximum recursion depth exceeded
     # when running this script with PyInstaller 3.3 installed
-    if loadlib.IS_WINDOWS:
+    if constants.IS_WINDOWS:
         os_ignore_list = ['(Unix)', '(Linux)', '(Linux, FreeBSD)']
-    elif loadlib.IS_LINUX:
+    elif constants.IS_LINUX:
         os_ignore_list = ['(Windows)']
-    elif loadlib.IS_MAC:
+    elif constants.IS_MAC:
         os_ignore_list = ['(Windows)', '(Linux)', '(Linux, FreeBSD)']
     else:
         os_ignore_list = []
@@ -263,9 +264,9 @@ VSVersionInfo(
         [StringStruct('CompanyName', '{loadlib.__author__}'),
         StringStruct('FileDescription', 'Access a 32-bit library from 64-bit Python'),
         StringStruct('FileVersion', '{loadlib.version_info.major}.{loadlib.version_info.minor}.{loadlib.version_info.micro}.0'),
-        StringStruct('InternalName', '{loadlib.SERVER_FILENAME}'),
+        StringStruct('InternalName', '{constants.SERVER_FILENAME}'),
         StringStruct('LegalCopyright', '\xc2{loadlib.__copyright__}'),
-        StringStruct('OriginalFilename', '{loadlib.SERVER_FILENAME}'),
+        StringStruct('OriginalFilename', '{constants.SERVER_FILENAME}'),
         StringStruct('ProductName', 'Python'),
         StringStruct('ProductVersion', '{sys.version_info.major}.{sys.version_info.minor}.{sys.version_info.micro}.0')])
       ]), 

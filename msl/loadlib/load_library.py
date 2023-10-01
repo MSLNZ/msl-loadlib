@@ -7,9 +7,9 @@ import os
 import subprocess
 import sys
 
-from . import DEFAULT_EXTENSION
-from . import IS_WINDOWS
 from . import utils
+from .constants import DEFAULT_EXTENSION
+from .constants import IS_WINDOWS
 
 
 class LoadLibrary:

@@ -2,12 +2,13 @@ import os
 import sys
 
 import pytest
+
 try:
     import clr
 except ImportError:
     clr = None
 
-from msl import loadlib
+from msl.loadlib.constants import *
 
 
 def add_py4j_in_eggs():
@@ -24,7 +25,7 @@ def add_py4j_in_eggs():
 
 
 def has_labview_runtime():
-    if loadlib.IS_PYTHON_64BIT:
+    if IS_PYTHON_64BIT:
         root = r'C:\Program Files\National Instruments\Shared\LabVIEW Run-Time'
     else:
         root = r'C:\Program Files (x86)\National Instruments\Shared\LabVIEW Run-Time'
@@ -43,19 +44,19 @@ def has_labview_runtime():
 @pytest.fixture(autouse=True)
 def doctest_skipif(doctest_namespace):
 
-    if not loadlib.IS_WINDOWS:
+    if not IS_WINDOWS:
         not_windows = lambda: pytest.skip('not Windows')
         readme_com = lambda: pytest.skip('skipped at COM test')
     else:
         not_windows = lambda: None
         readme_com = lambda: None
 
-    if loadlib.IS_MAC:
+    if IS_MAC:
         is_mac = lambda: pytest.skip('is macOS')
     else:
         is_mac = lambda: None
 
-    if loadlib.IS_PYTHON_64BIT:
+    if IS_PYTHON_64BIT:
         bit64 = lambda: pytest.skip('requires 32-bit Python')
         bit32 = lambda: None
         readme_all = lambda: None
@@ -64,7 +65,7 @@ def doctest_skipif(doctest_namespace):
         bit32 = lambda: pytest.skip('requires 64-bit Python')
         readme_all = lambda: pytest.skip('skipped all tests')
 
-    if loadlib.IS_PYTHON_64BIT and has_labview_runtime():
+    if IS_PYTHON_64BIT and has_labview_runtime():
         no_labview64 = lambda: None
     else:
         no_labview64 = lambda: pytest.skip('requires 64-bit LabVIEW Run-Time Engine')
@@ -78,7 +79,7 @@ def doctest_skipif(doctest_namespace):
         readme_dotnet = lambda: None
         no_pythonnet = lambda: None
 
-    if loadlib.IS_WINDOWS and os.getenv('GITHUB_ACTIONS') == 'true':
+    if IS_WINDOWS and os.getenv('GITHUB_ACTIONS') == 'true':
         win32_github_actions = lambda: pytest.skip('flaky test on Windows and GA')
     else:
         win32_github_actions = lambda: None
@@ -97,7 +98,7 @@ def doctest_skipif(doctest_namespace):
 
 
 skipif_no_comtypes = pytest.mark.skipif(
-    not loadlib.IS_WINDOWS,
+    not IS_WINDOWS,
     reason='comtypes is only supported on Windows'
 )
 skipif_no_labview_runtime = pytest.mark.skipif(
@@ -109,15 +110,15 @@ skipif_no_pythonnet = pytest.mark.skipif(
     reason='pythonnet is not installed'
 )
 skipif_no_server32 = pytest.mark.skipif(
-    loadlib.IS_MAC,
+    IS_MAC,
     reason='32-bit server does not exist'
 )
 skipif_not_windows = pytest.mark.skipif(
-    not loadlib.IS_WINDOWS,
+    not IS_WINDOWS,
     reason='not Windows'
 )
 
 xfail_windows_ga = pytest.mark.xfail(
-    loadlib.IS_WINDOWS and os.getenv('GITHUB_ACTIONS') == 'true',
+    IS_WINDOWS and os.getenv('GITHUB_ACTIONS') == 'true',
     reason='flaky test on Windows and GA'
 )

@@ -16,9 +16,9 @@ import traceback
 from http.server import BaseHTTPRequestHandler
 from http.server import HTTPServer
 
-from . import IS_WINDOWS
-from . import LoadLibrary
-from . import SERVER_FILENAME
+from .constants import IS_WINDOWS
+from .constants import SERVER_FILENAME
+from .load_library import LoadLibrary
 
 METADATA = '-METADATA-'
 SHUTDOWN = '-SHUTDOWN-'

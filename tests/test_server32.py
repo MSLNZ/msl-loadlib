@@ -12,8 +12,8 @@ from msl.examples.loadlib import Echo64
 from msl.examples.loadlib import Fortran64
 from msl.examples.loadlib import FourPoints
 from msl.loadlib import ConnectionTimeoutError
-from msl.loadlib import IS_MAC
-from msl.loadlib import IS_WINDOWS
+from msl.loadlib.constants import IS_MAC
+from msl.loadlib.constants import IS_WINDOWS
 
 c = None
 f = None

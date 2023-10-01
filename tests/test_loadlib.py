@@ -22,52 +22,53 @@ from conftest import skipif_no_comtypes
 from conftest import skipif_no_labview_runtime
 from conftest import skipif_no_pythonnet
 from conftest import skipif_not_windows
-from msl import loadlib
 from msl.examples.loadlib import EXAMPLES_DIR
 from msl.examples.loadlib import FourPoints
 from msl.examples.loadlib import NPoints
 from msl.examples.loadlib import Point
+from msl.loadlib import LoadLibrary
+from msl.loadlib.constants import *
+from msl.loadlib.utils import get_com_info
 
 
 def test_invalid_libtype():
-    with pytest.raises(ValueError, match=', '.join(loadlib.LoadLibrary.LIBTYPES)):
-        loadlib.LoadLibrary('does-not-matter', libtype='xxxxxxxx')
+    with pytest.raises(ValueError, match=', '.join(LoadLibrary.LIBTYPES)):
+        LoadLibrary('does-not-matter', libtype='xxxxxxxx')
 
 
 @pytest.mark.parametrize('path', [None, ''])
 def test_invalid_path(path):
     with pytest.raises(ValueError, match=r'You must specify the path'):
-        loadlib.LoadLibrary(path)
+        LoadLibrary(path)
 
 
-@pytest.mark.skipif(loadlib.IS_MAC, reason='the 32-bit libraries do not exist for macOS')
+@pytest.mark.skipif(IS_MAC, reason='the 32-bit libraries do not exist for macOS')
 @pytest.mark.parametrize('filename', ['cpp_lib', 'fortran_lib'])
 def test_wrong_bitness(filename):
-    suffix = '32' if loadlib.IS_PYTHON_64BIT else '64'
-    path = os.path.join(EXAMPLES_DIR, filename+suffix+loadlib.DEFAULT_EXTENSION)
+    suffix = '32' if IS_PYTHON_64BIT else '64'
+    path = os.path.join(EXAMPLES_DIR, f'{filename}{suffix}{DEFAULT_EXTENSION}')
     assert os.path.isfile(path)
     with pytest.raises(OSError):
-        loadlib.LoadLibrary(path)
+        LoadLibrary(path)
 
 
 @skipif_no_pythonnet
 @skipif_not_windows
 def test_wrong_bitness_dotnet():
-    import clr
     import System
-    suffix = '32' if loadlib.IS_PYTHON_64BIT else '64'
+    suffix = '32' if IS_PYTHON_64BIT else '64'
     path = os.path.join(EXAMPLES_DIR, 'dotnet_lib'+suffix+'.dll')
     assert os.path.isfile(path)
     with pytest.raises(System.BadImageFormatException):
-        loadlib.LoadLibrary(path, libtype='net')
+        LoadLibrary(path, libtype='net')
 
 
 @skipif_no_pythonnet
-@pytest.mark.skipif(loadlib.IS_WINDOWS, reason='requires mono runtime')
+@pytest.mark.skipif(IS_WINDOWS, reason='requires mono runtime')
 @pytest.mark.parametrize('filename', ['dotnet_lib32.dll', 'dotnet_lib64.dll'])
 def test_mono_bitness_independent(filename):
     path = os.path.join(EXAMPLES_DIR, filename)
-    net = loadlib.LoadLibrary(path, libtype='clr')
+    net = LoadLibrary(path, libtype='clr')
 
     names = ';'.join(str(name) for name in net.assembly.GetTypes()).split(';')
     assert len(names) == 4
@@ -116,9 +117,9 @@ def test_mono_bitness_independent(filename):
 
 
 def test_cpp():
-    bitness = '64' if loadlib.IS_PYTHON_64BIT else '32'
+    bitness = '64' if IS_PYTHON_64BIT else '32'
     path = os.path.join(EXAMPLES_DIR, 'cpp_lib' + bitness)
-    cpp = loadlib.LoadLibrary(path)
+    cpp = LoadLibrary(path)
 
     lib = cpp.lib
     lib.add.argtypes = [c_int, c_int]
@@ -163,7 +164,7 @@ def test_cpp():
     # ignore testing for null termination on different platforms
     assert '[abc x|z j 1 *&' == str_out[:len(str_in)].decode()
 
-    fp = FourPoints((0, 0), (0, 1), (1, 1), (1, 0))
+    fp = FourPoints(Point(0, 0), Point(0, 1), Point(1, 1), Point(1, 0))
     assert lib.distance_4_points(fp) == pytest.approx(4.0)
 
     n = 2**16
@@ -179,9 +180,9 @@ def test_cpp():
 
 
 def test_fortran():
-    bitness = '64' if loadlib.IS_PYTHON_64BIT else '32'
+    bitness = '64' if IS_PYTHON_64BIT else '32'
     path = os.path.join(EXAMPLES_DIR, 'fortran_lib' + bitness)
-    fortran = loadlib.LoadLibrary(path)
+    fortran = LoadLibrary(path)
 
     lib = fortran.lib
     lib.sum_8bit.argtypes = [POINTER(c_int8), POINTER(c_int8)]
@@ -266,9 +267,9 @@ def test_fortran():
 
 @skipif_no_pythonnet
 def test_dotnet():
-    bitness = '64' if loadlib.IS_PYTHON_64BIT else '32'
+    bitness = '64' if IS_PYTHON_64BIT else '32'
     path = os.path.join(EXAMPLES_DIR, f'dotnet_lib{bitness}.dll')
-    net = loadlib.LoadLibrary(path, 'clr')
+    net = LoadLibrary(path, 'clr')
 
     names = ';'.join(str(name) for name in net.assembly.GetTypes()).split(';')
     assert len(names) == 4
@@ -320,12 +321,12 @@ def test_dotnet():
 def test_labview():
     from ctypes import c_double, byref
 
-    if loadlib.IS_PYTHON_64BIT:
+    if IS_PYTHON_64BIT:
         path = f'{EXAMPLES_DIR}/labview_lib64.dll'
     else:
         path = f'{EXAMPLES_DIR}/labview_lib32.dll'
 
-    labview = loadlib.LoadLibrary(path)
+    labview = LoadLibrary(path)
 
     data = [1, 2, 3, 4, 5, 6, 7, 8, 9]
     x = (c_double * len(data))(*data)
@@ -347,12 +348,12 @@ def test_labview():
 
 def test_java():
     try:
-        jar = loadlib.LoadLibrary(f'{EXAMPLES_DIR}/java_lib.jar')
+        jar = LoadLibrary(f'{EXAMPLES_DIR}/java_lib.jar')
     except OSError as e:
         if 'Create a PY4J_JAR environment variable' not in str(e):
             raise
         add_py4j_in_eggs()
-        jar = loadlib.LoadLibrary(f'{EXAMPLES_DIR}/java_lib.jar')
+        jar = LoadLibrary(f'{EXAMPLES_DIR}/java_lib.jar')
 
     Math = jar.lib.nz.msl.examples.MathUtils
     Matrix = jar.lib.nz.msl.examples.Matrix
@@ -437,7 +438,7 @@ def test_java():
 
     jar.gateway.shutdown()
 
-    cls = loadlib.LoadLibrary(f'{EXAMPLES_DIR}/Trig.class')
+    cls = LoadLibrary(f'{EXAMPLES_DIR}/Trig.class')
     Trig = cls.lib.Trig
 
     x = 0.123456
@@ -468,21 +469,21 @@ def test_comtypes():
 
     progid = 'MediaPlayer.MediaPlayer.1'
 
-    obj = loadlib.LoadLibrary(progid, 'com')
+    obj = LoadLibrary(progid, 'com')
     # don't care whether it is enabled, just that a boolean is returned
     assert isinstance(obj.lib.IsSoundCardEnabled(), bool)
 
     with pytest.raises(OSError, match=r"Cannot find 'ABC.def.GHI' for libtype='com'"):
-        loadlib.LoadLibrary('ABC.def.GHI', 'com')
+        LoadLibrary('ABC.def.GHI', 'com')
 
-    info = loadlib.utils.get_com_info()
+    info = get_com_info()
     assert info
 
     # load by CLSID
     found_it = False
     for key, value in info.items():
         if value['ProgID'] == progid:
-            obj = loadlib.LoadLibrary(key, 'com')
+            obj = LoadLibrary(key, 'com')
             assert isinstance(obj.lib.IsSoundCardEnabled(), bool)
             found_it = True
             break
@@ -495,7 +496,7 @@ def test_activex_raises():
     from msl.loadlib.activex import Application
 
     with pytest.raises(OSError, match=r"Cannot find 'ABC' for libtype='activex'"):
-        loadlib.LoadLibrary('ABC', 'activex')
+        LoadLibrary('ABC', 'activex')
 
     with pytest.raises(OSError, match=r"Cannot find 'ABC' for libtype='activex'"):
         Application.load('ABC')
@@ -504,13 +505,13 @@ def test_activex_raises():
 
     for item in [0, [], 'xxx']:
         with pytest.raises(OSError, match=r'Cannot create a Handle'):
-            loadlib.LoadLibrary(progid, 'activex', parent=item)
+            LoadLibrary(progid, 'activex', parent=item)
         with pytest.raises(OSError, match=r'Cannot create a Handle'):
             Application.load(progid, parent=item)
 
 
 def test_unicode_path_java():
-    cls = loadlib.LoadLibrary('./tests/uñicödé/Trig.class')
+    cls = LoadLibrary('./tests/uñicödé/Trig.class')
     x = 0.123456
     assert cls.lib.Trig.cos(x) == pytest.approx(math.cos(x))
     repr(cls)  # this should not raise an exception
@@ -520,7 +521,7 @@ def test_unicode_path_java():
 
 @skipif_no_pythonnet
 def test_unicode_path_dotnet():
-    net = loadlib.LoadLibrary('./tests/uñicödé/Namespace.With.Dots-uñicödé.dll', 'net')
+    net = LoadLibrary('./tests/uñicödé/Namespace.With.Dots-uñicödé.dll', 'net')
     checker = net.lib.Namespace.With.Dots.Checker()
     assert checker.IsSuccess()
     repr(net)  # this should not raise an exception
@@ -529,8 +530,8 @@ def test_unicode_path_dotnet():
 
 
 def test_unicode_path_cpp():
-    bitness = '64' if loadlib.IS_PYTHON_64BIT else '32'
-    cpp = loadlib.LoadLibrary(f'cpp_lib{bitness}-uñicödé')
+    bitness = '64' if IS_PYTHON_64BIT else '32'
+    cpp = LoadLibrary(f'cpp_lib{bitness}-uñicödé')
     assert cpp.lib.add(1, 2) == 3
     repr(cpp)  # this should not raise an exception
     str(cpp)  # this should not raise an exception
@@ -539,7 +540,7 @@ def test_unicode_path_cpp():
 @skipif_no_pythonnet
 def test_issue7():
     # checks that Issue #7 is fixed
-    net = loadlib.LoadLibrary('./tests/namespace_with_dots/Namespace.With.Dots.dll', 'net')
+    net = LoadLibrary('./tests/namespace_with_dots/Namespace.With.Dots.dll', 'net')
     checker = net.lib.Namespace.With.Dots.Checker()
     assert checker.IsSuccess()
     repr(net)  # test that the __repr__ and __str__ methods don't raise an exception
@@ -549,13 +550,13 @@ def test_issue7():
 
 def test_issue8():
     # checks that Issue #8 is fixed
-    bitness = '64' if loadlib.IS_PYTHON_64BIT else '32'
-    loadlib.LoadLibrary(pathlib.Path(os.path.join(EXAMPLES_DIR, 'cpp_lib' + bitness)))
+    bitness = '64' if IS_PYTHON_64BIT else '32'
+    LoadLibrary(pathlib.Path(os.path.join(EXAMPLES_DIR, 'cpp_lib' + bitness)))
 
 
 @skipif_no_pythonnet
 def test_dotnet_nested_namespace():
-    net = loadlib.LoadLibrary('./tests/nested_namespaces/nested_namespaces.dll', 'clr')
+    net = LoadLibrary('./tests/nested_namespaces/nested_namespaces.dll', 'clr')
     lib = net.lib
 
     assert lib.System.Math.PI == pytest.approx(math.pi)
@@ -644,20 +645,20 @@ def test_py4j_jar_environment_variable():
     # the file does not exist
     os.environ['PY4J_JAR'] = f'{__file__}abc'
     with pytest.raises(OSError, match=r'the full path to py4j[\d.]+.jar is invalid'):
-        loadlib.LoadLibrary(f'{EXAMPLES_DIR}/java_lib.jar')
+        LoadLibrary(f'{EXAMPLES_DIR}/java_lib.jar')
 
     # a valid folder, but expect a path to the py4j<version>.jar file
     os.environ['PY4J_JAR'] = os.path.dirname(__file__)
     with pytest.raises(OSError, match=r'the full path to py4j[\d.]+.jar is invalid'):
-        loadlib.LoadLibrary(f'{EXAMPLES_DIR}/java_lib.jar')
+        LoadLibrary(f'{EXAMPLES_DIR}/java_lib.jar')
 
     # a valid file but not a py4j<version>.jar file
     os.environ['PY4J_JAR'] = __file__
     with pytest.raises(OSError, match=r'the full path to py4j[\d.]+.jar is invalid'):
-        loadlib.LoadLibrary(f'{EXAMPLES_DIR}/java_lib.jar')
+        LoadLibrary(f'{EXAMPLES_DIR}/java_lib.jar')
 
     os.environ['PY4J_JAR'] = original
-    java = loadlib.LoadLibrary(f'{EXAMPLES_DIR}/java_lib.jar')
+    java = LoadLibrary(f'{EXAMPLES_DIR}/java_lib.jar')
     assert 0.0 <= java.lib.nz.msl.examples.MathUtils.random() < 1.0
     java.gateway.shutdown()
 
@@ -666,7 +667,7 @@ def test_bad_del():
     # Make sure that the following exception is not raised in LoadLibrary.__del__
     #   AttributeError: 'BadDel' object has no attribute '_gateway'
 
-    class BadDel(loadlib.LoadLibrary):
+    class BadDel(LoadLibrary):
         def __init__(self):
             pass
 
