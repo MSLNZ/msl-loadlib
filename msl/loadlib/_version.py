@@ -27,5 +27,5 @@ if __version__.endswith('dev0'):
 major, minor, micro, *releaselevel = __version__.split('.')
 
 version_info: VersionInfo = VersionInfo(
-    int(major), int(minor), int(micro), releaselevel or 'final')
+    int(major), int(minor), int(micro), ''.join(releaselevel) or 'final')
 """Contains the version information as a (major, minor, micro, releaselevel) tuple."""
