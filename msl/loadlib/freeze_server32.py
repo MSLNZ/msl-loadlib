@@ -159,7 +159,7 @@ def main(spec=None, dest=None, packages=None, data=None):
     check_call(cmd)
 
     # maybe create the .NET Framework config file
-    if packages and ('pythonnet' in packages or 'clr' in packages):
+    if packages and ('pythonnet' in packages):
         loadlib.utils.check_dot_net_config(server_path)
 
     print(f'Server saved to {server_path}')
