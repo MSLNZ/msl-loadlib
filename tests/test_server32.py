@@ -12,6 +12,7 @@ from msl.examples.loadlib import DotNet64
 from msl.examples.loadlib import Echo64
 from msl.examples.loadlib import Fortran64
 from msl.examples.loadlib import FourPoints
+from msl.examples.loadlib import Point
 from msl.loadlib import ConnectionTimeoutError
 from msl.loadlib.constants import IS_MAC
 from msl.loadlib.constants import IS_WINDOWS
@@ -92,7 +93,7 @@ def test_cpp():
     assert '0987654321' == c.reverse_string_v1('1234567890')
     assert '[abc x|z j 1 *&' == c.reverse_string_v2('&* 1 j z|x cba[')
 
-    fp = FourPoints((0, 0), (0, 1), (1, 1), (1, 0))
+    fp = FourPoints(Point(0, 0), Point(0, 1), Point(1, 1), Point(1, 0))
     assert c.distance_4_points(fp) == 4.0
 
     assert c.circumference(0.5, 0) == 0.0
@@ -116,7 +117,7 @@ def test_fortran():
     assert 1 == int(f.factorial(0))
     assert 1 == int(f.factorial(1))
     assert 120 == int(f.factorial(5))
-    assert 2.73861278752583 == pytest.approx(f.standard_deviation([float(val) for val in range(1,10)]))
+    assert 2.73861278752583 == pytest.approx(f.standard_deviation([float(val) for val in range(1, 10)]))
     assert 0.171650807137 == pytest.approx(f.besselJ0(8.0))
     assert '!dlrow olleh' == f.reverse_string('hello world!')
 
