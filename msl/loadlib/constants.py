@@ -10,8 +10,6 @@ __all__: list[str] = [
     'IS_LINUX',
     'IS_MAC',
     'IS_WINDOWS',
-    'IS_PYTHON2',
-    'IS_PYTHON3',
     'IS_PYTHON_64BIT',
     'NET_FRAMEWORK_DESCRIPTION',
     'NET_FRAMEWORK_FIX',
@@ -29,12 +27,6 @@ IS_MAC: bool = sys.platform == 'darwin'
 
 IS_PYTHON_64BIT: bool = sys.maxsize > 2 ** 32
 """Whether the Python interpreter is 64-bits."""
-
-IS_PYTHON2: bool = sys.version_info.major == 2
-"""Whether Python 2 is the interpreter."""
-
-IS_PYTHON3: bool = sys.version_info.major == 3
-"""Whether Python 3 is the interpreter."""
 
 if IS_WINDOWS:
     SERVER_FILENAME: str = 'server32-windows.exe'
