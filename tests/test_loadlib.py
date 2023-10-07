@@ -32,13 +32,13 @@ from msl.loadlib.utils import get_com_info
 
 
 def test_invalid_libtype():
-    with pytest.raises(ValueError, match=', '.join(LoadLibrary.LIBTYPES)):
+    with pytest.raises(ValueError, match=r'Invalid libtype'):
         LoadLibrary('does-not-matter', libtype='xxxxxxxx')
 
 
 @pytest.mark.parametrize('path', [None, ''])
 def test_invalid_path(path):
-    with pytest.raises(ValueError, match=r'You must specify the path'):
+    with pytest.raises(ValueError, match=r'Must specify a non-empty path'):
         LoadLibrary(path)
 
 

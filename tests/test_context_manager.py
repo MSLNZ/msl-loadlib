@@ -25,7 +25,7 @@ def test_raises():
             pass
 
     path = os.path.join(EXAMPLES_DIR, 'Trig.class')
-    with pytest.raises(ValueError, match=r'^Cannot load libtype'):
+    with pytest.raises(ValueError, match=r'^Invalid libtype'):
         with LoadLibrary(path, libtype='invalid'):
             pass
 

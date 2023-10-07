@@ -114,7 +114,7 @@ class LoadLibrary:
         self._gateway = None
 
         if not path:
-            raise ValueError(f'You must specify the path, got {path!r}')
+            raise ValueError(f'Must specify a non-empty path, got {path!r}')
 
         # fixes Issue #8, if `path` is a <class 'pathlib.Path'> object
         path = str(path)
@@ -209,7 +209,7 @@ class LoadLibrary:
 
             # find the py4j*.jar file (needed to import the py4j.GatewayServer on the Java side)
             filename = f'py4j{__version__}.jar'
-            py4j_jar = os.environ.get('PY4J_JAR')
+            py4j_jar = os.environ.get('PY4J_JAR', '')
             if py4j_jar:
                 if not os.path.isfile(py4j_jar) or os.path.basename(py4j_jar) != filename:
                     raise OSError(f'A PY4J_JAR environment variable exists, '
