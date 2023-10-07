@@ -19,12 +19,8 @@ from msl import loadlib
 extensions = [
     'sphinx.ext.autodoc',
     'sphinx.ext.autosummary',
-    'sphinx.ext.doctest',
     'sphinx.ext.intersphinx',
-    'sphinx.ext.viewcode',
-    'sphinx.ext.coverage',
     'sphinx.ext.napoleon',
-    'sphinx.ext.todo',
     'sphinx_rtd_theme',
 ]
 
