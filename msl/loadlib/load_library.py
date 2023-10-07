@@ -117,11 +117,10 @@ class LoadLibrary:
             raise ValueError(f'You must specify the path, got {path!r}')
 
         # fixes Issue #8, if `path` is a <class 'pathlib.Path'> object
-        if hasattr(path, 'as_posix'):
-            path = path.as_posix()
+        path = str(path)
 
-        # try to automatically determine the libtype
         if libtype is None:
+            # automatically determine the libtype
             if path.endswith('.jar') or path.endswith('.class'):
                 libtype = 'java'
             else:
