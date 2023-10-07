@@ -7,6 +7,7 @@ Version 1.0.0 (in development)
 
 * Added
 
+  - support for Python 3.12
   - type annotations (:PEP:`484` and :PEP:`561` using inline types)
   - ``freeze32`` console script to create a new 32-bit server
 
