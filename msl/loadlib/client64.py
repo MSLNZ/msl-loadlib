@@ -177,7 +177,7 @@ class Client64:
             server_exe,
             '--module', module32,
             '--host', host,
-            '--port', str(port)
+            '--port', str(port),
         ]
 
         # include paths to the 32-bit server's sys.path
@@ -185,22 +185,18 @@ class Client64:
         if append_sys_path is not None:
             if isinstance(append_sys_path, str):
                 sys_path.append(append_sys_path)
-            elif isinstance(append_sys_path, (list, tuple)):
-                sys_path.extend(append_sys_path)
             else:
-                raise TypeError('append_sys_path must be a str, list or tuple')
-        cmd.extend(['--append-sys-path', ';'.join(sys_path)])  # don't replace ';' with os.pathsep
+                sys_path.extend(append_sys_path)
+        cmd.extend(['--append-sys-path', ';'.join(sys_path)])
 
         # include paths to the 32-bit server's os.environ['PATH']
         env_path = [os.getcwd()]
         if append_environ_path is not None:
             if isinstance(append_environ_path, str):
                 env_path.append(append_environ_path)
-            elif isinstance(append_environ_path, (list, tuple)):
-                env_path.extend(append_environ_path)
             else:
-                raise TypeError('append_environ_path must be a str, list or tuple')
-        cmd.extend(['--append-environ-path', ';'.join(env_path)])  # don't replace ';' with os.pathsep
+                env_path.extend(append_environ_path)
+        cmd.extend(['--append-environ-path', ';'.join(env_path)])
 
         # include any keyword arguments
         if kwargs:
