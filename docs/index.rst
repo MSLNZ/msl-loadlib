@@ -35,7 +35,7 @@ Contents
    FAQ <faq>
    License <license>
    Authors <authors>
-   Release notes <changelog>
+   Release Notes <changelog>
 
 .. _Python for .NET: https://pythonnet.github.io/
 .. _Py4J: https://www.py4j.org/

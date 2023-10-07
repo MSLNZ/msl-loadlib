@@ -31,14 +31,9 @@ class Server32Error(HTTPException):
 
         .. versionadded:: 0.5
 
-        Parameters
-        ----------
-        value : :class:`str`
-            The error message.
-        name : :class:`str`, optional
-            The name of the exception.
-        traceback : :class:`str`, optional
-            The exception traceback.
+        :param value: The error message.
+        :param name: The name of the exception type.
+        :param traceback: The exception traceback.
         """
         super().__init__(f'\n{traceback}\n{name}: {value}' if name else value)
         self._value: str = value
@@ -47,17 +42,17 @@ class Server32Error(HTTPException):
 
     @property
     def name(self) -> str:
-        """The name of the exception from the 32-bit server."""
+        """The name of the exception type."""
         return self._name
 
     @property
     def traceback(self) -> str:
-        """The exception traceback from the 32-bit server."""
+        """The exception traceback."""
         return self._traceback
 
     @property
     def value(self) -> str:
-        """The error message from the 32-bit server."""
+        """The error message."""
         return self._value
 
 

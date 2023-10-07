@@ -7,6 +7,7 @@ Version 1.0.0 (in development)
 
 * Added
 
+  - type annotations (:PEP:`484` and :PEP:`561` using inline types)
   - ``freeze32`` console script to create a new 32-bit server
 
 * Changed
@@ -14,13 +15,13 @@ Version 1.0.0 (in development)
   - convert to a :PEP:`420` implicit namespace package
   - the `requires_pythonnet` and `requires_comtypes` arguments to
     :func:`freeze_server32.main() <msl.loadlib.freeze_server32.main>`
-    were removed and the `packages` and `data` arguments were added
+    were removed and the `imports` and `data` arguments were added
+  - constants (e.g., `IS_WINDOWS`) were moved to a `constants.py` file
 
 * Removed
 
   - support for Python 2.7, 3.5, 3.6 and 3.7
   - the deprecated `quiet` parameter
-
 
 Version 0.10.0 (2023-06-16)
 ===========================
@@ -120,7 +121,7 @@ Version 0.8.0 (2021-02-20)
 
 * Removed
 
-  - ``cygwin`` from the :obj:`~msl.loadlib.IS_WINDOWS` check
+  - ``cygwin`` from the `IS_WINDOWS` check
 
 Version 0.7.0 (2020-03-17)
 ==========================

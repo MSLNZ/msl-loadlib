@@ -50,59 +50,51 @@ class LoadLibrary:
         .. _COM: https://en.wikipedia.org/wiki/Component_Object_Model
         .. _ActiveX: https://en.wikipedia.org/wiki/ActiveX
 
-        Parameters
-        ----------
-        path : :class:`str`
-            The path to the shared library.
+        :param path: The path to the shared library.
 
             The search order for finding the shared library is:
 
                 1. assume that a full or a relative (to the current working directory)
-                   path is specified,
-                2. use :func:`ctypes.util.find_library` to find the shared library file,
+                   path is specified, then
+                2. use :func:`ctypes.util.find_library`, then
                 3. search :data:`sys.path`, then
-                4. search :data:`os.environ['PATH'] <os.environ>` to find the shared library.
+                4. search :data:`os.environ['PATH'] <os.environ>`.
 
-            If loading a COM_ library then `path` is either the `ProgID`, e.g.
-            ``"InternetExplorer.Application"``, or the `CLSID`, e.g.
-            ``"{2F7860A2-1473-4D75-827D-6C4E27600CAC}"``.
+            If loading a COM_ library, `path` may either be the
 
-        libtype : :class:`str`, optional
-            The library type. The following values are currently supported:
+                * ProgID (e.g., ``InternetExplorer.Application``), or the
+                * CLSID (e.g., ``{2F7860A2-1473-4D75-827D-6C4E27600CAC}``).
 
-            * ``'cdll'`` -- for a library that uses the __cdecl calling convention
-            * ``'windll'`` or ``'oledll'`` -- for a __stdcall calling convention
-            * ``'net'`` or ``'clr'`` -- for Microsoft's .NET Framework (Common Language Runtime)
-            * ``'java'`` -- for a Java archive, ``.jar``, or Java byte code, ``.class``, file
-            * ``'com'`` -- for a COM_ library
-            * ``'activex'`` -- for an ActiveX_ library
+        :param libtype: The library type.
 
-            Default is ``'cdll'``.
+            The following values are currently supported:
+
+                * `cdll`: a library that uses the __cdecl calling convention (default)
+                * `windll` or `oledll`: a library that uses the __stdcall calling convention
+                * `net`: a Microsoft .NET Framework library
+                * `clr`: alias for `net` (Common Language Runtime)
+                * `java`: a Java archive (``.jar`` or ``.class`` files)
+                * `com`: a COM_ library
+                * `activex`: an ActiveX_ library
 
             .. tip::
                Since the ``.jar`` or ``.class`` extension uniquely defines a Java library,
-               the `libtype` will be automatically set to ``'java'`` if `path` ends with
+               `libtype` will automatically be set to `java` if `path` ends with
                ``.jar`` or ``.class``.
 
-        **kwargs
-            All additional keyword arguments are passed to the object that loads the library.
-
+        :param kwargs: All additional keyword arguments are passed to the object that loads the library.
             If `libtype` is
 
-                * ``'cdll'`` then :class:`~ctypes.CDLL`
-                * ``'windll'`` then :class:`~ctypes.WinDLL`
-                * ``'oledll'`` then :class:`~ctypes.OleDLL`
-                * ``'net'`` or ``'clr'`` then all keyword arguments are ignored
-                * ``'java'`` then :class:`~.py4j.java_gateway.JavaGateway`
-                * ``'com'`` then comtypes.CreateObject_
-                * ``'activex'`` then :meth:`Application.load <msl.loadlib.activex.Application.load>`
+                * `cdll` :math:`\\rightarrow` :class:`~ctypes.CDLL`
+                * `windll` :math:`\\rightarrow` :class:`~ctypes.WinDLL`
+                * `oledll` :math:`\\rightarrow` :class:`~ctypes.OleDLL`
+                * `net` or `clr` :math:`\\rightarrow` all keyword arguments are ignored
+                * `java` :math:`\\rightarrow` :class:`~.py4j.java_gateway.JavaGateway`
+                * `com` :math:`\\rightarrow` comtypes.CreateObject_
+                * `activex` :math:`\\rightarrow` :meth:`Application.load <msl.loadlib.activex.Application.load>`
 
-        Raises
-        ------
-        OSError
-            If the shared library cannot be loaded.
-        ValueError
-            If the value of `libtype` is not supported.
+        :raises OSError: If the shared library cannot be loaded.
+        :raises ValueError: If the value of `libtype` is not supported.
         """
         # a reference to the shared library
         self._lib = None
@@ -395,16 +387,16 @@ class LoadLibrary:
 
     @property
     def lib(self) -> Any:
-        """Returns the reference to the loaded library object.
+        """Returns the reference to the library object.
 
         For example, if `libtype` is
 
-            * ``'cdll'`` then a :class:`~ctypes.CDLL` object
-            * ``'windll'`` then a :class:`~ctypes.WinDLL` object
-            * ``'oledll'`` then a :class:`~ctypes.OleDLL` object
-            * ``'net'`` or ``'clr'`` then a :class:`~.load_library.DotNet` object
-            * ``'java'`` then a :class:`~py4j.java_gateway.JVMView` object
-            * ``'com'`` or ``'activex'`` then an interface pointer to the COM_ object
+            * `cdll` :math:`\\rightarrow` :class:`~ctypes.CDLL`
+            * `windll` :math:`\\rightarrow` :class:`~ctypes.WinDLL`
+            * `oledll` :math:`\\rightarrow` :class:`~ctypes.OleDLL`
+            * `net` or `clr` :math:`\\rightarrow` :class:`~.load_library.DotNet`
+            * `java` :math:`\\rightarrow` :class:`~py4j.java_gateway.JVMView`
+            * `com` or `activex` :math:`\\rightarrow` :func:`POINTER <ctypes.POINTER>`
         """
         return self._lib
 
@@ -416,15 +408,18 @@ class LoadLibrary:
 
 class DotNet:
 
-    def __init__(self, dot_net_dict: dict, path: str) -> None:
+    def __init__(self, items: dict, path: str) -> None:
         """Contains the namespace_ modules, classes and `System.Type`_ objects of a .NET Assembly.
 
         Do not instantiate this class directly.
 
         .. _namespace: https://msdn.microsoft.com/en-us/library/z2kcy19k.aspx
         .. _System.Type: https://docs.microsoft.com/en-us/dotnet/api/system.type
+
+        :param items: The items to use to update the internal __dict__ attribute.
+        :param path: The path to the .NET library file.
         """
-        self.__dict__.update(dot_net_dict)
+        self.__dict__.update(items)
         self._path = path
 
     def __repr__(self) -> str:

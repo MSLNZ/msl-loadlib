@@ -25,20 +25,9 @@ class Echo32(Server32):
         Example of a server class that illustrates that Python data types are preserved
         when they are sent from the :class:`~.echo64.Echo64` client to the server.
 
-        Parameters
-        ----------
-        host : :class:`str`
-            The IP address of the server.
-        port : :class:`int`
-            The port to open on the server.
-
-        Note
-        ----
-        Any class that is a subclass of :class:`~msl.loadlib.server32.Server32` **MUST**
-        provide two arguments in its constructor: `host` and `port` (in that order)
-        and `**kwargs`. Otherwise the ``server32`` executable, see
-        :class:`~msl.loadlib.start_server32`, cannot create an instance of the
-        :class:`~msl.loadlib.server32.Server32` subclass.
+        :param host: The IP address (or hostname) to use for the server.
+        :param port: The port to open for the server.
+        :param kwargs: Optional keyword arguments. The keys and values are of type :class:`str`.
         """
         # even though this is a *echo* class that does not call a shared library
         # we still need to provide a library file that exists. Use the C++ library.
@@ -50,16 +39,8 @@ class Echo32(Server32):
         """Process a request from the :meth:`~.echo64.Echo64.send_data` method from
         the 64-bit client.
 
-        Parameters
-        ----------
-        *args
-            The arguments.
-        **kwargs
-            The keyword arguments.
-
-        Returns
-        -------
-        :class:`tuple`
-            The `args` and `kwargs` that were received.
+        :param args: The arguments.
+        :param kwargs: The keyword arguments.
+        :return: The `args` and `kwargs` that were received.
         """
         return args, kwargs

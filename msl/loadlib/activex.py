@@ -10,7 +10,7 @@ from __future__ import annotations
 
 import ctypes
 from typing import Any
-from typing import Optional
+from typing import Callable
 
 try:
     import clr
@@ -107,12 +107,13 @@ class Application(Forms.Form):
 
            >>> SKIP_IF_NOT_WINDOWS() or SKIP_IF_NO_PYTHONNET()
 
-        Examples
-        --------
-        >>> from msl.loadlib.activex import Application
-        >>> app = Application()
-        >>> app.create_panel()
-        <System.Windows.Forms.Panel object at ...>
+        Examples::
+
+            >>> from msl.loadlib.activex import Application
+            >>> app = Application()
+            >>> app.create_panel()
+            <System.Windows.Forms.Panel object at ...>
+
         """
         super().__init__()
 
@@ -126,25 +127,16 @@ class Application(Forms.Form):
 
     def handle_events(self,
                       source: Any,
-                      sink: Optional[Any] = None,
-                      interface: Optional[Any] = None):
+                      sink: Callable[[Any, ...], Any] = None,
+                      interface: Any = None):
         """Handle events from an ActiveX object.
 
-        Parameters
-        ----------
-        source
-            The ActiveX object that emits events.
-        sink
-            The object that handles the events. The `sink` must
-            define methods with the same names as the ActiveX event names.
-            If not specified then uses the calling application instance
-            as the `sink`.
-        interface
-            The interface to use.
-
-        Returns
-        -------
-        The connection object.
+        :param source: An ActiveX object that emits events.
+        :param sink: The object that handles the events. The `sink` must
+            define methods with the same names as the ActiveX event names. If not
+            specified, the :class:`.Application` instance is used as the `sink`.
+        :param interface: The interface to use.
+        :return: The advise-connection object.
         """
         cxn = client.GetEvents(source, sink or self, interface=interface)
         self._event_connections.append(cxn)
@@ -158,7 +150,7 @@ class Application(Forms.Form):
     @staticmethod
     def load(activex_id: str,
              *,
-             parent: Optional[Any] = None,
+             parent: Any = None,
              x: int = 0,
              y: int = 0,
              width: int = 0,
@@ -176,39 +168,19 @@ class Application(Forms.Form):
         .. _CreateWindowExA: https://docs.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-createwindowexa
         .. _System.Windows.Forms: https://docs.microsoft.com/en-us/dotnet/api/system.windows.forms
 
-        Parameters
-        ----------
-        activex_id : :class:`str`
-            The ProgID or CLSID of the ActiveX object.
-        parent
-            The parent or owner window of the window being created.
-            The parent is typically an object from the System.Windows.Forms_
-            namespace that has a ``Handle`` property.
-        x : :class:`int`, optional
-            The initial horizontal position of the window.
-        y : :class:`int`, optional
-            The initial vertical position of the window.
-        width : :class:`int`, optional
-            The width of the window.
-        height : :class:`int`, optional
-            The height of the window.
-        style : :class:`int`, optional
-            The style of the window being created. This argument can be a
-            combination of the `Window Styles`_ constants, e.g.,
-            ``style = WS_CHILD | WS_VISIBLE``.
-        ex_style : :class:`int`, optional
-            The extended window style of the window being created. This argument can be a
-            combination of the `Extended Window Styles`_ constants, e.g.,
-            ``ex_style = WS_EX_APPWINDOW | WS_EX_CONTEXTHELP``.
-
-        Returns
-        -------
-        The interface pointer to the ActiveX library.
-
-        Raises
-        ------
-        OSError
-            If the library cannot be loaded.
+        :param activex_id: ProgID or CLSID of the ActiveX object.
+        :param parent: Parent of the window being created. The parent is typically
+            an object from the System.Windows.Forms_ namespace that has a ``Handle`` property.
+        :param x: Initial horizontal position of the window.
+        :param y: Initial vertical position of the window.
+        :param width: Initial width of the window.
+        :param height: Initial height of the window.
+        :param style: Style of the window being created. The value may be a
+            combination of `Window Styles`_ constants, e.g., ``WS_CHILD | WS_VISIBLE``.
+        :param ex_style: Extended window style of the window being created. The value may be a
+            combination of `Extended Window Styles`_ constants, e.g., ``WS_EX_APPWINDOW | WS_EX_CONTEXTHELP``.
+        :return: The interface pointer to the ActiveX library.
+        :raises OSError: If the library cannot be loaded.
         """
         if comtypes is None:
             raise OSError(

@@ -21,25 +21,23 @@ from msl.loadlib import Client64
 
 
 class DotNet64(Client64):
-    """Communicates with the 32-bit C# :ref:`dotnet_lib32.dll <dotnet-lib>` library.
 
-    This class demonstrates how to communicate with a 32-bit .NET library if an instance of this
-    class is created within a 64-bit Python interpreter.
-    """
     def __init__(self) -> None:
+        """Communicates with the 32-bit C# :ref:`dotnet_lib32.dll <dotnet-lib>` library.
+
+        This class demonstrates how to communicate with a 32-bit .NET library if an instance of this
+        class is created within a 64-bit Python interpreter.
+        """
         # specify the name of the corresponding 32-bit server module, dotnet32, which hosts
         # the 32-bit .NET library -- dotnet_lib32.dll.
         super().__init__(module32='dotnet32', append_sys_path=os.path.dirname(__file__))
 
     def get_class_names(self) -> list[str]:
-        """Return the class names in the library.
+        """Returns the class names in the library.
 
         See the corresponding 32-bit :meth:`~.dotnet32.DotNet32.get_class_names` method.
 
-        Returns
-        -------
-        :class:`list` of :class:`str`
-            The names of the classes that are available in :ref:`dotnet_lib32.dll <dotnet-lib>`.        
+        :return: The names of the classes that are available in :ref:`dotnet_lib32.dll <dotnet-lib>`.
         """
         return self.request32('get_class_names')
 
@@ -48,17 +46,9 @@ class DotNet64(Client64):
 
         See the corresponding 32-bit :meth:`~.dotnet32.DotNet32.add_integers` method.
 
-        Parameters
-        ----------
-        a : :class:`int`
-            The first integer.
-        b : :class:`int`
-            The second integer.
-
-        Returns
-        -------
-        :class:`int`
-            The sum of `a` and `b`.
+        :param a: First integer.
+        :param b: Second integer.
+        :return: The sum of `a` and `b`.
         """
         return self.request32('add_integers', a, b)
 
@@ -67,17 +57,9 @@ class DotNet64(Client64):
 
         See the corresponding 32-bit :meth:`~.dotnet32.DotNet32.divide_floats` method.
 
-        Parameters
-        ----------
-        a : :class:`float`
-            The first number.
-        b : :class:`float`
-            The second number.
-
-        Returns
-        -------
-        :class:`float`:
-            The quotient of `a` / `b`.
+        :param a: First floating-point number.
+        :param b: Second floating-point number.
+        :return: The quotient of `a` / `b`.
         """
         return self.request32('divide_floats', a, b)
 
@@ -86,17 +68,9 @@ class DotNet64(Client64):
 
         See the corresponding 32-bit :meth:`~.dotnet32.DotNet32.multiply_doubles` method.
 
-        Parameters
-        ----------
-        a : :class:`float`
-            The first number.
-        b : :class:`float`
-            The second number.
-
-        Returns
-        -------
-        :class:`float`
-            The product of `a` * `b`.
+        :param a: First double-precision number.
+        :param b: Second double-precision number.
+        :return: The product of `a` * `b`.
         """
         return self.request32('multiply_doubles', a, b)
 
@@ -105,19 +79,10 @@ class DotNet64(Client64):
 
         See the corresponding 32-bit :meth:`~.dotnet32.DotNet32.add_or_subtract` method.
 
-        Parameters
-        ----------
-        a : :class:`float`
-            The first double-precision number.
-        b : :class:`float`
-            The second double-precision number.
-        do_addition : :class:`bool`
-            Whether to **add** the numbers.
-
-        Returns
-        -------
-        :class:`float`
-            Either `a` + `b` if `do_addition` is :data:`True` else `a` - `b`.
+        :param a: First double-precision number.
+        :param b: Second double-precision number.
+        :param do_addition: Whether to add or subtract the numbers.
+        :return: `a+b` if `do_addition` is :data:`True` else `a-b`.
         """
         return self.request32('add_or_subtract', a, b, do_addition)
 
@@ -126,17 +91,9 @@ class DotNet64(Client64):
 
         See the corresponding 32-bit :meth:`~.dotnet32.DotNet32.scalar_multiply` method.
 
-        Parameters
-        ----------
-        a : :class:`float`
-            The scalar value.
-        xin : :class:`list` of :class:`float`
-            The array to modify.
-
-        Returns
-        -------
-        :class:`list` of :class:`float`
-            A new array with each element in `xin` multiplied by `a`.
+        :param a: Scalar value.
+        :param xin: Array to modify.
+        :return: A new array with each element in `xin` multiplied by `a`.
         """
         return self.request32('scalar_multiply', a, xin)
 
@@ -147,17 +104,9 @@ class DotNet64(Client64):
 
         See the corresponding 32-bit :meth:`~.dotnet32.DotNet32.multiply_matrices` method.
 
-        Parameters
-        ----------
-        a1 : :class:`list` of :class:`list` of :class:`float`
-            The first matrix.
-        a2 : :class:`list` of :class:`list` of :class:`float`
-            The second matrix.
-
-        Returns
-        -------
-        :class:`list` of :class:`list` of :class:`float`
-             The result of `a1` * `a2`.
+        :param a1: First matrix.
+        :param a2: Second matrix.
+        :return: The result of `a1` * `a2`.
         """
         return self.request32('multiply_matrices', a1, a2)
 
@@ -166,15 +115,8 @@ class DotNet64(Client64):
 
         See the corresponding 32-bit :meth:`~.dotnet32.DotNet32.reverse_string` method.
 
-        Parameters
-        ----------
-        original : :class:`str`
-            The original string.
-
-        Returns
-        -------
-        :class:`str`
-            The string reversed.
+        :param original: The original string.
+        :return: The string reversed.
         """
         return self.request32('reverse_string', original)
 
@@ -183,23 +125,12 @@ class DotNet64(Client64):
 
         See the corresponding 32-bit :meth:`~.dotnet32.DotNet32.add_multiple` method.
 
-        Parameters
-        ----------
-        a : :class:`int`
-            An integer.
-        b : :class:`int`
-            An integer.
-        c : :class:`int`
-            An integer.
-        d : :class:`int`
-            An integer.
-        e : :class:`int`
-            An integer.
-
-        Returns
-        -------
-        :class:`int`
-            The sum of the input arguments.
+        :param a: First integer.
+        :param b: Second integer.
+        :param c: Third integer.
+        :param d: Fourth integer.
+        :param e: Fifth integer.
+        :return: The sum of the input arguments.
         """
         return self.request32('add_multiple', a, b, c, d, e)
 
@@ -209,22 +140,11 @@ class DotNet64(Client64):
 
         See the corresponding 32-bit :meth:`~.dotnet32.DotNet32.concatenate` method.
 
-        Parameters
-        ----------
-        a : :class:`str`
-            A string.
-        b : :class:`str`
-            A string.
-        c : :class:`str`
-            A string.
-        d : :class:`bool`
-            Whether to include `e` in the concatenation.
-        e : :class:`str`
-            A string.
-
-        Returns
-        -------
-        :class:`str`
-            The strings concatenated together.
+        :param a: First string.
+        :param b: Second string.
+        :param c: Third string.
+        :param d: Whether to include `e` in the concatenation.
+        :param e: Fourth string.
+        :return: The strings concatenated together.
         """
         return self.request32('concatenate', a, b, c, d, e)

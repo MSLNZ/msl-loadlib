@@ -41,36 +41,25 @@ class Server32(HTTPServer):
         """Base class for loading a 32-bit library in 32-bit Python.
 
         All modules that are to be run on the 32-bit server must contain a class
-        that is inherited from this class and the module can import **any** of
-        the `standard`_ python modules **except** for :mod:`distutils`,
-        :mod:`ensurepip`, :mod:`tkinter` and :mod:`turtle`.
+        that is inherited from this class. The module may import most of the
+        `standard <https://docs.python.org/3/py-modindex.html>`_ python modules.
 
         All modules that are run on the 32-bit server must be able to run on the Python
         interpreter that the server is running on, see :meth:`.version` for how to
         determine the version of the Python interpreter.
 
-        .. _standard: https://docs.python.org/3/py-modindex.html
-        .. _JVM: https://en.wikipedia.org/wiki/Java_virtual_machine
-
-        Parameters
-        ----------
-        path : :class:`str`
-            The path to the 32-bit library. See :class:`.LoadLibrary` for more details.
-        libtype : :class:`str`
-            The library type. See :class:`.LoadLibrary` for more details.
+        :param path: The path to the 32-bit library (see :class:`.LoadLibrary`)
+        :param libtype: The library type (see :class:`.LoadLibrary`).
 
             .. note::
-               Since Java byte code is executed on the JVM_ it does not make sense to
-               use :class:`Server32` for a Java ``.jar`` or ``.class`` file.
+               Since Java byte code is executed on the
+               `JVM <https://en.wikipedia.org/wiki/Java_virtual_machine>`_
+               it does not make sense to use :class:`Server32` for a Java
+               ``.jar`` or ``.class`` file.
 
-        host : :class:`str`
-            The IP address of the server.
-        port : :class:`int`
-            The port to run the server on.
-        *args
-            All additional arguments are currently ignored.
-        **kwargs
-            All keyword arguments are passed to :class:`.LoadLibrary`.
+        :param host: The IP address (or hostname) to use for the server.
+        :param port: The port to open for the server.
+        :param kwargs: All keyword arguments are passed to :class:`.LoadLibrary`.
         """
         self._library = LoadLibrary(path, libtype=libtype, **kwargs)
         self._assembly = self._library.assembly
@@ -95,17 +84,15 @@ class Server32(HTTPServer):
 
     @property
     def lib(self):
-        """Returns the reference to the 32-bit, loaded-library object.
+        """Returns the reference to the library object.
 
         For example, if `libtype` is
 
-            * ``'cdll'`` then a :class:`~ctypes.CDLL` object
-            * ``'windll'`` then a :class:`~ctypes.WinDLL` object
-            * ``'oledll'`` then a :class:`~ctypes.OleDLL` object
-            * ``'net'`` or ``'clr'`` then a :class:`~.load_library.DotNet` object
-            * ``'com'`` or ``'activex'`` then an interface pointer to the COM_ object
-
-        .. _COM: https://en.wikipedia.org/wiki/Component_Object_Model
+            * `cdll` :math:`\\rightarrow` :class:`~ctypes.CDLL`
+            * `windll` :math:`\\rightarrow` :class:`~ctypes.WinDLL`
+            * `oledll` :math:`\\rightarrow` :class:`~ctypes.OleDLL`
+            * `net` or `clr` :math:`\\rightarrow` :class:`~.load_library.DotNet`
+            * `com` or `activex` :math:`\\rightarrow` :func:`POINTER <ctypes.POINTER>`
         """
         return self._lib
 
@@ -122,18 +109,15 @@ class Server32(HTTPServer):
 
            >>> SKIP_IF_MACOS()
 
-        Examples
-        --------
-        ::
+        Example::
 
             >>> from msl.loadlib import Server32
             >>> Server32.version()
             'Python 3.11.4 ...'
 
-        Note
-        ----
-        This method takes about 1 second to finish because the 32-bit server
-        needs to start in order to determine the version of the Python interpreter.
+        .. note::
+            This method takes about 1 second to finish because the 32-bit server
+            needs to start in order to determine the version of the Python interpreter.
         """
         exe = os.path.join(os.path.dirname(__file__), SERVER_FILENAME)
         return subprocess.check_output([exe, '--version']).decode().strip()
@@ -145,9 +129,7 @@ class Server32(HTTPServer):
         This method starts an interactive console, in a new terminal, with the
         Python interpreter on the 32-bit server.
 
-        Examples
-        --------
-        ::
+        Example::
 
             >>> from msl.loadlib import Server32  # doctest: +SKIP
             >>> Server32.interactive_console()  # doctest: +SKIP
@@ -173,9 +155,7 @@ class Server32(HTTPServer):
 
         .. versionadded:: 0.9
 
-        Examples
-        --------
-        ::
+        Example::
 
             import sys
             from msl.loadlib import Server32
@@ -193,11 +173,8 @@ class Server32(HTTPServer):
                     # optional: add the site-packages directory back into sys.path
                     sys.path.append(path)
 
-        Returns
-        -------
-        :class:`str`
-            The path of the site-packages directory that was removed. Can be an
-            empty string if the directory was not found in :data:`sys.path`.
+        :return: The path of the site-packages directory that was removed.
+            Can be an empty string if the directory was not found in :data:`sys.path`.
         """
         for index, path in enumerate(sys.path):
             if path.endswith('site-packages'):
@@ -210,19 +187,12 @@ class Server32(HTTPServer):
 
         If the same module is executed by both
         :class:`~msl.loadlib.client64.Client64` and :class:`.Server32`
-        then there may be only parts of the code that should be executed
+        then there may be only parts of the code that should only be executed
         by the correct bitness of the Python interpreter.
 
         .. versionadded:: 0.9
 
-        Returns
-        -------
-        :class:`bool`
-            Whether the code is running on the 32-bit server.
-
-        Examples
-        --------
-        ::
+        Example::
 
             import sys
             from msl.loadlib import Server32
@@ -231,6 +201,7 @@ class Server32(HTTPServer):
                 # this only gets executed on the 32-bit server
                 assert sys.maxsize < 2**32
 
+        :return: Whether the code is running on the 32-bit server.
         """
         return sys.executable.endswith(SERVER_FILENAME)
 
@@ -240,10 +211,7 @@ class Server32(HTTPServer):
 
         .. versionadded:: 0.9
 
-        Returns
-        -------
-        :class:`str`
-            The directory where the example libraries are located.
+        :return: The directory where the example libraries are located.
         """
         if Server32.is_interpreter():
             root = os.path.dirname(sys.executable)

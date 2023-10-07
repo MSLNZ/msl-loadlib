@@ -73,63 +73,47 @@ class Client64:
         .. versionchanged:: 1.0
            Removed the deprecated `quiet` argument.
 
-        Parameters
-        ----------
-        module32 : :class:`str`
-            The name of the Python module that is to be imported by the 32-bit server.
-        host : :class:`str`, optional
-            The address of the 32-bit server. Default is ``'127.0.0.1'``.
-        port : :class:`int`, optional
-            The port to open on the 32-bit server. Default is :data:`None`, which means
-            to automatically find a port that is available.
-        timeout : :class:`float`, optional
-            The maximum number of seconds to wait to establish a connection to the
-            32-bit server. Default is 10 seconds.
-        append_sys_path : :class:`str` or :class:`list` of :class:`str`, optional
-            Append path(s) to the 32-bit server's :data:`sys.path` variable. The value of
-            :data:`sys.path` from the 64-bit process is automatically included,
-            i.e., ``sys.path(32bit) = sys.path(64bit) + append_sys_path``.
-        append_environ_path : :class:`str` or :class:`list` of :class:`str`, optional
-            Append path(s) to the 32-bit server's :data:`os.environ['PATH'] <os.environ>`
-            variable. This can be useful if the library that is being loaded requires
-            additional libraries that must be available on ``PATH``.
-        rpc_timeout : :class:`float`, optional
-            The maximum number of seconds to wait for a response from the 32-bit server.
-            The `RPC <https://en.wikipedia.org/wiki/Remote_procedure_call>`_ timeout value
-            is used for *all* requests from the server. If you want different requests to
-            have different timeout values then you will need to implement custom timeout
-            handling for each method on the server. Default is :data:`None`, which means
-            to use the default timeout value used by the :mod:`socket` module (which is
-            to *wait forever*).
-        protocol : :class:`int`, optional
-            The :mod:`pickle` :ref:`protocol <pickle-protocols>` to use. If not
-            specified then determines the value to use based on the version of
-            Python that the :class:`.Client64` is running in.
-        server32_dir : :class:`str`, optional
-            The directory where the frozen 32-bit server is located.
-        **kwargs
-            All additional keyword arguments are passed to the :class:`~.server32.Server32`
-            subclass. The data type of each value is not preserved. It will be a string
+        :param module32: The name of, or the path to, a Python module that will be
+            imported by the 32-bit server. The module must contain a class that inherits
+            from :class:`~.server32.Server32`.
+        :param append_environ_path: Append path(s) to the 32-bit server's
+            :data:`os.environ['PATH'] <os.environ>` variable. This may be useful if
+            the library that is being loaded requires additional libraries that
+            must be available on ``PATH``.
+        :param append_sys_path: Append path(s) to the 32-bit server's :data:`sys.path`
+            variable. The value of :data:`sys.path` from the 64-bit process is
+            automatically included, i.e.,
+
+            .. centered::
+               ``sys.path(32bit) = sys.path(64bit) + append_sys_path``.
+        :param host: The hostname (IP address) of the 32-bit server.
+        :param port: The port to open on the 32-bit server. If :data:`None`,
+            an available port will be used.
+        :param protocol: The :mod:`pickle` :ref:`protocol <pickle-protocols>` to use.
+        :param rpc_timeout: The maximum number of seconds to wait for a response from the
+            32-bit server. The `RPC <https://en.wikipedia.org/wiki/Remote_procedure_call>`_
+            timeout value is used for *all* requests from the server. If you want different
+            requests to have different timeout values, you will need to implement custom
+            timeout handling for each method on the server. Default is :data:`None`, which
+            means to use the default timeout value used by the :mod:`socket` module (which
+            is to *wait forever*).
+        :param server32_dir: The directory where the frozen 32-bit server is located.
+        :param timeout: The maximum number of seconds to wait to establish a connection
+            with the 32-bit server.
+        :param kwargs: All additional keyword arguments are passed to the :class:`~.server32.Server32`
+            subclass. The data type of each value is not preserved. It will be of type :class:`str`
             at the constructor of the :class:`~.server32.Server32` subclass.
+        :raises OSError: If the 32-bit server cannot be found.
+        :raises ConnectionTimeoutError: If the connection to the 32-bit server cannot be established.
 
-        Note
-        ----
-        If `module32` is not located in the current working directory then you
-        must either specify the full path to `module32` **or** you can
-        specify the folder where `module32` is located by passing a value to the
-        `append_sys_path` parameter. Using the `append_sys_path` option also allows
-        for any other modules that `module32` may depend on to also be included
-        in :data:`sys.path` so that those modules can be imported when `module32`
-        is imported.
-
-        Raises
-        ------
-        ~msl.loadlib.exceptions.ConnectionTimeoutError
-            If the connection to the 32-bit server cannot be established.
-        OSError
-            If the frozen executable cannot be found.
-        TypeError
-            If the data type of `append_sys_path` or `append_environ_path` is invalid.
+        .. note::
+            If `module32` is not located in the current working directory then you
+            must either specify the full path to `module32` **or** you can
+            specify the folder where `module32` is located by passing a value to the
+            `append_sys_path` parameter. Using the `append_sys_path` option also allows
+            for any other modules that `module32` may depend on to also be included
+            in :data:`sys.path` so that those modules can be imported when `module32`
+            is imported.
         """
         self._meta32: dict[str, str | int] = {}
         self._conn: HTTPConnection | None = None
@@ -280,26 +264,12 @@ class Client64:
     def request32(self, name: str, *args: Any, **kwargs: Any) -> Any:
         """Send a request to the 32-bit server.
 
-        Parameters
-        ----------
-        name : :class:`str`
-            The name of an attribute of the :class:`~.server32.Server32` subclass.
-            The name can be a method, property or any attribute.
-        *args
-            The arguments that the method in the :class:`~.server32.Server32` subclass requires.
-        **kwargs
-            The keyword arguments that the method in the :class:`~.server32.Server32` subclass requires.
-
-        Returns
-        -------
-        Whatever is returned by the method of the :class:`~.server32.Server32` subclass.
-
-        Raises
-        ------
-        ~msl.loadlib.exceptions.Server32Error
-            If there was an error processing the request on the 32-bit server.
-        ~msl.loadlib.exceptions.ResponseTimeoutError
-            If a timeout occurs while waiting for the response from the 32-bit server.
+        :param name: The name of a method, property or attribute of the :class:`~.server32.Server32` subclass.
+        :param args: The arguments that the method in the :class:`~.server32.Server32` subclass requires.
+        :param kwargs: The keyword arguments that the method in the :class:`~.server32.Server32` subclass requires.
+        :return: Whatever is returned by calling `name`.
+        :raises Server32Error: If there was an error processing the request on the 32-bit server.
+        :raises ResponseTimeoutError: If a timeout occurs while waiting for the response from the 32-bit server.
         """
         if self._conn is None:
             raise Server32Error('The 32-bit server is not active')
@@ -341,25 +311,17 @@ class Client64:
         .. versionchanged:: 0.8
            Returns the (stdout, stderr) streams from the 32-bit server.
 
-        Parameters
-        ----------
-        kill_timeout : :class:`float`, optional
-            If the 32-bit server is still running after `kill_timeout` seconds then
-            the server will be killed using brute force. A warning will be issued
-            if the server is killed in this manner.
-
-        Returns
-        -------
-        :class:`tuple`
-            The (stdout, stderr) streams from the 32-bit server. Limit the total
+        :param kill_timeout: If the 32-bit server is still running after `kill_timeout`
+            seconds, the server will be killed using brute force. A warning will be
+            issued if the server is killed in this manner.
+        :return: The (stdout, stderr) streams from the 32-bit server. Limit the total
             number of characters that are written to either stdout or stderr on
             the 32-bit server to be < 4096. This will avoid potential blocking
             when reading the stdout and stderr PIPE buffers.
 
-        Note
-        ----
-        This method gets called automatically when the reference count to the
-        :class:`~.client64.Client64` object reaches 0 -- see :meth:`~object.__del__`.
+        .. note::
+            This method gets called automatically when the reference count to the
+            :class:`.Client64` object reaches zero (see :meth:`~object.__del__`).
         """
         if self._conn is None:
             return self._proc.stdout, self._proc.stderr

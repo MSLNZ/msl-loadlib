@@ -25,20 +25,9 @@ class Fortran32(Server32):
         32-bit FORTRAN library via :py:mod:`ctypes`. For a summary of the FORTRAN
         data types see `here <https://earth.uni-muenster.de/~joergs/doc/f90/unix-um/dfum_034.html>`_.
 
-        Parameters
-        ----------
-        host : :class:`str`
-            The IP address of the server.
-        port : :class:`int`
-            The port to open on the server.
-
-        Note
-        ----
-        Any class that is a subclass of :class:`~msl.loadlib.server32.Server32` **MUST**
-        provide two arguments in its constructor: `host` and `port` (in that order)
-        and `**kwargs`. Otherwise the ``server32`` executable, see
-        :class:`~msl.loadlib.start_server32`, cannot create an instance of the
-        :class:`~msl.loadlib.server32.Server32` subclass.
+        :param host: The IP address (or hostname) to use for the server.
+        :param port: The port to open for the server.
+        :param kwargs: Optional keyword arguments. The keys and values are of type :class:`str`.
         """
         # By not specifying the extension of the library file the server will open
         # the appropriate file based on the operating system.
@@ -46,7 +35,7 @@ class Fortran32(Server32):
         super().__init__(path, 'cdll', host, port)
 
     def sum_8bit(self, a: int, b: int) -> int:
-        """Add two 8-bit signed integers. 
+        """Add two 8-bit signed integers.
         
         Python only has one :class:`int` data type to represent integer values.
         The :meth:`~.fortran32.Fortran32.sum_8bit` method converts the data types 
@@ -65,17 +54,9 @@ class Fortran32(Server32):
 
         See the corresponding 64-bit :meth:`~.fortran64.Fortran64.sum_8bit` method.
 
-        Parameters
-        ----------
-        a : :class:`int`
-            The first 8-bit signed integer.
-        b : :class:`int`
-            The second 8-bit signed integer.
-
-        Returns
-        -------
-        :class:`int`
-            The sum of `a` and `b`.
+        :param a: First 8-bit signed integer.
+        :param b: Second 8-bit signed integer.
+        :return: The sum of `a` and `b`.
         """
         ac = ctypes.c_int8(a)
         bc = ctypes.c_int8(b)
@@ -102,17 +83,9 @@ class Fortran32(Server32):
 
         See the corresponding 64-bit :meth:`~.fortran64.Fortran64.sum_16bit` method.
 
-        Parameters
-        ----------
-        a : :class:`int`
-            The first 16-bit signed integer.
-        b : :class:`int`
-            The second 16-bit signed integer.
-
-        Returns
-        -------
-        :class:`int`
-            The sum of `a` and `b`.
+        :param a: First 16-bit signed integer.
+        :param b: Second 16-bit signed integer.
+        :return: The sum of `a` and `b`.
         """
         ac = ctypes.c_int16(a)
         bc = ctypes.c_int16(b)
@@ -139,17 +112,9 @@ class Fortran32(Server32):
 
         See the corresponding 64-bit :meth:`~.fortran64.Fortran64.sum_32bit` method.
 
-        Parameters
-        ----------
-        a : :class:`int`
-            The first 32-bit signed integer.
-        b : :class:`int`
-            The second 32-bit signed integer.
-
-        Returns
-        -------
-        :class:`int`
-            The sum of `a` and `b`.
+        :param a: First 32-bit signed integer.
+        :param b: Second 32-bit signed integer.
+        :return: The sum of `a` and `b`.
         """
         ac = ctypes.c_int32(a)
         bc = ctypes.c_int32(b)
@@ -176,17 +141,9 @@ class Fortran32(Server32):
 
         See the corresponding 64-bit :meth:`~.fortran64.Fortran64.sum_64bit` method.
 
-        Parameters
-        ----------
-        a : :class:`int`
-            The first 64-bit signed integer.
-        b : :class:`int`
-            The second 64-bit signed integer.
-
-        Returns
-        -------
-        :class:`int`
-            The sum of `a` and `b`.
+        :param a: First 64-bit signed integer.
+        :param b: Second 64-bit signed integer.
+        :return: The sum of `a` and `b`.
         """
         ac = ctypes.c_int64(a)
         bc = ctypes.c_int64(b)
@@ -209,17 +166,9 @@ class Fortran32(Server32):
 
         See the corresponding 64-bit :meth:`~.fortran64.Fortran64.multiply_float32` method.
 
-        Parameters
-        ----------
-        a : :class:`float`
-            The first floating-point number.
-        b : :class:`float`
-            The second floating-point number.
-
-        Returns
-        -------
-        :class:`float`
-            The product of `a` and `b`.
+        :param a: First floating-point number.
+        :param b: Second floating-point number.
+        :return: The product of `a` and `b`.
         """
         ac = ctypes.c_float(a)
         bc = ctypes.c_float(b)
@@ -242,17 +191,9 @@ class Fortran32(Server32):
 
         See the corresponding 64-bit :meth:`~.fortran64.Fortran64.multiply_float64` method.
 
-        Parameters
-        ----------
-        a : :class:`float`
-            The first double-precision number.
-        b : :class:`float`
-            The second double-precision number.
-
-        Returns
-        -------
-        :class:`float`
-            The product of `a` and `b`.
+        :param a: First double-precision number.
+        :param b: Second double-precision number.
+        :return: The product of `a` and `b`.
         """
         ac = ctypes.c_double(a)
         bc = ctypes.c_double(b)
@@ -276,15 +217,8 @@ class Fortran32(Server32):
 
         See the corresponding 64-bit :meth:`~.fortran64.Fortran64.is_positive` method.
 
-        Parameters
-        ----------
-        a : :class:`float`
-            A double-precision number.
-
-        Returns
-        -------
-        :class:`bool`
-            Whether the value of `a` is > 0.
+        :param a: Double-precision number.
+        :return: Whether the value of `a` is > 0.
         """
         ac = ctypes.c_double(a)
         self.lib.is_positive.restype = ctypes.c_bool
@@ -311,19 +245,10 @@ class Fortran32(Server32):
 
         See the corresponding 64-bit :meth:`~.fortran64.Fortran64.add_or_subtract` method.
 
-        Parameters
-        ----------
-        a : :class:`int`
-            The first integer.
-        b : :class:`int`
-            The second integer.
-        do_addition : :class:`bool`
-            Whether to **add** the numbers.
-
-        Returns
-        -------
-        :class:`int`
-            Either `a` + `b` if `do_addition` is :data:`True` else `a` - `b`.
+        :param a: First integer.
+        :param b: Second integer.
+        :param do_addition: Whether to add or subtract the numbers.
+        :return: `a+b` if `do_addition` is :data:`True` else `a-b`.
         """
         ac = ctypes.c_int32(a)
         bc = ctypes.c_int32(b)
@@ -357,15 +282,8 @@ class Fortran32(Server32):
 
         See the corresponding 64-bit :meth:`~.fortran64.Fortran64.factorial` method.
 
-        Parameters
-        ----------
-        n : :class:`int`
-            The integer to computer the factorial of. The maximum allowed value is 127.
-
-        Returns
-        -------
-        :class:`float`
-            The factorial of `n`.
+        :param n: The integer to computer the factorial of. The maximum allowed value is 127.
+        :return: The factorial of `n`.
         """
         ac = ctypes.c_int8(n)
         self.lib.factorial.restype = ctypes.c_double
@@ -388,15 +306,8 @@ class Fortran32(Server32):
 
         See the corresponding 64-bit :meth:`~.fortran64.Fortran64.standard_deviation` method.
 
-        Parameters
-        ----------
-        data : :class:`list` of :class:`float`
-            The data to compute the standard deviation of.
-
-        Returns
-        -------
-        :class:`float`
-            The standard deviation of `data`.
+        :param data: The values to compute the standard deviation of.
+        :return: The standard deviation of `data`.
         """
         n = len(data)
         nc = ctypes.c_int32(n)
@@ -419,15 +330,8 @@ class Fortran32(Server32):
 
         See the corresponding 64-bit :meth:`~.fortran64.Fortran64.besselJ0` method.
 
-        Parameters
-        ----------
-        x : :class:`float`
-            The value to compute ``BESSEL_J0`` of.
-
-        Returns
-        -------
-        :class:`float`
-            The value of ``BESSEL_J0(x)``.
+        :param x: The value to compute ``BESSEL_J0`` of.
+        :return: The value of ``BESSEL_J0(x)``.
         """
         xc = ctypes.c_double(x)
         self.lib.besselj0.restype = ctypes.c_double
@@ -453,15 +357,8 @@ class Fortran32(Server32):
 
         See the corresponding 64-bit :meth:`~.fortran64.Fortran64.reverse_string` method.
 
-        Parameters
-        ----------
-        original : :class:`str`
-            The original string.
-
-        Returns
-        -------
-        :class:`str`
-            The string reversed.
+        :param original: The original string.
+        :return: The string reversed.
         """
         n = len(original)
         nc = ctypes.c_int32(n)
@@ -486,21 +383,13 @@ class Fortran32(Server32):
                 double precision :: in1(n), in2(n) ! the arrays to add (element-wise)
                 double precision :: a(n) ! the array that will contain the element-wise sum
                 a(:) = in1(:) + in2(:)
-            end subroutine add_1D_arrays
+            end subroutine add_1d_arrays
 
-        See the corresponding 64-bit :meth:`~.fortran64.Fortran64.add_1D_arrays` method.
+        See the corresponding 64-bit :meth:`~.fortran64.Fortran64.add_1d_arrays` method.
 
-        Parameters
-        ----------
-        a1 : :class:`list` of :class:`float`
-            The first array.
-        a2 : :class:`list` of :class:`float`
-            The second array.
-
-        Returns
-        -------
-        :class:`list` of :class:`float`
-            The element-wise addition of `a1` + `a2`.
+        :param a1: First array.
+        :param a2: Second array.
+        :return: The element-wise addition of `a1` + `a2`.
         """
         n = len(a1)
         nc = ctypes.c_int32(n)
@@ -531,28 +420,19 @@ class Fortran32(Server32):
                 a = MATMUL(a1, a2)
             end subroutine matrix_multiply
 
-        Note
-        ----
-        FORTRAN stores multi-dimensional arrays in `column-major order <order_>`_, as
-        opposed to `row-major order <order_>`_ for C (Python) arrays. Therefore, the
-        input matrices need to be transposed before sending the matrices to FORTRAN
-        and also the result needs to be transposed before returning the result.
+        .. note::
+            FORTRAN stores multidimensional arrays in `column-major order <order_>`_, as
+            opposed to `row-major order <order_>`_ for C (Python) arrays. Therefore, the
+            input matrices need to be transposed before sending the matrices to FORTRAN
+            and also the result needs to be transposed before returned.
 
         .. _order: https://en.wikipedia.org/wiki/Row-_and_column-major_order
         
         See the corresponding 64-bit :meth:`~.fortran64.Fortran64.matrix_multiply` method.
 
-        Parameters
-        ----------
-        a1 : :class:`list` of :class:`list` of :class:`float`
-            The first matrix.
-        a2 : :class:`list` of :class:`list` of :class:`float`
-            The second matrix.
-
-        Returns
-        -------
-        :class:`list` of :class:`list` of :class:`float`
-            The result of `a1` * `a2`.
+        :param a1: First matrix.
+        :param a2: Second matrix.
+        :return: The product of `a1` * `a2`.
         """
         nrows1 = ctypes.c_int32(len(a1))
         ncols1 = ctypes.c_int32(len(a1[0]))

@@ -23,20 +23,9 @@ class DotNet32(Server32):
         :ref:`dotnet_lib32.dll <dotnet-lib>`. `Python for .NET <https://pythonnet.github.io/>`_
         can handle many native Python data types as input arguments.
 
-        Parameters
-        ----------
-        host : :class:`str`
-            The IP address of the server.
-        port : :class:`int`
-            The port to open on the server.
-
-        Note
-        ----
-        Any class that is a subclass of :class:`~msl.loadlib.server32.Server32` **MUST**
-        provide two arguments in its constructor: `host` and `port` (in that order)
-        and `**kwargs`. Otherwise the ``server32`` executable, see
-        :class:`~msl.loadlib.start_server32`, cannot create an instance of the
-        :class:`~msl.loadlib.server32.Server32` subclass.
+        :param host: The IP address (or hostname) to use for the server.
+        :param port: The port to open for the server.
+        :param kwargs: Optional keyword arguments. The keys and values are of type :class:`str`.
         """
         path = os.path.join(os.path.dirname(__file__), 'dotnet_lib32.dll')
         super().__init__(path, 'net', host, port)
@@ -49,10 +38,7 @@ class DotNet32(Server32):
 
         See the corresponding 64-bit :meth:`~.dotnet64.DotNet64.get_class_names` method.
 
-        Returns
-        -------
-        :class:`list` of :class:`str`
-            The names of the classes that are available in :ref:`dotnet_lib32.dll <dotnet-lib>`.
+        :return: The names of the classes that are available in :ref:`dotnet_lib32.dll <dotnet-lib>`.
         """
         return ';'.join(str(name) for name in self.assembly.GetTypes()).split(';')
 
@@ -70,17 +56,9 @@ class DotNet32(Server32):
 
         See the corresponding 64-bit :meth:`~.dotnet64.DotNet64.add_integers` method.
 
-        Parameters
-        ----------
-        a : :class:`int`
-            The first integer.
-        b : :class:`int`
-            The second integer.
-
-        Returns
-        -------
-        :class:`int`
-            The sum of `a` and `b`.
+        :param a: First integer.
+        :param b: Second integer.
+        :return: The sum of `a` and `b`.
         """
         return self.BasicMath.add_integers(a, b)
 
@@ -98,17 +76,9 @@ class DotNet32(Server32):
 
         See the corresponding 64-bit :meth:`~.dotnet64.DotNet64.divide_floats` method.
 
-        Parameters
-        ----------
-        a : :class:`float`
-            The first number.
-        b : :class:`float`
-            The second number.
-
-        Returns
-        -------
-        :class:`float`:
-            The quotient of `a` / `b`.
+        :param a: First floating-point number.
+        :param b: Second floating-point number.
+        :return: The quotient of `a` / `b`.
         """
         return self.BasicMath.divide_floats(a, b)
 
@@ -126,17 +96,9 @@ class DotNet32(Server32):
 
         See the corresponding 64-bit :meth:`~.dotnet64.DotNet64.multiply_doubles` method.
 
-        Parameters
-        ----------
-        a : :class:`float`
-            The first number.
-        b : :class:`float`
-            The second number.
-
-        Returns
-        -------
-        :class:`float`
-            The product of `a` * `b`.
+        :param a: First double-precision number.
+        :param b: Second double-precision number.
+        :return: The product of `a` * `b`.
         """
         return self.BasicMath.multiply_doubles(a, b)
 
@@ -161,19 +123,10 @@ class DotNet32(Server32):
 
         See the corresponding 64-bit :meth:`~.dotnet64.DotNet64.add_or_subtract` method.
 
-        Parameters
-        ----------
-        a : :class:`float`
-            The first double-precision number.
-        b : :class:`float`
-            The second double-precision number.
-        do_addition : :class:`bool`
-            Whether to **add** the numbers.
-
-        Returns
-        -------
-        :class:`float`
-            Either `a` + `b` if `do_addition` is :data:`True` else `a` - `b`.
+        :param a: First double-precision number.
+        :param b: Second double-precision number.
+        :param do_addition: Whether to add or subtract the numbers.
+        :return: `a+b` if `do_addition` is :data:`True` else `a-b`.
         """
         return self.BasicMath.add_or_subtract(a, b, do_addition)
 
@@ -197,17 +150,9 @@ class DotNet32(Server32):
 
         See the corresponding 64-bit :meth:`~.dotnet64.DotNet64.scalar_multiply` method.
 
-        Parameters
-        ----------
-        a : :class:`float`
-            The scalar value.
-        xin : :class:`list` of :class:`float`
-            The array to modify.
-
-        Returns
-        -------
-        :class:`list` of :class:`float`
-            A new array with each element in `xin` multiplied by `a`.
+        :param a: Scalar value.
+        :param xin: Array to modify.
+        :return: A new array with each element in `xin` multiplied by `a`.
         """
         ret = self.ArrayManipulation.scalar_multiply(a, xin)
         return [val for val in ret]
@@ -254,17 +199,9 @@ class DotNet32(Server32):
 
         See the corresponding 64-bit :meth:`~.dotnet64.DotNet64.multiply_matrices` method.
 
-        Parameters
-        ----------
-        a1 : :class:`list` of :class:`list` of :class:`float`
-            The first matrix.
-        a2 : :class:`list` of :class:`list` of :class:`float`
-            The second matrix.
-
-        Returns
-        -------
-        :class:`list` of :class:`list` of :class:`float`
-             The result of `a1` * `a2`.
+        :param a1: First matrix.
+        :param a2: Second matrix.
+        :return: The result of `a1` * `a2`.
         """
         nrows1 = len(a1)
         ncols1 = len(a1[0])
@@ -305,15 +242,8 @@ class DotNet32(Server32):
 
         See the corresponding 64-bit :meth:`~.dotnet64.DotNet64.reverse_string` method.
 
-        Parameters
-        ----------
-        original : :class:`str`
-            The original string.
-
-        Returns
-        -------
-        :class:`str`
-            The string reversed.
+        :param original: The original string.
+        :return: The string reversed.
         """
         return self.lib.StringManipulation().reverse_string(original)
 
@@ -331,23 +261,12 @@ class DotNet32(Server32):
 
         See the corresponding 64-bit :meth:`~.dotnet64.DotNet64.add_multiple` method.
 
-        Parameters
-        ----------
-        a : :class:`int`
-            An integer.
-        b : :class:`int`
-            An integer.
-        c : :class:`int`
-            An integer.
-        d : :class:`int`
-            An integer.
-        e : :class:`int`
-            An integer.
-
-        Returns
-        -------
-        :class:`int`
-            The sum of the input arguments.
+        :param a: First integer.
+        :param b: Second integer.
+        :param c: Third integer.
+        :param d: Fourth integer.
+        :param e: Fifth integer.
+        :return: The sum of the input arguments.
         """
         return self.lib.StaticClass.add_multiple(a, b, c, d, e)
 
@@ -366,27 +285,15 @@ class DotNet32(Server32):
                     res += e;
                 }
                 return res;
-
             }
 
         See the corresponding 64-bit :meth:`~.dotnet64.DotNet64.concatenate` method.
 
-        Parameters
-        ----------
-        a : :class:`str`
-            A string.
-        b : :class:`str`
-            A string.
-        c : :class:`str`
-            A string.
-        d : :class:`bool`
-            Whether to include `e` in the concatenation.
-        e : :class:`str`
-            A string.
-
-        Returns
-        -------
-        :class:`str`
-            The strings concatenated together.
+        :param a: First string.
+        :param b: Second string.
+        :param c: Third string.
+        :param d: Whether to include `e` in the concatenation.
+        :param e: Fourth string.
+        :return: The strings concatenated together.
         """
         return self.lib.StaticClass.concatenate(a, b, c, d, e)

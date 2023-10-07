@@ -33,20 +33,9 @@ class Kernel32(Server32):
         Example of a class that is a wrapper around the Windows 32-bit `kernel32.dll
         <https://www.geoffchappell.com/studies/windows/win32/kernel32/api/>`_ library.
 
-        Parameters
-        ----------
-        host : :class:`str`
-            The IP address of the server.
-        port : :class:`int`
-            The port to open on the server.
-
-        Note
-        ----
-        Any class that is a subclass of :class:`~msl.loadlib.server32.Server32` **MUST**
-        provide two arguments in its constructor: `host` and `port` (in that order)
-        and `**kwargs`. Otherwise the ``server32`` executable, see
-        :class:`~msl.loadlib.start_server32`, cannot create an instance of the
-        :class:`~msl.loadlib.server32.Server32` subclass.
+        :param host: The IP address (or hostname) to use for the server.
+        :param port: The port to open for the server.
+        :param kwargs: Optional keyword arguments. The keys and values are of type :class:`str`.
         """
         super().__init__('C:/Windows/SysWOW64/kernel32.dll', 'windll', host, port)
 
@@ -58,10 +47,7 @@ class Kernel32(Server32):
 
         See the corresponding 64-bit :meth:`~.kernel64.Kernel64.get_local_time` method.
 
-        Returns
-        -------
-        :class:`~datetime.datetime` 
-            The current date and time.
+        :return: The current date and time.
         """
         st = SystemTime()
         self.lib.GetLocalTime(ctypes.pointer(st))

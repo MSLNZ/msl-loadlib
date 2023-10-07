@@ -26,12 +26,13 @@ from msl.loadlib import Client64
 
 
 class Labview64(Client64):
-    """Communicates with a 32-bit LabVIEW library, :ref:`labview_lib32 <labview-lib>`.
 
-    This class demonstrates how to communicate with a 32-bit LabVIEW library if an
-    instance of this class is created within a 64-bit Python interpreter.
-    """
     def __init__(self) -> None:
+        """Communicates with a 32-bit LabVIEW library, :ref:`labview_lib32 <labview-lib>`.
+
+        This class demonstrates how to communicate with a 32-bit LabVIEW library if an
+        instance of this class is created within a 64-bit Python interpreter.
+        """
         # specify the name of the corresponding 32-bit server module, labview32, which hosts
         # the 32-bit LabVIEW library -- labview_lib32.dll
         super().__init__(module32='labview32', append_sys_path=os.path.dirname(__file__))
@@ -41,22 +42,10 @@ class Labview64(Client64):
 
         See the corresponding 32-bit :meth:`~.labview32.Labview32.stdev` method.
 
-        Parameters
-        ----------
-        x : :class:`list` of :class:`float`
-            The data to calculate the mean, variance and standard deviation of.
-        weighting : :class:`int`, optional
-            Whether to calculate the **sample**, ``weighting = 0``, or the **population**,
-            ``weighting = 1``, standard deviation and variance.
-
-        Returns
-        -------
-        :class:`float`
-            The mean.
-        :class:`float`
-            The variance.
-        :class:`float`
-            The standard deviation.
+        :param x: The data to calculate the mean, variance and standard deviation of.
+        :param weighting: Whether to calculate the sample (`weighting` = 0) or the
+            population (`weighting` = 1) standard deviation and variance.
+        :return: The mean, variance and standard deviation.
         """
         if weighting == 0 or weighting == 1:
             return self.request32('stdev', x, weighting)

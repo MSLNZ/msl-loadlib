@@ -26,14 +26,15 @@ from msl.loadlib import Client64
 
 
 class Kernel64(Client64):
-    """
-    Example of a class that can communicate with the 32-bit `kernel32.dll
-    <https://www.geoffchappell.com/studies/windows/win32/kernel32/api/>`_ library.
 
-    This class demonstrates how to communicate with a Windows 32-bit library if an
-    instance of this class is created within a 64-bit Python interpreter.
-    """
     def __init__(self) -> None:
+        """
+        Example of a class that can communicate with the 32-bit `kernel32.dll
+        <https://www.geoffchappell.com/studies/windows/win32/kernel32/api/>`_ library.
+
+        This class demonstrates how to communicate with a Windows 32-bit library if an
+        instance of this class is created within a 64-bit Python interpreter.
+        """
         # specify the name of the corresponding 32-bit server module, kernel32, which hosts
         # the Windows 32-bit library -- kernel32.dll
         super().__init__(module32='kernel32', append_sys_path=os.path.dirname(__file__))
@@ -48,9 +49,6 @@ class Kernel64(Client64):
 
         .. _time: https://msdn.microsoft.com/en-us/library/windows/desktop/ms724338(v=vs.85).aspx
 
-        Returns
-        -------
-        :class:`~datetime.datetime` 
-            The current date and time.
+        :return: The current date and time.
         """
         return self.request32('get_time')

@@ -22,12 +22,13 @@ from msl.loadlib import Client64
 
 
 class Fortran64(Client64):
-    """Communicates with the 32-bit FORTRAN :ref:`fortran_lib32 <fortran-lib>` library.
 
-    This class demonstrates how to communicate with a 32-bit FORTRAN library if an 
-    instance of this class is created within a 64-bit Python interpreter.
-    """
     def __init__(self) -> None:
+        """Communicates with the 32-bit FORTRAN :ref:`fortran_lib32 <fortran-lib>` library.
+
+        This class demonstrates how to communicate with a 32-bit FORTRAN library if an
+        instance of this class is created within a 64-bit Python interpreter.
+        """
         # specify the name of the corresponding 32-bit server module, fortran32, which hosts
         # the 32-bit FORTRAN library -- fortran_lib32.
         super().__init__(module32='fortran32', append_sys_path=os.path.dirname(__file__))
@@ -37,17 +38,9 @@ class Fortran64(Client64):
 
         See the corresponding 32-bit :meth:`~.fortran32.Fortran32.sum_8bit` method.
 
-        Parameters
-        ----------
-        a : :class:`int`
-            The first 8-bit signed integer.
-        b : :class:`int`
-            The second 8-bit signed integer.
-
-        Returns
-        -------
-        :class:`int`
-            The sum of `a` and `b`.
+        :param a: First 8-bit signed integer.
+        :param b: Second 8-bit signed integer.
+        :return: The sum of `a` and `b`.
         """
         return self.request32('sum_8bit', a, b)
 
@@ -56,17 +49,9 @@ class Fortran64(Client64):
 
         See the corresponding 32-bit :meth:`~.fortran32.Fortran32.sum_16bit` method.
 
-        Parameters
-        ----------
-        a : :class:`int`
-            The first 16-bit signed integer.
-        b : :class:`int`
-            The second 16-bit signed integer.
-
-        Returns
-        -------
-        :class:`int`
-            The sum of `a` and `b`.
+        :param a: First 16-bit signed integer.
+        :param b: Second 16-bit signed integer.
+        :return: The sum of `a` and `b`.
         """
         return self.request32('sum_16bit', a, b)
 
@@ -75,17 +60,9 @@ class Fortran64(Client64):
 
         See the corresponding 32-bit :meth:`~.fortran32.Fortran32.sum_32bit` method.
 
-        Parameters
-        ----------
-        a : :class:`int`
-            The first 32-bit signed integer.
-        b : :class:`int`
-            The second 32-bit signed integer.
-
-        Returns
-        -------
-        :class:`int`
-            The sum of `a` and `b`.
+        :param a: First 32-bit signed integer.
+        :param b: Second 32-bit signed integer.
+        :return: The sum of `a` and `b`.
         """
         return self.request32('sum_32bit', a, b)
 
@@ -94,17 +71,9 @@ class Fortran64(Client64):
 
         See the corresponding 32-bit :meth:`~.fortran32.Fortran32.sum_64bit` method.
 
-        Parameters
-        ----------
-        a : :class:`int`
-            The first 64-bit signed integer.
-        b : :class:`int`
-            The second 64-bit signed integer.
-
-        Returns
-        -------
-        :class:`int`
-            The sum of `a` and `b`.
+        :param a: First 64-bit signed integer.
+        :param b: Second 64-bit signed integer.
+        :return: The sum of `a` and `b`.
         """
         return self.request32('sum_64bit', a, b)
 
@@ -113,17 +82,9 @@ class Fortran64(Client64):
 
         See the corresponding 32-bit :meth:`~.fortran32.Fortran32.multiply_float32` method.
 
-        Parameters
-        ----------
-        a : :class:`float`
-            The first floating-point number.
-        b : :class:`float`
-            The second floating-point number.
-
-        Returns
-        -------
-        :class:`float`
-            The product of `a` and `b`.
+        :param a: First floating-point number.
+        :param b: Second floating-point number.
+        :return: The product of `a` and `b`.
         """
         return self.request32('multiply_float32', a, b)
 
@@ -132,17 +93,9 @@ class Fortran64(Client64):
 
         See the corresponding 32-bit :meth:`~.fortran32.Fortran32.multiply_float64` method.
 
-        Parameters
-        ----------
-        a : :class:`float`
-            The first double-precision number.
-        b : :class:`float`
-            The second double-precision number.
-
-        Returns
-        -------
-        :class:`float`
-            The product of `a` and `b`.
+        :param a: First double-precision number.
+        :param b: Second double-precision number.
+        :return: The product of `a` and `b`.
         """
         return self.request32('multiply_float64', a, b)
 
@@ -151,15 +104,8 @@ class Fortran64(Client64):
 
         See the corresponding 32-bit :meth:`~.fortran32.Fortran32.is_positive` method.
 
-        Parameters
-        ----------
-        a : :class:`float`
-            A double-precision number.
-
-        Returns
-        -------
-        :class:`bool`
-            Whether the value of `a` is > 0.
+        :param a: Double-precision number.
+        :return: Whether the value of `a` is > 0.
         """
         return self.request32('is_positive', a)
 
@@ -168,19 +114,10 @@ class Fortran64(Client64):
 
         See the corresponding 32-bit :meth:`~.fortran32.Fortran32.add_or_subtract` method.
 
-        Parameters
-        ----------
-        a : :class:`int`
-            The first integer.
-        b : :class:`int`
-            The second integer.
-        do_addition : :class:`bool`
-            Whether to **add** the numbers.
-
-        Returns
-        -------
-        :class:`int`
-            Either `a` + `b` if `do_addition` is :data:`True` else `a` - `b`.
+        :param a: First integer.
+        :param b: Second integer.
+        :param do_addition: Whether to add or subtract the numbers.
+        :return: `a+b` if `do_addition` is :data:`True` else `a-b`.
         """
         return self.request32('add_or_subtract', a, b, do_addition)
 
@@ -189,15 +126,8 @@ class Fortran64(Client64):
 
         See the corresponding 32-bit :meth:`~.fortran32.Fortran32.factorial` method.
 
-        Parameters
-        ----------
-        n : :class:`int`
-            The integer to computer the factorial of. The maximum allowed value is 127.
-
-        Returns
-        -------
-        :class:`float`
-            The factorial of `n`.
+        :param n: The integer to computer the factorial of. The maximum allowed value is 127.
+        :return: The factorial of `n`.
         """
         return self.request32('factorial', n)
 
@@ -206,15 +136,8 @@ class Fortran64(Client64):
 
         See the corresponding 32-bit :meth:`~.fortran32.Fortran32.standard_deviation` method.
 
-        Parameters
-        ----------
-        data : :class:`list` of :class:`float`
-            The data to compute the standard deviation of.
-
-        Returns
-        -------
-        :class:`float`
-            The standard deviation of `data`.
+        :param data: The values to compute the standard deviation of.
+        :return: The standard deviation of `data`.
         """
         return self.request32('standard_deviation', data)
 
@@ -223,15 +146,8 @@ class Fortran64(Client64):
 
         See the corresponding 32-bit :meth:`~.fortran32.Fortran32.besselJ0` method.
 
-        Parameters
-        ----------
-        x : :class:`float`
-            The value to compute ``BESSEL_J0`` of.
-
-        Returns
-        -------
-        :class:`float`
-            The value of ``BESSEL_J0(x)``.
+        :param x: The value to compute ``BESSEL_J0`` of.
+        :return: The value of ``BESSEL_J0(x)``.
         """
         return self.request32('besselJ0', x)
 
@@ -240,34 +156,19 @@ class Fortran64(Client64):
 
         See the corresponding 32-bit :meth:`~.fortran32.Fortran32.reverse_string` method.
 
-        Parameters
-        ----------
-        original : :class:`str`
-            The original string.
-
-        Returns
-        -------
-        :class:`str`
-            The string reversed.
+        :param original: The original string.
+        :return: The string reversed.
         """
         return self.request32('reverse_string', original)
 
     def add_1d_arrays(self, a1: Sequence[float], a2: Sequence[float]) -> list[float]:
         """Perform an element-wise addition of two 1D double-precision arrays.
 
-        See the corresponding 32-bit :meth:`~.fortran32.Fortran32.add_1D_arrays` method.
+        See the corresponding 32-bit :meth:`~.fortran32.Fortran32.add_1d_arrays` method.
 
-        Parameters
-        ----------
-        a1 : :class:`list` of :class:`float`
-            The first array.
-        a2 : :class:`list` of :class:`float`
-            The second array.
-
-        Returns
-        -------
-        :class:`list` of :class:`float`
-            The element-wise addition of `a1` + `a2`.
+        :param a1: First array.
+        :param a2: Second array.
+        :return: The element-wise addition of `a1` + `a2`.
         """
         return self.request32('add_1d_arrays', a1, a2)
 
@@ -279,16 +180,8 @@ class Fortran64(Client64):
 
         See the corresponding 32-bit :meth:`~.fortran32.Fortran32.matrix_multiply` method.
 
-        Parameters
-        ----------
-        a1 : :class:`list` of :class:`list` of :class:`float`
-            The first matrix.
-        a2 : :class:`list` of :class:`list` of :class:`float`
-            The second matrix.
-
-        Returns
-        -------
-        :class:`list` of :class:`list` of :class:`float`
-            The result of `a1` * `a2`.
+        :param a1: First matrix.
+        :param a2: Second matrix.
+        :return: The product of `a1` * `a2`.
         """
         return self.request32('matrix_multiply', a1, a2)

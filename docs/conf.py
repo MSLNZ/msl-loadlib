@@ -20,7 +20,6 @@ extensions = [
     'sphinx.ext.autodoc',
     'sphinx.ext.autosummary',
     'sphinx.ext.intersphinx',
-    'sphinx.ext.napoleon',
     'sphinx_rtd_theme',
 ]
 
@@ -39,24 +38,6 @@ autosummary_generate = True
 
 # include both class docstring and __init__
 autoclass_content = 'both'
-
-# Napoleon settings
-napoleon_google_docstring = False
-napoleon_numpy_docstring = True
-napoleon_include_init_with_doc = False
-napoleon_include_private_with_doc = False
-napoleon_include_special_with_doc = False
-napoleon_use_admonition_for_examples = False
-napoleon_use_admonition_for_notes = False
-napoleon_use_admonition_for_references = False
-napoleon_use_ivar = False
-napoleon_use_param = True
-napoleon_use_rtype = True
-napoleon_preprocess_types = True
-napoleon_type_aliases = {
-    'LibTypes': 'LibTypes',
-}
-napoleon_attr_annotations = True
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ['_templates']
@@ -211,7 +192,12 @@ nitpicky = True
 # known bad links
 nitpick_ignore = [
     ('py:class', 'System.Windows.Forms.Form'),
+    ('py:class', 'module'),
 ]
+
+type_aliases = {
+    'LibTypes': 'LibTypes',
+}
 
 
 def resolve_aliases(app, env, node, contnode):
@@ -229,7 +215,7 @@ def resolve_aliases(app, env, node, contnode):
 
     # resolve py:class: references to our type aliases as py:data: instead
     if (node['refdomain'] == 'py' and node['reftype'] == 'class' and
-            node['reftarget'] in napoleon_type_aliases):
+            node['reftarget'] in type_aliases):
         return app.env.get_domain('py').resolve_xref(
             env, node['refdoc'], app.builder, 'data', node['reftarget'], node, contnode)
 

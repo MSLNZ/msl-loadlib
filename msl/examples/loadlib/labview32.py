@@ -27,20 +27,9 @@ class Labview32(Server32):
     def __init__(self, host: str, port: int, **kwargs: str) -> None:
         """A wrapper around the 32-bit LabVIEW library, :ref:`labview_lib32 <labview-lib>`.
 
-        Parameters
-        ----------
-        host : :class:`str`
-            The IP address of the server.
-        port : :class:`int`
-            The port to open on the server.
-
-        Note
-        ----
-        Any class that is a subclass of :class:`~msl.loadlib.server32.Server32` **MUST**
-        provide two arguments in its constructor: `host` and `port` (in that order)
-        and `**kwargs`. Otherwise the ``server32`` executable, see
-        :class:`~msl.loadlib.start_server32`, cannot create an instance of the
-        :class:`~msl.loadlib.server32.Server32` subclass.
+        :param host: The IP address (or hostname) to use for the server.
+        :param port: The port to open for the server.
+        :param kwargs: Optional keyword arguments. The keys and values are of type :class:`str`.
         """
         path = os.path.join(os.path.dirname(__file__), 'labview_lib32.dll')
         super().__init__(path, 'cdll', host, port)
@@ -50,22 +39,10 @@ class Labview32(Server32):
 
         See the corresponding 64-bit :meth:`~.labview64.Labview64.stdev` method.
 
-        Parameters
-        ----------
-        x : :class:`list` of :class:`float`
-            The data to calculate the mean, variance and standard deviation of.
-        weighting : :class:`int`, optional
-            Whether to calculate the **sample**, ``weighting = 0``, or the **population**,
-            ``weighting = 1``, standard deviation and variance.
-
-        Returns
-        -------
-        :class:`float`
-            The mean.
-        :class:`float`
-            The variance.
-        :class:`float`
-            The standard deviation.
+        :param x: The data to calculate the mean, variance and standard deviation of.
+        :param weighting: Whether to calculate the sample (`weighting` = 0) or the
+            population (`weighting` = 1) standard deviation and variance.
+        :return: The mean, variance and standard deviation.
         """
         data = (c_double * len(x))(*x)
         mean, variance, std = c_double(), c_double(), c_double()

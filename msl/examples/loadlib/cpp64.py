@@ -22,12 +22,13 @@ from msl.loadlib import Client64
 
 
 class Cpp64(Client64):
-    """Communicates with a 32-bit C++ library, :ref:`cpp_lib32 <cpp-lib>`.
 
-    This class demonstrates how to communicate with a 32-bit C++ library if an 
-    instance of this class is created within a 64-bit Python interpreter.
-    """
     def __init__(self) -> None:
+        """Communicates with a 32-bit C++ library, :ref:`cpp_lib32 <cpp-lib>`.
+
+        This class demonstrates how to communicate with a 32-bit C++ library if an
+        instance of this class is created within a 64-bit Python interpreter.
+        """
         # specify the name of the corresponding 32-bit server module, cpp32, which hosts
         # the 32-bit C++ library -- cpp_lib32.
         super().__init__(module32='cpp32', append_sys_path=os.path.dirname(__file__))
@@ -37,17 +38,9 @@ class Cpp64(Client64):
 
         See the corresponding 32-bit :meth:`~.cpp32.Cpp32.add` method.
 
-        Parameters
-        ----------
-        a : :class:`int`
-            The first integer.
-        b : :class:`int`
-            The second integer.
-
-        Returns
-        -------
-        :class:`int`
-            The sum of `a` and `b`.
+        :param a: First integer.
+        :param b: Second integer.
+        :return: The sum of `a` and `b`.
         """
         return self.request32('add', a, b)
 
@@ -56,17 +49,9 @@ class Cpp64(Client64):
 
         See the corresponding 32-bit :meth:`~.cpp32.Cpp32.subtract` method.
 
-        Parameters
-        ----------
-        a : :class:`float`
-            The first floating-point number.
-        b : :class:`float`
-            The second floating-point number.
-
-        Returns
-        -------
-        :class:`float`
-            The difference between `a` and `b`.
+        :param a: First floating-point number.
+        :param b: Second floating-point number.
+        :return: The difference between `a` and `b`.
         """
         return self.request32('subtract', a, b)
 
@@ -75,19 +60,10 @@ class Cpp64(Client64):
 
         See the corresponding 32-bit :meth:`~.cpp32.Cpp32.add_or_subtract` method.
 
-        Parameters
-        ----------
-        a : :class:`float`
-            The first floating-point number.
-        b : :class:`float`
-            The second floating-point number.
-        do_addition : :class:`bool`
-            Whether to **add** the numbers.
-
-        Returns
-        -------
-        :class:`float`
-            Either `a` + `b` if `do_addition` is :data:`True` else `a` - `b`.
+        :param a: First double-precision number.
+        :param b: Second double-precision number.
+        :param do_addition: Whether to add or subtract the numbers.
+        :return: `a+b` if `do_addition` is :data:`True` else `a-b`.
         """
         return self.request32('add_or_subtract', a, b, do_addition)
 
@@ -96,17 +72,9 @@ class Cpp64(Client64):
 
         See the corresponding 32-bit :meth:`~.cpp32.Cpp32.scalar_multiply` method.
 
-        Parameters
-        ----------
-        a : :class:`float`
-            The scalar value.
-        xin : :class:`list` of :class:`float`
-            The array to modify.
-
-        Returns
-        -------
-        :class:`list` of :class:`float`
-            A new array with each element in `xin` multiplied by `a`.
+        :param a: Scalar value.
+        :param xin: Array to modify.
+        :return: A new array with each element in `xin` multiplied by `a`.
         """
         return self.request32('scalar_multiply', a, xin)
 
@@ -118,15 +86,8 @@ class Cpp64(Client64):
 
         See the corresponding 32-bit :meth:`~.cpp32.Cpp32.reverse_string_v1` method.
 
-        Parameters
-        ----------
-        original : :class:`str`
-            The original string.
-
-        Returns
-        -------
-        :class:`str`
-            The string reversed.
+        :param original: The original string.
+        :return: The string reversed.
         """
         return self.request32('reverse_string_v1', original)
 
@@ -138,15 +99,8 @@ class Cpp64(Client64):
 
         See the corresponding 32-bit :meth:`~.cpp32.Cpp32.reverse_string_v2` method.
 
-        Parameters
-        ----------
-        original : :class:`str`
-            The original string.
-
-        Returns
-        -------
-        :class:`str`
-            The string reversed.
+        :param original: The original string.
+        :return: The string reversed.
         """
         return self.request32('reverse_string_v2', original)
 
@@ -155,18 +109,12 @@ class Cpp64(Client64):
 
         See the corresponding 32-bit :meth:`~.cpp32.Cpp32.distance_4_points` method.
 
-        Parameters
-        ----------
-        points : :class:`.FourPoints`
+        :param points: The points to use to calculate the total distance.
             Since `points` is a struct that is a fixed size we can pass the
             :class:`ctypes.Structure` object directly from 64-bit Python to
             the 32-bit Python. The :mod:`ctypes` module on the 32-bit server
             can load the :mod:`pickle`\'d :class:`ctypes.Structure`.
-
-        Returns
-        -------
-        :class:`float`
-            The total distance connecting the 4 :class:`~.Point`\'s.
+        :return: The total distance connecting the 4 points.
         """
         if not isinstance(points, FourPoints):
             raise TypeError(f'Must pass in a FourPoints object. Got {type(points)}')
@@ -179,16 +127,8 @@ class Cpp64(Client64):
 
         See the corresponding 32-bit :meth:`~.cpp32.Cpp32.circumference` method.
 
-        Parameters
-        ----------
-        radius : :class:`float`
-            The radius of the circle.
-        n : :class:`int`
-            The number of points to use to estimate the circumference.
-
-        Returns
-        -------
-        :class:`float`
-            The estimated circumference of the circle.
+        :param radius: The radius of the circle.
+        :param n: The number of points to use to estimate the circumference.
+        :return: The estimated circumference of the circle.
         """
         return self.request32('circumference', radius, n)

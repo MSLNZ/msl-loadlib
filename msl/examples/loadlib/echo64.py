@@ -32,16 +32,8 @@ class Echo64(Client64):
         """Send a request to execute the :meth:`~.echo32.Echo32.received_data`
         method on the 32-bit server.
 
-        Parameters
-        ----------
-        *args
-            The arguments that the :meth:`~.echo32.Echo32.received_data` method requires.
-        **kwargs
-            The keyword arguments that the :meth:`~.echo32.Echo32.received_data` method requires.
-        
-        Returns
-        -------
-        :class:`tuple`
-            The `args` and `kwargs` that were returned from :meth:`~.echo32.Echo32.received_data`.
+        :param args: The arguments that the :meth:`~.echo32.Echo32.received_data` method requires.
+        :param kwargs: The keyword arguments that the :meth:`~.echo32.Echo32.received_data` method requires.
+        :return: The `args` and `kwargs` that were returned from :meth:`~.echo32.Echo32.received_data`.
         """
         return self.request32('received_data', *args, **kwargs)

@@ -68,7 +68,7 @@ One can create objects from the System_ namespace,
 
    >>> System = net.lib.System
 
- for example, to create a 32-bit signed integer,
+for example, to create a 32-bit signed integer,
 
 .. code-block:: pycon
 

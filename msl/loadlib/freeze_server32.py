@@ -31,45 +31,39 @@ def main(*,
 
     This function must be run from a 32-bit Python interpreter with `PyInstaller`_ installed.
 
-    Uses `PyInstaller`_ to create a frozen 32-bit Python executable. This
-    executable starts a 32-bit server, :class:`~.server32.Server32`, which
-    hosts a Python module that can load a 32-bit library.
-
-    If a value for `spec` is specified, then `packages` or `data` cannot
-    be specified.
-
-    .. versionchanged:: 1.0
-       Removed the `requires_pythonnet` and `requires_comtypes` arguments.
-       Added the `packages` and `data` arguments.
-
-    .. versionchanged:: 0.10
-       Added the `dest` argument.
+    Uses `PyInstaller`_ to create a frozen 32-bit Python executable. This executable
+    starts a 32-bit server, :class:`~.server32.Server32`, which hosts a Python module
+    that can load a 32-bit library.
 
     .. versionchanged:: 0.5
        Added the `requires_pythonnet` and `requires_comtypes` arguments.
 
+    .. versionchanged:: 0.10
+       Added the `dest` argument.
+
+    .. versionchanged:: 1.0
+       Removed the `requires_pythonnet` and `requires_comtypes` arguments.
+       Added the `imports` and `data` arguments.
+
     .. _PyInstaller: https://www.pyinstaller.org/
 
-    Parameters
-    ----------
-    spec : :class:`str`, optional
-        The path to a :ref:`spec file <using spec files>` to use to create
+    :param spec: The path to a :ref:`spec file <using spec files>` to use to create
         the frozen 32-bit server.
-    dest : :class:`str`, optional
-        The destination directory to save the 32-bit server to. Default is
+    :param dest: The destination directory to save the 32-bit server to. Default is
         the current directory.
-    imports
-        The names of additional modules and packages that must be importable
-        on the 32-bit server.
-    data
-        The path(s) to additional data files, or directories containing data
-        files, to be added to the frozen 32-bit server. Each value should be
-        in the form `source:dest_dir`, where `:dest_dir` is optional. `source`
-        is the path to a file (or a directory of files) to add. `dest_dir`
-        is an optional destination directory, relative to the top-level
-        directory of the frozen 32-bit server, to add the file(s) to. If
-        `dest_dir` is not specified, the file(s) will be added to the
-        top-level directory of the 32-bit server.
+    :param imports: The names of additional modules and packages that must be
+        importable on the 32-bit server.
+    :param data: The path(s) to additional data files, or directories containing
+        data files, to be added to the frozen 32-bit server. Each value should be
+        in the form `source:dest_dir`, where `:dest_dir` is optional. `source` is
+        the path to a file (or a directory of files) to add. `dest_dir` is an
+        optional destination directory, relative to the top-level directory of
+        the frozen 32-bit server, to add the file(s) to. If `dest_dir` is not
+        specified, the file(s) will be added to the top-level directory of the
+        32-bit server.
+
+    .. attention::
+        If a value for `spec` is specified, then `imports` nor `data` may be specified.
     """
     if constants.IS_PYTHON_64BIT:
         print('Must freeze the server using a 32-bit Python interpreter', file=sys.stderr)
@@ -195,12 +189,8 @@ def _get_standard_modules() -> list[str]:
     into the frozen application (only if the module is available for the operating
     system that is running this script).
 
-    Returns
-    -------
-    :class:`list` of :class:`str`
-        A list of modules to be included and excluded.
+    :return: A list of modules to be included and excluded.
     """
-
     # the frozen application is not meant to create GUIs or to add
     # support for building and installing Python modules
     ignore_list = [
@@ -252,8 +242,12 @@ def _get_standard_modules() -> list[str]:
     return included_modules + excluded_modules
 
 
-def _create_version_info_file(root_path: str) -> str:
-    # Returns the filename of the created file
+def _create_version_info_file(root_dir: str) -> str:
+    """Create the version info file for Windows.
+
+    :param root_dir: The directory to save the version file to.
+    :return: The filename of the version file.
+    """
     text = f"""# UTF-8
 #
 # For more details about fixed file info 'ffi' see:
@@ -290,7 +284,7 @@ VSVersionInfo(
 )
 """
     filename = 'file_version_info.txt'
-    with open(os.path.join(root_path, filename), mode='wt') as fp:
+    with open(os.path.join(root_dir, filename), mode='wt') as fp:
         fp.write(text)
     return filename
 

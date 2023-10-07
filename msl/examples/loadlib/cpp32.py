@@ -20,25 +20,14 @@ from msl.loadlib import Server32
 class Cpp32(Server32):
 
     def __init__(self, host: str, port: int, **kwargs: str) -> None:
-        """A wrapper around the 32-bit C++ library, :ref:`cpp_lib32 <cpp-lib>`.
+        """Wrapper around the 32-bit C++ library, :ref:`cpp_lib32 <cpp-lib>`.
 
         This class demonstrates how to send/receive various data types to/from a
         32-bit C++ library via :mod:`ctypes`.
 
-        Parameters
-        ----------
-        host : :class:`str`
-            The IP address of the server.
-        port : :class:`int`
-            The port to open on the server.
-
-        Note
-        ----
-        Any class that is a subclass of :class:`~msl.loadlib.server32.Server32` **MUST**
-        provide two arguments in its constructor: `host` and `port` (in that order)
-        and `**kwargs`. Otherwise the ``server32`` executable, see
-        :class:`~msl.loadlib.start_server32`, cannot create an instance of the
-        :class:`~msl.loadlib.server32.Server32` subclass.
+        :param host: The IP address (or hostname) to use for the server.
+        :param port: The port to open for the server.
+        :param kwargs: Optional keyword arguments. The keys and values are of type :class:`str`.
         """
         # By not specifying the extension of the library file the server will open
         # the appropriate file based on the operating system.
@@ -58,17 +47,9 @@ class Cpp32(Server32):
 
         See the corresponding 64-bit :meth:`~.cpp64.Cpp64.add` method.
 
-        Parameters
-        ----------
-        a : :class:`int`
-            The first integer.
-        b : :class:`int`
-            The second integer.
-
-        Returns
-        -------
-        :class:`int`
-            The sum of `a` and `b`.
+        :param a: First integer.
+        :param b: Second integer.
+        :return: The sum of `a` and `b`.
         """
         # restype and argtypes could be defined in the __init__ method
         self.lib.add.restype = ctypes.c_int32
@@ -88,17 +69,9 @@ class Cpp32(Server32):
 
         See the corresponding 64-bit :meth:`~.cpp64.Cpp64.subtract` method.
 
-        Parameters
-        ----------
-        a : :class:`float`
-            The first floating-point number.
-        b : :class:`float`
-            The second floating-point number.
-
-        Returns
-        -------
-        :class:`float`
-            The difference between `a` and `b`.
+        :param a: First floating-point number.
+        :param b: Second floating-point number.
+        :return: The difference between `a` and `b`.
         """
         # restype and argtypes could be defined in the __init__ method
         self.lib.subtract.restype = ctypes.c_float
@@ -122,19 +95,10 @@ class Cpp32(Server32):
 
         See the corresponding 64-bit :meth:`~.cpp64.Cpp64.add_or_subtract` method.
 
-        Parameters
-        ----------
-        a : :class:`float`
-            The first double-precision number.
-        b : :class:`float`
-            The second double-precision number.
-        do_addition : :class:`bool`
-            Whether to **add** the numbers.
-
-        Returns
-        -------
-        :class:`float`
-            Either `a` + `b` if `do_addition` is :data:`True` else `a` - `b`.
+        :param a: First double-precision number.
+        :param b: Second double-precision number.
+        :param do_addition: Whether to add or subtract the numbers.
+        :return: `a+b` if `do_addition` is :data:`True` else `a-b`.
         """
         # restype and argtypes could be defined in the __init__ method
         self.lib.add_or_subtract.restype = ctypes.c_double
@@ -156,17 +120,9 @@ class Cpp32(Server32):
 
         See the corresponding 64-bit :meth:`~.cpp64.Cpp64.scalar_multiply` method.
 
-        Parameters
-        ----------
-        a : :class:`float`
-            The scalar value.
-        xin : :class:`list` of :class:`float`
-            The array to modify.
-
-        Returns
-        -------
-        :class:`list` of :class:`float`
-            A new array with each element in `xin` multiplied by `a`.
+        :param a: Scalar value.
+        :param xin: Array to modify.
+        :return: A new array with each element in `xin` multiplied by `a`.
         """
         # restype and argtypes could be defined in the __init__ method
         self.lib.scalar_multiply.restype = None
@@ -201,15 +157,8 @@ class Cpp32(Server32):
 
         See the corresponding 64-bit :meth:`~.cpp64.Cpp64.reverse_string_v1` method.
 
-        Parameters
-        ----------
-        original : :class:`str`
-            The original string.
-
-        Returns
-        -------
-        :class:`str`
-            The string reversed.
+        :param original: The original string.
+        :return: The string reversed.
         """
         # restype and argtypes could be defined in the __init__ method
         self.lib.reverse_string_v1.restype = None
@@ -240,15 +189,8 @@ class Cpp32(Server32):
 
         See the corresponding 64-bit :meth:`~.cpp64.Cpp64.reverse_string_v2` method.
 
-        Parameters
-        ----------
-        original : :class:`str`
-            The original string.
-
-        Returns
-        -------
-        :class:`str`
-            The string reversed.
+        :param original: The original string.
+        :return: The string reversed.
         """
         # restype and argtypes could be defined in the __init__ method
         self.lib.reverse_string_v2.restype = ctypes.c_char_p
@@ -275,15 +217,8 @@ class Cpp32(Server32):
 
         See the corresponding 64-bit :meth:`~.cpp64.Cpp64.distance_4_points` method.
 
-        Parameters
-        ----------
-        four_points : :class:`.FourPoints`
-            The points to use to calculate the total distance.
-
-        Returns
-        -------
-        :class:`float`
-            The total distance connecting the 4 :class:`~.Point`\'s.
+        :param four_points: The points to use to calculate the total distance.
+        :return: The total distance connecting the 4 points.
         """
         self.lib.distance_4_points.restype = ctypes.c_double
         return self.lib.distance_4_points(four_points)
@@ -311,17 +246,9 @@ class Cpp32(Server32):
                 return d;
             }
 
-        Parameters
-        ----------
-        radius : :class:`float`
-            The radius of the circle.
-        n : :class:`int`
-            The number of points to use to estimate the circumference.
-
-        Returns
-        -------
-        :class:`float`
-            The estimated circumference of the circle.
+        :param radius: The radius of the circle.
+        :param n: The number of points to use to estimate the circumference.
+        :return: The estimated circumference of the circle.
         """
         # restype and argtypes could be defined in the __init__ method
         self.lib.distance_n_points.restype = ctypes.c_double
@@ -378,16 +305,10 @@ class FourPoints(ctypes.Structure):
                Point points[4];
            };
 
-        Parameters
-        ----------
-        point1 : :class:`tuple` of :class:`int`
-            The first point as an (x, y) ordered pair.
-        point2 : :class:`tuple` of :class:`int`
-            The second point as an (x, y) ordered pair.
-        point3 : :class:`tuple` of :class:`int`
-            The third point as an (x, y) ordered pair.
-        point4 : :class:`tuple` of :class:`int`
-            The fourth point as an (x, y) ordered pair.
+        :param point1: The first point.
+        :param point2: The second point.
+        :param point3: The third point.
+        :param point4: The fourth point.
         """
         super().__init__()
         self.points = (Point * 4)(point1, point2, point3, point4)

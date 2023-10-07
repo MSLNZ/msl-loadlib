@@ -31,16 +31,12 @@ def is_pythonnet_installed() -> bool:
 
     .. _Python for .NET: https://pythonnet.github.io/
 
-    Returns
-    -------
-    :class:`bool`
-        Whether `Python for .NET`_ is installed.
+    :return: Whether `Python for .NET`_ is installed.
 
-    Note
-    ----
-    For help getting `Python for .NET`_ installed on a non-Windows operating system look at
-    the :ref:`prerequisites <loadlib-prerequisites>`, the `Mono <https://www.mono-project.com/>`_
-    project and the `Python for .NET documentation <Python for .NET_>`_.
+    .. note::
+        For help getting `Python for .NET`_ installed on a non-Windows operating system look at
+        the :ref:`prerequisites <loadlib-prerequisites>`, the `Mono <https://www.mono-project.com/>`_
+        project and the `Python for .NET documentation <Python for .NET_>`_.
     """
     try:
         import clr
@@ -56,10 +52,7 @@ def is_py4j_installed() -> bool:
 
     .. _Py4J: https://www.py4j.org/index.html#
 
-    Returns
-    -------
-    :class:`bool`
-        Whether Py4J_ is installed.
+    :return: Whether Py4J_ is installed.
     """
     try:
         import py4j
@@ -75,10 +68,7 @@ def is_comtypes_installed() -> bool:
 
     .. _comtypes: https://pythonhosted.org/comtypes/#
 
-    Returns
-    -------
-    :class:`bool`
-        Whether comtypes_ is installed.
+    :return: Whether comtypes_ is installed.
     """
     try:
         import comtypes
@@ -110,24 +100,15 @@ def check_dot_net_config(py_exe_path: str) -> tuple[int, str]:
             </startup>
         </configuration>
 
-    Parameters
-    ----------
-    py_exe_path : :class:`str`
-        The path to a Python executable.
+    :param py_exe_path: The path to a Python executable.
+    :return: A status flag and a message describing the outcome.
 
-    Returns
-    -------
-    :class:`int`
-        One of the following values:
+        The flag will be one of the following values:
 
-            * -1 -- if there was a problem
-            * 0 -- if the .NET property was already enabled, or
-            * 1 -- if the property was created successfully.
-
-    :class:`str`
-        A message describing the outcome.
+            * -1: if there was a problem
+            * 0: if the .NET property was already enabled, or
+            * 1: if the property was created successfully.
     """
-
     config_path = f'{py_exe_path}.config'
 
     if os.path.isfile(config_path):
@@ -201,15 +182,8 @@ def is_port_in_use(port: int) -> bool:
     .. versionchanged:: 0.7.0
        Renamed from `port_in_use` and added support for macOS.
 
-    Parameters
-    ----------
-    port : :class:`int`
-        The port number to test.
-
-    Returns
-    -------
-    :class:`bool`
-        Whether the TCP port is in use.
+    :param port: The port number to test.
+    :return: Whether the TCP port is in use.
     """
     flags = 0
     if IS_WINDOWS:
@@ -237,19 +211,10 @@ def get_available_port() -> int:
 def wait_for_server(host: str, port: int, timeout: float) -> None:
     """Wait for the 32-bit server to start.
 
-    Parameters
-    ----------
-    host : :class:`str`
-        The host address of the server, e.g., ``'127.0.0.1'``.
-    port : :class:`int`
-        The port number of the server.
-    timeout : :class:`float`
-        The maximum number of seconds to wait to establish a connection to the server.
-
-    Raises
-    ------
-    ~msl.loadlib.exceptions.ConnectionTimeoutError
-        If a timeout occurred.
+    :param host: The hostname or IP address of the server.
+    :param port: The port number of the server.
+    :param timeout: The maximum number of seconds to wait to establish a connection to the server.
+    :raises ConnectionTimeoutError: If a timeout occurred.
     """
     stop = time.time() + max(0.0, timeout)
     while True:
@@ -271,25 +236,18 @@ def get_com_info(*additional_keys: str) -> dict[str, dict[str, str | None]]:
     .. _COM: https://en.wikipedia.org/wiki/Component_Object_Model
     .. _Class ID: https://docs.microsoft.com/en-us/windows/desktop/com/clsid-key-hklm
 
-    Parameters
-    ----------
-    *additional_keys : :class:`str`, optional
-        The Program ID (ProgID) key is returned automatically. You can include
-        additional keys (e.g., Version, InprocHandler32, ToolboxBitmap32,
+    :param additional_keys: The Program ID (ProgID) key is returned automatically.
+        You can include additional keys (e.g., Version, InprocHandler32, ToolboxBitmap32,
         VersionIndependentProgID, ...) if you also want this additional
         information to be returned for each `Class ID`_.
-
-    Returns
-    -------
-    :class:`dict`
-        The keys are the Class ID's and each value is a :class:`dict`
+    :return: The keys are the Class ID's and each value is a :class:`dict`
         of the information that was requested.
 
-    Examples
-    --------
-    >>> from msl.loadlib import utils
-    >>> info = utils.get_com_info()
-    >>> info = utils.get_com_info('Version', 'ToolboxBitmap32')
+    Example::
+
+        >>> from msl.loadlib import utils
+        >>> info = utils.get_com_info()
+        >>> more_info = utils.get_com_info('Version', 'ToolboxBitmap32')
     """
     if winreg is None:
         return {}
@@ -345,28 +303,25 @@ def generate_com_wrapper(lib: Any, out_dir: str | None = None) -> ModuleType:
 
     .. _Accessing type libraries: https://pythonhosted.org/comtypes/#accessing-type-libraries
 
-    Parameters
-    ----------
-    lib
+    :param lib: The COM library to create a wrapper of.
+
         Can be any of the following
 
             * a :class:`~msl.loadlib.load_library.LoadLibrary` object
             * the `ProgID` or `CLSID` of a registered COM library as a :class:`str`
-            * a COM pointer instance
-            * an ITypeLib COM pointer instance
+            * a COM pointer instance (:func:`~ctypes.POINTER`)
+            * an ITypeLib COM pointer instance (:func:`~ctypes.POINTER`)
             * a path to a library file (.tlb, .exe or .dll) as a :class:`str`
             * a :class:`tuple` or :class:`list` specifying the GUID of a library,
-              a major and a minor version number, plus optionally an LCID number,
-              e.g., (guid, major, minor, lcid=0)
+              a major and a minor version number, plus optionally an LCID number, e.g.,
+
+                 ``['{EAB22AC0-30C1-11CF-A7EB-0000C05BAE0B}', 1, 1]``
+
             * an object with ``_reg_libid_`` and ``_reg_version_`` attributes
 
-    out_dir : :class:`str`, optional
-        The output directory to save the wrapper to. If not specified then
-        saves it to the ``../site-packages/comtypes/gen`` directory.
-
-    Returns
-    -------
-    The wrapper module that was generated.
+    :param out_dir: The output directory to save the wrapper to. If not specified,
+        the module is saved to the ``../site-packages/comtypes/gen`` directory.
+    :return: The wrapper module that was generated.
     """
     if not is_comtypes_installed():
         raise OSError(
