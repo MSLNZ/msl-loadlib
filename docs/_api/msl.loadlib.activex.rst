@@ -5,3 +5,4 @@ msl.loadlib.activex module
    :members:
    :undoc-members:
    :show-inheritance:
+   :exclude-members: Forms
