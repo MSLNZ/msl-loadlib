@@ -3,7 +3,7 @@ import shutil
 import socket
 import sys
 import tempfile
-import xml.etree.ElementTree as ET
+from xml.etree import ElementTree
 
 import pytest
 
@@ -86,7 +86,7 @@ def test_check_dot_net_config():
     val, msg = utils.check_dot_net_config(exe)
     assert val == 1
     assert msg.startswith('Added')
-    root = ET.parse(cfg).getroot()
+    root = ElementTree.parse(cfg).getroot()
     assert root.find('something').text == '7'
     assert root.find('startup').attrib['useLegacyV2RuntimeActivationPolicy'].lower() == 'true'
     os.remove(cfg)
@@ -192,7 +192,7 @@ def test_generate_com_wrapper():
 
         assert comtypes.client.gen_dir.endswith('site-packages\\comtypes\\gen')
 
-        # a non-LoadLib object should still raise and error
+        # a non-LoadLib object should still raise an error
         for obj in [dict(), None, True]:
             with pytest.raises((AttributeError, TypeError)):
                 utils.generate_com_wrapper(obj)
