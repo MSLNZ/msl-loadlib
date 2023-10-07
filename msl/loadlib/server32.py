@@ -136,8 +136,7 @@ class Server32(HTTPServer):
         needs to start in order to determine the version of the Python interpreter.
         """
         exe = os.path.join(os.path.dirname(__file__), SERVER_FILENAME)
-        pipe = subprocess.Popen([exe, '--version'], stdout=subprocess.PIPE)
-        return pipe.communicate()[0].decode().strip()
+        return subprocess.check_output([exe, '--version']).decode().strip()
 
     @staticmethod
     def interactive_console() -> None:
