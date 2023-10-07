@@ -122,7 +122,7 @@ def test_fortran():
 
     a = [float(val) for val in range(1, 1000)]
     b = [3.0*val for val in range(1, 1000)]
-    f_values = f.add_1D_arrays(a, b)
+    f_values = f.add_1d_arrays(a, b)
     for i in range(len(a)):
         assert a[i] + b[i] == pytest.approx(f_values[i])
 

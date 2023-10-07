@@ -136,7 +136,7 @@ Reverse a string, see
    '!dlrow olleh'
 
 Add two 1D arrays, see
-:meth:`~msl.examples.loadlib.fortran64.Fortran64.add_1D_arrays`
+:meth:`~msl.examples.loadlib.fortran64.Fortran64.add_1d_arrays`
 
 .. code-block:: pycon
 
@@ -146,7 +146,7 @@ Add two 1D arrays, see
    [1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0]
    >>> b
    [0.5, 1.0, 1.5, 2.0, 2.5, 3.0, 3.5, 4.0, 4.5]
-   >>> f.add_1D_arrays(a, b)
+   >>> f.add_1d_arrays(a, b)
    [1.5, 3.0, 4.5, 6.0, 7.5, 9.0, 10.5, 12.0, 13.5]
 
 Multiply two matrices, see

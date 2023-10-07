@@ -142,7 +142,7 @@ subroutine add_1d_arrays(a, in1, in2, n)
     double precision :: in1(n), in2(n) ! the arrays to add (element-wise)
     double precision :: a(n) ! the array that will contain the element-wise sum
     a(:) = in1(:) + in2(:)
-    end subroutine add_1D_arrays
+    end subroutine add_1d_arrays
 
 
 ! multiply two 2D, double-precision arrays. 
