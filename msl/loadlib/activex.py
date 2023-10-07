@@ -13,19 +13,17 @@ try:
     import System
     clr.AddReference('System.Windows.Forms')
     import System.Windows.Forms as Forms
-except:
+except ImportError:
     clr = None
 
     class Forms:
         Form = object
 
 try:
-    from comtypes import GUID
-    from comtypes import IUnknown
-    from comtypes.client import GetBestInterface
-    from comtypes.client import GetEvents
-except:
-    GUID = None
+    import comtypes
+    import comtypes.client as client
+except ImportError:
+    comtypes = client = None
 
 
 CW_USEDEFAULT = 0x80000000
@@ -141,7 +139,7 @@ class Application(Forms.Form):
         -------
         The connection object.
         """
-        cxn = GetEvents(source, sink or self, interface=interface)
+        cxn = client.GetEvents(source, sink or self, interface=interface)
         self._event_connections.append(cxn)
         return cxn
 
@@ -197,14 +195,14 @@ class Application(Forms.Form):
         OSError
             If the library cannot be loaded.
         """
-        if GUID is None:
+        if comtypes is None:
             raise OSError(
                 'Cannot load an ActiveX library because comtypes is not installed.\n'
                 'Run: pip install comtypes'
             )
 
         try:
-            clsid = GUID.from_progid(activex_id)
+            clsid = comtypes.GUID.from_progid(activex_id)
         except (TypeError, OSError):
             clsid = None
 
@@ -250,9 +248,9 @@ class Application(Forms.Form):
             raise OSError(f'CreateWindowExA {ctypes.WinError()}')
 
         # get the interface to the ActiveX control
-        unknown = ctypes.POINTER(IUnknown)()
+        unknown = ctypes.POINTER(comtypes.IUnknown)()
         ret = ctypes.windll.atl.AtlAxGetControl(hwnd, ctypes.byref(unknown))
         if ret != 0:
             raise OSError(f'AtlAxGetControl {ctypes.WinError()}')
 
-        return GetBestInterface(unknown)
+        return client.GetBestInterface(unknown)
