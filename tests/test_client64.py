@@ -1,11 +1,15 @@
 import gc
+import os.path
+from datetime import datetime
 
 import pytest
 
 from conftest import skipif_no_server32
+from conftest import skipif_not_windows
 from msl.examples.loadlib import Cpp64
 from msl.loadlib import Client64
 from msl.loadlib.constants import SERVER_FILENAME
+from msl.examples.loadlib import EXAMPLES_DIR
 
 
 @skipif_no_server32
@@ -59,3 +63,19 @@ def test_bad_del():
 def test_invalid_server32_dir():
     with pytest.raises(OSError, match=rf'^Cannot find {SERVER_FILENAME}$'):
         Client64(__file__, server32_dir='')
+
+
+@skipif_no_server32
+@skipif_not_windows
+def test_module32_as_name():
+    client = Client64(module32='msl.examples.loadlib.kernel32')
+    assert isinstance(client.request32('get_time'), datetime)
+
+
+@skipif_no_server32
+@skipif_not_windows
+def test_module32_as_path():
+    path = os.path.join(EXAMPLES_DIR, 'kernel32.py')
+    assert os.path.isfile(path)
+    client = Client64(module32=path)
+    assert isinstance(client.request32('get_time'), datetime)
