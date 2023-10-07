@@ -58,7 +58,6 @@ class Labview64(Client64):
         :class:`float`
             The standard deviation.
         """
-        w = int(weighting)
-        if w == 0 or w == 1:
-            return self.request32('stdev', x, w)
-        raise ValueError(f'The weighting must be either 0 or 1. Got {w}')
+        if weighting == 0 or weighting == 1:
+            return self.request32('stdev', x, weighting)
+        raise ValueError(f'The weighting must be either 0 or 1, got {weighting}')
