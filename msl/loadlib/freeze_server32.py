@@ -2,18 +2,31 @@
 Create a 32-bit server to use for
 `inter-process communication <https://en.wikipedia.org/wiki/Inter-process_communication>`_.
 """
+from __future__ import annotations
+
 import os
 import sys
 from importlib import import_module
 from subprocess import check_call
 from tempfile import TemporaryDirectory
+from typing import Iterable
 from urllib.request import urlopen
 
 from msl import loadlib
 from msl.loadlib import constants
+from msl.loadlib import version_info
 
 
-def main(spec=None, dest=None, packages=None, data=None):
+# When freezing for a new release, use
+# Windows: imports=['msl.examples.loadlib', 'comtypes', 'pythonnet']
+# Linux: imports=['msl.examples.loadlib']
+
+
+def main(*,
+         spec: str | None = None,
+         dest: str | None = None,
+         imports: str | Iterable[str] | None = None,
+         data: str | Iterable[str] | None = None) -> None:
     """Create a frozen 32-bit server.
 
     This function must be run from a 32-bit Python interpreter with `PyInstaller`_ installed.
@@ -45,9 +58,10 @@ def main(spec=None, dest=None, packages=None, data=None):
     dest : :class:`str`, optional
         The destination directory to save the 32-bit server to. Default is
         the current directory.
-    packages : :class:`str` or :class:`list` of :class:`str`, optional
-        The names of additional packages to bundle with the 32-bit server.
-    data : :class:`str` or :class:`list` of :class:`str`, optional
+    imports
+        The names of additional modules and packages that must be importable
+        on the 32-bit server.
+    data
         The path(s) to additional data files, or directories containing data
         files, to be added to the frozen 32-bit server. Each value should be
         in the form `source:dest_dir`, where `:dest_dir` is optional. `source`
@@ -62,14 +76,14 @@ def main(spec=None, dest=None, packages=None, data=None):
         return
 
     try:
-        from PyInstaller import __version__ as pyinstaller_version  # noqa
+        from PyInstaller import __version__ as pyinstaller_version  # noqa: PyInstaller is not a dependency
     except ImportError:
         print('PyInstaller must be installed to create the 32-bit server, run:\n'
               'pip install pyinstaller', file=sys.stderr)
         return
 
-    if spec and (packages or data):
-        print('Cannot specify a spec file and packages/data', file=sys.stderr)
+    if spec and (imports or data):
+        print('Cannot specify a spec file and imports/data', file=sys.stderr)
         return
 
     here = os.path.abspath(os.path.dirname(__file__))
@@ -101,27 +115,27 @@ def main(spec=None, dest=None, packages=None, data=None):
         cmd.extend([
             '--name', constants.SERVER_FILENAME,
             '--onefile',
-            '--hidden-import', 'msl.examples.loadlib',
         ])
 
-        if packages:
-            if isinstance(packages, str):
-                packages = [packages]
+        if imports:
+            if isinstance(imports, str):
+                imports = [imports]
 
             sys.path.append(os.getcwd())
 
             missing = []
-            for package in packages:
+            for module in imports:
                 try:
-                    import_module(package)
+                    import_module(module)
                 except ImportError:
-                    missing.append(package)
+                    missing.append(module)
                 else:
-                    cmd.extend(['--hidden-import', package])
+                    cmd.extend(['--hidden-import', module])
 
             if missing:
-                print(f'Packages are missing to be able to create the 32-bit server, run:\n'
-                      f'pip install {" ".join(missing)}', file=sys.stderr)
+                print(f'The following modules cannot be imported: '
+                      f'{" ".join(missing)}\n'
+                      f'Cannot freeze the 32-bit server', file=sys.stderr)
                 return
 
         cmd.extend(_get_standard_modules())
@@ -159,13 +173,13 @@ def main(spec=None, dest=None, packages=None, data=None):
     check_call(cmd)
 
     # maybe create the .NET Framework config file
-    if packages and ('pythonnet' in packages):
+    if imports and ('pythonnet' in imports):
         loadlib.utils.check_dot_net_config(server_path)
 
     print(f'Server saved to {server_path}')
 
 
-def _get_standard_modules():
+def _get_standard_modules() -> list[str]:
     """
     Returns a list of standard python modules to include and exclude in the
     frozen application.
@@ -238,7 +252,8 @@ def _get_standard_modules():
     return included_modules + excluded_modules
 
 
-def _create_version_info_file(root_path):
+def _create_version_info_file(root_path: str) -> str:
+    # Returns the filename of the created file
     text = f"""# UTF-8
 #
 # For more details about fixed file info 'ffi' see:
@@ -247,7 +262,7 @@ def _create_version_info_file(root_path):
 # https://docs.microsoft.com/en-us/windows/win32/menurc/stringfileinfo-block
 VSVersionInfo(
   ffi=FixedFileInfo(
-    filevers=({loadlib.version_info.major}, {loadlib.version_info.minor}, {loadlib.version_info.micro}, 0),
+    filevers=({version_info.major}, {version_info.minor}, {version_info.micro}, 0),
     prodvers=({sys.version_info.major}, {sys.version_info.minor}, {sys.version_info.micro}, 0),
     mask=0x3f,
     flags=0x0,
@@ -263,7 +278,7 @@ VSVersionInfo(
         '000004B0',
         [StringStruct('CompanyName', '{loadlib.__author__}'),
         StringStruct('FileDescription', 'Access a 32-bit library from 64-bit Python'),
-        StringStruct('FileVersion', '{loadlib.version_info.major}.{loadlib.version_info.minor}.{loadlib.version_info.micro}.0'),
+        StringStruct('FileVersion', '{version_info.major}.{version_info.minor}.{version_info.micro}.0'),
         StringStruct('InternalName', '{constants.SERVER_FILENAME}'),
         StringStruct('LegalCopyright', '\xc2{loadlib.__copyright__}'),
         StringStruct('OriginalFilename', '{constants.SERVER_FILENAME}'),
@@ -280,7 +295,8 @@ VSVersionInfo(
     return filename
 
 
-def _cli():
+def _cli() -> None:
+    """Main entry point of the console script."""
     import argparse
 
     parser = argparse.ArgumentParser(
@@ -298,12 +314,12 @@ def _cli():
              '(Default is the current directory)'
     )
     parser.add_argument(
-        '-p', '--packages',
+        '-i', '--imports',
         nargs='*',
-        help='the names of packages to bundle with the 32-bit server\n'
+        help='the names of modules that must be importable on the 32-bit server\n'
              'Examples:\n'
-             '  --packages mypackage\n'
-             '  --packages mypackage numpy'
+             '  --imports msl.examples.loadlib\n'
+             '  --imports mypackage numpy'
     )
     parser.add_argument(
         '-D', '--data',
@@ -327,7 +343,7 @@ def _cli():
         main(
             spec=args.spec,
             dest=args.dest,
-            packages=args.packages,
+            imports=args.imports,
             data=args.data,
         )
     )
