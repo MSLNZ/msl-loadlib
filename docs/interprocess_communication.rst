@@ -53,16 +53,16 @@ constructor is optional.
     class MyServer(Server32):
         """Wrapper around a 32-bit C++ library 'my_lib.dll' that has an 'add' and 'version' function."""
 
-        def __init__(self, host, port, **kwargs):
+        def __init__(self, host: str, port: int, **kwargs: str) -> None:
             # Load the 'my_lib' shared-library file using ctypes.CDLL
             super(MyServer, self).__init__('my_lib.dll', 'cdll', host, port)
 
             # The Server32 class has a 'lib' property that is a reference to the ctypes.CDLL object
 
             # Call the version function from the library
-            self.version = self.lib.version()
+            self.version: str = self.lib.version()
 
-        def add(self, a, b):
+        def add(self, a: int, b: int) -> int:
             # The shared library's 'add' function takes two integers as inputs and returns the sum
             return self.lib.add(a, b)
 
@@ -80,16 +80,16 @@ and sends the response back to *MyClient*.
     class MyClient(Client64):
         """Call a function in 'my_lib.dll' via the 'MyServer' wrapper."""
 
-        def __init__(self):
+        def __init__(self) -> None:
             # Specify the name of the Python module to execute on the 32-bit server (i.e., 'my_server')
             super(MyClient, self).__init__(module32='my_server')
 
-        def add(self, a, b):
+        def add(self, a: int, b: int) -> int:
             # The Client64 class has a 'request32' method to send a request to the 32-bit server
             # Send the 'a' and 'b' arguments to the 'add' method in MyServer
             return self.request32('add', a, b)
 
-        def version(self):
+        def version(self) -> str:
             # Get the version
             return self.request32('version')
 

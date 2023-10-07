@@ -1,23 +1,37 @@
 """
 Load a shared library.
 """
+from __future__ import annotations
+
 import ctypes
 import ctypes.util
 import os
 import subprocess
 import sys
+from typing import Any
+from typing import Literal
+from typing import TypeVar
 
 from . import utils
 from .constants import DEFAULT_EXTENSION
 from .constants import IS_WINDOWS
 
+_LIBTYPES: set[str] = {'cdll', 'windll', 'oledll', 'net', 'clr', 'java', 'com', 'activex'}
+
+LibTypes = Literal['cdll', 'windll', 'oledll', 'net', 'clr', 'java', 'com', 'activex']
+"""Library types."""
+
+# the Self type was added in Python 3.11 (PEP 673)
+# using TypeVar is equivalent for < 3.11
+Self = TypeVar('Self', bound='LoadLibrary')
+
 
 class LoadLibrary:
 
-    LIBTYPES = ['cdll', 'windll', 'oledll', 'net', 'clr', 'java', 'com', 'activex']
-    """The library types that are supported."""
-
-    def __init__(self, path, libtype=None, **kwargs):
+    def __init__(self,
+                 path: str | os.PathLike,
+                 libtype: LibTypes | None = None,
+                 **kwargs: Any) -> None:
         """Load a shared library.
 
         For example, a C/C++, FORTRAN, C#, Java, Delphi, LabVIEW, ActiveX, ... library.
@@ -115,10 +129,9 @@ class LoadLibrary:
         else:
             libtype = libtype.lower()
 
-        if libtype not in LoadLibrary.LIBTYPES:
-            libs = ', '.join(LoadLibrary.LIBTYPES)
-            raise ValueError(f'Cannot load libtype={libtype!r}.\n'
-                             f'Must be one of: {libs}')
+        if libtype not in _LIBTYPES:
+            raise ValueError(f'Invalid libtype {libtype!r}\n'
+                             f'Must be one of: {", ".join(_LIBTYPES)}')
 
         # create a new reference to `path` just in case the
         # DEFAULT_EXTENSION is appended below so that the
@@ -334,20 +347,20 @@ class LoadLibrary:
 
         utils.logger.debug('Loaded %s', self._path)
 
-    def __del__(self):
+    def __del__(self) -> None:
         if hasattr(self, '_gateway'):
             self.cleanup()
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         return f'<LoadLibrary libtype={self._lib.__class__.__name__} path={self._path}>'
 
-    def __enter__(self):
+    def __enter__(self: Self) -> Self:
         return self
 
-    def __exit__(self, *exc):
+    def __exit__(self, *ignore) -> None:
         self.cleanup()
 
-    def cleanup(self):
+    def cleanup(self) -> None:
         """Clean up references to the library.
 
         .. versionadded:: 0.10.0
@@ -360,7 +373,7 @@ class LoadLibrary:
             utils.logger.debug('shutdown Py4J.GatewayServer')
 
     @property
-    def assembly(self):
+    def assembly(self) -> Any:
         """
         Returns a reference to the `.NET Runtime Assembly <Assembly_>`_ object if
         the shared library is a .NET Framework otherwise returns :data:`None`.
@@ -382,7 +395,7 @@ class LoadLibrary:
         return self._gateway
 
     @property
-    def lib(self):
+    def lib(self) -> Any:
         """Returns the reference to the loaded library object.
 
         For example, if `libtype` is
@@ -397,14 +410,14 @@ class LoadLibrary:
         return self._lib
 
     @property
-    def path(self):
-        """:class:`str`: The path to the shared library file."""
+    def path(self) -> str:
+        """The path to the shared library file."""
         return self._path
 
 
 class DotNet:
 
-    def __init__(self, dot_net_dict, path):
+    def __init__(self, dot_net_dict: dict, path: str) -> None:
         """Contains the namespace_ modules, classes and `System.Type`_ objects of a .NET Assembly.
 
         Do not instantiate this class directly.
@@ -415,5 +428,5 @@ class DotNet:
         self.__dict__.update(dot_net_dict)
         self._path = path
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         return f'<{self.__class__.__name__} path={self._path}>'

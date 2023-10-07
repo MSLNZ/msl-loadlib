@@ -1,6 +1,8 @@
 """
 Example modules showing how to load a 32-bit shared library in 64-bit Python.
 """
+from __future__ import annotations
+
 import os
 
 from .cpp32 import Cpp32
@@ -19,4 +21,4 @@ from .kernel64 import Kernel64
 from .labview32 import Labview32
 from .labview64 import Labview64
 
-EXAMPLES_DIR = os.path.abspath(os.path.dirname(__file__))
+EXAMPLES_DIR: str = os.path.abspath(os.path.dirname(__file__))

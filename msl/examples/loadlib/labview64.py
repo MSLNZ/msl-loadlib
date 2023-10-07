@@ -17,7 +17,10 @@ is the 32-bit server for `inter-process communication <ipc_>`_.
 
 .. _ipc: https://en.wikipedia.org/wiki/Inter-process_communication
 """
+from __future__ import annotations
+
 import os
+from typing import Sequence
 
 from msl.loadlib import Client64
 
@@ -28,12 +31,12 @@ class Labview64(Client64):
     This class demonstrates how to communicate with a 32-bit LabVIEW library if an
     instance of this class is created within a 64-bit Python interpreter.
     """
-    def __init__(self):
+    def __init__(self) -> None:
         # specify the name of the corresponding 32-bit server module, labview32, which hosts
         # the 32-bit LabVIEW library -- labview_lib32.dll
         super().__init__(module32='labview32', append_sys_path=os.path.dirname(__file__))
 
-    def stdev(self, x, weighting=0):
+    def stdev(self, x: Sequence[float], weighting: int = 0) -> tuple[float, float, float]:
         """Calculates the mean, variance and standard deviation of the values in the input `x`.
 
         See the corresponding 32-bit :meth:`~.labview32.Labview32.stdev` method.

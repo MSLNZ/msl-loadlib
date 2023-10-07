@@ -10,14 +10,17 @@ the 64-bit client class. These *echo* classes do not actually communicate with a
 library. The point of these *echo* classes is to show that a Python data type in a
 64-bit process appears as the same data type in the 32-bit process and vice versa.
 """
+from __future__ import annotations
+
 import os
+from typing import Any
 
 from msl.loadlib import Client64
 
 
 class Echo64(Client64):
 
-    def __init__(self):
+    def __init__(self) -> None:
         """
         Example of a client class that illustrates that Python data types are
         preserved when they are sent to the :class:`~.echo32.Echo32` server
@@ -25,7 +28,7 @@ class Echo64(Client64):
         """
         super().__init__(module32='echo32', append_sys_path=os.path.dirname(__file__))
 
-    def send_data(self, *args, **kwargs):
+    def send_data(self, *args: Any, **kwargs: Any) -> tuple[tuple[Any, ...], dict[Any, Any]]:
         """Send a request to execute the :meth:`~.echo32.Echo32.received_data`
         method on the 32-bit server.
 

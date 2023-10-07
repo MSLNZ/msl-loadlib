@@ -12,16 +12,19 @@ can be executed by a 64-bit Python interpreter and the :class:`~.labview64.Labvi
 a request to the :class:`~.labview32.Labview32` class which calls the 32-bit library to execute the
 request and then return the response from the library.
 """
+from __future__ import annotations
+
 import os
 from ctypes import byref
 from ctypes import c_double
+from typing import Sequence
 
 from msl.loadlib import Server32
 
 
 class Labview32(Server32):
 
-    def __init__(self, host, port, **kwargs):
+    def __init__(self, host: str, port: int, **kwargs: str) -> None:
         """A wrapper around the 32-bit LabVIEW library, :ref:`labview_lib32 <labview-lib>`.
 
         Parameters
@@ -42,7 +45,7 @@ class Labview32(Server32):
         path = os.path.join(os.path.dirname(__file__), 'labview_lib32.dll')
         super().__init__(path, 'cdll', host, port)
 
-    def stdev(self, x, weighting=0):
+    def stdev(self, x: Sequence[float], weighting: int = 0) -> tuple[float, float, float]:
         """Calculates the mean, variance and standard deviation of the values in the input `x`.
 
         See the corresponding 64-bit :meth:`~.labview64.Labview64.stdev` method.

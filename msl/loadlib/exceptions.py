@@ -1,24 +1,32 @@
 """
 Exception classes.
 """
+from __future__ import annotations
+
 from http.client import HTTPException
 
 
 class ConnectionTimeoutError(OSError):
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, message: str) -> None:
         """Raised when the connection to the 32-bit server cannot be established."""
-        self.timeout_message = args[0] if args else 'Timeout'
-        self.reason = ''
-        super().__init__(*args, **kwargs)
+        super().__init__(message)
+        self.timeout_message: str = message
+        self.reason: str = ''
 
-    def __str__(self):
-        return f'{self.timeout_message}\n{self.reason}'
+    def __str__(self) -> str:
+        if self.reason:
+            return f'{self.timeout_message}\n{self.reason}'
+        return self.timeout_message
 
 
 class Server32Error(HTTPException):
 
-    def __init__(self, value, name=None, traceback=None):
+    def __init__(self,
+                 value: str,
+                 *,
+                 name: str = '',
+                 traceback: str = '') -> None:
         """Raised when an exception occurs on the 32-bit server.
 
         .. versionadded:: 0.5
@@ -32,25 +40,24 @@ class Server32Error(HTTPException):
         traceback : :class:`str`, optional
             The exception traceback.
         """
-        msg = f'\n{traceback}\n{name}: {value}' if name else value
-        super().__init__(msg)
-        self._name = name
-        self._value = value
-        self._traceback = traceback
+        super().__init__(f'\n{traceback}\n{name}: {value}' if name else value)
+        self._value: str = value
+        self._name: str = name
+        self._traceback: str = traceback
 
     @property
-    def name(self):
-        """:class:`str`: The name of the exception from the 32-bit server."""
+    def name(self) -> str:
+        """The name of the exception from the 32-bit server."""
         return self._name
 
     @property
-    def traceback(self):
-        """:class:`str`: The exception traceback from the 32-bit server."""
+    def traceback(self) -> str:
+        """The exception traceback from the 32-bit server."""
         return self._traceback
 
     @property
-    def value(self):
-        """:class:`str`: The error message from the 32-bit server."""
+    def value(self) -> str:
+        """The error message from the 32-bit server."""
         return self._value
 
 

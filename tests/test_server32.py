@@ -1,5 +1,6 @@
 import math
 import os
+from typing import Optional
 
 import pytest
 
@@ -15,10 +16,10 @@ from msl.loadlib import ConnectionTimeoutError
 from msl.loadlib.constants import IS_MAC
 from msl.loadlib.constants import IS_WINDOWS
 
-c = None
-f = None
-e = None
-n = None
+c: Optional[Cpp64] = None
+f: Optional[Fortran64] = None
+e: Optional[Echo64] = None
+n: Optional[DotNet64] = None
 
 
 def setup_module():

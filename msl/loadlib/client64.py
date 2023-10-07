@@ -5,6 +5,8 @@ The :class:`~.server32.Server32` class is used in combination with the
 :class:`~.client64.Client64` class to communicate with a 32-bit shared library
 from 64-bit Python.
 """
+from __future__ import annotations
+
 import json
 import os
 import pickle
@@ -17,6 +19,10 @@ import time
 import warnings
 from http.client import CannotSendRequest
 from http.client import HTTPConnection
+from typing import Any
+from typing import BinaryIO
+from typing import Iterable
+from typing import TypeVar
 
 from . import utils
 from .constants import IS_WINDOWS
@@ -28,12 +34,25 @@ from .server32 import METADATA
 from .server32 import OK
 from .server32 import SHUTDOWN
 
+# the Self type was added in Python 3.11 (PEP 673)
+# using TypeVar is equivalent for < 3.11
+Self = TypeVar('Self', bound='Client64')
+
 
 class Client64:
 
-    def __init__(self, module32, host='127.0.0.1', port=None, timeout=10.0,
-                 append_sys_path=None, append_environ_path=None,
-                 rpc_timeout=None, protocol=None, server32_dir=None, **kwargs):
+    def __init__(self,
+                 module32: str,
+                 *,
+                 append_environ_path: str | Iterable[str] | None = None,
+                 append_sys_path: str | Iterable[str] | None = None,
+                 host: str = '127.0.0.1',
+                 port: int | None = None,
+                 protocol: int = 5,
+                 rpc_timeout: float | None = None,
+                 server32_dir: str | None = None,
+                 timeout: float = 10,
+                 **kwargs: Any) -> None:
         """Base class for communicating with a 32-bit library from 64-bit Python.
 
         Starts a 32-bit server, :class:`~.server32.Server32`, to host a Python class
@@ -112,9 +131,9 @@ class Client64:
         TypeError
             If the data type of `append_sys_path` or `append_environ_path` is invalid.
         """
-        self._meta32 = {}
-        self._conn = None
-        self._proc = None
+        self._meta32: dict[str, str | int] = {}
+        self._conn: HTTPConnection | None = None
+        self._proc: subprocess.Popen | None = None
 
         if port is None:
             port = utils.get_available_port()
@@ -123,8 +142,7 @@ class Client64:
         f = os.path.join(tempfile.gettempdir(), f'msl-loadlib-{host}-{port}')
         self._pickle_path = f'{f}.pickle'
         self._meta_path = f'{f}.txt'
-
-        self._pickle_protocol = 5 if protocol is None else protocol
+        self._pickle_protocol = protocol
 
         # Find the 32-bit server executable.
         # Check a few locations in case msl-loadlib is frozen.
@@ -223,13 +241,13 @@ class Client64:
 
         self._meta32 = self.request32(METADATA)
 
-    def __del__(self):
+    def __del__(self) -> None:
         try:
             self._cleanup()
         except:
             pass
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         header = f'<{self.__class__.__name__}'
         if self._conn:
             lib = os.path.basename(self._meta32['path'])
@@ -237,39 +255,33 @@ class Client64:
         else:
             return f'{header} lib=None address=None>'
 
-    def __enter__(self):
+    def __enter__(self: Self) -> Self:
         return self
 
-    def __exit__(self, *exc):
+    def __exit__(self, *ignored) -> None:
         self._cleanup()
 
     @property
-    def host(self):
-        """:class:`str`: The address of the host for the :attr:`~msl.loadlib.client64.Client64.connection`."""
+    def host(self) -> str:
+        """The host address of the 32-bit server."""
         return self._conn.host
 
     @property
-    def port(self):
-        """:class:`int`: The port number of the :attr:`~msl.loadlib.client64.Client64.connection`."""
+    def port(self) -> int:
+        """The port number of the 32-bit server."""
         return self._conn.port
 
     @property
-    def connection(self):
-        """:class:`~http.client.HTTPConnection`: The reference to the connection to the 32-bit server."""
+    def connection(self) -> HTTPConnection:
+        """The connection to the 32-bit server."""
         return self._conn
 
     @property
-    def lib32_path(self):
-        """The path to the 32-bit library.
-
-        Returns
-        -------
-        :class:`str`
-            The path to the 32-bit shared-library file.
-        """
+    def lib32_path(self) -> str:
+        """The path to the 32-bit shared-library file."""
         return self._meta32['path']
 
-    def request32(self, name, *args, **kwargs):
+    def request32(self, name: str, *args: Any, **kwargs: Any) -> Any:
         """Send a request to the 32-bit server.
 
         Parameters
@@ -320,7 +332,7 @@ class Client64:
 
         raise Server32Error(**json.loads(response.read().decode()))
 
-    def shutdown_server32(self, kill_timeout=10):
+    def shutdown_server32(self, kill_timeout: float = 10) -> tuple[BinaryIO, BinaryIO]:
         """Shutdown the 32-bit server.
 
         This method shuts down the 32-bit server, closes the client connection,
@@ -376,7 +388,7 @@ class Client64:
         self._conn = None
         return self._proc.stdout, self._proc.stderr
 
-    def _wait(self, timeout=10., stacklevel=3):
+    def _wait(self, timeout: float = 10, stacklevel: int = 3) -> None:
         # give the 32-bit server a chance to shut down gracefully
         t0 = time.time()
         while self._proc.poll() is None:
@@ -393,7 +405,7 @@ class Client64:
                 warnings.warn('killed the 32-bit server using brute force', stacklevel=stacklevel)
                 break
 
-    def _cleanup(self):
+    def _cleanup(self) -> None:
         try:
             out, err = self.shutdown_server32()
             out.close()
@@ -406,7 +418,7 @@ class Client64:
         except AttributeError:
             pass
 
-    def _cleanup_zombie_and_files(self):
+    def _cleanup_zombie_and_files(self) -> None:
         try:
             os.remove(self._pickle_path)
         except OSError:

@@ -6,7 +6,11 @@ The module also defines all the `Window Styles`_ and `Extended Window Styles`_ c
 .. _Window Styles: https://docs.microsoft.com/en-us/windows/win32/winmsg/window-styles
 .. _Extended Window Styles: https://docs.microsoft.com/en-us/windows/win32/winmsg/extended-window-styles
 """
+from __future__ import annotations
+
 import ctypes
+from typing import Any
+from typing import Optional
 
 try:
     import clr
@@ -89,7 +93,7 @@ WS_EX_PALETTEWINDOW = WS_EX_WINDOWEDGE | WS_EX_TOOLWINDOW | WS_EX_TOPMOST
 
 class Application(Forms.Form):
 
-    def __init__(self):
+    def __init__(self) -> None:
         """Create the main application window to display ActiveX controls.
 
         Creating an application requires pythonnet_ to be installed.
@@ -120,7 +124,10 @@ class Application(Forms.Form):
 
         self._event_connections = []
 
-    def handle_events(self, source, sink=None, interface=None):
+    def handle_events(self,
+                      source: Any,
+                      sink: Optional[Any] = None,
+                      interface: Optional[Any] = None):
         """Handle events from an ActiveX object.
 
         Parameters
@@ -149,7 +156,15 @@ class Application(Forms.Form):
         return Forms.Panel()
 
     @staticmethod
-    def load(activex_id, parent=None, x=0, y=0, width=0, height=0, style=0, ex_style=0):
+    def load(activex_id: str,
+             *,
+             parent: Optional[Any] = None,
+             x: int = 0,
+             y: int = 0,
+             width: int = 0,
+             height: int = 0,
+             style: int = 0,
+             ex_style: int = 0) -> ctypes.POINTER:
         """Load an ActiveX library.
 
         Additional information about the keyword arguments are described by the

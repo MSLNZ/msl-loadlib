@@ -7,15 +7,18 @@ module can be executed by a 64-bit Python interpreter and the :class:`~.fortran6
 class can send a request to the :class:`~.fortran32.Fortran32` class which calls the 32-bit
 library to execute the request and then return the response from the library.
 """
+from __future__ import annotations
+
 import ctypes
 import os
+from typing import Sequence
 
 from msl.loadlib import Server32
 
 
 class Fortran32(Server32):
 
-    def __init__(self, host, port, **kwargs):
+    def __init__(self, host: str, port: int, **kwargs: str) -> None:
         """A wrapper around a 32-bit FORTRAN library, :ref:`fortran_lib32 <fortran-lib>`.
 
         This class demonstrates how to send/receive various data types to/from a
@@ -42,7 +45,7 @@ class Fortran32(Server32):
         path = os.path.join(os.path.dirname(__file__), 'fortran_lib32')
         super().__init__(path, 'cdll', host, port)
 
-    def sum_8bit(self, a, b):
+    def sum_8bit(self, a: int, b: int) -> int:
         """Add two 8-bit signed integers. 
         
         Python only has one :class:`int` data type to represent integer values.
@@ -79,7 +82,7 @@ class Fortran32(Server32):
         self.lib.sum_8bit.restype = ctypes.c_int8
         return self.lib.sum_8bit(ctypes.byref(ac), ctypes.byref(bc))
 
-    def sum_16bit(self, a, b):
+    def sum_16bit(self, a: int, b: int) -> int:
         """Add two 16-bit signed integers
         
         Python only has one :class:`int` data type to represent integer values.
@@ -116,7 +119,7 @@ class Fortran32(Server32):
         self.lib.sum_16bit.restype = ctypes.c_int16
         return self.lib.sum_16bit(ctypes.byref(ac), ctypes.byref(bc))
 
-    def sum_32bit(self, a, b):
+    def sum_32bit(self, a: int, b: int) -> int:
         """Add two 32-bit signed integers. 
         
         Python only has one :class:`int` data type to represent integer values.
@@ -153,7 +156,7 @@ class Fortran32(Server32):
         self.lib.sum_32bit.restype = ctypes.c_int32
         return self.lib.sum_32bit(ctypes.byref(ac), ctypes.byref(bc))
 
-    def sum_64bit(self, a, b):
+    def sum_64bit(self, a: int, b: int) -> int:
         """Add two 64-bit signed integers. 
         
         Python only has one :class:`int` data type to represent integer values.
@@ -190,7 +193,7 @@ class Fortran32(Server32):
         self.lib.sum_64bit.restype = ctypes.c_int64
         return self.lib.sum_64bit(ctypes.byref(ac), ctypes.byref(bc))
 
-    def multiply_float32(self, a, b):
+    def multiply_float32(self, a: float, b: float) -> float:
         """Multiply two FORTRAN floating-point numbers.
 
         The corresponding FORTRAN code is
@@ -223,7 +226,7 @@ class Fortran32(Server32):
         self.lib.multiply_float32.restype = ctypes.c_float
         return self.lib.multiply_float32(ctypes.byref(ac), ctypes.byref(bc))
 
-    def multiply_float64(self, a, b):
+    def multiply_float64(self, a: float, b: float) -> float:
         """Multiply two FORTRAN double-precision numbers.
 
         The corresponding FORTRAN code is
@@ -256,7 +259,7 @@ class Fortran32(Server32):
         self.lib.multiply_float64.restype = ctypes.c_double
         return self.lib.multiply_float64(ctypes.byref(ac), ctypes.byref(bc))
 
-    def is_positive(self, a):
+    def is_positive(self, a: float) -> bool:
         """Returns whether the value of the input argument is > 0.
 
         The corresponding FORTRAN code is
@@ -287,7 +290,7 @@ class Fortran32(Server32):
         self.lib.is_positive.restype = ctypes.c_bool
         return self.lib.is_positive(ctypes.byref(ac))
 
-    def add_or_subtract(self, a, b, do_addition):
+    def add_or_subtract(self, a: int, b: int, do_addition: bool) -> int:
         """Add or subtract two integers.
 
         The corresponding FORTRAN code is
@@ -328,7 +331,7 @@ class Fortran32(Server32):
         self.lib.add_or_subtract.restype = ctypes.c_int32
         return self.lib.add_or_subtract(ctypes.byref(ac), ctypes.byref(bc), ctypes.byref(logical))
 
-    def factorial(self, n):
+    def factorial(self, n: int) -> float:
         """Compute the n'th factorial.
 
         The corresponding FORTRAN code is
@@ -368,7 +371,7 @@ class Fortran32(Server32):
         self.lib.factorial.restype = ctypes.c_double
         return self.lib.factorial(ctypes.byref(ac))
 
-    def standard_deviation(self, data):
+    def standard_deviation(self, data: Sequence[float]) -> float:
         """Compute the standard deviation.
 
         The corresponding FORTRAN code is
@@ -401,7 +404,7 @@ class Fortran32(Server32):
         self.lib.standard_deviation.restype = ctypes.c_double
         return self.lib.standard_deviation(ctypes.byref(datac), ctypes.byref(nc))
 
-    def besselJ0(self, x):
+    def besselJ0(self, x: float) -> float:
         """Compute the Bessel function of the first kind of order 0 of x.
 
         The corresponding FORTRAN code is
@@ -430,7 +433,7 @@ class Fortran32(Server32):
         self.lib.besselj0.restype = ctypes.c_double
         return self.lib.besselj0(ctypes.byref(xc))
 
-    def reverse_string(self, original):
+    def reverse_string(self, original: str) -> str:
         """Reverse a string.
 
         The corresponding FORTRAN code is
@@ -469,7 +472,7 @@ class Fortran32(Server32):
                                 rev)
         return rev.raw.decode()
 
-    def add_1D_arrays(self, a1, a2):
+    def add_1d_arrays(self, a1: Sequence[float], a2: Sequence[float]) -> list[float]:
         """Perform an element-wise addition of two 1D double-precision arrays.
 
         The corresponding FORTRAN code is
@@ -510,7 +513,9 @@ class Fortran32(Server32):
                                ctypes.byref(nc))
         return [val for val in out]
 
-    def matrix_multiply(self, a1, a2):
+    def matrix_multiply(self,
+                        a1: Sequence[Sequence[float]],
+                        a2: Sequence[Sequence[float]]) -> list[list[float]]:
         """Multiply two matrices.
 
         The corresponding FORTRAN code is

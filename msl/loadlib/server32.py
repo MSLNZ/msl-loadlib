@@ -5,6 +5,8 @@ The :class:`~.server32.Server32` class is used in combination with the
 :class:`~.client64.Client64` class to communicate with a 32-bit shared library
 from 64-bit Python.
 """
+from __future__ import annotations
+
 import json
 import os
 import pickle
@@ -15,20 +17,27 @@ import threading
 import traceback
 from http.server import BaseHTTPRequestHandler
 from http.server import HTTPServer
+from typing import Any
 
 from .constants import IS_WINDOWS
 from .constants import SERVER_FILENAME
+from .load_library import LibTypes
 from .load_library import LoadLibrary
 
-METADATA = '-METADATA-'
-SHUTDOWN = '-SHUTDOWN-'
-OK = 200
-ERROR = 500
+METADATA: str = '-METADATA-'
+SHUTDOWN: str = '-SHUTDOWN-'
+OK: int = 200
+ERROR: int = 500
 
 
 class Server32(HTTPServer):
 
-    def __init__(self, path, libtype, host, port, *args, **kwargs):
+    def __init__(self,
+                 path: str,
+                 libtype: LibTypes,
+                 host: str,
+                 port: int,
+                 **kwargs: Any) -> None:
         """Base class for loading a 32-bit library in 32-bit Python.
 
         All modules that are to be run on the 32-bit server must contain a class
@@ -101,19 +110,13 @@ class Server32(HTTPServer):
         return self._lib
 
     @property
-    def path(self):
-        """:class:`str`: The path to the shared library file."""
+    def path(self) -> str:
+        """The path to the shared library file."""
         return self._path
 
     @staticmethod
-    def version():
-        """Gets the version of the Python interpreter that the 32-bit server is running on.
-
-        Returns
-        -------
-        :class:`str`
-            The result of executing ``'Python ' + sys.version`` on the 32-bit server.
-
+    def version() -> str:
+        """Returns the version of Python that the 32-bit server is running on.
 
         .. invisible-code-block: pycon
 
@@ -137,7 +140,7 @@ class Server32(HTTPServer):
         return pipe.communicate()[0].decode().strip()
 
     @staticmethod
-    def interactive_console():
+    def interactive_console() -> None:
         """Start an interactive console.
 
         This method starts an interactive console, in a new terminal, with the
@@ -158,7 +161,7 @@ class Server32(HTTPServer):
         os.system(cmd)
 
     @staticmethod
-    def remove_site_packages_64bit():
+    def remove_site_packages_64bit() -> str:
         """Remove the site-packages directory from the 64-bit process.
 
         By default, the site-packages directory of the 64-bit process is
@@ -203,7 +206,7 @@ class Server32(HTTPServer):
         return ''
 
     @staticmethod
-    def is_interpreter():
+    def is_interpreter() -> bool:
         """Check if code is running on the 32-bit server.
 
         If the same module is executed by both
@@ -233,7 +236,7 @@ class Server32(HTTPServer):
         return sys.executable.endswith(SERVER_FILENAME)
 
     @staticmethod
-    def examples_dir():
+    def examples_dir() -> str:
         """Get the directory where the example libraries are located.
 
         .. versionadded:: 0.9
@@ -250,7 +253,7 @@ class Server32(HTTPServer):
         path = os.path.join(root, os.pardir, 'examples', 'loadlib')
         return os.path.abspath(path)
 
-    def shutdown_handler(self):
+    def shutdown_handler(self) -> None:
         """Proxy function that is called immediately prior to the server shutting down.
 
         The intended use case is for the server to do any necessary cleanup, such as stopping
@@ -319,7 +322,7 @@ class _RequestHandler(BaseHTTPRequestHandler):
             self.send_response(code)
             self.end_headers()
 
-    def log_message(self, fmt, *args):
+    def log_message(self, fmt: str, *args: Any) -> None:
         """
         Overrides: :meth:`~http.server.BaseHTTPRequestHandler.log_message`
 

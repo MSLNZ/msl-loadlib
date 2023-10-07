@@ -12,7 +12,10 @@ is the 32-bit server for `inter-process communication <ipc_>`_.
 
 .. _ipc: https://en.wikipedia.org/wiki/Inter-process_communication
 """
+from __future__ import annotations
+
 import os
+from typing import Sequence
 
 from msl.loadlib import Client64
 
@@ -23,12 +26,12 @@ class DotNet64(Client64):
     This class demonstrates how to communicate with a 32-bit .NET library if an instance of this
     class is created within a 64-bit Python interpreter.
     """
-    def __init__(self):
+    def __init__(self) -> None:
         # specify the name of the corresponding 32-bit server module, dotnet32, which hosts
         # the 32-bit .NET library -- dotnet_lib32.dll.
         super().__init__(module32='dotnet32', append_sys_path=os.path.dirname(__file__))
 
-    def get_class_names(self):
+    def get_class_names(self) -> list[str]:
         """Return the class names in the library.
 
         See the corresponding 32-bit :meth:`~.dotnet32.DotNet32.get_class_names` method.
@@ -40,7 +43,7 @@ class DotNet64(Client64):
         """
         return self.request32('get_class_names')
 
-    def add_integers(self, a, b):
+    def add_integers(self, a: int, b: int) -> int:
         """Add two integers.
 
         See the corresponding 32-bit :meth:`~.dotnet32.DotNet32.add_integers` method.
@@ -59,7 +62,7 @@ class DotNet64(Client64):
         """
         return self.request32('add_integers', a, b)
 
-    def divide_floats(self, a, b):
+    def divide_floats(self, a: float, b: float) -> float:
         """Divide two C# floating-point numbers.
 
         See the corresponding 32-bit :meth:`~.dotnet32.DotNet32.divide_floats` method.
@@ -78,7 +81,7 @@ class DotNet64(Client64):
         """
         return self.request32('divide_floats', a, b)
 
-    def multiply_doubles(self, a, b):
+    def multiply_doubles(self, a: float, b: float) -> float:
         """Multiply two C# double-precision numbers.
 
         See the corresponding 32-bit :meth:`~.dotnet32.DotNet32.multiply_doubles` method.
@@ -97,7 +100,7 @@ class DotNet64(Client64):
         """
         return self.request32('multiply_doubles', a, b)
 
-    def add_or_subtract(self, a, b, do_addition):
+    def add_or_subtract(self, a: float, b: float, do_addition: bool) -> float:
         """Add or subtract two C# double-precision numbers.
 
         See the corresponding 32-bit :meth:`~.dotnet32.DotNet32.add_or_subtract` method.
@@ -118,7 +121,7 @@ class DotNet64(Client64):
         """
         return self.request32('add_or_subtract', a, b, do_addition)
 
-    def scalar_multiply(self, a, xin):
+    def scalar_multiply(self, a: float, xin: Sequence[float]) -> list[float]:
         """Multiply each element in an array by a number.
 
         See the corresponding 32-bit :meth:`~.dotnet32.DotNet32.scalar_multiply` method.
@@ -137,7 +140,9 @@ class DotNet64(Client64):
         """
         return self.request32('scalar_multiply', a, xin)
 
-    def multiply_matrices(self, a1, a2):
+    def multiply_matrices(self,
+                          a1: Sequence[Sequence[float]],
+                          a2: Sequence[Sequence[float]]) -> list[list[float]]:
         """Multiply two matrices.
 
         See the corresponding 32-bit :meth:`~.dotnet32.DotNet32.multiply_matrices` method.
@@ -156,7 +161,7 @@ class DotNet64(Client64):
         """
         return self.request32('multiply_matrices', a1, a2)
 
-    def reverse_string(self, original):
+    def reverse_string(self, original: str) -> str:
         """Reverse a string.
 
         See the corresponding 32-bit :meth:`~.dotnet32.DotNet32.reverse_string` method.
@@ -173,7 +178,7 @@ class DotNet64(Client64):
         """
         return self.request32('reverse_string', original)
 
-    def add_multiple(self, a, b, c, d, e):
+    def add_multiple(self, a: int, b: int, c: int, d: int, e: int) -> int:
         """Add multiple integers. *Calls a static method in a static class.*
 
         See the corresponding 32-bit :meth:`~.dotnet32.DotNet32.add_multiple` method.
@@ -198,7 +203,7 @@ class DotNet64(Client64):
         """
         return self.request32('add_multiple', a, b, c, d, e)
 
-    def concatenate(self, a, b, c, d, e):
+    def concatenate(self, a: str, b: str, c: str, d: bool, e: str) -> str:
         """
         Concatenate strings. *Calls a static method in a static class.*
 

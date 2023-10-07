@@ -1,12 +1,17 @@
 """
 Common functions used by the **MSL-LoadLib** package.
 """
+from __future__ import annotations
+
 import logging
 import os
 import socket
 import subprocess
 import time
-import xml.etree.ElementTree as ET
+from types import ModuleType
+from typing import Any
+from xml.etree import ElementTree
+
 try:
     import winreg
 except ImportError:
@@ -21,7 +26,7 @@ from .exceptions import ConnectionTimeoutError
 logger = logging.getLogger(__package__)
 
 
-def is_pythonnet_installed():
+def is_pythonnet_installed() -> bool:
     """Checks if `Python for .NET`_ is installed.
 
     .. _Python for .NET: https://pythonnet.github.io/
@@ -44,7 +49,7 @@ def is_pythonnet_installed():
     return True
 
 
-def is_py4j_installed():
+def is_py4j_installed() -> bool:
     """Checks if Py4J_ is installed.
 
     .. versionadded:: 0.4
@@ -63,7 +68,7 @@ def is_py4j_installed():
     return True
 
 
-def is_comtypes_installed():
+def is_comtypes_installed() -> bool:
     """Checks if comtypes_ is installed.
 
     .. versionadded:: 0.5
@@ -82,7 +87,7 @@ def is_comtypes_installed():
     return True
 
 
-def check_dot_net_config(py_exe_path):
+def check_dot_net_config(py_exe_path: str) -> tuple[int, str]:
     """Check if the **useLegacyV2RuntimeActivationPolicy** property is enabled.
 
     By default, `Python for .NET <https://pythonnet.github.io/>`_ works with .NET
@@ -127,10 +132,9 @@ def check_dot_net_config(py_exe_path):
 
     if os.path.isfile(config_path):
 
-        # use the ElementTree to parse the file
         try:
-            tree = ET.parse(config_path)
-        except ET.ParseError:
+            tree = ElementTree.parse(config_path)
+        except ElementTree.ParseError:
             msg = (f'Invalid XML file {config_path}\n'
                    f'Cannot create the useLegacyV2RuntimeActivationPolicy property.\n')
             logger.warning(msg)
@@ -187,7 +191,7 @@ def check_dot_net_config(py_exe_path):
         return 1, msg
 
 
-def is_port_in_use(port):
+def is_port_in_use(port: int) -> bool:
     """Checks whether the TCP port is in use.
 
     .. versionchanged:: 0.10.0
@@ -222,15 +226,15 @@ def is_port_in_use(port):
     return out.find(b':%d ' % port) > 0
 
 
-def get_available_port():
-    """:class:`int`: Returns a port number that is available."""
+def get_available_port() -> int:
+    """Returns a port number that is available."""
     with socket.socket() as sock:
         sock.bind(('', 0))
         port = sock.getsockname()[1]
     return port
 
 
-def wait_for_server(host, port, timeout):
+def wait_for_server(host: str, port: int, timeout: float) -> None:
     """Wait for the 32-bit server to start.
 
     Parameters
@@ -257,7 +261,7 @@ def wait_for_server(host, port, timeout):
                                          f'Could not connect to {host}:{port}')
 
 
-def get_com_info(*additional_keys):
+def get_com_info(*additional_keys: str) -> dict[str, dict[str, str | None]]:
     """Reads the registry for the COM_ libraries that are available.
 
     This function is only supported on Windows.
@@ -332,7 +336,7 @@ def get_com_info(*additional_keys):
     return results
 
 
-def generate_com_wrapper(lib, out_dir=None):
+def generate_com_wrapper(lib: Any, out_dir: str | None = None) -> ModuleType:
     """Generate a Python wrapper module around a COM library.
 
     For more information see `Accessing type libraries`_.

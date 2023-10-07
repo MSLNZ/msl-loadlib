@@ -17,7 +17,10 @@ is the 32-bit server for `inter-process communication <ipc_>`_.
 .. _ipc: https://en.wikipedia.org/wiki/Inter-process_communication
 .. _kernel: https://www.geoffchappell.com/studies/windows/win32/kernel32/api/
 """
+from __future__ import annotations
+
 import os
+from datetime import datetime
 
 from msl.loadlib import Client64
 
@@ -30,12 +33,12 @@ class Kernel64(Client64):
     This class demonstrates how to communicate with a Windows 32-bit library if an
     instance of this class is created within a 64-bit Python interpreter.
     """
-    def __init__(self):
+    def __init__(self) -> None:
         # specify the name of the corresponding 32-bit server module, kernel32, which hosts
         # the Windows 32-bit library -- kernel32.dll
         super().__init__(module32='kernel32', append_sys_path=os.path.dirname(__file__))
 
-    def get_local_time(self):
+    def get_local_time(self) -> datetime:
         """
         Sends a request to the 32-bit server, :class:`~.kernel32.Kernel32`, to
         execute the `kernel32.GetLocalTime <time_>`_ function to get the

@@ -28,18 +28,20 @@ IS_MAC: bool = sys.platform == 'darwin'
 IS_PYTHON_64BIT: bool = sys.maxsize > 2 ** 32
 """Whether the Python interpreter is 64-bits."""
 
+SERVER_FILENAME: str
+DEFAULT_EXTENSION: str
 if IS_WINDOWS:
-    SERVER_FILENAME: str = 'server32-windows.exe'
-    DEFAULT_EXTENSION: str = '.dll'
+    SERVER_FILENAME = 'server32-windows.exe'
+    DEFAULT_EXTENSION = '.dll'
 elif IS_LINUX:
-    SERVER_FILENAME: str = 'server32-linux'
-    DEFAULT_EXTENSION: str = '.so'
+    SERVER_FILENAME = 'server32-linux'
+    DEFAULT_EXTENSION = '.so'
 elif IS_MAC:
-    SERVER_FILENAME: str = 'server32-mac'
-    DEFAULT_EXTENSION: str = '.dylib'
+    SERVER_FILENAME = 'server32-mac'
+    DEFAULT_EXTENSION = '.dylib'
 else:
-    SERVER_FILENAME: str = 'server32-unknown'
-    DEFAULT_EXTENSION: str = '.unknown'
+    SERVER_FILENAME = 'server32-unknown'
+    DEFAULT_EXTENSION = '.unknown'
 
 
 NET_FRAMEWORK_DESCRIPTION: str = """

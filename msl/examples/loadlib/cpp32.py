@@ -7,16 +7,19 @@ can be executed by a 64-bit Python interpreter and the :class:`~.cpp64.Cpp64` cl
 a request to the :class:`~.cpp32.Cpp32` class which calls the 32-bit library to execute the
 request and then return the response from the library.
 """
+from __future__ import annotations
+
 import ctypes
 import math
 import os
+from typing import Sequence
 
 from msl.loadlib import Server32
 
 
 class Cpp32(Server32):
 
-    def __init__(self, host, port, **kwargs):
+    def __init__(self, host: str, port: int, **kwargs: str) -> None:
         """A wrapper around the 32-bit C++ library, :ref:`cpp_lib32 <cpp-lib>`.
 
         This class demonstrates how to send/receive various data types to/from a
@@ -42,7 +45,7 @@ class Cpp32(Server32):
         path = os.path.join(os.path.dirname(__file__), 'cpp_lib32')
         super().__init__(path, 'cdll', host, port)
 
-    def add(self, a, b):
+    def add(self, a: int, b: int) -> int:
         """Add two integers.
 
         The corresponding C++ code is
@@ -72,7 +75,7 @@ class Cpp32(Server32):
         self.lib.add.argtypes = [ctypes.c_int32, ctypes.c_int32]
         return self.lib.add(a, b)
 
-    def subtract(self, a, b):
+    def subtract(self, a: float, b: float) -> float:
         """Subtract two floating-point numbers *('float' refers to the C++ data type)*.
 
         The corresponding C++ code is
@@ -102,7 +105,7 @@ class Cpp32(Server32):
         self.lib.subtract.argtypes = [ctypes.c_float, ctypes.c_float]
         return self.lib.subtract(a, b)
 
-    def add_or_subtract(self, a, b, do_addition):
+    def add_or_subtract(self, a: float, b: float, do_addition: bool) -> float:
         """Add or subtract two double-precision numbers *('double' refers to the C++ data type)*.
 
         The corresponding C++ code is
@@ -138,7 +141,7 @@ class Cpp32(Server32):
         self.lib.add_or_subtract.argtypes = [ctypes.c_double, ctypes.c_double, ctypes.c_bool]
         return self.lib.add_or_subtract(a, b, do_addition)
 
-    def scalar_multiply(self, a, xin):
+    def scalar_multiply(self, a: float, xin: Sequence[float]) -> list[float]:
         """Multiply each element in an array by a number.
 
         The corresponding C++ code is
@@ -180,7 +183,7 @@ class Cpp32(Server32):
         self.lib.scalar_multiply(a, c_xin, n, c_xout)
         return [value for value in c_xout]
 
-    def reverse_string_v1(self, original):
+    def reverse_string_v1(self, original: str) -> str:
         """Reverse a string (version 1).
 
         In this method Python allocates the memory for the reversed string and
@@ -217,7 +220,7 @@ class Cpp32(Server32):
         self.lib.reverse_string_v1(original.encode(), n, rev)
         return rev.raw.decode()
 
-    def reverse_string_v2(self, original):
+    def reverse_string_v2(self, original: str) -> str:
         """Reverse a string (version 2).
 
         In this method C++ allocates the memory for the reversed string and passes
@@ -255,7 +258,7 @@ class Cpp32(Server32):
         rev = self.lib.reverse_string_v2(original.encode(), n)
         return ctypes.string_at(rev, n).decode()
 
-    def distance_4_points(self, four_points):
+    def distance_4_points(self, four_points: FourPoints) -> float:
         """Calculates the total distance connecting 4 :class:`~.Point`\'s.
 
         The corresponding C++ code is
@@ -285,7 +288,7 @@ class Cpp32(Server32):
         self.lib.distance_4_points.restype = ctypes.c_double
         return self.lib.distance_4_points(four_points)
 
-    def circumference(self, radius, n):
+    def circumference(self, radius: float, n: int) -> float:
         """Estimates the circumference of a circle.
 
         This method calls the ``distance_n_points`` function in :ref:`cpp_lib32 <cpp-lib>`.
@@ -360,7 +363,11 @@ class FourPoints(ctypes.Structure):
         ('points', (Point * 4)),
     ]
 
-    def __init__(self, point1, point2, point3, point4):
+    def __init__(self,
+                 point1: Point,
+                 point2: Point,
+                 point3: Point,
+                 point4: Point) -> None:
         """C++ struct that is a fixed size in memory.
 
         This object can be :mod:`pickle`\'d.

@@ -25,6 +25,8 @@ extensions = [
 ]
 
 # autodoc options
+autodoc_typehints = 'description'
+autodoc_typehints_format = 'short'
 autodoc_default_options = {
     'members': None,
     'member-order': 'bysource',
@@ -49,8 +51,12 @@ napoleon_use_admonition_for_notes = False
 napoleon_use_admonition_for_references = False
 napoleon_use_ivar = False
 napoleon_use_param = True
-napoleon_use_rtype = False
-napoleon_use_keyword = True
+napoleon_use_rtype = True
+napoleon_preprocess_types = True
+napoleon_type_aliases = {
+    'LibTypes': 'LibTypes',
+}
+napoleon_attr_annotations = True
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ['_templates']
@@ -204,6 +210,29 @@ nitpicky = True
 
 # known bad links
 nitpick_ignore = [
-    ('py:class', '_ctypes.Structure'),
     ('py:class', 'System.Windows.Forms.Form'),
 ]
+
+
+def resolve_aliases(app, env, node, contnode):
+    """Resolve aliases."""
+    from sphinx.ext.intersphinx import missing_reference
+
+    if node['reftarget'] == '_ctypes.Structure':
+        node['reftarget'] = 'ctypes.Structure'
+        return missing_reference(app, env, node, contnode)
+
+    if node['reftarget'] == '_ctypes.POINTER':
+        node['reftarget'] = 'ctypes.POINTER'
+        node['reftype'] = 'func'
+        return missing_reference(app, env, node, contnode)
+
+    # resolve py:class: references to our type aliases as py:data: instead
+    if (node['refdomain'] == 'py' and node['reftype'] == 'class' and
+            node['reftarget'] in napoleon_type_aliases):
+        return app.env.get_domain('py').resolve_xref(
+            env, node['refdoc'], app.builder, 'data', node['reftarget'], node, contnode)
+
+
+def setup(app):
+    app.connect('missing-reference', resolve_aliases)

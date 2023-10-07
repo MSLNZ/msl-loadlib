@@ -7,14 +7,17 @@ module can be executed by a 64-bit Python interpreter and the :class:`~.dotnet64
 class can send a request to the :class:`~.dotnet32.DotNet32` class which calls the
 32-bit library to execute the request and then return the response from the library.
 """
+from __future__ import annotations
+
 import os
+from typing import Sequence
 
 from msl.loadlib import Server32
 
 
 class DotNet32(Server32):
 
-    def __init__(self, host, port, **kwargs):
+    def __init__(self, host: str, port: int, **kwargs: str) -> None:
         """
         Example of a class that is a wrapper around a 32-bit .NET Framework library,
         :ref:`dotnet_lib32.dll <dotnet-lib>`. `Python for .NET <https://pythonnet.github.io/>`_
@@ -41,7 +44,7 @@ class DotNet32(Server32):
         self.BasicMath = self.lib.DotNetMSL.BasicMath()
         self.ArrayManipulation = self.lib.DotNetMSL.ArrayManipulation()
 
-    def get_class_names(self):
+    def get_class_names(self) -> list[str]:
         """Returns the class names in the library.
 
         See the corresponding 64-bit :meth:`~.dotnet64.DotNet64.get_class_names` method.
@@ -53,7 +56,7 @@ class DotNet32(Server32):
         """
         return ';'.join(str(name) for name in self.assembly.GetTypes()).split(';')
 
-    def add_integers(self, a, b):
+    def add_integers(self, a: int, b: int) -> int:
         """Add two integers.
 
         The corresponding C# code is
@@ -81,7 +84,7 @@ class DotNet32(Server32):
         """
         return self.BasicMath.add_integers(a, b)
 
-    def divide_floats(self, a, b):
+    def divide_floats(self, a: float, b: float) -> float:
         """Divide two C# floating-point numbers.
 
         The corresponding C# code is
@@ -109,7 +112,7 @@ class DotNet32(Server32):
         """
         return self.BasicMath.divide_floats(a, b)
 
-    def multiply_doubles(self, a, b):
+    def multiply_doubles(self, a: float, b: float) -> float:
         """Multiply two C# double-precision numbers.
 
         The corresponding C# code is
@@ -137,7 +140,7 @@ class DotNet32(Server32):
         """
         return self.BasicMath.multiply_doubles(a, b)
 
-    def add_or_subtract(self, a, b, do_addition):
+    def add_or_subtract(self, a: float, b: float, do_addition: bool) -> float:
         """Add or subtract two C# double-precision numbers.
 
         The corresponding C# code is
@@ -174,7 +177,7 @@ class DotNet32(Server32):
         """
         return self.BasicMath.add_or_subtract(a, b, do_addition)
 
-    def scalar_multiply(self, a, xin):
+    def scalar_multiply(self, a: float, xin: Sequence[float]) -> list[float]:
         """Multiply each element in an array by a number.
 
         The corresponding C# code is
@@ -209,7 +212,9 @@ class DotNet32(Server32):
         ret = self.ArrayManipulation.scalar_multiply(a, xin)
         return [val for val in ret]
 
-    def multiply_matrices(self, a1, a2):
+    def multiply_matrices(self,
+                          a1: Sequence[Sequence[float]],
+                          a2: Sequence[Sequence[float]]) -> list[list[float]]:
         """Multiply two matrices.
 
         The corresponding C# code is
@@ -284,7 +289,7 @@ class DotNet32(Server32):
         ret = self.ArrayManipulation.multiply_matrices(m1, m2)
         return [[ret[r, c] for c in range(ncols2)] for r in range(nrows1)]
 
-    def reverse_string(self, original):
+    def reverse_string(self, original: str) -> str:
         """Reverse a string.
 
         The corresponding C# code is
@@ -312,7 +317,7 @@ class DotNet32(Server32):
         """
         return self.lib.StringManipulation().reverse_string(original)
 
-    def add_multiple(self, a, b, c, d, e):
+    def add_multiple(self, a: int, b: int, c: int, d: int, e: int) -> int:
         """Add multiple integers. *Calls a static method in a static class.*
 
         The corresponding C# code is
@@ -346,7 +351,7 @@ class DotNet32(Server32):
         """
         return self.lib.StaticClass.add_multiple(a, b, c, d, e)
 
-    def concatenate(self, a, b, c, d, e):
+    def concatenate(self, a: str, b: str, c: str, d: bool, e: str) -> str:
         """Concatenate strings. *Calls a static method in a static class.*
 
         The corresponding C# code is
