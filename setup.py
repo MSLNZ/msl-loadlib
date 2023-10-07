@@ -147,6 +147,7 @@ setup(
         'Topic :: Software Development',
         'Topic :: Scientific/Engineering',
     ],
+    python_requires='>=3.8',
     tests_require=tests_require,
     install_requires=install_requires,
     extras_require={
