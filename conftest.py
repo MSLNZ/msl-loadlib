@@ -10,6 +10,17 @@ except ImportError:
 
 from msl.loadlib.constants import *
 
+# Using the --doctest-modules option with pytest for an implicit
+# namespace package does not work properly, see
+#   https://github.com/pytest-dev/pytest/issues/1927
+#   https://github.com/pytest-dev/pytest/issues/2371
+#   https://github.com/pytest-dev/pytest/issues/5147
+#   https://github.com/pytest-dev/pytest/issues/6966
+# Consider using the hack in msl-nlf (where a hack with Sybil is used)
+# instead of the following hack that adds loadlib to sys.modules
+from msl import loadlib
+sys.modules['loadlib'] = loadlib
+
 
 def add_py4j_in_eggs():
     # if py4j is located in the .eggs directory and not in the site-packages directory
