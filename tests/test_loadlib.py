@@ -554,6 +554,15 @@ def test_issue8():
     LoadLibrary(pathlib.Path(os.path.join(EXAMPLES_DIR, 'cpp_lib' + bitness)))
 
 
+def test_path_attrib():
+    bitness = '64' if IS_PYTHON_64BIT else '32'
+    path = os.path.join(EXAMPLES_DIR, f'cpp_lib{bitness}')
+    expected = path + DEFAULT_EXTENSION
+    assert LoadLibrary(path).path == expected
+    assert LoadLibrary(path.encode()).path == expected
+    assert LoadLibrary(pathlib.Path(path)).path == expected
+
+
 @skipif_no_pythonnet
 def test_dotnet_nested_namespace():
     net = LoadLibrary('./tests/nested_namespaces/nested_namespaces.dll', 'clr')

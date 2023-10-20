@@ -29,7 +29,7 @@ Self = TypeVar('Self', bound='LoadLibrary')
 class LoadLibrary:
 
     def __init__(self,
-                 path: str | os.PathLike,
+                 path: str | bytes | os.PathLike,
                  libtype: LibTypes | None = None,
                  **kwargs: Any) -> None:
         """Load a shared library.
@@ -109,7 +109,7 @@ class LoadLibrary:
             raise ValueError(f'Must specify a non-empty path, got {path!r}')
 
         # fixes Issue #8, if `path` is a <class 'pathlib.Path'> object
-        path = str(path)
+        path = os.fsdecode(path)
 
         if libtype is None:
             # automatically determine the libtype
