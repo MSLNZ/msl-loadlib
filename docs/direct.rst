@@ -29,7 +29,7 @@ independent since they run in the JVM_.
 
    C++ <direct_cpp>
    FORTRAN <direct_fortran>
-   Microsoft .NET Framework <direct_dotnet>
+   Microsoft .NET <direct_dotnet>
    Java <direct_java>
    COM <direct_com>
    Windows __stdcall <direct_stdcall>

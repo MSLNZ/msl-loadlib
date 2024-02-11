@@ -6,8 +6,8 @@ MSL-LoadLib
 
 This package loads a shared library in Python. It is basically just a thin wrapper
 around ctypes_ (for libraries that use the ``__cdecl`` or ``__stdcall`` calling
-convention), `Python for .NET`_ (for libraries that use Microsoft's .NET Framework,
-``CLR``), Py4J_ (for Java ``.jar`` or ``.class`` files) and comtypes_ (for
+convention), `Python for .NET`_ (for libraries that use Microsoft .NET, ``CLR``),
+Py4J_ (for Java ``.jar`` or ``.class`` files) and comtypes_ (for
 libraries that use the `Component Object Model`_).
 
 However, the primary advantage is that it is possible to communicate with a 32-bit

@@ -71,7 +71,7 @@ class Server32(HTTPServer):
     def assembly(self):
         """
         Returns a reference to the `.NET Runtime Assembly <NET_>`_ object if
-        the shared library is a .NET Framework otherwise returns :data:`None`.
+        the shared library is .NET, otherwise returns :data:`None`.
 
         .. tip::
            The `JetBrains dotPeek`_ program can be used to reliably decompile any

@@ -128,7 +128,7 @@ compiled in different programming languages or using different calling conventio
    "Echo" <tutorials_echo>
    C++ <tutorials_cpp>
    FORTRAN <tutorials_fortran>
-   Microsoft .NET Framework <tutorials_dotnet>
+   Microsoft .NET <tutorials_dotnet>
    Windows __stdcall <tutorials_stdcall>
    LabVIEW <tutorials_labview>
 

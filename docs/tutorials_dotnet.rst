@@ -21,6 +21,27 @@ The source code of the C# program is available :ref:`here <dotnet-lib>`.
 
    .. image:: _static/dotpeek_lib.png
 
+
+.. attention::
+   To configure `pythonnet` to use the .NET Core runtime, you must either
+   run
+
+   .. code-block:: python
+
+      from pythonnet import load
+      load("coreclr")
+
+   or define a ``PYTHONNET_RUNTIME=coreclr`` environment variable
+
+   .. code-block:: python
+
+      import os
+      os.environ["PYTHONNET_RUNTIME"] = "coreclr"
+
+   before :class:`super() <super>` is called in the
+   :class:`~msl.loadlib.server32.Server32` subclass. To use the Mono runtime,
+   replace ``"coreclr"`` with ``"mono"``.
+
 Create a :class:`~msl.examples.loadlib.dotnet64.DotNet64` client to communicate
 with the 32-bit :ref:`dotnet_lib32.dll <dotnet-lib>` library
 

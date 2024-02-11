@@ -1,7 +1,7 @@
 .. _dotnet-lib:
 
-Microsoft .NET Framework
-========================
+Microsoft .NET
+==============
 
 Source code for the example C# library.
 

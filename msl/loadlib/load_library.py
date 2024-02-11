@@ -71,7 +71,7 @@ class LoadLibrary:
 
                 * `cdll`: a library that uses the __cdecl calling convention (default)
                 * `windll` or `oledll`: a library that uses the __stdcall calling convention
-                * `net`: a Microsoft .NET Framework library
+                * `net`: a Microsoft .NET library
                 * `clr`: alias for `net` (Common Language Runtime)
                 * `java`: a Java archive (``.jar`` or ``.class`` files)
                 * `com`: a COM_ library
@@ -367,7 +367,7 @@ class LoadLibrary:
     def assembly(self) -> Any:
         """
         Returns a reference to the `.NET Runtime Assembly <Assembly_>`_ object if
-        the shared library is a .NET Framework otherwise returns :data:`None`.
+        the shared library is .NET, otherwise returns :data:`None`.
 
         .. tip::
            The `JetBrains dotPeek`_ program can be used to reliably decompile any

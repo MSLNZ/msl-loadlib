@@ -1,15 +1,11 @@
 .. _direct_dotnet:
 
-Microsoft .NET Framework
-------------------------
+Microsoft .NET
+--------------
 Load a 64-bit C# library (a .NET Framework) in 64-bit Python (view the
 :ref:`C# source code <dotnet-lib>`). Include the ``'net'`` argument to
 indicate that the ``.dll`` file is for the .NET Framework.
 *To load the 32-bit version in 32-bit Python use* ``'/dotnet_lib32.dll'``.
-
-.. tip::
-
-   ``'clr'`` is an alias for ``'net'`` and can also be used as the `libtype`
 
 .. invisible-code-block: pycon
 
@@ -20,6 +16,29 @@ indicate that the ``.dll`` file is for the .NET Framework.
    >>> from msl.loadlib import LoadLibrary
    >>> from msl.examples.loadlib import EXAMPLES_DIR
    >>> net = LoadLibrary(EXAMPLES_DIR + '/dotnet_lib64.dll', 'net')
+
+.. tip::
+
+   ``'clr'`` is an alias for ``'net'`` and can also be used as the `libtype`
+
+.. attention::
+   To configure `pythonnet` to use the .NET Core runtime, you must either
+   run
+
+   .. code-block:: python
+
+      from pythonnet import load
+      load("coreclr")
+
+   or define a ``PYTHONNET_RUNTIME=coreclr`` environment variable
+
+   .. code-block:: python
+
+      import os
+      os.environ["PYTHONNET_RUNTIME"] = "coreclr"
+
+   before :class:`~msl.loadlib.load_library.LoadLibrary` is called.
+   To use the Mono runtime, replace ``"coreclr"`` with ``"mono"``.
 
 The :ref:`dotnet_lib64 <dotnet-lib>` library contains a reference to the
 ``DotNetMSL`` module (which is a C# namespace), the ``StaticClass`` class,
