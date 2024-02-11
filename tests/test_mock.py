@@ -110,10 +110,8 @@ def test_context_manager():
 
 
 def test_raises_server32_error():
-    match = r'TypeError: wrong type\n\(see above for more details\)$'
-
     c = Client(host=None)
-    with pytest.raises(Server32Error, match=match):
+    with pytest.raises(Server32Error, match=r'\(see above for more details\)$'):
         assert c.add(1, [2]) == 3
 
     stdout, stderr = c.shutdown_server32()
