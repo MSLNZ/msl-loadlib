@@ -127,5 +127,5 @@ def test_client():
     assert out.closed
     assert err.closed
 
-    assert 'lib=None address=None' in str(cpp)
-    assert 'lib=None address=None' in repr(cpp)
+    assert str(cpp).endswith('address=None (closed)>')
+    assert repr(cpp).endswith('address=None (closed)>')

@@ -38,5 +38,9 @@ def test_killed():
 
     hangs = Hangs()
     assert hangs.add(1, 1) == 2
-    with pytest.warns(UserWarning, match=r'killed the 32-bit server using brute force'):
+    with pytest.warns(UserWarning, match=r'killed the 32-bit server using brute force') as warn_info:
         hangs.shutdown_server32(kill_timeout=2)
+
+    assert len(warn_info.list) == 1
+    assert warn_info.list[0].filename == __file__
+    assert warn_info.list[0].lineno == 42  # occurs at hangs.shutdown_server32 above

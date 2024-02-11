@@ -7,6 +7,8 @@ Version 1.0.0 (in development)
 
 * Added
 
+  - :class:`~msl.loadlib.client64.Client64` now accepts ``None`` as
+    the value of `host`, which will mock the connection to the server
   - support for Python 3.12
   - type annotations (:PEP:`484` and :PEP:`561` using inline types)
   - ``freeze32`` console script to create a new 32-bit server

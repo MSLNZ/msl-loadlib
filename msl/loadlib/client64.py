@@ -7,6 +7,9 @@ from 64-bit Python.
 """
 from __future__ import annotations
 
+import importlib
+import inspect
+import io
 import json
 import os
 import pickle
@@ -33,6 +36,7 @@ from .exceptions import Server32Error
 from .server32 import METADATA
 from .server32 import OK
 from .server32 import SHUTDOWN
+from .server32 import Server32
 
 # the Self type was added in Python 3.11 (PEP 673)
 # using TypeVar is equivalent for < 3.11
@@ -46,7 +50,7 @@ class Client64:
                  *,
                  append_environ_path: str | Iterable[str] | None = None,
                  append_sys_path: str | Iterable[str] | None = None,
-                 host: str = '127.0.0.1',
+                 host: str | None = '127.0.0.1',
                  port: int | None = None,
                  protocol: int = 5,
                  rpc_timeout: float | None = None,
@@ -71,7 +75,7 @@ class Client64:
            Added the `server32_dir` argument.
 
         .. versionchanged:: 1.0
-           Removed the deprecated `quiet` argument.
+           Removed the deprecated `quiet` argument. The `host` value may now be `None`.
 
         :param module32: The name of, or the path to, a Python module that will be
             imported by the 32-bit server. The module must contain a class that inherits
@@ -87,6 +91,8 @@ class Client64:
             .. centered::
                ``sys.path(32bit) = sys.path(64bit) + append_sys_path``.
         :param host: The hostname (IP address) of the 32-bit server.
+            If :data:`None` then the connection to the server is mocked.
+            See :ref:`msl-loadlib-mock-connection` for more details.
         :param port: The port to open on the 32-bit server. If :data:`None`,
             an available port will be used.
         :param protocol: The :mod:`pickle` :ref:`protocol <pickle-protocols>` to use.
@@ -115,6 +121,131 @@ class Client64:
             in :data:`sys.path` so that those modules can be imported when `module32`
             is imported.
         """
+        self._client: MockClient | HTTPClient | None = None
+        if host is None:
+            self._client = MockClient(
+                module32,
+                append_environ_path=append_environ_path,
+                append_sys_path=append_sys_path,
+                **kwargs
+            )
+        else:
+            self._client = HTTPClient(
+                module32,
+                append_environ_path=append_environ_path,
+                append_sys_path=append_sys_path,
+                host=host,
+                port=port,
+                protocol=protocol,
+                rpc_timeout=rpc_timeout,
+                server32_dir=server32_dir,
+                timeout=timeout,
+                **kwargs
+            )
+
+    def __del__(self) -> None:
+        try:
+            self._client.cleanup()
+        except AttributeError:
+            pass
+
+    def __enter__(self: Self) -> Self:
+        return self
+
+    def __exit__(self, *ignored) -> None:
+        try:
+            self._client.cleanup()
+        except AttributeError:
+            pass
+
+    def __repr__(self) -> str:
+        lib = os.path.basename(self._client.lib32_path)
+        if self._client.host is None:
+            return (f'<{self.__class__.__name__} lib={lib} '
+                    f'address=None (mocked)>')
+
+        if self._client.connection is None:
+            return (f'<{self.__class__.__name__} lib={lib} '
+                    f'address=None (closed)>')
+
+        return (f'<{self.__class__.__name__} lib={lib} '
+                f'address={self._client.host}:{self._client.port}>')
+
+    @property
+    def host(self) -> str | None:
+        """The host address of the 32-bit server."""
+        return self._client.host
+
+    @property
+    def port(self) -> int:
+        """The port number of the 32-bit server."""
+        return self._client.port
+
+    @property
+    def connection(self) -> HTTPConnection | None:
+        """The connection to the 32-bit server."""
+        return self._client.connection
+
+    @property
+    def lib32_path(self) -> str:
+        """The path to the 32-bit shared-library file."""
+        return self._client.lib32_path
+
+    def request32(self, name: str, *args: Any, **kwargs: Any) -> Any:
+        """Send a request to the 32-bit server.
+
+        :param name: The name of a method, property or attribute of the :class:`~.server32.Server32` subclass.
+        :param args: The arguments that the method in the :class:`~.server32.Server32` subclass requires.
+        :param kwargs: The keyword arguments that the method in the :class:`~.server32.Server32` subclass requires.
+        :return: Whatever is returned by calling `name`.
+        :raises Server32Error: If there was an error processing the request on the 32-bit server.
+        :raises ResponseTimeoutError: If a timeout occurs while waiting for the response from the 32-bit server.
+        """
+        return self._client.request32(name, *args, **kwargs)
+
+    def shutdown_server32(self, kill_timeout: float = 10) -> tuple[BinaryIO, BinaryIO]:
+        """Shutdown the 32-bit server.
+
+        This method shuts down the 32-bit server, closes the client connection,
+        and deletes the temporary file that is used to save the serialized
+        :mod:`pickle`\'d data.
+
+        .. versionchanged:: 0.6
+           Added the `kill_timeout` argument.
+
+        .. versionchanged:: 0.8
+           Returns the (stdout, stderr) streams from the 32-bit server.
+
+        :param kill_timeout: If the 32-bit server is still running after `kill_timeout`
+            seconds, the server will be killed using brute force. A warning will be
+            issued if the server is killed in this manner.
+        :return: The (stdout, stderr) streams from the 32-bit server. Limit the total
+            number of characters that are written to either stdout or stderr on
+            the 32-bit server to be < 4096. This will avoid potential blocking
+            when reading the stdout and stderr PIPE buffers.
+
+        .. note::
+            This method gets called automatically when the reference count to the
+            :class:`.Client64` object reaches zero (see :meth:`~object.__del__`).
+        """
+        return self._client.shutdown_server32(kill_timeout=kill_timeout)
+
+
+class HTTPClient:
+
+    def __init__(self,
+                 module32: str,
+                 *,
+                 append_environ_path: str | Iterable[str] | None = None,
+                 append_sys_path: str | Iterable[str] | None = None,
+                 host: str | None = '127.0.0.1',
+                 port: int | None = None,
+                 protocol: int = 5,
+                 rpc_timeout: float | None = None,
+                 server32_dir: str | None = None,
+                 timeout: float = 10,
+                 **kwargs: Any) -> None:
+        """Start a server and connect to it."""
         self._meta32: dict[str, str | int] = {}
         self._conn: HTTPConnection | None = None
         self._proc: subprocess.Popen | None = None
@@ -193,7 +324,7 @@ class Client64:
         try:
             utils.wait_for_server(host, port, timeout)
         except ConnectionTimeoutError as err:
-            self._wait(timeout=0, stacklevel=4)
+            self._wait(timeout=0, stacklevel=5)
             # if the subprocess was killed then self._wait sets returncode to -2
             if self._proc.returncode == -2:
                 self._cleanup_zombie_and_files()
@@ -212,6 +343,8 @@ class Client64:
         # connect to the server
         self._rpc_timeout = socket.getdefaulttimeout() if rpc_timeout is None else rpc_timeout
         self._conn = HTTPConnection(host, port=port, timeout=self._rpc_timeout)
+        self._host = self._conn.host
+        self._port = self._conn.port
 
         # let the server know the info to use for pickling
         self._conn.request('POST', f'protocol={self._pickle_protocol}&path={self._pickle_path}')
@@ -221,35 +354,15 @@ class Client64:
 
         self._meta32 = self.request32(METADATA)
 
-    def __del__(self) -> None:
-        try:
-            self._cleanup()
-        except:
-            pass
-
-    def __repr__(self) -> str:
-        header = f'<{self.__class__.__name__}'
-        if self._conn:
-            lib = os.path.basename(self._meta32['path'])
-            return f'{header} lib={lib} address={self._conn.host}:{self._conn.port}>'
-        else:
-            return f'{header} lib=None address=None>'
-
-    def __enter__(self: Self) -> Self:
-        return self
-
-    def __exit__(self, *ignored) -> None:
-        self._cleanup()
-
     @property
     def host(self) -> str:
         """The host address of the 32-bit server."""
-        return self._conn.host
+        return self._host
 
     @property
     def port(self) -> int:
         """The port number of the 32-bit server."""
-        return self._conn.port
+        return self._port
 
     @property
     def connection(self) -> HTTPConnection:
@@ -261,18 +374,24 @@ class Client64:
         """The path to the 32-bit shared-library file."""
         return self._meta32['path']
 
-    def request32(self, name: str, *args: Any, **kwargs: Any) -> Any:
-        """Send a request to the 32-bit server.
+    def cleanup(self) -> None:
+        """Shutdown the server and remove files."""
+        try:
+            out, err = self.shutdown_server32()
+            out.close()
+            err.close()
+        except AttributeError:
+            pass
 
-        :param name: The name of a method, property or attribute of the :class:`~.server32.Server32` subclass.
-        :param args: The arguments that the method in the :class:`~.server32.Server32` subclass requires.
-        :param kwargs: The keyword arguments that the method in the :class:`~.server32.Server32` subclass requires.
-        :return: Whatever is returned by calling `name`.
-        :raises Server32Error: If there was an error processing the request on the 32-bit server.
-        :raises ResponseTimeoutError: If a timeout occurs while waiting for the response from the 32-bit server.
-        """
+        try:
+            self._cleanup_zombie_and_files()
+        except AttributeError:
+            pass
+
+    def request32(self, name: str, *args: Any, **kwargs: Any) -> Any:
+        """Send a request to the 32-bit server."""
         if self._conn is None:
-            raise Server32Error('The 32-bit server is not active')
+            raise Server32Error('The connection to the 32-bit server is closed')
 
         with open(self._pickle_path, mode='wb') as f:
             pickle.dump(args, f, protocol=self._pickle_protocol)
@@ -299,32 +418,9 @@ class Client64:
         raise Server32Error(**json.loads(response.read().decode()))
 
     def shutdown_server32(self, kill_timeout: float = 10) -> tuple[BinaryIO, BinaryIO]:
-        """Shutdown the 32-bit server.
-
-        This method shuts down the 32-bit server, closes the client connection,
-        and deletes the temporary file that is used to save the serialized
-        :mod:`pickle`\'d data.
-
-        .. versionchanged:: 0.6
-           Added the `kill_timeout` argument.
-
-        .. versionchanged:: 0.8
-           Returns the (stdout, stderr) streams from the 32-bit server.
-
-        :param kill_timeout: If the 32-bit server is still running after `kill_timeout`
-            seconds, the server will be killed using brute force. A warning will be
-            issued if the server is killed in this manner.
-        :return: The (stdout, stderr) streams from the 32-bit server. Limit the total
-            number of characters that are written to either stdout or stderr on
-            the 32-bit server to be < 4096. This will avoid potential blocking
-            when reading the stdout and stderr PIPE buffers.
-
-        .. note::
-            This method gets called automatically when the reference count to the
-            :class:`.Client64` object reaches zero (see :meth:`~object.__del__`).
-        """
+        """Shutdown the 32-bit server."""
         if self._conn is None:
-            return self._proc.stdout, self._proc.stderr
+            return self._proc.stdout, self._proc.stderr  # noqa: stdout/stderr are not None
 
         # send the shutdown request
         try:
@@ -337,16 +433,16 @@ class Client64:
             self._conn.request('POST', SHUTDOWN)
 
         # give the frozen 32-bit server a chance to shut down gracefully
-        self._wait(timeout=kill_timeout, stacklevel=3)
+        self._wait(timeout=kill_timeout, stacklevel=4)
 
         self._cleanup_zombie_and_files()
 
         self._conn.sock.shutdown(socket.SHUT_RDWR)
         self._conn.close()
         self._conn = None
-        return self._proc.stdout, self._proc.stderr
+        return self._proc.stdout, self._proc.stderr  # noqa: stdout/stderr are not None
 
-    def _wait(self, timeout: float = 10, stacklevel: int = 3) -> None:
+    def _wait(self, timeout: float = 10, stacklevel: int = 4) -> None:
         # give the 32-bit server a chance to shut down gracefully
         t0 = time.time()
         while self._proc.poll() is None:
@@ -362,19 +458,6 @@ class Client64:
                 self._proc.returncode = -2
                 warnings.warn('killed the 32-bit server using brute force', stacklevel=stacklevel)
                 break
-
-    def _cleanup(self) -> None:
-        try:
-            out, err = self.shutdown_server32()
-            out.close()
-            err.close()
-        except AttributeError:
-            pass
-
-        try:
-            self._cleanup_zombie_and_files()
-        except AttributeError:
-            pass
 
     def _cleanup_zombie_and_files(self) -> None:
         try:
@@ -407,3 +490,105 @@ class Client64:
             os.remove(self._meta_path)
         except OSError:
             pass
+
+
+class MockClient:
+
+    def __init__(self,
+                 module32: str,
+                 *,
+                 append_environ_path: str | Iterable[str] | None = None,
+                 append_sys_path: str | Iterable[str] | None = None,
+                 **kwargs: Any) -> None:
+        """Mocks the HTTP connection to the server."""
+        if append_environ_path:
+            if isinstance(append_environ_path, str):
+                append_environ_path = [append_environ_path]
+
+            env_paths = os.environ['PATH'].split(os.pathsep)
+            new_env_paths = [path for path in append_environ_path
+                             if path and path not in env_paths]
+
+            if new_env_paths:
+                os.environ['PATH'] += os.pathsep + os.pathsep.join(new_env_paths)
+
+        # module32 may be a path to a Python file
+        directory, module_name = os.path.split(module32)
+
+        # must append specified paths to sys.path before importing module32
+        if directory:
+            if directory not in sys.path:
+                sys.path.append(directory)
+        if append_sys_path:
+            if isinstance(append_sys_path, str):
+                append_sys_path = [append_sys_path]
+            for path in append_sys_path:
+                if path and path not in sys.path:
+                    sys.path.append(path)
+
+        # get the Server32 subclass in the module
+        cls = None
+        if module_name.endswith('.py'):
+            mod = importlib.import_module(module_name[:-3])
+        else:
+            mod = importlib.import_module(module_name)
+        for name, obj in inspect.getmembers(mod, inspect.isclass):
+            if name != 'Server32' and issubclass(obj, Server32):
+                cls = obj
+                break
+
+        if cls is None:
+            raise AttributeError(f'Module {module32!r} does not contain '
+                                 f'a class that is a subclass of Server32')
+
+        # the Server32 subclass expects the values for all kwargs
+        # to be of type string
+        kw = dict((key, str(value)) for key, value in kwargs.items())
+
+        self.server = cls(None, -1, **kw)  # noqa: (host, port, **kwargs)
+
+    def cleanup(self) -> None:
+        """Close the socket (which was never bound and activated)."""
+        self.server.socket.close()
+
+    @property
+    def connection(self) -> None:
+        """The connection to the mocked server."""
+        return
+
+    @property
+    def host(self) -> None:
+        """The host address of the mocked server."""
+        return
+
+    @property
+    def lib32_path(self) -> str:
+        """The path to the shared-library file."""
+        return self.server.path
+
+    @property
+    def port(self) -> int:
+        """The port number of the mocked server."""
+        return -1
+
+    def request32(self, name: str, *args: Any, **kwargs: Any) -> Any:
+        """Send a request to the mocked server."""
+        try:
+            attr = getattr(self.server, name)
+            if callable(attr):
+                return attr(*args, **kwargs)
+            else:
+                return attr
+        except Exception as exc:  # noqa: Too broad exception clause
+            exception = {
+                'name': exc.__class__.__name__,
+                'value': f'The mocked connection to the server raised:\n'
+                         f'{exc}\n'
+                         f'(see above for more details)'
+            }
+            raise Server32Error(**exception) from exc
+
+    def shutdown_server32(self, **ignored) -> tuple[BinaryIO, BinaryIO]:
+        """Shutdown the mocked server."""
+        self.cleanup()
+        return io.BytesIO(), io.BytesIO()

@@ -56,7 +56,7 @@ def test_bad_del():
         pass
 
     # this should raise AttributeError because super() was not called in BadDel
-    with pytest.raises(AttributeError, match='_conn'):
+    with pytest.raises(AttributeError, match='_client'):
         BadDel().request32('request')
 
 
