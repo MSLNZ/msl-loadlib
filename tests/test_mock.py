@@ -59,7 +59,12 @@ def test_equivalent(host):
     if host is None:
         assert c.connection is None
         assert c.host is None
-        assert c.lib32_path.endswith(f'cpp_lib64{DEFAULT_EXTENSION}')
+        if sys.maxsize > 2 ** 32:
+            # client and server are running in 64-bit Python
+            assert c.lib32_path.endswith(f'cpp_lib64{DEFAULT_EXTENSION}')
+        else:
+            # client and server are running in 32-bit Python
+            assert c.lib32_path.endswith(f'cpp_lib32{DEFAULT_EXTENSION}')
         assert c.port == -1
         assert str(c) == f"<Client lib={basename} address=None (mocked)>"
     else:
@@ -82,12 +87,16 @@ def test_equivalent(host):
 
 def test_attributes():
     c = Client(x=0, y='hello', z=None)
-    basename = os.path.basename(c.lib32_path)
     assert c.connection is None
     assert c.host is None
-    assert c.lib32_path.endswith(f'cpp_lib64{DEFAULT_EXTENSION}')
+    if sys.maxsize > 2 ** 32:
+        # client and server are running in 64-bit Python
+        assert c.lib32_path.endswith(f'cpp_lib64{DEFAULT_EXTENSION}')
+    else:
+        # client and server are running in 32-bit Python
+        assert c.lib32_path.endswith(f'cpp_lib32{DEFAULT_EXTENSION}')
     assert c.port == -1
-    assert str(c) == f"<Client lib={basename} address=None (mocked)>"
+    assert str(c) == f"<Client lib={os.path.basename(c.lib32_path)} address=None (mocked)>"
     assert c.add(1, 2) == 3
     # kwarg values are cast to str
     assert c.get_kwargs() == {'x': '0', 'y': 'hello', 'z': 'None'}
