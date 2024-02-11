@@ -14,7 +14,7 @@ from .load_library import LoadLibrary
 from .server32 import Server32
 
 __author__: str = 'Measurement Standards Laboratory of New Zealand'
-__copyright__: str = f'\xa9 2017 - 2023, {__author__}'
+__copyright__: str = f'\xa9 2017 - 2024, {__author__}'
 
 version_info = __version_info__
 """Contains the version information as a (major, minor, micro, releaselevel) named tuple."""
