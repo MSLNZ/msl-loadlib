@@ -1,5 +1,5 @@
 """
-Create a 32-bit server to use for
+Create a server for
 `inter-process communication <https://en.wikipedia.org/wiki/Inter-process_communication>`_.
 """
 from __future__ import annotations
@@ -26,14 +26,12 @@ def main(*,
          spec: str | None = None,
          dest: str | None = None,
          imports: str | Iterable[str] | None = None,
-         data: str | Iterable[str] | None = None) -> None:
-    """Create a frozen 32-bit server.
+         data: str | Iterable[str] | None = None,
+         skip_32bit_check: bool = False) -> None:
+    """Create a frozen server.
 
-    This function must be run from a 32-bit Python interpreter with `PyInstaller`_ installed.
-
-    Uses `PyInstaller`_ to create a frozen 32-bit Python executable. This executable
-    starts a 32-bit server, :class:`~.server32.Server32`, which hosts a Python module
-    that can load a 32-bit library.
+    This function should be run using a 32-bit Python interpreter with
+    `PyInstaller`_ installed.
 
     .. versionchanged:: 0.5
        Added the `requires_pythonnet` and `requires_comtypes` arguments.
@@ -43,36 +41,53 @@ def main(*,
 
     .. versionchanged:: 1.0
        Removed the `requires_pythonnet` and `requires_comtypes` arguments.
-       Added the `imports` and `data` arguments.
+       Added the `imports`, `data` and `skip_32bit_check` arguments.
 
     .. _PyInstaller: https://www.pyinstaller.org/
 
-    :param spec: The path to a :ref:`spec file <using spec files>` to use to create
-        the frozen 32-bit server.
-    :param dest: The destination directory to save the 32-bit server to. Default is
+    :param spec: The path to a :ref:`spec file <using spec files>` to use to
+        create the frozen server.
+    :param dest: The destination directory to save the server to. Default is
         the current directory.
     :param imports: The names of additional modules and packages that must be
-        importable on the 32-bit server.
+        importable on the server.
     :param data: The path(s) to additional data files, or directories containing
-        data files, to be added to the frozen 32-bit server. Each value should be
-        in the form `source:dest_dir`, where `:dest_dir` is optional. `source` is
+        data files, to be added to the frozen server. Each value should be in
+        the form `source:dest_dir`, where `:dest_dir` is optional. `source` is
         the path to a file (or a directory of files) to add. `dest_dir` is an
         optional destination directory, relative to the top-level directory of
-        the frozen 32-bit server, to add the file(s) to. If `dest_dir` is not
-        specified, the file(s) will be added to the top-level directory of the
-        32-bit server.
+        the frozen server, to add the file(s) to. If `dest_dir` is not specified,
+        the file(s) will be added to the top-level directory of the server.
+    :param skip_32bit_check: In the rare situation that you want to create a
+        frozen 64-bit server, you can set this value to :data:`True` which skips
+        the requirement that a 32-bit version of Python must be used to create
+        the server. Before you create a 64-bit server, decide if
+        :ref:`msl-loadlib-mock-connection` is a better solution for your
+        application.
 
     .. attention::
-        If a value for `spec` is specified, then `imports` nor `data` may be specified.
+        If a value for `spec` is specified, then `imports` nor `data` may be
+        specified.
     """
-    if constants.IS_PYTHON_64BIT:
-        print('Must freeze the server using a 32-bit Python interpreter', file=sys.stderr)
+    if not skip_32bit_check and constants.IS_PYTHON_64BIT:
+        msg = ''
+        if sys.argv:
+            if sys.argv[0].endswith('freeze32'):
+                msg = ('\nIf you want to create a 64-bit server, you may '
+                       'include the\n--skip-32bit-check flag '
+                       'to ignore this requirement.')
+            else:
+                msg = ('\nIf you want to create a 64-bit server, you may '
+                       'set the argument\nskip_32bit_check=True '
+                       'to ignore this requirement.')
+        print(f'Must freeze the server using a 32-bit version of Python.{msg}',
+              file=sys.stderr)
         return
 
     try:
         from PyInstaller import __version__ as pyinstaller_version  # noqa: PyInstaller is not a dependency
     except ImportError:
-        print('PyInstaller must be installed to create the 32-bit server, run:\n'
+        print('PyInstaller must be installed to create the server, run:\n'
               'pip install pyinstaller', file=sys.stderr)
         return
 
@@ -129,7 +144,7 @@ def main(*,
             if missing:
                 print(f'The following modules cannot be imported: '
                       f'{" ".join(missing)}\n'
-                      f'Cannot freeze the 32-bit server', file=sys.stderr)
+                      f'Cannot freeze the server', file=sys.stderr)
                 return
 
         cmd.extend(_get_standard_modules())
@@ -171,6 +186,7 @@ def main(*,
         loadlib.utils.check_dot_net_config(server_path)
 
     print(f'Server saved to {server_path}')
+    return 0
 
 
 def _get_standard_modules() -> list[str]:
@@ -294,7 +310,7 @@ def _cli() -> None:
     import argparse
 
     parser = argparse.ArgumentParser(
-        description='Create a frozen 32-bit server.',
+        description='Create a frozen server for msl-loadlib.',
         formatter_class=argparse.RawTextHelpFormatter,
     )
 
@@ -304,13 +320,13 @@ def _cli() -> None:
     )
     parser.add_argument(
         '-d', '--dest',
-        help='the destination directory to save the 32-bit server to\n'
+        help='the destination directory to save the server to\n'
              '(Default is the current directory)'
     )
     parser.add_argument(
         '-i', '--imports',
         nargs='*',
-        help='the names of modules that must be importable on the 32-bit server\n'
+        help='the names of modules that must be importable on the server\n'
              'Examples:\n'
              '  --imports msl.examples.loadlib\n'
              '  --imports mypackage numpy'
@@ -318,17 +334,26 @@ def _cli() -> None:
     parser.add_argument(
         '-D', '--data',
         nargs='*',
-        help='additional data files to bundle with the 32-bit server\n'
-             '(The format is "source:dest_dir", where source is the\n'
-             'path to a file (or a directory of files) to add and dest_dir\n'
+        help='additional data files to bundle with the server -- the\n'
+             'format is "source:dest_dir", where "source" is the path\n'
+             'to a file (or a directory of files) to add and "dest_dir"\n'
              'is an optional destination directory, relative to the\n'
-             'top-level directory of the frozen 32-bit server, to add\n'
-             'the file(s) to. If dest_dir is not specified, the file(s)\n'
-             'will be added to the top-level directory of the 32-bit server)\n'
+             'top-level directory of the frozen server, to add the\n'
+             'file(s) to. If dest_dir is not specified, the file(s)\n'
+             'will be added to the top-level directory of the server.\n'
              'Examples:\n'
              '  --data mydata\n'
              '  --data mydata/lib1.dll mydata/bin/lib2.dll:bin\n'
              '  --data mypackage/lib32.dll:mypackage'
+    )
+
+    parser.add_argument(
+        '--skip-32bit-check',
+        action='store_true',
+        help='in the rare situation that you want to create a frozen\n'
+             '64-bit server, you can include this flag which skips the\n'
+             'requirement that a 32-bit version of Python must be used\n'
+             'to create the server.'
     )
 
     args = parser.parse_args(sys.argv[1:])
@@ -339,5 +364,6 @@ def _cli() -> None:
             dest=args.dest,
             imports=args.imports,
             data=args.data,
+            skip_32bit_check=args.skip_32bit_check,
         )
     )
