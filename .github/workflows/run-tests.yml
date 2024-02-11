@@ -52,9 +52,9 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           python -m pip install --upgrade setuptools wheel
-      - name: Install pythonnet from source
-        if: ${{ matrix.python-version == '3.12' }}
-        run: python -m pip install git+https://github.com/pythonnet/pythonnet.git@5a4a986f9e2b9f4f505db68809f45a63c39b1418
+#      - name: Install pythonnet from source
+#        if: ${{ matrix.python-version == '3.12' }}
+#        run: python -m pip install git+https://github.com/pythonnet/pythonnet.git@5a4a986f9e2b9f4f505db68809f45a63c39b1418
       - name: Install msl-loadlib
         run: python -m pip install --upgrade --editable .[tests]
       - name: Run tests
