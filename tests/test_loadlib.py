@@ -459,19 +459,10 @@ def test_java():
 
 @skipif_no_comtypes
 def test_comtypes():
-    # changes to ctypes in Python 3.7.6 and 3.8.1 caused the following exception
-    #  TypeError: item 1 in _argtypes_ passes a union by value, which is unsupported.
-    # when loading some COM objects, see https://bugs.python.org/issue16575
-    #
-    # The 'MediaPlayer.MediaPlayer.1' object does not appear to raise this exception
-    # and the goal of this test function is not to test the internals of comtypes
-    # but LoadLibrary calling the underlying comtypes wrapper properly
+    progid = 'Scripting.FileSystemObject'
 
-    progid = 'MediaPlayer.MediaPlayer.1'
-
-    obj = LoadLibrary(progid, 'com')
-    # don't care whether it is enabled, just that a boolean is returned
-    assert isinstance(obj.lib.IsSoundCardEnabled(), bool)
+    with LoadLibrary(progid, 'com') as obj:
+        assert obj.lib.BuildPath('root', 'filename') == r'root\filename'
 
     with pytest.raises(OSError, match=r"Cannot find 'ABC.def.GHI' for libtype='com'"):
         LoadLibrary('ABC.def.GHI', 'com')
@@ -483,12 +474,12 @@ def test_comtypes():
     found_it = False
     for key, value in info.items():
         if value['ProgID'] == progid:
-            obj = LoadLibrary(key, 'com')
-            assert isinstance(obj.lib.IsSoundCardEnabled(), bool)
-            found_it = True
-            break
+            with LoadLibrary(key, 'com') as obj:
+                assert obj.lib.BuildPath('root', 'filename') == r'root\filename'
+                found_it = True
+                break
 
-    assert found_it, 'did not find %s in utils.get_com_info() dict' % progid
+    assert found_it, f'did not find {progid!r} in utils.get_com_info() dict'
 
 
 @skipif_no_comtypes
