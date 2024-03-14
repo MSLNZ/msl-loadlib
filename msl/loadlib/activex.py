@@ -20,7 +20,10 @@ except ImportError:
 WM_COMMAND = 0x0111
 WM_DESTROY = 0x0002
 
-WNDPROC = ctypes.WINFUNCTYPE(wt.LPARAM, wt.HWND, wt.UINT, wt.WPARAM, wt.LPARAM)
+try:
+    WNDPROC = ctypes.WINFUNCTYPE(wt.LPARAM, wt.HWND, wt.UINT, wt.WPARAM, wt.LPARAM)
+except AttributeError:
+    WNDPROC = None
 
 
 class WNDCLASSEXW(ctypes.Structure):
