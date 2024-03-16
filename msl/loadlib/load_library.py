@@ -10,11 +10,15 @@ import subprocess
 import sys
 from typing import Any
 from typing import Literal
+from typing import TYPE_CHECKING
 from typing import TypeVar
 
 from . import utils
 from .constants import DEFAULT_EXTENSION
 from .constants import IS_WINDOWS
+
+if TYPE_CHECKING:
+    from .activex import Application
 
 _LIBTYPES: set[str] = {'cdll', 'windll', 'oledll', 'net', 'clr', 'java', 'com', 'activex'}
 
@@ -96,6 +100,9 @@ class LoadLibrary:
         :raises OSError: If the shared library cannot be loaded.
         :raises ValueError: If the value of `libtype` is not supported.
         """
+        # a reference to the ActiveX application
+        self._app = None
+
         # a reference to the shared library
         self._lib = None
 
@@ -183,7 +190,8 @@ class LoadLibrary:
 
         elif libtype == 'activex':
             from .activex import Application
-            self._lib = Application.load(self._path, **kwargs)
+            self._app = Application()
+            self._lib = self._app.load(self._path, **kwargs)
 
         elif libtype == 'java':
             if not utils.is_py4j_installed():
@@ -351,6 +359,19 @@ class LoadLibrary:
     def __exit__(self, *ignore) -> None:
         self.cleanup()
 
+    @property
+    def app(self) -> Application | None:
+        """Returns a reference to the ActiveX main application window.
+
+        When an ActiveX library is loaded, the window is not shown
+        (to show it call :meth:`~msl.loadlib.activex.Application.show`)
+        and the message loop is not running
+        (to run it call :meth:`~msl.loadlib.activex.Application.run`).
+
+        .. versionadded:: 1.0.0
+        """
+        return self._app
+
     def cleanup(self) -> None:
         """Clean up references to the library.
 
@@ -362,6 +383,10 @@ class LoadLibrary:
             self._gateway.shutdown()
             self._gateway = None
             utils.logger.debug('shutdown Py4J.GatewayServer')
+        if self._app:
+            self._app.close()
+            self._app = None
+            utils.logger.debug('close ActiveX application')
 
     @property
     def assembly(self) -> Any:
