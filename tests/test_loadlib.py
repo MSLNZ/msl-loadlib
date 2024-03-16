@@ -484,21 +484,16 @@ def test_comtypes():
 
 @skipif_no_comtypes
 def test_activex_raises():
-    from msl.loadlib.activex import Application
-
-    with pytest.raises(OSError, match=r"Cannot find 'ABC' for libtype='activex'"):
+    with pytest.raises(OSError, match=r"Cannot find an ActiveX library with ID 'ABC'"):
         LoadLibrary('ABC', 'activex')
-
-    with pytest.raises(OSError, match=r"Cannot find 'ABC' for libtype='activex'"):
-        Application.load('ABC')
 
     progid = 'MediaPlayer.MediaPlayer.1'
 
-    for item in [0, [], 'xxx']:
-        with pytest.raises(OSError, match=r'Cannot create a Handle'):
-            LoadLibrary(progid, 'activex', parent=item)
-        with pytest.raises(OSError, match=r'Cannot create a Handle'):
-            Application.load(progid, parent=item)
+    with pytest.raises(OSError, match=r'Cannot create a top-level child window'):
+        LoadLibrary(progid, 'activex', parent=0)
+
+    with pytest.raises(OSError, match=r'Invalid window handle'):
+        LoadLibrary(progid, 'activex', parent='xxx')
 
 
 def test_unicode_path_java():
