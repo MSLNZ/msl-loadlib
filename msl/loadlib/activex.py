@@ -16,31 +16,10 @@ try:
 except ImportError:
     comtypes = client = None
 
+LRESULT = wt.LPARAM
 
 WM_COMMAND = 0x0111
 WM_DESTROY = 0x0002
-
-try:
-    WNDPROC = ctypes.WINFUNCTYPE(wt.LPARAM, wt.HWND, wt.UINT, wt.WPARAM, wt.LPARAM)
-except AttributeError:
-    WNDPROC = None
-
-
-class WNDCLASSEXW(ctypes.Structure):
-    _fields_ = [
-        ('cbSize', wt.UINT),
-        ('style', wt.UINT),
-        ('lpfnWndProc', WNDPROC),
-        ('cbClsExtra', ctypes.c_int),
-        ('cbWndExtra', ctypes.c_int),
-        ('hInstance', wt.HINSTANCE),
-        ('hIcon', wt.HICON),
-        ('hCursor', wt.HANDLE),
-        ('hbrBackground', wt.HBRUSH),
-        ('lpszMenuName', wt.LPCWSTR),
-        ('lpszClassName', wt.LPCWSTR),
-        ('hIconSm', wt.HICON),
-    ]
 
 
 class Background(IntEnum):
@@ -258,6 +237,24 @@ try:
     atl = ctypes.windll.atl
     user32 = ctypes.windll.user32
 
+    WNDPROC = ctypes.WINFUNCTYPE(LRESULT, wt.HWND, wt.UINT, wt.WPARAM, wt.LPARAM)
+
+    class WNDCLASSEXW(ctypes.Structure):
+        _fields_ = [
+            ('cbSize', wt.UINT),
+            ('style', wt.UINT),
+            ('lpfnWndProc', WNDPROC),
+            ('cbClsExtra', ctypes.c_int),
+            ('cbWndExtra', ctypes.c_int),
+            ('hInstance', wt.HINSTANCE),
+            ('hIcon', wt.HICON),
+            ('hCursor', wt.HANDLE),
+            ('hbrBackground', wt.HBRUSH),
+            ('lpszMenuName', wt.LPCWSTR),
+            ('lpszClassName', wt.LPCWSTR),
+            ('hIconSm', wt.HICON),
+        ]
+
     user32.CreateWindowExW.errcheck = _err_check
     user32.CreateWindowExW.restype = wt.HWND
     user32.CreateWindowExW.argtypes = [
@@ -301,8 +298,20 @@ try:
     user32.MessageBoxExW.restype = ctypes.c_int
     user32.MessageBoxExW.argtypes = [wt.HWND, wt.LPCWSTR, wt.LPCWSTR, wt.UINT, wt.WORD]
 
+    user32.DefWindowProcW.restype = LRESULT
+    user32.DefWindowProcW.argtypes = [wt.HWND, wt.UINT, wt.WPARAM, wt.LPARAM]
+
+    user32.DestroyMenu.restype = ctypes.c_bool
+    user32.DestroyMenu.argtypes = [wt.HMENU]
+
+    user32.RegisterClassExW.restype = wt.ATOM
+    user32.RegisterClassExW.argtypes = [ctypes.POINTER(WNDCLASSEXW)]
+
+    user32.UnregisterClassW.restype = ctypes.c_bool
+    user32.UnregisterClassW.argtypes = [wt.LPCWSTR, wt.HINSTANCE]
+
 except AttributeError:
-    kernel32 = user32 = atl = gdi32 = None
+    kernel32 = user32 = atl = gdi32 = WNDCLASSEXW = None
 
 
 CW_USEDEFAULT = 0x80000000
@@ -542,8 +551,12 @@ class Application:
         :param title: The text to display in the titlebar (if one is visible).
         """
         super().__init__()
+        self._atom = None
         self._event_connections = []
         self._msg_handlers: list[Callable[[int, int, int, int], None]] = []
+
+        if WNDCLASSEXW is None:
+            raise OSError('An ActiveX application is not supported on this platform')
 
         self._window = WNDCLASSEXW()
         self._window.cbSize = ctypes.sizeof(WNDCLASSEXW)
@@ -555,11 +568,11 @@ class Application:
         self._window.hIcon = user32.LoadIconW(None, wt.LPCWSTR(icon))
         self._window.hCursor = user32.LoadCursorW(None, wt.LPCWSTR(32512))  # IDC_ARROW
         self._window.hbrBackground = gdi32.GetStockObject(background)
-        self._window.lpszMenuName = 'ActiveXMenu'
-        self._window.lpszClassName = 'ActiveXClass'
+        self._window.lpszMenuName = f'ActiveXMenu{id(self._window)}'  # make the name unique
+        self._window.lpszClassName = f'ActiveXClass{id(self._window)}'
         self._window.hIconSm = user32.LoadIconW(None, wt.LPCWSTR(icon))
 
-        self._atom = user32.RegisterClassExW(ctypes.byref(self._window))
+        self._atom = user32.RegisterClassExW(self._window)
 
         self._menu = Menu()
 
@@ -582,8 +595,10 @@ class Application:
         for ec in self._event_connections:
             ec.disconnect()
         self._event_connections.clear()
-        user32.DestroyMenu(self._menu.hmenu)
-        user32.UnregisterClassW(self._atom, self._window.hInstance)
+
+        if self._atom is not None:
+            user32.UnregisterClassW(self._window.lpszClassName, self._window.hInstance)
+            self._atom = None
 
     def _window_procedure(self, hwnd: int, message: int, w_param: int, l_param: int) -> int:
         for handler in self._msg_handlers:
@@ -607,8 +622,8 @@ class Application:
         :param handler: A function that processes messages sent to a window.
             The function must accept four positional arguments (all integer
             values) and the returned object is ignored. See
-            `here <https://learn.microsoft.com/en-us/windows/win32/learnwin32/writing-the-window-procedure>`_
-            for more details about the input arguments.
+            `window-procedure <https://learn.microsoft.com/en-us/windows/win32/learnwin32/writing-the-window-procedure>`_
+            for more details about the input arguments to the `handler`.
         """
         self._msg_handlers.append(handler)
 
@@ -646,8 +661,8 @@ class Application:
              parent: int = None,
              x: int = 0,
              y: int = 0,
-             width: int = 100,
-             height: int = 100,
+             width: int = 0,
+             height: int = 0,
              style: int = WindowStyle.VISIBLE | WindowStyle.CHILD,
              ex_style: int = ExtendedWindowStyle.NONE) -> ctypes.POINTER:
         """Load an ActiveX library.
@@ -668,14 +683,22 @@ class Application:
         :return: The interface pointer to the ActiveX library.
         """
         if comtypes is None:
-            raise RuntimeError('comtypes must be installed to load an ActiveX library')
+            raise OSError('comtypes must be installed to load an ActiveX library')
 
         if parent is None:
             parent = self._hwnd
 
+        try:
+            window_name = str(comtypes.GUID.from_progid(activex_id))
+        except (TypeError, OSError):
+            window_name = None
+
+        if not window_name:
+            raise OSError(f'Cannot find an ActiveX library with ID {activex_id!r}')
+
         hwnd = _create_window(
             class_name='AtlAxWin',
-            window_name=str(comtypes.GUID.from_progid(activex_id)),
+            window_name=window_name,
             style=style,
             ex_style=ex_style,
             x=x,
@@ -766,9 +789,9 @@ class Application:
         user32.SetWindowTextW(self._hwnd, title)
 
     def show(self, command: int = ShowWindow.NORMAL) -> None:
-        """Show the main window.
+        """Show the main application window.
 
-        :param command: Controls how the window is to be shown
+        :param command: Controls how the window is shown
             (a :class:`.ShowWindow` value).
         """
         user32.SetMenu(self._hwnd, self._menu.hmenu)
@@ -777,5 +800,6 @@ class Application:
 
     @property
     def thread_id(self) -> int:
-        """Returns the identifier of the thread that created the window."""
+        """Returns the identifier of the thread that created the
+        main application window."""
         return self._thread_id
