@@ -69,12 +69,13 @@ def test_menu():
     a = group.append('A', data='a')
     assert isinstance(a, activex.MenuItem)
     b = group.append('B')
+    group.append_separator()
     c = group.append('C')
 
     m.append_group(h_settings, group)
 
     assert m[a.id] is a
-    assert a.id == 3  # adding a separator increments the ID counter
+    assert a.id == 3  # adding a separator (before creating 'Settings') increments the ID counter
     assert a.text == 'A'
     assert a.flags == activex.MenuFlag.STRING
     assert a.callback is None
@@ -87,7 +88,7 @@ def test_menu():
     assert b.data is None
 
     assert m[c.id] is c
-    assert c.id == 5
+    assert c.id == 6  # adding a separator (in the group) increments the ID counter
     assert c.text == 'C'
 
     with pytest.raises(KeyError):

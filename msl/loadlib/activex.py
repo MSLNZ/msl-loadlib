@@ -435,6 +435,11 @@ class MenuGroup:
         self._items.append(item)
         return item
 
+    def append_separator(self) -> None:
+        """Append a horizontal dividing line to the group."""
+        self._items.append(MenuItem(hmenu=-1, text=None, callback=None,
+                                    id=-1, flags=MenuFlag.SEPARATOR, data=None))
+
     @property
     def checked(self) -> MenuItem | None:
         """Returns the menu item that is currently checked in the group."""
