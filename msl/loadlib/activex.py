@@ -351,7 +351,10 @@ class MenuItem:
         """User data associated with the menu item."""
 
     def __eq__(self, other: MenuItem) -> bool:
-        return self.id == other.id
+        try:
+            return self.id == other.id
+        except AttributeError:
+            return False
 
     def __repr__(self) -> str:
         return f'<{self.__class__.__name__} id={self._id} text={self._text!r}>'
@@ -440,7 +443,7 @@ class MenuGroup:
                 return item
 
     @checked.setter
-    def checked(self, item: MenuItem) -> None:
+    def checked(self, item: MenuItem | None) -> None:
         """Sets the menu item that is currently checked in the group."""
         for i in self:
             i.checked = i == item
