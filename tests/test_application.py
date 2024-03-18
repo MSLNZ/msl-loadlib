@@ -22,6 +22,11 @@ def test_menu_item():
     mi2 = activex.MenuItem(hmenu=123, id=8, text='hello world', callback=None, flags=1, data=[-1, 0, 1])
     assert mi != mi2  # IDs do not match
 
+    mi3 = activex.MenuItem(hmenu=-1, id=1, text='a', callback=None, flags=0, data=None)
+
+    with pytest.raises(ValueError, match='A MenuItem must first be added to a Menu'):
+        mi3.checked = True
+
 
 def test_menu_group():
     mg = activex.MenuGroup()
@@ -33,14 +38,19 @@ def test_menu_group():
     a = mg.append('a')
     assert isinstance(a, activex.MenuItem)
     mg.append('b', data=8, flags=activex.MenuFlag.POPUP)
+    mg.append_separator()
     mg.append('c', callback=None)
     assert mg.name == 'click'
     assert mg.checked is None
-    assert str(mg) == "<MenuGroup name='click' size=3>"
+    assert str(mg) == "<MenuGroup name='click' size=4>"
 
     for item in mg:
         assert isinstance(item, activex.MenuItem)
         assert item.checked is False
+
+    for item in [a, None]:
+        with pytest.raises(ValueError, match='A MenuGroup must first be added to a Menu'):
+            mg.checked = item
 
 
 @skipif_not_windows

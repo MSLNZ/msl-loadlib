@@ -372,6 +372,10 @@ class MenuItem:
     @checked.setter
     def checked(self, value: bool) -> None:
         """Set the checked state of the menu item."""
+        if self._hmenu == -1:
+            raise ValueError('A MenuItem must first be added to a Menu '
+                             'before it can be checked')
+
         # MF_CHECKED=8, MF_UNCHECKED=0
         state = 8 if value else 0
         previous = user32.CheckMenuItem(self._hmenu, self._id, state)
@@ -451,6 +455,9 @@ class MenuGroup:
     def checked(self, item: MenuItem | None) -> None:
         """Sets the menu item that is currently checked in the group."""
         for i in self:
+            if i.hmenu == -1:
+                raise ValueError('A MenuGroup must first be added to a Menu '
+                                 'before a MenuItem can be checked')
             i.checked = i == item
 
     @property
