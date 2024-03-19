@@ -84,19 +84,6 @@ class ExtendedWindowStyle(IntEnum):
     PALETTEWINDOW = WINDOWEDGE | TOOLWINDOW | TOPMOST
 
 
-class Icon(IntEnum):
-    """Standard icons. See
-    `about-icons <https://learn.microsoft.com/en-us/windows/win32/menurc/about-icons>`_
-    for more details."""
-    APPLICATION = 32512
-    ERROR = 32513
-    QUESTION = 32514
-    WARNING = 32515
-    INFORMATION = 32516
-    WINLOGO = 32517
-    SHIELD = 32518
-
-
 class MenuFlag(IntEnum):
     """Menu item flags. See
     `append-menu <https://learn.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-appendmenuw>`_
@@ -236,6 +223,7 @@ try:
     gdi32 = ctypes.windll.gdi32
     atl = ctypes.windll.atl
     user32 = ctypes.windll.user32
+    shell32 = ctypes.windll.shell32
 
     WNDPROC = ctypes.WINFUNCTYPE(LRESULT, wt.HWND, wt.UINT, wt.WPARAM, wt.LPARAM)
 
@@ -310,8 +298,11 @@ try:
     user32.UnregisterClassW.restype = ctypes.c_bool
     user32.UnregisterClassW.argtypes = [wt.LPCWSTR, wt.HINSTANCE]
 
+    shell32.ExtractIconW.restype = wt.HICON
+    shell32.ExtractIconW.argtypes = [wt.HINSTANCE, wt.LPCWSTR, wt.UINT]
+
 except AttributeError:
-    kernel32 = user32 = atl = gdi32 = WNDCLASSEXW = None
+    kernel32 = user32 = atl = gdi32 = shell32 = WNDCLASSEXW = None
 
 
 CW_USEDEFAULT = 0x80000000
@@ -334,6 +325,52 @@ def _create_window(*,
     return user32.CreateWindowExW(ex_style, class_name, window_name,
                                   style, x, y, width, height, parent,
                                   menu, instance, param)
+
+
+class Icon:
+
+    def __init__(self,
+                 file: str,
+                 *,
+                 index: int = 0,
+                 hinstance: int = None) -> None:
+        """Extract an icon from an executable file, DLL or icon file.
+
+        :param file: The path to an executable file, DLL or icon file.
+        :param index: The zero-based index of the icon to extract.
+        :param hinstance: Handle to the instance of the calling application.
+        """
+        self._hicon: int | None = None
+
+        if shell32 is None:
+            raise OSError('Loading an icon is not supported on this platform')
+
+        if index < 0:
+            raise ValueError('A negative index is not supported')
+
+        if hinstance is None:
+            hinstance = kernel32.GetModuleHandleW(None)
+
+        self._file = file
+        self._index = index
+        self._hicon = shell32.ExtractIconW(hinstance, file, index)
+
+    def __repr__(self) -> str:
+        return f'<Icon file={self._file!r} index={self._index}>'
+
+    def __del__(self) -> None:
+        self.destroy()
+
+    @property
+    def hicon(self) -> int | None:
+        """Returns the handle to the icon or :data:`None` if no icon was found."""
+        return self._hicon
+
+    def destroy(self) -> None:
+        """Destroys the icon and frees any memory the icon occupied."""
+        if self._hicon is not None:
+            user32.DestroyIcon(self._hicon)
+            self._hicon = None
 
 
 class MenuItem:
@@ -552,7 +589,7 @@ class Application:
                  *,
                  background: int = Background.WHITE,
                  class_style: int = ClassStyle.NONE,
-                 icon: int = Icon.APPLICATION,
+                 icon: Icon = None,
                  style: int = WindowStyle.OVERLAPPEDWINDOW,
                  title: str = 'ActiveX') -> None:
         """Create the main application window to display ActiveX controls.
@@ -567,11 +604,17 @@ class Application:
         """
         super().__init__()
         self._atom = None
+        self._icon = icon  # prevent an icon from being garbage collected
         self._event_connections = []
         self._msg_handlers: list[Callable[[int, int, int, int], None]] = []
 
         if WNDCLASSEXW is None:
             raise OSError('An ActiveX application is not supported on this platform')
+
+        if isinstance(icon, Icon):
+            h_icon = icon.hicon
+        else:
+            h_icon = user32.LoadIconW(None, wt.LPCWSTR(32512))  # IDI_APPLICATION
 
         self._window = WNDCLASSEXW()
         self._window.cbSize = ctypes.sizeof(WNDCLASSEXW)
@@ -580,12 +623,12 @@ class Application:
         self._window.cbClsExtra = 0
         self._window.cbWndExtra = 0
         self._window.hInstance = kernel32.GetModuleHandleW(None)
-        self._window.hIcon = user32.LoadIconW(None, wt.LPCWSTR(icon))
+        self._window.hIcon = h_icon
         self._window.hCursor = user32.LoadCursorW(None, wt.LPCWSTR(32512))  # IDC_ARROW
         self._window.hbrBackground = gdi32.GetStockObject(background)
         self._window.lpszMenuName = f'ActiveXMenu{id(self._window)}'  # make the name unique
         self._window.lpszClassName = f'ActiveXClass{id(self._window)}'
-        self._window.hIconSm = user32.LoadIconW(None, wt.LPCWSTR(icon))
+        self._window.hIconSm = h_icon
 
         self._atom = user32.RegisterClassExW(self._window)
 
@@ -615,6 +658,8 @@ class Application:
             user32.UnregisterClassW(self._window.lpszClassName, self._window.hInstance)
             self._atom = None
 
+        self._icon = None
+
     def _window_procedure(self, hwnd: int, message: int, w_param: int, l_param: int) -> int:
         for handler in self._msg_handlers:
             handler(hwnd, message, w_param, l_param)
@@ -637,7 +682,7 @@ class Application:
         :param handler: A function that processes messages sent to a window.
             The function must accept four positional arguments (all integer
             values) and the returned object is ignored. See
-            `window-procedure <https://learn.microsoft.com/en-us/windows/win32/learnwin32/writing-the-window-procedure>`_
+            `WindowProc <https://learn.microsoft.com/en-us/windows/win32/learnwin32/writing-the-window-procedure>`_
             for more details about the input arguments to the `handler`.
         """
         self._msg_handlers.append(handler)
@@ -700,9 +745,6 @@ class Application:
         if comtypes is None:
             raise OSError('comtypes must be installed to load an ActiveX library')
 
-        if parent is None:
-            parent = self._hwnd
-
         try:
             window_name = str(comtypes.GUID.from_progid(activex_id))
         except (TypeError, OSError):
@@ -710,6 +752,9 @@ class Application:
 
         if not window_name:
             raise OSError(f'Cannot find an ActiveX library with ID {activex_id!r}')
+
+        if parent is None:
+            parent = self._hwnd
 
         hwnd = _create_window(
             class_name='AtlAxWin',

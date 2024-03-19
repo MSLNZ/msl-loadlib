@@ -1,3 +1,5 @@
+import sys
+
 from msl.loadlib import activex
 from msl.loadlib.constants import IS_WINDOWS
 
@@ -156,3 +158,23 @@ def test_application():
 def test_application_raises():
     with pytest.raises(OSError, match='not supported on this platform'):
         activex.Application()
+
+
+@skipif_not_windows
+def test_icon():
+    icon = activex.Icon('does not exist')
+    assert str(icon) == "<Icon file='does not exist' index=0>"
+    assert icon.hicon is None
+
+    # ok to call destroy() multiple times
+    icon.destroy()
+    icon.destroy()
+    icon.destroy()
+    icon.destroy()
+
+    with pytest.raises(ValueError, match='negative index'):
+        activex.Icon('', index=-1)
+
+    icon = activex.Icon(sys.executable)
+    assert icon.hicon > 0
+    icon.destroy()
