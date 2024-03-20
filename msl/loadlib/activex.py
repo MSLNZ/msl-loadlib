@@ -526,7 +526,11 @@ Callback = Callable[[MenuItem], None]
 class Menu:
 
     def __init__(self) -> None:
-        """A menu associated with the main application window."""
+        """A menu associated with the main application window.
+
+        Do not instantiate directly. Use the :attr:`.Application.menu`
+        property to access the menu instance.
+        """
         self._id = 0
         self._items: dict[int, MenuItem] = {}
         self._hmenu: int = user32.CreateMenu()
