@@ -46,6 +46,7 @@ Package Structure
 -----------------
 
 .. toctree::
+   :maxdepth: 1
 
    msl.loadlib <_api/msl.loadlib>
    msl.loadlib.activex <_api/msl.loadlib.activex>
@@ -61,6 +62,7 @@ Example modules for communicating with a 32-bit library from 64-bit Python
 --------------------------------------------------------------------------
 
 .. toctree::
+   :maxdepth: 2
 
    _api/msl.examples.loadlib
 
