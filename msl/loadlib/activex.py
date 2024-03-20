@@ -6,6 +6,7 @@ from __future__ import annotations
 import ctypes
 from ctypes import wintypes as wt
 from enum import IntEnum
+from enum import IntFlag
 from typing import Any
 from typing import Callable
 from typing import Iterator
@@ -31,8 +32,8 @@ class Background(IntEnum):
     BLACK = 4
 
 
-class ClassStyle(IntEnum):
-    """Window class styles. See
+class ClassStyle(IntFlag):
+    """Window class style flags. See
     `window-class-styles <https://learn.microsoft.com/en-us/windows/win32/winmsg/window-class-styles#constants>`_
     for more details."""
     NONE = 0
@@ -50,8 +51,8 @@ class ClassStyle(IntEnum):
     VREDRAW = 0x0001
 
 
-class ExtendedWindowStyle(IntEnum):
-    """Extended window styles. See
+class ExtendedWindowStyle(IntFlag):
+    """Extended window style flags. See
     `extended-window-styles <https://learn.microsoft.com/en-us/windows/win32/winmsg/extended-window-styles>`_
     for more details."""
     NONE = 0
@@ -84,7 +85,7 @@ class ExtendedWindowStyle(IntEnum):
     PALETTEWINDOW = WINDOWEDGE | TOOLWINDOW | TOPMOST
 
 
-class MenuFlag(IntEnum):
+class MenuFlag(IntFlag):
     """Menu item flags. See
     `append-menu <https://learn.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-appendmenuw>`_
     for more details."""
@@ -102,7 +103,7 @@ class MenuFlag(IntEnum):
     UNCHECKED = 0x00000000
 
 
-class MessageBoxOption(IntEnum):
+class MessageBoxOption(IntFlag):
     """Message box options. See
     `message-box <https://learn.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-messagebox>`_
     for more details."""
@@ -137,8 +138,8 @@ class MessageBoxOption(IntEnum):
     SERVICE_NOTIFICATION = 0x00200000
 
 
-class PositionFlag(IntEnum):
-    """Window position options. See
+class PositionFlag(IntFlag):
+    """Window position flags. See
     `set-window-pos <https://learn.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-setwindowpos>`_
     for more details."""
     NONE = 0
@@ -179,8 +180,8 @@ class ShowWindow(IntEnum):
     FORCEMINIMIZE = 11
 
 
-class WindowStyle(IntEnum):
-    """Window styles. See
+class WindowStyle(IntFlag):
+    """Window style flags. See
     `window-styles <https://learn.microsoft.com/en-us/windows/win32/winmsg/window-styles>`_
     for more details."""
     OVERLAPPED = 0x00000000
@@ -298,6 +299,10 @@ try:
     user32.UnregisterClassW.restype = ctypes.c_bool
     user32.UnregisterClassW.argtypes = [wt.LPCWSTR, wt.HINSTANCE]
 
+    user32.CreateMenu.errcheck = _err_check
+    user32.CreateMenu.restype = wt.HMENU
+    user32.CreateMenu.argtypes = []
+
     shell32.ExtractIconW.restype = wt.HICON
     shell32.ExtractIconW.argtypes = [wt.HINSTANCE, wt.LPCWSTR, wt.UINT]
 
@@ -368,7 +373,7 @@ class Icon:
 
     def destroy(self) -> None:
         """Destroys the icon and frees any memory the icon occupied."""
-        if self._hicon is not None:
+        if self._hicon is not None and self._hicon > 0:
             user32.DestroyIcon(self._hicon)
             self._hicon = None
 
@@ -376,7 +381,11 @@ class Icon:
 class MenuItem:
 
     def __init__(self, **kwargs) -> None:
-        """A menu item that belongs to a popup menu."""
+        """A menu item that belongs to a popup menu.
+
+        Do not instantiate this class directly. Use :meth:`.MenuGroup.append`
+        or :meth:`.Menu.append` to create a new menu item.
+        """
         self._hmenu: int = kwargs['hmenu']
         self._id: int = kwargs['id']
         self._text: str = kwargs['text']
@@ -444,7 +453,11 @@ class MenuItem:
 class MenuGroup:
 
     def __init__(self, name: str = '') -> None:
-        """A group of :class:`.MenuItem`\\'s where only one item may be selected at a time."""
+        """A group of :class:`.MenuItem`\\'s where only one item in the group
+        may have a check mark to indicate that a particular item is selected.
+
+        :param name: A name to associate with the group.
+        """
         self._name = name
         self._items: list[MenuItem] = []
 
@@ -525,7 +538,7 @@ class Menu:
                callback: Callback | None = None,
                data: Any = None,
                flags: int = MenuFlag.STRING) -> MenuItem:
-        """Create and append a menu item to a popup menu.
+        """Create a new :class:`.MenuItem` and append it to a popup menu.
 
         :param hmenu: The handle of a popup menu to append the new menu item to.
         :param text: The content of the new menu item.
@@ -679,7 +692,7 @@ class Application:
 
         Messages correspond to events from the user and from the operating system.
 
-        :param handler: A function that processes messages sent to a window.
+        :param handler: A function that processes messages sent to the main window.
             The function must accept four positional arguments (all integer
             values) and the returned object is ignored. See
             `WindowProc <https://learn.microsoft.com/en-us/windows/win32/learnwin32/writing-the-window-procedure>`_
@@ -702,7 +715,7 @@ class Application:
         :param sink: The object that handles the events. The `sink` must
             define methods with the same names as the ActiveX event names. If not
             specified, the :class:`.Application` instance is used as the `sink`.
-        :param interface: The interface to use.
+        :param interface: The COM interface to use.
 
         :return: The advise-connection object.
         """
