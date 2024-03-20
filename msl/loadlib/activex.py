@@ -262,11 +262,11 @@ try:
     ]
 
     user32.SetWindowTextW.errcheck = _err_check
-    user32.SetWindowTextW.restype = ctypes.c_bool
+    user32.SetWindowTextW.restype = wt.BOOL
     user32.SetWindowTextW.argtypes = [wt.HWND, wt.LPCWSTR]
 
     user32.SetWindowPos.errcheck = _err_check
-    user32.SetWindowPos.restype = ctypes.c_bool
+    user32.SetWindowPos.restype = wt.BOOL
     user32.SetWindowPos.argtypes = [
         wt.HWND,       # hWnd
         wt.HWND,       # hWndInsertAfter
@@ -278,10 +278,10 @@ try:
     ]
 
     user32.AppendMenuW.errcheck = _err_check
-    user32.AppendMenuW.restype = ctypes.c_bool
+    user32.AppendMenuW.restype = wt.BOOL
     user32.AppendMenuW.argtypes = [wt.HMENU, wt.UINT, wt.UINT, wt.LPCWSTR]
 
-    user32.CheckMenuItem.restype = ctypes.c_int
+    user32.CheckMenuItem.restype = wt.DWORD
     user32.CheckMenuItem.argtypes = [wt.HMENU, wt.UINT, wt.UINT]
 
     user32.MessageBoxExW.restype = ctypes.c_int
@@ -290,13 +290,13 @@ try:
     user32.DefWindowProcW.restype = LRESULT
     user32.DefWindowProcW.argtypes = [wt.HWND, wt.UINT, wt.WPARAM, wt.LPARAM]
 
-    user32.DestroyMenu.restype = ctypes.c_bool
+    user32.DestroyMenu.restype = wt.BOOL
     user32.DestroyMenu.argtypes = [wt.HMENU]
 
     user32.RegisterClassExW.restype = wt.ATOM
     user32.RegisterClassExW.argtypes = [ctypes.POINTER(WNDCLASSEXW)]
 
-    user32.UnregisterClassW.restype = ctypes.c_bool
+    user32.UnregisterClassW.restype = wt.BOOL
     user32.UnregisterClassW.argtypes = [wt.LPCWSTR, wt.HINSTANCE]
 
     user32.CreateMenu.errcheck = _err_check
