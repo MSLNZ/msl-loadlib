@@ -26,9 +26,9 @@ WM_DESTROY = 0x0002
 class Background(IntEnum):
     """Background colours."""
     WHITE = 0
-    LIGHT_GRAY = 1
-    GRAY = 2
-    DARK_GRAY = 3
+    LIGHT_GREY = 1
+    GREY = 2
+    DARK_GREY = 3
     BLACK = 4
 
 
