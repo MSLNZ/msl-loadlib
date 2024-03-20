@@ -532,6 +532,7 @@ class MenuGroup:
             instance as an argument and the returned object is ignored.
         :param data: User data associated with the menu item.
         :param flags: Controls the appearance and behaviour of the new menu item.
+            Can be any combination (bitwise OR) of :class:`.MenuFlag` values.
 
         :return: The menu item that was appended to the group.
         """
@@ -602,6 +603,7 @@ class Menu:
             instance as an argument and the returned object is ignored.
         :param data: User data associated with the menu item.
         :param flags: Controls the appearance and behaviour of the new menu item.
+            Can be any combination (bitwise OR) of :class:`.MenuFlag` values.
 
         :return: The menu item that was appended.
         """
@@ -662,12 +664,13 @@ class Application:
                  title: str = 'ActiveX') -> None:
         """Create the main application window to display ActiveX controls.
 
-        :param background: The background colour of the main window.
-        :param class_style: The class style(s). Can be any combination (bitwise OR)
-            of the :class:`.ClassStyle` values.
+        :param background: The background colour of the main window
+            (a :class:`.Background` value).
+        :param class_style: The class style(s). Can be any combination
+            (bitwise OR) of :class:`.ClassStyle` values.
         :param icon: The application icon.
         :param style: The window style(s). Can be any combination (bitwise OR)
-            of the :class:`.WindowStyle` values.
+            of :class:`.WindowStyle` values.
         :param title: The text to display in the titlebar (if one is visible).
         """
         super().__init__()
@@ -803,9 +806,10 @@ class Application:
         :param width: Width (in pixels) of the ActiveX object.
         :param height: Height (in pixels) of the ActiveX object.
         :param style: Style of the window that is created to contain the ActiveX
-            object. A combination (bitwise OR) of :class:`.WindowStyle` values.
+            object. Can be any combination (bitwise OR) of :class:`.WindowStyle`
+            values.
         :param ex_style: Extended style of the window that is created to contain
-            the ActiveX object. A combination (bitwise OR) of
+            the ActiveX object. Can be any combination (bitwise OR) of
             :class:`.ExtendedWindowStyle` values.
 
         :return: The interface pointer to the ActiveX library.
@@ -860,8 +864,8 @@ class Application:
         :param hwnd: A handle to the owner window of the message box to be created.
         :param language_id: The language for the text displayed in the message box
             button(s).
-        :param options: The contents and behavior of the dialog box. A combination
-            (bitwise OR) of :class:`.MessageBoxOption` values.
+        :param options: The contents and behavior of the dialog box. Can be any
+            combination (bitwise OR) of :class:`.MessageBoxOption` values.
         :param text: The message to be displayed.
         :param title: The dialog box title.
 
@@ -897,8 +901,8 @@ class Application:
         :param y: The new position of the top of the window.
         :param width: The new width of the window (in pixels).
         :param height: The new height of the window (in pixels).
-        :param flags: The window sizing and positioning flags. A combination
-            (bitwise OR) of :class:`.PositionFlag` values.
+        :param flags: The window sizing and positioning flags. Can be any
+            combination (bitwise OR) of :class:`.PositionFlag` values.
         """
         user32.SetWindowPos(self._hwnd, None, x, y, width, height, flags)
 
