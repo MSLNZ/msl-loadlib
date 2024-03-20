@@ -244,6 +244,9 @@ try:
             ('hIconSm', wt.HICON),
         ]
 
+    kernel32.GetModuleHandleW.restype = wt.HMODULE
+    kernel32.GetModuleHandleW.argtypes = [wt.LPCWSTR]
+
     user32.CreateWindowExW.errcheck = _err_check
     user32.CreateWindowExW.restype = wt.HWND
     user32.CreateWindowExW.argtypes = [
@@ -299,15 +302,60 @@ try:
     user32.UnregisterClassW.restype = wt.BOOL
     user32.UnregisterClassW.argtypes = [wt.LPCWSTR, wt.HINSTANCE]
 
+    user32.CreatePopupMenu.restype = wt.HMENU
+    user32.CreatePopupMenu.argtypes = []
+
     user32.CreateMenu.errcheck = _err_check
     user32.CreateMenu.restype = wt.HMENU
     user32.CreateMenu.argtypes = []
 
-    shell32.ExtractIconW.restype = wt.HICON
-    shell32.ExtractIconW.argtypes = [wt.HINSTANCE, wt.LPCWSTR, wt.UINT]
+    user32.LoadIconW.restype = wt.HICON
+    user32.LoadIconW.argtypes = [wt.HINSTANCE, wt.LPCWSTR]
+
+    user32.LoadCursorW.restype = wt.HANDLE
+    user32.LoadCursorW.argtypes = [wt.HINSTANCE, wt.LPCWSTR]
 
     user32.DestroyIcon.restype = wt.BOOL
     user32.DestroyIcon.argtypes = [wt.HICON]
+
+    user32.SetMenu.restype = wt.BOOL
+    user32.SetMenu.argtypes = [wt.HWND, wt.HMENU]
+
+    user32.ShowWindow.restype = wt.BOOL
+    user32.ShowWindow.argtypes = [wt.HWND, ctypes.c_int]
+
+    user32.UpdateWindow.restype = wt.BOOL
+    user32.UpdateWindow.argtypes = [wt.HWND]
+
+    user32.GetWindowThreadProcessId.restype = wt.DWORD
+    user32.GetWindowThreadProcessId.argtypes = [wt.HWND, wt.LPDWORD]
+
+    user32.PostQuitMessage.restype = ctypes.c_void_p
+    user32.PostQuitMessage.argtypes = [ctypes.c_int]
+
+    user32.PostMessageW.restype = wt.BOOL
+    user32.PostMessageW.argtypes = [wt.HWND, wt.UINT, wt.WPARAM, wt.LPARAM]
+
+    user32.GetMessageW.restype = wt.BOOL
+    user32.GetMessageW.argtypes = [wt.LPMSG, wt.HWND, wt.UINT, wt.UINT]
+
+    user32.TranslateMessage.restype = wt.BOOL
+    user32.TranslateMessage.argtypes = [ctypes.POINTER(wt.MSG)]
+
+    user32.DispatchMessageW.restype = LRESULT
+    user32.DispatchMessageW.argtypes = [ctypes.POINTER(wt.MSG)]
+
+    gdi32.GetStockObject.restype = wt.HGDIOBJ
+    gdi32.GetStockObject.argtypes = [ctypes.c_int]
+
+    shell32.ExtractIconW.restype = wt.HICON
+    shell32.ExtractIconW.argtypes = [wt.HINSTANCE, wt.LPCWSTR, wt.UINT]
+
+    atl.AtlAxWinInit.restype = wt.BOOL
+    atl.AtlAxWinInit.argtypes = []
+
+    atl.AtlAxGetControl.restype = ctypes.HRESULT
+    atl.AtlAxGetControl.argtypes = [wt.HWND, ctypes.c_void_p]
 
 except AttributeError:
     kernel32 = user32 = atl = gdi32 = shell32 = WNDCLASSEXW = None
@@ -828,12 +876,11 @@ class Application:
         This is a blocking call. Create and run the application in a separate
         thread if you want to execute other code while the application is running.
         """
-        byref = ctypes.byref
         msg = wt.MSG()
         try:
-            while user32.GetMessageW(byref(msg), None, 0, 0) != 0:
-                user32.TranslateMessage(byref(msg))
-                user32.DispatchMessageW(byref(msg))
+            while user32.GetMessageW(msg, None, 0, 0) != 0:
+                user32.TranslateMessage(msg)
+                user32.DispatchMessageW(msg)
         except KeyboardInterrupt:
             pass
 
