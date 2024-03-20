@@ -306,6 +306,9 @@ try:
     shell32.ExtractIconW.restype = wt.HICON
     shell32.ExtractIconW.argtypes = [wt.HINSTANCE, wt.LPCWSTR, wt.UINT]
 
+    user32.DestroyIcon.restype = wt.BOOL
+    user32.DestroyIcon.argtypes = [wt.HICON]
+
 except AttributeError:
     kernel32 = user32 = atl = gdi32 = shell32 = WNDCLASSEXW = None
 
