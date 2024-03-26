@@ -32,45 +32,39 @@ def main():
     .. _here: https://msl-loadlib.readthedocs.io/en/stable/_modules/msl/loadlib/start_server32.html#main
     """
     parser = argparse.ArgumentParser(
-        description='Starts a 32-bit Python interpreter which allows for inter-process communication'
-                    ' via a client-server protocol -- i.e., calling a 32-bit process (server) from a'
-                    ' 64-bit process (client).',
-    )
+        description='Created by the msl-loadlib Python package.\n\n'
+                    'Runs a 32-bit Python interpreter for inter-process communication for the client-server\n'
+                    'protocol, i.e., call a 32-bit process (server) from a 64-bit process (client).',
+        formatter_class=argparse.RawTextHelpFormatter)
 
-    parser.add_argument('-m', '--module', default=None,
-                        help='the name of the Python module to run on the 32-bit '
-                             'server (the module must contain a class that is a '
-                             'subclass of msl.loadlib.Server32)')
+    parser.add_argument('-i', '--interactive', action='store_true',
+                        help='run an interactive console with the 32-bit server and exit')
+
+    parser.add_argument('-v', '--version', action='store_true',
+                        help='show the Python version of the 32-bit server and exit')
 
     parser.add_argument('-s', '--append-sys-path', default=None,
-                        help=r'append path(s) to the sys.path variable on the 32-bit '
-                             r'server, e.g., -s D:\path\to\my_scripts, or for '
-                             r'multiple paths separate each path by a semi-colon, '
-                             r'e.g., -s D:\path\to\my_scripts;D:\lib')
+                        help='append path(s) to sys.path on the 32-bit server\n'
+                             '(to append multiple paths, separate each path with a semicolon)')
 
     parser.add_argument('-e', '--append-environ-path', default=None,
-                        help=r"append path(s) to the os.environ['PATH'] variable on "
-                             r"the 32-bit server, e.g., -e D:\code\bin, or for "
-                             r"multiple paths separate each path by a semi-colon, "
-                             r"e.g., -e D:\code\bin;D:\lib")
+                        help='append path(s) to os.environ["PATH"] on the 32-bit server\n'
+                             '(to append multiple paths, separate each path with a semicolon)')
+
+    parser.add_argument('-m', '--module', default=None,
+                        help='a Python module to run on the 32-bit server\n'
+                             '(the module must contain a subclass of Server32)')
 
     parser.add_argument('-H', '--host', default='127.0.0.1',
-                        help='the IP address of the host [default: 127.0.0.1]')
+                        help='hostname or IP address to run the server on [default: 127.0.0.1]')
 
     parser.add_argument('-p', '--port', default=8080,
                         help='the port to open on the host [default: 8080]')
 
-    parser.add_argument('-v', '--version', action='store_true',
-                        help='show the Python version that the server is running on '
-                             'and exit')
-
-    parser.add_argument('-i', '--interactive', action='store_true',
-                        help='start a 32-bit interactive Python console and exit')
-
     parser.add_argument('-k', '--kwargs', default=None,
-                        help='keyword arguments that are passed to the constructor '
-                             'of the msl.loadlib.Server32 subclass as "key=value;" '
-                             'pairs, e.g., -k a=-2;b=3.14;c=whatever;d=[1,2,3]')
+                        help='keyword arguments that are passed to the constructor of the\n'
+                             'Server32 subclass as name=value pairs separated with a semicolon\n'
+                             'e.g., --kwargs a=100;b=3.14;c=filename.csv')
 
     args = parser.parse_args()
 
