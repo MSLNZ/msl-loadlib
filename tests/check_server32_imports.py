@@ -1,4 +1,4 @@
-"""
+r"""
 Run this script using the server32 executable to see which modules from
 the standard library cannot be imported, e.g.,
 
@@ -11,8 +11,9 @@ The following error will be displayed when the script exits (but that's ok)
   Cannot start the 32-bit server.
 
 """
+import importlib
 
-# Builtin modules in Python 3.11 (https://docs.python.org/3/py-modindex.html)
+# Builtin modules in Python 3.12 (https://docs.python.org/3/py-modindex.html)
 # (module-name, operating-system-dependency)
 modules = [
     ('__future__', ''),
@@ -23,9 +24,7 @@ modules = [
     ('argparse', ''),
     ('array', ''),
     ('ast', ''),
-    ('asynchat', ''),
     ('asyncio', ''),
-    ('asyncore', ''),
     ('atexit', ''),
     ('audioop', ''),
     ('base64', ''),
@@ -71,50 +70,6 @@ modules = [
     ('decimal', ''),
     ('difflib', ''),
     ('dis', ''),
-    ('distutils', ''),
-    ('distutils.archive_util', ''),
-    ('distutils.bcppcompiler', ''),
-    ('distutils.ccompiler', ''),
-    ('distutils.cmd', ''),
-    ('distutils.command', ''),
-    ('distutils.command.bdist', ''),
-    ('distutils.command.bdist_dumb', ''),
-    ('distutils.command.bdist_packager', ''),
-    ('distutils.command.bdist_rpm', ''),
-    ('distutils.command.build', ''),
-    ('distutils.command.build_clib', ''),
-    ('distutils.command.build_ext', ''),
-    ('distutils.command.build_py', ''),
-    ('distutils.command.build_scripts', ''),
-    ('distutils.command.check', ''),
-    ('distutils.command.clean', ''),
-    ('distutils.command.config', ''),
-    ('distutils.command.install', ''),
-    ('distutils.command.install_data', ''),
-    ('distutils.command.install_headers', ''),
-    ('distutils.command.install_lib', ''),
-    ('distutils.command.install_scripts', ''),
-    ('distutils.command.register', ''),
-    ('distutils.command.sdist', ''),
-    ('distutils.core', ''),
-    ('distutils.cygwinccompiler', ''),
-    ('distutils.debug', ''),
-    ('distutils.dep_util', ''),
-    ('distutils.dir_util', ''),
-    ('distutils.dist', ''),
-    ('distutils.errors', ''),
-    ('distutils.extension', ''),
-    ('distutils.fancy_getopt', ''),
-    ('distutils.file_util', ''),
-    ('distutils.filelist', ''),
-    ('distutils.log', ''),
-    ('distutils.msvccompiler', ''),
-    ('distutils.spawn', ''),
-    ('distutils.sysconfig', ''),
-    ('distutils.text_file', ''),
-    ('distutils.unixccompiler', ''),
-    ('distutils.util', ''),
-    ('distutils.version', ''),
     ('doctest', ''),
     ('email', ''),
     ('email.charset', ''),
@@ -127,6 +82,14 @@ modules = [
     ('email.iterators', ''),
     ('email.message', ''),
     ('email.mime', ''),
+    ('email.mime.application', ''),
+    ('email.mime.audio', ''),
+    ('email.mime.base', ''),
+    ('email.mime.image', ''),
+    ('email.mime.message', ''),
+    ('email.mime.multipart', ''),
+    ('email.mime.nonmultipart', ''),
+    ('email.mime.text', ''),
     ('email.parser', ''),
     ('email.policy', ''),
     ('email.utils', ''),
@@ -167,7 +130,6 @@ modules = [
     ('idlelib', ''),
     ('imaplib', ''),
     ('imghdr', ''),
-    ('imp', ''),
     ('importlib', ''),
     ('importlib.abc', ''),
     ('importlib.machinery', ''),
@@ -250,7 +212,6 @@ modules = [
     ('shutil', ''),
     ('signal', ''),
     ('site', ''),
-    ('smtpd', ''),
     ('smtplib', ''),
     ('sndhdr', ''),
     ('socket', ''),
@@ -275,6 +236,7 @@ modules = [
     ('tempfile', ''),
     ('termios', '(Unix)'),
     ('test', ''),
+    ('test.regrtest', ''),
     ('test.support', ''),
     ('test.support.bytecode_helper', ''),
     ('test.support.import_helper', ''),
@@ -339,6 +301,7 @@ modules = [
     ('xml.dom', ''),
     ('xml.dom.minidom', ''),
     ('xml.dom.pulldom', ''),
+    ('xml.etree.ElementInclude', ''),
     ('xml.etree.ElementTree', ''),
     ('xml.parsers.expat', ''),
     ('xml.parsers.expat.errors', ''),
@@ -364,18 +327,22 @@ from msl import loadlib
 from msl.loadlib import LoadLibrary
 from msl.loadlib import Client64
 from msl.loadlib import Server32
+from msl.loadlib import constants
+from msl.loadlib import utils
 from msl.loadlib.activex import Application
-from msl.loadlib.activex import WS_CHILD
+from msl.loadlib.activex import Background
 from msl.examples.loadlib import EXAMPLES_DIR
 
-if loadlib.IS_WINDOWS:
+from sys import monitoring
+
+if constants.IS_WINDOWS:
     import clr
     import comtypes
     import pythonnet
 
 for name, os in modules:
     try:
-        __import__(name)
+        importlib.import_module(name)
     except ImportError:
         print(f'  {name} {os}')
 print('')
