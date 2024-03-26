@@ -368,14 +368,14 @@ class LoadLibrary:
         and the message loop is not running
         (to run it call :meth:`~msl.loadlib.activex.Application.run`).
 
-        .. versionadded:: 1.0.0
+        .. versionadded:: 1.0
         """
         return self._app
 
     def cleanup(self) -> None:
         """Clean up references to the library.
 
-        .. versionadded:: 0.10.0
+        .. versionadded:: 0.10
         """
         self._assembly = None
         self._lib = None
