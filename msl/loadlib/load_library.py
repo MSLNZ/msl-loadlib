@@ -272,8 +272,8 @@ class LoadLibrary:
                     'Run: pip install pythonnet'
                 )
 
-            import clr
-            import System
+            import clr  # noqa: clr is an alias for pythonnet
+            import System  # noqa: available once pythonnet is imported
             dotnet = {'System': System}
 
             # the shared library must be available in sys.path
@@ -282,7 +282,7 @@ class LoadLibrary:
 
             try:
                 # don't include the library extension
-                clr.AddReference(os.path.splitext(tail)[0])
+                clr.AddReference(os.path.splitext(tail)[0])  # noqa: AddReference exists
             except (System.IO.FileNotFoundException, System.IO.FileLoadException):
                 # The file must exist since its existence is checked above.
                 # There must be another reason why loading the DLL raises this
@@ -323,7 +323,7 @@ class LoadLibrary:
             except Exception as e:
                 utils.logger.error(e)
                 utils.logger.error('The LoaderExceptions are:')
-                for item in e.LoaderExceptions:
+                for item in e.LoaderExceptions:  # noqa: LoaderExceptions comes from .NET
                     utils.logger.error('  %s', item.Message)
             else:
                 for t in types:
@@ -332,7 +332,7 @@ class LoadLibrary:
                             obj = __import__(t.Namespace)
                         else:
                             obj = getattr(__import__('clr'), t.FullName)
-                    except:
+                    except:  # noqa: PEP 8: E722 do not use bare 'except'
                         obj = t
                         obj.__name__ = t.FullName
 
