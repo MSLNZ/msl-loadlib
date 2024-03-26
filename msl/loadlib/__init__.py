@@ -7,6 +7,7 @@ from . import utils
 from ._version import __version__
 from ._version import __version_info__
 from .client64 import Client64
+from .constants import IS_PYTHON_64BIT
 from .exceptions import ConnectionTimeoutError
 from .exceptions import ResponseTimeoutError
 from .exceptions import Server32Error
