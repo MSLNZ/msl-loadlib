@@ -69,7 +69,7 @@ def main():
     args = parser.parse_args()
 
     if args.version:
-        print('Python ' + sys.version)
+        print(f'Python {sys.version}')
         return 0
 
     # include directories in sys.path
@@ -88,11 +88,27 @@ def main():
                 os.environ['PATH'] += os.pathsep + os.path.abspath(path)
 
     if args.interactive:
-        globals().update({'exit': sys.exit, 'quit': sys.exit})
-        console = code.InteractiveConsole(locals=dict(globals(), **locals()))
-        banner = 'Python ' + sys.version
-        banner += '\nType exit() or quit() or <CTRL+Z then Enter> to terminate the console.'
-        console.interact(banner=banner)
+        import builtins
+
+        class Quitter:
+            def __repr__(self):
+                ctrl = '"Ctrl-Z then Enter"' if sys.platform == 'win32' else 'Ctrl-D (i.e. EOF)'
+                return f'Use exit(), quit() or {ctrl} to exit the 32-bit server console'
+
+            def __call__(self, *args, **kwargs):
+                raise SystemExit
+
+        quitter = Quitter()
+        builtins.exit = quitter
+        builtins.quit = quitter
+
+        locs = dict((k, v) for k, v in globals().items() if k.startswith('_'))
+        locs['__doc__'] = 'Interactive console for the 32-bit server (msl-loadlib).'
+        console = code.InteractiveConsole(locals=locs)
+        try:
+            console.interact(banner=f'Python {sys.version} on {sys.platform}\n{quitter}', exitmsg='')
+        except SystemExit:
+            console.write('\n')
         return 0
 
     # build the keyword-argument dictionary
