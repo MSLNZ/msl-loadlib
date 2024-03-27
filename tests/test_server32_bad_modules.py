@@ -86,7 +86,7 @@ def test_bad_lib_path():
 
 @skipif_no_server32
 def test_bad_lib_type():
-    check('bad_lib_type', r"Cannot load libtype='invalid'")
+    check('bad_lib_type', r"ValueError: Invalid libtype 'invalid'")
 
 
 @skipif_no_server32

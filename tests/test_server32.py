@@ -229,7 +229,7 @@ def test_server32_error():
         c.add('hello', 'world')
     except loadlib.Server32Error as err:
         assert err.name == 'ArgumentError'
-        assert err.value.endswith("TypeError: wrong type")
+        assert 'argument 1: TypeError:' in err.value
         assert err.traceback.endswith('return self.lib.add(a, b)')
 
 
@@ -303,17 +303,8 @@ def test_activex():
         def this(self):
             return self.request32('this')
 
-        def static(self):
-            return self.request32('static')
-
-        def create(self):
-            return self.request32('create')
-
-        def parent(self):
-            return self.request32('parent')
-
-        def panel(self):
-            return self.request32('panel')
+        def reload(self):
+            return self.request32('reload')
 
         def load_library(self):
             return self.request32('load_library')
@@ -328,13 +319,10 @@ def test_activex():
 
     # don't care whether the value is True or False only that it is a boolean
     assert isinstance(ax.this(), bool)
-    assert isinstance(ax.static(), bool)
-    assert isinstance(ax.create(), bool)
-    assert isinstance(ax.parent(), bool)
-    assert isinstance(ax.panel(), bool)
+    assert isinstance(ax.reload(), bool)
     assert isinstance(ax.load_library(), bool)
-    assert ax.error1().endswith("Cannot find 'ABC.DEF.GHI' for libtype='activex'")
-    assert ax.error2().endswith("Cannot find 'ABC.DEF.GHI' for libtype='activex'")
+    assert ax.error1().endswith("Cannot find an ActiveX library with ID 'ABC.DEF.GHI'")
+    assert ax.error2().endswith("Cannot find an ActiveX library with ID 'ABC.DEF.GHI'")
 
     # no numpy warnings from comtypes
     out, err = ax.shutdown_server32()

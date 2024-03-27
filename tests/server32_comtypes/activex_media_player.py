@@ -13,33 +13,23 @@ prog_id = 'MediaPlayer.MediaPlayer.1'
 
 class ActiveX(Server32):
 
-    def __init__(self, host, port, **kwargs):
+    def __init__(self, host, port):
         super().__init__(prog_id, 'activex', host, port)
+        self._app = Application()
 
     def this(self):
         return self.lib.IsSoundCardEnabled()
 
-    def static(self):
-        return Application.load(prog_id).IsSoundCardEnabled()
+    def reload(self):
+        return self._app.load(prog_id).IsSoundCardEnabled()
 
-    def create(self):
-        return Application().load(prog_id).IsSoundCardEnabled()
-
-    def parent(self):
-        app = Application()
-        return app.load(prog_id, parent=app).IsSoundCardEnabled()
-
-    def panel(self):
-        app = Application()
-        panel = app.create_panel()
-        return app.load(prog_id, parent=panel).IsSoundCardEnabled()
-
-    def load_library(self):
+    @staticmethod
+    def load_library():
         return LoadLibrary(prog_id, 'activex').lib.IsSoundCardEnabled()
 
     def error1(self):
         try:
-            Application.load('ABC.DEF.GHI')
+            self._app.load('ABC.DEF.GHI')
         except OSError as e:
             return str(e)
         else:
