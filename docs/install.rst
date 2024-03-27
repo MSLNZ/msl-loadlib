@@ -106,7 +106,8 @@ install comtypes_
 
    When loading a shared library it is vital that all dependencies of the
    library are also on the computer and that the directory that the dependencies
-   are located in is available on the PATH_ variable. A helpful utility to
+   are located in is available on the PATH_ variable (and possibly you may need
+   to add a directory with :func:`os.add_dll_directory`). A helpful utility to
    determine the dependencies of a shared library on Windows is Dependencies_
    (which is a modern `Dependency Walker`_). Microsoft also provides the
    DUMPBIN_ tool. For finding the dependencies of a .NET library the

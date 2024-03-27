@@ -1,5 +1,6 @@
 import gc
 import os.path
+import pathlib
 from datetime import datetime
 
 import pytest
@@ -7,9 +8,10 @@ import pytest
 from conftest import skipif_no_server32
 from conftest import skipif_not_windows
 from msl.examples.loadlib import Cpp64
-from msl.loadlib import Client64
-from msl.loadlib.constants import SERVER_FILENAME
 from msl.examples.loadlib import EXAMPLES_DIR
+from msl.loadlib import Client64
+from msl.loadlib.client64 import _build_paths
+from msl.loadlib.constants import SERVER_FILENAME
 
 
 @skipif_no_server32
@@ -79,3 +81,44 @@ def test_module32_as_path():
     assert os.path.isfile(path)
     client = Client64(module32=path)
     assert isinstance(client.request32('get_time'), datetime)
+
+
+def test_build_paths_none():
+    paths = _build_paths(None)
+    assert isinstance(paths, list)
+    assert len(paths) == 0
+
+
+class BytesPath:
+
+    def __init__(self, path: bytes) -> None:
+        self._path = path
+
+    def __fspath__(self) -> bytes:
+        return self._path
+
+
+@pytest.mark.parametrize('path', ['here', b'here', pathlib.Path('here'), BytesPath(b'here')])
+def test_build_paths_single(path):
+    assert _build_paths(path) == [os.path.join(os.getcwd(), 'here')]
+
+
+def test_build_paths_iterable():
+    cwd = os.getcwd()
+    paths = ['a', b'b', pathlib.Path('c'), BytesPath(b'd')]
+    assert _build_paths(paths) == [
+        os.path.join(cwd, 'a'),
+        os.path.join(cwd, 'b'),
+        os.path.join(cwd, 'c'),
+        os.path.join(cwd, 'd'),
+    ]
+
+
+def test_build_paths_ignore():
+    cwd = os.getcwd()
+    paths = ['a', b'b', pathlib.Path('c'), BytesPath(b'd')]
+    assert _build_paths(paths, ignore=[os.path.join(cwd, 'c')]) == [
+        os.path.join(cwd, 'a'),
+        os.path.join(cwd, 'b'),
+        os.path.join(cwd, 'd'),
+    ]

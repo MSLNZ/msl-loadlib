@@ -33,6 +33,7 @@ from .constants import SERVER_FILENAME
 from .exceptions import ConnectionTimeoutError
 from .exceptions import ResponseTimeoutError
 from .exceptions import Server32Error
+from .load_library import PathLike
 from .server32 import METADATA
 from .server32 import OK
 from .server32 import SHUTDOWN
@@ -46,15 +47,16 @@ Self = TypeVar('Self', bound='Client64')
 class Client64:
 
     def __init__(self,
-                 module32: str,
+                 module32: PathLike,
                  *,
-                 append_environ_path: str | Iterable[str] | None = None,
-                 append_sys_path: str | Iterable[str] | None = None,
+                 add_dll_directory: PathLike | Iterable[PathLike] | None = None,
+                 append_environ_path: PathLike | Iterable[PathLike] | None = None,
+                 append_sys_path: PathLike | Iterable[PathLike] | None = None,
                  host: str | None = '127.0.0.1',
                  port: int | None = None,
                  protocol: int = 5,
                  rpc_timeout: float | None = None,
-                 server32_dir: str | None = None,
+                 server32_dir: PathLike | None = None,
                  timeout: float = 10,
                  **kwargs: Any) -> None:
         """Base class for communicating with a 32-bit library from 64-bit Python.
@@ -76,10 +78,13 @@ class Client64:
 
         .. versionchanged:: 1.0
            Removed the deprecated `quiet` argument. The `host` value may now be `None`.
+           Added the `add_dll_directory` argument.
 
         :param module32: The name of, or the path to, a Python module that will be
             imported by the 32-bit server. The module must contain a class that inherits
             from :class:`~.server32.Server32`.
+        :param add_dll_directory: Add path(s) to the 32-bit server's DLL search path.
+            See :func:`os.add_dll_directory` for more details. Available on Windows only.
         :param append_environ_path: Append path(s) to the 32-bit server's
             :data:`os.environ['PATH'] <os.environ>` variable. This may be useful if
             the library that is being loaded requires additional libraries that
@@ -124,14 +129,16 @@ class Client64:
         self._client: MockClient | HTTPClient | None = None
         if host is None:
             self._client = MockClient(
-                module32,
+                os.fsdecode(module32),
+                add_dll_directory=add_dll_directory,
                 append_environ_path=append_environ_path,
                 append_sys_path=append_sys_path,
                 **kwargs
             )
         else:
             self._client = HTTPClient(
-                module32,
+                os.fsdecode(module32),
+                add_dll_directory=add_dll_directory,
                 append_environ_path=append_environ_path,
                 append_sys_path=append_sys_path,
                 host=host,
@@ -236,13 +243,14 @@ class HTTPClient:
     def __init__(self,
                  module32: str,
                  *,
-                 append_environ_path: str | Iterable[str] | None = None,
-                 append_sys_path: str | Iterable[str] | None = None,
+                 add_dll_directory: PathLike | Iterable[PathLike] | None = None,
+                 append_environ_path: PathLike | Iterable[PathLike] | None = None,
+                 append_sys_path: PathLike | Iterable[PathLike] | None = None,
                  host: str | None = '127.0.0.1',
                  port: int | None = None,
                  protocol: int = 5,
                  rpc_timeout: float | None = None,
-                 server32_dir: str | None = None,
+                 server32_dir: PathLike | None = None,
                  timeout: float = 10,
                  **kwargs: Any) -> None:
         """Start a server and connect to it."""
@@ -261,7 +269,7 @@ class HTTPClient:
 
         # Find the 32-bit server executable.
         # Check a few locations in case msl-loadlib is frozen.
-        dirs = [os.path.dirname(__file__)] if server32_dir is None else [server32_dir]
+        dirs = [os.path.dirname(__file__)] if server32_dir is None else [os.fsdecode(server32_dir)]
         if getattr(sys, 'frozen', False):
             # PyInstaller location for data files
             if hasattr(sys, '_MEIPASS'):
@@ -297,21 +305,18 @@ class HTTPClient:
 
         # include paths to the 32-bit server's sys.path
         sys_path = list(sys.path)
-        if append_sys_path is not None:
-            if isinstance(append_sys_path, str):
-                sys_path.append(append_sys_path)
-            else:
-                sys_path.extend(append_sys_path)
+        sys_path.extend(_build_paths(append_sys_path, ignore=sys_path))
         cmd.extend(['--append-sys-path', ';'.join(sys_path)])
 
         # include paths to the 32-bit server's os.environ['PATH']
         env_path = [os.getcwd()]
-        if append_environ_path is not None:
-            if isinstance(append_environ_path, str):
-                env_path.append(append_environ_path)
-            else:
-                env_path.extend(append_environ_path)
+        env_path.extend(_build_paths(append_environ_path, ignore=env_path))
         cmd.extend(['--append-environ-path', ';'.join(env_path)])
+
+        # include paths to the 32-bit server's os.add_dll_directory()
+        dll_dirs = _build_paths(add_dll_directory)
+        if dll_dirs:
+            cmd.extend(['--add-dll-directory', ';'.join(dll_dirs)])
 
         # include any keyword arguments
         if kwargs:
@@ -497,18 +502,18 @@ class MockClient:
     def __init__(self,
                  module32: str,
                  *,
-                 append_environ_path: str | Iterable[str] | None = None,
-                 append_sys_path: str | Iterable[str] | None = None,
+                 add_dll_directory: PathLike | Iterable[PathLike] | None = None,
+                 append_environ_path: PathLike | Iterable[PathLike] | None = None,
+                 append_sys_path: PathLike | Iterable[PathLike] | None = None,
                  **kwargs: Any) -> None:
         """Mocks the HTTP connection to the server."""
-        if append_environ_path:
-            if isinstance(append_environ_path, str):
-                append_environ_path = [append_environ_path]
+        self._added_dll_directories = []
+        for path in _build_paths(add_dll_directory):
+            self._added_dll_directories.append(os.add_dll_directory(path))
 
-            env_paths = os.environ['PATH'].split(os.pathsep)
-            new_env_paths = [path for path in append_environ_path
-                             if path and path not in env_paths]
-
+        if append_environ_path is not None:
+            ignore = os.environ['PATH'].split(os.pathsep)
+            new_env_paths = _build_paths(append_environ_path, ignore=ignore)
             if new_env_paths:
                 os.environ['PATH'] += os.pathsep + os.pathsep.join(new_env_paths)
 
@@ -519,12 +524,8 @@ class MockClient:
         if directory:
             if directory not in sys.path:
                 sys.path.append(directory)
-        if append_sys_path:
-            if isinstance(append_sys_path, str):
-                append_sys_path = [append_sys_path]
-            for path in append_sys_path:
-                if path and path not in sys.path:
-                    sys.path.append(path)
+        if append_sys_path is not None:
+            sys.path.extend(_build_paths(append_sys_path, ignore=sys.path))
 
         # get the Server32 subclass in the module
         cls = None
@@ -550,6 +551,11 @@ class MockClient:
     def cleanup(self) -> None:
         """Close the socket (which was never bound and activated)."""
         self.server.socket.close()
+
+        for directory in self._added_dll_directories:
+            if directory.path:
+                directory.close()
+        self._added_dll_directories.clear()
 
     @property
     def connection(self) -> None:
@@ -592,3 +598,24 @@ class MockClient:
         """Shutdown the mocked server."""
         self.cleanup()
         return io.BytesIO(), io.BytesIO()
+
+
+def _build_paths(paths: PathLike | Iterable[PathLike] | None,
+                 *,
+                 ignore: list[str] = None) -> list[str]:
+    """Build a list of absolute paths."""
+    if paths is None:
+        return []
+
+    if ignore is None:
+        ignore = []
+
+    if isinstance(paths, (str, bytes, os.PathLike)):
+        paths = [paths]
+
+    out = []
+    for p in paths:
+        path = os.path.abspath(os.fsdecode(p))
+        if path not in ignore:
+            out.append(path)
+    return out

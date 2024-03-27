@@ -43,6 +43,11 @@ def main():
     parser.add_argument('-v', '--version', action='store_true',
                         help='show the Python version of the 32-bit server and exit')
 
+    parser.add_argument('-d', '--add-dll-directory', default=None,
+                        help='add path(s) to os.add_dll_directory() on the 32-bit server\n'
+                             '(to add multiple paths, separate each path with a semicolon)\n'
+                             'Supported on Windows only')
+
     parser.add_argument('-s', '--append-sys-path', default=None,
                         help='append path(s) to sys.path on the 32-bit server\n'
                              '(to append multiple paths, separate each path with a semicolon)')
@@ -74,18 +79,40 @@ def main():
 
     # include directories in sys.path
     sys.path.append(os.path.abspath('.'))
-    if args.module is not None and os.path.dirname(args.module):
-        sys.path.append(os.path.dirname(args.module))
+    if args.module is not None:
+        mod_dir = os.path.dirname(args.module)
+        if mod_dir and mod_dir not in sys.path:
+            sys.path.append(mod_dir)
     if args.append_sys_path is not None:
         for path in args.append_sys_path.split(';'):
-            if path:
-                sys.path.append(os.path.abspath(path))
+            if path and path not in sys.path:
+                sys.path.append(path)
 
     # include directories in os.environ['PATH']
     if args.append_environ_path is not None:
         for path in args.append_environ_path.split(';'):
             if path:
-                os.environ['PATH'] += os.pathsep + os.path.abspath(path)
+                os.environ['PATH'] += os.pathsep + path
+
+    # include directories with os.add_dll_directory()
+    dll_dirs = []
+    if args.add_dll_directory is not None:
+        for path in args.add_dll_directory.split(';'):
+            if path:
+                try:
+                    dll_dirs.append(os.add_dll_directory(path))
+                except OSError as e:
+                    err = (f'os.add_dll_directory() raised the following error on the 32-bit server:\n'
+                           f'  {e.__class__.__name__}: {e}\n'
+                           f'Cannot start the 32-bit server.')
+                    print(err, file=sys.stderr)
+                    return -1
+                except AttributeError:
+                    err = ('os.add_dll_directory() is not supported on the 32-bit server.\n'
+                           'Cannot start the 32-bit server.')
+                    print(err, file=sys.stderr)
+                    return -1
+        os.added_dll_directories = dll_dirs
 
     if args.interactive:
         import builtins
@@ -109,6 +136,10 @@ def main():
             console.interact(banner=f'Python {sys.version} on {sys.platform}\n{quitter}', exitmsg='')
         except SystemExit:
             console.write('\n')
+        finally:
+            for directory in dll_dirs:
+                if directory.path:
+                    directory.close()
         return 0
 
     # build the keyword-argument dictionary
@@ -227,6 +258,9 @@ def main():
         return -1
     finally:
         server.server_close()
+        for directory in dll_dirs:
+            if directory.path:
+                directory.close()
 
 
 if __name__ == '__main__':
