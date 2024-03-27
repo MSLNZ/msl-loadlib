@@ -5,3 +5,4 @@ msl.loadlib.client64 module
     :members:
     :undoc-members:
     :show-inheritance:
+    :exclude-members: HTTPClient, MockClient
