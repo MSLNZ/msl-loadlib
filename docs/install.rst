@@ -142,29 +142,10 @@ If you need to load a Microsoft .NET library then you must install Mono_
 
    pip3 install pythonnet
 
-.. attention::
-
-   If your version of Python is < 3.7, wheels for pythonnet are not available on PyPI
-   and you must build `Python for .NET`_ from source. First, install the build dependencies,
-
-   .. code-block:: console
-
-      sudo apt install libglib2.0-dev clang python3-pip python3-dev
-      pip3 install pycparser
-
-   and then install `Python for .NET`_
-
-   .. code-block:: console
-
-      pip3 install pythonnet
-
-   If you have problems installing `Python for .NET`_ then the best place
-   to find help is on the issues_ page of `Python for .NET`_\'s repository.
-
 .. important::
 
    As of version 0.10.0 of MSL-LoadLib, pythonnet is no longer available
-   on the 32-bit server for Linux. Mono can load both 32-bit and 64-bit
+   on the 32-bit server for Linux. Mono_ can load both 32-bit and 64-bit
    libraries and therefore a 32-bit .NET library can be loaded directly
    via :class:`~msl.loadlib.load_library.LoadLibrary` on 64-bit Linux.
 
@@ -221,25 +202,6 @@ and `Python for .NET`_
 
    pip3 install pythonnet
 
-.. attention::
-
-   If your version of Python is < 3.7, wheels for pythonnet are not available on PyPI
-   and you must build `Python for .NET`_ from source. First, install the build dependencies,
-
-   .. code-block:: console
-
-      brew install pkg-config glib
-      pip3 install pycparser
-
-   and then install `Python for .NET`_
-
-   .. code-block:: console
-
-      pip3 install pythonnet
-
-   If you have problems installing `Python for .NET`_ then the best place
-   to find help is on the issues_ page of `Python for .NET`_\'s repository.
-
 If you need to load a Java library (i.e., a ``.jar`` or ``.class`` file)
 then you must install Py4J_,
 
@@ -266,7 +228,6 @@ and a `Java Runtime Environment`_
 .. _Dependency Walker for .NET: https://github.com/isindicic/DependencyWalker.Net
 .. _Mono: https://www.mono-project.com/download/stable/
 .. _issues: https://github.com/pythonnet/pythonnet/issues
-.. _issue 1210: https://github.com/pythonnet/pythonnet/issues/1210
 .. _Homebrew: https://brew.sh/
 .. _ss: https://man7.org/linux/man-pages/man8/ss.8.html
 .. _ldd: https://man7.org/linux/man-pages/man1/ldd.1.html
