@@ -29,7 +29,7 @@ LibTypes = Literal['cdll', 'windll', 'oledll', 'net', 'clr', 'java', 'com', 'act
 # using TypeVar is equivalent for < 3.11
 Self = TypeVar('Self', bound='LoadLibrary')
 
-PathLike = TypeVar('PathLike', str, bytes, os.PathLike[str], os.PathLike[bytes])
+PathLike = TypeVar('PathLike', str, bytes, os.PathLike)
 """A :term:`path-like object`."""
 
 
