@@ -29,11 +29,14 @@ LibTypes = Literal['cdll', 'windll', 'oledll', 'net', 'clr', 'java', 'com', 'act
 # using TypeVar is equivalent for < 3.11
 Self = TypeVar('Self', bound='LoadLibrary')
 
+PathLike = TypeVar('PathLike', str, bytes, os.PathLike[str], os.PathLike[bytes])
+"""A :term:`path-like object`."""
+
 
 class LoadLibrary:
 
     def __init__(self,
-                 path: str | bytes | os.PathLike,
+                 path: PathLike,
                  libtype: LibTypes | None = None,
                  **kwargs: Any) -> None:
         """Load a shared library.
