@@ -105,16 +105,6 @@ class Server32(HTTPServer):
     def version() -> str:
         """Returns the version of Python that the 32-bit server is running on.
 
-        .. invisible-code-block: pycon
-
-           >>> SKIP_IF_MACOS()
-
-        Example::
-
-            >>> from msl.loadlib import Server32
-            >>> Server32.version()
-            'Python 3.11.4 ...'
-
         .. note::
             This method takes about 1 second to finish because the 32-bit server
             needs to start in order to determine the version of the Python interpreter.
@@ -128,11 +118,6 @@ class Server32(HTTPServer):
 
         This method starts an interactive console, in a new terminal, with the
         Python interpreter on the 32-bit server.
-
-        Example::
-
-            >>> from msl.loadlib import Server32  # doctest: +SKIP
-            >>> Server32.interactive_console()  # doctest: +SKIP
         """
         exe = os.path.join(os.path.dirname(__file__), SERVER_FILENAME)
         if IS_WINDOWS:
@@ -207,11 +192,9 @@ class Server32(HTTPServer):
 
     @staticmethod
     def examples_dir() -> str:
-        """Get the directory where the example libraries are located.
+        """Returns the directory where the example libraries are located.
 
         .. versionadded:: 0.9
-
-        :return: The directory where the example libraries are located.
         """
         if Server32.is_interpreter():
             root = os.path.dirname(sys.executable)
