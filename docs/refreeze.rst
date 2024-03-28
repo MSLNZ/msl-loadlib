@@ -51,9 +51,9 @@ function with the appropriate keyword arguments, for example,
 .. code-block:: python
 
     from msl.loadlib import freeze_server32
-    freeze_server32.main(packages='numpy')
+    freeze_server32.main(imports='numpy')
 
-and run your script using the 32-bit Python interpreter.
+and run your script using a 32-bit Python interpreter.
 
 .. _refreeze-cli:
 
@@ -72,6 +72,6 @@ For example, if you want to include your own package and data files, you would r
 
 .. code-block:: console
 
-   freeze32 --packages my_package --data .\mydata\lib32.dll
+   freeze32 --imports my_package --data .\mydata\lib32.dll
 
 .. _PyInstaller: https://www.pyinstaller.org/
