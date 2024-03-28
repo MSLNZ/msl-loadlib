@@ -3,7 +3,7 @@
 Install
 =======
 
-To install MSL-LoadLib run
+To install msl-loadlib run
 
 .. code-block:: console
 
@@ -25,25 +25,25 @@ Optional dependencies:
   * Py4J_
   * comtypes_
 
-You can install MSL-LoadLib and `Python for .NET`_ using,
+You can install msl-loadlib and `Python for .NET`_ using,
 
 .. code-block:: console
 
    pip install msl-loadlib[clr]
 
-MSL-LoadLib and Py4J_,
+msl-loadlib and Py4J_,
 
 .. code-block:: console
 
    pip install msl-loadlib[java]
 
-MSL-LoadLib and comtypes_,
+msl-loadlib and comtypes_,
 
 .. code-block:: console
 
    pip install msl-loadlib[com]
 
-or MSL-LoadLib and all optional dependencies
+or msl-loadlib and all optional dependencies
 
 .. code-block:: console
 
@@ -51,12 +51,8 @@ or MSL-LoadLib and all optional dependencies
 
 Compatibility
 -------------
-* The :mod:`~msl.loadlib.start_server32` module has been built into a
-  frozen_ Python executable for Windows and Linux and works with the
-  Python versions listed above. The 32-bit server is running on a
-  Python 3 interpreter and therefore all modules that run on the server
-  must use Python 3 syntax.
-* You can create a new 32-bit server. See :ref:`refreeze` for more details.
+* The 32-bit server has been built into a frozen_ Python executable for Windows and Linux.
+* You may create a new 32-bit server. See :ref:`refreeze` for more details.
 
 .. _loadlib-prerequisites:
 
@@ -66,37 +62,35 @@ Prerequisites
 Windows
 +++++++
 64-bit Windows already comes with WoW64_ to run 32-bit software and therefore
-no prerequisites are required to load ``__cdecl`` or ``__stdcall`` libraries.
-However, the library might have its own dependencies, such as a particular
-Visual C++ Redistributable, that may need to be installed.
+no prerequisites are required to load 32-bit libraries. However, the library
+might have its own dependencies, such as a particular Visual C++ Redistributable,
+that may need to be installed.
 
-If you need to load a Microsoft .NET library then you must install
-`Python for .NET`_
+If you need to load a Microsoft .NET library, you must install `Python for .NET`_
 
 .. code-block:: console
 
    pip install pythonnet
 
-If you need to load a Java library (i.e., a ``.jar`` or ``.class`` file)
-then you must install Py4J_,
+If you need to load a Java library (i.e., a ``.jar`` or ``.class`` file),
+you must install Py4J_,
 
 .. code-block:: console
 
    pip install py4j
 
-a `Java Runtime Environment`_, and ensure that the ``java`` executable
-is available on the PATH_ variable. For example, the following should return the
+a `Java Runtime Environment`_, and, ensure that the ``java`` executable is
+available on the PATH_ variable. For example, the following should return the
 version of Java that is installed
 
 .. code-block:: console
 
    C:\Users\username>java --version
-   java 19 2022-09-20
-   Java(TM) SE Runtime Environment (build 19+36-2238)
-   Java HotSpot(TM) 64-Bit Server VM (build 19+36-2238, mixed mode, sharing)
+   java 22 2024-03-19
+   Java(TM) SE Runtime Environment (build 22+36-2370)
+   Java HotSpot(TM) 64-Bit Server VM (build 22+36-2370, mixed mode, sharing)
 
-If you need to load a `Component Object Model`_ library then you must
-install comtypes_
+If you need to load a `Component Object Model`_ (or ActiveX_) library, you must install comtypes_
 
 .. code-block:: console
 
@@ -111,20 +105,22 @@ install comtypes_
    determine the dependencies of a shared library on Windows is Dependencies_
    (which is a modern `Dependency Walker`_). Microsoft also provides the
    DUMPBIN_ tool. For finding the dependencies of a .NET library the
-   `Dependency Walker for .NET`_ can also be helpful.
+   `Dependency Walker for .NET`_ may also be helpful.
 
 Linux
-++++++
-Before using MSL-LoadLib on Linux, the following packages are required.
-
-Install the packages that are required to load 32-bit and 64-bit C/C++
-and FORTRAN libraries
++++++
+Before using msl-loadlib on Linux (Debian), the following packages are required.
+For other linux distributions, use the appropriate system package manager
+(e.g., *yum*) and the equivalent command.
 
 .. attention::
 
    The following packages are required to run the examples that are included
-   with MSL-LoadLib when it is installed. The dependencies for the C/C++ or
+   with msl-loadlib when it is installed. The dependencies for the C/C++ or
    FORTRAN library that you want to load may be different.
+
+Install the packages that are required to load 32-bit and 64-bit C/C++
+and FORTRAN libraries
 
 .. code-block:: console
 
@@ -145,13 +141,14 @@ If you need to load a Microsoft .NET library then you must install Mono_
 
 .. important::
 
-   As of version 0.10.0 of MSL-LoadLib, pythonnet is no longer available
+   As of version 0.10.0 of msl-loadlib, pythonnet is no longer installed
    on the 32-bit server for Linux. Mono_ can load both 32-bit and 64-bit
-   libraries and therefore a 32-bit .NET library can be loaded directly
-   via :class:`~msl.loadlib.load_library.LoadLibrary` on 64-bit Linux.
+   libraries on 64-bit Linux and therefore a 32-bit .NET library can be
+   loaded directly via :class:`~msl.loadlib.load_library.LoadLibrary` on
+   64-bit Linux.
 
-If you need to load a Java library (i.e., a ``.jar`` or ``.class`` file)
-then you must install Py4J_,
+If you need to load a Java library (i.e., a ``.jar`` or ``.class`` file),
+you must install Py4J_,
 
 .. code-block:: console
 
@@ -191,7 +188,7 @@ To load a C/C++ or FORTRAN library install gcc (which includes gfortran)
 
    brew install gcc
 
-If you need to load a Microsoft .NET library then you must install Mono_,
+If you need to load a Microsoft .NET library, you must install Mono_,
 
 .. code-block:: console
 
@@ -203,8 +200,8 @@ and `Python for .NET`_
 
    pip3 install pythonnet
 
-If you need to load a Java library (i.e., a ``.jar`` or ``.class`` file)
-then you must install Py4J_,
+If you need to load a Java library (i.e., a ``.jar`` or ``.class`` file),
+you must install Py4J_,
 
 .. code-block:: console
 
@@ -222,7 +219,7 @@ and a `Java Runtime Environment`_
 .. _comtypes: https://pythonhosted.org/comtypes/#
 .. _frozen: https://pyinstaller.readthedocs.io/en/stable/
 .. _WoW64: https://en.wikipedia.org/wiki/WoW64
-.. _Java Runtime Environment: https://www.oracle.com/technetwork/java/javase/downloads/index.html
+.. _Java Runtime Environment: https://www.oracle.com/java/technologies/downloads/
 .. _Component Object Model: https://en.wikipedia.org/wiki/Component_Object_Model
 .. _Dependencies: https://github.com/lucasg/Dependencies
 .. _Dependency Walker: https://www.dependencywalker.com/
@@ -233,4 +230,5 @@ and a `Java Runtime Environment`_
 .. _ss: https://man7.org/linux/man-pages/man8/ss.8.html
 .. _ldd: https://man7.org/linux/man-pages/man1/ldd.1.html
 .. _PATH: https://en.wikipedia.org/wiki/PATH_(variable)
-.. _DUMPBIN: https://learn.microsoft.com/en-us/cpp/build/reference/dependents?view=msvc-170
+.. _DUMPBIN: https://learn.microsoft.com/en-us/cpp/build/reference/dumpbin-reference?view=msvc-170
+.. _ActiveX: https://en.wikipedia.org/wiki/ActiveX
