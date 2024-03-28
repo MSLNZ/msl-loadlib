@@ -4,7 +4,7 @@ LabVIEW
 -------
 Load a 64-bit LabVIEW_ library in 64-bit Python (view the
 :ref:`LabVIEW source code <labview-lib>`).
-*To load the 32-bit version in 32-bit Python use* ``'/labview_lib32.dll'``.
+*To load the 32-bit library in 32-bit Python use* ``'/labview_lib32.dll'``.
 *Also, an appropriate LabVIEW Run-Time Engine must be installed.*
 *The LabVIEW example is only valid on Windows.*
 

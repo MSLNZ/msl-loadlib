@@ -4,7 +4,7 @@ FORTRAN
 -------
 Load a 64-bit FORTRAN library in 64-bit Python (view the
 :ref:`FORTRAN source code <fortran-lib>`).
-*To load the 32-bit version in 32-bit Python use* ``'/fortran_lib32'``.
+*To load the 32-bit library in 32-bit Python use* ``'/fortran_lib32'``.
 
 .. invisible-code-block: pycon
 

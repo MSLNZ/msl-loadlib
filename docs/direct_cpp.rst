@@ -3,7 +3,7 @@
 C++
 ---
 Load a 64-bit C++ library in 64-bit Python (view the :ref:`C++ source code <cpp-lib>`).
-*To load the 32-bit version in 32-bit Python use* ``'/cpp_lib32'``.
+*To load the 32-bit library in 32-bit Python use* ``'/cpp_lib32'``.
 
 .. invisible-code-block: pycon
 

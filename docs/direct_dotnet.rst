@@ -5,7 +5,7 @@ Microsoft .NET
 Load a 64-bit C# library (a .NET Framework) in 64-bit Python (view the
 :ref:`C# source code <dotnet-lib>`). Include the ``'net'`` argument to
 indicate that the ``.dll`` file is for the .NET Framework.
-*To load the 32-bit version in 32-bit Python use* ``'/dotnet_lib32.dll'``.
+*To load the 32-bit library in 32-bit Python use* ``'/dotnet_lib32.dll'``.
 
 .. invisible-code-block: pycon
 
