@@ -1,6 +1,8 @@
 """
-Create a server for
+Create a 32-bit server for
 `inter-process communication <https://en.wikipedia.org/wiki/Inter-process_communication>`_.
+
+There is also a :ref:`command-line utility <refreeze-cli>` to create a server.
 """
 from __future__ import annotations
 
