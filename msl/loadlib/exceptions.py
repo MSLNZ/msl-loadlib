@@ -9,7 +9,10 @@ from http.client import HTTPException
 class ConnectionTimeoutError(OSError):
 
     def __init__(self, message: str) -> None:
-        """Raised when the connection to the 32-bit server cannot be established."""
+        """Raised when the connection to the 32-bit server cannot be established.
+
+        :param message: The error message.
+        """
         super().__init__(message)
         self.timeout_message: str = message
         self.reason: str = ''
