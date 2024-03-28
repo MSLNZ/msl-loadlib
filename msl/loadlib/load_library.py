@@ -22,8 +22,8 @@ if TYPE_CHECKING:
 
 _LIBTYPES: set[str] = {'cdll', 'windll', 'oledll', 'net', 'clr', 'java', 'com', 'activex'}
 
-LibTypes = Literal['cdll', 'windll', 'oledll', 'net', 'clr', 'java', 'com', 'activex']
-"""Library types."""
+LibType = Literal['cdll', 'windll', 'oledll', 'net', 'clr', 'java', 'com', 'activex']
+"""The library type."""
 
 # the Self type was added in Python 3.11 (PEP 673)
 # using TypeVar is equivalent for < 3.11
@@ -37,7 +37,7 @@ class LoadLibrary:
 
     def __init__(self,
                  path: PathLike,
-                 libtype: LibTypes | None = None,
+                 libtype: LibType | None = None,
                  **kwargs: Any) -> None:
         """Load a shared library.
 

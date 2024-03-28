@@ -21,7 +21,7 @@ from typing import Any
 
 from .constants import IS_WINDOWS
 from .constants import SERVER_FILENAME
-from .load_library import LibTypes
+from .load_library import LibType
 from .load_library import LoadLibrary
 
 METADATA: str = '-METADATA-'
@@ -34,7 +34,7 @@ class Server32(HTTPServer):
 
     def __init__(self,
                  path: str,
-                 libtype: LibTypes,
+                 libtype: LibType,
                  host: str,
                  port: int,
                  **kwargs: Any) -> None:
