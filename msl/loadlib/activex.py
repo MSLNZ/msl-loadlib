@@ -800,7 +800,7 @@ class Application:
 
         :param activex_id: ProgID or CLSID of the ActiveX object.
         :param parent: The handle to the parent window that the ActiveX object
-            will belong to.
+            will belong to. Default is the main application window.
         :param x: Horizontal position of the ActiveX object in the parent window.
         :param y: Vertical position of the ActiveX object in the parent window.
         :param width: Width (in pixels) of the ActiveX object.
