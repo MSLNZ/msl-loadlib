@@ -916,7 +916,10 @@ class Application:
         self.set_window_position(0, 0, width, height, flags=0x0002)
 
     def set_window_title(self, title: str) -> None:
-        """Set the text to display in the window's title bar."""
+        """Set the text to display in the window's title bar.
+
+        :param title: The title bar text.
+        """
         user32.SetWindowTextW(self._hwnd, title)
 
     def show(self, command: int = ShowWindow.NORMAL) -> None:
