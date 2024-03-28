@@ -41,4 +41,4 @@ Contents
 .. _Py4J: https://www.py4j.org/
 .. _comtypes: https://pythonhosted.org/comtypes/#
 .. _Component Object Model: https://en.wikipedia.org/wiki/Component_Object_Model
-.. _inter-process communication: https://en.wikipedia.org/wiki/Inter-process_communication>
+.. _inter-process communication: https://en.wikipedia.org/wiki/Inter-process_communication
