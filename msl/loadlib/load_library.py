@@ -313,7 +313,12 @@ class LoadLibrary:
                 #  runtime and cannot be loaded in the 4.0 runtime without additional
                 #  configuration information. "
                 if str(err).startswith('Mixed mode assembly is built against version'):
-                    status, msg = utils.check_dot_net_config(sys.executable)
+                    py_exe = sys.executable
+                    if sys.prefix != sys.base_prefix:
+                        # Python is running in a venv/virtualenv
+                        # When using conda environments, sys.prefix == sys.base_prefix
+                        py_exe = os.path.join(sys.base_prefix, os.path.basename(py_exe))
+                    status, msg = utils.check_dot_net_config(py_exe)
                     if not status == 0:
                         raise OSError(msg)
                     else:

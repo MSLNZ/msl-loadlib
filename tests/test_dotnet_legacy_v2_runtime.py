@@ -9,7 +9,7 @@ from conftest import skipif_no_pythonnet
 from conftest import skipif_not_windows
 from msl.loadlib import LoadLibrary
 
-config_path = f'{sys.executable}.config'
+config_path = os.path.join(sys.base_prefix, os.path.basename(sys.executable)+'.config')
 
 
 def teardown_module():
