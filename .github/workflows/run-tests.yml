@@ -33,13 +33,11 @@ jobs:
           sudo dpkg --add-architecture i386
           sudo apt-get update
           sudo apt-get install -y libgfortran5:i386
-      - name: Set up Mono (macOS)
+      - name: Set up .NET Core environment variable (macOS)
         if: ${{ matrix.os == 'macos' }}
-        uses: maxim-lobanov/setup-xamarin@v1
-        with:
-          mono-version: latest
-      - name: Mono version (non Windows)
-        if: ${{ matrix.os != 'windows' }}
+        run: echo "PYTHONNET_RUNTIME=coreclr" >> $GITHUB_ENV
+      - name: Mono version (Ubuntu)
+        if: ${{ matrix.os == 'ubuntu' }}
         run: mono --version
       - name: Java version
         run: java -version
