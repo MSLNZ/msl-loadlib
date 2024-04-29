@@ -35,7 +35,10 @@ jobs:
           sudo apt-get install -y libgfortran5:i386
       - name: Set up .NET Core environment variable (macOS)
         if: ${{ matrix.os == 'macos' }}
-        run: echo "PYTHONNET_RUNTIME=coreclr" >> $GITHUB_ENV
+        run: |
+          echo PYTHONNET_RUNTIME=coreclr >> $GITHUB_ENV
+          echo PYTHONNET_PYDLL=$(python -m find_libpython) >> $GITHUB_ENV
+          echo PYTHONHOME=$(python -c 'import sys; print(sys.prefix)') >> $GITHUB_ENV
       - name: Mono version (Ubuntu)
         if: ${{ matrix.os == 'ubuntu' }}
         run: mono --version
