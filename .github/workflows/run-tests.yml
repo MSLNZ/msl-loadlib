@@ -33,11 +33,11 @@ jobs:
           sudo dpkg --add-architecture i386
           sudo apt-get update
           sudo apt-get install -y libgfortran5:i386
-      - name: Set up Mono (macOS)
-        if: ${{ matrix.os == 'macos-13' }}
-        uses: maxim-lobanov/setup-xamarin@v1
-        with:
-          mono-version: latest
+#      - name: Set up Mono (macOS)
+#        if: ${{ matrix.os == 'macos-13' }}
+#        uses: maxim-lobanov/setup-xamarin@v1
+#        with:
+#          mono-version: latest
       - name: Mono version (non Windows)
         if: ${{ matrix.os != 'windows-latest' }}
         run: mono --version
