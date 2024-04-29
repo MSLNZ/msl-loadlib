@@ -109,9 +109,9 @@ If you need to load a `Component Object Model`_ (or ActiveX_) library, you must 
 
 Linux
 +++++
-Before using msl-loadlib on Linux (Debian), the following packages are required.
-For other linux distributions, use the appropriate system package manager
-(e.g., *yum*) and the equivalent command.
+Before using msl-loadlib on Debian-based Linux distributions, the following
+packages are required. For other distributions, use the appropriate system
+package manager (e.g., *yum*) and the equivalent command.
 
 .. attention::
 
@@ -124,6 +124,8 @@ and FORTRAN libraries
 
 .. code-block:: console
 
+   sudo dpkg --add-architecture i386
+   sudo apt update
    sudo apt install g++ gfortran libgfortran5 zlib1g:i386 libstdc++6:i386 libgfortran5:i386
 
 The following ensures that the ss_ command is available
