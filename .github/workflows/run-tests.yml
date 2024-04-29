@@ -9,38 +9,37 @@ env:
 jobs:
   test:
     name: Test
-    runs-on: ${{ matrix.os }}-latest
+    runs-on: ${{ matrix.os }}
     timeout-minutes: 10
 
     strategy:
       fail-fast: false
       matrix:
         python-version: ["3.8", "3.9", "3.10", "3.11", "3.12"]
-        os: [windows, ubuntu, macos]
+        os: [windows-latest, ubuntu-latest, macos-13]
         architecture: [x64, x86]
         exclude:
-          - os: ubuntu
+          - os: ubuntu-latest
             architecture: x86
-          - os: macos
+          - os: macos-13
             architecture: x86
 
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
       - name: Install system dependencies (Ubuntu)
-        if: ${{ matrix.os == 'ubuntu' }}
+        if: ${{ matrix.os == 'ubuntu-latest' }}
         run: |
           sudo dpkg --add-architecture i386
           sudo apt-get update
           sudo apt-get install -y libgfortran5:i386
-      - name: Set up .NET Core environment variable (macOS)
-        if: ${{ matrix.os == 'macos' }}
-        run: |
-          echo PYTHONNET_RUNTIME=coreclr >> $GITHUB_ENV
-          echo PYTHONNET_PYDLL=$(python -m find_libpython) >> $GITHUB_ENV
-          echo PYTHONHOME=$(python -c 'import sys; print(sys.prefix)') >> $GITHUB_ENV
-      - name: Mono version (Ubuntu)
-        if: ${{ matrix.os == 'ubuntu' }}
+      - name: Set up Mono (macOS)
+        if: ${{ matrix.os == 'macos-13' }}
+        uses: maxim-lobanov/setup-xamarin@v1
+        with:
+          mono-version: latest
+      - name: Mono version (non Windows)
+        if: ${{ matrix.os != 'windows-latest' }}
         run: mono --version
       - name: Java version
         run: java -version
