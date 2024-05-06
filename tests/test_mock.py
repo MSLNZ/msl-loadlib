@@ -4,8 +4,6 @@ from ctypes import c_int
 from http.client import HTTPConnection
 from unittest.mock import Mock
 
-from conftest import IS_MACOS_ARM64
-
 from msl.loadlib import Client64
 from msl.loadlib import Server32
 from msl.loadlib import Server32Error
@@ -13,8 +11,10 @@ from msl.loadlib import Server32Error
 if Server32.is_interpreter():
     pytest = Mock()
     skipif_no_server32 = Mock()
+    IS_MACOS_ARM64 = False
 else:
     import pytest
+    from conftest import IS_MACOS_ARM64
     from conftest import skipif_no_server32
     from msl.loadlib.constants import DEFAULT_EXTENSION
 
