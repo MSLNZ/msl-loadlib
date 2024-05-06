@@ -26,6 +26,8 @@ jobs:
           - os: macos-13
             architecture: x86
 
+    env:
+      PIP_DISABLE_PIP_VERSION_CHECK: 1
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
