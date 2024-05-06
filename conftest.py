@@ -6,7 +6,7 @@ import pytest
 
 try:
     import clr
-except ImportError:
+except (ImportError, RuntimeError):
     clr = None
 
 from msl.loadlib.constants import *
