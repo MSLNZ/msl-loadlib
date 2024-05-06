@@ -1,4 +1,5 @@
 import os
+import platform
 import sys
 
 import pytest
@@ -70,11 +71,14 @@ def doctest_skipif(doctest_namespace):
     if IS_PYTHON_64BIT:
         bit64 = lambda: pytest.skip('requires 32-bit Python')
         bit32 = lambda: None
-        readme_all = lambda: None
     else:
         bit64 = lambda: None
         bit32 = lambda: pytest.skip('requires 64-bit Python')
+
+    if not IS_PYTHON_64BIT or (sys.platform == 'darwin' and platform.machine() == 'arm64'):
         readme_all = lambda: pytest.skip('skipped all tests')
+    else:
+        readme_all = lambda: None
 
     if IS_PYTHON_64BIT and has_labview_runtime():
         no_labview64 = lambda: None

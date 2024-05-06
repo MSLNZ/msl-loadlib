@@ -1,6 +1,7 @@
 import math
 import os
 import pathlib
+import platform
 from ctypes import POINTER
 from ctypes import byref
 from ctypes import c_bool
@@ -117,8 +118,12 @@ def test_mono_bitness_independent(filename):
 
 
 def test_cpp():
-    bitness = '64' if IS_PYTHON_64BIT else '32'
-    path = os.path.join(EXAMPLES_DIR, 'cpp_lib' + bitness)
+    if platform.system() == 'Darwin' and platform.machine() == 'arm64':
+        suffix = 'arm64'
+    else:
+        suffix = '64' if IS_PYTHON_64BIT else '32'
+
+    path = os.path.join(EXAMPLES_DIR, f'cpp_lib{suffix}')
     cpp = LoadLibrary(path)
 
     lib = cpp.lib
@@ -180,8 +185,12 @@ def test_cpp():
 
 
 def test_fortran():
-    bitness = '64' if IS_PYTHON_64BIT else '32'
-    path = os.path.join(EXAMPLES_DIR, 'fortran_lib' + bitness)
+    if platform.system() == 'Darwin' and platform.machine() == 'arm64':
+        suffix = 'arm64'
+    else:
+        suffix = '64' if IS_PYTHON_64BIT else '32'
+
+    path = os.path.join(EXAMPLES_DIR, f'fortran_lib{suffix}')
     fortran = LoadLibrary(path)
 
     lib = fortran.lib
