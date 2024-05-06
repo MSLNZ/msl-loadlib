@@ -22,6 +22,8 @@ from msl.loadlib.constants import *
 from msl import loadlib
 sys.modules['loadlib'] = loadlib
 
+IS_MACOS_ARM64 = sys.platform == 'darwin' and platform.machine() == 'arm64'
+
 
 def add_py4j_in_eggs():
     # if py4j is located in the .eggs directory and not in the site-packages directory
@@ -75,10 +77,15 @@ def doctest_skipif(doctest_namespace):
         bit64 = lambda: None
         bit32 = lambda: pytest.skip('requires 64-bit Python')
 
-    if not IS_PYTHON_64BIT or (sys.platform == 'darwin' and platform.machine() == 'arm64'):
+    if not IS_PYTHON_64BIT or IS_MACOS_ARM64:
         readme_all = lambda: pytest.skip('skipped all tests')
     else:
         readme_all = lambda: None
+
+    if IS_MACOS_ARM64:
+        is_mac_arm64 = lambda: pytest.skip('ignore on macOS arm64')
+    else:
+        is_mac_arm64 = lambda: None
 
     if IS_PYTHON_64BIT and has_labview_runtime():
         no_labview64 = lambda: None
@@ -102,6 +109,7 @@ def doctest_skipif(doctest_namespace):
     doctest_namespace['SKIP_IF_WINDOWS_GITHUB_ACTIONS'] = win32_github_actions
     doctest_namespace['SKIP_IF_NOT_WINDOWS'] = not_windows
     doctest_namespace['SKIP_IF_MACOS'] = is_mac
+    doctest_namespace['SKIP_IF_MACOS_ARM64'] = is_mac_arm64
     doctest_namespace['SKIP_IF_64BIT'] = bit64
     doctest_namespace['SKIP_IF_32BIT'] = bit32
     doctest_namespace['SKIP_IF_LABVIEW64_NOT_INSTALLED'] = no_labview64

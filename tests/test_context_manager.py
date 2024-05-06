@@ -6,6 +6,7 @@ import pytest
 from py4j.java_gateway import JVMView
 from py4j.java_gateway import JavaGateway
 
+from conftest import IS_MACOS_ARM64
 from conftest import skipif_no_pythonnet
 from conftest import skipif_no_server32
 from msl.examples.loadlib import Cpp64
@@ -16,7 +17,10 @@ from msl.loadlib.constants import IS_PYTHON_64BIT
 from msl.loadlib.load_library import DotNet
 from msl.loadlib.utils import logger
 
-suffix = '64' if IS_PYTHON_64BIT else '32'
+if IS_MACOS_ARM64:
+    suffix = 'arm64'
+else:
+    suffix = '64' if IS_PYTHON_64BIT else '32'
 
 
 def test_raises():

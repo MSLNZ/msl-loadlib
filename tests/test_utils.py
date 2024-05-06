@@ -7,9 +7,9 @@ from xml.etree import ElementTree
 
 import pytest
 
+from conftest import IS_MACOS_ARM64
 from conftest import skipif_not_windows
 from msl.loadlib import utils
-from msl.loadlib.constants import IS_MAC
 from msl.loadlib.constants import IS_WINDOWS
 
 
@@ -28,12 +28,9 @@ def test_port_functions():
     assert not utils.is_port_in_use(port)
 
 
+@pytest.mark.skipif(IS_MACOS_ARM64, reason='macOS and arm64')
 def test_is_pythonnet_installed():
-    # importing pythonnet under these conditions causes a fatal crash
-    if IS_MAC and sys.version_info[:2] <= (3, 5):
-        assert not utils.is_pythonnet_installed()
-    else:
-        assert utils.is_pythonnet_installed()
+    assert utils.is_pythonnet_installed()
 
 
 def test_is_py4j_installed():

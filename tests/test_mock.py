@@ -4,6 +4,8 @@ from ctypes import c_int
 from http.client import HTTPConnection
 from unittest.mock import Mock
 
+from conftest import IS_MACOS_ARM64
+
 from msl.loadlib import Client64
 from msl.loadlib import Server32
 from msl.loadlib import Server32Error
@@ -20,7 +22,10 @@ else:
 class Server(Server32):
 
     def __init__(self, host, port, **kwargs):
-        file = 'cpp_lib64' if sys.maxsize > 2 ** 32 else 'cpp_lib32'
+        if IS_MACOS_ARM64:
+            file = 'cpp_libarm64'
+        else:
+            file = 'cpp_lib64' if sys.maxsize > 2 ** 32 else 'cpp_lib32'
         path = os.path.join(Server32.examples_dir(), file)
         super().__init__(path, 'cdll', host, port)
 
@@ -91,7 +96,10 @@ def test_attributes():
     assert c.host is None
     if sys.maxsize > 2 ** 32:
         # client and server are running in 64-bit Python
-        assert c.lib32_path.endswith(f'cpp_lib64{DEFAULT_EXTENSION}')
+        if IS_MACOS_ARM64:
+            assert c.lib32_path.endswith(f'cpp_libarm64{DEFAULT_EXTENSION}')
+        else:
+            assert c.lib32_path.endswith(f'cpp_lib64{DEFAULT_EXTENSION}')
     else:
         # client and server are running in 32-bit Python
         assert c.lib32_path.endswith(f'cpp_lib32{DEFAULT_EXTENSION}')

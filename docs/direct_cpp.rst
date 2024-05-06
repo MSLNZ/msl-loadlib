@@ -7,7 +7,7 @@ Load a 64-bit C++ library in 64-bit Python (view the :ref:`C++ source code <cpp-
 
 .. invisible-code-block: pycon
 
-   >>> SKIP_IF_32BIT()
+   >>> SKIP_IF_32BIT() or SKIP_IF_MACOS_ARM64()
 
 .. code-block:: pycon
 

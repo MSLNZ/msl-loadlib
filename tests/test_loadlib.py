@@ -1,7 +1,6 @@
 import math
 import os
 import pathlib
-import platform
 from ctypes import POINTER
 from ctypes import byref
 from ctypes import c_bool
@@ -18,6 +17,7 @@ from ctypes import create_string_buffer
 
 import pytest
 
+from conftest import IS_MACOS_ARM64
 from conftest import add_py4j_in_eggs
 from conftest import skipif_no_comtypes
 from conftest import skipif_no_labview_runtime
@@ -30,6 +30,11 @@ from msl.examples.loadlib import Point
 from msl.loadlib import LoadLibrary
 from msl.loadlib.constants import *
 from msl.loadlib.utils import get_com_info
+
+if IS_MACOS_ARM64:
+    suffix = 'arm64'
+else:
+    suffix = '64' if IS_PYTHON_64BIT else '32'
 
 
 def test_invalid_libtype():
@@ -118,11 +123,6 @@ def test_mono_bitness_independent(filename):
 
 
 def test_cpp():
-    if platform.system() == 'Darwin' and platform.machine() == 'arm64':
-        suffix = 'arm64'
-    else:
-        suffix = '64' if IS_PYTHON_64BIT else '32'
-
     path = os.path.join(EXAMPLES_DIR, f'cpp_lib{suffix}')
     cpp = LoadLibrary(path)
 
@@ -185,11 +185,6 @@ def test_cpp():
 
 
 def test_fortran():
-    if platform.system() == 'Darwin' and platform.machine() == 'arm64':
-        suffix = 'arm64'
-    else:
-        suffix = '64' if IS_PYTHON_64BIT else '32'
-
     path = os.path.join(EXAMPLES_DIR, f'fortran_lib{suffix}')
     fortran = LoadLibrary(path)
 
@@ -526,8 +521,7 @@ def test_unicode_path_dotnet():
 
 
 def test_unicode_path_cpp():
-    bitness = '64' if IS_PYTHON_64BIT else '32'
-    cpp = LoadLibrary(f'cpp_lib{bitness}-uñicödé')
+    cpp = LoadLibrary(f'cpp_lib{suffix}-uñicödé')
     assert cpp.lib.add(1, 2) == 3
     repr(cpp)  # this should not raise an exception
     str(cpp)  # this should not raise an exception
@@ -546,13 +540,11 @@ def test_issue7():
 
 def test_issue8():
     # checks that Issue #8 is fixed
-    bitness = '64' if IS_PYTHON_64BIT else '32'
-    LoadLibrary(pathlib.Path(os.path.join(EXAMPLES_DIR, 'cpp_lib' + bitness)))
+    LoadLibrary(pathlib.Path(os.path.join(EXAMPLES_DIR, f'cpp_lib{suffix}')))
 
 
 def test_path_attrib():
-    bitness = '64' if IS_PYTHON_64BIT else '32'
-    path = os.path.join(EXAMPLES_DIR, f'cpp_lib{bitness}')
+    path = os.path.join(EXAMPLES_DIR, f'cpp_lib{suffix}')
     expected = path + DEFAULT_EXTENSION
     assert LoadLibrary(path).path == expected
     assert LoadLibrary(path.encode()).path == expected
