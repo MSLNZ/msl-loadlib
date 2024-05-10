@@ -1,0 +1,136 @@
+[build-system]
+requires = ["hatchling", "hatch-vcs"]
+build-backend = "hatchling.build"
+
+[project]
+name = "msl-loadlib"
+dynamic = ["version"]
+dependencies = []
+description = "Load a shared library (and access a 32-bit library from 64-bit Python)"
+license = {file = "LICENSE.txt"}
+authors =[{name="Measurement Standards Laboratory of New Zealand", email="info@measurement.govt.nz"}]
+requires-python = ">=3.8"
+readme = "README.rst"
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "Intended Audience :: Science/Research",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Scientific/Engineering",
+    "Topic :: Software Development",
+]
+
+[project.urls]
+Changes = "https://msl-loadlib.readthedocs.io/en/stable/changelog.html"
+Documentation = "https://msl-loadlib.readthedocs.io/en/stable/"
+Homepage = "https://msl-loadlib.readthedocs.io/en/stable/"
+Source = "https://github.com/MSLNZ/msl-loadlib"
+Tracker = "https://github.com/MSLNZ/msl-loadlib/issues"
+
+[project.optional-dependencies]
+all = [
+    "comtypes;sys_platform=='win32'",
+    "py4j",
+    "pythonnet"
+]
+clr = ["pythonnet"]
+com = ["comtypes"]
+dev = ["msl-loadlib[docs,tests]"]
+docs = ["sphinx-rtd-theme>0.5", "sphinx>2"]
+java = ["py4j"]
+tests = ["msl-loadlib[all]", "numpy", "pytest>=8.1"]
+
+[project.scripts]
+freeze32 = "msl.loadlib.freeze_server32:_cli"
+
+[tool.hatch.version]
+source = "vcs"
+
+[tool.hatch.build.hooks.vcs]
+version-file = "msl/loadlib/_version.py"
+
+[tool.hatch.build.targets.sdist]
+include = ["msl"]
+exclude = [
+    "*.dll",
+    "*.dylib",
+    "*.so",
+    "msl/examples/loadlib/Trig.class",
+    "msl/examples/loadlib/java_lib.jar",
+    "msl/examples/loadlib/labview_lib.h",
+    "msl/loadlib/server32-linux*",
+    "msl/loadlib/server32-windows.exe*",
+]
+
+[tool.hatch.build.targets.wheel]
+packages = ["msl"]
+
+[tool.hatch.envs.default.scripts]
+clean = "rm -rf .coverage_html dist docs/_apidoc docs/_build .pytest_cache"
+
+[tool.hatch.envs.hatch-test]
+extra-dependencies = ["msl-loadlib[tests]"]
+default-args = ["--config-file=pyproject.toml"]
+
+[tool.hatch.envs.hatch-test.scripts]
+run = "pytest{env:HATCH_TEST_ARGS:} {args}"
+run-cov = "coverage run -m pytest{env:HATCH_TEST_ARGS:} {args}"
+cov-combine = "coverage combine"
+cov-report = "coverage html"
+
+[tool.hatch.envs.docs]
+dependencies = ["msl-loadlib[docs]"]
+
+[tool.hatch.envs.docs.scripts]
+apidoc = "sphinx-apidoc --force --module-first --separate --implicit-namespaces --output-dir docs/_apidoc msl"
+build = "sphinx-build docs docs/_build/html"
+clean = "rm -rf docs/_apidoc docs/_build"
+show = "python -c \"import os, webbrowser; webbrowser.open('file://' + os.getcwd() + '/docs/_build/html/index.html')\""
+rebuild = ["clean", "build", "show"]
+
+[tool.pytest.ini_options]
+addopts = [
+    "--verbose",
+    "--doctest-modules",
+    "--doctest-glob=*.rst",
+    "--import-mode=importlib",
+    "--ignore=docs/conf.py",
+    "--ignore=docs/_ext/autodoc_intenum.py",
+    "--ignore=msl/examples",
+    "--ignore=tests/check_pythonw.py",
+    "--ignore=tests/check_server32_imports.py",
+    "--ignore=tests/bad_servers",
+    "--ignore=tests/dotnet_config/legacy_v2_runtime.py",
+    "--ignore=tests/server32_comtypes",
+    "--ignore=tests/sew_eurodrive",
+]
+consider_namespace_packages = true
+doctest_optionflags = "NORMALIZE_WHITESPACE ALLOW_UNICODE ELLIPSIS"
+
+[tool.coverage.run]
+branch = true
+data_file = ".coverage_html/.coverage"
+omit = [
+    "msl/examples/*",
+    "*/msl-loadlib-com-wrapper/*",
+]
+
+[tool.coverage.report]
+exclude_lines = [
+  "no cov",
+  "if __name__ == .__main__.:",
+  "if TYPE_CHECKING:",
+]
+include_namespace_packages = true
+
+[tool.coverage.html]
+directory = ".coverage_html"
+title = "MSL-LoadLib coverage report"
