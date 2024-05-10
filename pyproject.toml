@@ -73,6 +73,17 @@ exclude = [
 [tool.hatch.build.targets.wheel]
 packages = ["msl"]
 
+[tool.hatch.build.targets.custom]
+packages = ["msl"]
+versions = [
+    "linux_i686",
+    "linux_x86_64",
+    "macos_arm64",
+    "macos_x86_64",
+    "win32",
+    "win_amd64",
+]
+
 [tool.hatch.envs.default.scripts]
 clean = "rm -rf .coverage_html dist docs/_apidoc docs/_build .pytest_cache"
 
@@ -102,6 +113,7 @@ addopts = [
     "--doctest-modules",
     "--doctest-glob=*.rst",
     "--import-mode=importlib",
+    "--ignore=hatch_build.py",
     "--ignore=docs/conf.py",
     "--ignore=docs/_ext/autodoc_intenum.py",
     "--ignore=msl/examples",
