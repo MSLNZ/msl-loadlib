@@ -521,7 +521,7 @@ def test_unicode_path_dotnet():
 
 
 def test_unicode_path_cpp():
-    cpp = LoadLibrary(f'cpp_lib{suffix}-uñicödé')
+    cpp = LoadLibrary(f'./tests/uñicödé/cpp_lib{suffix}-uñicödé')
     assert cpp.lib.add(1, 2) == 3
     repr(cpp)  # this should not raise an exception
     str(cpp)  # this should not raise an exception
