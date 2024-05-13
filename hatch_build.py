@@ -37,7 +37,7 @@ versions: dict[str, tuple[str, ...]] = {
     'linux_x86_64': include + ('.so', 'linux', 'linux.config', 'dotnet_lib32.dll', 'dotnet_lib64.dll'),
     'macos_arm64': include + ('libarm64.dylib',),
     'macos_x86_64': include + ('lib64.dylib', 'dotnet_lib32.dll', 'dotnet_lib64.dll'),
-    'win32': include + ('lib32.dll', '.exe', '.exe.config'),
+    'win32': include + ('.dll', '.exe', '.exe.config'),
     'win_amd64': include + ('.dll', '.exe', '.exe.config'),
 }
 
