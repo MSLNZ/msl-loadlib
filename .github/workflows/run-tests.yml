@@ -37,11 +37,6 @@ jobs:
           sudo dpkg --add-architecture i386
           sudo apt-get update
           sudo apt-get install -y libgfortran5:i386
-#      - name: Set up Mono (macOS)
-#        if: ${{ matrix.os == 'macos-13' }}
-#        uses: maxim-lobanov/setup-xamarin@v1
-#        with:
-#          mono-version: latest
       - name: Mono version (non Windows)
         if: ${{ matrix.os != 'windows-latest' }}
         run: mono --version
@@ -58,14 +53,16 @@ jobs:
         uses: actions/setup-python@v5
         with:
           python-version: ${{ matrix.python-version }}
-      - name: Upgrade pip, setuptools and wheel
+      - name: Upgrade pip
         run: |
           python -m pip install --upgrade pip
-          python -m pip install --upgrade setuptools wheel
-#      - name: Install pythonnet from source
-#        if: ${{ matrix.python-version == '3.12' }}
-#        run: python -m pip install git+https://github.com/pythonnet/pythonnet.git@5a4a986f9e2b9f4f505db68809f45a63c39b1418
-      - name: Install msl-loadlib
-        run: python -m pip install --upgrade --editable .[tests]
+      - name: Build custom wheels
+        run: |
+          python -m pip install --upgrade hatch
+          hatch build --target custom
+      - name: Install from custom-built wheel
+        run: python -m pip install --find-links dist --no-index msl-loadlib
+      - name: Install test dependencies
+        run: python -m pip install msl-loadlib[tests]
       - name: Run tests
         run: python -m pytest

@@ -78,7 +78,7 @@ def main():
         return 0
 
     # include directories in sys.path
-    sys.path.append(os.path.abspath('.'))
+    sys.path.append(os.path.abspath(''))
     if args.module is not None:
         mod_dir = os.path.dirname(args.module)
         if mod_dir and mod_dir not in sys.path:

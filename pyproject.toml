@@ -55,26 +55,26 @@ freeze32 = "msl.loadlib.freeze_server32:_cli"
 source = "vcs"
 
 [tool.hatch.build.hooks.vcs]
-version-file = "msl/loadlib/_version.py"
+version-file = "src/msl/loadlib/_version.py"
 
 [tool.hatch.build.targets.sdist]
-include = ["msl"]
+include = ["src"]
 exclude = [
     "*.dll",
     "*.dylib",
     "*.so",
-    "msl/examples/loadlib/Trig.class",
-    "msl/examples/loadlib/java_lib.jar",
-    "msl/examples/loadlib/labview_lib.h",
-    "msl/loadlib/server32-linux*",
-    "msl/loadlib/server32-windows.exe*",
+    "Trig.class",
+    "java_lib.jar",
+    "labview_lib.h",
+    "server32-linux*",
+    "server32-windows.exe*",
 ]
 
 [tool.hatch.build.targets.wheel]
-packages = ["msl"]
+packages = ["src/msl"]
 
 [tool.hatch.build.targets.custom]
-packages = ["msl"]
+packages = ["src/msl"]
 versions = [
     "linux_i686",
     "linux_x86_64",
@@ -116,7 +116,7 @@ addopts = [
     "--ignore=hatch_build.py",
     "--ignore=docs/conf.py",
     "--ignore=docs/_ext/autodoc_intenum.py",
-    "--ignore=msl/examples",
+    "--ignore=src/msl/examples",
     "--ignore=tests/check_pythonw.py",
     "--ignore=tests/check_server32_imports.py",
     "--ignore=tests/bad_servers",
@@ -131,7 +131,7 @@ doctest_optionflags = "NORMALIZE_WHITESPACE ALLOW_UNICODE ELLIPSIS"
 branch = true
 data_file = ".coverage_html/.coverage"
 omit = [
-    "msl/examples/*",
+    "src/msl/examples/*",
     "*/msl-loadlib-com-wrapper/*",
 ]
 

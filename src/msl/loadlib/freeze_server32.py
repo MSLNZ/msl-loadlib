@@ -162,7 +162,7 @@ def main(*,
                 s = item.split(':')
                 if len(s) == 1:
                     src = s[0]
-                    dst = '.'
+                    dst = ''
                 elif len(s) == 2:
                     src = s[0]
                     dst = s[1] or '.'

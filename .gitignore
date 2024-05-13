@@ -55,4 +55,4 @@ py4jwrapper/.classpath
 a_new_file.txt
 
 # Auto-generated during builds
-/msl/loadlib/_version.py
+/src/msl/loadlib/_version.py
