@@ -19,5 +19,5 @@ labview_lib.vi
 labview_lib.h
 =============
 
-.. literalinclude:: ../msl/examples/loadlib/labview_lib.h
+.. literalinclude:: ../src/msl/examples/loadlib/labview_lib.h
    :language: cpp

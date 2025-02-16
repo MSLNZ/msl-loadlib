@@ -88,7 +88,7 @@ versions = [
 clean = "rm -rf .coverage_html dist docs/_apidoc docs/_build .pytest_cache"
 
 [tool.hatch.envs.hatch-test]
-extra-dependencies = ["msl-loadlib[tests]"]
+features = ["tests"]
 default-args = ["--config-file=pyproject.toml"]
 
 [tool.hatch.envs.hatch-test.scripts]
@@ -98,7 +98,7 @@ cov-combine = "coverage combine"
 cov-report = "coverage html"
 
 [tool.hatch.envs.docs]
-dependencies = ["msl-loadlib[docs]"]
+features = ["docs"]
 
 [tool.hatch.envs.docs.scripts]
 apidoc = "sphinx-apidoc --force --module-first --separate --implicit-namespaces --output-dir docs/_apidoc msl"

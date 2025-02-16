@@ -16,7 +16,7 @@ The following file is compiled to ``Trig.class`` byte code.
 Trig.java
 ----------
 
-.. literalinclude:: ../msl/examples/loadlib/Trig.java
+.. literalinclude:: ../src/msl/examples/loadlib/Trig.java
    :language: java
 
 .. _java-lib-jar:
@@ -32,7 +32,7 @@ The following classes are included in the ``nz.msl.examples`` package in ``java_
 MathUtils.java
 --------------
 
-.. literalinclude:: ../msl/examples/loadlib/nz/msl/examples/MathUtils.java
+.. literalinclude:: ../src/msl/examples/loadlib/nz/msl/examples/MathUtils.java
    :language: java
 
 .. _java-lib-Matrix:
@@ -40,5 +40,5 @@ MathUtils.java
 Matrix.java
 -----------
 
-.. literalinclude:: ../msl/examples/loadlib/nz/msl/examples/Matrix.java
+.. literalinclude:: ../src/msl/examples/loadlib/nz/msl/examples/Matrix.java
    :language: java
