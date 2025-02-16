@@ -19,9 +19,10 @@ from msl.loadlib import constants
 from msl.loadlib import version_info
 
 
-# When freezing for a new release, use
-# Windows: imports=['msl.examples.loadlib', 'comtypes', 'pythonnet']
-# Linux: imports=['msl.examples.loadlib']
+# Command to run when freezing the server for a new release
+#
+# Windows: freeze32 --imports msl.examples.loadlib comtypes pythonnet
+# Linux: freeze32 --imports msl.examples.loadlib
 
 
 def main(*,
@@ -104,7 +105,8 @@ def main(*,
     else:
         dist_path = os.getcwd()
 
-    tmp_dir = TemporaryDirectory(ignore_cleanup_errors=True)
+    tmp_kw = {'ignore_cleanup_errors': True} if sys.version_info[:2] >= (3, 10) else {}
+    tmp_dir = TemporaryDirectory(**tmp_kw)
     work_path = tmp_dir.name
     server_path = os.path.join(dist_path, constants.SERVER_FILENAME)
 
@@ -188,7 +190,6 @@ def main(*,
         loadlib.utils.check_dot_net_config(server_path)
 
     print(f'Server saved to {server_path}')
-    return 0
 
 
 def _get_standard_modules() -> list[str]:
@@ -209,17 +210,22 @@ def _get_standard_modules() -> list[str]:
 
     :return: A list of modules to be included and excluded.
     """
-    # the frozen application is not meant to create GUIs or to add
-    # support for building and installing Python modules
+    # The frozen application is not meant to create GUIs or to add
+    # support for building and installing Python modules.
+    #
+    # PyInstaller wants to include distutils via hook-distutils.py,
+    # and modifying hooks can only be done with a .spec file.
+    # So that's why distutils is not in the ignore_list.
+    
     ignore_list = [
         '__main__',
-        'distutils',
         'ensurepip',
         'idlelib',
         'lib2to3',
         'test',
         'tkinter',
-        'turtle'
+        '_tkinter',
+        'turtle',
     ]
 
     # some modules are platform specific and got a
@@ -235,7 +241,7 @@ def _get_standard_modules() -> list[str]:
         os_ignore_list = []
 
     modules = []
-    url = f'https://docs.python.org/{sys.version_info.major}.{sys.version_info.minor}/py-modindex.html'
+    url = f'https://docs.python.org/{sys.version_info.major}/py-modindex.html'
     for s in urlopen(url).read().decode().split('#module-')[1:]:
         m = s.split('"><code')
         add_module = True

@@ -1,8 +1,13 @@
 r"""
 Run this script using the server32 executable to see which modules from
-the standard library cannot be imported, e.g.,
+the standard library cannot be imported.
 
-  server32-windows.exe -m ..\..\tests\check_server32_imports
+With the package installed in editable mode, run the following commands
+from the root directory of the repository:
+
+   freeze32 --imports msl.examples.loadlib comtypes pythonnet
+
+  .\server32-windows.exe -m .\tests\check_server32_imports.py
 
 The following error will be displayed when the script exits (but that's ok)
 
@@ -11,22 +16,25 @@ The following error will be displayed when the script exits (but that's ok)
   Cannot start the 32-bit server.
 
 """
+import sys
 import importlib
 
-# Builtin modules in Python 3.12 (https://docs.python.org/3/py-modindex.html)
-# (module-name, operating-system-dependency)
+# Builtin modules in Python 3 (https://docs.python.org/3/py-modindex.html)
+# (module-name, comment)
 modules = [
     ('__future__', ''),
     ('__main__', ''),
     ('_thread', ''),
     ('abc', ''),
-    ('aifc', ''),
+    ('aifc', 'Removed in 3.13'),
     ('argparse', ''),
     ('array', ''),
     ('ast', ''),
+    ('asynchat', 'Removed in 3.12'),
     ('asyncio', ''),
+    ('asyncore', 'Removed in 3.12'),
     ('atexit', ''),
-    ('audioop', ''),
+    ('audioop', 'Removed in 3.13'),
     ('base64', ''),
     ('bdb', ''),
     ('binascii', ''),
@@ -34,9 +42,9 @@ modules = [
     ('builtins', ''),
     ('bz2', ''),
     ('calendar', ''),
-    ('cgi', ''),
-    ('cgitb', ''),
-    ('chunk', ''),
+    ('cgi', 'Removed in 3.13'),
+    ('cgitb', 'Removed in 3.13'),
+    ('chunk', 'Removed in 3.13'),
     ('cmath', ''),
     ('cmd', ''),
     ('code', ''),
@@ -54,22 +62,24 @@ modules = [
     ('copy', ''),
     ('copyreg', ''),
     ('cProfile', ''),
-    ('crypt', '(Unix)'),
+    ('crypt', 'Unix only; Removed in 3.13'),
     ('csv', ''),
     ('ctypes', ''),
-    ('curses', '(Unix)'),
-    ('curses.ascii', '(Unix)'),
-    ('curses.panel', '(Unix)'),
-    ('curses.textpad', '(Unix)'),
+    ('curses', 'Unix only'),
+    ('curses.ascii', 'Unix only'),
+    ('curses.panel', 'Unix only'),
+    ('curses.textpad', 'Unix only'),
     ('dataclasses', ''),
     ('datetime', ''),
     ('dbm', ''),
     ('dbm.dumb', ''),
-    ('dbm.gnu', '(Unix)'),
-    ('dbm.ndbm', '(Unix)'),
+    ('dbm.gnu', 'Unix only'),
+    ('dbm.ndbm', 'Unix only'),
+    ('dbm.sqlite3', 'Added in 3.13'),
     ('decimal', ''),
     ('difflib', ''),
     ('dis', ''),
+    ('distutils', 'Removed in 3.12'),
     ('doctest', ''),
     ('email', ''),
     ('email.charset', ''),
@@ -97,11 +107,11 @@ modules = [
     ('encodings.idna', ''),
     ('encodings.mbcs', ''),
     ('encodings.utf_8_sig', ''),
-    ('ensurepip', ''),
+    ('ensurepip', 'PyInstaller excluded module'),
     ('enum', ''),
     ('errno', ''),
     ('faulthandler', ''),
-    ('fcntl', '(Unix)'),
+    ('fcntl', 'Unix only'),
     ('filecmp', ''),
     ('fileinput', ''),
     ('fnmatch', ''),
@@ -113,8 +123,8 @@ modules = [
     ('getpass', ''),
     ('gettext', ''),
     ('glob', ''),
-    ('graphlib', ''),
-    ('grp', '(Unix)'),
+    ('graphlib', 'Added in 3.9'),
+    ('grp', 'Unix only'),
     ('gzip', ''),
     ('hashlib', ''),
     ('heapq', ''),
@@ -127,15 +137,16 @@ modules = [
     ('http.cookiejar', ''),
     ('http.cookies', ''),
     ('http.server', ''),
-    ('idlelib', ''),
+    ('idlelib', 'PyInstaller excluded module'),
     ('imaplib', ''),
-    ('imghdr', ''),
+    ('imghdr', 'Removed in 3.13'),
+    ('imp', 'Removed in 3.12'),
     ('importlib', ''),
     ('importlib.abc', ''),
     ('importlib.machinery', ''),
     ('importlib.metadata', ''),
     ('importlib.resources', ''),
-    ('importlib.resources.abc', ''),
+    ('importlib.resources.abc', 'Added in 3.11'),
     ('importlib.util', ''),
     ('inspect', ''),
     ('io', ''),
@@ -144,7 +155,6 @@ modules = [
     ('json', ''),
     ('json.tool', ''),
     ('keyword', ''),
-    ('lib2to3', ''),
     ('linecache', ''),
     ('locale', ''),
     ('logging', ''),
@@ -152,14 +162,14 @@ modules = [
     ('logging.handlers', ''),
     ('lzma', ''),
     ('mailbox', ''),
-    ('mailcap', ''),
+    ('mailcap', 'Removed in 3.13'),
     ('marshal', ''),
     ('math', ''),
     ('mimetypes', ''),
     ('mmap', ''),
     ('modulefinder', ''),
-    ('msilib', '(Windows)'),
-    ('msvcrt', '(Windows)'),
+    ('msilib', 'Windows only; Removed in 3.13'),
+    ('msvcrt', 'Windows only'),
     ('multiprocessing', ''),
     ('multiprocessing.connection', ''),
     ('multiprocessing.dummy', ''),
@@ -168,29 +178,29 @@ modules = [
     ('multiprocessing.shared_memory', ''),
     ('multiprocessing.sharedctypes', ''),
     ('netrc', ''),
-    ('nis', '(Unix)'),
-    ('nntplib', ''),
+    ('nis', 'Unix only; Removed in 3.13'),
+    ('nntplib', 'Removed in 3.13'),
     ('numbers', ''),
     ('operator', ''),
     ('optparse', ''),
     ('os', ''),
     ('os.path', ''),
-    ('ossaudiodev', '(Linux, FreeBSD)'),
+    ('ossaudiodev', 'Linux and FreeBSD only; Removed in 3.13'),
     ('pathlib', ''),
     ('pdb', ''),
     ('pickle', ''),
     ('pickletools', ''),
-    ('pipes', '(Unix)'),
+    ('pipes', 'Unix only; Removed in 3.13'),
     ('pkgutil', ''),
     ('platform', ''),
     ('plistlib', ''),
     ('poplib', ''),
-    ('posix', '(Unix)'),
+    ('posix', 'Unix only'),
     ('pprint', ''),
     ('profile', ''),
     ('pstats', ''),
-    ('pty', '(Unix)'),
-    ('pwd', '(Unix)'),
+    ('pty', 'Unix only'),
+    ('pwd', 'Unix only'),
     ('py_compile', ''),
     ('pyclbr', ''),
     ('pydoc', ''),
@@ -198,9 +208,9 @@ modules = [
     ('quopri', ''),
     ('random', ''),
     ('re', ''),
-    ('readline', '(Unix)'),
+    ('readline', 'Unix only'),
     ('reprlib', ''),
-    ('resource', '(Unix)'),
+    ('resource', 'Unix only'),
     ('rlcompleter', ''),
     ('runpy', ''),
     ('sched', ''),
@@ -212,11 +222,12 @@ modules = [
     ('shutil', ''),
     ('signal', ''),
     ('site', ''),
+    ('smtpd', 'Removed in 3.12'),
     ('smtplib', ''),
-    ('sndhdr', ''),
+    ('sndhdr', 'Removed in 3.13'),
     ('socket', ''),
     ('socketserver', ''),
-    ('spwd', '(Unix)'),
+    ('spwd', 'Unix only; Removed in 3.13'),
     ('sqlite3', ''),
     ('ssl', ''),
     ('stat', ''),
@@ -225,50 +236,50 @@ modules = [
     ('stringprep', ''),
     ('struct', ''),
     ('subprocess', ''),
-    ('sunau', ''),
+    ('sunau', 'Removed in 3.13'),
     ('symtable', ''),
     ('sys', ''),
     ('sysconfig', ''),
-    ('syslog', '(Unix)'),
+    ('syslog', 'Unix only'),
     ('tabnanny', ''),
     ('tarfile', ''),
-    ('telnetlib', ''),
+    ('telnetlib', 'Removed in 3.13'),
     ('tempfile', ''),
-    ('termios', '(Unix)'),
-    ('test', ''),
-    ('test.regrtest', ''),
-    ('test.support', ''),
-    ('test.support.bytecode_helper', ''),
-    ('test.support.import_helper', ''),
-    ('test.support.os_helper', ''),
-    ('test.support.script_helper', ''),
-    ('test.support.socket_helper', ''),
-    ('test.support.threading_helper', ''),
-    ('test.support.warnings_helper', ''),
+    ('termios', 'Unix only'),
+    ('test', 'PyInstaller excluded module'),
+    ('test.regrtest', 'PyInstaller excluded module'),
+    ('test.support', 'PyInstaller excluded module'),
+    ('test.support.bytecode_helper', 'PyInstaller excluded module'),
+    ('test.support.import_helper', 'PyInstaller excluded module'),
+    ('test.support.os_helper', 'PyInstaller excluded module'),
+    ('test.support.script_helper', 'PyInstaller excluded module'),
+    ('test.support.socket_helper', 'PyInstaller excluded module'),
+    ('test.support.threading_helper', 'PyInstaller excluded module'),
+    ('test.support.warnings_helper', 'PyInstaller excluded module'),
     ('textwrap', ''),
     ('threading', ''),
     ('time', ''),
     ('timeit', ''),
-    ('tkinter', ''),
-    ('tkinter.colorchooser', ''),
-    ('tkinter.commondialog', ''),
-    ('tkinter.dnd', ''),
-    ('tkinter.filedialog', ''),
-    ('tkinter.font', ''),
-    ('tkinter.messagebox', ''),
-    ('tkinter.scrolledtext', ''),
-    ('tkinter.simpledialog', ''),
-    ('tkinter.tix', ''),
-    ('tkinter.ttk', ''),
+    ('tkinter', 'PyInstaller excluded module'),
+    ('tkinter.colorchooser', 'PyInstaller excluded module'),
+    ('tkinter.commondialog', 'PyInstaller excluded module'),
+    ('tkinter.dnd', 'PyInstaller excluded module'),
+    ('tkinter.filedialog', 'PyInstaller excluded module'),
+    ('tkinter.font', 'PyInstaller excluded module'),
+    ('tkinter.messagebox', 'PyInstaller excluded module'),
+    ('tkinter.scrolledtext', 'PyInstaller excluded module'),
+    ('tkinter.simpledialog', 'PyInstaller excluded module'),
+    ('tkinter.tix', 'PyInstaller excluded module'),
+    ('tkinter.ttk', 'PyInstaller excluded module'),
     ('token', ''),
     ('tokenize', ''),
-    ('tomllib', ''),
+    ('tomllib', 'Added in 3.11'),
     ('trace', ''),
     ('traceback', ''),
     ('tracemalloc', ''),
-    ('tty', '(Unix)'),
-    ('turtle', ''),
-    ('turtledemo', ''),
+    ('tty', 'Unix only'),
+    ('turtle', 'PyInstaller excluded module'),
+    ('turtledemo', 'PyInstaller excluded module'),
     ('types', ''),
     ('typing', ''),
     ('unicodedata', ''),
@@ -280,23 +291,23 @@ modules = [
     ('urllib.request', ''),
     ('urllib.response', ''),
     ('urllib.robotparser', ''),
-    ('uu', ''),
+    ('uu', 'Removed in 3.13'),
     ('uuid', ''),
     ('venv', ''),
     ('warnings', ''),
     ('wave', ''),
     ('weakref', ''),
     ('webbrowser', ''),
-    ('winreg', '(Windows)'),
-    ('winsound', '(Windows)'),
+    ('winreg', 'Windows only'),
+    ('winsound', 'Windows only'),
     ('wsgiref', ''),
     ('wsgiref.handlers', ''),
     ('wsgiref.headers', ''),
     ('wsgiref.simple_server', ''),
-    ('wsgiref.types', ''),
+    ('wsgiref.types', 'Added in 3.11'),
     ('wsgiref.util', ''),
     ('wsgiref.validate', ''),
-    ('xdrlib', ''),
+    ('xdrlib', 'Removed in 3.13'),
     ('xml', ''),
     ('xml.dom', ''),
     ('xml.dom.minidom', ''),
@@ -317,10 +328,8 @@ modules = [
     ('zipfile', ''),
     ('zipimport', ''),
     ('zlib', ''),
-    ('zoneinfo', '')
+    ('zoneinfo', 'Added in 3.9')
 ]
-
-print('The following modules cannot be imported')
 
 # these are mandatory
 from msl import loadlib
@@ -333,16 +342,24 @@ from msl.loadlib.activex import Application
 from msl.loadlib.activex import Background
 from msl.examples.loadlib import EXAMPLES_DIR
 
-from sys import monitoring
+if sys.version_info[:2] >= (3, 12):
+    from sys import monitoring
 
 if constants.IS_WINDOWS:
     import clr
     import comtypes
     import pythonnet
 
-for name, os in modules:
+failed = []
+for name, comment in modules:
     try:
         importlib.import_module(name)
     except ImportError:
-        print(f'  {name} {os}')
+        failed.append((name, comment))
+
+version = '.'.join(str(v) for v in sys.version_info[:3])
+print(f'These modules cannot be imported by the server running on Python {version}')
+length = max(len(name) for name, _ in failed)
+for name, comment in failed:
+    print(f'  {name:{length}s} {comment}')
 print('')
