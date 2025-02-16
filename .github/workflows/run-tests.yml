@@ -16,10 +16,10 @@ jobs:
       fail-fast: false
       matrix:
         python-version: ["3.8", "3.9", "3.10", "3.11", "3.12", "3.13"]
-        os: [windows-latest, ubuntu-latest, macos-latest, macos-13]
+        os: [windows-latest, ubuntu-22.04, macos-latest, macos-13]
         architecture: [x64, x86]
         exclude:
-          - os: ubuntu-latest
+          - os: ubuntu-22.04
             architecture: x86
           - os: macos-latest
             architecture: x86
@@ -32,7 +32,7 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
       - name: Install system dependencies (Ubuntu)
-        if: ${{ matrix.os == 'ubuntu-latest' }}
+        if: ${{ matrix.os == 'ubuntu-22.04' }}
         run: |
           sudo dpkg --add-architecture i386
           sudo apt-get update
