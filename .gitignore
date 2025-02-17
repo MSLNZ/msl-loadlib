@@ -56,3 +56,7 @@ a_new_file.txt
 
 # Auto-generated during builds
 /src/msl/loadlib/_version.py
+
+# Might be generated when freezing the server
+file_version_info.txt
+server32.spec

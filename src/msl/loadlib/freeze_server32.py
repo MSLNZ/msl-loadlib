@@ -9,6 +9,7 @@ from __future__ import annotations
 import os
 import sys
 from importlib import import_module
+from shutil import copy
 from subprocess import check_call
 from tempfile import TemporaryDirectory
 from typing import Iterable
@@ -30,7 +31,9 @@ def main(*,
          dest: str | None = None,
          imports: str | Iterable[str] | None = None,
          data: str | Iterable[str] | None = None,
-         skip_32bit_check: bool = False) -> None:
+         skip_32bit_check: bool = False,
+         save_spec: bool = False,
+         keep_tk: bool = False) -> None:
     """Create a frozen server.
 
     This function should be run using a 32-bit Python interpreter with
@@ -44,7 +47,8 @@ def main(*,
 
     .. versionchanged:: 1.0
        Removed the `requires_pythonnet` and `requires_comtypes` arguments.
-       Added the `imports`, `data` and `skip_32bit_check` arguments.
+       Added the `imports`, `data`, `skip_32bit_check`, `save_spec` and `keep_tk`
+       arguments.
 
     .. _PyInstaller: https://www.pyinstaller.org/
 
@@ -67,6 +71,13 @@ def main(*,
         the server. Before you create a 64-bit server, decide if
         :ref:`msl-loadlib-mock-connection` is a better solution for your
         application.
+    :param save_spec: By default, the `.spec` file that is created (when the
+        server is frozen) is deleted. Setting this value to :data:`True` will
+        save the `.spec` file, so that it may be modified and then passed as
+        the value to the `spec` parameter.
+    :param keep_tk: By default, the :mod:`tkinter` module is excluded from the
+        server. Setting this value to :data:`True` will bundle :mod:`tkinter`
+        with the server.
 
     .. attention::
         If a value for `spec` is specified, then `imports` nor `data` may be
@@ -151,7 +162,7 @@ def main(*,
                       f'Cannot freeze the server', file=sys.stderr)
                 return
 
-        cmd.extend(_get_standard_modules())
+        cmd.extend(_get_standard_modules(keep_tk))
 
         if data:
             major, *rest = pyinstaller_version.split('.')
@@ -189,10 +200,32 @@ def main(*,
     if imports and ('pythonnet' in imports):
         loadlib.utils.check_dot_net_config(server_path)
 
-    print(f'Server saved to {server_path}')
+    if save_spec:
+        print(f'The following files were saved to {dist_path}\n'
+              f'  {constants.SERVER_FILENAME}')
+
+        if os.path.isfile(f'{server_path}.config'):
+            print(f'  {os.path.basename(server_path)}.config')
+
+        spec_file = 'server32.spec'
+        copy(
+            os.path.join(work_path, f'{constants.SERVER_FILENAME}.spec'),
+            os.path.join(dist_path, spec_file)
+        )
+        print(f'  {spec_file}')
+
+        if constants.IS_WINDOWS:
+            file_version_info = 'file_version_info.txt'
+            copy(
+                os.path.join(work_path, file_version_info),
+                dist_path
+            )
+            print(f'  {file_version_info}  (required by the {spec_file} file)')
+    else:
+        print(f'Server saved to {server_path}')
 
 
-def _get_standard_modules() -> list[str]:
+def _get_standard_modules(keep_tk: bool) -> list[str]:
     """
     Returns a list of standard python modules to include and exclude in the
     frozen application.
@@ -223,10 +256,11 @@ def _get_standard_modules() -> list[str]:
         'idlelib',
         'lib2to3',
         'test',
-        'tkinter',
-        '_tkinter',
         'turtle',
     ]
+
+    if not keep_tk:
+        ignore_list.extend(['tkinter', '_tkinter'])
 
     # some modules are platform specific and got a
     #   RecursionError: maximum recursion depth exceeded
@@ -320,21 +354,27 @@ def _cli() -> None:
     parser = argparse.ArgumentParser(
         description='Create a frozen server for msl-loadlib.',
         formatter_class=argparse.RawTextHelpFormatter,
+        add_help=False,
     )
-
+    parser.add_argument(
+        '-h', '--help',
+        action='help',
+        default=argparse.SUPPRESS,
+        help='Show this help message and exit.'
+    )
     parser.add_argument(
         '-s', '--spec',
-        help='the path to a PyInstaller .spec file'
+        help='The path to a PyInstaller .spec file.'
     )
     parser.add_argument(
         '-d', '--dest',
-        help='the destination directory to save the server to\n'
+        help='The destination directory to save the server to.\n'
              '(Default is the current directory)'
     )
     parser.add_argument(
         '-i', '--imports',
         nargs='*',
-        help='the names of modules that must be importable on the server\n'
+        help='The names of modules that must be importable on the server.\n'
              'Examples:\n'
              '  --imports msl.examples.loadlib\n'
              '  --imports mypackage numpy'
@@ -342,7 +382,7 @@ def _cli() -> None:
     parser.add_argument(
         '-D', '--data',
         nargs='*',
-        help='additional data files to bundle with the server -- the\n'
+        help='Additional data files to bundle with the server -- the\n'
              'format is "source:dest_dir", where "source" is the path\n'
              'to a file (or a directory of files) to add and "dest_dir"\n'
              'is an optional destination directory, relative to the\n'
@@ -354,14 +394,27 @@ def _cli() -> None:
              '  --data mydata/lib1.dll mydata/bin/lib2.dll:bin\n'
              '  --data mypackage/lib32.dll:mypackage'
     )
-
     parser.add_argument(
         '--skip-32bit-check',
         action='store_true',
-        help='in the rare situation that you want to create a frozen\n'
+        help='In the rare situation that you want to create a frozen\n'
              '64-bit server, you can include this flag which skips the\n'
              'requirement that a 32-bit version of Python must be used\n'
              'to create the server.'
+    )
+    parser.add_argument(
+        '--save-spec',
+        action='store_true',
+        help='By default, the PyInstaller ".spec" file (that is created\n'
+             'when the server is frozen) is deleted. Including this\n'
+             'flag will save the ".spec" file, so that it may be modified\n'
+             'and then passed as the value to the "--spec" option.'
+    )
+    parser.add_argument(
+        '--keep-tk',
+        action='store_true',
+        help='By default, the tkinter module is excluded from the server.\n'
+             'Including this flag will bundle tkinter with the server.'
     )
 
     args = parser.parse_args(sys.argv[1:])
@@ -373,5 +426,7 @@ def _cli() -> None:
             imports=args.imports,
             data=args.data,
             skip_32bit_check=args.skip_32bit_check,
+            save_spec=args.save_spec,
+            keep_tk=args.keep_tk,
         )
     )

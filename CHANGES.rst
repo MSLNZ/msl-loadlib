@@ -9,6 +9,7 @@ Version 1.0.0 (in development)
 
   - :class:`~msl.loadlib.client64.Client64` now accepts ``None`` as
     the value of `host`, which will mock the connection to the server
+  - support for Python 3.13
   - support for Python 3.12
   - type annotations (:PEP:`484` and :PEP:`561` using inline types)
   - ``freeze32`` console script to create a new server
@@ -18,8 +19,8 @@ Version 1.0.0 (in development)
   - convert to a :PEP:`420` implicit namespace package
   - the `requires_pythonnet` and `requires_comtypes` arguments to
     :func:`freeze_server32.main() <msl.loadlib.freeze_server32.main>`
-    were removed and the `imports`, `data` and `skip_32bit_check`
-    arguments were added
+    were removed and the `imports`, `data`, `skip_32bit_check`, `save_spec`
+    and `keep_tk` arguments were added
   - constants (e.g., `IS_WINDOWS`) were moved to a `constants.py` file,
     these constants are meant for internal use only
 
