@@ -66,6 +66,7 @@ type = [
 ]
 dev = [
     "comtypes>=1.4.10;sys_platform=='win32'",
+    "hatch>=1.14.0",
     "py4j>=0.10.9.9",
     "pythonnet>=3.0.5",
     {include-group = "doc"},
@@ -193,8 +194,8 @@ explicit_package_bases = true
 allow_redefinition = false
 allow_untyped_globals = false
 disallow_any_decorated = true
-disallow_any_explicit = true
-disallow_any_expr = true
+disallow_any_explicit = false  # true
+disallow_any_expr = false  # true
 disallow_any_unimported = true
 ignore_missing_imports = false
 implicit_optional = false
@@ -211,6 +212,8 @@ exclude = [
     "**/__pycache__",
     "**/_version.py",
 ]
+reportAny = false
+reportExplicitAny = false
 
 [tool.ruff]
 cache-dir = ".cache/ruff"
@@ -237,6 +240,7 @@ ignore = [
     "D213", # multi-line-summary-second-line
     "COM812", # missing-trailing-comma
     "ISC001", # single-line-implicit-string-concatenation
+    "ANN401", # dynamically typed expressions (typing.Any) are disallowed
 ]
 
 [tool.ruff.lint.per-file-ignores]
