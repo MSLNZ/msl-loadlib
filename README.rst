@@ -177,8 +177,8 @@ The documentation for **MSL-LoadLib** can be found
 .. |pypi| image:: https://badge.fury.io/py/msl-loadlib.svg
    :target: https://badge.fury.io/py/msl-loadlib
 
-.. |github tests| image:: https://github.com/MSLNZ/msl-loadlib/actions/workflows/run-tests.yml/badge.svg
-   :target: https://github.com/MSLNZ/msl-loadlib/actions/workflows/run-tests.yml
+.. |github tests| image:: https://github.com/MSLNZ/msl-loadlib/actions/workflows/tests.yml/badge.svg
+   :target: https://github.com/MSLNZ/msl-loadlib/actions/workflows/tests.yml
 
 .. _ctypes: https://docs.python.org/3/library/ctypes.html
 .. _Python for .NET: https://pythonnet.github.io/
