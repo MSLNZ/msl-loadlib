@@ -1,0 +1,26 @@
+{
+    "$schema": "https://raw.githubusercontent.com/streetsidesoftware/cspell/main/cspell.schema.json",
+    "version": "0.2",
+    "language": "en-GB",
+    "languageId": "python",
+    "useGitignore": true,
+    "dictionaries": [
+        "!aws",
+        "!companies",
+        "!cryptocurrencies",
+        "!web-services"
+    ],
+    "cache": {
+        "cacheFormat": "universal",
+        "cacheLocation": ".cache/.cspellcache",
+        "cacheStrategy": "content",
+        "useCache": true
+    },
+    "ignorePaths": [
+        ".readthedocs.yml",
+        "cspell.json",
+        "pyproject.toml"
+    ],
+    "words": [
+    ]
+}
