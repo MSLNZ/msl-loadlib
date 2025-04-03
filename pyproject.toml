@@ -152,12 +152,13 @@ addopts = [
     "--ignore=tests/server32_comtypes",
     "--ignore=tests/sew_eurodrive",
 ]
+cache_dir = ".cache/pytest"
 consider_namespace_packages = true
 doctest_optionflags = "NORMALIZE_WHITESPACE ALLOW_UNICODE ELLIPSIS"
 
 [tool.coverage.run]
 branch = true
-data_file = ".coverage_html/.coverage"
+data_file = ".cache/coverage/.coverage"
 omit = [
     "src/msl/examples/*",
     "*/msl-loadlib-com-wrapper/*",
@@ -172,5 +173,5 @@ exclude_lines = [
 include_namespace_packages = true
 
 [tool.coverage.html]
-directory = ".coverage_html"
+directory = ".cache/coverage"
 title = "MSL-LoadLib coverage report"
