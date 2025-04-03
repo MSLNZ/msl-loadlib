@@ -65,7 +65,9 @@ type = [
     "mypy>=1.14.1",
 ]
 dev = [
-    "msl-loadlib[all]",
+    "comtypes>=1.4.10;sys_platform=='win32'",
+    "py4j>=0.10.9.9",
+    "pythonnet>=3.0.5",
     {include-group = "doc"},
     {include-group = "lint"},
     {include-group = "test"},
