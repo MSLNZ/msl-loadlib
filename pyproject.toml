@@ -8,7 +8,12 @@ dynamic = ["version"]
 dependencies = []
 description = "Load a shared library (and access a 32-bit library from 64-bit Python)"
 license = {file = "LICENSE.txt"}
-authors =[{name="Measurement Standards Laboratory of New Zealand", email="info@measurement.govt.nz"}]
+authors =[
+    {name = "Measurement Standards Laboratory of New Zealand", email = "info@measurement.govt.nz"},
+]
+maintainers = [
+    {name = "Joseph Borbely", email = "joseph.borbely@measurement.govt.nz"},
+]
 requires-python = ">=3.8"
 readme = "README.rst"
 classifiers = [
