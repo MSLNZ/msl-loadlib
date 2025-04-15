@@ -14,19 +14,19 @@ from msl.examples.loadlib import Cpp64
 from msl.examples.loadlib import EXAMPLES_DIR
 from msl.loadlib import LoadLibrary
 
-if os.path.basename(sys.executable) != 'pythonw.exe':
+if os.path.basename(sys.executable) != "pythonw.exe":
     raise RuntimeError(
-        'Must run this script using,\n'
-        '  pythonw.exe ' + __file__
+        "Must run this script using,\n"
+        "  pythonw.exe " + __file__
     )
 
-sys.stdout = open(__file__[:-3]+'.txt', mode='wt')
+sys.stdout = open(__file__[:-3]+".txt", mode="wt")
 sys.stderr = sys.stdout
 
-with LoadLibrary(os.path.join(EXAMPLES_DIR, 'Trig.class')) as java:
+with LoadLibrary(os.path.join(EXAMPLES_DIR, "Trig.class")) as java:
     print(java)
 
 with Cpp64() as cpp:
     print(cpp)
 
-print('You should delete this file')
+print("You should delete this file")

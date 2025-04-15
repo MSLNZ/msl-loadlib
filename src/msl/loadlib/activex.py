@@ -230,18 +230,18 @@ try:
 
     class WNDCLASSEXW(ctypes.Structure):
         _fields_ = [
-            ('cbSize', wt.UINT),
-            ('style', wt.UINT),
-            ('lpfnWndProc', WNDPROC),
-            ('cbClsExtra', ctypes.c_int),
-            ('cbWndExtra', ctypes.c_int),
-            ('hInstance', wt.HINSTANCE),
-            ('hIcon', wt.HICON),
-            ('hCursor', wt.HANDLE),
-            ('hbrBackground', wt.HBRUSH),
-            ('lpszMenuName', wt.LPCWSTR),
-            ('lpszClassName', wt.LPCWSTR),
-            ('hIconSm', wt.HICON),
+            ("cbSize", wt.UINT),
+            ("style", wt.UINT),
+            ("lpfnWndProc", WNDPROC),
+            ("cbClsExtra", ctypes.c_int),
+            ("cbWndExtra", ctypes.c_int),
+            ("hInstance", wt.HINSTANCE),
+            ("hIcon", wt.HICON),
+            ("hCursor", wt.HANDLE),
+            ("hbrBackground", wt.HBRUSH),
+            ("lpszMenuName", wt.LPCWSTR),
+            ("lpszClassName", wt.LPCWSTR),
+            ("hIconSm", wt.HICON),
         ]
 
     kernel32.GetModuleHandleW.restype = wt.HMODULE
@@ -366,8 +366,8 @@ CW_USEDEFAULT = 0x80000000
 
 def _create_window(*,
                    ex_style: int = 0,
-                   class_name: str = '',
-                   window_name: str = '',
+                   class_name: str = "",
+                   window_name: str = "",
                    style: int = 0,
                    x: int = CW_USEDEFAULT,
                    y: int = CW_USEDEFAULT,
@@ -399,10 +399,10 @@ class Icon:
         self._hicon: int | None = None
 
         if shell32 is None:
-            raise OSError('Loading an icon is not supported on this platform')
+            raise OSError("Loading an icon is not supported on this platform")
 
         if index < 0:
-            raise ValueError('A negative index is not supported')
+            raise ValueError("A negative index is not supported")
 
         if hinstance is None:
             hinstance = kernel32.GetModuleHandleW(None)
@@ -412,7 +412,7 @@ class Icon:
         self._hicon = shell32.ExtractIconW(hinstance, file, index)
 
     def __repr__(self) -> str:
-        return f'<Icon file={self._file!r} index={self._index}>'
+        return f"<Icon file={self._file!r} index={self._index}>"
 
     def __del__(self) -> None:
         self.destroy()
@@ -437,14 +437,14 @@ class MenuItem:
         Do not instantiate this class directly. Use :meth:`.MenuGroup.append`
         or :meth:`.Menu.append` to create a new menu item.
         """
-        self._hmenu: int = kwargs['hmenu']
-        self._id: int = kwargs['id']
-        self._text: str = kwargs['text']
-        self._callback: Callback | None = kwargs['callback']
-        self._flags: int = kwargs['flags']
+        self._hmenu: int = kwargs["hmenu"]
+        self._id: int = kwargs["id"]
+        self._text: str = kwargs["text"]
+        self._callback: Callback | None = kwargs["callback"]
+        self._flags: int = kwargs["flags"]
         self._checked = False
 
-        self.data: Any = kwargs['data']
+        self.data: Any = kwargs["data"]
         """User data associated with the menu item."""
 
     def __eq__(self, other: MenuItem) -> bool:
@@ -454,7 +454,7 @@ class MenuItem:
             return False
 
     def __repr__(self) -> str:
-        return f'<{self.__class__.__name__} id={self._id} text={self._text!r}>'
+        return f"<{self.__class__.__name__} id={self._id} text={self._text!r}>"
 
     @property
     def callback(self) -> Callback | None:
@@ -470,8 +470,8 @@ class MenuItem:
     def checked(self, value: bool) -> None:
         """Set the checked state of the menu item."""
         if self._hmenu == -1:
-            raise ValueError('A MenuItem must first be added to a Menu '
-                             'before it can be checked')
+            raise ValueError("A MenuItem must first be added to a Menu "
+                             "before it can be checked")
 
         # MF_CHECKED=8, MF_UNCHECKED=0
         state = 8 if value else 0
@@ -503,7 +503,7 @@ class MenuItem:
 
 class MenuGroup:
 
-    def __init__(self, name: str = '') -> None:
+    def __init__(self, name: str = "") -> None:
         """A group of :class:`.MenuItem`\\'s where only one item in the group
         may have a check mark to indicate that a particular item is selected.
 
@@ -513,7 +513,7 @@ class MenuGroup:
         self._items: list[MenuItem] = []
 
     def __repr__(self) -> str:
-        return f'<{self.__class__.__name__} name={self._name!r} size={len(self._items)}>'
+        return f"<{self.__class__.__name__} name={self._name!r} size={len(self._items)}>"
 
     def __iter__(self) -> Iterator[MenuItem]:
         return iter(self._items)
@@ -558,8 +558,8 @@ class MenuGroup:
         """Sets the menu item that is currently checked in the group."""
         for i in self:
             if i.hmenu == -1:
-                raise ValueError('A MenuGroup must first be added to a Menu '
-                                 'before a MenuItem can be checked')
+                raise ValueError("A MenuGroup must first be added to a Menu "
+                                 "before a MenuItem can be checked")
             i.checked = i == item
 
     @property
@@ -661,7 +661,7 @@ class Application:
                  class_style: int = ClassStyle.NONE,
                  icon: Icon = None,
                  style: int = WindowStyle.OVERLAPPEDWINDOW,
-                 title: str = 'ActiveX') -> None:
+                 title: str = "ActiveX") -> None:
         """Create the main application window to display ActiveX controls.
 
         :param background: The background colour of the main window
@@ -680,7 +680,7 @@ class Application:
         self._msg_handlers: list[Callable[[int, int, int, int], None]] = []
 
         if WNDCLASSEXW is None:
-            raise OSError('An ActiveX application is not supported on this platform')
+            raise OSError("An ActiveX application is not supported on this platform")
 
         if isinstance(icon, Icon):
             h_icon = icon.hicon
@@ -697,8 +697,8 @@ class Application:
         self._window.hIcon = h_icon
         self._window.hCursor = user32.LoadCursorW(None, wt.LPCWSTR(32512))  # IDC_ARROW
         self._window.hbrBackground = gdi32.GetStockObject(background)
-        self._window.lpszMenuName = f'ActiveXMenu{id(self._window)}'  # make the name unique
-        self._window.lpszClassName = f'ActiveXClass{id(self._window)}'
+        self._window.lpszMenuName = f"ActiveXMenu{id(self._window)}"  # make the name unique
+        self._window.lpszClassName = f"ActiveXClass{id(self._window)}"
         self._window.hIconSm = h_icon
 
         self._atom = user32.RegisterClassExW(self._window)
@@ -815,7 +815,7 @@ class Application:
         :return: The interface pointer to the ActiveX library.
         """
         if comtypes is None:
-            raise OSError('comtypes must be installed to load an ActiveX library')
+            raise OSError("comtypes must be installed to load an ActiveX library")
 
         try:
             window_name = str(comtypes.GUID.from_progid(activex_id))
@@ -823,13 +823,13 @@ class Application:
             window_name = None
 
         if not window_name:
-            raise OSError(f'Cannot find an ActiveX library with ID {activex_id!r}')
+            raise OSError(f"Cannot find an ActiveX library with ID {activex_id!r}")
 
         if parent is None:
             parent = self._hwnd
 
         hwnd = _create_window(
-            class_name='AtlAxWin',
+            class_name="AtlAxWin",
             window_name=window_name,
             style=style,
             ex_style=ex_style,
@@ -844,7 +844,7 @@ class Application:
         unknown = ctypes.POINTER(comtypes.IUnknown)()
         ret = atl.AtlAxGetControl(hwnd, ctypes.byref(unknown))
         if ret != 0:
-            raise OSError(f'AtlAxGetControl {ctypes.WinError()}')
+            raise OSError(f"AtlAxGetControl {ctypes.WinError()}")
         return client.GetBestInterface(unknown)
 
     @property
@@ -857,8 +857,8 @@ class Application:
                     hwnd: int = None,
                     language_id: int = 0,
                     options: int = MessageBoxOption.OK,
-                    text: str = '',
-                    title: str = '') -> int:
+                    text: str = "",
+                    title: str = "") -> int:
         """Displays a modal dialog box.
 
         :param hwnd: A handle to the owner window of the message box to be created.

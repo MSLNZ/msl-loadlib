@@ -17,8 +17,8 @@ else:
 class Bounce32(Server32):
 
     def __init__(self, host, port):
-        path = os.path.join(Server32.examples_dir(), 'cpp_lib32')
-        super().__init__(path, 'cdll', host, port)
+        path = os.path.join(Server32.examples_dir(), "cpp_lib32")
+        super().__init__(path, "cdll", host, port)
 
     def bounce(self, *args, **kwargs):
         return args, kwargs
@@ -30,26 +30,26 @@ class Bounce64(Client64):
         super().__init__(__file__, protocol=protocol)
 
     def bounce(self, *args, **kwargs):
-        return self.request32('bounce', *args, **kwargs)
+        return self.request32("bounce", *args, **kwargs)
 
 
 @skipif_no_server32
 def test_protocol():
-    args = (None, True, False, 1, -2.0, 5-6j, [1, [2., 'hello']], {'one': '1', 'two': 2})
+    args = (None, True, False, 1, -2.0, 5-6j, [1, [2., "hello"]], {"one": "1", "two": 2})
     kwargs = {
-        'None': None,
-        'True': True,
-        'False': False,
-        'Int': 1,
-        'Float': -2.0,
-        'Complex': 5 - 6j,
-        'List': [1, [2., 'hello']],
-        'Dict': {'one': '1', 'two': 2},
+        "None": None,
+        "True": True,
+        "False": False,
+        "Int": 1,
+        "Float": -2.0,
+        "Complex": 5 - 6j,
+        "List": [1, [2., "hello"]],
+        "Dict": {"one": "1", "two": 2},
     }
 
     # determine the maximum pickle protocol allowed based on
     # Python versions that are used by the server and the client
-    server_version = re.match(r'Python\s(\d+)\.(\d+)', Server32.version())
+    server_version = re.match(r"Python\s(\d+)\.(\d+)", Server32.version())
     server_major, server_minor = map(int, server_version.groups())
     client_major, client_minor = sys.version_info[:2]
     major = min(server_major, client_major)
@@ -65,7 +65,7 @@ def test_protocol():
 
     for protocol in list(range(10)):
         if protocol > max_protocol:
-            with pytest.raises((Server32Error, ValueError), match=r'pickle protocol'):
+            with pytest.raises((Server32Error, ValueError), match=r"pickle protocol"):
                 Bounce64(protocol)
         else:
             b = Bounce64(protocol)

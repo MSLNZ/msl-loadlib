@@ -19,8 +19,8 @@ RPC_TIMEOUT = 5.0
 class RPCServer(Server32):
 
     def __init__(self, host, port):
-        path = os.path.join(Server32.examples_dir(), 'cpp_lib32')
-        super().__init__(path, 'cdll', host, port)
+        path = os.path.join(Server32.examples_dir(), "cpp_lib32")
+        super().__init__(path, "cdll", host, port)
 
     def no_delay(self, a, b):
         return self.lib.add(a, b)
@@ -40,13 +40,13 @@ class RPCClient(Client64):
         super().__init__(__file__, rpc_timeout=RPC_TIMEOUT)
 
     def no_delay(self, a, b):
-        return self.request32('no_delay', a, b)
+        return self.request32("no_delay", a, b)
 
     def short_delay(self, a, b):
-        return self.request32('short_delay', a, b)
+        return self.request32("short_delay", a, b)
 
     def long_delay(self, a, b):
-        return self.request32('long_delay', a, b)
+        return self.request32("long_delay", a, b)
 
 
 @skipif_no_server32

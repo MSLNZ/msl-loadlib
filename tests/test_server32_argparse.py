@@ -27,17 +27,17 @@ class ArgParse32(Server32):
 
     def __init__(self, host, port, **kwargs):
         # load any dll since it won't be called
-        path = os.path.join(Server32.examples_dir(), 'cpp_lib32')
-        super().__init__(path, 'cdll', host, port)
+        path = os.path.join(Server32.examples_dir(), "cpp_lib32")
+        super().__init__(path, "cdll", host, port)
         self.kwargs = kwargs
 
-        self.env_paths = os.environ['PATH'].split(os.pathsep)
+        self.env_paths = os.environ["PATH"].split(os.pathsep)
 
         # the server creates the os.added_dll_directories attribute (Windows only)
         try:
             dll_dirs = os.added_dll_directories
         except AttributeError:
-            self.dll_dirs = 'os.added_dll_directories does not exist'
+            self.dll_dirs = "os.added_dll_directories does not exist"
         else:
             self.dll_dirs = [p.path for p in dll_dirs]
 
@@ -63,18 +63,18 @@ class ArgParse64(Client64):
 
     def is_in_sys_path(self, path):
         p = os.path.abspath(os.fsdecode(path))
-        return self.request32('is_in_sys_path', p)
+        return self.request32("is_in_sys_path", p)
 
     def is_in_environ_path(self, path):
         p = os.path.abspath(os.fsdecode(path))
-        return self.request32('is_in_environ_path', p)
+        return self.request32("is_in_environ_path", p)
 
     def is_in_dll_dirs(self, path):
         p = os.path.abspath(os.fsdecode(path))
-        return self.request32('is_in_dll_dirs', p)
+        return self.request32("is_in_dll_dirs", p)
 
     def get_kwarg(self, key):
-        return self.request32('get_kwarg', key)
+        return self.request32("get_kwarg", key)
 
 
 class BytesPath:
@@ -90,34 +90,34 @@ class BytesPath:
 def test_arg_parser_iterable():
     if IS_WINDOWS:
         sys_path = [
-            b'C:/home/joe/code',
-            'C:\\Program Files (x86)\\Whatever',
-            pathlib.Path(r'C:\Users\username'),
-            BytesPath(b'C:/users')
+            b"C:/home/joe/code",
+            "C:\\Program Files (x86)\\Whatever",
+            pathlib.Path(r"C:\Users\username"),
+            BytesPath(b"C:/users")
         ]
         env_path = [
-            b'D:/ends/in/slash/',
-            'D:/path/to/lib',
-            pathlib.Path(r'D:\path\with space'),
-            BytesPath(b'C:/a/b/c')
+            b"D:/ends/in/slash/",
+            "D:/path/to/lib",
+            pathlib.Path(r"D:\path\with space"),
+            BytesPath(b"C:/a/b/c")
         ]
         dll_dir = os.path.dirname(__file__)
     else:
         sys_path = [
-            b'/ends/in/slash/',
-            '/usr/local/custom/path',
-            pathlib.Path('/home/username'),
-            BytesPath(b'/a/b/c')
+            b"/ends/in/slash/",
+            "/usr/local/custom/path",
+            pathlib.Path("/home/username"),
+            BytesPath(b"/a/b/c")
         ]
         env_path = [
-            b'/home/my/folder',
-            '/a/path/for/environ/slash/',
-            pathlib.Path('/home/my/username'),
-            BytesPath(b'/a/b/c/d')
+            b"/home/my/folder",
+            "/a/path/for/environ/slash/",
+            pathlib.Path("/home/my/username"),
+            BytesPath(b"/a/b/c/d")
         ]
         dll_dir = None
 
-    kwargs = {'a': -11, 'b': 3.1415926, 'c': 'abcd efghi jk', 'd': [1, 2, 3], 'e': {1: 'val'}}  # cSpell: ignore efghi
+    kwargs = {"a": -11, "b": 3.1415926, "c": "abcd efghi jk", "d": [1, 2, 3], "e": {1: "val"}}  # cSpell: ignore efghi
 
     client = ArgParse64(
         add_dll_directory=dll_dir,
@@ -136,17 +136,17 @@ def test_arg_parser_iterable():
     if dll_dir is not None:
         assert client.is_in_dll_dirs(dll_dir)
 
-    assert client.get_kwarg('a') == '-11'
-    assert client.get_kwarg('b') == '3.1415926'
-    assert client.get_kwarg('c') == 'abcd efghi jk'
-    assert client.get_kwarg('d') == '[1, 2, 3]'
-    assert client.get_kwarg('e') == "{1: 'val'}"
+    assert client.get_kwarg("a") == "-11"
+    assert client.get_kwarg("b") == "3.1415926"
+    assert client.get_kwarg("c") == "abcd efghi jk"
+    assert client.get_kwarg("d") == "[1, 2, 3]"
+    assert client.get_kwarg("e") == "{1: 'val'}"
 
 
 @skipif_not_windows
 def test_add_dll_directory_win32():
     with ArgParse64() as a:
-        assert a.request32('dll_dirs') == 'os.added_dll_directories does not exist'
+        assert a.request32("dll_dirs") == "os.added_dll_directories does not exist"
 
     path = os.path.dirname(__file__)
     with ArgParse64(add_dll_directory=path) as a:
@@ -154,22 +154,22 @@ def test_add_dll_directory_win32():
 
     dll_dirs = [
         path.encode(),
-        os.path.abspath(os.path.join(path, '..')),
-        pathlib.Path(os.path.abspath(os.path.join(path, '..', '..'))),
-        BytesPath(os.path.join(path, 'bad_servers').encode())
+        os.path.abspath(os.path.join(path, "..")),
+        pathlib.Path(os.path.abspath(os.path.join(path, "..", ".."))),
+        BytesPath(os.path.join(path, "bad_servers").encode())
     ]
     with ArgParse64(add_dll_directory=dll_dirs) as a:
         for path in dll_dirs:
             assert a.is_in_dll_dirs(path)
 
-    with pytest.raises(ConnectionTimeoutError, match=r'FileNotFoundError'):
-        with ArgParse64(add_dll_directory='C:\\does\\not\\exist', timeout=2):
+    with pytest.raises(ConnectionTimeoutError, match=r"FileNotFoundError"):
+        with ArgParse64(add_dll_directory="C:\\does\\not\\exist", timeout=2):
             pass
 
 
-@pytest.mark.skipif(IS_WINDOWS, reason='do not test on Windows')
+@pytest.mark.skipif(IS_WINDOWS, reason="do not test on Windows")
 @skipif_no_server32
 def test_add_dll_directory_linux():
-    with pytest.raises(ConnectionTimeoutError, match=r'not supported'):
-        with ArgParse64(add_dll_directory='/home', timeout=2):
+    with pytest.raises(ConnectionTimeoutError, match=r"not supported"):
+        with ArgParse64(add_dll_directory="/home", timeout=2):
             pass

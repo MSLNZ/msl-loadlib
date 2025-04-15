@@ -4,8 +4,8 @@ import sys
 # If extensions (or modules to document with autodoc) are in another directory,
 # add these directories to sys.path here. If the directory is relative to the
 # documentation root, use os.path.abspath to make it absolute, like shown here.
-sys.path.insert(0, os.path.abspath('.'))
-sys.path.insert(0, os.path.abspath('..'))
+sys.path.insert(0, os.path.abspath("."))
+sys.path.insert(0, os.path.abspath(".."))
 
 from msl import loadlib
 
@@ -18,39 +18,39 @@ from msl import loadlib
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
 # ones.
 extensions = [
-    'sphinx.ext.autodoc',
-    'sphinx.ext.autosummary',
-    'sphinx.ext.intersphinx',
-    'sphinx_rtd_theme',
+    "sphinx.ext.autodoc",
+    "sphinx.ext.autosummary",
+    "sphinx.ext.intersphinx",
+    "sphinx_rtd_theme",
 ]
 
 # autodoc options
-autodoc_typehints = 'description'
-autodoc_typehints_format = 'short'
+autodoc_typehints = "description"
+autodoc_typehints_format = "short"
 autodoc_default_options = {
-    'members': None,
-    'member-order': 'bysource',
-    'undoc-members': None,
-    'show-inheritance': None,
+    "members": None,
+    "member-order": "bysource",
+    "undoc-members": None,
+    "show-inheritance": None,
 }
 
 # Generate autodoc stubs with summaries from code
 autosummary_generate = True
 
 # include both class docstring and __init__
-autoclass_content = 'both'
+autoclass_content = "both"
 
 # Add any paths that contain templates here, relative to this directory.
-templates_path = ['_templates']
+templates_path = ["_templates"]
 
 # The suffix of source filenames.
-source_suffix = '.rst'
+source_suffix = ".rst"
 
 # The master toctree document.
-master_doc = 'index'
+master_doc = "index"
 
 # General information about the project.
-project = 'MSL-LoadLib'
+project = "MSL-LoadLib"
 copyright = loadlib.__copyright__[1:]
 author = loadlib.__author__
 
@@ -68,15 +68,15 @@ release = loadlib.__version__
 #
 # This is also used if you do content translation via gettext catalogs.
 # Usually you set "language" from the command line for these cases.
-language = 'en'
+language = "en"
 
 # List of patterns, relative to source directory, that match files and
 # directories to ignore when looking for source files.
 # This patterns also effect to html_static_path and html_extra_path
-exclude_patterns = ['_build', 'Thumbs.db', '.DS_Store']
+exclude_patterns = ["_build", "Thumbs.db", ".DS_Store"]
 
 # The name of the Pygments (syntax highlighting) style to use.
-pygments_style = 'sphinx'
+pygments_style = "sphinx"
 
 # If true, to-do and to-doList produce output, else they produce nothing.
 todo_include_todos = True
@@ -87,7 +87,7 @@ todo_include_todos = True
 # The theme to use for HTML and HTML Help pages.  See the documentation for
 # a list of builtin themes.
 #
-html_theme = 'sphinx_rtd_theme'
+html_theme = "sphinx_rtd_theme"
 
 # Theme options are theme-specific and customize the look and feel of a theme
 # further.  For a list of options available for each theme, see the
@@ -98,14 +98,14 @@ html_theme = 'sphinx_rtd_theme'
 # Add any paths that contain custom static files (such as style sheets) here,
 # relative to this directory. They are copied after the builtin static files,
 # so a file named "default.css" will overwrite the builtin "default.css".
-html_static_path = ['_static']
+html_static_path = ["_static"]
 
-html_css_files = ['css/custom.css']
+html_css_files = ["css/custom.css"]
 
 # -- Options for HTMLHelp output ------------------------------------------
 
 # Output file base name for HTML help builder.
-htmlhelp_basename = 'MSL-LoadLibdoc'
+htmlhelp_basename = "MSL-LoadLibdoc"
 
 
 # -- Options for LaTeX output ---------------------------------------------
@@ -113,11 +113,11 @@ htmlhelp_basename = 'MSL-LoadLibdoc'
 latex_elements = {
     # The paper size ('letterpaper' or 'a4paper').
     #
-    'papersize': 'a4paper',
+    "papersize": "a4paper",
 
     # The font size ('10pt', '11pt' or '12pt').
     #
-    'pointsize': '11pt',
+    "pointsize": "11pt",
 
     # Additional stuff for the LaTeX preamble.
     #
@@ -132,8 +132,8 @@ latex_elements = {
 # (source start file, target name, title,
 #  author, documentclass [howto, manual, or own class]).
 latex_documents = [
-    (master_doc, 'MSL-LoadLib.tex', 'MSL-LoadLib Documentation',
-     'Measurement Standards Laboratory of New Zealand', 'manual'),
+    (master_doc, "MSL-LoadLib.tex", "MSL-LoadLib Documentation",
+     "Measurement Standards Laboratory of New Zealand", "manual"),
 ]
 
 
@@ -142,7 +142,7 @@ latex_documents = [
 # One entry per manual page. List of tuples
 # (source start file, name, description, authors, manual section).
 man_pages = [
-    (master_doc, 'MSL-LoadLib', 'MSL-LoadLib Documentation',
+    (master_doc, "MSL-LoadLib", "MSL-LoadLib Documentation",
      [author], 1)
 ]
 
@@ -153,9 +153,9 @@ man_pages = [
 # (source start file, target name, title, author,
 #  dir menu entry, description, category)
 texinfo_documents = [
-    (master_doc, 'MSL-LoadLib', 'MSL-LoadLib Documentation',
-     author, 'MSL-LoadLib', 'Load a shared library into Python.',
-     'Miscellaneous'),
+    (master_doc, "MSL-LoadLib", "MSL-LoadLib Documentation",
+     author, "MSL-LoadLib", "Load a shared library into Python.",
+     "Miscellaneous"),
 ]
 
 
@@ -177,14 +177,14 @@ epub_copyright = copyright
 # epub_uid = ''
 
 # A list of files that should not be packed into the epub file.
-epub_exclude_files = ['search.html']
+epub_exclude_files = ["search.html"]
 
 # Example configuration for intersphinx: refer to the Python standard library.
 intersphinx_mapping = {
-    'python': ('https://docs.python.org/3', None),
-    'py4j': ('https://www.py4j.org/', None),
-    'numpy': ('https://numpy.org/doc/stable/', None),
-    'pyinstaller': ('https://pyinstaller.org/en/stable', None),
+    "python": ("https://docs.python.org/3", None),
+    "py4j": ("https://www.py4j.org/", None),
+    "numpy": ("https://numpy.org/doc/stable/", None),
+    "pyinstaller": ("https://pyinstaller.org/en/stable", None),
 }
 
 # warn about all broken links
@@ -192,12 +192,12 @@ nitpicky = True
 
 # known bad links
 nitpick_ignore = [
-    ('py:class', 'System.Windows.Forms.Form'),
-    ('py:class', 'module'),
+    ("py:class", "System.Windows.Forms.Form"),
+    ("py:class", "module"),
 ]
 
 type_aliases = {
-    'LibTypes': 'LibTypes',
+    "LibTypes": "LibTypes",
 }
 
 
@@ -205,24 +205,24 @@ def resolve_aliases(app, env, node, contnode):
     """Resolve aliases."""
     from sphinx.ext.intersphinx import missing_reference
 
-    if node['reftarget'] == '_ctypes.Structure':
-        node['reftarget'] = 'ctypes.Structure'
+    if node["reftarget"] == "_ctypes.Structure":
+        node["reftarget"] = "ctypes.Structure"
         return missing_reference(app, env, node, contnode)
 
-    if node['reftarget'] == '_ctypes.POINTER':
-        node['reftarget'] = 'ctypes.POINTER'
-        node['reftype'] = 'func'
+    if node["reftarget"] == "_ctypes.POINTER":
+        node["reftarget"] = "ctypes.POINTER"
+        node["reftype"] = "func"
         return missing_reference(app, env, node, contnode)
 
     # resolve py:class: references to our type aliases as py:data: instead
-    if (node['refdomain'] == 'py' and node['reftype'] == 'class' and
-            node['reftarget'] in type_aliases):
-        return app.env.get_domain('py').resolve_xref(
-            env, node['refdoc'], app.builder, 'data', node['reftarget'], node, contnode)
+    if (node["refdomain"] == "py" and node["reftype"] == "class" and
+            node["reftarget"] in type_aliases):
+        return app.env.get_domain("py").resolve_xref(
+            env, node["refdoc"], app.builder, "data", node["reftarget"], node, contnode)
 
 
 def setup(app):
-    app.connect('missing-reference', resolve_aliases)
+    app.connect("missing-reference", resolve_aliases)
 
     from _ext.autodoc_intenum import IntEnumDocumenter
     app.add_autodocumenter(IntEnumDocumenter)

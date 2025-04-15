@@ -58,29 +58,29 @@ def test_bad_del():
         pass
 
     # this should raise AttributeError because super() was not called in BadDel
-    with pytest.raises(AttributeError, match='_client'):
-        BadDel().request32('request')
+    with pytest.raises(AttributeError, match="_client"):
+        BadDel().request32("request")
 
 
 def test_invalid_server32_dir():
-    with pytest.raises(OSError, match=rf'^Cannot find {SERVER_FILENAME}$'):
-        Client64(__file__, server32_dir='')
+    with pytest.raises(OSError, match=rf"^Cannot find {SERVER_FILENAME}$"):
+        Client64(__file__, server32_dir="")
 
 
 @skipif_no_server32
 @skipif_not_windows
 def test_module32_as_name():
-    client = Client64(module32='msl.examples.loadlib.kernel32')
-    assert isinstance(client.request32('get_time'), datetime)
+    client = Client64(module32="msl.examples.loadlib.kernel32")
+    assert isinstance(client.request32("get_time"), datetime)
 
 
 @skipif_no_server32
 @skipif_not_windows
 def test_module32_as_path():
-    path = os.path.join(EXAMPLES_DIR, 'kernel32.py')
+    path = os.path.join(EXAMPLES_DIR, "kernel32.py")
     assert os.path.isfile(path)
     client = Client64(module32=path)
-    assert isinstance(client.request32('get_time'), datetime)
+    assert isinstance(client.request32("get_time"), datetime)
 
 
 def test_build_paths_none():
@@ -98,27 +98,27 @@ class BytesPath:
         return self._path
 
 
-@pytest.mark.parametrize('path', ['here', b'here', pathlib.Path('here'), BytesPath(b'here')])
+@pytest.mark.parametrize("path", ["here", b"here", pathlib.Path("here"), BytesPath(b"here")])
 def test_build_paths_single(path):
-    assert _build_paths(path) == [os.path.join(os.getcwd(), 'here')]
+    assert _build_paths(path) == [os.path.join(os.getcwd(), "here")]
 
 
 def test_build_paths_iterable():
     cwd = os.getcwd()
-    paths = ['a', b'b', pathlib.Path('c'), BytesPath(b'd')]
+    paths = ["a", b"b", pathlib.Path("c"), BytesPath(b"d")]
     assert _build_paths(paths) == [
-        os.path.join(cwd, 'a'),
-        os.path.join(cwd, 'b'),
-        os.path.join(cwd, 'c'),
-        os.path.join(cwd, 'd'),
+        os.path.join(cwd, "a"),
+        os.path.join(cwd, "b"),
+        os.path.join(cwd, "c"),
+        os.path.join(cwd, "d"),
     ]
 
 
 def test_build_paths_ignore():
     cwd = os.getcwd()
-    paths = ['a', b'b', pathlib.Path('c'), BytesPath(b'd')]
-    assert _build_paths(paths, ignore=[os.path.join(cwd, 'c')]) == [
-        os.path.join(cwd, 'a'),
-        os.path.join(cwd, 'b'),
-        os.path.join(cwd, 'd'),
+    paths = ["a", b"b", pathlib.Path("c"), BytesPath(b"d")]
+    assert _build_paths(paths, ignore=[os.path.join(cwd, "c")]) == [
+        os.path.join(cwd, "a"),
+        os.path.join(cwd, "b"),
+        os.path.join(cwd, "d"),
     ]

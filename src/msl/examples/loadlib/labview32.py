@@ -31,8 +31,8 @@ class Labview32(Server32):
         :param port: The port to open for the server.
         :param kwargs: Optional keyword arguments. The keys and values are of type :class:`str`.
         """
-        path = os.path.join(os.path.dirname(__file__), 'labview_lib32.dll')
-        super().__init__(path, 'cdll', host, port)
+        path = os.path.join(os.path.dirname(__file__), "labview_lib32.dll")
+        super().__init__(path, "cdll", host, port)
 
     def stdev(self, x: Sequence[float], weighting: int = 0) -> tuple[float, float, float]:
         """Calculates the mean, variance and standard deviation of the values in the input `x`.

@@ -31,8 +31,8 @@ class Fortran32(Server32):
         """
         # By not specifying the extension of the library file the server will open
         # the appropriate file based on the operating system.
-        path = os.path.join(os.path.dirname(__file__), 'fortran_lib32')
-        super().__init__(path, 'cdll', host, port)
+        path = os.path.join(os.path.dirname(__file__), "fortran_lib32")
+        super().__init__(path, "cdll", host, port)
 
     def sum_8bit(self, a: int, b: int) -> int:
         """Add two 8-bit signed integers.
@@ -441,8 +441,8 @@ class Fortran32(Server32):
         n_cols2 = ctypes.c_int32(len(a2[0]))
 
         if not n_cols1.value == n_rows2.value:
-            raise ValueError(f'Cannot multiply a {n_rows1.value}x{n_cols1.value} matrix '
-                             f'with a {n_rows2.value}x{n_cols2.value} matrix')
+            raise ValueError(f"Cannot multiply a {n_rows1.value}x{n_cols1.value} matrix "
+                             f"with a {n_rows2.value}x{n_cols2.value} matrix")
 
         m1 = ((ctypes.c_double * n_rows1.value) * n_cols1.value)()
         for r in range(n_rows1.value):

@@ -9,14 +9,14 @@ from ._version import __version__
 from ._version import version_tuple
 
 __all__: list[str] = [
-    '__author__',
-    '__copyright__',
-    '__version__',
-    'version_info',
+    "__author__",
+    "__copyright__",
+    "__version__",
+    "version_info",
 ]
 
-__author__: str = 'Measurement Standards Laboratory of New Zealand'
-__copyright__: str = f'\xa9 2017 - 2024, {__author__}'
+__author__: str = "Measurement Standards Laboratory of New Zealand"
+__copyright__: str = f"\xa9 2017 - 2024, {__author__}"
 
 
 class VersionInfo(NamedTuple):
@@ -29,6 +29,6 @@ class VersionInfo(NamedTuple):
 
 
 major, minor, micro, *releaselevel = version_tuple
-release_level = ''.join(releaselevel) or 'final'
+release_level = "".join(releaselevel) or "final"
 
 version_info: VersionInfo = VersionInfo(major, minor, micro, release_level)

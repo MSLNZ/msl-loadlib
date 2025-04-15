@@ -23,13 +23,13 @@ class FileSystemObjectServer(Server32):
         # (This only appeared to be an issue when Client64 runs on Python 3.5)
         path = Server32.remove_site_packages_64bit()
 
-        super().__init__('Scripting.FileSystemObject', 'com', host, port)
+        super().__init__("Scripting.FileSystemObject", "com", host, port)
 
         # put 'site-packages' back in
         if path:
             sys.path.append(path)
 
-        self.temp_file = os.path.join(tempfile.gettempdir(), 'msl-loadlib-FileSystemObject.txt')
+        self.temp_file = os.path.join(tempfile.gettempdir(), "msl-loadlib-FileSystemObject.txt")
 
     def get_temp_file(self):
         return self.temp_file

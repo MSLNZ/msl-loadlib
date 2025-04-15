@@ -31,8 +31,8 @@ class Cpp32(Server32):
         """
         # By not specifying the extension of the library file the server will open
         # the appropriate file based on the operating system.
-        path = os.path.join(os.path.dirname(__file__), 'cpp_lib32')
-        super().__init__(path, 'cdll', host, port)
+        path = os.path.join(os.path.dirname(__file__), "cpp_lib32")
+        super().__init__(path, "cdll", host, port)
 
     def add(self, a: int, b: int) -> int:
         """Add two integers.
@@ -279,15 +279,15 @@ class Point(ctypes.Structure):
        };
     """
     _fields_ = [
-        ('x', ctypes.c_double),
-        ('y', ctypes.c_double),
+        ("x", ctypes.c_double),
+        ("y", ctypes.c_double),
     ]
 
 
 class FourPoints(ctypes.Structure):
 
     _fields_ = [
-        ('points', (Point * 4)),
+        ("points", (Point * 4)),
     ]
 
     def __init__(self,
@@ -328,6 +328,6 @@ class NPoints(ctypes.Structure):
        };
     """
     _fields_ = [
-        ('n', ctypes.c_int),
-        ('points', ctypes.POINTER(Point)),
+        ("n", ctypes.c_int),
+        ("points", ctypes.POINTER(Point)),
     ]

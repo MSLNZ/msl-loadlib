@@ -26,7 +26,7 @@ class Echo64(Client64):
         preserved when they are sent to the :class:`~.echo32.Echo32` server
         and back again.
         """
-        super().__init__(module32='echo32', append_sys_path=os.path.dirname(__file__))
+        super().__init__(module32="echo32", append_sys_path=os.path.dirname(__file__))
 
     def send_data(self, *args: Any, **kwargs: Any) -> tuple[tuple[Any, ...], dict[Any, Any]]:
         """Send a request to execute the :meth:`~.echo32.Echo32.received_data`
@@ -36,4 +36,4 @@ class Echo64(Client64):
         :param kwargs: The keyword arguments that the :meth:`~.echo32.Echo32.received_data` method requires.
         :return: The `args` and `kwargs` that were returned from :meth:`~.echo32.Echo32.received_data`.
         """
-        return self.request32('received_data', *args, **kwargs)
+        return self.request32("received_data", *args, **kwargs)

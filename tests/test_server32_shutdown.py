@@ -15,8 +15,8 @@ else:
 class ShutdownHangs(Server32):
 
     def __init__(self, host, port):
-        path = os.path.join(Server32.examples_dir(), 'cpp_lib32')
-        super().__init__(path, 'cdll', host, port)
+        path = os.path.join(Server32.examples_dir(), "cpp_lib32")
+        super().__init__(path, "cdll", host, port)
 
     def add(self, x, y):
         return self.lib.add(x, y)
@@ -34,11 +34,11 @@ def test_killed():
             super().__init__(__file__)
 
         def add(self, x, y):
-            return self.request32('add', x, y)
+            return self.request32("add", x, y)
 
     hangs = Hangs()
     assert hangs.add(1, 1) == 2
-    with pytest.warns(UserWarning, match=r'killed the 32-bit server using brute force') as warn_info:
+    with pytest.warns(UserWarning, match=r"killed the 32-bit server using brute force") as warn_info:
         hangs.shutdown_server32(kill_timeout=2)
 
     assert len(warn_info.list) == 1

@@ -31,8 +31,8 @@ class Echo32(Server32):
         """
         # even though this is a *echo* class that does not call a shared library
         # we still need to provide a library file that exists. Use the C++ library.
-        path = os.path.join(os.path.dirname(__file__), 'cpp_lib32')
-        super().__init__(path, 'cdll', host, port)
+        path = os.path.join(os.path.dirname(__file__), "cpp_lib32")
+        super().__init__(path, "cdll", host, port)
 
     @staticmethod
     def received_data(*args: Any, **kwargs: Any) -> tuple[tuple[Any, ...], dict[Any, Any]]:

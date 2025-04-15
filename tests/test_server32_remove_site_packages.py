@@ -14,8 +14,8 @@ else:
 class Site32(Server32):
 
     def __init__(self, host, port):
-        path = os.path.join(Server32.examples_dir(), 'cpp_lib32')
-        super().__init__(path, 'cdll', host, port)
+        path = os.path.join(Server32.examples_dir(), "cpp_lib32")
+        super().__init__(path, "cdll", host, port)
 
     def remove(self):
         return self.remove_site_packages_64bit()
@@ -31,10 +31,10 @@ class Site64(Client64):
         super().__init__(__file__)
 
     def remove(self):
-        return self.request32('remove')
+        return self.request32("remove")
 
     def contains(self, path):
-        return self.request32('contains', path)
+        return self.request32("contains", path)
 
 
 @skipif_no_server32

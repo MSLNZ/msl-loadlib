@@ -37,7 +37,7 @@ def setup_module():
         try:
             n = DotNet64()
         except ConnectionTimeoutError:
-            pytest.xfail('flaky test with .NET, Windows and GA')
+            pytest.xfail("flaky test with .NET, Windows and GA")
 
 
 def teardown_module():
@@ -62,17 +62,17 @@ def test_unique_ports():
 @skipif_no_server32
 def test_lib_name():
     def get_name(path):
-        return os.path.basename(path).split('.')[0]
+        return os.path.basename(path).split(".")[0]
 
-    assert 'cpp_lib32' == get_name(c.lib32_path)
-    assert 'fortran_lib32' == get_name(f.lib32_path)
+    assert "cpp_lib32" == get_name(c.lib32_path)
+    assert "fortran_lib32" == get_name(f.lib32_path)
     if n is not None:
-        assert 'dotnet_lib32' == get_name(n.lib32_path)
+        assert "dotnet_lib32" == get_name(n.lib32_path)
 
 
 @skipif_no_server32
 def test_server_version():
-    assert loadlib.Server32.version().startswith('Python')
+    assert loadlib.Server32.version().startswith("Python")
 
 
 @skipif_no_server32
@@ -90,8 +90,8 @@ def test_cpp():
     for i in range(len(values)):
         assert a*values[i] == pytest.approx(c_values[i])
 
-    assert '0987654321' == c.reverse_string_v1('1234567890')
-    assert '[abc x|z j 1 *&' == c.reverse_string_v2('&* 1 j z|x cba[')
+    assert "0987654321" == c.reverse_string_v1("1234567890")
+    assert "[abc x|z j 1 *&" == c.reverse_string_v2("&* 1 j z|x cba[")
 
     fp = FourPoints(Point(0, 0), Point(0, 1), Point(1, 1), Point(1, 0))
     assert c.distance_4_points(fp) == 4.0
@@ -119,7 +119,7 @@ def test_fortran():
     assert 120 == int(f.factorial(5))
     assert 2.73861278752583 == pytest.approx(f.standard_deviation([float(val) for val in range(1, 10)]))
     assert 0.171650807137 == pytest.approx(f.besselJ0(8.0))
-    assert '!dlrow olleh' == f.reverse_string('hello world!')
+    assert "!dlrow olleh" == f.reverse_string("hello world!")
 
     a = [float(val) for val in range(1, 1000)]
     b = [3.0*val for val in range(1, 1000)]
@@ -144,19 +144,19 @@ def test_echo():
 
     args, kwargs = e.send_data(x=1.0)
     assert not args
-    assert kwargs == {'x': 1.0}
+    assert kwargs == {"x": 1.0}
 
     x = [val for val in range(100)]
     y = range(9999)
-    my_dict = {'x': x, 'y': y, 'text': 'abcd 1234 wxyz'}  # cSpell: ignore wxyz
+    my_dict = {"x": x, "y": y, "text": "abcd 1234 wxyz"}  # cSpell: ignore wxyz
     args, kwargs = e.send_data(111, 2.3, complex(-1.2, 2.30), (1, 2), x=x, y=y, my_dict=my_dict)
     assert args[0] == 111
     assert args[1] == 2.3
     assert args[2] == complex(-1.2, 2.30)
     assert args[3] == (1, 2)
-    assert kwargs['x'] == x
-    assert kwargs['y'] == y
-    assert kwargs['my_dict'] == my_dict
+    assert kwargs["x"] == x
+    assert kwargs["y"] == y
+    assert kwargs["my_dict"] == my_dict
 
 
 @skipif_not_windows
@@ -164,10 +164,10 @@ def test_dotnet():
 
     names = n.get_class_names()
     assert len(names) == 4
-    assert 'StringManipulation' in names
-    assert 'DotNetMSL.BasicMath' in names
-    assert 'DotNetMSL.ArrayManipulation' in names
-    assert 'StaticClass' in names
+    assert "StringManipulation" in names
+    assert "DotNetMSL.BasicMath" in names
+    assert "DotNetMSL.ArrayManipulation" in names
+    assert "StaticClass" in names
 
     assert 9 == n.add_integers(4, 5)
     assert 0.8 == pytest.approx(n.divide_floats(4., 5.))
@@ -181,7 +181,7 @@ def test_dotnet():
     for i in range(len(values)):
         assert a*values[i] == pytest.approx(net_values[i])
 
-    assert n.reverse_string('New Zealand') == 'dnalaeZ weN'
+    assert n.reverse_string("New Zealand") == "dnalaeZ weN"
 
     net_mat = n.multiply_matrices([[1., 2., 3.], [4., 5., 6.]], [[1., 2.], [3., 4.], [5., 6.]])
     assert 22.0 == pytest.approx(net_mat[0][0])
@@ -190,8 +190,8 @@ def test_dotnet():
     assert 64.0 == pytest.approx(net_mat[1][1])
 
     assert 33 == n.add_multiple(11, -22, 33, -44, 55)
-    assert 'the experiment worked ' == n.concatenate('the ', 'experiment ', 'worked ', False, 'temporarily')
-    assert 'the experiment worked temporarily' == n.concatenate('the ', 'experiment ', 'worked ', True, 'temporarily')
+    assert "the experiment worked " == n.concatenate("the ", "experiment ", "worked ", False, "temporarily")
+    assert "the experiment worked temporarily" == n.concatenate("the ", "experiment ", "worked ", True, "temporarily")
 
 
 @skipif_no_server32
@@ -201,22 +201,22 @@ def test_unicode_path():
         def __init__(self):
             dir_name = os.path.dirname(__file__)
             super().__init__(
-                module32='cpp32unicode',
-                append_sys_path=f'{dir_name}/uñicödé',
-                append_environ_path=f'{dir_name}/uñicödé',
+                module32="cpp32unicode",
+                append_sys_path=f"{dir_name}/uñicödé",
+                append_environ_path=f"{dir_name}/uñicödé",
             )
 
         def add(self, a, b):
-            return self.request32('add', a, b)
+            return self.request32("add", a, b)
 
     c2 = Cpp64Encoding()
     assert c2.add(-5, 3) == -2
 
     with pytest.raises(loadlib.Server32Error):
-        c2.add('hello', 'world')
+        c2.add("hello", "world")
 
     try:
-        c2.add('hello', 'world')
+        c2.add("hello", "world")
     except loadlib.Server32Error as err:
         print(err)  # must not raise an error
 
@@ -226,11 +226,11 @@ def test_unicode_path():
 @skipif_no_server32
 def test_server32_error():
     try:
-        c.add('hello', 'world')
+        c.add("hello", "world")
     except loadlib.Server32Error as err:
-        assert err.name == 'ArgumentError'
-        assert 'argument 1: TypeError:' in err.value
-        assert err.traceback.endswith('return self.lib.add(a, b)')
+        assert err.name == "ArgumentError"
+        assert "argument 1: TypeError:" in err.value
+        assert err.traceback.endswith("return self.lib.add(a, b)")
 
 
 @skipif_not_windows
@@ -245,8 +245,8 @@ def test_comtypes_ctypes_union_error():
     class FileSystemObjectClient(loadlib.Client64):
         def __init__(self):
             super().__init__(
-                module32='ctypes_union_error',
-                append_sys_path=os.path.join(os.path.dirname(__file__), 'server32_comtypes'),
+                module32="ctypes_union_error",
+                append_sys_path=os.path.join(os.path.dirname(__file__), "server32_comtypes"),
             )
 
         def __getattr__(self, name):
@@ -255,13 +255,13 @@ def test_comtypes_ctypes_union_error():
             return send
 
     file_system = FileSystemObjectClient()
-    file_system.create_and_write('foo<bar<baz>>')
+    file_system.create_and_write("foo<bar<baz>>")
     temp_file = file_system.get_temp_file()
 
-    with open(temp_file, mode='rt') as fp:
+    with open(temp_file, mode="rt") as fp:
         source = fp.read().strip()
 
-    assert source == 'foo<bar<baz>>'
+    assert source == "foo<bar<baz>>"
 
     os.remove(temp_file)
     file_system.shutdown_server32()
@@ -273,16 +273,16 @@ def test_comtypes_shell32():
     class Shell64(loadlib.Client64):
         def __init__(self):
             super().__init__(
-                module32='shell32.py',
-                append_sys_path=os.path.join(os.path.dirname(__file__), 'server32_comtypes'),
+                module32="shell32.py",
+                append_sys_path=os.path.join(os.path.dirname(__file__), "server32_comtypes"),
             )
 
         def environ(self, key):
-            return self.request32('environ', key)
+            return self.request32("environ", key)
 
     shell = Shell64()
 
-    for name in ['PROCESSOR_IDENTIFIER', 'NUMBER_OF_PROCESSORS']:
+    for name in ["PROCESSOR_IDENTIFIER", "NUMBER_OF_PROCESSORS"]:
         assert shell.environ(name) == os.environ[name]
 
     shell.shutdown_server32()
@@ -295,25 +295,25 @@ def test_activex():
 
         def __init__(self):
             super().__init__(
-                module32='activex_media_player.py',
-                append_sys_path=os.path.join(os.path.dirname(__file__), 'server32_comtypes'),
+                module32="activex_media_player.py",
+                append_sys_path=os.path.join(os.path.dirname(__file__), "server32_comtypes"),
                 timeout=30,
             )
 
         def this(self):
-            return self.request32('this')
+            return self.request32("this")
 
         def reload(self):
-            return self.request32('reload')
+            return self.request32("reload")
 
         def load_library(self):
-            return self.request32('load_library')
+            return self.request32("load_library")
 
         def error1(self):
-            return self.request32('error1')
+            return self.request32("error1")
 
         def error2(self):
-            return self.request32('error2')
+            return self.request32("error2")
 
     ax = ActiveX()
 

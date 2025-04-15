@@ -37,7 +37,7 @@ class Kernel32(Server32):
         :param port: The port to open for the server.
         :param kwargs: Optional keyword arguments. The keys and values are of type :class:`str`.
         """
-        super().__init__('C:/Windows/SysWOW64/kernel32.dll', 'windll', host, port)
+        super().__init__("C:/Windows/SysWOW64/kernel32.dll", "windll", host, port)
 
     def get_time(self) -> datetime:
         """
@@ -65,11 +65,11 @@ class SystemTime(ctypes.Structure):
     """
     WORD = ctypes.c_uint16
 
-    _fields_ = [('wYear', WORD),
-                ('wMonth', WORD),
-                ('wDayOfWeek', WORD),
-                ('wDay', WORD),
-                ('wHour', WORD),
-                ('wMinute', WORD),
-                ('wSecond', WORD),
-                ('wMilliseconds', WORD)]
+    _fields_ = [("wYear", WORD),
+                ("wMonth", WORD),
+                ("wDayOfWeek", WORD),
+                ("wDay", WORD),
+                ("wHour", WORD),
+                ("wMinute", WORD),
+                ("wSecond", WORD),
+                ("wMilliseconds", WORD)]

@@ -13,8 +13,8 @@ else:
 class Running32(Server32):
 
     def __init__(self, host, port):
-        path = os.path.join(Server32.examples_dir(), 'cpp_lib32')
-        super().__init__(path, 'cdll', host, port)
+        path = os.path.join(Server32.examples_dir(), "cpp_lib32")
+        super().__init__(path, "cdll", host, port)
 
     def interpreter(self):
         return self.is_interpreter()
@@ -26,10 +26,10 @@ class Running64(Client64):
         super().__init__(__file__)
 
     def interpreter(self):
-        return self.request32('interpreter')
+        return self.request32("interpreter")
 
     def is_interpreter(self):
-        return self.request32('is_interpreter')
+        return self.request32("is_interpreter")
 
 
 @skipif_no_server32

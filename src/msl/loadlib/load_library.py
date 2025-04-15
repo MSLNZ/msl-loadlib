@@ -20,19 +20,19 @@ from .constants import IS_WINDOWS
 if TYPE_CHECKING:
     from .activex import Application
 
-_LIBTYPES: set[str] = {'cdll', 'windll', 'oledll', 'net', 'clr', 'java', 'com', 'activex'}
+_LIBTYPES: set[str] = {"cdll", "windll", "oledll", "net", "clr", "java", "com", "activex"}
 
-LibType = Literal['cdll', 'windll', 'oledll', 'net', 'clr', 'java', 'com', 'activex']
+LibType = Literal["cdll", "windll", "oledll", "net", "clr", "java", "com", "activex"]
 """The library type."""
 
 # the Self type was added in Python 3.11 (PEP 673)
 # using TypeVar is equivalent for < 3.11
-Self = TypeVar('Self', bound='LoadLibrary')
+Self = TypeVar("Self", bound="LoadLibrary")
 
-PathLike = TypeVar('PathLike', str, bytes, os.PathLike)
+PathLike = TypeVar("PathLike", str, bytes, os.PathLike)
 """A :term:`path-like object`."""
 
-if IS_WINDOWS and not hasattr(sys, 'coinit_flags'):
+if IS_WINDOWS and not hasattr(sys, "coinit_flags"):
     # https://pywinauto.readthedocs.io/en/latest/HowTo.html#com-threading-model
     # Configure comtypes for Multi-Threaded Apartment model (MTA)
     # This avoids the following exception from being raised:
@@ -123,17 +123,17 @@ class LoadLibrary:
         self._gateway = None
 
         if not path:
-            raise ValueError(f'Must specify a non-empty path, got {path!r}')
+            raise ValueError(f"Must specify a non-empty path, got {path!r}")
 
         # fixes Issue #8, if `path` is a <class 'pathlib.Path'> object
         path = os.fsdecode(path)
 
         if libtype is None:
             # automatically determine the libtype
-            if path.endswith('.jar') or path.endswith('.class'):
-                libtype = 'java'
+            if path.endswith(".jar") or path.endswith(".class"):
+                libtype = "java"
             else:
-                libtype = 'cdll'
+                libtype = "cdll"
         else:
             libtype = libtype.lower()
 
@@ -149,10 +149,10 @@ class LoadLibrary:
 
         # assume a default extension if no extension was provided
         ext = os.path.splitext(path)[1]
-        if not ext and libtype not in ['java', 'com', 'activex']:
+        if not ext and libtype not in ["java", "com", "activex"]:
             _path += DEFAULT_EXTENSION
 
-        if libtype not in ['com', 'activex']:
+        if libtype not in ["com", "activex"]:
             self._path = os.path.abspath(_path)
             if not os.path.isfile(self._path):
                 # for find_library use the original 'path' value since it may be a library name
@@ -160,7 +160,7 @@ class LoadLibrary:
                 self._path = ctypes.util.find_library(path)
                 if self._path is None:  # then search sys.path and os.environ['PATH']
                     success = False
-                    search_dirs = sys.path + os.environ['PATH'].split(os.pathsep)
+                    search_dirs = sys.path + os.environ["PATH"].split(os.pathsep)
                     for directory in search_dirs:
                         p = os.path.join(directory, _path)
                         if os.path.isfile(p):
@@ -168,21 +168,21 @@ class LoadLibrary:
                             success = True
                             break
                     if not success:
-                        raise OSError(f'Cannot find {path!r} for libtype={libtype!r}')
+                        raise OSError(f"Cannot find {path!r} for libtype={libtype!r}")
         else:
             self._path = _path
 
-        if libtype == 'cdll':
+        if libtype == "cdll":
             self._lib = ctypes.CDLL(self._path, **kwargs)
-        elif libtype == 'windll':
+        elif libtype == "windll":
             self._lib = ctypes.WinDLL(self._path, **kwargs)
-        elif libtype == 'oledll':
+        elif libtype == "oledll":
             self._lib = ctypes.OleDLL(self._path, **kwargs)
-        elif libtype == 'com':
+        elif libtype == "com":
             if not utils.is_comtypes_installed():
                 raise OSError(
-                    'Cannot load a COM library because comtypes is not installed.\n'
-                    'Run: pip install comtypes'
+                    "Cannot load a COM library because comtypes is not installed.\n"
+                    "Run: pip install comtypes"
                 )
 
             from comtypes import GUID
@@ -198,55 +198,55 @@ class LoadLibrary:
 
             self._lib = CreateObject(clsid, **kwargs)
 
-        elif libtype == 'activex':
+        elif libtype == "activex":
             from .activex import Application
             self._app = Application()
             self._lib = self._app.load(self._path, **kwargs)
 
-        elif libtype == 'java':
+        elif libtype == "java":
             if not utils.is_py4j_installed():
                 raise OSError(
-                    'Cannot load a Java file because Py4J is not installed.\n'
-                    'Run: pip install py4j'
+                    "Cannot load a Java file because Py4J is not installed.\n"
+                    "Run: pip install py4j"
                 )
 
             from py4j.version import __version__
             from py4j.java_gateway import JavaGateway, GatewayParameters
 
             # the address and port to use to host the py4j.GatewayServer
-            address = kwargs.pop('address', '127.0.0.1')
-            port = kwargs.pop('port', utils.get_available_port())
+            address = kwargs.pop("address", "127.0.0.1")
+            port = kwargs.pop("port", utils.get_available_port())
 
             # find the py4j*.jar file (needed to import the py4j.GatewayServer on the Java side)
-            filename = f'py4j{__version__}.jar'
-            py4j_jar = os.environ.get('PY4J_JAR', '')
+            filename = f"py4j{__version__}.jar"
+            py4j_jar = os.environ.get("PY4J_JAR", "")
             if py4j_jar:
                 if not os.path.isfile(py4j_jar) or os.path.basename(py4j_jar) != filename:
-                    raise OSError(f'A PY4J_JAR environment variable exists, '
-                                  f'but the full path to {filename} is invalid\n'
-                                  f'PY4J_JAR={py4j_jar}')
+                    raise OSError(f"A PY4J_JAR environment variable exists, "
+                                  f"but the full path to {filename} is invalid\n"
+                                  f"PY4J_JAR={py4j_jar}")
             else:
                 root = os.path.dirname(sys.executable)
-                for item in [root, os.path.dirname(root), os.path.join(os.path.expanduser('~'), '.local')]:
-                    py4j_jar = os.path.join(item, 'share', 'py4j', filename)
+                for item in [root, os.path.dirname(root), os.path.join(os.path.expanduser("~"), ".local")]:
+                    py4j_jar = os.path.join(item, "share", "py4j", filename)
                     if os.path.isfile(py4j_jar):
                         break
                 if not os.path.isfile(py4j_jar):
-                    raise OSError(f'Cannot find {filename}\n'
-                                  f'Create a PY4J_JAR environment variable '
-                                  f'to be equal to the full path to {filename}')
+                    raise OSError(f"Cannot find {filename}\n"
+                                  f"Create a PY4J_JAR environment variable "
+                                  f"to be equal to the full path to {filename}")
 
             # build the java command
-            wrapper = os.path.join(os.path.dirname(__file__), 'py4j-wrapper.jar')
-            cmd = ['java', '-cp', f'{py4j_jar}{os.pathsep}{wrapper}', 'Py4JWrapper', str(port)]
+            wrapper = os.path.join(os.path.dirname(__file__), "py4j-wrapper.jar")
+            cmd = ["java", "-cp", f"{py4j_jar}{os.pathsep}{wrapper}", "Py4JWrapper", str(port)]
 
             # from the URLClassLoader documentation:
             #   Any URL that ends with a '/' is assumed to refer to a directory. Otherwise, the URL
             #   is assumed to refer to a JAR file which will be downloaded and opened as needed.
-            if ext == '.jar':
+            if ext == ".jar":
                 cmd.append(self._path)
             else:  # it is a .class file
-                cmd.append(f'{os.path.dirname(self._path)}/')
+                cmd.append(f"{os.path.dirname(self._path)}/")
 
             err = None
             try:
@@ -255,7 +255,7 @@ class LoadLibrary:
                 subprocess.Popen(cmd, stderr=subprocess.PIPE, stdout=subprocess.PIPE, creationflags=flags)
             except OSError as e:
                 err = str(e).rstrip()
-                err += '\nYou must have a Java Runtime Environment installed and available on PATH'
+                err += "\nYou must have a Java Runtime Environment installed and available on PATH"
 
             if err:
                 raise OSError(err)
@@ -264,7 +264,7 @@ class LoadLibrary:
                 utils.wait_for_server(address, port, 10.0)
             except OSError as e:
                 err = str(e).rstrip()
-                err += '\nCould not start the Py4J GatewayServer'
+                err += "\nCould not start the Py4J GatewayServer"
 
             if err:
                 raise OSError(err)
@@ -275,16 +275,16 @@ class LoadLibrary:
 
             self._lib = self._gateway.jvm
 
-        elif libtype == 'net' or libtype == 'clr':
+        elif libtype == "net" or libtype == "clr":
             if not utils.is_pythonnet_installed():
                 raise OSError(
-                    'Cannot load a .NET Assembly because pythonnet is not installed.\n'
-                    'Run: pip install pythonnet'
+                    "Cannot load a .NET Assembly because pythonnet is not installed.\n"
+                    "Run: pip install pythonnet"
                 )
 
             import clr  # noqa: clr is an alias for pythonnet
             import System  # noqa: available once pythonnet is imported
-            dotnet = {'System': System}
+            dotnet = {"System": System}
 
             # the shared library must be available in sys.path
             head, tail = os.path.split(self._path)
@@ -319,7 +319,7 @@ class LoadLibrary:
                 # " Mixed mode assembly is built against version 'v2.0.50727' of the
                 #  runtime and cannot be loaded in the 4.0 runtime without additional
                 #  configuration information. "
-                if str(err).startswith('Mixed mode assembly is built against version'):
+                if str(err).startswith("Mixed mode assembly is built against version"):
                     py_exe = sys.executable
                     if sys.prefix != sys.base_prefix:
                         # Python is running in a venv/virtualenv
@@ -329,24 +329,24 @@ class LoadLibrary:
                     if not status == 0:
                         raise OSError(msg)
                     else:
-                        raise OSError(f'Checking .NET config returned {msg!r} and still '
-                                      f'cannot load the library.\n{err}')
+                        raise OSError(f"Checking .NET config returned {msg!r} and still "
+                                      f"cannot load the library.\n{err}")
                 raise OSError('The above "System.IO.FileLoadException" is not handled.\n')
 
             try:
                 types = self._assembly.GetTypes()
             except Exception as e:
                 utils.logger.error(e)
-                utils.logger.error('The LoaderExceptions are:')
+                utils.logger.error("The LoaderExceptions are:")
                 for item in e.LoaderExceptions:  # noqa: LoaderExceptions comes from .NET
-                    utils.logger.error('  %s', item.Message)
+                    utils.logger.error("  %s", item.Message)
             else:
                 for t in types:
                     try:
                         if t.Namespace:
                             obj = __import__(t.Namespace)
                         else:
-                            obj = getattr(__import__('clr'), t.FullName)
+                            obj = getattr(__import__("clr"), t.FullName)
                     except:  # noqa: PEP 8: E722 do not use bare 'except'
                         obj = t
                         obj.__name__ = t.FullName
@@ -357,16 +357,16 @@ class LoadLibrary:
             self._lib = DotNet(dotnet, self._path)
 
         else:
-            assert False, 'Should not get here -- contact developers'
+            assert False, "Should not get here -- contact developers"
 
-        utils.logger.debug('Loaded %s', self._path)
+        utils.logger.debug("Loaded %s", self._path)
 
     def __del__(self) -> None:
-        if hasattr(self, '_gateway'):
+        if hasattr(self, "_gateway"):
             self.cleanup()
 
     def __repr__(self) -> str:
-        return f'<LoadLibrary libtype={self._lib.__class__.__name__} path={self._path}>'
+        return f"<LoadLibrary libtype={self._lib.__class__.__name__} path={self._path}>"
 
     def __enter__(self: Self) -> Self:
         return self
@@ -397,11 +397,11 @@ class LoadLibrary:
         if self._gateway:
             self._gateway.shutdown()
             self._gateway = None
-            utils.logger.debug('shutdown Py4J.GatewayServer')
+            utils.logger.debug("shutdown Py4J.GatewayServer")
         if self._app:
             self._app.close()
             self._app = None
-            utils.logger.debug('close ActiveX application')
+            utils.logger.debug("close ActiveX application")
 
     @property
     def assembly(self) -> Any:
@@ -463,4 +463,4 @@ class DotNet:
         self._path = path
 
     def __repr__(self) -> str:
-        return f'<{self.__class__.__name__} path={self._path}>'
+        return f"<{self.__class__.__name__} path={self._path}>"

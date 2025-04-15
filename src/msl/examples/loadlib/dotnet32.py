@@ -27,8 +27,8 @@ class DotNet32(Server32):
         :param port: The port to open for the server.
         :param kwargs: Optional keyword arguments. The keys and values are of type :class:`str`.
         """
-        path = os.path.join(os.path.dirname(__file__), 'dotnet_lib32.dll')
-        super().__init__(path, 'net', host, port)
+        path = os.path.join(os.path.dirname(__file__), "dotnet_lib32.dll")
+        super().__init__(path, "net", host, port)
 
         self.BasicMath = self.lib.DotNetMSL.BasicMath()
         self.ArrayManipulation = self.lib.DotNetMSL.ArrayManipulation()
@@ -40,7 +40,7 @@ class DotNet32(Server32):
 
         :return: The names of the classes that are available in :ref:`dotnet_lib32.dll <dotnet-lib>`.
         """
-        return ';'.join(str(name) for name in self.assembly.GetTypes()).split(';')
+        return ";".join(str(name) for name in self.assembly.GetTypes()).split(";")
 
     def add_integers(self, a: int, b: int) -> int:
         """Add two integers.
@@ -210,8 +210,8 @@ class DotNet32(Server32):
         n_cols2 = len(a2[0])
 
         if not n_cols1 == n_rows2:
-            raise ValueError(f'Cannot multiply a {n_rows1}x{n_cols1} matrix '
-                             f'with a {n_rows2}x{n_cols2} matrix')
+            raise ValueError(f"Cannot multiply a {n_rows1}x{n_cols1} matrix "
+                             f"with a {n_rows2}x{n_cols2} matrix")
 
         m1 = self.lib.System.Array.CreateInstance(self.lib.System.Double, n_rows1, n_cols1)
         for r in range(n_rows1):

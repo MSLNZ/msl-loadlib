@@ -15,11 +15,11 @@ class ConnectionTimeoutError(OSError):
         """
         super().__init__(message)
         self.timeout_message: str = message
-        self.reason: str = ''
+        self.reason: str = ""
 
     def __str__(self) -> str:
         if self.reason:
-            return f'{self.timeout_message}\n{self.reason}'
+            return f"{self.timeout_message}\n{self.reason}"
         return self.timeout_message
 
 
@@ -28,8 +28,8 @@ class Server32Error(HTTPException):
     def __init__(self,
                  value: str,
                  *,
-                 name: str = '',
-                 traceback: str = '') -> None:
+                 name: str = "",
+                 traceback: str = "") -> None:
         """Raised when an exception occurs on the 32-bit server.
 
         .. versionadded:: 0.5
@@ -38,7 +38,7 @@ class Server32Error(HTTPException):
         :param name: The name of the exception type.
         :param traceback: The exception traceback.
         """
-        super().__init__(f'\n{traceback}\n{name}: {value}' if name else value)
+        super().__init__(f"\n{traceback}\n{name}: {value}" if name else value)
         self._value: str = value
         self._name: str = name
         self._traceback: str = traceback

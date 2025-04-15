@@ -24,8 +24,8 @@ from .constants import SERVER_FILENAME
 from .load_library import LibType
 from .load_library import LoadLibrary
 
-METADATA: str = '-METADATA-'
-SHUTDOWN: str = '-SHUTDOWN-'
+METADATA: str = "-METADATA-"
+SHUTDOWN: str = "-SHUTDOWN-"
 OK: int = 200
 ERROR: int = 500
 
@@ -110,7 +110,7 @@ class Server32(HTTPServer):
             needs to start in order to determine the version of the Python interpreter.
         """
         exe = os.path.join(os.path.dirname(__file__), SERVER_FILENAME)
-        return subprocess.check_output([exe, '--version']).decode().strip()
+        return subprocess.check_output([exe, "--version"]).decode().strip()
 
     @staticmethod
     def interactive_console() -> None:
@@ -162,9 +162,9 @@ class Server32(HTTPServer):
             Can be an empty string if the directory was not found in :data:`sys.path`.
         """
         for index, path in enumerate(sys.path):
-            if path.endswith('site-packages'):
+            if path.endswith("site-packages"):
                 return sys.path.pop(index)
-        return ''
+        return ""
 
     @staticmethod
     def is_interpreter() -> bool:
@@ -200,7 +200,7 @@ class Server32(HTTPServer):
             root = os.path.dirname(sys.executable)
         else:
             root = os.path.dirname(__file__)
-        path = os.path.join(root, os.pardir, 'examples', 'loadlib')
+        path = os.path.join(root, os.pardir, "examples", "loadlib")
         return os.path.abspath(path)
 
     def shutdown_handler(self) -> None:
@@ -222,12 +222,12 @@ class _RequestHandler(BaseHTTPRequestHandler):
         try:
             if self.path == METADATA:
                 response = {
-                    'path': self.server.path,
-                    'pid': os.getpid(),
-                    'unfrozen_dir': sys._MEIPASS,
+                    "path": self.server.path,
+                    "pid": os.getpid(),
+                    "unfrozen_dir": sys._MEIPASS,
                 }
             else:
-                with open(self.server.pickle_path, mode='rb') as f:
+                with open(self.server.pickle_path, mode="rb") as f:
                     args = pickle.load(f)
                     kwargs = pickle.load(f)
 
@@ -237,7 +237,7 @@ class _RequestHandler(BaseHTTPRequestHandler):
                 else:
                     response = attr
 
-            with open(self.server.pickle_path, mode='wb') as f:
+            with open(self.server.pickle_path, mode="wb") as f:
                 pickle.dump(response, f, protocol=self.server.pickle_protocol)
 
             self.send_response(OK)
@@ -247,11 +247,11 @@ class _RequestHandler(BaseHTTPRequestHandler):
             exc_type, exc_value, exc_traceback = sys.exc_info()
             tb_list = traceback.extract_tb(exc_traceback)
             tb = tb_list[min(len(tb_list)-1, 1)]  # get the Server32 subclass exception
-            response = {'name': exc_type.__name__, 'value': str(exc_value)}
-            traceback_ = f'  File {tb[0]!r}, line {tb[1]}, in {tb[2]}'
+            response = {"name": exc_type.__name__, "value": str(exc_value)}
+            traceback_ = f"  File {tb[0]!r}, line {tb[1]}, in {tb[2]}"
             if tb[3]:
-                traceback_ += f'\n    {tb[3]}'
-            response['traceback'] = traceback_
+                traceback_ += f"\n    {tb[3]}"
+            response["traceback"] = traceback_
             self.send_response(ERROR)
             self.end_headers()
             self.wfile.write(json.dumps(response).encode())
@@ -262,7 +262,7 @@ class _RequestHandler(BaseHTTPRequestHandler):
             self.server.shutdown_handler()
             threading.Thread(target=self.server.shutdown).start()
         else:  # the pickle info
-            match = re.match(r'protocol=(\d+)&path=(.*)', self.path)
+            match = re.match(r"protocol=(\d+)&path=(.*)", self.path)
             if match:
                 self.server.pickle_protocol = int(match.group(1))
                 self.server.pickle_path = match.group(2)

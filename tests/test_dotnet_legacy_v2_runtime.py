@@ -9,7 +9,7 @@ from conftest import skipif_no_pythonnet
 from conftest import skipif_not_windows
 from msl.loadlib import LoadLibrary
 
-config_path = os.path.join(sys.base_prefix, os.path.basename(sys.executable)+'.config')
+config_path = os.path.join(sys.base_prefix, os.path.basename(sys.executable)+".config")
 
 
 def teardown_module():
@@ -33,8 +33,8 @@ def test_framework_v2():
     #   'legacy_v2_runtime_x64.dll' or one of its dependencies.
     #
 
-    root_dir = os.path.join(os.path.dirname(__file__), 'dotnet_config')
-    script = os.path.join(root_dir, 'legacy_v2_runtime.py')
+    root_dir = os.path.join(os.path.dirname(__file__), "dotnet_config")
+    script = os.path.join(root_dir, "legacy_v2_runtime.py")
 
     assert os.path.isfile(script)
 
@@ -46,15 +46,15 @@ def test_framework_v2():
     p = Popen([sys.executable, script], stdout=PIPE, stderr=PIPE)
     stdout, stderr = p.communicate()
     assert not stdout
-    assert b'useLegacyV2RuntimeActivationPolicy property was added' in stderr
+    assert b"useLegacyV2RuntimeActivationPolicy property was added" in stderr
 
     # the script now runs without error
     p = Popen([sys.executable, script], stdout=PIPE, stderr=PIPE)
     stdout, stderr = p.communicate()
     assert not stderr
-    assert stdout.rstrip() == b'SUCCESS'
+    assert stdout.rstrip() == b"SUCCESS"
 
     # the above tests also depend on LoadLibrary raising OSError
     # if the DLL file does not exist
     with pytest.raises(OSError, match=r"Cannot find '.*legacy_v2_runtime.dll' for libtype='clr'"):
-        LoadLibrary(os.path.join(root_dir, 'legacy_v2_runtime.dll'), libtype='clr')
+        LoadLibrary(os.path.join(root_dir, "legacy_v2_runtime.dll"), libtype="clr")

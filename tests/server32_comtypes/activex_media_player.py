@@ -8,13 +8,13 @@ if Server32.is_interpreter():
 
 from msl.loadlib.activex import Application
 
-prog_id = 'MediaPlayer.MediaPlayer.1'
+prog_id = "MediaPlayer.MediaPlayer.1"
 
 
 class ActiveX(Server32):
 
     def __init__(self, host, port):
-        super().__init__(prog_id, 'activex', host, port)
+        super().__init__(prog_id, "activex", host, port)
         self._app = Application()
 
     def this(self):
@@ -25,20 +25,20 @@ class ActiveX(Server32):
 
     @staticmethod
     def load_library():
-        return LoadLibrary(prog_id, 'activex').lib.IsSoundCardEnabled()
+        return LoadLibrary(prog_id, "activex").lib.IsSoundCardEnabled()
 
     def error1(self):
         try:
-            self._app.load('ABC.DEF.GHI')
+            self._app.load("ABC.DEF.GHI")
         except OSError as e:
             return str(e)
         else:
-            raise OSError('Did not raise OSError')
+            raise OSError("Did not raise OSError")
 
     def error2(self):
         try:
-            LoadLibrary('ABC.DEF.GHI', 'activex')
+            LoadLibrary("ABC.DEF.GHI", "activex")
         except OSError as e:
             return str(e)
         else:
-            raise OSError('Did not raise OSError')
+            raise OSError("Did not raise OSError")

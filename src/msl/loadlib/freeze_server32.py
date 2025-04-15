@@ -84,29 +84,29 @@ def main(*,
         specified.
     """
     if not skip_32bit_check and constants.IS_PYTHON_64BIT:
-        msg = ''
+        msg = ""
         if sys.argv:
-            if sys.argv[0].endswith('freeze32'):
-                msg = ('\nIf you want to create a 64-bit server, you may '
-                       'include the\n--skip-32bit-check flag '
-                       'to ignore this requirement.')
+            if sys.argv[0].endswith("freeze32"):
+                msg = ("\nIf you want to create a 64-bit server, you may "
+                       "include the\n--skip-32bit-check flag "
+                       "to ignore this requirement.")
             else:
-                msg = ('\nIf you want to create a 64-bit server, you may '
-                       'set the argument\nskip_32bit_check=True '
-                       'to ignore this requirement.')
-        print(f'Must freeze the server using a 32-bit version of Python.{msg}',
+                msg = ("\nIf you want to create a 64-bit server, you may "
+                       "set the argument\nskip_32bit_check=True "
+                       "to ignore this requirement.")
+        print(f"Must freeze the server using a 32-bit version of Python.{msg}",
               file=sys.stderr)
         return
 
     try:
         from PyInstaller import __version__ as pyinstaller_version  # noqa: PyInstaller is not a dependency
     except ImportError:
-        print('PyInstaller must be installed to create the server, run:\n'
-              'pip install pyinstaller', file=sys.stderr)
+        print("PyInstaller must be installed to create the server, run:\n"
+              "pip install pyinstaller", file=sys.stderr)
         return
 
     if spec and (imports or data):
-        print('Cannot specify a spec file and imports/data', file=sys.stderr)
+        print("Cannot specify a spec file and imports/data", file=sys.stderr)
         return
 
     here = os.path.abspath(os.path.dirname(__file__))
@@ -116,29 +116,29 @@ def main(*,
     else:
         dist_path = os.getcwd()
 
-    tmp_kw = {'ignore_cleanup_errors': True} if sys.version_info[:2] >= (3, 10) else {}
+    tmp_kw = {"ignore_cleanup_errors": True} if sys.version_info[:2] >= (3, 10) else {}
     tmp_dir = TemporaryDirectory(**tmp_kw)
     work_path = tmp_dir.name
     server_path = os.path.join(dist_path, constants.SERVER_FILENAME)
 
     # Specifically invoke pyinstaller in the context of the current python interpreter.
     # This fixes the issue where the blind `pyinstaller` invocation points to a 64-bit version.
-    cmd = [sys.executable, '-m', 'PyInstaller',
-           '--distpath', dist_path,
-           '--workpath', work_path,
-           '--noconfirm',
-           '--clean']
+    cmd = [sys.executable, "-m", "PyInstaller",
+           "--distpath", dist_path,
+           "--workpath", work_path,
+           "--noconfirm",
+           "--clean"]
 
     if spec is None:
-        cmd.extend(['--specpath', work_path,
-                    '--python-option', 'u'])
+        cmd.extend(["--specpath", work_path,
+                    "--python-option", "u"])
 
         if constants.IS_WINDOWS:
-            cmd.extend(['--version-file', _create_version_info_file(work_path)])
+            cmd.extend(["--version-file", _create_version_info_file(work_path)])
 
         cmd.extend([
-            '--name', constants.SERVER_FILENAME,
-            '--onefile',
+            "--name", constants.SERVER_FILENAME,
+            "--onefile",
         ])
 
         if imports:
@@ -154,7 +154,7 @@ def main(*,
                 except ImportError:
                     missing.append(module)
                 else:
-                    cmd.extend(['--hidden-import', module])
+                    cmd.extend(["--hidden-import", module])
 
             if missing:
                 print(f'The following modules cannot be imported: '
@@ -165,64 +165,64 @@ def main(*,
         cmd.extend(_get_standard_modules(keep_tk))
 
         if data:
-            major, *rest = pyinstaller_version.split('.')
-            sep = os.pathsep if int(major) < 6 else ':'
+            major, *rest = pyinstaller_version.split(".")
+            sep = os.pathsep if int(major) < 6 else ":"
 
             if isinstance(data, str):
                 data = [data]
 
             for item in data:
-                s = item.split(':')
+                s = item.split(":")
                 if len(s) == 1:
                     src = s[0]
-                    dst = ''
+                    dst = ""
                 elif len(s) == 2:
                     src = s[0]
-                    dst = s[1] or '.'
+                    dst = s[1] or "."
                 else:
-                    print(f'Invalid data format {item!r}', file=sys.stderr)
+                    print(f"Invalid data format {item!r}", file=sys.stderr)
                     return
 
                 src = os.path.abspath(src)
                 if not os.path.exists(src):
-                    print(f'Cannot find {src!r}', file=sys.stderr)
+                    print(f"Cannot find {src!r}", file=sys.stderr)
                     return
 
-                cmd.extend(['--add-data', f'{src}{sep}{dst}'])
+                cmd.extend(["--add-data", f"{src}{sep}{dst}"])
 
-        cmd.append(os.path.join(here, 'start_server32.py'))
+        cmd.append(os.path.join(here, "start_server32.py"))
     else:
         cmd.append(spec)
 
     check_call(cmd)
 
     # maybe create the .NET Framework config file
-    if imports and ('pythonnet' in imports):
+    if imports and ("pythonnet" in imports):
         loadlib.utils.check_dot_net_config(server_path)
 
     if save_spec:
-        print(f'The following files were saved to {dist_path}\n'
-              f'  {constants.SERVER_FILENAME}')
+        print(f"The following files were saved to {dist_path}\n"
+              f"  {constants.SERVER_FILENAME}")
 
-        if os.path.isfile(f'{server_path}.config'):
-            print(f'  {os.path.basename(server_path)}.config')
+        if os.path.isfile(f"{server_path}.config"):
+            print(f"  {os.path.basename(server_path)}.config")
 
-        spec_file = 'server32.spec'
+        spec_file = "server32.spec"
         copy(
-            os.path.join(work_path, f'{constants.SERVER_FILENAME}.spec'),
+            os.path.join(work_path, f"{constants.SERVER_FILENAME}.spec"),
             os.path.join(dist_path, spec_file)
         )
-        print(f'  {spec_file}')
+        print(f"  {spec_file}")
 
         if constants.IS_WINDOWS:
-            file_version_info = 'file_version_info.txt'
+            file_version_info = "file_version_info.txt"
             copy(
                 os.path.join(work_path, file_version_info),
                 dist_path
             )
-            print(f'  {file_version_info}  (required by the {spec_file} file)')
+            print(f"  {file_version_info}  (required by the {spec_file} file)")
     else:
-        print(f'Server saved to {server_path}')
+        print(f"Server saved to {server_path}")
 
 
 def _get_standard_modules(keep_tk: bool) -> list[str]:
@@ -251,32 +251,32 @@ def _get_standard_modules(keep_tk: bool) -> list[str]:
     # So that's why distutils is not in the ignore_list.
     
     ignore_list = [
-        '__main__',
-        'ensurepip',
-        'idlelib',
-        'lib2to3',
-        'test',
-        'turtle',
+        "__main__",
+        "ensurepip",
+        "idlelib",
+        "lib2to3",
+        "test",
+        "turtle",
     ]
 
     if not keep_tk:
-        ignore_list.extend(['tkinter', '_tkinter'])
+        ignore_list.extend(["tkinter", "_tkinter"])
 
     # some modules are platform specific and got a
     #   RecursionError: maximum recursion depth exceeded
     # when running this script with PyInstaller 3.3 installed
     if constants.IS_WINDOWS:
-        os_ignore_list = ['(Unix)', '(Linux)', '(Linux, FreeBSD)']
+        os_ignore_list = ["(Unix)", "(Linux)", "(Linux, FreeBSD)"]
     elif constants.IS_LINUX:
-        os_ignore_list = ['(Windows)']
+        os_ignore_list = ["(Windows)"]
     elif constants.IS_MAC:
-        os_ignore_list = ['(Windows)', '(Linux)', '(Linux, FreeBSD)']
+        os_ignore_list = ["(Windows)", "(Linux)", "(Linux, FreeBSD)"]
     else:
         os_ignore_list = []
 
     modules = []
-    url = f'https://docs.python.org/{sys.version_info.major}/py-modindex.html'
-    for s in urlopen(url).read().decode().split('#module-')[1:]:
+    url = f"https://docs.python.org/{sys.version_info.major}/py-modindex.html"
+    for s in urlopen(url).read().decode().split("#module-")[1:]:
         m = s.split('"><code')
         add_module = True
         for x in os_ignore_list:
@@ -292,11 +292,11 @@ def _get_standard_modules(keep_tk: bool) -> list[str]:
         include_module = True
         for mod in ignore_list:
             if module.startswith(mod):
-                excluded_modules.extend(['--exclude-module', module])
+                excluded_modules.extend(["--exclude-module", module])
                 include_module = False
                 break
         if include_module:
-            included_modules.extend(['--hidden-import', module])
+            included_modules.extend(["--hidden-import", module])
     return included_modules + excluded_modules
 
 
@@ -341,8 +341,8 @@ VSVersionInfo(
   ]
 )
 """
-    filename = 'file_version_info.txt'
-    with open(os.path.join(root_dir, filename), mode='wt') as fp:
+    filename = "file_version_info.txt"
+    with open(os.path.join(root_dir, filename), mode="wt") as fp:
         fp.write(text)
     return filename
 
@@ -352,36 +352,36 @@ def _cli() -> None:
     import argparse
 
     parser = argparse.ArgumentParser(
-        description='Create a frozen server for msl-loadlib.',
+        description="Create a frozen server for msl-loadlib.",
         formatter_class=argparse.RawTextHelpFormatter,
         add_help=False,
     )
     parser.add_argument(
-        '-h', '--help',
-        action='help',
+        "-h", "--help",
+        action="help",
         default=argparse.SUPPRESS,
-        help='Show this help message and exit.'
+        help="Show this help message and exit."
     )
     parser.add_argument(
-        '-s', '--spec',
-        help='The path to a PyInstaller .spec file.'
+        "-s", "--spec",
+        help="The path to a PyInstaller .spec file."
     )
     parser.add_argument(
-        '-d', '--dest',
-        help='The destination directory to save the server to.\n'
-             '(Default is the current directory)'
+        "-d", "--dest",
+        help="The destination directory to save the server to.\n"
+             "(Default is the current directory)"
     )
     parser.add_argument(
-        '-i', '--imports',
-        nargs='*',
-        help='The names of modules that must be importable on the server.\n'
-             'Examples:\n'
-             '  --imports msl.examples.loadlib\n'
-             '  --imports mypackage numpy'
+        "-i", "--imports",
+        nargs="*",
+        help="The names of modules that must be importable on the server.\n"
+             "Examples:\n"
+             "  --imports msl.examples.loadlib\n"
+             "  --imports mypackage numpy"
     )
     parser.add_argument(
-        '-D', '--data',
-        nargs='*',
+        "-D", "--data",
+        nargs="*",
         help='Additional data files to bundle with the server -- the\n'
              'format is "source:dest_dir", where "source" is the path\n'
              'to a file (or a directory of files) to add and "dest_dir"\n'
@@ -395,26 +395,26 @@ def _cli() -> None:
              '  --data mypackage/lib32.dll:mypackage'
     )
     parser.add_argument(
-        '--skip-32bit-check',
-        action='store_true',
-        help='In the rare situation that you want to create a frozen\n'
-             '64-bit server, you can include this flag which skips the\n'
-             'requirement that a 32-bit version of Python must be used\n'
-             'to create the server.'
+        "--skip-32bit-check",
+        action="store_true",
+        help="In the rare situation that you want to create a frozen\n"
+             "64-bit server, you can include this flag which skips the\n"
+             "requirement that a 32-bit version of Python must be used\n"
+             "to create the server."
     )
     parser.add_argument(
-        '--save-spec',
-        action='store_true',
+        "--save-spec",
+        action="store_true",
         help='By default, the PyInstaller ".spec" file (that is created\n'
              'when the server is frozen) is deleted. Including this\n'
              'flag will save the ".spec" file, so that it may be modified\n'
              'and then passed as the value to the "--spec" option.'
     )
     parser.add_argument(
-        '--keep-tk',
-        action='store_true',
-        help='By default, the tkinter module is excluded from the server.\n'
-             'Including this flag will bundle tkinter with the server.'
+        "--keep-tk",
+        action="store_true",
+        help="By default, the tkinter module is excluded from the server.\n"
+             "Including this flag will bundle tkinter with the server."
     )
 
     args = parser.parse_args(sys.argv[1:])

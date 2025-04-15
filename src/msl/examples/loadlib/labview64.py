@@ -35,7 +35,7 @@ class Labview64(Client64):
         """
         # specify the name of the corresponding 32-bit server module, labview32, which hosts
         # the 32-bit LabVIEW library -- labview_lib32.dll
-        super().__init__(module32='labview32', append_sys_path=os.path.dirname(__file__))
+        super().__init__(module32="labview32", append_sys_path=os.path.dirname(__file__))
 
     def stdev(self, x: Sequence[float], weighting: int = 0) -> tuple[float, float, float]:
         """Calculates the mean, variance and standard deviation of the values in the input `x`.
@@ -48,5 +48,5 @@ class Labview64(Client64):
         :return: The mean, variance and standard deviation.
         """
         if weighting == 0 or weighting == 1:
-            return self.request32('stdev', x, weighting)
-        raise ValueError(f'The weighting must be either 0 or 1, got {weighting}')
+            return self.request32("stdev", x, weighting)
+        raise ValueError(f"The weighting must be either 0 or 1, got {weighting}")

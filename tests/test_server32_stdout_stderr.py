@@ -16,16 +16,16 @@ else:
 class Print32(Server32):
 
     def __init__(self, host, port, **kwargs):
-        path = os.path.join(Server32.examples_dir(), 'cpp_lib32')
-        super().__init__(path, 'cdll', host, port)
+        path = os.path.join(Server32.examples_dir(), "cpp_lib32")
+        super().__init__(path, "cdll", host, port)
 
-        if kwargs['show'] == 'True':
-            print('this is a message')
-            print('there is a problem', file=sys.stderr)
+        if kwargs["show"] == "True":
+            print("this is a message")
+            print("there is a problem", file=sys.stderr)
 
     def write(self, n, stdout):
         stream = sys.stdout if stdout else sys.stderr
-        print('x'*n, end='', file=stream)
+        print("x"*n, end="", file=stream)
         return True
 
 
@@ -35,15 +35,15 @@ class Print64(Client64):
         super().__init__(__file__, show=show)
 
     def write(self, n, stdout):
-        return self.request32('write', n, stdout)
+        return self.request32("write", n, stdout)
 
 
 @skipif_no_server32
 def test_shutdown_server32():
     p = Print64(True)
     stdout, stderr = p.shutdown_server32()
-    assert stdout.read().rstrip() == b'this is a message'
-    assert stderr.read().rstrip() == b'there is a problem'
+    assert stdout.read().rstrip() == b"this is a message"
+    assert stderr.read().rstrip() == b"there is a problem"
 
     # calling shutdown_server32 multiple times is okay
     # but the buffer has been read already
@@ -61,8 +61,8 @@ def test_buffer_size_4096():
     assert p.write(n, True)
     assert p.write(n, False)
     stdout, stderr = p.shutdown_server32()
-    assert stdout.read() == b'x'*n
-    assert stderr.read() == b'x'*n
+    assert stdout.read() == b"x"*n
+    assert stderr.read() == b"x"*n
 
     # calling shutdown_server32 multiple times is okay
     # but the buffer has been read already

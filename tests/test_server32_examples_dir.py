@@ -17,8 +17,8 @@ class Ex32(Server32):
         # this class would not instantiate if Server32.examples_dir()
         # was incorrect, so the fact that the server starts already
         # demonstrates that this test passes
-        path = os.path.join(Server32.examples_dir(), 'cpp_lib32')
-        super().__init__(path, 'cdll', host, port)
+        path = os.path.join(Server32.examples_dir(), "cpp_lib32")
+        super().__init__(path, "cdll", host, port)
 
     def ex_dir(self):
         return self.examples_dir()
@@ -30,10 +30,10 @@ class Ex64(Client64):
         super().__init__(__file__)
 
     def examples_dir(self):
-        return self.request32('examples_dir')
+        return self.request32("examples_dir")
 
     def ex_dir(self):
-        return self.request32('ex_dir')
+        return self.request32("ex_dir")
 
 
 @skipif_no_server32

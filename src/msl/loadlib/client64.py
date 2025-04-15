@@ -41,7 +41,7 @@ from .server32 import Server32
 
 # the Self type was added in Python 3.11 (PEP 673)
 # using TypeVar is equivalent for < 3.11
-Self = TypeVar('Self', bound='Client64')
+Self = TypeVar("Self", bound="Client64")
 
 
 class Client64:
@@ -52,7 +52,7 @@ class Client64:
                  add_dll_directory: PathLike | Iterable[PathLike] | None = None,
                  append_environ_path: PathLike | Iterable[PathLike] | None = None,
                  append_sys_path: PathLike | Iterable[PathLike] | None = None,
-                 host: str | None = '127.0.0.1',
+                 host: str | None = "127.0.0.1",
                  port: int | None = None,
                  protocol: int = 5,
                  rpc_timeout: float | None = None,
@@ -168,15 +168,15 @@ class Client64:
     def __repr__(self) -> str:
         lib = os.path.basename(self._client.lib32_path)
         if self._client.host is None:
-            return (f'<{self.__class__.__name__} lib={lib} '
-                    f'address=None (mocked)>')
+            return (f"<{self.__class__.__name__} lib={lib} "
+                    f"address=None (mocked)>")
 
         if self._client.connection is None:
-            return (f'<{self.__class__.__name__} lib={lib} '
-                    f'address=None (closed)>')
+            return (f"<{self.__class__.__name__} lib={lib} "
+                    f"address=None (closed)>")
 
-        return (f'<{self.__class__.__name__} lib={lib} '
-                f'address={self._client.host}:{self._client.port}>')
+        return (f"<{self.__class__.__name__} lib={lib} "
+                f"address={self._client.host}:{self._client.port}>")
 
     @property
     def host(self) -> str | None:
@@ -246,7 +246,7 @@ class HTTPClient:
                  add_dll_directory: PathLike | Iterable[PathLike] | None = None,
                  append_environ_path: PathLike | Iterable[PathLike] | None = None,
                  append_sys_path: PathLike | Iterable[PathLike] | None = None,
-                 host: str | None = '127.0.0.1',
+                 host: str | None = "127.0.0.1",
                  port: int | None = None,
                  protocol: int = 5,
                  rpc_timeout: float | None = None,
@@ -262,17 +262,17 @@ class HTTPClient:
             port = utils.get_available_port()
 
         # the temporary files
-        f = os.path.join(tempfile.gettempdir(), f'msl-loadlib-{host}-{port}')
-        self._pickle_path = f'{f}.pickle'
-        self._meta_path = f'{f}.txt'
+        f = os.path.join(tempfile.gettempdir(), f"msl-loadlib-{host}-{port}")
+        self._pickle_path = f"{f}.pickle"
+        self._meta_path = f"{f}.txt"
         self._pickle_protocol = protocol
 
         # Find the 32-bit server executable.
         # Check a few locations in case msl-loadlib is frozen.
         dirs = [os.path.dirname(__file__)] if server32_dir is None else [os.fsdecode(server32_dir)]
-        if getattr(sys, 'frozen', False):
+        if getattr(sys, "frozen", False):
             # PyInstaller location for data files
-            if hasattr(sys, '_MEIPASS'):
+            if hasattr(sys, "_MEIPASS"):
                 dirs.append(sys._MEIPASS)
 
             # cx_Freeze location for data files
@@ -290,38 +290,38 @@ class HTTPClient:
 
         if server_exe is None:
             if len(dirs) == 1:
-                raise OSError(f'Cannot find {os.path.join(dirs[0], SERVER_FILENAME)}')
+                raise OSError(f"Cannot find {os.path.join(dirs[0], SERVER_FILENAME)}")
             else:
-                directories = '\n  '.join(sorted(set(dirs)))
-                raise OSError(f'Cannot find {SERVER_FILENAME!r} in any of the '
-                              f'following directories:\n  {directories}')
+                directories = "\n  ".join(sorted(set(dirs)))
+                raise OSError(f"Cannot find {SERVER_FILENAME!r} in any of the "
+                              f"following directories:\n  {directories}")
 
         cmd = [
             server_exe,
-            '--module', module32,
-            '--host', host,
-            '--port', str(port),
+            "--module", module32,
+            "--host", host,
+            "--port", str(port),
         ]
 
         # include paths to the 32-bit server's sys.path
         sys_path = list(sys.path)
         sys_path.extend(_build_paths(append_sys_path, ignore=sys_path))
-        cmd.extend(['--append-sys-path', ';'.join(sys_path)])
+        cmd.extend(["--append-sys-path", ";".join(sys_path)])
 
         # include paths to the 32-bit server's os.environ['PATH']
         env_path = [os.getcwd()]
         env_path.extend(_build_paths(append_environ_path, ignore=env_path))
-        cmd.extend(['--append-environ-path', ';'.join(env_path)])
+        cmd.extend(["--append-environ-path", ";".join(env_path)])
 
         # include paths to the 32-bit server's os.add_dll_directory()
         dll_dirs = _build_paths(add_dll_directory)
         if dll_dirs:
-            cmd.extend(['--add-dll-directory', ';'.join(dll_dirs)])
+            cmd.extend(["--add-dll-directory", ";".join(dll_dirs)])
 
         # include any keyword arguments
         if kwargs:
-            kw_str = ';'.join(f'{k}={v}' for k, v in kwargs.items())
-            cmd.extend(['--kwargs', kw_str])
+            kw_str = ";".join(f"{k}={v}" for k, v in kwargs.items())
+            cmd.extend(["--kwargs", kw_str])
 
         # start the 32-bit server
         flags = 0x08000000 if IS_WINDOWS else 0  # fixes issue 31, CREATE_NO_WINDOW = 0x08000000
@@ -335,14 +335,14 @@ class HTTPClient:
                 self._cleanup_zombie_and_files()
                 stdout = self._proc.stdout.read()
                 if not stdout:
-                    err.reason = (f'If you add print() statements to {module32!r}\n'
-                                  f'the statements that are executed will be displayed here.\n'
-                                  f'Limit the total number of characters that are written to stdout to be < 4096\n'
-                                  f'to avoid potential blocking when reading the stdout PIPE buffer.')
+                    err.reason = (f"If you add print() statements to {module32!r}\n"
+                                  f"the statements that are executed will be displayed here.\n"
+                                  f"Limit the total number of characters that are written to stdout to be < 4096\n"
+                                  f"to avoid potential blocking when reading the stdout PIPE buffer.")
                 else:
-                    err.reason = f'stdout from {module32!r} is:\n{stdout.decode()}'
+                    err.reason = f"stdout from {module32!r} is:\n{stdout.decode()}"
             else:
-                err.reason = self._proc.stderr.read().decode(errors='ignore')
+                err.reason = self._proc.stderr.read().decode(errors="ignore")
             raise
 
         # connect to the server
@@ -352,10 +352,10 @@ class HTTPClient:
         self._port = self._conn.port
 
         # let the server know the info to use for pickling
-        self._conn.request('POST', f'protocol={self._pickle_protocol}&path={self._pickle_path}')
+        self._conn.request("POST", f"protocol={self._pickle_protocol}&path={self._pickle_path}")
         response = self._conn.getresponse()
         if response.status != OK:
-            raise Server32Error('Cannot set pickle info')
+            raise Server32Error("Cannot set pickle info")
 
         self._meta32 = self.request32(METADATA)
 
@@ -377,7 +377,7 @@ class HTTPClient:
     @property
     def lib32_path(self) -> str:
         """The path to the 32-bit shared-library file."""
-        return self._meta32['path']
+        return self._meta32["path"]
 
     def cleanup(self) -> None:
         """Shutdown the server and remove files."""
@@ -396,13 +396,13 @@ class HTTPClient:
     def request32(self, name: str, *args: Any, **kwargs: Any) -> Any:
         """Send a request to the 32-bit server."""
         if self._conn is None:
-            raise Server32Error('The connection to the 32-bit server is closed')
+            raise Server32Error("The connection to the 32-bit server is closed")
 
-        with open(self._pickle_path, mode='wb') as f:
+        with open(self._pickle_path, mode="wb") as f:
             pickle.dump(args, f, protocol=self._pickle_protocol)
             pickle.dump(kwargs, f, protocol=self._pickle_protocol)
 
-        self._conn.request('GET', name)
+        self._conn.request("GET", name)
 
         try:
             response = self._conn.getresponse()
@@ -411,12 +411,12 @@ class HTTPClient:
 
         if response is None:
             raise ResponseTimeoutError(
-                f'Waiting for the response from the {name!r} request timed '
-                f'out after {self._rpc_timeout} second(s)'
+                f"Waiting for the response from the {name!r} request timed "
+                f"out after {self._rpc_timeout} second(s)"
             )
 
         if response.status == OK:
-            with open(self._pickle_path, mode='rb') as f:
+            with open(self._pickle_path, mode="rb") as f:
                 result = pickle.load(f)
             return result
 
@@ -429,13 +429,13 @@ class HTTPClient:
 
         # send the shutdown request
         try:
-            self._conn.request('POST', SHUTDOWN)
+            self._conn.request("POST", SHUTDOWN)
         except CannotSendRequest:
             # can occur if the previous request raised ResponseTimeoutError
             # send the shutdown request again
             self._conn.close()
             self._conn = HTTPConnection(self.host, port=self.port)
-            self._conn.request('POST', SHUTDOWN)
+            self._conn.request("POST", SHUTDOWN)
 
         # give the frozen 32-bit server a chance to shut down gracefully
         self._wait(timeout=kill_timeout, stacklevel=4)
@@ -461,7 +461,7 @@ class HTTPClient:
             if time.time() - t0 > timeout:
                 self._proc.terminate()
                 self._proc.returncode = -2
-                warnings.warn('killed the 32-bit server using brute force', stacklevel=stacklevel)
+                warnings.warn("killed the 32-bit server using brute force", stacklevel=stacklevel)
                 break
 
     def _cleanup_zombie_and_files(self) -> None:
@@ -471,11 +471,11 @@ class HTTPClient:
             pass
 
         if self._meta32:
-            pid = self._meta32['pid']
-            unfrozen_dir = self._meta32['unfrozen_dir']
+            pid = self._meta32["pid"]
+            unfrozen_dir = self._meta32["unfrozen_dir"]
         else:
             try:
-                with open(self._meta_path, mode='rt') as fp:
+                with open(self._meta_path, mode="rt") as fp:
                     lines = fp.readlines()
             except (OSError, NameError):
                 return
@@ -512,10 +512,10 @@ class MockClient:
             self._added_dll_directories.append(os.add_dll_directory(path))
 
         if append_environ_path is not None:
-            ignore = os.environ['PATH'].split(os.pathsep)
+            ignore = os.environ["PATH"].split(os.pathsep)
             new_env_paths = _build_paths(append_environ_path, ignore=ignore)
             if new_env_paths:
-                os.environ['PATH'] += os.pathsep + os.pathsep.join(new_env_paths)
+                os.environ["PATH"] += os.pathsep + os.pathsep.join(new_env_paths)
 
         # module32 may be a path to a Python file
         directory, module_name = os.path.split(module32)
@@ -529,18 +529,18 @@ class MockClient:
 
         # get the Server32 subclass in the module
         cls = None
-        if module_name.endswith('.py'):
+        if module_name.endswith(".py"):
             mod = importlib.import_module(module_name[:-3])
         else:
             mod = importlib.import_module(module_name)
         for name, obj in inspect.getmembers(mod, inspect.isclass):
-            if name != 'Server32' and issubclass(obj, Server32):
+            if name != "Server32" and issubclass(obj, Server32):
                 cls = obj
                 break
 
         if cls is None:
-            raise AttributeError(f'Module {module32!r} does not contain '
-                                 f'a class that is a subclass of Server32')
+            raise AttributeError(f"Module {module32!r} does not contain "
+                                 f"a class that is a subclass of Server32")
 
         # the Server32 subclass expects the values for all kwargs
         # to be of type string
@@ -587,10 +587,10 @@ class MockClient:
                 return attr
         except Exception as exc:  # noqa: Too broad exception clause
             exception = {
-                'name': exc.__class__.__name__,
-                'value': f'The mocked connection to the server raised:\n'
-                         f'{exc}\n'
-                         f'(see above for more details)'
+                "name": exc.__class__.__name__,
+                "value": f"The mocked connection to the server raised:\n"
+                         f"{exc}\n"
+                         f"(see above for more details)"
             }
             raise Server32Error(**exception) from exc
 

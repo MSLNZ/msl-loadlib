@@ -31,7 +31,7 @@ class Cpp64(Client64):
         """
         # specify the name of the corresponding 32-bit server module, cpp32, which hosts
         # the 32-bit C++ library -- cpp_lib32.
-        super().__init__(module32='cpp32', append_sys_path=os.path.dirname(__file__))
+        super().__init__(module32="cpp32", append_sys_path=os.path.dirname(__file__))
 
     def add(self, a: int, b: int) -> int:
         """Add two integers.
@@ -42,7 +42,7 @@ class Cpp64(Client64):
         :param b: Second integer.
         :return: The sum of `a` and `b`.
         """
-        return self.request32('add', a, b)
+        return self.request32("add", a, b)
 
     def subtract(self, a: float, b: float) -> float:
         """Subtract two floating-point numbers *('float' refers to the C++ data type)*.
@@ -53,7 +53,7 @@ class Cpp64(Client64):
         :param b: Second floating-point number.
         :return: The difference between `a` and `b`.
         """
-        return self.request32('subtract', a, b)
+        return self.request32("subtract", a, b)
 
     def add_or_subtract(self, a: float, b: float, do_addition: bool) -> float:
         """Add or subtract two floating-point numbers *('double' refers to the C++ data type)*.
@@ -65,7 +65,7 @@ class Cpp64(Client64):
         :param do_addition: Whether to add or subtract the numbers.
         :return: `a+b` if `do_addition` is :data:`True` else `a-b`.
         """
-        return self.request32('add_or_subtract', a, b, do_addition)
+        return self.request32("add_or_subtract", a, b, do_addition)
 
     def scalar_multiply(self, a: float, xin: Sequence[float]) -> list[float]:
         """Multiply each element in an array by a number.
@@ -76,7 +76,7 @@ class Cpp64(Client64):
         :param xin: Array to modify.
         :return: A new array with each element in `xin` multiplied by `a`.
         """
-        return self.request32('scalar_multiply', a, xin)
+        return self.request32("scalar_multiply", a, xin)
 
     def reverse_string_v1(self, original: str) -> str:
         """Reverse a string (version 1).
@@ -89,7 +89,7 @@ class Cpp64(Client64):
         :param original: The original string.
         :return: The string reversed.
         """
-        return self.request32('reverse_string_v1', original)
+        return self.request32("reverse_string_v1", original)
 
     def reverse_string_v2(self, original: str) -> str:
         """Reverse a string (version 2).
@@ -102,7 +102,7 @@ class Cpp64(Client64):
         :param original: The original string.
         :return: The string reversed.
         """
-        return self.request32('reverse_string_v2', original)
+        return self.request32("reverse_string_v2", original)
 
     def distance_4_points(self, points: FourPoints) -> float:
         """Calculates the total distance connecting 4 :class:`~msl.examples.loadlib.cpp32.Point`\'s.
@@ -117,8 +117,8 @@ class Cpp64(Client64):
         :return: The total distance connecting the 4 points.
         """
         if not isinstance(points, FourPoints):
-            raise TypeError(f'Must pass in a FourPoints object. Got {type(points)}')
-        return self.request32('distance_4_points', points)
+            raise TypeError(f"Must pass in a FourPoints object. Got {type(points)}")
+        return self.request32("distance_4_points", points)
 
     def circumference(self, radius: float, n: int) -> float:
         """Estimates the circumference of a circle.
@@ -131,4 +131,4 @@ class Cpp64(Client64):
         :param n: The number of points to use to estimate the circumference.
         :return: The estimated circumference of the circle.
         """
-        return self.request32('circumference', radius, n)
+        return self.request32("circumference", radius, n)

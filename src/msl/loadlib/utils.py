@@ -109,59 +109,59 @@ def check_dot_net_config(py_exe_path: str) -> tuple[int, str]:
             * 0: if the .NET property was already enabled, or
             * 1: if the property was created successfully.
     """
-    config_path = f'{py_exe_path}.config'
+    config_path = f"{py_exe_path}.config"
 
     if os.path.isfile(config_path):
 
         try:
             tree = ElementTree.parse(config_path)
         except ElementTree.ParseError:
-            msg = (f'Invalid XML file {config_path}\n'
-                   f'Cannot create the useLegacyV2RuntimeActivationPolicy property.\n')
+            msg = (f"Invalid XML file {config_path}\n"
+                   f"Cannot create the useLegacyV2RuntimeActivationPolicy property.\n")
             logger.warning(msg)
             return -1, msg
 
         root = tree.getroot()
 
-        if root.tag != 'configuration':
-            msg = (f'The root tag in {config_path} is <{root.tag}>.\n'
-                   f'It must be <configuration> in order to create a .NET Framework config\n'
-                   f'file which enables the useLegacyV2RuntimeActivationPolicy property.\n'
-                   f'To load an assembly from a .NET Framework version < 4.0 the following\n'
-                   f'must be in {config_path}\n\n'
-                   f'<configuration>{NET_FRAMEWORK_FIX}</configuration>\n')
+        if root.tag != "configuration":
+            msg = (f"The root tag in {config_path} is <{root.tag}>.\n"
+                   f"It must be <configuration> in order to create a .NET Framework config\n"
+                   f"file which enables the useLegacyV2RuntimeActivationPolicy property.\n"
+                   f"To load an assembly from a .NET Framework version < 4.0 the following\n"
+                   f"must be in {config_path}\n\n"
+                   f"<configuration>{NET_FRAMEWORK_FIX}</configuration>\n")
             logger.warning(msg)
             return -1, msg
 
         # check if the policy exists
-        policy = root.find('startup/[@useLegacyV2RuntimeActivationPolicy]')
+        policy = root.find("startup/[@useLegacyV2RuntimeActivationPolicy]")
         if policy is None:
-            with open(config_path, mode='rt') as fp:
+            with open(config_path, mode="rt") as fp:
                 lines = fp.readlines()
 
             lines.insert(-1, NET_FRAMEWORK_FIX)
-            with open(config_path, mode='wt') as fp:
+            with open(config_path, mode="wt") as fp:
                 fp.writelines(lines)
-            msg = (f'Added the useLegacyV2RuntimeActivationPolicy property to\n'
-                   f'{config_path}\n'
-                   f'Try again to see if Python can now load the .NET library.\n')
+            msg = (f"Added the useLegacyV2RuntimeActivationPolicy property to\n"
+                   f"{config_path}\n"
+                   f"Try again to see if Python can now load the .NET library.\n")
             return 1, msg
         else:
-            if not policy.attrib['useLegacyV2RuntimeActivationPolicy'].lower() == 'true':
+            if not policy.attrib["useLegacyV2RuntimeActivationPolicy"].lower() == "true":
                 msg = (f'The useLegacyV2RuntimeActivationPolicy in\n{config_path}\n'
                        f'is "false". Cannot load an assembly from a .NET Framework '
                        f'version < 4.0.\n')
                 logger.warning(msg)
                 return -1, msg
-            return 0, 'The useLegacyV2RuntimeActivationPolicy property is enabled'
+            return 0, "The useLegacyV2RuntimeActivationPolicy property is enabled"
 
     else:
-        with open(config_path, mode='wt') as f:
+        with open(config_path, mode="wt") as f:
             f.write('<?xml version="1.0" encoding="utf-8" ?>')
             f.write(NET_FRAMEWORK_DESCRIPTION)
-            f.write('<configuration>')
+            f.write("<configuration>")
             f.write(NET_FRAMEWORK_FIX)
-            f.write('</configuration>\n')
+            f.write("</configuration>\n")
 
         msg = (f'The library appears to be from a .NET Framework version < 4.0.\n'
                f'The useLegacyV2RuntimeActivationPolicy property was added to\n'
@@ -188,22 +188,22 @@ def is_port_in_use(port: int) -> bool:
     flags = 0
     if IS_WINDOWS:
         flags = 0x08000000  # fixes issue 31, CREATE_NO_WINDOW = 0x08000000
-        cmd = ['netstat', '-a', '-n', '-p', 'TCP']
+        cmd = ["netstat", "-a", "-n", "-p", "TCP"]
     elif IS_LINUX:
-        cmd = ['ss', '-ant']
+        cmd = ["ss", "-ant"]
     else:
-        cmd = ['lsof', '-nPw', '-iTCP']
+        cmd = ["lsof", "-nPw", "-iTCP"]
     p = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, creationflags=flags)
     out, err = p.communicate()
     if err:
-        raise RuntimeError(err.decode(errors='ignore'))
-    return out.find(b':%d ' % port) > 0
+        raise RuntimeError(err.decode(errors="ignore"))
+    return out.find(b":%d " % port) > 0
 
 
 def get_available_port() -> int:
     """Returns a port number that is available."""
     with socket.socket() as sock:
-        sock.bind(('', 0))
+        sock.bind(("", 0))
         port = sock.getsockname()[1]
     return port
 
@@ -222,8 +222,8 @@ def wait_for_server(host: str, port: int, timeout: float) -> None:
             return
 
         if time.time() > stop:
-            raise ConnectionTimeoutError(f'Timeout after {timeout:.1f} second(s). '
-                                         f'Could not connect to {host}:{port}')
+            raise ConnectionTimeoutError(f"Timeout after {timeout:.1f} second(s). "
+                                         f"Could not connect to {host}:{port}")
 
 
 def get_com_info(*additional_keys: str) -> dict[str, dict[str, str | None]]:
@@ -253,13 +253,13 @@ def get_com_info(*additional_keys: str) -> dict[str, dict[str, str | None]]:
         return {}
 
     results = {}
-    for item in ['CLSID', r'Wow6432Node\CLSID']:
+    for item in ["CLSID", r"Wow6432Node\CLSID"]:
         try:
             key = winreg.OpenKey(winreg.HKEY_CLASSES_ROOT, item)
         except OSError:
             continue
         else:
-            logger.debug(r'Parsing HKEY_CLASSES_ROOT\%s\...', item)
+            logger.debug(r"Parsing HKEY_CLASSES_ROOT\%s\...", item)
 
         index = -1
         while True:
@@ -274,12 +274,12 @@ def get_com_info(*additional_keys: str) -> dict[str, dict[str, str | None]]:
             # ProgID is mandatory, if this fails then ignore
             # this CLSID and go to the next index in the registry
             try:
-                progid = winreg.QueryValue(sub_key, 'ProgID')
+                progid = winreg.QueryValue(sub_key, "ProgID")
             except OSError:
                 pass
             else:
                 results[clsid] = {}
-                results[clsid]['ProgID'] = progid
+                results[clsid]["ProgID"] = progid
 
                 for name in additional_keys:
                     try:
@@ -325,8 +325,8 @@ def generate_com_wrapper(lib: Any, out_dir: str | None = None) -> ModuleType:
     """
     if not is_comtypes_installed():
         raise OSError(
-            'Cannot create a COM wrapper because comtypes is not installed, run\n'
-            '  pip install comtypes'
+            "Cannot create a COM wrapper because comtypes is not installed, run\n"
+            "  pip install comtypes"
         )
 
     import comtypes.client
@@ -351,9 +351,9 @@ def generate_com_wrapper(lib: Any, out_dir: str | None = None) -> ModuleType:
     except OSError:
         pass
     except (AttributeError, TypeError) as e:
-        if 'LoadLibrary' in str(e):
+        if "LoadLibrary" in str(e):
             mod = from_pointer(lib.lib)
-        elif hasattr(lib, '__com_interface__'):
+        elif hasattr(lib, "__com_interface__"):
             mod = from_pointer(lib)
         else:
             raise

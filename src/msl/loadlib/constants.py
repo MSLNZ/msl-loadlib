@@ -6,23 +6,23 @@ from __future__ import annotations
 import sys
 
 __all__: list[str] = [
-    'DEFAULT_EXTENSION',
-    'IS_LINUX',
-    'IS_MAC',
-    'IS_WINDOWS',
-    'IS_PYTHON_64BIT',
-    'NET_FRAMEWORK_DESCRIPTION',
-    'NET_FRAMEWORK_FIX',
-    'SERVER_FILENAME',
+    "DEFAULT_EXTENSION",
+    "IS_LINUX",
+    "IS_MAC",
+    "IS_WINDOWS",
+    "IS_PYTHON_64BIT",
+    "NET_FRAMEWORK_DESCRIPTION",
+    "NET_FRAMEWORK_FIX",
+    "SERVER_FILENAME",
 ]
 
-IS_WINDOWS: bool = sys.platform == 'win32'
+IS_WINDOWS: bool = sys.platform == "win32"
 """Whether the operating system is Windows."""
 
-IS_LINUX: bool = sys.platform.startswith('linux')
+IS_LINUX: bool = sys.platform.startswith("linux")
 """Whether the operating system is Linux."""
 
-IS_MAC: bool = sys.platform == 'darwin'
+IS_MAC: bool = sys.platform == "darwin"
 """Whether the operating system is macOS."""
 
 IS_PYTHON_64BIT: bool = sys.maxsize > 2 ** 32
@@ -31,17 +31,17 @@ IS_PYTHON_64BIT: bool = sys.maxsize > 2 ** 32
 SERVER_FILENAME: str
 DEFAULT_EXTENSION: str
 if IS_WINDOWS:
-    SERVER_FILENAME = 'server32-windows.exe'
-    DEFAULT_EXTENSION = '.dll'
+    SERVER_FILENAME = "server32-windows.exe"
+    DEFAULT_EXTENSION = ".dll"
 elif IS_LINUX:
-    SERVER_FILENAME = 'server32-linux'
-    DEFAULT_EXTENSION = '.so'
+    SERVER_FILENAME = "server32-linux"
+    DEFAULT_EXTENSION = ".so"
 elif IS_MAC:
-    SERVER_FILENAME = 'server32-mac'
-    DEFAULT_EXTENSION = '.dylib'
+    SERVER_FILENAME = "server32-mac"
+    DEFAULT_EXTENSION = ".dylib"
 else:
-    SERVER_FILENAME = 'server32-unknown'
-    DEFAULT_EXTENSION = '.unknown'
+    SERVER_FILENAME = "server32-unknown"
+    DEFAULT_EXTENSION = ".unknown"
 
 
 NET_FRAMEWORK_DESCRIPTION: str = """

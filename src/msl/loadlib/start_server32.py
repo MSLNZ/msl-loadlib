@@ -32,84 +32,84 @@ def main():
     .. _here: https://msl-loadlib.readthedocs.io/en/stable/_modules/msl/loadlib/start_server32.html#main
     """
     parser = argparse.ArgumentParser(
-        description='Created by the msl-loadlib Python package.\n\n'
-                    'Runs a 32-bit Python interpreter for inter-process communication for the client-server\n'
-                    'protocol, i.e., call a 32-bit process (server) from a 64-bit process (client).',
+        description="Created by the msl-loadlib Python package.\n\n"
+                    "Runs a 32-bit Python interpreter for inter-process communication for the client-server\n"
+                    "protocol, i.e., call a 32-bit process (server) from a 64-bit process (client).",
         formatter_class=argparse.RawTextHelpFormatter)
 
-    parser.add_argument('-i', '--interactive', action='store_true',
-                        help='run an interactive console with the 32-bit server and exit')
+    parser.add_argument("-i", "--interactive", action="store_true",
+                        help="run an interactive console with the 32-bit server and exit")
 
-    parser.add_argument('-v', '--version', action='store_true',
-                        help='show the Python version of the 32-bit server and exit')
+    parser.add_argument("-v", "--version", action="store_true",
+                        help="show the Python version of the 32-bit server and exit")
 
-    parser.add_argument('-d', '--add-dll-directory', default=None,
-                        help='add path(s) to os.add_dll_directory() on the 32-bit server\n'
-                             '(to add multiple paths, separate each path with a semicolon)\n'
-                             'Supported on Windows only')
+    parser.add_argument("-d", "--add-dll-directory", default=None,
+                        help="add path(s) to os.add_dll_directory() on the 32-bit server\n"
+                             "(to add multiple paths, separate each path with a semicolon)\n"
+                             "Supported on Windows only")
 
-    parser.add_argument('-s', '--append-sys-path', default=None,
-                        help='append path(s) to sys.path on the 32-bit server\n'
-                             '(to append multiple paths, separate each path with a semicolon)')
+    parser.add_argument("-s", "--append-sys-path", default=None,
+                        help="append path(s) to sys.path on the 32-bit server\n"
+                             "(to append multiple paths, separate each path with a semicolon)")
 
-    parser.add_argument('-e', '--append-environ-path', default=None,
+    parser.add_argument("-e", "--append-environ-path", default=None,
                         help='append path(s) to os.environ["PATH"] on the 32-bit server\n'
                              '(to append multiple paths, separate each path with a semicolon)')
 
-    parser.add_argument('-m', '--module', default=None,
-                        help='a Python module to run on the 32-bit server\n'
-                             '(the module must contain a subclass of Server32)')
+    parser.add_argument("-m", "--module", default=None,
+                        help="a Python module to run on the 32-bit server\n"
+                             "(the module must contain a subclass of Server32)")
 
-    parser.add_argument('-H', '--host', default='127.0.0.1',
-                        help='hostname or IP address to run the server on [default: 127.0.0.1]')
+    parser.add_argument("-H", "--host", default="127.0.0.1",
+                        help="hostname or IP address to run the server on [default: 127.0.0.1]")
 
-    parser.add_argument('-p', '--port', default=8080,
-                        help='the port to open on the host [default: 8080]')
+    parser.add_argument("-p", "--port", default=8080,
+                        help="the port to open on the host [default: 8080]")
 
-    parser.add_argument('-k', '--kwargs', default=None,
-                        help='keyword arguments that are passed to the constructor of the\n'
-                             'Server32 subclass as name=value pairs separated with a semicolon\n'
-                             'e.g., --kwargs a=100;b=3.14;c=filename.csv')
+    parser.add_argument("-k", "--kwargs", default=None,
+                        help="keyword arguments that are passed to the constructor of the\n"
+                             "Server32 subclass as name=value pairs separated with a semicolon\n"
+                             "e.g., --kwargs a=100;b=3.14;c=filename.csv")
 
     args = parser.parse_args()
 
     if args.version:
-        print(f'Python {sys.version}')
+        print(f"Python {sys.version}")
         return 0
 
     # include directories in sys.path
-    sys.path.append(os.path.abspath(''))
+    sys.path.append(os.path.abspath(""))
     if args.module is not None:
         mod_dir = os.path.dirname(args.module)
         if mod_dir and mod_dir not in sys.path:
             sys.path.append(mod_dir)
     if args.append_sys_path is not None:
-        for path in args.append_sys_path.split(';'):
+        for path in args.append_sys_path.split(";"):
             if path and path not in sys.path:
                 sys.path.append(path)
 
     # include directories in os.environ['PATH']
     if args.append_environ_path is not None:
-        for path in args.append_environ_path.split(';'):
+        for path in args.append_environ_path.split(";"):
             if path:
-                os.environ['PATH'] += os.pathsep + path
+                os.environ["PATH"] += os.pathsep + path
 
     # include directories with os.add_dll_directory()
     dll_dirs = []
     if args.add_dll_directory is not None:
-        for path in args.add_dll_directory.split(';'):
+        for path in args.add_dll_directory.split(";"):
             if path:
                 try:
                     dll_dirs.append(os.add_dll_directory(path))
                 except OSError as e:
-                    err = (f'os.add_dll_directory() raised the following error on the 32-bit server:\n'
-                           f'  {e.__class__.__name__}: {e}\n'
-                           f'Cannot start the 32-bit server.')
+                    err = (f"os.add_dll_directory() raised the following error on the 32-bit server:\n"
+                           f"  {e.__class__.__name__}: {e}\n"
+                           f"Cannot start the 32-bit server.")
                     print(err, file=sys.stderr)
                     return -1
                 except AttributeError:
-                    err = ('os.add_dll_directory() is not supported on the 32-bit server.\n'
-                           'Cannot start the 32-bit server.')
+                    err = ("os.add_dll_directory() is not supported on the 32-bit server.\n"
+                           "Cannot start the 32-bit server.")
                     print(err, file=sys.stderr)
                     return -1
         os.added_dll_directories = dll_dirs
@@ -119,8 +119,8 @@ def main():
 
         class Quitter:
             def __repr__(self):
-                ctrl = '"Ctrl-Z then Enter"' if sys.platform == 'win32' else 'Ctrl-D (i.e. EOF)'
-                return f'Use exit(), quit() or {ctrl} to exit the 32-bit server console'
+                ctrl = '"Ctrl-Z then Enter"' if sys.platform == "win32" else "Ctrl-D (i.e. EOF)"
+                return f"Use exit(), quit() or {ctrl} to exit the 32-bit server console"
 
             def __call__(self, *args, **kwargs):
                 raise SystemExit
@@ -129,13 +129,13 @@ def main():
         builtins.exit = quitter
         builtins.quit = quitter
 
-        locs = dict((k, v) for k, v in globals().items() if k.startswith('_'))
-        locs['__doc__'] = 'Interactive console for the 32-bit server (msl-loadlib).'
+        locs = dict((k, v) for k, v in globals().items() if k.startswith("_"))
+        locs["__doc__"] = "Interactive console for the 32-bit server (msl-loadlib)."
         console = code.InteractiveConsole(locals=locs)
         try:
-            console.interact(banner=f'Python {sys.version} on {sys.platform}\n{quitter}', exitmsg='')
+            console.interact(banner=f"Python {sys.version} on {sys.platform}\n{quitter}", exitmsg="")
         except SystemExit:
-            console.write('\n')
+            console.write("\n")
         finally:
             for directory in dll_dirs:
                 if directory.path:
@@ -145,11 +145,11 @@ def main():
     # build the keyword-argument dictionary
     kwargs = {}
     if args.kwargs is not None:
-        for item in args.kwargs.split(';'):
-            item_split = item.split('=')
+        for item in args.kwargs.split(";"):
+            item_split = item.split("=")
             if len(item_split) == 1:
                 key = item_split[0].strip()
-                value = ''
+                value = ""
             else:
                 key = item_split[0].strip()
                 value = item_split[1].strip()
@@ -159,57 +159,57 @@ def main():
     # if you get to this point in the script that means you want to start a server for
     # inter-process communication and therefore args.module must have a value
     if not args.module:
-        err = (f'You must specify a Python module to run on the 32-bit server.\n'
-               f'For example: {SERVER_FILENAME} -m my_module\n'
-               f'Cannot start the 32-bit server.')
+        err = (f"You must specify a Python module to run on the 32-bit server.\n"
+               f"For example: {SERVER_FILENAME} -m my_module\n"
+               f"Cannot start the 32-bit server.")
         print(err, file=sys.stderr)
         return -1
 
     args.module = os.path.basename(args.module)
-    if args.module.endswith('.py'):
+    if args.module.endswith(".py"):
         args.module = args.module[:-3]
 
-    if args.module.startswith('.'):
-        err = (f'ImportError: {args.module}\n'
-               f'Cannot perform relative imports.\n'
-               f'Cannot start the 32-bit server.')
+    if args.module.startswith("."):
+        err = (f"ImportError: {args.module}\n"
+               f"Cannot perform relative imports.\n"
+               f"Cannot start the 32-bit server.")
         print(err, file=sys.stderr)
         return -1
 
-    f = os.path.join(tempfile.gettempdir(), f'msl-loadlib-{args.host}-{args.port}.txt')
-    with open(f, mode='wt') as fp:
-        fp.write(f'{os.getpid()}\n{sys._MEIPASS}')  # noqa: sys._MEIPASS exists
+    f = os.path.join(tempfile.gettempdir(), f"msl-loadlib-{args.host}-{args.port}.txt")
+    with open(f, mode="wt") as fp:
+        fp.write(f"{os.getpid()}\n{sys._MEIPASS}")  # noqa: sys._MEIPASS exists
 
     try:
         mod = importlib.import_module(args.module)
     except ImportError as e:
         # ignore the folders from the unfrozen application
-        paths = '\n  '.join(item for item in sys.path
+        paths = "\n  ".join(item for item in sys.path
                             if not item.startswith(sys._MEIPASS))  # noqa: sys._MEIPASS exists
-        err = (f'ImportError: {e}\n'
-               f'The missing module must be in sys.path (see the --append-sys-path option)\n'
-               f'The paths in sys.path are:\n  {paths}\n\n'
-               f'Cannot start the 32-bit server.')
+        err = (f"ImportError: {e}\n"
+               f"The missing module must be in sys.path (see the --append-sys-path option)\n"
+               f"The paths in sys.path are:\n  {paths}\n\n"
+               f"Cannot start the 32-bit server.")
         print(err, file=sys.stderr)
         return -1
     except:  # noqa: PEP 8: E722 do not use bare 'except'
-        err = (f'Importing {args.module!r} on the 32-bit server raised '
-               f'the following exception:\n\n{traceback.format_exc()}\n'
-               f'Cannot start the 32-bit server.')
+        err = (f"Importing {args.module!r} on the 32-bit server raised "
+               f"the following exception:\n\n{traceback.format_exc()}\n"
+               f"Cannot start the 32-bit server.")
         print(err, file=sys.stderr)
         return -1
 
     # ensure that there is a subclass of Server32 in the module
     cls = None
     for name, obj in inspect.getmembers(mod, inspect.isclass):
-        if name != 'Server32' and issubclass(obj, Server32):
+        if name != "Server32" and issubclass(obj, Server32):
             cls = obj
             break
 
     if cls is None:
-        err = (f'AttributeError: module {args.module}.py\n'
-               f'Module does not contain a class that is a subclass of Server32.\n'
-               f'Cannot start the 32-bit server.')
+        err = (f"AttributeError: module {args.module}.py\n"
+               f"Module does not contain a class that is a subclass of Server32.\n"
+               f"Cannot start the 32-bit server.")
         print(err, file=sys.stderr)
         return -1
 
@@ -221,26 +221,26 @@ def main():
         tb = traceback.format_exc()
 
     if error is not None:
-        err = f'Instantiating {cls.__name__!r} raised the following exception:\n\n{tb}\n'
-        if error.__class__.__name__ == 'TypeError' and '__init__' in str(error):
+        err = f"Instantiating {cls.__name__!r} raised the following exception:\n\n{tb}\n"
+        if error.__class__.__name__ == "TypeError" and "__init__" in str(error):
             name = cls.__name__
-            err += (f'Check that the {name!r} class is defined with the following syntax\n\n'
-                    f'class {name}(Server32):\n'
-                    f'    def __init__(self, host, port, **kwargs):\n'
-                    f'        super().__init__(path, libtype, host, port, **kwargs)\n\n')
+            err += (f"Check that the {name!r} class is defined with the following syntax\n\n"
+                    f"class {name}(Server32):\n"
+                    f"    def __init__(self, host, port, **kwargs):\n"
+                    f"        super().__init__(path, libtype, host, port, **kwargs)\n\n")
 
-        err += 'Cannot start the 32-bit server.'
+        err += "Cannot start the 32-bit server."
         print(err, file=sys.stderr)
         return -1
 
-    if not hasattr(server, '_library'):
+    if not hasattr(server, "_library"):
         name = cls.__name__
-        err = (f'The super() function was never called in the Server32 subclass.\n'
-               f'Check that the {name!r} class is defined with the following syntax\n\n'
-               f'class {name}(Server32):\n'
-               f'    def __init__(self, host, port, **kwargs):\n'
-               f'        super().__init__(path, libtype, host, port, **kwargs)\n\n'
-               f'Cannot start the 32-bit server.')
+        err = (f"The super() function was never called in the Server32 subclass.\n"
+               f"Check that the {name!r} class is defined with the following syntax\n\n"
+               f"class {name}(Server32):\n"
+               f"    def __init__(self, host, port, **kwargs):\n"
+               f"        super().__init__(path, libtype, host, port, **kwargs)\n\n"
+               f"Cannot start the 32-bit server.")
         print(err, file=sys.stderr)
         return -1
 
@@ -253,8 +253,8 @@ def main():
     except:  # noqa: PEP 8: E722 do not use bare 'except'
         # Can only get here if starting the HTTPServer raised an exception.
         # Error handling for a request is handled by the RequestHandler class.
-        print(f'Binding, activating and starting the HTTPServer raised the '
-              f'following exception\n{traceback.format_exc()}', file=sys.stderr)
+        print(f"Binding, activating and starting the HTTPServer raised the "
+              f"following exception\n{traceback.format_exc()}", file=sys.stderr)
         return -1
     finally:
         server.server_close()
@@ -263,5 +263,5 @@ def main():
                 directory.close()
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     sys.exit(main())

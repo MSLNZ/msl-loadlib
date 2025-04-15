@@ -20,11 +20,11 @@ def test_sew_eurodrive():
 
         def __init__(self):
             super().__init__(
-                os.path.join(os.path.dirname(__file__), 'sew_eurodrive', 'sew32.py')
+                os.path.join(os.path.dirname(__file__), "sew_eurodrive", "sew32.py")
             )
 
         def do_something(self, value):
-            return self.request32('do_something', value)
+            return self.request32("do_something", value)
 
     sew = SEWEuroDrive64()
     assert sew.do_something(600) == 100

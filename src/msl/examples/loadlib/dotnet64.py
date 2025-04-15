@@ -30,7 +30,7 @@ class DotNet64(Client64):
         """
         # specify the name of the corresponding 32-bit server module, dotnet32, which hosts
         # the 32-bit .NET library -- dotnet_lib32.dll.
-        super().__init__(module32='dotnet32', append_sys_path=os.path.dirname(__file__))
+        super().__init__(module32="dotnet32", append_sys_path=os.path.dirname(__file__))
 
     def get_class_names(self) -> list[str]:
         """Returns the class names in the library.
@@ -39,7 +39,7 @@ class DotNet64(Client64):
 
         :return: The names of the classes that are available in :ref:`dotnet_lib32.dll <dotnet-lib>`.
         """
-        return self.request32('get_class_names')
+        return self.request32("get_class_names")
 
     def add_integers(self, a: int, b: int) -> int:
         """Add two integers.
@@ -50,7 +50,7 @@ class DotNet64(Client64):
         :param b: Second integer.
         :return: The sum of `a` and `b`.
         """
-        return self.request32('add_integers', a, b)
+        return self.request32("add_integers", a, b)
 
     def divide_floats(self, a: float, b: float) -> float:
         """Divide two C# floating-point numbers.
@@ -61,7 +61,7 @@ class DotNet64(Client64):
         :param b: Second floating-point number.
         :return: The quotient of `a` / `b`.
         """
-        return self.request32('divide_floats', a, b)
+        return self.request32("divide_floats", a, b)
 
     def multiply_doubles(self, a: float, b: float) -> float:
         """Multiply two C# double-precision numbers.
@@ -72,7 +72,7 @@ class DotNet64(Client64):
         :param b: Second double-precision number.
         :return: The product of `a` * `b`.
         """
-        return self.request32('multiply_doubles', a, b)
+        return self.request32("multiply_doubles", a, b)
 
     def add_or_subtract(self, a: float, b: float, do_addition: bool) -> float:
         """Add or subtract two C# double-precision numbers.
@@ -84,7 +84,7 @@ class DotNet64(Client64):
         :param do_addition: Whether to add or subtract the numbers.
         :return: `a+b` if `do_addition` is :data:`True` else `a-b`.
         """
-        return self.request32('add_or_subtract', a, b, do_addition)
+        return self.request32("add_or_subtract", a, b, do_addition)
 
     def scalar_multiply(self, a: float, xin: Sequence[float]) -> list[float]:
         """Multiply each element in an array by a number.
@@ -95,7 +95,7 @@ class DotNet64(Client64):
         :param xin: Array to modify.
         :return: A new array with each element in `xin` multiplied by `a`.
         """
-        return self.request32('scalar_multiply', a, xin)
+        return self.request32("scalar_multiply", a, xin)
 
     def multiply_matrices(self,
                           a1: Sequence[Sequence[float]],
@@ -108,7 +108,7 @@ class DotNet64(Client64):
         :param a2: Second matrix.
         :return: The result of `a1` * `a2`.
         """
-        return self.request32('multiply_matrices', a1, a2)
+        return self.request32("multiply_matrices", a1, a2)
 
     def reverse_string(self, original: str) -> str:
         """Reverse a string.
@@ -118,7 +118,7 @@ class DotNet64(Client64):
         :param original: The original string.
         :return: The string reversed.
         """
-        return self.request32('reverse_string', original)
+        return self.request32("reverse_string", original)
 
     def add_multiple(self, a: int, b: int, c: int, d: int, e: int) -> int:
         """Add multiple integers. *Calls a static method in a static class.*
@@ -132,7 +132,7 @@ class DotNet64(Client64):
         :param e: Fifth integer.
         :return: The sum of the input arguments.
         """
-        return self.request32('add_multiple', a, b, c, d, e)
+        return self.request32("add_multiple", a, b, c, d, e)
 
     def concatenate(self, a: str, b: str, c: str, d: bool, e: str) -> str:
         """
@@ -147,4 +147,4 @@ class DotNet64(Client64):
         :param e: Fourth string.
         :return: The strings concatenated together.
         """
-        return self.request32('concatenate', a, b, c, d, e)
+        return self.request32("concatenate", a, b, c, d, e)
