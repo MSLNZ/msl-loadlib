@@ -117,7 +117,7 @@ def test_arg_parser_iterable():
         ]
         dll_dir = None
 
-    kwargs = {'a': -11, 'b': 3.1415926, 'c': 'abcd efghi jk', 'd': [1, 2, 3], 'e': {1: 'val'}}
+    kwargs = {'a': -11, 'b': 3.1415926, 'c': 'abcd efghi jk', 'd': [1, 2, 3], 'e': {1: 'val'}}  # cSpell: ignore efghi
 
     client = ArgParse64(
         add_dll_directory=dll_dir,

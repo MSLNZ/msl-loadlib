@@ -203,28 +203,28 @@ class DotNet32(Server32):
         :param a2: Second matrix.
         :return: The result of `a1` * `a2`.
         """
-        nrows1 = len(a1)
-        ncols1 = len(a1[0])
+        n_rows1 = len(a1)
+        n_cols1 = len(a1[0])
 
-        nrows2 = len(a2)
-        ncols2 = len(a2[0])
+        n_rows2 = len(a2)
+        n_cols2 = len(a2[0])
 
-        if not ncols1 == nrows2:
-            raise ValueError(f'Cannot multiply a {nrows1}x{ncols1} matrix '
-                             f'with a {nrows2}x{ncols2} matrix')
+        if not n_cols1 == n_rows2:
+            raise ValueError(f'Cannot multiply a {n_rows1}x{n_cols1} matrix '
+                             f'with a {n_rows2}x{n_cols2} matrix')
 
-        m1 = self.lib.System.Array.CreateInstance(self.lib.System.Double, nrows1, ncols1)
-        for r in range(nrows1):
-            for c in range(ncols1):
+        m1 = self.lib.System.Array.CreateInstance(self.lib.System.Double, n_rows1, n_cols1)
+        for r in range(n_rows1):
+            for c in range(n_cols1):
                 m1[r, c] = a1[r][c]
 
-        m2 = self.lib.System.Array.CreateInstance(self.lib.System.Double, nrows2, ncols2)
-        for r in range(nrows2):
-            for c in range(ncols2):
+        m2 = self.lib.System.Array.CreateInstance(self.lib.System.Double, n_rows2, n_cols2)
+        for r in range(n_rows2):
+            for c in range(n_cols2):
                 m2[r, c] = a2[r][c]
 
         ret = self.ArrayManipulation.multiply_matrices(m1, m2)
-        return [[ret[r, c] for c in range(ncols2)] for r in range(nrows1)]
+        return [[ret[r, c] for c in range(n_cols2)] for r in range(n_rows1)]
 
     def reverse_string(self, original: str) -> str:
         """Reverse a string.

@@ -413,9 +413,9 @@ def test_java():
     A = Matrix(m3)
     x = Matrix.solve(A, Matrix(m4))
 
-    bprime = Matrix.multiply(A, x)
+    b_prime = Matrix.multiply(A, x)
     for i in range(3):
-        assert bprime.getValue(i, 0) == pytest.approx(m4[i])
+        assert b_prime.getValue(i, 0) == pytest.approx(m4[i])
 
     #
     # Check inverse

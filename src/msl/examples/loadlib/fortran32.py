@@ -36,9 +36,9 @@ class Fortran32(Server32):
 
     def sum_8bit(self, a: int, b: int) -> int:
         """Add two 8-bit signed integers.
-        
+
         Python only has one :class:`int` data type to represent integer values.
-        The :meth:`~.fortran32.Fortran32.sum_8bit` method converts the data types 
+        The :meth:`~.fortran32.Fortran32.sum_8bit` method converts the data types
         of `a` and `b` to be :class:`ctypes.c_int8`.
 
         The corresponding FORTRAN code is
@@ -65,9 +65,9 @@ class Fortran32(Server32):
 
     def sum_16bit(self, a: int, b: int) -> int:
         """Add two 16-bit signed integers
-        
+
         Python only has one :class:`int` data type to represent integer values.
-        The :meth:`~.fortran32.Fortran32.sum_16bit` method converts the data 
+        The :meth:`~.fortran32.Fortran32.sum_16bit` method converts the data
         types of `a` and `b` to be :class:`ctypes.c_int16`.
 
         The corresponding FORTRAN code is
@@ -93,10 +93,10 @@ class Fortran32(Server32):
         return self.lib.sum_16bit(ctypes.byref(ac), ctypes.byref(bc))
 
     def sum_32bit(self, a: int, b: int) -> int:
-        """Add two 32-bit signed integers. 
-        
+        """Add two 32-bit signed integers.
+
         Python only has one :class:`int` data type to represent integer values.
-        The :meth:`~.fortran32.Fortran32.sum_32bit` method converts the data types 
+        The :meth:`~.fortran32.Fortran32.sum_32bit` method converts the data types
         of `a` and `b` to be :class:`ctypes.c_int32`.
 
         The corresponding FORTRAN code is
@@ -122,10 +122,10 @@ class Fortran32(Server32):
         return self.lib.sum_32bit(ctypes.byref(ac), ctypes.byref(bc))
 
     def sum_64bit(self, a: int, b: int) -> int:
-        """Add two 64-bit signed integers. 
-        
+        """Add two 64-bit signed integers.
+
         Python only has one :class:`int` data type to represent integer values.
-        The :meth:`~.fortran32.Fortran32.sum_64bit` method converts the data types 
+        The :meth:`~.fortran32.Fortran32.sum_64bit` method converts the data types
         of `a` and `b` to be :class:`ctypes.c_int64`.
 
         The corresponding FORTRAN code is
@@ -311,9 +311,9 @@ class Fortran32(Server32):
         """
         n = len(data)
         nc = ctypes.c_int32(n)
-        datac = (ctypes.c_double * n)(*data)
+        data_c = (ctypes.c_double * n)(*data)
         self.lib.standard_deviation.restype = ctypes.c_double
-        return self.lib.standard_deviation(ctypes.byref(datac), ctypes.byref(nc))
+        return self.lib.standard_deviation(ctypes.byref(data_c), ctypes.byref(nc))
 
     def besselJ0(self, x: float) -> float:
         """Compute the Bessel function of the first kind of order 0 of x.
@@ -427,38 +427,38 @@ class Fortran32(Server32):
             and also the result needs to be transposed before returned.
 
         .. _order: https://en.wikipedia.org/wiki/Row-_and_column-major_order
-        
+
         See the corresponding 64-bit :meth:`~.fortran64.Fortran64.matrix_multiply` method.
 
         :param a1: First matrix.
         :param a2: Second matrix.
         :return: The product of `a1` * `a2`.
         """
-        nrows1 = ctypes.c_int32(len(a1))
-        ncols1 = ctypes.c_int32(len(a1[0]))
+        n_rows1 = ctypes.c_int32(len(a1))
+        n_cols1 = ctypes.c_int32(len(a1[0]))
 
-        nrows2 = ctypes.c_int32(len(a2))
-        ncols2 = ctypes.c_int32(len(a2[0]))
+        n_rows2 = ctypes.c_int32(len(a2))
+        n_cols2 = ctypes.c_int32(len(a2[0]))
 
-        if not ncols1.value == nrows2.value:
-            raise ValueError(f'Cannot multiply a {nrows1.value}x{ncols1.value} matrix '
-                             f'with a {nrows2.value}x{ncols2.value} matrix')
+        if not n_cols1.value == n_rows2.value:
+            raise ValueError(f'Cannot multiply a {n_rows1.value}x{n_cols1.value} matrix '
+                             f'with a {n_rows2.value}x{n_cols2.value} matrix')
 
-        m1 = ((ctypes.c_double * nrows1.value) * ncols1.value)()
-        for r in range(nrows1.value):
-            for c in range(ncols1.value):
+        m1 = ((ctypes.c_double * n_rows1.value) * n_cols1.value)()
+        for r in range(n_rows1.value):
+            for c in range(n_cols1.value):
                 m1[c][r] = a1[r][c]
 
-        m2 = ((ctypes.c_double * nrows2.value) * ncols2.value)()
-        for r in range(nrows2.value):
-            for c in range(ncols2.value):
+        m2 = ((ctypes.c_double * n_rows2.value) * n_cols2.value)()
+        for r in range(n_rows2.value):
+            for c in range(n_cols2.value):
                 m2[c][r] = a2[r][c]
 
-        out = ((ctypes.c_double * nrows1.value) * ncols2.value)()
+        out = ((ctypes.c_double * n_rows1.value) * n_cols2.value)()
 
         self.lib.matrix_multiply.restype = None
         self.lib.matrix_multiply(out,
-                                 m1, ctypes.byref(nrows1), ctypes.byref(ncols1),
-                                 m2, ctypes.byref(nrows2), ctypes.byref(ncols2))
+                                 m1, ctypes.byref(n_rows1), ctypes.byref(n_cols1),
+                                 m2, ctypes.byref(n_rows2), ctypes.byref(n_cols2))
 
-        return [[out[c][r] for c in range(ncols2.value)] for r in range(nrows1.value)]
+        return [[out[c][r] for c in range(n_cols2.value)] for r in range(n_rows1.value)]

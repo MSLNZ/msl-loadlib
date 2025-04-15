@@ -148,7 +148,7 @@ def test_echo():
 
     x = [val for val in range(100)]
     y = range(9999)
-    my_dict = {'x': x, 'y': y, 'text': 'abcd 1234 wxyz'}
+    my_dict = {'x': x, 'y': y, 'text': 'abcd 1234 wxyz'}  # cSpell: ignore wxyz
     args, kwargs = e.send_data(111, 2.3, complex(-1.2, 2.30), (1, 2), x=x, y=y, my_dict=my_dict)
     assert args[0] == 111
     assert args[1] == 2.3

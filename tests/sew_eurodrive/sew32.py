@@ -12,4 +12,4 @@ class SEWEuroDrive32(Server32):
 
     def do_something(self, value):
         # returns "value/3/2"
-        return self.first_class.DoSometing(value)
+        return self.first_class.DoSometing(value)  # cSpell: ignore Someting

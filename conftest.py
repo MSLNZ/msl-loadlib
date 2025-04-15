@@ -48,7 +48,7 @@ def has_labview_runtime():
         return False
 
     for item in os.listdir(root):
-        path = os.path.join(root, item, 'lvrt.dll')
+        path = os.path.join(root, item, 'lvrt.dll')  # cSpell: ignore lvrt
         if os.path.isfile(path):
             return True
 

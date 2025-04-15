@@ -864,7 +864,7 @@ class Application:
         :param hwnd: A handle to the owner window of the message box to be created.
         :param language_id: The language for the text displayed in the message box
             button(s).
-        :param options: The contents and behavior of the dialog box. Can be any
+        :param options: The contents and behaviour of the dialog box. Can be any
             combination (bitwise OR) of :class:`.MessageBoxOption` values.
         :param text: The message to be displayed.
         :param title: The dialog box title.

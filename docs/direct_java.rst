@@ -39,10 +39,10 @@ Solve a linear system of equations, Ax=b
 .. code-block:: pycon
 
    >>> A = jar.gateway.new_array(jar.lib.Double, 3, 3)
-   >>> coeff = [[3, 2, -1], [7, -2, 4], [-1, 5, 1]]
+   >>> coefficients = [[3, 2, -1], [7, -2, 4], [-1, 5, 1]]
    >>> for i in range(3):
    ...     for j in range(3):
-   ...         A[i][j] = float(coeff[i][j])
+   ...         A[i][j] = float(coefficients[i][j])
    ...
    >>> b = jar.gateway.new_array(jar.lib.Double, 3)
    >>> b[0] = 4.0
@@ -61,7 +61,7 @@ Verify that `x` is the solution
    >>> for i in range(3):
    ...     x_i = 0.0
    ...     for j in range(3):
-   ...         x_i += coeff[i][j] * x.getValue(j,0)
+   ...         x_i += coefficients[i][j] * x.getValue(j,0)
    ...     assert abs(x_i - b[i]) < 1e-12
    ...
 
