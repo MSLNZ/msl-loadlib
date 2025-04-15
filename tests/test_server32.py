@@ -88,7 +88,7 @@ def test_cpp():
     values = [float(x) for x in range(100)]
     c_values = c.scalar_multiply(a, values)
     for i in range(len(values)):
-        assert a*values[i] == pytest.approx(c_values[i])
+        assert a * values[i] == pytest.approx(c_values[i])
 
     assert "0987654321" == c.reverse_string_v1("1234567890")
     assert "[abc x|z j 1 *&" == c.reverse_string_v2("&* 1 j z|x cba[")
@@ -99,15 +99,15 @@ def test_cpp():
     assert c.circumference(0.5, 0) == 0.0
     assert c.circumference(0.5, 2) == 2.0
     assert c.circumference(0.5, 2**16) == pytest.approx(math.pi)
-    assert c.circumference(1.0, 2**16) == pytest.approx(2.0*math.pi)
+    assert c.circumference(1.0, 2**16) == pytest.approx(2.0 * math.pi)
 
 
 @skipif_no_server32
 def test_fortran():
-    assert -127 == f.sum_8bit(-2**7, 1)
+    assert -127 == f.sum_8bit(-(2**7), 1)
     assert 32766 == f.sum_16bit(2**15 - 1, -1)
     assert 123456789 == f.sum_32bit(123456788, 1)
-    assert -9223372036854775807 == f.sum_64bit(-2**63, 1)
+    assert -9223372036854775807 == f.sum_64bit(-(2**63), 1)
     assert -52487.570494 == pytest.approx(f.multiply_float32(40.874, -1284.131))
     assert 2.31e300 == pytest.approx(f.multiply_float64(1.1e100, 2.1e200))
     assert f.is_positive(1e-100)
@@ -122,12 +122,12 @@ def test_fortran():
     assert "!dlrow olleh" == f.reverse_string("hello world!")
 
     a = [float(val) for val in range(1, 1000)]
-    b = [3.0*val for val in range(1, 1000)]
+    b = [3.0 * val for val in range(1, 1000)]
     f_values = f.add_1d_arrays(a, b)
     for i in range(len(a)):
         assert a[i] + b[i] == pytest.approx(f_values[i])
 
-    f_mat = f.matrix_multiply([[1., 2., 3.], [4., 5., 6.]], [[1., 2.], [3., 4.], [5., 6.]])
+    f_mat = f.matrix_multiply([[1.0, 2.0, 3.0], [4.0, 5.0, 6.0]], [[1.0, 2.0], [3.0, 4.0], [5.0, 6.0]])
     assert 22.0 == pytest.approx(f_mat[0][0])
     assert 28.0 == pytest.approx(f_mat[0][1])
     assert 49.0 == pytest.approx(f_mat[1][0])
@@ -136,7 +136,6 @@ def test_fortran():
 
 @skipif_no_server32
 def test_echo():
-
     args, kwargs = e.send_data(True)
     assert args[0]
     assert isinstance(args[0], bool)
@@ -161,7 +160,6 @@ def test_echo():
 
 @skipif_not_windows
 def test_dotnet():
-
     names = n.get_class_names()
     assert len(names) == 4
     assert "StringManipulation" in names
@@ -170,20 +168,20 @@ def test_dotnet():
     assert "StaticClass" in names
 
     assert 9 == n.add_integers(4, 5)
-    assert 0.8 == pytest.approx(n.divide_floats(4., 5.))
+    assert 0.8 == pytest.approx(n.divide_floats(4.0, 5.0))
     assert 458383.926 == pytest.approx(n.multiply_doubles(872.24, 525.525))
-    assert 108.0 == pytest.approx(n.add_or_subtract(99., 9., True))
-    assert 90.0 == pytest.approx(n.add_or_subtract(99., 9., False))
+    assert 108.0 == pytest.approx(n.add_or_subtract(99.0, 9.0, True))
+    assert 90.0 == pytest.approx(n.add_or_subtract(99.0, 9.0, False))
 
     a = 7.13141
     values = [float(x) for x in range(1000)]
     net_values = n.scalar_multiply(a, values)
     for i in range(len(values)):
-        assert a*values[i] == pytest.approx(net_values[i])
+        assert a * values[i] == pytest.approx(net_values[i])
 
     assert n.reverse_string("New Zealand") == "dnalaeZ weN"
 
-    net_mat = n.multiply_matrices([[1., 2., 3.], [4., 5., 6.]], [[1., 2.], [3., 4.], [5., 6.]])
+    net_mat = n.multiply_matrices([[1.0, 2.0, 3.0], [4.0, 5.0, 6.0]], [[1.0, 2.0], [3.0, 4.0], [5.0, 6.0]])
     assert 22.0 == pytest.approx(net_mat[0][0])
     assert 28.0 == pytest.approx(net_mat[0][1])
     assert 49.0 == pytest.approx(net_mat[1][0])
@@ -196,7 +194,6 @@ def test_dotnet():
 
 @skipif_no_server32
 def test_unicode_path():
-
     class Cpp64Encoding(loadlib.Client64):
         def __init__(self):
             dir_name = os.path.dirname(__file__)
@@ -252,6 +249,7 @@ def test_comtypes_ctypes_union_error():
         def __getattr__(self, name):
             def send(*args, **kwargs):
                 return self.request32(name, *args, **kwargs)
+
             return send
 
     file_system = FileSystemObjectClient()
@@ -269,7 +267,6 @@ def test_comtypes_ctypes_union_error():
 
 @skipif_not_windows
 def test_comtypes_shell32():
-
     class Shell64(loadlib.Client64):
         def __init__(self):
             super().__init__(
@@ -290,9 +287,7 @@ def test_comtypes_shell32():
 
 @skipif_not_windows
 def test_activex():
-
     class ActiveX(loadlib.Client64):
-
         def __init__(self):
             super().__init__(
                 module32="activex_media_player.py",

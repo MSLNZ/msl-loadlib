@@ -4,7 +4,6 @@ from msl.loadlib import Server32
 
 
 class Cpp32(Server32):
-
     def __init__(self, host, port, **kwargs):
         super().__init__("cpp_lib32-uñicödé", "cdll", host, port)
 

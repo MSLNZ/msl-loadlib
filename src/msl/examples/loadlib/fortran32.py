@@ -7,6 +7,7 @@ module can be executed by a 64-bit Python interpreter and the :class:`~.fortran6
 class can send a request to the :class:`~.fortran32.Fortran32` class which calls the 32-bit
 library to execute the request and then return the response from the library.
 """
+
 from __future__ import annotations
 
 import ctypes
@@ -17,7 +18,6 @@ from msl.loadlib import Server32
 
 
 class Fortran32(Server32):
-
     def __init__(self, host: str, port: int, **kwargs: str) -> None:
         """A wrapper around a 32-bit FORTRAN library, :ref:`fortran_lib32 <fortran-lib>`.
 
@@ -364,9 +364,7 @@ class Fortran32(Server32):
         nc = ctypes.c_int32(n)
         rev = ctypes.create_string_buffer(n)
         self.lib.reverse_string.restype = None
-        self.lib.reverse_string(ctypes.c_char_p(original.encode()),
-                                ctypes.byref(nc),
-                                rev)
+        self.lib.reverse_string(ctypes.c_char_p(original.encode()), ctypes.byref(nc), rev)
         return rev.raw.decode()
 
     def add_1d_arrays(self, a1: Sequence[float], a2: Sequence[float]) -> list[float]:
@@ -396,15 +394,10 @@ class Fortran32(Server32):
         out = (ctypes.c_double * n)()
 
         self.lib.add_1d_arrays.restype = None
-        self.lib.add_1d_arrays(out,
-                               (ctypes.c_double * n)(*a1),
-                               (ctypes.c_double * n)(*a2),
-                               ctypes.byref(nc))
+        self.lib.add_1d_arrays(out, (ctypes.c_double * n)(*a1), (ctypes.c_double * n)(*a2), ctypes.byref(nc))
         return [val for val in out]
 
-    def matrix_multiply(self,
-                        a1: Sequence[Sequence[float]],
-                        a2: Sequence[Sequence[float]]) -> list[list[float]]:
+    def matrix_multiply(self, a1: Sequence[Sequence[float]], a2: Sequence[Sequence[float]]) -> list[list[float]]:
         """Multiply two matrices.
 
         The corresponding FORTRAN code is
@@ -441,8 +434,10 @@ class Fortran32(Server32):
         n_cols2 = ctypes.c_int32(len(a2[0]))
 
         if not n_cols1.value == n_rows2.value:
-            raise ValueError(f"Cannot multiply a {n_rows1.value}x{n_cols1.value} matrix "
-                             f"with a {n_rows2.value}x{n_cols2.value} matrix")
+            raise ValueError(
+                f"Cannot multiply a {n_rows1.value}x{n_cols1.value} matrix "
+                f"with a {n_rows2.value}x{n_cols2.value} matrix"
+            )
 
         m1 = ((ctypes.c_double * n_rows1.value) * n_cols1.value)()
         for r in range(n_rows1.value):
@@ -457,8 +452,8 @@ class Fortran32(Server32):
         out = ((ctypes.c_double * n_rows1.value) * n_cols2.value)()
 
         self.lib.matrix_multiply.restype = None
-        self.lib.matrix_multiply(out,
-                                 m1, ctypes.byref(n_rows1), ctypes.byref(n_cols1),
-                                 m2, ctypes.byref(n_rows2), ctypes.byref(n_cols2))
+        self.lib.matrix_multiply(
+            out, m1, ctypes.byref(n_rows1), ctypes.byref(n_cols1), m2, ctypes.byref(n_rows2), ctypes.byref(n_cols2)
+        )
 
         return [[out[c][r] for c in range(n_cols2.value)] for r in range(n_rows1.value)]

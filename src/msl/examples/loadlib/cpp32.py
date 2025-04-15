@@ -7,6 +7,7 @@ can be executed by a 64-bit Python interpreter and the :class:`~.cpp64.Cpp64` cl
 a request to the :class:`~.cpp32.Cpp32` class which calls the 32-bit library to execute the
 request and then return the response from the library.
 """
+
 from __future__ import annotations
 
 import ctypes
@@ -18,7 +19,6 @@ from msl.loadlib import Server32
 
 
 class Cpp32(Server32):
-
     def __init__(self, host: str, port: int, **kwargs: str) -> None:
         """Wrapper around the 32-bit C++ library, :ref:`cpp_lib32 <cpp-lib>`.
 
@@ -255,13 +255,13 @@ class Cpp32(Server32):
         self.lib.distance_n_points.argtypes = [NPoints]
 
         theta = 0.0
-        delta = (2.0*math.pi)/float(n) if n != 0 else 0
+        delta = (2.0 * math.pi) / float(n) if n != 0 else 0
 
         pts = NPoints()
         pts.n = n
         pts.points = (Point * n)()
         for i in range(n):
-            pts.points[i] = Point(radius*math.cos(theta), radius*math.sin(theta))
+            pts.points[i] = Point(radius * math.cos(theta), radius * math.sin(theta))
             theta += delta
         return self.lib.distance_n_points(pts)
 
@@ -278,6 +278,7 @@ class Point(ctypes.Structure):
            double y;
        };
     """
+
     _fields_ = [
         ("x", ctypes.c_double),
         ("y", ctypes.c_double),
@@ -285,16 +286,11 @@ class Point(ctypes.Structure):
 
 
 class FourPoints(ctypes.Structure):
-
     _fields_ = [
         ("points", (Point * 4)),
     ]
 
-    def __init__(self,
-                 point1: Point,
-                 point2: Point,
-                 point3: Point,
-                 point4: Point) -> None:
+    def __init__(self, point1: Point, point2: Point, point3: Point, point4: Point) -> None:
         """C++ struct that is a fixed size in memory.
 
         This object can be :mod:`pickle`\'d.
@@ -327,6 +323,7 @@ class NPoints(ctypes.Structure):
            Point *points;
        };
     """
+
     _fields_ = [
         ("n", ctypes.c_int),
         ("points", ctypes.POINTER(Point)),

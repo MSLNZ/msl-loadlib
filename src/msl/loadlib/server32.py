@@ -5,6 +5,7 @@ The :class:`~.server32.Server32` class is used in combination with the
 :class:`~.client64.Client64` class to communicate with a 32-bit shared library
 from 64-bit Python.
 """
+
 from __future__ import annotations
 
 import json
@@ -31,13 +32,7 @@ ERROR: int = 500
 
 
 class Server32(HTTPServer):
-
-    def __init__(self,
-                 path: str,
-                 libtype: LibType,
-                 host: str,
-                 port: int,
-                 **kwargs: Any) -> None:
+    def __init__(self, path: str, libtype: LibType, host: str, port: int, **kwargs: Any) -> None:
         """Base class for loading a 32-bit library in 32-bit Python.
 
         All modules that are to be run on the 32-bit server must contain a class
@@ -246,7 +241,7 @@ class _RequestHandler(BaseHTTPRequestHandler):
         except:  # noqa: PEP 8: E722 do not use bare 'except'
             exc_type, exc_value, exc_traceback = sys.exc_info()
             tb_list = traceback.extract_tb(exc_traceback)
-            tb = tb_list[min(len(tb_list)-1, 1)]  # get the Server32 subclass exception
+            tb = tb_list[min(len(tb_list) - 1, 1)]  # get the Server32 subclass exception
             response = {"name": exc_type.__name__, "value": str(exc_value)}
             traceback_ = f"  File {tb[0]!r}, line {tb[1]}, in {tb[2]}"
             if tb[3]:

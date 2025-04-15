@@ -2,6 +2,7 @@
 Tests the CLI argparse which updates sys.path,
 os.environ['PATH'] and **kwargs for the 32-bit server.
 """
+
 import os
 import pathlib
 import sys
@@ -24,7 +25,6 @@ else:
 
 
 class ArgParse32(Server32):
-
     def __init__(self, host, port, **kwargs):
         # load any dll since it won't be called
         path = os.path.join(Server32.examples_dir(), "cpp_lib32")
@@ -41,7 +41,6 @@ class ArgParse32(Server32):
         else:
             self.dll_dirs = [p.path for p in dll_dirs]
 
-
     @staticmethod
     def is_in_sys_path(path):
         return path in sys.path
@@ -57,7 +56,6 @@ class ArgParse32(Server32):
 
 
 class ArgParse64(Client64):
-
     def __init__(self, **kwargs):
         super().__init__(__file__, **kwargs)
 
@@ -78,7 +76,6 @@ class ArgParse64(Client64):
 
 
 class BytesPath:
-
     def __init__(self, path: bytes) -> None:
         self._path = path
 
@@ -93,37 +90,23 @@ def test_arg_parser_iterable():
             b"C:/home/joe/code",
             "C:\\Program Files (x86)\\Whatever",
             pathlib.Path(r"C:\Users\username"),
-            BytesPath(b"C:/users")
+            BytesPath(b"C:/users"),
         ]
-        env_path = [
-            b"D:/ends/in/slash/",
-            "D:/path/to/lib",
-            pathlib.Path(r"D:\path\with space"),
-            BytesPath(b"C:/a/b/c")
-        ]
+        env_path = [b"D:/ends/in/slash/", "D:/path/to/lib", pathlib.Path(r"D:\path\with space"), BytesPath(b"C:/a/b/c")]
         dll_dir = os.path.dirname(__file__)
     else:
-        sys_path = [
-            b"/ends/in/slash/",
-            "/usr/local/custom/path",
-            pathlib.Path("/home/username"),
-            BytesPath(b"/a/b/c")
-        ]
+        sys_path = [b"/ends/in/slash/", "/usr/local/custom/path", pathlib.Path("/home/username"), BytesPath(b"/a/b/c")]
         env_path = [
             b"/home/my/folder",
             "/a/path/for/environ/slash/",
             pathlib.Path("/home/my/username"),
-            BytesPath(b"/a/b/c/d")
+            BytesPath(b"/a/b/c/d"),
         ]
         dll_dir = None
 
     kwargs = {"a": -11, "b": 3.1415926, "c": "abcd efghi jk", "d": [1, 2, 3], "e": {1: "val"}}  # cSpell: ignore efghi
 
-    client = ArgParse64(
-        add_dll_directory=dll_dir,
-        append_sys_path=sys_path,
-        append_environ_path=env_path,
-        **kwargs)
+    client = ArgParse64(add_dll_directory=dll_dir, append_sys_path=sys_path, append_environ_path=env_path, **kwargs)
 
     for path in sys_path:
         assert client.is_in_sys_path(path)
@@ -156,7 +139,7 @@ def test_add_dll_directory_win32():
         path.encode(),
         os.path.abspath(os.path.join(path, "..")),
         pathlib.Path(os.path.abspath(os.path.join(path, "..", ".."))),
-        BytesPath(os.path.join(path, "bad_servers").encode())
+        BytesPath(os.path.join(path, "bad_servers").encode()),
     ]
     with ArgParse64(add_dll_directory=dll_dirs) as a:
         for path in dll_dirs:

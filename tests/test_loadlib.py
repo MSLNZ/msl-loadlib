@@ -62,8 +62,9 @@ def test_wrong_bitness(filename):
 @skipif_not_windows
 def test_wrong_bitness_dotnet():
     import System
+
     suffix = "32" if IS_PYTHON_64BIT else "64"
-    path = os.path.join(EXAMPLES_DIR, "dotnet_lib"+suffix+".dll")
+    path = os.path.join(EXAMPLES_DIR, "dotnet_lib" + suffix + ".dll")
     assert os.path.isfile(path)
     with pytest.raises(System.BadImageFormatException):
         LoadLibrary(path, libtype="net")
@@ -85,10 +86,10 @@ def test_mono_bitness_independent(filename):
 
     BasicMath = net.lib.DotNetMSL.BasicMath()
     assert 9 == BasicMath.add_integers(4, 5)
-    assert 0.8 == pytest.approx(BasicMath.divide_floats(4., 5.))
+    assert 0.8 == pytest.approx(BasicMath.divide_floats(4.0, 5.0))
     assert 458383.926 == pytest.approx(BasicMath.multiply_doubles(872.24, 525.525))
-    assert 108.0 == pytest.approx(BasicMath.add_or_subtract(99., 9., True))
-    assert 90.0 == pytest.approx(BasicMath.add_or_subtract(99., 9., False))
+    assert 108.0 == pytest.approx(BasicMath.add_or_subtract(99.0, 9.0, True))
+    assert 90.0 == pytest.approx(BasicMath.add_or_subtract(99.0, 9.0, False))
 
     ArrayManipulation = net.lib.DotNetMSL.ArrayManipulation()
     a = 7.13141
@@ -97,12 +98,12 @@ def test_mono_bitness_independent(filename):
     for i in range(len(values)):
         assert a * values[i] == pytest.approx(net_values[i])
 
-    a1 = [[1., 2., 3.], [4., 5., 6.]]
+    a1 = [[1.0, 2.0, 3.0], [4.0, 5.0, 6.0]]
     m1 = net.lib.System.Array.CreateInstance(net.lib.System.Double, 2, 3)
     for r in range(2):
         for c in range(3):
             m1[r, c] = a1[r][c]
-    a2 = [[1., 2.], [3., 4.], [5., 6.]]
+    a2 = [[1.0, 2.0], [3.0, 4.0], [5.0, 6.0]]
     m2 = net.lib.System.Array.CreateInstance(net.lib.System.Double, 3, 2)
     for r in range(3):
         for c in range(2):
@@ -167,7 +168,7 @@ def test_cpp():
     str_in = "&* 1 j z|x cba["
     str_out = lib.reverse_string_v2(create_string_buffer(str_in.encode()), len(str_in))
     # ignore testing for null termination on different platforms
-    assert "[abc x|z j 1 *&" == str_out[:len(str_in)].decode()
+    assert "[abc x|z j 1 *&" == str_out[: len(str_in)].decode()
 
     fp = FourPoints(Point(0, 0), Point(0, 1), Point(1, 1), Point(1, 0))
     assert lib.distance_4_points(fp) == pytest.approx(4.0)
@@ -215,14 +216,21 @@ def test_fortran():
     lib.reverse_string.restype = None
     lib.add_1d_arrays.argtypes = [POINTER(c_double), POINTER(c_double), POINTER(c_double), POINTER(c_int32)]
     lib.add_1d_arrays.restype = None
-    lib.matrix_multiply.argtypes = [c_void_p, c_void_p, POINTER(c_int32), POINTER(c_int32), c_void_p, POINTER(c_int32),
-                                    POINTER(c_int32)]
+    lib.matrix_multiply.argtypes = [
+        c_void_p,
+        c_void_p,
+        POINTER(c_int32),
+        POINTER(c_int32),
+        c_void_p,
+        POINTER(c_int32),
+        POINTER(c_int32),
+    ]
     lib.matrix_multiply.restype = None
 
-    assert -127 == lib.sum_8bit(byref(c_int8(-2 ** 7)), byref(c_int8(1)))
-    assert 32766 == lib.sum_16bit(byref(c_int16(2 ** 15 - 1)), byref(c_int16(-1)))
+    assert -127 == lib.sum_8bit(byref(c_int8(-(2**7))), byref(c_int8(1)))
+    assert 32766 == lib.sum_16bit(byref(c_int16(2**15 - 1)), byref(c_int16(-1)))
     assert 123456789 == lib.sum_32bit(byref(c_int32(123456788)), byref(c_int32(1)))
-    assert -9223372036854775807 == lib.sum_64bit(byref(c_int64(-2 ** 63)), byref(c_int64(1)))
+    assert -9223372036854775807 == lib.sum_64bit(byref(c_int64(-(2**63))), byref(c_int64(1)))
     assert -52487.570494 == pytest.approx(lib.multiply_float32(byref(c_float(40.874)), byref(c_float(-1284.131))))
     assert 2.31e300 == pytest.approx(lib.multiply_float64(byref(c_double(1.1e100)), byref(c_double(2.1e200))))
     assert lib.is_positive(byref(c_double(1e-100)))
@@ -251,12 +259,12 @@ def test_fortran():
     for i in range(len(a)):
         assert in1[i] + in2[i] == pytest.approx(a[i])
 
-    m1 = [[1., 2., 3.], [4., 5., 6.]]
+    m1 = [[1.0, 2.0, 3.0], [4.0, 5.0, 6.0]]
     a1 = ((c_double * 2) * 3)()
     for r in range(2):
         for c in range(3):
             a1[c][r] = m1[r][c]
-    m2 = [[1., 2.], [3., 4.], [5., 6.]]
+    m2 = [[1.0, 2.0], [3.0, 4.0], [5.0, 6.0]]
     a2 = ((c_double * 3) * 2)()
     for r in range(3):
         for c in range(2):
@@ -284,10 +292,10 @@ def test_dotnet():
 
     BasicMath = net.lib.DotNetMSL.BasicMath()
     assert 9 == BasicMath.add_integers(4, 5)
-    assert 0.8 == pytest.approx(BasicMath.divide_floats(4., 5.))
+    assert 0.8 == pytest.approx(BasicMath.divide_floats(4.0, 5.0))
     assert 458383.926 == pytest.approx(BasicMath.multiply_doubles(872.24, 525.525))
-    assert 108.0 == pytest.approx(BasicMath.add_or_subtract(99., 9., True))
-    assert 90.0 == pytest.approx(BasicMath.add_or_subtract(99., 9., False))
+    assert 108.0 == pytest.approx(BasicMath.add_or_subtract(99.0, 9.0, True))
+    assert 90.0 == pytest.approx(BasicMath.add_or_subtract(99.0, 9.0, False))
 
     ArrayManipulation = net.lib.DotNetMSL.ArrayManipulation()
     a = 7.13141
@@ -296,12 +304,12 @@ def test_dotnet():
     for i in range(len(values)):
         assert a * values[i] == pytest.approx(net_values[i])
 
-    a1 = [[1., 2., 3.], [4., 5., 6.]]
+    a1 = [[1.0, 2.0, 3.0], [4.0, 5.0, 6.0]]
     m1 = net.lib.System.Array.CreateInstance(net.lib.System.Double, 2, 3)
     for r in range(2):
         for c in range(3):
             m1[r, c] = a1[r][c]
-    a2 = [[1., 2.], [3., 4.], [5., 6.]]
+    a2 = [[1.0, 2.0], [3.0, 4.0], [5.0, 6.0]]
     m2 = net.lib.System.Array.CreateInstance(net.lib.System.Double, 3, 2)
     for r in range(3):
         for c in range(2):
@@ -395,12 +403,12 @@ def test_java():
     # solve Ax=b
     #
     m3 = jar.gateway.new_array(jar.lib.Double, 3, 3)
-    m3[0][0] = 3.
-    m3[0][1] = 2.
-    m3[0][2] = -1.
-    m3[1][0] = 2.
-    m3[1][1] = -2.
-    m3[1][2] = 4.
+    m3[0][0] = 3.0
+    m3[0][1] = 2.0
+    m3[0][2] = -1.0
+    m3[1][0] = 2.0
+    m3[1][1] = -2.0
+    m3[1][2] = 4.0
     m3[2][0] = -1.0
     m3[2][1] = 0.5
     m3[2][2] = 1.0
@@ -571,6 +579,7 @@ def test_dotnet_nested_namespace():
     # One must now either use enum members (e.g. MyEnum.Option), or use enum constructor
     # (e.g. MyEnum(42) or MyEnum(42, True) when MyEnum does not have a member with value 42).
     import clr
+
     if int(clr.__version__.split(".")[0]) < 3:
         # an enum in a namespace
         assert lib.A.B.C.ErrorCode.Unknown == 0

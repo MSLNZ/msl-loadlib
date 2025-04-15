@@ -12,7 +12,6 @@ prog_id = "MediaPlayer.MediaPlayer.1"
 
 
 class ActiveX(Server32):
-
     def __init__(self, host, port):
         super().__init__(prog_id, "activex", host, port)
         self._app = Application()

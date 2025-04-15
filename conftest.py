@@ -20,6 +20,7 @@ from msl.loadlib.constants import *
 # Consider using the hack in msl-nlf (where a hack with Sybil is used)
 # instead of the following hack that adds loadlib to sys.modules
 from msl import loadlib
+
 sys.modules["loadlib"] = loadlib
 
 IS_MACOS_ARM64 = sys.platform == "darwin" and platform.machine() == "arm64"
@@ -29,12 +30,13 @@ def add_py4j_in_eggs():
     # if py4j is located in the .eggs directory and not in the site-packages directory
     # then the py4j*.jar file cannot be found, so we need to create a PY4J_JAR env variable
     import py4j
+
     os.environ["PY4J_JAR"] = os.path.join(
         ".eggs",
         f"py4j-{py4j.__version__}-py{sys.version_info.major}.{sys.version_info.minor}.egg",
         "share",
         "py4j",
-        f"py4j{py4j.__version__}.jar"
+        f"py4j{py4j.__version__}.jar",
     )
 
 
@@ -57,7 +59,6 @@ def has_labview_runtime():
 
 @pytest.fixture(autouse=True)
 def doctest_skipif(doctest_namespace):
-
     if not IS_WINDOWS:
         not_windows = lambda: pytest.skip("not Windows")
         readme_com = lambda: pytest.skip("skipped at COM test")
@@ -120,28 +121,12 @@ def doctest_skipif(doctest_namespace):
     doctest_namespace["SKIP_IF_NO_PYTHONNET"] = no_pythonnet
 
 
-skipif_no_comtypes = pytest.mark.skipif(
-    not IS_WINDOWS,
-    reason="comtypes is only supported on Windows"
-)
-skipif_no_labview_runtime = pytest.mark.skipif(
-    not has_labview_runtime(),
-    reason="requires LabVIEW Run-Time Engine"
-)
-skipif_no_pythonnet = pytest.mark.skipif(
-    clr is None,
-    reason="pythonnet is not installed"
-)
-skipif_no_server32 = pytest.mark.skipif(
-    IS_MAC,
-    reason="32-bit server does not exist"
-)
-skipif_not_windows = pytest.mark.skipif(
-    not IS_WINDOWS,
-    reason="not Windows"
-)
+skipif_no_comtypes = pytest.mark.skipif(not IS_WINDOWS, reason="comtypes is only supported on Windows")
+skipif_no_labview_runtime = pytest.mark.skipif(not has_labview_runtime(), reason="requires LabVIEW Run-Time Engine")
+skipif_no_pythonnet = pytest.mark.skipif(clr is None, reason="pythonnet is not installed")
+skipif_no_server32 = pytest.mark.skipif(IS_MAC, reason="32-bit server does not exist")
+skipif_not_windows = pytest.mark.skipif(not IS_WINDOWS, reason="not Windows")
 
 xfail_windows_ga = pytest.mark.xfail(
-    IS_WINDOWS and os.getenv("GITHUB_ACTIONS") == "true",
-    reason="flaky test on Windows and GA"
+    IS_WINDOWS and os.getenv("GITHUB_ACTIONS") == "true", reason="flaky test on Windows and GA"
 )

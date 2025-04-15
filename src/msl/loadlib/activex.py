@@ -1,6 +1,7 @@
 """
 Helper module for loading an ActiveX library in an application window.
 """
+
 from __future__ import annotations
 
 import ctypes
@@ -25,6 +26,7 @@ WM_DESTROY = 0x0002
 
 class Background(IntEnum):
     """Background colours."""
+
     WHITE = 0
     LIGHT_GREY = 1
     GREY = 2
@@ -36,6 +38,7 @@ class ClassStyle(IntFlag):
     """Window class style flags. See
     `window-class-styles <https://learn.microsoft.com/en-us/windows/win32/winmsg/window-class-styles#constants>`_
     for more details."""
+
     NONE = 0
     BYTEALIGNCLIENT = 0x1000
     BYTEALIGNWINDOW = 0x2000
@@ -55,6 +58,7 @@ class ExtendedWindowStyle(IntFlag):
     """Extended window style flags. See
     `extended-window-styles <https://learn.microsoft.com/en-us/windows/win32/winmsg/extended-window-styles>`_
     for more details."""
+
     NONE = 0
     DLGMODALFRAME = 0x00000001
     NOPARENTNOTIFY = 0x00000004
@@ -89,6 +93,7 @@ class MenuFlag(IntFlag):
     """Menu item flags. See
     `append-menu <https://learn.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-appendmenuw>`_
     for more details."""
+
     BITMAP = 0x00000004
     CHECKED = 0x00000008
     DISABLED = 0x00000002
@@ -107,6 +112,7 @@ class MessageBoxOption(IntFlag):
     """Message box options. See
     `message-box <https://learn.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-messagebox>`_
     for more details."""
+
     ABORTRETRYIGNORE = 0x00000002
     CANCELTRYCONTINUE = 0x00000006
     HELP = 0x00004000
@@ -142,6 +148,7 @@ class PositionFlag(IntFlag):
     """Window position flags. See
     `set-window-pos <https://learn.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-setwindowpos>`_
     for more details."""
+
     NONE = 0
     ASYNCWINDOWPOS = 0x4000
     DEFERERASE = 0x2000
@@ -164,6 +171,7 @@ class ShowWindow(IntEnum):
     """Show window commands. See
     `show-window <https://learn.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-showwindow>`_
     for more details."""
+
     HIDE = 0
     SHOWNORMAL = 1
     NORMAL = 1
@@ -184,6 +192,7 @@ class WindowStyle(IntFlag):
     """Window style flags. See
     `window-styles <https://learn.microsoft.com/en-us/windows/win32/winmsg/window-styles>`_
     for more details."""
+
     OVERLAPPED = 0x00000000
     POPUP = 0x80000000
     CHILD = 0x40000000
@@ -250,18 +259,18 @@ try:
     user32.CreateWindowExW.errcheck = _err_check
     user32.CreateWindowExW.restype = wt.HWND
     user32.CreateWindowExW.argtypes = [
-        wt.DWORD,      # dwExStyle
-        wt.LPCWSTR,    # lpClassName
-        wt.LPCWSTR,    # lpWindowName
-        wt.DWORD,      # dwStyle
+        wt.DWORD,  # dwExStyle
+        wt.LPCWSTR,  # lpClassName
+        wt.LPCWSTR,  # lpWindowName
+        wt.DWORD,  # dwStyle
         ctypes.c_int,  # X
         ctypes.c_int,  # Y
         ctypes.c_int,  # nWidth
         ctypes.c_int,  # nHeight
-        wt.HWND,       # hWndParent
-        wt.HMENU,      # hMenu
+        wt.HWND,  # hWndParent
+        wt.HMENU,  # hMenu
         wt.HINSTANCE,  # hInstance
-        wt.LPVOID      # lpParam
+        wt.LPVOID,  # lpParam
     ]
 
     user32.SetWindowTextW.errcheck = _err_check
@@ -271,13 +280,13 @@ try:
     user32.SetWindowPos.errcheck = _err_check
     user32.SetWindowPos.restype = wt.BOOL
     user32.SetWindowPos.argtypes = [
-        wt.HWND,       # hWnd
-        wt.HWND,       # hWndInsertAfter
+        wt.HWND,  # hWnd
+        wt.HWND,  # hWndInsertAfter
         ctypes.c_int,  # X
         ctypes.c_int,  # Y
         ctypes.c_int,  # cx
         ctypes.c_int,  # cy
-        wt.UINT        # uFlags
+        wt.UINT,  # uFlags
     ]
 
     user32.AppendMenuW.errcheck = _err_check
@@ -364,32 +373,29 @@ except AttributeError:
 CW_USEDEFAULT = 0x80000000
 
 
-def _create_window(*,
-                   ex_style: int = 0,
-                   class_name: str = "",
-                   window_name: str = "",
-                   style: int = 0,
-                   x: int = CW_USEDEFAULT,
-                   y: int = CW_USEDEFAULT,
-                   width: int = CW_USEDEFAULT,
-                   height: int = CW_USEDEFAULT,
-                   parent: int = None,
-                   menu: int = None,
-                   instance: int = None,
-                   param: int = None) -> int:
+def _create_window(
+    *,
+    ex_style: int = 0,
+    class_name: str = "",
+    window_name: str = "",
+    style: int = 0,
+    x: int = CW_USEDEFAULT,
+    y: int = CW_USEDEFAULT,
+    width: int = CW_USEDEFAULT,
+    height: int = CW_USEDEFAULT,
+    parent: int = None,
+    menu: int = None,
+    instance: int = None,
+    param: int = None,
+) -> int:
     """Create a new Window and return the handle."""
-    return user32.CreateWindowExW(ex_style, class_name, window_name,
-                                  style, x, y, width, height, parent,
-                                  menu, instance, param)
+    return user32.CreateWindowExW(
+        ex_style, class_name, window_name, style, x, y, width, height, parent, menu, instance, param
+    )
 
 
 class Icon:
-
-    def __init__(self,
-                 file: str,
-                 *,
-                 index: int = 0,
-                 hinstance: int = None) -> None:
+    def __init__(self, file: str, *, index: int = 0, hinstance: int = None) -> None:
         """Extract an icon from an executable file, DLL or icon file.
 
         :param file: The path to an executable file, DLL or icon file.
@@ -430,7 +436,6 @@ class Icon:
 
 
 class MenuItem:
-
     def __init__(self, **kwargs) -> None:
         """A menu item that belongs to a popup menu.
 
@@ -470,8 +475,7 @@ class MenuItem:
     def checked(self, value: bool) -> None:
         """Set the checked state of the menu item."""
         if self._hmenu == -1:
-            raise ValueError("A MenuItem must first be added to a Menu "
-                             "before it can be checked")
+            raise ValueError("A MenuItem must first be added to a Menu before it can be checked")
 
         # MF_CHECKED=8, MF_UNCHECKED=0
         state = 8 if value else 0
@@ -502,7 +506,6 @@ class MenuItem:
 
 
 class MenuGroup:
-
     def __init__(self, name: str = "") -> None:
         """A group of :class:`.MenuItem`\\'s where only one item in the group
         may have a check mark to indicate that a particular item is selected.
@@ -518,12 +521,9 @@ class MenuGroup:
     def __iter__(self) -> Iterator[MenuItem]:
         return iter(self._items)
 
-    def append(self,
-               text: str,
-               *,
-               callback: Callback | None = None,
-               data: Any = None,
-               flags: int = MenuFlag.STRING) -> MenuItem:
+    def append(
+        self, text: str, *, callback: Callback | None = None, data: Any = None, flags: int = MenuFlag.STRING
+    ) -> MenuItem:
         """Create a new :class:`.MenuItem` and append it to the group.
 
         :param text: The content of the new menu item.
@@ -536,15 +536,13 @@ class MenuGroup:
 
         :return: The menu item that was appended to the group.
         """
-        item = MenuItem(hmenu=-1, text=text, callback=callback,
-                        id=-1, flags=flags, data=data)
+        item = MenuItem(hmenu=-1, text=text, callback=callback, id=-1, flags=flags, data=data)
         self._items.append(item)
         return item
 
     def append_separator(self) -> None:
         """Append a horizontal dividing line to the group."""
-        self._items.append(MenuItem(hmenu=-1, text=None, callback=None,
-                                    id=-1, flags=MenuFlag.SEPARATOR, data=None))
+        self._items.append(MenuItem(hmenu=-1, text=None, callback=None, id=-1, flags=MenuFlag.SEPARATOR, data=None))
 
     @property
     def checked(self) -> MenuItem | None:
@@ -558,8 +556,7 @@ class MenuGroup:
         """Sets the menu item that is currently checked in the group."""
         for i in self:
             if i.hmenu == -1:
-                raise ValueError("A MenuGroup must first be added to a Menu "
-                                 "before a MenuItem can be checked")
+                raise ValueError("A MenuGroup must first be added to a Menu before a MenuItem can be checked")
             i.checked = i == item
 
     @property
@@ -573,7 +570,6 @@ Callback = Callable[[MenuItem], None]
 
 
 class Menu:
-
     def __init__(self) -> None:
         """A menu associated with the main application window.
 
@@ -587,13 +583,9 @@ class Menu:
     def __getitem__(self, item: int) -> MenuItem:
         return self._items[item]
 
-    def append(self,
-               hmenu: int,
-               text: str,
-               *,
-               callback: Callback | None = None,
-               data: Any = None,
-               flags: int = MenuFlag.STRING) -> MenuItem:
+    def append(
+        self, hmenu: int, text: str, *, callback: Callback | None = None, data: Any = None, flags: int = MenuFlag.STRING
+    ) -> MenuItem:
         """Create a new :class:`.MenuItem` and append it to a popup menu.
 
         :param hmenu: The handle of a popup menu to append the new menu item to.
@@ -609,8 +601,7 @@ class Menu:
         """
         self._id += 1
         user32.AppendMenuW(hmenu, flags, self._id, text)
-        item = MenuItem(hmenu=hmenu, text=text, callback=callback,
-                        id=self._id, flags=flags, data=data)
+        item = MenuItem(hmenu=hmenu, text=text, callback=callback, id=self._id, flags=flags, data=data)
         self._items[self._id] = item
         return item
 
@@ -654,14 +645,15 @@ class Menu:
 
 
 class Application:
-
-    def __init__(self,
-                 *,
-                 background: int = Background.WHITE,
-                 class_style: int = ClassStyle.NONE,
-                 icon: Icon = None,
-                 style: int = WindowStyle.OVERLAPPEDWINDOW,
-                 title: str = "ActiveX") -> None:
+    def __init__(
+        self,
+        *,
+        background: int = Background.WHITE,
+        class_style: int = ClassStyle.NONE,
+        icon: Icon = None,
+        style: int = WindowStyle.OVERLAPPEDWINDOW,
+        title: str = "ActiveX",
+    ) -> None:
         """Create the main application window to display ActiveX controls.
 
         :param background: The background colour of the main window
@@ -762,11 +754,7 @@ class Application:
         """Close the application."""
         user32.PostMessageW(self._hwnd, WM_DESTROY, 0, 0)
 
-    def handle_events(self,
-                      source: Any,
-                      sink: Callable[..., Any] = None,
-                      *,
-                      interface: Any = None):
+    def handle_events(self, source: Any, sink: Callable[..., Any] = None, *, interface: Any = None):
         """Handle events from an ActiveX object.
 
         :param source: An ActiveX object that emits events.
@@ -786,16 +774,18 @@ class Application:
         """Returns the handle to the main application window."""
         return self._hwnd
 
-    def load(self,
-             activex_id: str,
-             *,
-             parent: int = None,
-             x: int = 0,
-             y: int = 0,
-             width: int = 0,
-             height: int = 0,
-             style: int = WindowStyle.VISIBLE | WindowStyle.CHILD,
-             ex_style: int = ExtendedWindowStyle.NONE) -> ctypes.POINTER:
+    def load(
+        self,
+        activex_id: str,
+        *,
+        parent: int = None,
+        x: int = 0,
+        y: int = 0,
+        width: int = 0,
+        height: int = 0,
+        style: int = WindowStyle.VISIBLE | WindowStyle.CHILD,
+        ex_style: int = ExtendedWindowStyle.NONE,
+    ) -> ctypes.POINTER:
         """Load an ActiveX library.
 
         :param activex_id: ProgID or CLSID of the ActiveX object.
@@ -853,12 +843,9 @@ class Application:
         return self._menu
 
     @staticmethod
-    def message_box(*,
-                    hwnd: int = None,
-                    language_id: int = 0,
-                    options: int = MessageBoxOption.OK,
-                    text: str = "",
-                    title: str = "") -> int:
+    def message_box(
+        *, hwnd: int = None, language_id: int = 0, options: int = MessageBoxOption.OK, text: str = "", title: str = ""
+    ) -> int:
         """Displays a modal dialog box.
 
         :param hwnd: A handle to the owner window of the message box to be created.
@@ -888,13 +875,7 @@ class Application:
         except KeyboardInterrupt:
             pass
 
-    def set_window_position(self,
-                            x: int,
-                            y: int,
-                            width: int,
-                            height: int,
-                            *,
-                            flags: int = PositionFlag.NONE) -> None:
+    def set_window_position(self, x: int, y: int, width: int, height: int, *, flags: int = PositionFlag.NONE) -> None:
         """Set the position of the main window.
 
         :param x: The new position of the left side of the window.

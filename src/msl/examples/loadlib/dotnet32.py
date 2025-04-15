@@ -7,6 +7,7 @@ module can be executed by a 64-bit Python interpreter and the :class:`~.dotnet64
 class can send a request to the :class:`~.dotnet32.DotNet32` class which calls the
 32-bit library to execute the request and then return the response from the library.
 """
+
 from __future__ import annotations
 
 import os
@@ -16,7 +17,6 @@ from msl.loadlib import Server32
 
 
 class DotNet32(Server32):
-
     def __init__(self, host: str, port: int, **kwargs: str) -> None:
         """
         Example of a class that is a wrapper around a 32-bit .NET Framework library,
@@ -157,9 +157,7 @@ class DotNet32(Server32):
         ret = self.ArrayManipulation.scalar_multiply(a, xin)
         return [val for val in ret]
 
-    def multiply_matrices(self,
-                          a1: Sequence[Sequence[float]],
-                          a2: Sequence[Sequence[float]]) -> list[list[float]]:
+    def multiply_matrices(self, a1: Sequence[Sequence[float]], a2: Sequence[Sequence[float]]) -> list[list[float]]:
         """Multiply two matrices.
 
         The corresponding C# code is
@@ -210,8 +208,7 @@ class DotNet32(Server32):
         n_cols2 = len(a2[0])
 
         if not n_cols1 == n_rows2:
-            raise ValueError(f"Cannot multiply a {n_rows1}x{n_cols1} matrix "
-                             f"with a {n_rows2}x{n_cols2} matrix")
+            raise ValueError(f"Cannot multiply a {n_rows1}x{n_cols1} matrix with a {n_rows2}x{n_cols2} matrix")
 
         m1 = self.lib.System.Array.CreateInstance(self.lib.System.Double, n_rows1, n_cols1)
         for r in range(n_rows1):

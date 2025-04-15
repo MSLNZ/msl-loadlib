@@ -4,6 +4,7 @@ from msl.loadlib import Client64
 from msl.loadlib import Server32
 
 if Server32.is_interpreter():
+
     def skipif_no_server32(*args):
         pass
 else:
@@ -11,7 +12,6 @@ else:
 
 
 class Running32(Server32):
-
     def __init__(self, host, port):
         path = os.path.join(Server32.examples_dir(), "cpp_lib32")
         super().__init__(path, "cdll", host, port)
@@ -21,7 +21,6 @@ class Running32(Server32):
 
 
 class Running64(Client64):
-
     def __init__(self):
         super().__init__(__file__)
 

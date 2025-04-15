@@ -12,9 +12,7 @@ from msl.loadlib import Server32
 
 
 class FileSystemObjectServer(Server32):
-
     def __init__(self, host, port, **kwargs):
-
         # comtypes will try to import numpy to see if it is available.
         # Since Client64 passes its sys.path to Server32 the modules that
         # are available to Client64 to import are also available to Server32.

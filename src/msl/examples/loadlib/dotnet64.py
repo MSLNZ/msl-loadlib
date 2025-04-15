@@ -12,6 +12,7 @@ is the 32-bit server for `inter-process communication <ipc_>`_.
 
 .. _ipc: https://en.wikipedia.org/wiki/Inter-process_communication
 """
+
 from __future__ import annotations
 
 import os
@@ -21,7 +22,6 @@ from msl.loadlib import Client64
 
 
 class DotNet64(Client64):
-
     def __init__(self) -> None:
         """Communicates with the 32-bit C# :ref:`dotnet_lib32.dll <dotnet-lib>` library.
 
@@ -97,9 +97,7 @@ class DotNet64(Client64):
         """
         return self.request32("scalar_multiply", a, xin)
 
-    def multiply_matrices(self,
-                          a1: Sequence[Sequence[float]],
-                          a2: Sequence[Sequence[float]]) -> list[list[float]]:
+    def multiply_matrices(self, a1: Sequence[Sequence[float]], a2: Sequence[Sequence[float]]) -> list[list[float]]:
         """Multiply two matrices.
 
         See the corresponding 32-bit :meth:`~.dotnet32.DotNet32.multiply_matrices` method.

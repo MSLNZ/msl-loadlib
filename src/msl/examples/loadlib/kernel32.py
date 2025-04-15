@@ -18,6 +18,7 @@ is the 64-bit client for `inter-process communication <ipc_>`_.
 .. _ipc: https://en.wikipedia.org/wiki/Inter-process_communication
 .. _kernel: https://www.geoffchappell.com/studies/windows/win32/kernel32/api/
 """
+
 from __future__ import annotations
 
 import ctypes
@@ -27,7 +28,6 @@ from msl.loadlib import Server32
 
 
 class Kernel32(Server32):
-
     def __init__(self, host: str, port: int, **kwargs: str) -> None:
         """
         Example of a class that is a wrapper around the Windows 32-bit `kernel32.dll
@@ -51,9 +51,15 @@ class Kernel32(Server32):
         """
         st = SystemTime()
         self.lib.GetLocalTime(ctypes.pointer(st))
-        return datetime(st.wYear, month=st.wMonth, day=st.wDay,
-                        hour=st.wHour, minute=st.wMinute, second=st.wSecond,
-                        microsecond=st.wMilliseconds * 1000)
+        return datetime(
+            st.wYear,
+            month=st.wMonth,
+            day=st.wDay,
+            hour=st.wHour,
+            minute=st.wMinute,
+            second=st.wSecond,
+            microsecond=st.wMilliseconds * 1000,
+        )
 
 
 class SystemTime(ctypes.Structure):
@@ -63,13 +69,16 @@ class SystemTime(ctypes.Structure):
 
     .. _SYSTEMTIME: https://msdn.microsoft.com/en-us/library/windows/desktop/ms724950(v=vs.85).aspx
     """
+
     WORD = ctypes.c_uint16
 
-    _fields_ = [("wYear", WORD),
-                ("wMonth", WORD),
-                ("wDayOfWeek", WORD),
-                ("wDay", WORD),
-                ("wHour", WORD),
-                ("wMinute", WORD),
-                ("wSecond", WORD),
-                ("wMilliseconds", WORD)]
+    _fields_ = [
+        ("wYear", WORD),
+        ("wMonth", WORD),
+        ("wDayOfWeek", WORD),
+        ("wDay", WORD),
+        ("wHour", WORD),
+        ("wMinute", WORD),
+        ("wSecond", WORD),
+        ("wMilliseconds", WORD),
+    ]

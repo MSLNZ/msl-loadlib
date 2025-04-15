@@ -114,15 +114,12 @@ latex_elements = {
     # The paper size ('letterpaper' or 'a4paper').
     #
     "papersize": "a4paper",
-
     # The font size ('10pt', '11pt' or '12pt').
     #
     "pointsize": "11pt",
-
     # Additional stuff for the LaTeX preamble.
     #
     # 'preamble': '',
-
     # Latex figure (float) alignment
     #
     # 'figure_align': 'htbp',
@@ -132,8 +129,13 @@ latex_elements = {
 # (source start file, target name, title,
 #  author, documentclass [howto, manual, or own class]).
 latex_documents = [
-    (master_doc, "MSL-LoadLib.tex", "MSL-LoadLib Documentation",
-     "Measurement Standards Laboratory of New Zealand", "manual"),
+    (
+        master_doc,
+        "MSL-LoadLib.tex",
+        "MSL-LoadLib Documentation",
+        "Measurement Standards Laboratory of New Zealand",
+        "manual",
+    ),
 ]
 
 
@@ -141,10 +143,7 @@ latex_documents = [
 
 # One entry per manual page. List of tuples
 # (source start file, name, description, authors, manual section).
-man_pages = [
-    (master_doc, "MSL-LoadLib", "MSL-LoadLib Documentation",
-     [author], 1)
-]
+man_pages = [(master_doc, "MSL-LoadLib", "MSL-LoadLib Documentation", [author], 1)]
 
 
 # -- Options for Texinfo output -------------------------------------------
@@ -153,9 +152,15 @@ man_pages = [
 # (source start file, target name, title, author,
 #  dir menu entry, description, category)
 texinfo_documents = [
-    (master_doc, "MSL-LoadLib", "MSL-LoadLib Documentation",
-     author, "MSL-LoadLib", "Load a shared library into Python.",
-     "Miscellaneous"),
+    (
+        master_doc,
+        "MSL-LoadLib",
+        "MSL-LoadLib Documentation",
+        author,
+        "MSL-LoadLib",
+        "Load a shared library into Python.",
+        "Miscellaneous",
+    ),
 ]
 
 
@@ -215,14 +220,15 @@ def resolve_aliases(app, env, node, contnode):
         return missing_reference(app, env, node, contnode)
 
     # resolve py:class: references to our type aliases as py:data: instead
-    if (node["refdomain"] == "py" and node["reftype"] == "class" and
-            node["reftarget"] in type_aliases):
+    if node["refdomain"] == "py" and node["reftype"] == "class" and node["reftarget"] in type_aliases:
         return app.env.get_domain("py").resolve_xref(
-            env, node["refdoc"], app.builder, "data", node["reftarget"], node, contnode)
+            env, node["refdoc"], app.builder, "data", node["reftarget"], node, contnode
+        )
 
 
 def setup(app):
     app.connect("missing-reference", resolve_aliases)
 
     from _ext.autodoc_intenum import IntEnumDocumenter
+
     app.add_autodocumenter(IntEnumDocumenter)

@@ -7,6 +7,7 @@ from msl.loadlib import Client64
 from msl.loadlib import Server32
 
 if Server32.is_interpreter():
+
     def skipif_no_server32(*args):
         pass
 else:
@@ -14,7 +15,6 @@ else:
 
 
 class Print32(Server32):
-
     def __init__(self, host, port, **kwargs):
         path = os.path.join(Server32.examples_dir(), "cpp_lib32")
         super().__init__(path, "cdll", host, port)
@@ -25,12 +25,11 @@ class Print32(Server32):
 
     def write(self, n, stdout):
         stream = sys.stdout if stdout else sys.stderr
-        print("x"*n, end="", file=stream)
+        print("x" * n, end="", file=stream)
         return True
 
 
 class Print64(Client64):
-
     def __init__(self, show):
         super().__init__(__file__, show=show)
 
@@ -61,8 +60,8 @@ def test_buffer_size_4096():
     assert p.write(n, True)
     assert p.write(n, False)
     stdout, stderr = p.shutdown_server32()
-    assert stdout.read() == b"x"*n
-    assert stderr.read() == b"x"*n
+    assert stdout.read() == b"x" * n
+    assert stderr.read() == b"x" * n
 
     # calling shutdown_server32 multiple times is okay
     # but the buffer has been read already

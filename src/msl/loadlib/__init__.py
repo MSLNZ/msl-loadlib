@@ -1,6 +1,7 @@
 """
 Load a shared library.
 """
+
 from .__about__ import __author__
 from .__about__ import __copyright__
 from .__about__ import __version__

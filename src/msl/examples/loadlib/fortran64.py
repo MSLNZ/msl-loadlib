@@ -13,6 +13,7 @@ is the 32-bit server for `inter-process communication <ipc_>`_.
 
 .. _ipc: https://en.wikipedia.org/wiki/Inter-process_communication
 """
+
 from __future__ import annotations
 
 import os
@@ -22,7 +23,6 @@ from msl.loadlib import Client64
 
 
 class Fortran64(Client64):
-
     def __init__(self) -> None:
         """Communicates with the 32-bit FORTRAN :ref:`fortran_lib32 <fortran-lib>` library.
 
@@ -172,9 +172,7 @@ class Fortran64(Client64):
         """
         return self.request32("add_1d_arrays", a1, a2)
 
-    def matrix_multiply(self,
-                        a1: Sequence[Sequence[float]],
-                        a2: Sequence[Sequence[float]]) -> list[list[float]]:
+    def matrix_multiply(self, a1: Sequence[Sequence[float]], a2: Sequence[Sequence[float]]) -> list[list[float]]:
         """
         Multiply two matrices.
 

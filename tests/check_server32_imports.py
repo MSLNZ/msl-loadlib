@@ -16,6 +16,7 @@ The following error will be displayed when the script exits (but that's ok)
   Cannot start the 32-bit server.
 
 """
+
 import sys
 import importlib
 
@@ -328,7 +329,7 @@ modules = [
     ("zipfile", ""),
     ("zipimport", ""),
     ("zlib", ""),
-    ("zoneinfo", "Added in 3.9")
+    ("zoneinfo", "Added in 3.9"),
 ]
 
 # these are mandatory

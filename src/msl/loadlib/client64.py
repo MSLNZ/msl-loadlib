@@ -5,6 +5,7 @@ The :class:`~.server32.Server32` class is used in combination with the
 :class:`~.client64.Client64` class to communicate with a 32-bit shared library
 from 64-bit Python.
 """
+
 from __future__ import annotations
 
 import importlib
@@ -45,20 +46,21 @@ Self = TypeVar("Self", bound="Client64")
 
 
 class Client64:
-
-    def __init__(self,
-                 module32: PathLike,
-                 *,
-                 add_dll_directory: PathLike | Iterable[PathLike] | None = None,
-                 append_environ_path: PathLike | Iterable[PathLike] | None = None,
-                 append_sys_path: PathLike | Iterable[PathLike] | None = None,
-                 host: str | None = "127.0.0.1",
-                 port: int | None = None,
-                 protocol: int = 5,
-                 rpc_timeout: float | None = None,
-                 server32_dir: PathLike | None = None,
-                 timeout: float = 10,
-                 **kwargs: Any) -> None:
+    def __init__(
+        self,
+        module32: PathLike,
+        *,
+        add_dll_directory: PathLike | Iterable[PathLike] | None = None,
+        append_environ_path: PathLike | Iterable[PathLike] | None = None,
+        append_sys_path: PathLike | Iterable[PathLike] | None = None,
+        host: str | None = "127.0.0.1",
+        port: int | None = None,
+        protocol: int = 5,
+        rpc_timeout: float | None = None,
+        server32_dir: PathLike | None = None,
+        timeout: float = 10,
+        **kwargs: Any,
+    ) -> None:
         """Base class for communicating with a 32-bit library from 64-bit Python.
 
         Starts a 32-bit server, :class:`~.server32.Server32`, to host a Python class
@@ -133,7 +135,7 @@ class Client64:
                 add_dll_directory=add_dll_directory,
                 append_environ_path=append_environ_path,
                 append_sys_path=append_sys_path,
-                **kwargs
+                **kwargs,
             )
         else:
             self._client = HTTPClient(
@@ -147,7 +149,7 @@ class Client64:
                 rpc_timeout=rpc_timeout,
                 server32_dir=server32_dir,
                 timeout=timeout,
-                **kwargs
+                **kwargs,
             )
 
     def __del__(self) -> None:
@@ -168,15 +170,12 @@ class Client64:
     def __repr__(self) -> str:
         lib = os.path.basename(self._client.lib32_path)
         if self._client.host is None:
-            return (f"<{self.__class__.__name__} lib={lib} "
-                    f"address=None (mocked)>")
+            return f"<{self.__class__.__name__} lib={lib} address=None (mocked)>"
 
         if self._client.connection is None:
-            return (f"<{self.__class__.__name__} lib={lib} "
-                    f"address=None (closed)>")
+            return f"<{self.__class__.__name__} lib={lib} address=None (closed)>"
 
-        return (f"<{self.__class__.__name__} lib={lib} "
-                f"address={self._client.host}:{self._client.port}>")
+        return f"<{self.__class__.__name__} lib={lib} address={self._client.host}:{self._client.port}>"
 
     @property
     def host(self) -> str | None:
@@ -239,20 +238,21 @@ class Client64:
 
 
 class HTTPClient:
-
-    def __init__(self,
-                 module32: str,
-                 *,
-                 add_dll_directory: PathLike | Iterable[PathLike] | None = None,
-                 append_environ_path: PathLike | Iterable[PathLike] | None = None,
-                 append_sys_path: PathLike | Iterable[PathLike] | None = None,
-                 host: str | None = "127.0.0.1",
-                 port: int | None = None,
-                 protocol: int = 5,
-                 rpc_timeout: float | None = None,
-                 server32_dir: PathLike | None = None,
-                 timeout: float = 10,
-                 **kwargs: Any) -> None:
+    def __init__(
+        self,
+        module32: str,
+        *,
+        add_dll_directory: PathLike | Iterable[PathLike] | None = None,
+        append_environ_path: PathLike | Iterable[PathLike] | None = None,
+        append_sys_path: PathLike | Iterable[PathLike] | None = None,
+        host: str | None = "127.0.0.1",
+        port: int | None = None,
+        protocol: int = 5,
+        rpc_timeout: float | None = None,
+        server32_dir: PathLike | None = None,
+        timeout: float = 10,
+        **kwargs: Any,
+    ) -> None:
         """Start a server and connect to it."""
         self._meta32: dict[str, str | int] = {}
         self._conn: HTTPConnection | None = None
@@ -293,14 +293,16 @@ class HTTPClient:
                 raise OSError(f"Cannot find {os.path.join(dirs[0], SERVER_FILENAME)}")
             else:
                 directories = "\n  ".join(sorted(set(dirs)))
-                raise OSError(f"Cannot find {SERVER_FILENAME!r} in any of the "
-                              f"following directories:\n  {directories}")
+                raise OSError(f"Cannot find {SERVER_FILENAME!r} in any of the following directories:\n  {directories}")
 
         cmd = [
             server_exe,
-            "--module", module32,
-            "--host", host,
-            "--port", str(port),
+            "--module",
+            module32,
+            "--host",
+            host,
+            "--port",
+            str(port),
         ]
 
         # include paths to the 32-bit server's sys.path
@@ -335,10 +337,12 @@ class HTTPClient:
                 self._cleanup_zombie_and_files()
                 stdout = self._proc.stdout.read()
                 if not stdout:
-                    err.reason = (f"If you add print() statements to {module32!r}\n"
-                                  f"the statements that are executed will be displayed here.\n"
-                                  f"Limit the total number of characters that are written to stdout to be < 4096\n"
-                                  f"to avoid potential blocking when reading the stdout PIPE buffer.")
+                    err.reason = (
+                        f"If you add print() statements to {module32!r}\n"
+                        f"the statements that are executed will be displayed here.\n"
+                        f"Limit the total number of characters that are written to stdout to be < 4096\n"
+                        f"to avoid potential blocking when reading the stdout PIPE buffer."
+                    )
                 else:
                     err.reason = f"stdout from {module32!r} is:\n{stdout.decode()}"
             else:
@@ -411,8 +415,7 @@ class HTTPClient:
 
         if response is None:
             raise ResponseTimeoutError(
-                f"Waiting for the response from the {name!r} request timed "
-                f"out after {self._rpc_timeout} second(s)"
+                f"Waiting for the response from the {name!r} request timed out after {self._rpc_timeout} second(s)"
             )
 
         if response.status == OK:
@@ -498,14 +501,15 @@ class HTTPClient:
 
 
 class MockClient:
-
-    def __init__(self,
-                 module32: str,
-                 *,
-                 add_dll_directory: PathLike | Iterable[PathLike] | None = None,
-                 append_environ_path: PathLike | Iterable[PathLike] | None = None,
-                 append_sys_path: PathLike | Iterable[PathLike] | None = None,
-                 **kwargs: Any) -> None:
+    def __init__(
+        self,
+        module32: str,
+        *,
+        add_dll_directory: PathLike | Iterable[PathLike] | None = None,
+        append_environ_path: PathLike | Iterable[PathLike] | None = None,
+        append_sys_path: PathLike | Iterable[PathLike] | None = None,
+        **kwargs: Any,
+    ) -> None:
         """Mocks the HTTP connection to the server."""
         self._added_dll_directories = []
         for path in _build_paths(add_dll_directory):
@@ -539,8 +543,7 @@ class MockClient:
                 break
 
         if cls is None:
-            raise AttributeError(f"Module {module32!r} does not contain "
-                                 f"a class that is a subclass of Server32")
+            raise AttributeError(f"Module {module32!r} does not contain a class that is a subclass of Server32")
 
         # the Server32 subclass expects the values for all kwargs
         # to be of type string
@@ -588,9 +591,7 @@ class MockClient:
         except Exception as exc:  # noqa: Too broad exception clause
             exception = {
                 "name": exc.__class__.__name__,
-                "value": f"The mocked connection to the server raised:\n"
-                         f"{exc}\n"
-                         f"(see above for more details)"
+                "value": f"The mocked connection to the server raised:\n{exc}\n(see above for more details)",
             }
             raise Server32Error(**exception) from exc
 
@@ -600,9 +601,7 @@ class MockClient:
         return io.BytesIO(), io.BytesIO()
 
 
-def _build_paths(paths: PathLike | Iterable[PathLike] | None,
-                 *,
-                 ignore: list[str] = None) -> list[str]:
+def _build_paths(paths: PathLike | Iterable[PathLike] | None, *, ignore: list[str] = None) -> list[str]:
     """Build a list of absolute paths."""
     if paths is None:
         return []

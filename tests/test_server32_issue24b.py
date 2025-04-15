@@ -18,13 +18,13 @@ class HangsForever(Server32):
         # Simulate the case where instantiating this class on the 32-bit server hangs
         print("import time")
         import time
+
         print("now go to sleep")
         time.sleep(999)
 
 
 @skipif_no_server32
 def test_instantiating():
-
     class Issue24(Client64):
         def __init__(self):
             super().__init__(__file__, timeout=2)

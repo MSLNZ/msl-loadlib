@@ -12,6 +12,7 @@ can be executed by a 64-bit Python interpreter and the :class:`~.labview64.Labvi
 a request to the :class:`~.labview32.Labview32` class which calls the 32-bit library to execute the
 request and then return the response from the library.
 """
+
 from __future__ import annotations
 
 import os
@@ -23,7 +24,6 @@ from msl.loadlib import Server32
 
 
 class Labview32(Server32):
-
     def __init__(self, host: str, port: int, **kwargs: str) -> None:
         """A wrapper around the 32-bit LabVIEW library, :ref:`labview_lib32 <labview-lib>`.
 

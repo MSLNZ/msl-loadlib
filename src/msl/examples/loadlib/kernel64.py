@@ -17,6 +17,7 @@ is the 32-bit server for `inter-process communication <ipc_>`_.
 .. _ipc: https://en.wikipedia.org/wiki/Inter-process_communication
 .. _kernel: https://www.geoffchappell.com/studies/windows/win32/kernel32/api/
 """
+
 from __future__ import annotations
 
 import os
@@ -26,7 +27,6 @@ from msl.loadlib import Client64
 
 
 class Kernel64(Client64):
-
     def __init__(self) -> None:
         """
         Example of a class that can communicate with the 32-bit `kernel32.dll

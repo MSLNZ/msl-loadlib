@@ -1,6 +1,7 @@
 """
 Common functions used by the **MSL-LoadLib** package.
 """
+
 from __future__ import annotations
 
 import logging
@@ -112,24 +113,24 @@ def check_dot_net_config(py_exe_path: str) -> tuple[int, str]:
     config_path = f"{py_exe_path}.config"
 
     if os.path.isfile(config_path):
-
         try:
             tree = ElementTree.parse(config_path)
         except ElementTree.ParseError:
-            msg = (f"Invalid XML file {config_path}\n"
-                   f"Cannot create the useLegacyV2RuntimeActivationPolicy property.\n")
+            msg = f"Invalid XML file {config_path}\nCannot create the useLegacyV2RuntimeActivationPolicy property.\n"
             logger.warning(msg)
             return -1, msg
 
         root = tree.getroot()
 
         if root.tag != "configuration":
-            msg = (f"The root tag in {config_path} is <{root.tag}>.\n"
-                   f"It must be <configuration> in order to create a .NET Framework config\n"
-                   f"file which enables the useLegacyV2RuntimeActivationPolicy property.\n"
-                   f"To load an assembly from a .NET Framework version < 4.0 the following\n"
-                   f"must be in {config_path}\n\n"
-                   f"<configuration>{NET_FRAMEWORK_FIX}</configuration>\n")
+            msg = (
+                f"The root tag in {config_path} is <{root.tag}>.\n"
+                f"It must be <configuration> in order to create a .NET Framework config\n"
+                f"file which enables the useLegacyV2RuntimeActivationPolicy property.\n"
+                f"To load an assembly from a .NET Framework version < 4.0 the following\n"
+                f"must be in {config_path}\n\n"
+                f"<configuration>{NET_FRAMEWORK_FIX}</configuration>\n"
+            )
             logger.warning(msg)
             return -1, msg
 
@@ -142,15 +143,19 @@ def check_dot_net_config(py_exe_path: str) -> tuple[int, str]:
             lines.insert(-1, NET_FRAMEWORK_FIX)
             with open(config_path, mode="wt") as fp:
                 fp.writelines(lines)
-            msg = (f"Added the useLegacyV2RuntimeActivationPolicy property to\n"
-                   f"{config_path}\n"
-                   f"Try again to see if Python can now load the .NET library.\n")
+            msg = (
+                f"Added the useLegacyV2RuntimeActivationPolicy property to\n"
+                f"{config_path}\n"
+                f"Try again to see if Python can now load the .NET library.\n"
+            )
             return 1, msg
         else:
             if not policy.attrib["useLegacyV2RuntimeActivationPolicy"].lower() == "true":
-                msg = (f'The useLegacyV2RuntimeActivationPolicy in\n{config_path}\n'
-                       f'is "false". Cannot load an assembly from a .NET Framework '
-                       f'version < 4.0.\n')
+                msg = (
+                    f"The useLegacyV2RuntimeActivationPolicy in\n{config_path}\n"
+                    f'is "false". Cannot load an assembly from a .NET Framework '
+                    f"version < 4.0.\n"
+                )
                 logger.warning(msg)
                 return -1, msg
             return 0, "The useLegacyV2RuntimeActivationPolicy property is enabled"
@@ -163,12 +168,14 @@ def check_dot_net_config(py_exe_path: str) -> tuple[int, str]:
             f.write(NET_FRAMEWORK_FIX)
             f.write("</configuration>\n")
 
-        msg = (f'The library appears to be from a .NET Framework version < 4.0.\n'
-               f'The useLegacyV2RuntimeActivationPolicy property was added to\n'
-               f'{config_path}\n'
-               f'to fix the "System.IO.FileLoadException: Mixed mode assembly..." error.\n'
-               f'Rerun the script, or restart the interactive console, to see if\n'
-               f'Python can now load the .NET library.\n')
+        msg = (
+            f"The library appears to be from a .NET Framework version < 4.0.\n"
+            f"The useLegacyV2RuntimeActivationPolicy property was added to\n"
+            f"{config_path}\n"
+            f'to fix the "System.IO.FileLoadException: Mixed mode assembly..." error.\n'
+            f"Rerun the script, or restart the interactive console, to see if\n"
+            f"Python can now load the .NET library.\n"
+        )
         return 1, msg
 
 
@@ -222,8 +229,7 @@ def wait_for_server(host: str, port: int, timeout: float) -> None:
             return
 
         if time.time() > stop:
-            raise ConnectionTimeoutError(f"Timeout after {timeout:.1f} second(s). "
-                                         f"Could not connect to {host}:{port}")
+            raise ConnectionTimeoutError(f"Timeout after {timeout:.1f} second(s). Could not connect to {host}:{port}")
 
 
 def get_com_info(*additional_keys: str) -> dict[str, dict[str, str | None]]:
@@ -324,10 +330,7 @@ def generate_com_wrapper(lib: Any, out_dir: str | None = None) -> ModuleType:
     :return: The wrapper module that was generated.
     """
     if not is_comtypes_installed():
-        raise OSError(
-            "Cannot create a COM wrapper because comtypes is not installed, run\n"
-            "  pip install comtypes"
-        )
+        raise OSError("Cannot create a COM wrapper because comtypes is not installed, run\n  pip install comtypes")
 
     import comtypes.client
 

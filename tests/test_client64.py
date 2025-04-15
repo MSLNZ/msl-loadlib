@@ -90,7 +90,6 @@ def test_build_paths_none():
 
 
 class BytesPath:
-
     def __init__(self, path: bytes) -> None:
         self._path = path
 

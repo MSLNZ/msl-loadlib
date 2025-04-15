@@ -20,12 +20,11 @@ else:
 
 
 class Server(Server32):
-
     def __init__(self, host, port, **kwargs):
         if IS_MACOS_ARM64:
             file = "cpp_libarm64"
         else:
-            file = "cpp_lib64" if sys.maxsize > 2 ** 32 else "cpp_lib32"
+            file = "cpp_lib64" if sys.maxsize > 2**32 else "cpp_lib32"
         path = os.path.join(Server32.examples_dir(), file)
         super().__init__(path, "cdll", host, port)
 
@@ -42,7 +41,6 @@ class Server(Server32):
 
 
 class Client(Client64):
-
     def __init__(self, module32=__file__, host=None, **kwargs):
         super().__init__(module32, host=host, **kwargs)
 
@@ -64,7 +62,7 @@ def test_equivalent(host):
     if host is None:
         assert c.connection is None
         assert c.host is None
-        if sys.maxsize > 2 ** 32:
+        if sys.maxsize > 2**32:
             # client and server are running in 64-bit Python
             assert c.lib32_path.endswith(f"cpp_lib64{DEFAULT_EXTENSION}")
         else:
@@ -94,7 +92,7 @@ def test_attributes():
     c = Client(x=0, y="hello", z=None)
     assert c.connection is None
     assert c.host is None
-    if sys.maxsize > 2 ** 32:
+    if sys.maxsize > 2**32:
         # client and server are running in 64-bit Python
         if IS_MACOS_ARM64:
             assert c.lib32_path.endswith(f"cpp_libarm64{DEFAULT_EXTENSION}")

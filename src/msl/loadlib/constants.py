@@ -1,6 +1,7 @@
 """
 Package constants.
 """
+
 from __future__ import annotations
 
 import sys
@@ -25,7 +26,7 @@ IS_LINUX: bool = sys.platform.startswith("linux")
 IS_MAC: bool = sys.platform == "darwin"
 """Whether the operating system is macOS."""
 
-IS_PYTHON_64BIT: bool = sys.maxsize > 2 ** 32
+IS_PYTHON_64BIT: bool = sys.maxsize > 2**32
 """Whether the Python interpreter is 64-bits."""
 
 SERVER_FILENAME: str

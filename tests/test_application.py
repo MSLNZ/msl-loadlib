@@ -104,7 +104,7 @@ def test_menu():
     assert c.text == "C"
 
     with pytest.raises(KeyError):
-        _ = m[c.id+1]
+        _ = m[c.id + 1]
 
     assert group.checked is None
     assert a.checked is False

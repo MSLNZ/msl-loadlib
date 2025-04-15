@@ -4,7 +4,6 @@ from msl.loadlib import Server32
 
 
 class SEWEuroDrive32(Server32):
-
     def __init__(self, host, port, **kwargs):
         path = os.path.join(os.path.dirname(__file__), "FirstDll.dll")
         super().__init__(path, "clr", host, port)

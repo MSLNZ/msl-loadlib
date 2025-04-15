@@ -17,11 +17,8 @@ def test_sew_eurodrive():
     """
 
     class SEWEuroDrive64(Client64):
-
         def __init__(self):
-            super().__init__(
-                os.path.join(os.path.dirname(__file__), "sew_eurodrive", "sew32.py")
-            )
+            super().__init__(os.path.join(os.path.dirname(__file__), "sew_eurodrive", "sew32.py"))
 
         def do_something(self, value):
             return self.request32("do_something", value)

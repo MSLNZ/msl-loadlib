@@ -1,6 +1,7 @@
 """
 Load a shared library.
 """
+
 from __future__ import annotations
 
 import ctypes
@@ -41,11 +42,7 @@ if IS_WINDOWS and not hasattr(sys, "coinit_flags"):
 
 
 class LoadLibrary:
-
-    def __init__(self,
-                 path: PathLike,
-                 libtype: LibType | None = None,
-                 **kwargs: Any) -> None:
+    def __init__(self, path: PathLike, libtype: LibType | None = None, **kwargs: Any) -> None:
         """Load a shared library.
 
         For example, a C/C++, FORTRAN, C#, Java, Delphi, LabVIEW, ActiveX, ... library.
@@ -138,8 +135,7 @@ class LoadLibrary:
             libtype = libtype.lower()
 
         if libtype not in _LIBTYPES:
-            raise ValueError(f'Invalid libtype {libtype!r}\n'
-                             f'Must be one of: {", ".join(_LIBTYPES)}')
+            raise ValueError(f"Invalid libtype {libtype!r}\nMust be one of: {', '.join(_LIBTYPES)}")
 
         # create a new reference to `path` just in case the
         # DEFAULT_EXTENSION is appended below so that the
@@ -180,10 +176,7 @@ class LoadLibrary:
             self._lib = ctypes.OleDLL(self._path, **kwargs)
         elif libtype == "com":
             if not utils.is_comtypes_installed():
-                raise OSError(
-                    "Cannot load a COM library because comtypes is not installed.\n"
-                    "Run: pip install comtypes"
-                )
+                raise OSError("Cannot load a COM library because comtypes is not installed.\nRun: pip install comtypes")
 
             from comtypes import GUID
             from comtypes.client import CreateObject
@@ -200,15 +193,13 @@ class LoadLibrary:
 
         elif libtype == "activex":
             from .activex import Application
+
             self._app = Application()
             self._lib = self._app.load(self._path, **kwargs)
 
         elif libtype == "java":
             if not utils.is_py4j_installed():
-                raise OSError(
-                    "Cannot load a Java file because Py4J is not installed.\n"
-                    "Run: pip install py4j"
-                )
+                raise OSError("Cannot load a Java file because Py4J is not installed.\nRun: pip install py4j")
 
             from py4j.version import __version__
             from py4j.java_gateway import JavaGateway, GatewayParameters
@@ -222,9 +213,11 @@ class LoadLibrary:
             py4j_jar = os.environ.get("PY4J_JAR", "")
             if py4j_jar:
                 if not os.path.isfile(py4j_jar) or os.path.basename(py4j_jar) != filename:
-                    raise OSError(f"A PY4J_JAR environment variable exists, "
-                                  f"but the full path to {filename} is invalid\n"
-                                  f"PY4J_JAR={py4j_jar}")
+                    raise OSError(
+                        f"A PY4J_JAR environment variable exists, "
+                        f"but the full path to {filename} is invalid\n"
+                        f"PY4J_JAR={py4j_jar}"
+                    )
             else:
                 root = os.path.dirname(sys.executable)
                 for item in [root, os.path.dirname(root), os.path.join(os.path.expanduser("~"), ".local")]:
@@ -232,9 +225,11 @@ class LoadLibrary:
                     if os.path.isfile(py4j_jar):
                         break
                 if not os.path.isfile(py4j_jar):
-                    raise OSError(f"Cannot find {filename}\n"
-                                  f"Create a PY4J_JAR environment variable "
-                                  f"to be equal to the full path to {filename}")
+                    raise OSError(
+                        f"Cannot find {filename}\n"
+                        f"Create a PY4J_JAR environment variable "
+                        f"to be equal to the full path to {filename}"
+                    )
 
             # build the java command
             wrapper = os.path.join(os.path.dirname(__file__), "py4j-wrapper.jar")
@@ -269,21 +264,19 @@ class LoadLibrary:
             if err:
                 raise OSError(err)
 
-            self._gateway = JavaGateway(
-                gateway_parameters=GatewayParameters(address=address, port=port, **kwargs)
-            )
+            self._gateway = JavaGateway(gateway_parameters=GatewayParameters(address=address, port=port, **kwargs))
 
             self._lib = self._gateway.jvm
 
         elif libtype == "net" or libtype == "clr":
             if not utils.is_pythonnet_installed():
                 raise OSError(
-                    "Cannot load a .NET Assembly because pythonnet is not installed.\n"
-                    "Run: pip install pythonnet"
+                    "Cannot load a .NET Assembly because pythonnet is not installed.\nRun: pip install pythonnet"
                 )
 
             import clr  # noqa: clr is an alias for pythonnet
             import System  # noqa: available once pythonnet is imported
+
             dotnet = {"System": System}
 
             # the shared library must be available in sys.path
@@ -329,8 +322,9 @@ class LoadLibrary:
                     if not status == 0:
                         raise OSError(msg)
                     else:
-                        raise OSError(f"Checking .NET config returned {msg!r} and still "
-                                      f"cannot load the library.\n{err}")
+                        raise OSError(
+                            f"Checking .NET config returned {msg!r} and still cannot load the library.\n{err}"
+                        )
                 raise OSError('The above "System.IO.FileLoadException" is not handled.\n')
 
             try:
@@ -447,7 +441,6 @@ class LoadLibrary:
 
 
 class DotNet:
-
     def __init__(self, items: dict, path: str) -> None:
         """Contains the namespace_ modules, classes and `System.Type`_ objects of a .NET Assembly.
 

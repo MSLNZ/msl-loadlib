@@ -17,6 +17,7 @@ is the 32-bit server for `inter-process communication <ipc_>`_.
 
 .. _ipc: https://en.wikipedia.org/wiki/Inter-process_communication
 """
+
 from __future__ import annotations
 
 import os
@@ -26,7 +27,6 @@ from msl.loadlib import Client64
 
 
 class Labview64(Client64):
-
     def __init__(self) -> None:
         """Communicates with a 32-bit LabVIEW library, :ref:`labview_lib32 <labview-lib>`.
 

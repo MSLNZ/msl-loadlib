@@ -1,13 +1,13 @@
 """
 Exception classes.
 """
+
 from __future__ import annotations
 
 from http.client import HTTPException
 
 
 class ConnectionTimeoutError(OSError):
-
     def __init__(self, message: str) -> None:
         """Raised when the connection to the 32-bit server cannot be established.
 
@@ -24,12 +24,7 @@ class ConnectionTimeoutError(OSError):
 
 
 class Server32Error(HTTPException):
-
-    def __init__(self,
-                 value: str,
-                 *,
-                 name: str = "",
-                 traceback: str = "") -> None:
+    def __init__(self, value: str, *, name: str = "", traceback: str = "") -> None:
         """Raised when an exception occurs on the 32-bit server.
 
         .. versionadded:: 0.5

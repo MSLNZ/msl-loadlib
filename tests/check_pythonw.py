@@ -3,6 +3,7 @@ Checks that running a script with pythonw.exe does not
 1) create a new console
 2) the console that pythonw.exe is executing in does not "flash"
 """
+
 import os
 import sys
 
@@ -15,12 +16,9 @@ from msl.examples.loadlib import EXAMPLES_DIR
 from msl.loadlib import LoadLibrary
 
 if os.path.basename(sys.executable) != "pythonw.exe":
-    raise RuntimeError(
-        "Must run this script using,\n"
-        "  pythonw.exe " + __file__
-    )
+    raise RuntimeError("Must run this script using,\n  pythonw.exe " + __file__)
 
-sys.stdout = open(__file__[:-3]+".txt", mode="wt")
+sys.stdout = open(__file__[:-3] + ".txt", mode="wt")
 sys.stderr = sys.stdout
 
 with LoadLibrary(os.path.join(EXAMPLES_DIR, "Trig.class")) as java:

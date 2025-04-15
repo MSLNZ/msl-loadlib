@@ -7,6 +7,7 @@ from msl.loadlib import Server32
 from msl.loadlib import Server32Error
 
 if Server32.is_interpreter():
+
     def skipif_no_server32(*args):
         pass
 else:
@@ -15,7 +16,6 @@ else:
 
 
 class Bounce32(Server32):
-
     def __init__(self, host, port):
         path = os.path.join(Server32.examples_dir(), "cpp_lib32")
         super().__init__(path, "cdll", host, port)
@@ -25,7 +25,6 @@ class Bounce32(Server32):
 
 
 class Bounce64(Client64):
-
     def __init__(self, protocol):
         super().__init__(__file__, protocol=protocol)
 
@@ -35,7 +34,7 @@ class Bounce64(Client64):
 
 @skipif_no_server32
 def test_protocol():
-    args = (None, True, False, 1, -2.0, 5-6j, [1, [2., "hello"]], {"one": "1", "two": 2})
+    args = (None, True, False, 1, -2.0, 5 - 6j, [1, [2.0, "hello"]], {"one": "1", "two": 2})
     kwargs = {
         "None": None,
         "True": True,
@@ -43,7 +42,7 @@ def test_protocol():
         "Int": 1,
         "Float": -2.0,
         "Complex": 5 - 6j,
-        "List": [1, [2., "hello"]],
+        "List": [1, [2.0, "hello"]],
         "Dict": {"one": "1", "two": 2},
     }
 

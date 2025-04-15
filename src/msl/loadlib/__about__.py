@@ -1,6 +1,7 @@
 """
 Project information.
 """
+
 from __future__ import annotations
 
 from typing import NamedTuple
@@ -22,6 +23,7 @@ __copyright__: str = f"\xa9 2017 - 2024, {__author__}"
 class VersionInfo(NamedTuple):
     """Contains the version information as a
     (major, minor, micro, releaselevel) named tuple."""
+
     major: int
     minor: int
     micro: int
