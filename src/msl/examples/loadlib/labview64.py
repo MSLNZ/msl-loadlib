@@ -47,6 +47,8 @@ class Labview64(Client64):
             population (`weighting` = 1) standard deviation and variance.
         :return: The mean, variance and standard deviation.
         """
-        if weighting == 0 or weighting == 1:
-            return self.request32("stdev", x, weighting)
-        raise ValueError(f"The weighting must be either 0 or 1, got {weighting}")
+        if weighting not in {0, 1}:
+            msg = f"The weighting must be either 0 or 1, got {weighting}"
+            raise ValueError(msg)
+
+        return self.request32("stdev", x, weighting)

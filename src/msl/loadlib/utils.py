@@ -229,7 +229,8 @@ def wait_for_server(host: str, port: int, timeout: float) -> None:
             return
 
         if time.time() > stop:
-            raise ConnectionTimeoutError(f"Timeout after {timeout:.1f} second(s). Could not connect to {host}:{port}")
+            msg = f"Timeout after {timeout:.1f} second(s). Could not connect to {host}:{port}"
+            raise ConnectionTimeoutError(msg)
 
 
 def get_com_info(*additional_keys: str) -> dict[str, dict[str, str | None]]:

@@ -120,7 +120,8 @@ class LoadLibrary:
         self._gateway = None
 
         if not path:
-            raise ValueError(f"Must specify a non-empty path, got {path!r}")
+            msg = f"Must specify a non-empty path, got {path!r}"
+            raise ValueError(msg)
 
         # fixes Issue #8, if `path` is a <class 'pathlib.Path'> object
         path = os.fsdecode(path)
@@ -135,7 +136,8 @@ class LoadLibrary:
             libtype = libtype.lower()
 
         if libtype not in _LIBTYPES:
-            raise ValueError(f"Invalid libtype {libtype!r}\nMust be one of: {', '.join(_LIBTYPES)}")
+            msg = f"Invalid libtype {libtype!r}\nMust be one of: {', '.join(_LIBTYPES)}"
+            raise ValueError(msg)
 
         # create a new reference to `path` just in case the
         # DEFAULT_EXTENSION is appended below so that the
@@ -164,7 +166,8 @@ class LoadLibrary:
                             success = True
                             break
                     if not success:
-                        raise OSError(f"Cannot find {path!r} for libtype={libtype!r}")
+                        msg = f"Cannot find {path!r} for libtype={libtype!r}"
+                        raise OSError(msg)
         else:
             self._path = _path
 
@@ -187,7 +190,8 @@ class LoadLibrary:
                 clsid = None
 
             if clsid is None:
-                raise OSError(f"Cannot find {path!r} for libtype='com'")
+                msg = f"Cannot find {path!r} for libtype='com'"
+                raise OSError(msg)
 
             self._lib = CreateObject(clsid, **kwargs)
 
@@ -213,11 +217,12 @@ class LoadLibrary:
             py4j_jar = os.environ.get("PY4J_JAR", "")
             if py4j_jar:
                 if not os.path.isfile(py4j_jar) or os.path.basename(py4j_jar) != filename:
-                    raise OSError(
+                    msg = (
                         f"A PY4J_JAR environment variable exists, "
                         f"but the full path to {filename} is invalid\n"
                         f"PY4J_JAR={py4j_jar}"
                     )
+                    raise OSError(msg)
             else:
                 root = os.path.dirname(sys.executable)
                 for item in [root, os.path.dirname(root), os.path.join(os.path.expanduser("~"), ".local")]:
@@ -225,11 +230,12 @@ class LoadLibrary:
                     if os.path.isfile(py4j_jar):
                         break
                 if not os.path.isfile(py4j_jar):
-                    raise OSError(
+                    msg = (
                         f"Cannot find {filename}\n"
                         f"Create a PY4J_JAR environment variable "
                         f"to be equal to the full path to {filename}"
                     )
+                    raise OSError(msg)
 
             # build the java command
             wrapper = os.path.join(os.path.dirname(__file__), "py4j-wrapper.jar")
@@ -319,12 +325,9 @@ class LoadLibrary:
                         # When using conda environments, sys.prefix == sys.base_prefix
                         py_exe = os.path.join(sys.base_prefix, os.path.basename(py_exe))
                     status, msg = utils.check_dot_net_config(py_exe)
-                    if not status == 0:
-                        raise OSError(msg)
-                    else:
-                        raise OSError(
-                            f"Checking .NET config returned {msg!r} and still cannot load the library.\n{err}"
-                        )
+                    if status == 0:
+                        msg = f"Checking .NET config returned {msg!r} and still cannot load the library.\n{err}"
+                    raise OSError(msg)
                 raise OSError('The above "System.IO.FileLoadException" is not handled.\n')
 
             try:

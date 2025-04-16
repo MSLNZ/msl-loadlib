@@ -433,11 +433,12 @@ class Fortran32(Server32):
         n_rows2 = ctypes.c_int32(len(a2))
         n_cols2 = ctypes.c_int32(len(a2[0]))
 
-        if not n_cols1.value == n_rows2.value:
-            raise ValueError(
+        if n_cols1.value != n_rows2.value:
+            msg = (
                 f"Cannot multiply a {n_rows1.value}x{n_cols1.value} matrix "
                 f"with a {n_rows2.value}x{n_cols2.value} matrix"
             )
+            raise ValueError(msg)
 
         m1 = ((ctypes.c_double * n_rows1.value) * n_cols1.value)()
         for r in range(n_rows1.value):

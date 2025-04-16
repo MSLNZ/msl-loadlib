@@ -813,7 +813,8 @@ class Application:
             window_name = None
 
         if not window_name:
-            raise OSError(f"Cannot find an ActiveX library with ID {activex_id!r}")
+            msg = f"Cannot find an ActiveX library with ID {activex_id!r}"
+            raise OSError(msg)
 
         if parent is None:
             parent = self._hwnd
@@ -834,7 +835,8 @@ class Application:
         unknown = ctypes.POINTER(comtypes.IUnknown)()
         ret = atl.AtlAxGetControl(hwnd, ctypes.byref(unknown))
         if ret != 0:
-            raise OSError(f"AtlAxGetControl {ctypes.WinError()}")
+            msg = f"AtlAxGetControl {ctypes.WinError()}"
+            raise OSError(msg)
         return client.GetBestInterface(unknown)
 
     @property

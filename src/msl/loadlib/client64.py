@@ -290,10 +290,12 @@ class HTTPClient:
 
         if server_exe is None:
             if len(dirs) == 1:
-                raise OSError(f"Cannot find {os.path.join(dirs[0], SERVER_FILENAME)}")
+                msg = f"Cannot find {os.path.join(dirs[0], SERVER_FILENAME)}"
+                raise OSError(msg)
             else:
                 directories = "\n  ".join(sorted(set(dirs)))
-                raise OSError(f"Cannot find {SERVER_FILENAME!r} in any of the following directories:\n  {directories}")
+                msg = f"Cannot find {SERVER_FILENAME!r} in any of the following directories:\n  {directories}"
+                raise OSError(msg)
 
         cmd = [
             server_exe,
@@ -414,9 +416,8 @@ class HTTPClient:
             response = None
 
         if response is None:
-            raise ResponseTimeoutError(
-                f"Waiting for the response from the {name!r} request timed out after {self._rpc_timeout} second(s)"
-            )
+            msg = f"Waiting for the response from the {name!r} request timed out after {self._rpc_timeout} second(s)"
+            raise ResponseTimeoutError(msg)
 
         if response.status == OK:
             with open(self._pickle_path, mode="rb") as f:
@@ -543,7 +544,8 @@ class MockClient:
                 break
 
         if cls is None:
-            raise AttributeError(f"Module {module32!r} does not contain a class that is a subclass of Server32")
+            msg = f"Module {module32!r} does not contain a class that is a subclass of Server32"
+            raise AttributeError(msg)
 
         # the Server32 subclass expects the values for all kwargs
         # to be of type string

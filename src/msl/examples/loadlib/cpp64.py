@@ -117,7 +117,8 @@ class Cpp64(Client64):
         :return: The total distance connecting the 4 points.
         """
         if not isinstance(points, FourPoints):
-            raise TypeError(f"Must pass in a FourPoints object. Got {type(points)}")
+            msg = f"Must pass in a FourPoints object. Got {type(points)}"
+            raise TypeError(msg)
         return self.request32("distance_4_points", points)
 
     def circumference(self, radius: float, n: int) -> float:
