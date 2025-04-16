@@ -405,10 +405,12 @@ class Icon:
         self._hicon: int | None = None
 
         if shell32 is None:
-            raise OSError("Loading an icon is not supported on this platform")
+            msg = "Loading an icon is not supported on this platform"
+            raise OSError(msg)
 
         if index < 0:
-            raise ValueError("A negative index is not supported")
+            msg = "A negative index is not supported"
+            raise ValueError(msg)
 
         if hinstance is None:
             hinstance = kernel32.GetModuleHandleW(None)
@@ -475,7 +477,8 @@ class MenuItem:
     def checked(self, value: bool) -> None:
         """Set the checked state of the menu item."""
         if self._hmenu == -1:
-            raise ValueError("A MenuItem must first be added to a Menu before it can be checked")
+            msg = "A MenuItem must first be added to a Menu before it can be checked"
+            raise ValueError(msg)
 
         # MF_CHECKED=8, MF_UNCHECKED=0
         state = 8 if value else 0
@@ -556,7 +559,8 @@ class MenuGroup:
         """Sets the menu item that is currently checked in the group."""
         for i in self:
             if i.hmenu == -1:
-                raise ValueError("A MenuGroup must first be added to a Menu before a MenuItem can be checked")
+                msg = "A MenuGroup must first be added to a Menu before a MenuItem can be checked"
+                raise ValueError(msg)
             i.checked = i == item
 
     @property
@@ -672,7 +676,8 @@ class Application:
         self._msg_handlers: list[Callable[[int, int, int, int], None]] = []
 
         if WNDCLASSEXW is None:
-            raise OSError("An ActiveX application is not supported on this platform")
+            msg = "An ActiveX application is not supported on this platform"
+            raise OSError(msg)
 
         if isinstance(icon, Icon):
             h_icon = icon.hicon
@@ -710,7 +715,8 @@ class Application:
         # by registering the "AtlAxWin" window class so that this window
         # class is available to the CreateWindowExW function
         if not atl.AtlAxWinInit():
-            raise OSError('Cannot register the "AtlAxWin" window class')
+            msg = "Cannot register the 'AtlAxWin' window class"
+            raise OSError(msg)
 
     def __del__(self) -> None:
         for ec in self._event_connections:
@@ -805,7 +811,8 @@ class Application:
         :return: The interface pointer to the ActiveX library.
         """
         if comtypes is None:
-            raise OSError("comtypes must be installed to load an ActiveX library")
+            msg = "comtypes must be installed to load an ActiveX library"
+            raise OSError(msg)
 
         try:
             window_name = str(comtypes.GUID.from_progid(activex_id))

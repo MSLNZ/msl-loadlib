@@ -331,7 +331,8 @@ def generate_com_wrapper(lib: Any, out_dir: str | None = None) -> ModuleType:
     :return: The wrapper module that was generated.
     """
     if not is_comtypes_installed():
-        raise OSError("Cannot create a COM wrapper because comtypes is not installed, run\n  pip install comtypes")
+        msg = "Cannot create a COM wrapper because comtypes is not installed, run\n  pip install comtypes"
+        raise OSError(msg)
 
     import comtypes.client
 

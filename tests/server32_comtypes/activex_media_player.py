@@ -32,7 +32,8 @@ class ActiveX(Server32):
         except OSError as e:
             return str(e)
         else:
-            raise OSError("Did not raise OSError")
+            msg = "Did not raise OSError"
+            raise OSError(msg)
 
     def error2(self):
         try:
@@ -40,4 +41,5 @@ class ActiveX(Server32):
         except OSError as e:
             return str(e)
         else:
-            raise OSError("Did not raise OSError")
+            msg = "Did not raise OSError"
+            raise OSError(msg)

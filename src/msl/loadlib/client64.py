@@ -361,7 +361,8 @@ class HTTPClient:
         self._conn.request("POST", f"protocol={self._pickle_protocol}&path={self._pickle_path}")
         response = self._conn.getresponse()
         if response.status != OK:
-            raise Server32Error("Cannot set pickle info")
+            value = "Cannot set pickle info"
+            raise Server32Error(value)
 
         self._meta32 = self.request32(METADATA)
 
@@ -402,7 +403,8 @@ class HTTPClient:
     def request32(self, name: str, *args: Any, **kwargs: Any) -> Any:
         """Send a request to the 32-bit server."""
         if self._conn is None:
-            raise Server32Error("The connection to the 32-bit server is closed")
+            value= "The connection to the 32-bit server is closed"
+            raise Server32Error(value)
 
         with open(self._pickle_path, mode="wb") as f:
             pickle.dump(args, f, protocol=self._pickle_protocol)

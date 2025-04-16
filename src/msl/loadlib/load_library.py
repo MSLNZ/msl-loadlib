@@ -179,7 +179,8 @@ class LoadLibrary:
             self._lib = ctypes.OleDLL(self._path, **kwargs)
         elif libtype == "com":
             if not utils.is_comtypes_installed():
-                raise OSError("Cannot load a COM library because comtypes is not installed.\nRun: pip install comtypes")
+                msg = "Cannot load a COM library because comtypes is not installed.\nRun: pip install comtypes"
+                raise OSError(msg)
 
             from comtypes import GUID
             from comtypes.client import CreateObject
@@ -203,7 +204,8 @@ class LoadLibrary:
 
         elif libtype == "java":
             if not utils.is_py4j_installed():
-                raise OSError("Cannot load a Java file because Py4J is not installed.\nRun: pip install py4j")
+                msg = "Cannot load a Java file because Py4J is not installed.\nRun: pip install py4j"
+                raise OSError(msg)
 
             from py4j.version import __version__
             from py4j.java_gateway import JavaGateway, GatewayParameters
@@ -276,9 +278,8 @@ class LoadLibrary:
 
         elif libtype == "net" or libtype == "clr":
             if not utils.is_pythonnet_installed():
-                raise OSError(
-                    "Cannot load a .NET Assembly because pythonnet is not installed.\nRun: pip install pythonnet"
-                )
+                msg = "Cannot load a .NET Assembly because pythonnet is not installed.\nRun: pip install pythonnet"
+                raise OSError(msg)
 
             import clr  # noqa: clr is an alias for pythonnet
             import System  # noqa: available once pythonnet is imported
@@ -328,7 +329,9 @@ class LoadLibrary:
                     if status == 0:
                         msg = f"Checking .NET config returned {msg!r} and still cannot load the library.\n{err}"
                     raise OSError(msg)
-                raise OSError('The above "System.IO.FileLoadException" is not handled.\n')
+
+                msg = "The above 'System.IO.FileLoadException' is not handled.\n"
+                raise OSError(msg)
 
             try:
                 types = self._assembly.GetTypes()
