@@ -343,7 +343,7 @@ VSVersionInfo(
         StringStruct('OriginalFilename', '{constants.SERVER_FILENAME}'),
         StringStruct('ProductName', 'Python'),
         StringStruct('ProductVersion', '{sys.version_info.major}.{sys.version_info.minor}.{sys.version_info.micro}.0')])
-      ]), 
+      ]),
     VarFileInfo([VarStruct('Translation', [0, 1200])])
   ]
 )
