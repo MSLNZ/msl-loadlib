@@ -41,4 +41,4 @@ def test_killed():
 
     assert len(warn_info.list) == 1
     assert warn_info.list[0].filename == __file__
-    assert warn_info.list[0].lineno == 42  # occurs at hangs.shutdown_server32 above
+    assert warn_info.list[0].lineno == 40  # occurs at hangs.shutdown_server32 above
