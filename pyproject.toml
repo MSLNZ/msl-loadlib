@@ -11,7 +11,7 @@ maintainers = [
     {name = "Joseph Borbely", email = "joseph.borbely@measurement.govt.nz"},
 ]
 requires-python = ">=3.8"
-readme = "README.rst"
+readme = "README.md"
 classifiers = [
     "Development Status :: 5 - Production/Stable",
     "Intended Audience :: Developers",
@@ -142,7 +142,7 @@ rebuild = ["clean", "build", "show"]
 addopts = [
     "--verbose",
     "--doctest-modules",
-    "--doctest-glob=*.rst",
+    "--doctest-glob=*.md",
     "--import-mode=importlib",
     "--ignore=hatch_build.py",
     "--ignore=docs/conf.py",
