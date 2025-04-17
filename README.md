@@ -4,7 +4,7 @@
 [![Docs Status](https://github.com/MSLNZ/msl-loadlib/actions/workflows/docs.yml/badge.svg)](https://github.com/MSLNZ/msl-loadlib/actions/workflows/docs.yml)
 [![PyPI - Version](https://img.shields.io/pypi/v/msl-loadlib?logo=pypi&logoColor=gold&label=PyPI&color=blue)](https://pypi.org/project/msl-loadlib/)
 
-This package loads a shared library in Python. It is basically just a thin wrapper around [ctypes] (for libraries that use the `__cdecl` or `__stdcall` calling convention), [Python for .NET] (for libraries that use Microsoft .NET, `CLR`), [Py4J] (for Java `.jar` or `.class` files) and [comtypes] (for libraries that use the [Component Object Model]).
+This package loads a shared library in Python. It is basically just a thin wrapper around [ctypes] (for libraries that use the `__cdecl` or `__stdcall` calling convention), [Python for .NET] (for libraries that use Microsoft .NET, `CLR`), [Py4J] (for Java `.jar` or `.class` files) and [comtypes] (for libraries that use the [Component Object Model] or [ActiveX]).
 
 However, the primary advantage is that it is possible to communicate with a 32-bit library from 64-bit Python.
 
@@ -150,3 +150,4 @@ The documentation for `msl-loadlib` can be found [here](https://msl-loadlib.read
 [Java Virtual Machine]: https://en.wikipedia.org/wiki/Java_virtual_machine
 [comtypes]: https://comtypes.readthedocs.io/en/stable/index.html
 [Component Object Model]: https://en.wikipedia.org/wiki/Component_Object_Model
+[ActiveX]: https://en.wikipedia.org/wiki/ActiveX

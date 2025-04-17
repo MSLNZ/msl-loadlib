@@ -1,0 +1,101 @@
+site_name: MSL-LoadLib
+site_description: Load a shared library (and access a 32-bit library from 64-bit Python)
+copyright: Copyright &copy; 2017 - 2025 Measurement Standards Laboratory of New Zealand
+repo_url: https://github.com/MSLNZ/msl-loadlib/
+site_url: https://github.com/MSLNZ/msl-loadlib/
+
+theme:
+  name: material
+  language: en
+  favicon: assets/images/favicon.ico
+  features:
+    - content.code.copy
+    - navigation.expand
+    - navigation.footer
+    - navigation.indexes
+    - navigation.sections
+    - navigation.top
+    - search.highlight
+    - search.suggest
+  palette:
+    # Palette toggle for automatic mode
+    - media: '(prefers-color-scheme)'
+      primary: indigo
+      accent: indigo
+      toggle:
+        icon: material/brightness-auto
+        name: Switch to light mode
+
+    # Palette toggle for light mode
+    - media: "(prefers-color-scheme: light)"
+      scheme: default
+      primary: indigo
+      accent: indigo
+      toggle:
+        icon: material/weather-sunny
+        name: Switch to dark mode
+
+    # Palette toggle for dark mode
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
+      primary: black
+      accent: deep orange
+      toggle:
+        icon: material/weather-night
+        name: Switch to system preference
+
+watch: [src]
+
+nav:
+  - Overview: index.md
+  - Install: install.md
+  - About:
+    - Developers: about/developers.md
+    - Release Notes: about/release-notes.md
+    - License: about/license.md
+
+markdown_extensions:
+  - abbr
+  - admonition  # enables: !!! tip
+  - attr_list  # enables: [link](url){:target="_blank"}
+  - pymdownx.snippets:  # enables: --8<--
+  - toc:
+      permalink: "¤"
+
+plugins:
+  - search
+  - autorefs
+  - mkdocstrings:
+      handlers:
+        python:
+          paths: [src]
+          inventories:
+            - url: https://docs.python.org/3/objects.inv
+              domains: [std, py]
+          options:
+            # General
+            show_source: false
+
+            # Headings
+            show_root_toc_entry: false
+
+            # Members
+            filters: ["!^_"]
+            inherited_members: true
+
+            # Docstrings
+            docstring_options:
+              ignore_init_summary: true
+            merge_init_into_class: true
+
+            # Signatures
+            separate_signature: true
+
+extra:
+  version:
+    provider: mike
+  social:
+  - icon: fontawesome/brands/github
+    link: https://github.com/MSLNZ/msl-loadlib/
+  - icon: fontawesome/brands/python
+    link: https://pypi.org/project/msl-loadlib/
