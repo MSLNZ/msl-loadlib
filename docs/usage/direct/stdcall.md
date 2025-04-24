@@ -4,6 +4,7 @@ Load a 32-bit Windows `__stdcall` library in 32-bit Python, see [kernel32]{:targ
 
 <!-- invisible-code-block: pycon
 >>> SKIP_IF_NOT_WINDOWS() or SKIP_IF_64BIT()
+
 -->
 
 ```pycon
