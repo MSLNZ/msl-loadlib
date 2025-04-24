@@ -1,5 +1,23 @@
-"""
-Helper module for loading an ActiveX library in an application window.
+"""Helper module for loading an ActiveX library in an application window.
+
+The following classes are available to interact with ActiveX controls
+
+* [Application][msl.loadlib.activex.Application]
+* [Icon][msl.loadlib.activex.Icon]
+* [Menu][msl.loadlib.activex.Menu]
+* [MenuGroup][msl.loadlib.activex.MenuGroup]
+* [MenuItem][msl.loadlib.activex.MenuItem]
+
+and the following enumerations
+
+* [Colour][msl.loadlib.activex.Colour]
+* [ExtendedWindowStyle][msl.loadlib.activex.ExtendedWindowStyle]
+* [MenuFlag][msl.loadlib.activex.MenuFlag]
+* [MessageBoxOption][msl.loadlib.activex.MessageBoxOption]
+* [ShowWindow][msl.loadlib.activex.ShowWindow]
+* [WindowClassStyle][msl.loadlib.activex.WindowClassStyle]
+* [WindowPosition][msl.loadlib.activex.WindowPosition]
+* [WindowStyle][msl.loadlib.activex.WindowStyle]
 """
 
 from __future__ import annotations
@@ -24,8 +42,16 @@ WM_COMMAND = 0x0111
 WM_DESTROY = 0x0002
 
 
-class Background(IntEnum):
-    """Background colours."""
+class Colour(IntEnum):
+    """Background colour.
+
+    Attributes:
+        WHITE (int): 0
+        LIGHT_GREY (int): 1
+        GREY (int): 2
+        DARK_GREY (int): 3
+        BLACK (int): 4
+    """
 
     WHITE = 0
     LIGHT_GREY = 1
@@ -34,10 +60,26 @@ class Background(IntEnum):
     BLACK = 4
 
 
-class ClassStyle(IntFlag):
-    """Window class style flags. See
-    `window-class-styles <https://learn.microsoft.com/en-us/windows/win32/winmsg/window-class-styles#constants>`_
-    for more details."""
+class WindowClassStyle(IntFlag):
+    """[Window class style]{:target="_blank"} flags.
+
+    [Window class style]: https://learn.microsoft.com/en-us/windows/win32/winmsg/window-class-styles#constants
+
+    Attributes:
+        NONE (int): 0x0000
+        BYTEALIGNCLIENT (int): 0x1000
+        BYTEALIGNWINDOW (int): 0x2000
+        CLASSDC (int): 0x0040
+        DBLCLKS (int): 0x0008
+        DROPSHADOW (int): 0x00020000
+        GLOBALCLASS (int): 0x4000
+        HREDRAW (int): 0x0002
+        NOCLOSE (int): 0x0200
+        OWNDC (int): 0x0020
+        PARENTDC (int): 0x0080
+        SAVEBITS (int): 0x0800
+        VREDRAW (int): 0x0001
+    """
 
     NONE = 0
     BYTEALIGNCLIENT = 0x1000
@@ -55,11 +97,40 @@ class ClassStyle(IntFlag):
 
 
 class ExtendedWindowStyle(IntFlag):
-    """Extended window style flags. See
-    `extended-window-styles <https://learn.microsoft.com/en-us/windows/win32/winmsg/extended-window-styles>`_
-    for more details."""
+    """[Extended window style]{:target="_blank"} flags.
 
-    NONE = 0
+    [Extended window style]: https://learn.microsoft.com/en-us/windows/win32/winmsg/extended-window-styles
+
+    Attributes:
+        DLGMODALFRAME (int): 0x00000001
+        NOPARENTNOTIFY (int): 0x00000004
+        TOPMOST (int): 0x00000008
+        ACCEPTFILES (int): 0x00000010
+        TRANSPARENT (int): 0x00000020
+        MDICHILD (int): 0x00000040
+        TOOLWINDOW (int): 0x00000080
+        WINDOWEDGE (int): 0x00000100
+        CLIENTEDGE (int): 0x00000200
+        CONTEXTHELP (int): 0x00000400
+        RIGHT (int): 0x00001000
+        LEFT (int): 0x00000000
+        RTLREADING (int): 0x00002000
+        LTRREADING (int): 0x00000000
+        LEFTSCROLLBAR (int): 0x00004000
+        RIGHTSCROLLBAR (int): 0x00000000
+        CONTROLPARENT (int): 0x00010000
+        STATICEDGE (int): 0x00020000
+        APPWINDOW (int): 0x00040000
+        LAYERED (int): 0x00080000
+        NOINHERITLAYOUT (int): 0x00100000
+        NOREDIRECTIONBITMAP (int): 0x00200000
+        LAYOUTRTL (int): 0x00400000
+        COMPOSITED (int): 0x02000000
+        NOACTIVATE (int): 0x08000000
+        OVERLAPPEDWINDOW (int): WINDOWEDGE | CLIENTEDGE
+        PALETTEWINDOW (int): WINDOWEDGE | TOOLWINDOW | TOPMOST
+    """
+
     DLGMODALFRAME = 0x00000001
     NOPARENTNOTIFY = 0x00000004
     TOPMOST = 0x00000008
@@ -90,9 +161,24 @@ class ExtendedWindowStyle(IntFlag):
 
 
 class MenuFlag(IntFlag):
-    """Menu item flags. See
-    `append-menu <https://learn.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-appendmenuw>`_
-    for more details."""
+    """[Menu]{:target="_blank"} item flags.
+
+    [Menu]: https://learn.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-appendmenuw
+
+    Attributes:
+        BITMAP (int): 0x00000004
+        CHECKED (int): 0x00000008
+        DISABLED (int): 0x00000002
+        ENABLED (int): 0x00000000
+        GRAYED (int): 0x00000001
+        MENUBARBREAK (int): 0x00000020
+        MENUBREAK (int): 0x00000040
+        OWNERDRAW (int): 0x00000100
+        POPUP (int): 0x00000010
+        SEPARATOR (int): 0x00000800
+        STRING (int): 0x00000000
+        UNCHECKED (int): 0x00000000
+    """
 
     BITMAP = 0x00000004
     CHECKED = 0x00000008
@@ -109,9 +195,41 @@ class MenuFlag(IntFlag):
 
 
 class MessageBoxOption(IntFlag):
-    """Message box options. See
-    `message-box <https://learn.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-messagebox>`_
-    for more details."""
+    """[Message box]{:target="_blank"} flags.
+
+    [Message box]: https://learn.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-messagebox
+
+    Attributes:
+        ABORTRETRYIGNORE (int): 0x00000002
+        CANCELTRYCONTINUE (int): 0x00000006
+        HELP (int): 0x00004000
+        OK (int): 0x00000000
+        OKCANCEL (int): 0x00000001
+        RETRYCANCEL (int): 0x00000005
+        YESNO (int): 0x00000004
+        YESNOCANCEL (int): 0x00000003
+        ICONEXCLAMATION (int): 0x00000030
+        ICONWARNING (int): 0x00000030
+        ICONINFORMATION (int): 0x00000040
+        ICONASTERISK (int): 0x00000040
+        ICONQUESTION (int): 0x00000020
+        ICONSTOP (int): 0x00000010
+        ICONERROR (int): 0x00000010
+        ICONHAND (int): 0x00000010
+        DEFBUTTON1 (int): 0x00000000
+        DEFBUTTON2 (int): 0x00000100
+        DEFBUTTON3 (int): 0x00000200
+        DEFBUTTON4 (int): 0x00000300
+        APPLMODAL (int): 0x00000000
+        SYSTEMMODAL (int): 0x00001000
+        TASKMODAL (int): 0x00002000
+        DEFAULT_DESKTOP_ONLY (int): 0x00020000
+        RIGHT (int): 0x00080000
+        RTLREADING (int): 0x00100000
+        SETFOREGROUND (int): 0x00010000
+        TOPMOST (int): 0x00040000
+        SERVICE_NOTIFICATION (int): 0x00200000
+    """
 
     ABORTRETRYIGNORE = 0x00000002
     CANCELTRYCONTINUE = 0x00000006
@@ -144,10 +262,29 @@ class MessageBoxOption(IntFlag):
     SERVICE_NOTIFICATION = 0x00200000
 
 
-class PositionFlag(IntFlag):
-    """Window position flags. See
-    `set-window-pos <https://learn.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-setwindowpos>`_
-    for more details."""
+class WindowPosition(IntFlag):
+    """[Window position]{:target="_blank"} flags.
+
+    [Window position]: https://learn.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-setwindowpos
+
+    Attributes:
+        NONE (int): 0x0000
+        ASYNCWINDOWPOS (int): 0x4000
+        DEFERERASE (int): 0x2000
+        DRAWFRAME (int): 0x0020
+        FRAMECHANGED (int): 0x0020
+        HIDEWINDOW (int): 0x0080
+        NOACTIVATE (int): 0x0010
+        NOCOPYBITS (int): 0x0100
+        NOMOVE (int): 0x0002
+        NOOWNERZORDER (int): 0x0200
+        NOREDRAW (int): 0x0008
+        NOREPOSITION (int): 0x0200
+        NOSENDCHANGING (int): 0x0400
+        NOSIZE (int): 0x0001
+        NOZORDER (int): 0x0004
+        SHOWWINDOW (int): 0x0040
+    """
 
     NONE = 0
     ASYNCWINDOWPOS = 0x4000
@@ -168,9 +305,26 @@ class PositionFlag(IntFlag):
 
 
 class ShowWindow(IntEnum):
-    """Show window commands. See
-    `show-window <https://learn.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-showwindow>`_
-    for more details."""
+    """[Show window]{:target="_blank"} options.
+
+    [Show window]: https://learn.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-showwindow
+
+    Attributes:
+        HIDE (int): 0
+        SHOWNORMAL (int): 1
+        NORMAL (int): 1
+        SHOWMINIMIZED (int): 2
+        SHOWMAXIMIZED (int): 3
+        MAXIMIZE (int): 3
+        SHOWNOACTIVATE (int): 4
+        SHOW (int): 5
+        MINIMIZE (int): 6
+        SHOWMINNOACTIVE (int): 7
+        SHOWNA (int): 8
+        RESTORE (int): 9
+        SHOWDEFAULT (int): 10
+        FORCEMINIMIZE (int): 11
+    """
 
     HIDE = 0
     SHOWNORMAL = 1
@@ -189,9 +343,39 @@ class ShowWindow(IntEnum):
 
 
 class WindowStyle(IntFlag):
-    """Window style flags. See
-    `window-styles <https://learn.microsoft.com/en-us/windows/win32/winmsg/window-styles>`_
-    for more details."""
+    """[Window style]{:target="_blank"} flags.
+
+    [Window styles]: https://learn.microsoft.com/en-us/windows/win32/winmsg/window-styles
+
+    Attributes:
+        OVERLAPPED (int): 0x00000000
+        POPUP (int): 0x80000000
+        CHILD (int): 0x40000000
+        MINIMIZE (int): 0x20000000
+        VISIBLE (int): 0x10000000
+        DISABLED (int): 0x08000000
+        CLIPSIBLINGS (int): 0x04000000
+        CLIPCHILDREN (int): 0x02000000
+        MAXIMIZE (int): 0x01000000
+        CAPTION (int): 0x00C00000
+        BORDER (int): 0x00800000
+        DLGFRAME (int): 0x00400000
+        VSCROLL (int): 0x00200000
+        HSCROLL (int): 0x00100000
+        SYSMENU (int): 0x00080000
+        THICKFRAME (int): 0x00040000
+        GROUP (int): 0x00020000
+        TABSTOP (int): 0x00010000
+        MINIMIZEBOX (int): 0x00020000
+        MAXIMIZEBOX (int): 0x00010000
+        TILED (int): OVERLAPPED
+        ICONIC (int): MINIMIZE
+        SIZEBOX (int): THICKFRAME
+        OVERLAPPEDWINDOW (int): OVERLAPPED | CAPTION | SYSMENU | THICKFRAME | MINIMIZEBOX | MAXIMIZEBOX
+        POPUPWINDOW (int): POPUP | BORDER | SYSMENU
+        CHILDWINDOW (int): CHILD
+        TILEDWINDOW (int): OVERLAPPEDWINDOW
+    """
 
     OVERLAPPED = 0x00000000
     POPUP = 0x80000000
@@ -238,7 +422,9 @@ try:
     WNDPROC = ctypes.WINFUNCTYPE(LRESULT, wt.HWND, wt.UINT, wt.WPARAM, wt.LPARAM)
 
     class WNDCLASSEXW(ctypes.Structure):
-        _fields_ = [
+        """Contains window class information."""
+
+        _fields_ = (
             ("cbSize", wt.UINT),
             ("style", wt.UINT),
             ("lpfnWndProc", WNDPROC),
@@ -251,7 +437,7 @@ try:
             ("lpszMenuName", wt.LPCWSTR),
             ("lpszClassName", wt.LPCWSTR),
             ("hIconSm", wt.HICON),
-        ]
+        )
 
     kernel32.GetModuleHandleW.restype = wt.HMODULE
     kernel32.GetModuleHandleW.argtypes = [wt.LPCWSTR]
@@ -383,10 +569,10 @@ def _create_window(
     y: int = CW_USEDEFAULT,
     width: int = CW_USEDEFAULT,
     height: int = CW_USEDEFAULT,
-    parent: int = None,
-    menu: int = None,
-    instance: int = None,
-    param: int = None,
+    parent: int | None = None,
+    menu: int | None = None,
+    instance: int | None = None,
+    param: int | None = None,
 ) -> int:
     """Create a new Window and return the handle."""
     return user32.CreateWindowExW(
@@ -395,12 +581,15 @@ def _create_window(
 
 
 class Icon:
-    def __init__(self, file: str, *, index: int = 0, hinstance: int = None) -> None:
+    """Extract an icon from an executable file, DLL or icon file."""
+
+    def __init__(self, file: str, *, index: int = 0, hinstance: int | None = None) -> None:
         """Extract an icon from an executable file, DLL or icon file.
 
-        :param file: The path to an executable file, DLL or icon file.
-        :param index: The zero-based index of the icon to extract.
-        :param hinstance: Handle to the instance of the calling application.
+        Args:
+            file: The path to an executable file, DLL or icon file.
+            index: The zero-based index of the icon to extract.
+            hinstance: Handle to the instance of the calling application.
         """
         self._hicon: int | None = None
 
@@ -420,14 +609,16 @@ class Icon:
         self._hicon = shell32.ExtractIconW(hinstance, file, index)
 
     def __repr__(self) -> str:
+        """Returns the string representation."""
         return f"<Icon file={self._file!r} index={self._index}>"
 
     def __del__(self) -> None:
+        """Destroys the icon and frees any memory the icon occupied."""
         self.destroy()
 
     @property
     def hicon(self) -> int | None:
-        """Returns the handle to the icon or :data:`None` if no icon was found."""
+        """[int][] | `None`: The handle to the icon or `None` if no icon was found."""
         return self._hicon
 
     def destroy(self) -> None:
@@ -438,11 +629,16 @@ class Icon:
 
 
 class MenuItem:
+    """A menu item that belongs to a popup menu."""
+
     def __init__(self, **kwargs) -> None:
         """A menu item that belongs to a popup menu.
 
-        Do not instantiate this class directly. Use :meth:`.MenuGroup.append`
-        or :meth:`.Menu.append` to create a new menu item.
+        !!! warning
+            Do not instantiate this class directly. Use
+            [MenuGroup.append][msl.loadlib.activex.MenuGroup.append]
+            or [Menu.append][msl.loadlib.activex.Menu.append]
+            to create a new menu item.
         """
         self._hmenu: int = kwargs["hmenu"]
         self._id: int = kwargs["id"]
@@ -455,22 +651,24 @@ class MenuItem:
         """User data associated with the menu item."""
 
     def __eq__(self, other: MenuItem) -> bool:
+        """Checks for equal id's."""
         try:
             return self.id == other.id
         except AttributeError:
             return False
 
     def __repr__(self) -> str:
+        """Returns the string representation."""
         return f"<{self.__class__.__name__} id={self._id} text={self._text!r}>"
 
     @property
     def callback(self) -> Callback | None:
-        """The callback function to call when the menu item is clicked."""
+        """[Callback][] | `None`: The callback function to call when the menu item is clicked."""
         return self._callback
 
     @property
     def checked(self) -> bool:
-        """Whether the menu item's check mark is shown."""
+        """[bool][]: Whether the menu item's check mark is shown."""
         return self._checked
 
     @checked.setter
@@ -489,55 +687,64 @@ class MenuItem:
 
     @property
     def flags(self) -> int:
-        """The flags that were used to create the menu item."""
+        """[int][]: The flags that were used to create the menu item."""
         return self._flags
 
     @property
     def hmenu(self) -> int:
-        """The handle to the popup menu that the menu item belongs to."""
+        """[int][]" The handle to the popup menu that the menu item belongs to."""
         return self._hmenu
 
     @property
     def id(self) -> int:
-        """The identifier of the menu item."""
+        """[int][]: The identifier of the menu item."""
         return self._id
 
     @property
     def text(self) -> str:
-        """The content of the menu item."""
+        """[str][]: The content of the menu item."""
         return self._text
 
 
 class MenuGroup:
-    def __init__(self, name: str = "") -> None:
-        """A group of :class:`.MenuItem`\\'s where only one item in the group
-        may have a check mark to indicate that a particular item is selected.
+    """A group of [MenuItem][msl.loadlib.activex.MenuItem]s."""
 
-        :param name: A name to associate with the group.
+    def __init__(self, name: str = "") -> None:
+        """A group of [MenuItem][msl.loadlib.activex.MenuItem]s.
+
+        Only one item in the group may have a check mark to indicate
+        that a particular item is selected.
+
+        Args:
+            name: A name to associate with the group.
         """
         self._name = name
         self._items: list[MenuItem] = []
 
     def __repr__(self) -> str:
+        """Returns the string representation."""
         return f"<{self.__class__.__name__} name={self._name!r} size={len(self._items)}>"
 
     def __iter__(self) -> Iterator[MenuItem]:
+        """Returns an iterator of the [MenuItem][msl.loadlib.activex.MenuItem]s."""
         return iter(self._items)
 
     def append(
-        self, text: str, *, callback: Callback | None = None, data: Any = None, flags: int = MenuFlag.STRING
+        self, text: str, *, callback: Callback | None = None, data: Any = None, flags: MenuFlag = MenuFlag.STRING
     ) -> MenuItem:
-        """Create a new :class:`.MenuItem` and append it to the group.
+        """Create a new [MenuItem][msl.loadlib.activex.MenuItem] and append it to the group.
 
-        :param text: The content of the new menu item.
-        :param callback: A callable object that will be called when this menu
-            item is selected. The callable object will receive the :class:`.MenuItem`
-            instance as an argument and the returned object is ignored.
-        :param data: User data associated with the menu item.
-        :param flags: Controls the appearance and behaviour of the new menu item.
-            Can be any combination (bitwise OR) of :class:`.MenuFlag` values.
+        Args:
+            text: The content of the new menu item.
+            callback: A callable object that will be called when this menu item is selected.
+                The callable object will receive the [MenuItem][msl.loadlib.activex.MenuItem]
+                instance as an argument and the returned object is ignored.
+            data: User data associated with the menu item.
+            flags: Controls the appearance and behaviour of the new menu item. Can be any
+                combination (bitwise OR) of [MenuFlag][msl.loadlib.activex.MenuFlag] values.
 
-        :return: The menu item that was appended to the group.
+        Returns:
+            The menu item that was appended to the group.
         """
         item = MenuItem(hmenu=-1, text=text, callback=callback, id=-1, flags=flags, data=data)
         self._items.append(item)
@@ -549,10 +756,11 @@ class MenuGroup:
 
     @property
     def checked(self) -> MenuItem | None:
-        """Returns the menu item that is currently checked in the group."""
+        """[MenuItem][msl.loadlib.activex.MenuItem] | `None`: The menu item that is currently checked in the group."""
         for item in self:
             if item.checked:
                 return item
+        return None
 
     @checked.setter
     def checked(self, item: MenuItem | None) -> None:
@@ -565,43 +773,52 @@ class MenuGroup:
 
     @property
     def name(self) -> str:
-        """Returns the name of the menu group."""
+        """[str][]: The name of the menu group."""
         return self._name
 
 
-# TypeAlias
-Callback = Callable[[MenuItem], None]
-
-
 class Menu:
+    """A menu associated with the main application window."""
+
     def __init__(self) -> None:
         """A menu associated with the main application window.
 
-        Do not instantiate directly. Use the :attr:`.Application.menu`
-        property to access the menu instance.
+        !!! warning
+            Do not instantiate directly. Use the
+            [Application.menu][msl.loadlib.activex.Application.menu]
+            property to access the menu instance.
         """
         self._id = 0
         self._items: dict[int, MenuItem] = {}
         self._hmenu: int = user32.CreateMenu()
 
     def __getitem__(self, item: int) -> MenuItem:
+        """Get a [MenuItem][msl.loadlib.activex.MenuItem]."""
         return self._items[item]
 
     def append(
-        self, hmenu: int, text: str, *, callback: Callback | None = None, data: Any = None, flags: int = MenuFlag.STRING
+        self,
+        hmenu: int,
+        text: str,
+        *,
+        callback: Callback | None = None,
+        data: Any = None,
+        flags: MenuFlag = MenuFlag.STRING,
     ) -> MenuItem:
-        """Create a new :class:`.MenuItem` and append it to a popup menu.
+        """Create a new [MenuItem][msl.loadlib.activex.MenuItem] and append it to a popup menu.
 
-        :param hmenu: The handle of a popup menu to append the new menu item to.
-        :param text: The content of the new menu item.
-        :param callback: A callable object that will be called when this menu
-            item is selected. The callable object will receive the :class:`.MenuItem`
-            instance as an argument and the returned object is ignored.
-        :param data: User data associated with the menu item.
-        :param flags: Controls the appearance and behaviour of the new menu item.
-            Can be any combination (bitwise OR) of :class:`.MenuFlag` values.
+        Args:
+            hmenu: The handle of a popup menu to append the new menu item to.
+            text: The content of the new menu item.
+            callback: A callable object that will be called when this menu item is selected.
+                The callable object will receive the [MenuItem][msl.loadlib.activex.MenuItem]
+                instance as an argument and the returned object is ignored.
+            data: User data associated with the menu item.
+            flags: Controls the appearance and behaviour of the new menu item. Can be any
+                combination (bitwise OR) of [MenuFlag][msl.loadlib.activex.MenuFlag] values.
 
-        :return: The menu item that was appended.
+        Returns:
+            The menu item that was appended.
         """
         self._id += 1
         user32.AppendMenuW(hmenu, flags, self._id, text)
@@ -612,8 +829,9 @@ class Menu:
     def append_group(self, hmenu: int, menu_group: MenuGroup) -> None:
         """Append a group of menu items to a popup menu.
 
-        :param hmenu: The handle of a popup menu to append the group to.
-        :param menu_group: A group of menu items.
+        Args:
+            hmenu: The handle of a popup menu to append the group to.
+            menu_group: A group of menu items.
         """
         for item in menu_group:
             self._id += 1
@@ -625,7 +843,8 @@ class Menu:
     def append_separator(self, hmenu: int) -> None:
         """Append a horizontal dividing line to a popup menu.
 
-        :param hmenu: The handle to a popup menu.
+        Args:
+            hmenu: The handle to a popup menu.
         """
         self._id += 1
         user32.AppendMenuW(hmenu, MenuFlag.SEPARATOR, self._id, None)
@@ -633,9 +852,11 @@ class Menu:
     def create(self, text: str) -> int:
         """Create a new popup menu and append it to the main menu.
 
-        :param text: The text to display for the popup menu.
+        Args:
+            text: The text to display for the popup menu.
 
-        :return: The handle to the popup menu that was created.
+        Returns:
+            The handle to the popup menu that was created.
         """
         flags = MenuFlag.STRING | MenuFlag.POPUP
         h: int = user32.CreatePopupMenu()
@@ -644,30 +865,32 @@ class Menu:
 
     @property
     def hmenu(self) -> int:
-        """Returns the handle to the main menu."""
+        """[int][]: The handle to the main menu."""
         return self._hmenu
 
 
 class Application:
+    """Create the main application window to display ActiveX controls."""
+
     def __init__(
         self,
         *,
-        background: int = Background.WHITE,
-        class_style: int = ClassStyle.NONE,
-        icon: Icon = None,
-        style: int = WindowStyle.OVERLAPPEDWINDOW,
+        background: Colour = Colour.WHITE,
+        class_style: WindowClassStyle = WindowClassStyle.NONE,
+        icon: Icon | None = None,
+        style: WindowStyle = WindowStyle.OVERLAPPEDWINDOW,
         title: str = "ActiveX",
     ) -> None:
         """Create the main application window to display ActiveX controls.
 
-        :param background: The background colour of the main window
-            (a :class:`.Background` value).
-        :param class_style: The class style(s). Can be any combination
-            (bitwise OR) of :class:`.ClassStyle` values.
-        :param icon: The application icon.
-        :param style: The window style(s). Can be any combination (bitwise OR)
-            of :class:`.WindowStyle` values.
-        :param title: The text to display in the titlebar (if one is visible).
+        Args:
+            background: The background colour of the main window.
+            class_style: The class style(s). Can be any combination (bitwise OR)
+                of [WindowClassStyle][msl.loadlib.activex.WindowClassStyle] values.
+            icon: The application icon.
+            style: The window style(s). Can be any combination (bitwise OR)
+                of [WindowStyle][msl.loadlib.activex.WindowStyle] values.
+            title: The text to display in the titlebar (if one is visible).
         """
         super().__init__()
         self._atom = None
@@ -719,6 +942,7 @@ class Application:
             raise OSError(msg)
 
     def __del__(self) -> None:
+        """Destroy all event handlers and unregister the window."""
         for ec in self._event_connections:
             ec.disconnect()
         self._event_connections.clear()
@@ -748,11 +972,12 @@ class Application:
 
         Messages correspond to events from the user and from the operating system.
 
-        :param handler: A function that processes messages sent to the main window.
-            The function must accept four positional arguments (all integer
-            values) and the returned object is ignored. See
-            `WindowProc <https://learn.microsoft.com/en-us/windows/win32/learnwin32/writing-the-window-procedure>`_
-            for more details about the input arguments to the `handler`.
+        Args:
+            handler: A function that processes messages sent to the main window.
+                The function must accept four positional arguments (all integer values)
+                and the returned object is ignored. See
+                [WindowProc](https://learn.microsoft.com/en-us/windows/win32/learnwin32/writing-the-window-procedure){:target="_blank"}
+                for more details about the input arguments to the `handler`.
         """
         self._msg_handlers.append(handler)
 
@@ -760,16 +985,19 @@ class Application:
         """Close the application."""
         user32.PostMessageW(self._hwnd, WM_DESTROY, 0, 0)
 
-    def handle_events(self, source: Any, sink: Callable[..., Any] = None, *, interface: Any = None):
+    def handle_events(self, source: Any, sink: Callable[..., Any] | None = None, *, interface: Any = None) -> Any:
         """Handle events from an ActiveX object.
 
-        :param source: An ActiveX object that emits events.
-        :param sink: The object that handles the events. The `sink` must
-            define methods with the same names as the ActiveX event names. If not
-            specified, the :class:`.Application` instance is used as the `sink`.
-        :param interface: The COM interface to use.
+        Args:
+            source: An ActiveX object that emits events.
+            sink: The object that handles the events. The `sink` must
+                define methods with the same names as the ActiveX event names. If not
+                specified, the [Application][msl.loadlib.activex.Application] instance
+                is used as the `sink`.
+            interface: The COM interface to use.
 
-        :return: The advise-connection object.
+        Returns:
+            An `AdviseConnection` object from `comtypes`.
         """
         cxn = client.GetEvents(source, sink or self, interface=interface)
         self._event_connections.append(cxn)
@@ -777,38 +1005,40 @@ class Application:
 
     @property
     def hwnd(self) -> int:
-        """Returns the handle to the main application window."""
+        """[int][]: The handle to the main application window."""
         return self._hwnd
 
     def load(
         self,
         activex_id: str,
         *,
-        parent: int = None,
+        parent: int | None = None,
         x: int = 0,
         y: int = 0,
         width: int = 0,
         height: int = 0,
-        style: int = WindowStyle.VISIBLE | WindowStyle.CHILD,
-        ex_style: int = ExtendedWindowStyle.NONE,
-    ) -> ctypes.POINTER:
+        style: WindowStyle = WindowStyle.VISIBLE | WindowStyle.CHILD,
+        ex_style: ExtendedWindowStyle = ExtendedWindowStyle.LEFT,
+    ) -> Any:
         """Load an ActiveX library.
 
-        :param activex_id: ProgID or CLSID of the ActiveX object.
-        :param parent: The handle to the parent window that the ActiveX object
-            will belong to. Default is the main application window.
-        :param x: Horizontal position of the ActiveX object in the parent window.
-        :param y: Vertical position of the ActiveX object in the parent window.
-        :param width: Width (in pixels) of the ActiveX object.
-        :param height: Height (in pixels) of the ActiveX object.
-        :param style: Style of the window that is created to contain the ActiveX
-            object. Can be any combination (bitwise OR) of :class:`.WindowStyle`
-            values.
-        :param ex_style: Extended style of the window that is created to contain
-            the ActiveX object. Can be any combination (bitwise OR) of
-            :class:`.ExtendedWindowStyle` values.
+        Args:
+            activex_id: ProgID or CLSID of the ActiveX object.
+            parent: The handle to the parent window that the ActiveX object
+                will belong to. Default is the main application window.
+            x: Horizontal position of the ActiveX object in the parent window.
+            y: Vertical position of the ActiveX object in the parent window.
+            width: Width (in pixels) of the ActiveX object.
+            height: Height (in pixels) of the ActiveX object.
+            style: Style of the window that is created to contain the ActiveX
+                object. Can be any combination (bitwise OR) of
+                [WindowStyle][msl.loadlib.activex.WindowStyle] values.
+            ex_style: Extended style of the window that is created to contain
+                the ActiveX object. Can be any combination (bitwise OR) of
+                [ExtendedWindowStyle][msl.loadlib.activex.ExtendedWindowStyle] values.
 
-        :return: The interface pointer to the ActiveX library.
+        Returns:
+            The interface pointer to the ActiveX library.
         """
         if comtypes is None:
             msg = "comtypes must be installed to load an ActiveX library"
@@ -848,24 +1078,30 @@ class Application:
 
     @property
     def menu(self) -> Menu:
-        """Returns the menu instance."""
+        """[Menu][msl.loadlib.activex.Menu]: The menu instance."""
         return self._menu
 
     @staticmethod
     def message_box(
-        *, hwnd: int = None, language_id: int = 0, options: int = MessageBoxOption.OK, text: str = "", title: str = ""
+        *,
+        hwnd: int | None = None,
+        language_id: int = 0,
+        options: MessageBoxOption = MessageBoxOption.OK,
+        text: str = "",
+        title: str = "",
     ) -> int:
-        """Displays a modal dialog box.
+        """Display a modal dialog box.
 
-        :param hwnd: A handle to the owner window of the message box to be created.
-        :param language_id: The language for the text displayed in the message box
-            button(s).
-        :param options: The contents and behaviour of the dialog box. Can be any
-            combination (bitwise OR) of :class:`.MessageBoxOption` values.
-        :param text: The message to be displayed.
-        :param title: The dialog box title.
+        Args:
+            hwnd: A handle to the owner window of the message box to be created.
+            language_id: The language for the text displayed in the message box button(s).
+            options: The contents and behaviour of the dialog box. Can be any combination
+                (bitwise OR) of [MessageBoxOption][msl.loadlib.activex.MessageBoxOption] values.
+            text: The message to be displayed.
+            title: The dialog box title.
 
-        :return: An indication of how the message box was closed.
+        Returns:
+            An indication of how the message box was closed.
         """
         return user32.MessageBoxExW(hwnd, text, title, options, language_id)
 
@@ -884,23 +1120,27 @@ class Application:
         except KeyboardInterrupt:
             pass
 
-    def set_window_position(self, x: int, y: int, width: int, height: int, *, flags: int = PositionFlag.NONE) -> None:
+    def set_window_position(
+        self, x: int, y: int, width: int, height: int, *, flags: WindowPosition = WindowPosition.NONE
+    ) -> None:
         """Set the position of the main window.
 
-        :param x: The new position of the left side of the window.
-        :param y: The new position of the top of the window.
-        :param width: The new width of the window (in pixels).
-        :param height: The new height of the window (in pixels).
-        :param flags: The window sizing and positioning flags. Can be any
-            combination (bitwise OR) of :class:`.PositionFlag` values.
+        Args:
+            x: The new position of the left side of the window.
+            y: The new position of the top of the window.
+            width: The new width (in pixels) of the window.
+            height: The new height (in pixels) of the window.
+            flags: The window sizing and positioning flags. Can be any combination
+                (bitwise OR) of [WindowPosition][msl.loadlib.activex.WindowPosition] values.
         """
         user32.SetWindowPos(self._hwnd, None, x, y, width, height, flags)
 
     def set_window_size(self, width: int, height: int) -> None:
         """Set the size of the main window.
 
-        :param width: The new width of the window (in pixels).
-        :param height: The new height of the window (in pixels).
+        Args:
+            width: The new width (in pixels) of the window.
+            height: The new height (in pixels) of the window.
         """
         # SWP_NOMOVE = 0x0002  Retains the current position (ignores X and Y parameters)
         self.set_window_position(0, 0, width, height, flags=0x0002)
@@ -908,15 +1148,16 @@ class Application:
     def set_window_title(self, title: str) -> None:
         """Set the text to display in the window's title bar.
 
-        :param title: The title bar text.
+        Args:
+            title: The title bar text.
         """
         user32.SetWindowTextW(self._hwnd, title)
 
-    def show(self, command: int = ShowWindow.NORMAL) -> None:
+    def show(self, command: ShowWindow = ShowWindow.NORMAL) -> None:
         """Show the main application window.
 
-        :param command: Controls how the window is shown
-            (a :class:`.ShowWindow` value).
+        Args:
+            command: Controls how the window is shown.
         """
         user32.SetMenu(self._hwnd, self._menu.hmenu)
         user32.ShowWindow(self._hwnd, command)
@@ -924,6 +1165,13 @@ class Application:
 
     @property
     def thread_id(self) -> int:
-        """Returns the identifier of the thread that created the
-        main application window."""
+        """[int][]: The identifier of the thread that created the main application window."""
         return self._thread_id
+
+
+# TypeAlias
+Callback = Callable[[MenuItem], None]
+"""[TypeAlias][typing.TypeAlias] for a callable object to handle a [MenuItem] callback.
+
+[MenuItem]: [msl.loadlib.activex.MenuItem]
+"""

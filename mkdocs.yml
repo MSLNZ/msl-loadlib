@@ -10,11 +10,11 @@ theme:
   favicon: assets/images/favicon.ico
   features:
     - content.code.copy
-    - navigation.expand
     - navigation.footer
     - navigation.indexes
-    - navigation.sections
     - navigation.top
+    - navigation.tabs
+    - navigation.tabs.sticky
     - search.highlight
     - search.suggest
   palette:
@@ -47,18 +47,46 @@ theme:
 watch: [src]
 
 nav:
-  - Overview: index.md
-  - Install: install.md
+  - Overview:
+    - index.md
+    - install.md
+  - User Guide:
+    - usage/overview.md
+    - Direct:
+      - usage/direct/index.md
+      - usage/direct/cpp.md
+      - usage/direct/fortran.md
+      - usage/direct/dotnet.md
+      - usage/direct/java.md
+      - usage/direct/com.md
+      - usage/direct/activex.md
+      - usage/direct/stdcall.md
+      - usage/direct/labview.md
+    - Client-Server:
+      - usage/ipc/index.md
+      - usage/ipc/echo.md
+      - usage/ipc/cpp.md
+      - usage/ipc/fortran.md
+      - usage/ipc/dotnet.md
+      - usage/ipc/stdcall.md
+      - usage/ipc/labview.md
+    - usage/refreeze.md
+  - API:
+    - api/activex.md
+  - FAQ: faq.md
   - About:
     - Developers: about/developers.md
     - Release Notes: about/release-notes.md
     - License: about/license.md
 
 markdown_extensions:
-  - abbr
   - admonition  # enables: !!! tip
-  - attr_list  # enables: [link](url){:target="_blank"}
-  - pymdownx.snippets:  # enables: --8<--
+  - attr_list  # enables: [link](url){:target="_blank"} and {: #rename-permalink }
+  - pymdownx.details  # enables collapsable admonition
+  - pymdownx.snippets  # enables: --8<--
+  - pymdownx.superfences  # enables tabs in admonition
+  - pymdownx.tabbed:
+      alternate_style: true  # tabs look better on narrower screen sizes (like mobile)
   - toc:
       permalink: "¤"
 
@@ -72,9 +100,11 @@ plugins:
           inventories:
             - url: https://docs.python.org/3/objects.inv
               domains: [std, py]
+            - https://numpy.org/doc/stable/objects.inv
+            - https://www.py4j.org/objects.inv
           options:
             # General
-            show_source: false
+            show_source: true
 
             # Headings
             show_root_toc_entry: false

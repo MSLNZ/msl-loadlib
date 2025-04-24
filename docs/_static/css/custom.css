@@ -1,4 +1,0 @@
-/* fix rendering of @property methods on ReadTheDocs */
-html.writer-html4 .rst-content dl:not(.docutils) .property, html.writer-html5 .rst-content dl[class]:not(.option-list):not(.field-list):not(.footnote):not(.citation):not(.glossary):not(.simple) .property {
-    display: revert;
-}

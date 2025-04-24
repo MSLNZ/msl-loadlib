@@ -1,15 +1,12 @@
 # Install
 
-`msl-loadlib` is available for installation via the [Python Package Index](https://pypi.org/project/msl-loadlib/){:target="_blank"}
+`msl-loadlib` is available for installation via the [Python Package Index]{:target="_blank"}
 
 ```console
 pip install msl-loadlib
 ```
 
-## Dependencies
-* Python 3.8+
-
-### Optional dependencies
+## Optional dependencies
 
 * [Python for .NET]{:target="_blank"}
 * [Py4J]{:target="_blank"}
@@ -40,8 +37,8 @@ pip install msl-loadlib[all]
 ```
 
 ## Compatibility
-* The 32-bit server has been built into a [frozen]{:target="_blank"} Python executable for Windows and Linux (glibc).
-* You may create a new 32-bit server. See [refreeze][] for more details.
+* The 32-bit server is built into a [frozen]{:target="_blank"} executable for Windows and Linux (glibc).
+* You may create a new 32-bit server. See [here][refreeze] for more details.
 
 ## Prerequisites
 
@@ -49,7 +46,7 @@ pip install msl-loadlib[all]
 
 64-bit Windows already comes with [WoW64]{:target="_blank"} to run 32-bit software and therefore no prerequisites are required to load 32-bit libraries. However, the library might have its own dependencies, such as a particular Visual C++ Redistributable, that may need to be installed.
 
-If you need to load a Microsoft .NET library, you must install [Python for .NET]{:target="_blank"}
+If you need to load a .NET library, you must install [Python for .NET]{:target="_blank"}
 
 ```console
 pip install pythonnet
@@ -70,7 +67,7 @@ Java(TM) SE Runtime Environment (build 23.0.2+7-58)
 Java HotSpot(TM) 64-Bit Server VM (build 23.0.2+7-58, mixed mode, sharing)
 ```
 
-If you need to load a [Component Object Model]{:target="_blank"} or [ActiveX]{:target="_blank"} library you must install [comtypes]{:target="_blank"}
+If you need to load a [Component Object Model]{:target="_blank"} or an [ActiveX]{:target="_blank"} library you must install [comtypes]{:target="_blank"}
 
 ```console
 pip install comtypes
@@ -100,14 +97,14 @@ The following ensures that the [ss]{:target="_blank"} command is available
 sudo apt install iproute2
 ```
 
-If you need to load a Microsoft .NET library then you must install [Mono]{:target="_blank"} and [Python for .NET]{:target="_blank"}
+If you need to load a .NET library then you must install [Mono]{:target="_blank"} and [Python for .NET]{:target="_blank"}
 
 ```console
 pip3 install pythonnet
 ```
 
 !!! important
-    As of version 0.10.0 of msl-loadlib, pythonnet is no longer installed on the 32-bit server for Linux. [Mono]{:target="_blank"} can load both 32-bit and 64-bit libraries on 64-bit Linux and therefore a 32-bit .NET library can be loaded directly via [LoadLibrary][msl.loadlib.load_library.LoadLibrary] on 64-bit Linux.
+    As of version 0.10.0 of `msl-loadlib`, `pythonnet` is no longer installed on the 32-bit server for Linux. [Mono]{:target="_blank"} can load both 32-bit and 64-bit libraries on 64-bit Linux and therefore a 32-bit .NET library can be loaded directly via [LoadLibrary][msl.loadlib.load_library.LoadLibrary] on 64-bit Linux.
 
 If you need to load a Java library (i.e., a `.jar` or `.class` file), you must install [Py4J]{:target="_blank"},
 
@@ -139,7 +136,7 @@ To load a C/C++ or FORTRAN library install gcc (which includes gfortran)
 brew install gcc
 ```
 
-If you need to load a Microsoft .NET library, you must install [Mono]{:target="_blank"},
+If you need to load a .NET library, you must install [Mono]{:target="_blank"},
 
 ```console
 brew install mono
@@ -163,20 +160,22 @@ and a [Java Runtime Environment]{:target="_blank"}
 brew cask install java
 ```
 
-[Python for .NET]: https://pythonnet.github.io/
-[Py4J]: https://www.py4j.org/
-[comtypes]: https://comtypes.readthedocs.io/en/stable/index.html
-[frozen]: https://pyinstaller.readthedocs.io/en/stable/
-[WoW64]: https://en.wikipedia.org/wiki/WoW64
-[Java Runtime Environment]: https://www.java.com/en/download/manual.jsp
+[ActiveX]: https://en.wikipedia.org/wiki/ActiveX
 [Component Object Model]: https://en.wikipedia.org/wiki/Component_Object_Model
+[comtypes]: https://comtypes.readthedocs.io/en/stable/index.html
 [Dependencies]: https://github.com/lucasg/Dependencies
 [Dependency Walker]: https://www.dependencywalker.com/
 [Dependency Walker for .NET]: https://github.com/isindicic/DependencyWalker.Net
-[Mono]: https://www.mono-project.com/download/stable/
-[Homebrew]: https://brew.sh/
-[ss]: https://man7.org/linux/man-pages/man8/ss.8.html
-[ldd]: https://man7.org/linux/man-pages/man1/ldd.1.html
-[PATH]: https://en.wikipedia.org/wiki/PATH_(variable)
 [DUMPBIN]: https://learn.microsoft.com/en-us/cpp/build/reference/dumpbin-reference?view=msvc-170
-[ActiveX]: https://en.wikipedia.org/wiki/ActiveX
+[frozen]: https://pyinstaller.readthedocs.io/en/stable/
+[Homebrew]: https://brew.sh/
+[inter-process communication]: https://en.wikipedia.org/wiki/Inter-process_communication
+[Java Runtime Environment]: https://www.java.com/en/download/manual.jsp
+[ldd]: https://man7.org/linux/man-pages/man1/ldd.1.html
+[Mono]: https://www.mono-project.com/download/stable/
+[PATH]: https://en.wikipedia.org/wiki/PATH_(variable)
+[Py4J]: https://www.py4j.org/
+[Python for .NET]: https://pythonnet.github.io/
+[Python Package Index]: https://pypi.org/project/msl-loadlib/
+[ss]: https://man7.org/linux/man-pages/man8/ss.8.html
+[WoW64]: https://en.wikipedia.org/wiki/WoW64

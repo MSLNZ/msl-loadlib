@@ -1,0 +1,20 @@
+# Directly loading a library {: #direct }
+
+If you are loading a 64-bit library in 64-bit Python (or a 32-bit library in 32-bit Python) then you can directly load the library using the [LoadLibrary][msl.loadlib.load_library.LoadLibrary] class.
+
+!!! attention
+    See [Client-Server][client-server] if you want to load a 32-bit library in 64-bit Python.
+
+The following examples are included with the `msl-loadlib` package:
+
+* [C++][direct-cpp] &ndash; compiled in 32- and 64-bit Windows and Linux and in 64-bit macOS
+* [FORTRAN][direct-fortran] &ndash; compiled in 32- and 64-bit Windows and Linux and in 64-bit macOS
+* [Microsoft .NET][direct-dotnet] &ndash; complied in 32- and 64-bit using Microsoft Visual Studio 2017
+* [Java][direct-java] &ndash; platform and bitness independent since they run in the [JVM]{:target="_blank"}
+* [COM][direct-com] &ndash; load a [Component Object Model]{:target="_blank"} library on Windows
+* [ActiveX][direct-activex] &ndash; illustrates how to load ActiveX controls on Windows
+* [Windows __stdcall][direct-stdcall] &ndash; load a 32-bit library that uses the `__stdcall` calling convention
+* [LabVIEW][direct-labview] &ndash; built using 32- and 64-bit LabVIEW on Windows
+
+[Component Object Model]: https://en.wikipedia.org/wiki/Component_Object_Model
+[JVM]: https://en.wikipedia.org/wiki/Java_virtual_machine
