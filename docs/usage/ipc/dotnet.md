@@ -6,7 +6,7 @@ This example shows how to access a 32-bit .NET library from 64-bit Python. [DotN
     If you have issues running the example make sure that you have the [prerequisites][] installed.
 
 ??? tip "Decompile a .NET assembly"
-    The [JetBrains dotPeek]{:target="_blank"} program can be used to decompile a .NET assembly into the equivalent source code. For example, *peeking* inside the example [dotnet_lib32.dll][dotnet-lib] library, that the [DotNet32][msl.examples.loadlib.dotnet32.DotNet32] class is a wrapper around, gives
+    The [JetBrains dotPeek]{:target="_blank"} program can be used to decompile a .NET assembly in to the equivalent source code. For example, *peeking* inside the example [dotnet_lib32.dll][dotnet-lib] library, that the [DotNet32][msl.examples.loadlib.dotnet32.DotNet32] class is a wrapper around, gives
 
     ![dotpeek_lib.png](../../assets/images/dotpeek_lib.png)
 
@@ -26,7 +26,7 @@ This example shows how to access a 32-bit .NET library from 64-bit Python. [DotN
     os.environ["PYTHONNET_RUNTIME"] = "coreclr"
     ```
 
-    before [super()][super]{:target="_blank"} is called in the [Server32][msl.loadlib.server32.Server32] subclass. To use the Mono runtime, replace `"coreclr"` with `"mono"`.
+    before [super()][super]{:target="_blank"} is called in the [Server32][] subclass. To use the Mono runtime, replace `"coreclr"` with `"mono"`.
 
 Create a [DotNet64][msl.examples.loadlib.dotnet64.DotNet64] client to communicate with the 32-bit [dotnet_lib32.dll][dotnet-lib] library
 

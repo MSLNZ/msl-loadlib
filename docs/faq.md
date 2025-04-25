@@ -115,9 +115,9 @@ You may also wish to [refreeze][] the 32-bit server and add your custom server t
 
 ## Mocking the connection to the server {: #faq-mock }
 
-You may mock the connection to the server by passing in `host=None` when you instantiate [Client64][msl.loadlib.client64.Client64]. Also, the [Server32][msl.loadlib.server32.Server32] may need to decide which library to load.
+You may mock the connection to the server by passing in `host=None` when you instantiate [Client64][]. Also, the [Server32][] may need to decide which library to load.
 
-When the connection is mocked, both [Client64][msl.loadlib.client64.Client64] and [Server32][msl.loadlib.server32.Server32] instances will run in the same Python interpreter, therefore the server must load a library that is the same bitness as the Python interpreter that the client is running in. The [pickle][]{:target="_blank"} module is not used when the connection is mocked, so there is no overhead of using a file as a middle step to process requests and responses (which has a side effect that a mocked connection can return objects in a server's response that are not pickleable).
+When the connection is mocked, both [Client64][] and [Server32][] instances will run in the same Python interpreter, therefore the server must load a library that is the same bitness as the Python interpreter that the client is running in. The [pickle][]{:target="_blank"} module is not used when the connection is mocked, so there is no overhead of using a file as a middle step to process requests and responses (which has a side effect that a mocked connection can return objects in a server's response that are not pickleable).
 
 One reason that you may want to mock the connection is that you wrote a lot of code that had to load a 32-bit library but now a 64-bit version of the library is available. You may also need to support the 32-bit and 64-bit libraries at the same time. Instead of making a relatively large change to your code, or
 managing different code bases, you can simply specify a keyword argument when instantiating your client class to decide whether to use the 32-bit library or the 64-bit library and the client class behaves exactly the same.

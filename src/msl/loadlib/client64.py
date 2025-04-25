@@ -1,9 +1,7 @@
-"""
-Contains the base class for communicating with a 32-bit library from 64-bit Python.
+"""Base class for communicating with a 32-bit library from 64-bit Python.
 
-The :class:`~.server32.Server32` class is used in combination with the
-:class:`~.client64.Client64` class to communicate with a 32-bit shared library
-from 64-bit Python.
+[Server32][] is used in combination with [Client64][] to communicate with
+a 32-bit library from 64-bit Python.
 """
 
 from __future__ import annotations
@@ -46,6 +44,8 @@ Self = TypeVar("Self", bound="Client64")
 
 
 class Client64:
+    """Base class for communicating with a 32-bit library from 64-bit Python."""
+
     def __init__(
         self,
         module32: PathLike,
@@ -54,7 +54,7 @@ class Client64:
         append_environ_path: PathLike | Iterable[PathLike] | None = None,
         append_sys_path: PathLike | Iterable[PathLike] | None = None,
         host: str | None = "127.0.0.1",
-        port: int | None = None,
+        port: int = 0,
         protocol: int = 5,
         rpc_timeout: float | None = None,
         server32_dir: PathLike | None = None,
@@ -63,74 +63,79 @@ class Client64:
     ) -> None:
         """Base class for communicating with a 32-bit library from 64-bit Python.
 
-        Starts a 32-bit server, :class:`~.server32.Server32`, to host a Python class
-        that is a wrapper around a 32-bit library. :class:`.Client64` runs within
-        a 64-bit Python interpreter, and it sends a request to the server which calls
-        the 32-bit library to execute the request. The server then provides a
-        response back to the client.
+        Starts a 32-bit server, [Server32][], to host a Python class that is a wrapper
+        around a 32-bit library. [Client64][] runs within a 64-bit Python interpreter
+        and it sends requests to the server which calls the 32-bit library to execute
+        the request. The server then sends the response back to the client.
 
-        .. versionchanged:: 0.6
-           Added the `rpc_timeout` argument.
+        Args:
+            module32: The name of, or the path to, a Python module that will be imported by the
+                32-bit server. The module must contain a class that inherits from [Server32][].
 
-        .. versionchanged:: 0.8
-           Added the `protocol` argument and the default `quiet` value became :data:`None`.
+            add_dll_directory: Add path(s) to the 32-bit server's DLL search path.
+                See [os.add_dll_directory][] for more details. Available on Windows only.
 
-        .. versionchanged:: 0.10
-           Added the `server32_dir` argument.
+                !!! note "Added in version 1.0"
 
-        .. versionchanged:: 1.0
-           Removed the deprecated `quiet` argument. The `host` value may now be `None`.
-           Added the `add_dll_directory` argument.
+            append_environ_path: Append path(s) to the 32-bit server's
+                [os.environ["PATH"]][os.environ] variable. This may be useful if
+                the library that is being loaded requires additional libraries that
+                must be available on `PATH`.
 
-        :param module32: The name of, or the path to, a Python module that will be
-            imported by the 32-bit server. The module must contain a class that inherits
-            from :class:`~.server32.Server32`.
-        :param add_dll_directory: Add path(s) to the 32-bit server's DLL search path.
-            See :func:`os.add_dll_directory` for more details. Available on Windows only.
-        :param append_environ_path: Append path(s) to the 32-bit server's
-            :data:`os.environ['PATH'] <os.environ>` variable. This may be useful if
-            the library that is being loaded requires additional libraries that
-            must be available on ``PATH``.
-        :param append_sys_path: Append path(s) to the 32-bit server's :data:`sys.path`
-            variable. The value of :data:`sys.path` from the 64-bit process is
-            automatically included, i.e.,
+            append_sys_path: Append path(s) to the 32-bit server's [sys.path][]
+                variable. The value of [sys.path][] from the 64-bit process is
+                automatically included, i.e.,
 
-            .. centered::
-               ``sys.path(32bit) = sys.path(64bit) + append_sys_path``.
-        :param host: The hostname (IP address) of the 32-bit server.
-            If :data:`None` then the connection to the server is mocked.
-            See :ref:`msl-loadlib-mock-connection` for more details.
-        :param port: The port to open on the 32-bit server. If :data:`None`,
-            an available port will be used.
-        :param protocol: The :mod:`pickle` :ref:`protocol <pickle-protocols>` to use.
-        :param rpc_timeout: The maximum number of seconds to wait for a response from the
-            32-bit server. The `RPC <https://en.wikipedia.org/wiki/Remote_procedure_call>`_
-            timeout value is used for *all* requests from the server. If you want different
-            requests to have different timeout values, you will need to implement custom
-            timeout handling for each method on the server. Default is :data:`None`, which
-            means to use the default timeout value used by the :mod:`socket` module (which
-            is to *wait forever*).
-        :param server32_dir: The directory where the frozen 32-bit server is located.
-        :param timeout: The maximum number of seconds to wait to establish a connection
-            with the 32-bit server.
-        :param kwargs: All additional keyword arguments are passed to the :class:`~.server32.Server32`
-            subclass. The data type of each value is not preserved. It will be of type :class:`str`
-            at the constructor of the :class:`~.server32.Server32` subclass.
-        :raises OSError: If the 32-bit server cannot be found.
-        :raises ConnectionTimeoutError: If the connection to the 32-bit server cannot be established.
+                <code>path<sub>32</sub> = path<sub>64</sub> + append_sys_path</code>
 
-        .. note::
+            host: The hostname (IP address) of the 32-bit server. If `None` then the
+                connection to the server is mocked. See [here][faq-mock] for more details.
+
+                !!! note "Changed in version 1.0"
+                    A value of `None` is allowed.
+
+            port: The port to open on the 32-bit server. If `0`, any available port will be used.
+
+            protocol: The [pickle][] [protocol][pickle-protocols] to use.
+                !!! note "Added in version 0.8"
+
+            rpc_timeout: The maximum number of seconds to wait for a response from the 32-bit server.
+                The [RPC](https://en.wikipedia.org/wiki/Remote_procedure_call){:target="_blank"}
+                timeout value is used for *all* requests from the server. If you want different
+                requests to have different timeout values, you will need to implement custom
+                timeout handling for each method on the server. Default is `None`, which will
+                call [socket.getdefaulttimeout][] to get the timeout value.
+
+                !!! note "Added in version 0.6"
+
+            server32_dir: The directory where the 32-bit server is located.
+                Specifying this value may be useful if you created a [custom server][refreeze].
+
+                !!! note "Added in version 0.10"
+
+            timeout: The maximum number of seconds to wait to establish a connection
+                with the 32-bit server.
+
+            kwargs: All additional keyword arguments are passed to the [Server32][] subclass.
+                The data type of each value is not preserved. It will be of type [str][]
+                at the constructor of the [Server32][] subclass.
+
+        Raises:
+            OSError: If the 32-bit server cannot be found.
+            ConnectionTimeoutError: If the connection to the 32-bit server cannot be established.
+
+        !!! note
             If `module32` is not located in the current working directory then you
             must either specify the full path to `module32` **or** you can
             specify the folder where `module32` is located by passing a value to the
             `append_sys_path` parameter. Using the `append_sys_path` option also allows
             for any other modules that `module32` may depend on to also be included
-            in :data:`sys.path` so that those modules can be imported when `module32`
+            in [sys.path][] so that those modules can be imported when `module32`
             is imported.
         """
-        self._client: MockClient | HTTPClient | None = None
+        self._client: _MockClient | _HTTPClient | None = None
         if host is None:
-            self._client = MockClient(
+            self._client = _MockClient(
                 os.fsdecode(module32),
                 add_dll_directory=add_dll_directory,
                 append_environ_path=append_environ_path,
@@ -138,7 +143,7 @@ class Client64:
                 **kwargs,
             )
         else:
-            self._client = HTTPClient(
+            self._client = _HTTPClient(
                 os.fsdecode(module32),
                 add_dll_directory=add_dll_directory,
                 append_environ_path=append_environ_path,
@@ -153,21 +158,25 @@ class Client64:
             )
 
     def __del__(self) -> None:
+        """Call the cleanup() method from the client."""
         try:
             self._client.cleanup()
         except AttributeError:
             pass
 
     def __enter__(self: Self) -> Self:
+        """Enter the context manager."""
         return self
 
     def __exit__(self, *ignored) -> None:
+        """Exit the context manager."""
         try:
             self._client.cleanup()
         except AttributeError:
             pass
 
     def __repr__(self) -> str:
+        """Returns the string representation."""
         lib = os.path.basename(self._client.lib32_path)
         if self._client.host is None:
             return f"<{self.__class__.__name__} lib={lib} address=None (mocked)>"
@@ -179,65 +188,80 @@ class Client64:
 
     @property
     def host(self) -> str | None:
-        """The host address of the 32-bit server."""
+        """[str][] | `None` &mdash; The host address of the 32-bit server.
+
+        The value is `None` for a [mocked][faq-mock] connection.
+        """
         return self._client.host
 
     @property
     def port(self) -> int:
-        """The port number of the 32-bit server."""
+        """[int][] &mdash; The port number of the 32-bit server."""
         return self._client.port
 
     @property
     def connection(self) -> HTTPConnection | None:
-        """The connection to the 32-bit server."""
+        """[HTTPConnection][http.client.HTTPConnection] | `None` &mdash; The connection to the 32-bit server.
+
+        The value is `None` for a [mocked][faq-mock] connection.
+        """
         return self._client.connection
 
     @property
     def lib32_path(self) -> str:
-        """The path to the 32-bit shared-library file."""
+        """[str][] &mdash; The path to the 32-bit library file."""
         return self._client.lib32_path
 
     def request32(self, name: str, *args: Any, **kwargs: Any) -> Any:
         """Send a request to the 32-bit server.
 
-        :param name: The name of a method, property or attribute of the :class:`~.server32.Server32` subclass.
-        :param args: The arguments that the method in the :class:`~.server32.Server32` subclass requires.
-        :param kwargs: The keyword arguments that the method in the :class:`~.server32.Server32` subclass requires.
-        :return: Whatever is returned by calling `name`.
-        :raises Server32Error: If there was an error processing the request on the 32-bit server.
-        :raises ResponseTimeoutError: If a timeout occurs while waiting for the response from the 32-bit server.
+        Args:
+            name: The name of a method, property or attribute of the [Server32][] subclass.
+            args: The arguments that the method of the [Server32][] subclass requires.
+            kwargs: The keyword arguments that the method of the [Server32][] subclass requires.
+
+        Returns:
+            Whatever is returned by calling `name`.
+
+        Raises:
+            Server32Error: If there was an error processing the request on the 32-bit server.
+            ResponseTimeoutError: If a timeout occurs while waiting for the response from the 32-bit server.
         """
         return self._client.request32(name, *args, **kwargs)
 
     def shutdown_server32(self, kill_timeout: float = 10) -> tuple[BinaryIO, BinaryIO]:
-        """Shutdown the 32-bit server.
+        """Shut down the 32-bit server.
 
-        This method shuts down the 32-bit server, closes the client connection,
-        and deletes the temporary file that is used to save the serialized
-        :mod:`pickle`\'d data.
+        This method shuts down the 32-bit server, closes the client connection, and
+        deletes the temporary file that was used to store the serialized [pickle][]d data.
 
-        .. versionchanged:: 0.6
-           Added the `kill_timeout` argument.
+        Limit the total number of characters that are written to either `stdout`
+        or `stderr` on the 32-bit server to be &lt; 4096. This will avoid potential
+        blocking when reading the `stdout` and `stderr` PIPE buffers.
 
-        .. versionchanged:: 0.8
-           Returns the (stdout, stderr) streams from the 32-bit server.
+        Args:
+            kill_timeout: If the 32-bit server is still running after `kill_timeout`
+                seconds, the server will be killed using brute force. A warning will be
+                issued if the server is killed in this manner.
 
-        :param kill_timeout: If the 32-bit server is still running after `kill_timeout`
-            seconds, the server will be killed using brute force. A warning will be
-            issued if the server is killed in this manner.
-        :return: The (stdout, stderr) streams from the 32-bit server. Limit the total
-            number of characters that are written to either stdout or stderr on
-            the 32-bit server to be < 4096. This will avoid potential blocking
-            when reading the stdout and stderr PIPE buffers.
+                !!! note "Added in version 0.6"
 
-        .. note::
+        Returns:
+            The `stdout` stream from the 32-bit server.
+            The `stderr` stream from the 32-bit server.
+
+        !!! note "Changed in version 0.8"
+            Prior to version 0.8 this method returned `None`
+
+        !!! tip
             This method gets called automatically when the reference count to the
-            :class:`.Client64` object reaches zero (see :meth:`~object.__del__`).
+            [Client64][] instance reaches zero (see [`object.__del__`][]).
         """
         return self._client.shutdown_server32(kill_timeout=kill_timeout)
 
 
-class HTTPClient:
+class _HTTPClient:
+
     def __init__(
         self,
         module32: str,
@@ -245,8 +269,8 @@ class HTTPClient:
         add_dll_directory: PathLike | Iterable[PathLike] | None = None,
         append_environ_path: PathLike | Iterable[PathLike] | None = None,
         append_sys_path: PathLike | Iterable[PathLike] | None = None,
-        host: str | None = "127.0.0.1",
-        port: int | None = None,
+        host: str = "127.0.0.1",
+        port: int = 0,
         protocol: int = 5,
         rpc_timeout: float | None = None,
         server32_dir: PathLike | None = None,
@@ -258,7 +282,7 @@ class HTTPClient:
         self._conn: HTTPConnection | None = None
         self._proc: subprocess.Popen | None = None
 
-        if port is None:
+        if port == 0:
             port = utils.get_available_port()
 
         # the temporary files
@@ -503,7 +527,7 @@ class HTTPClient:
             pass
 
 
-class MockClient:
+class _MockClient:
     def __init__(
         self,
         module32: str,

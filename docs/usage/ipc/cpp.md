@@ -56,7 +56,7 @@ Add or subtract two C++ double-precision numbers, see [Cpp64.add_or_subtract][ms
 Multiply a 1D array by a number, see [Cpp64.scalar_multiply][msl.examples.loadlib.cpp64.Cpp64.scalar_multiply]
 
 !!! attention
-    The [Cpp64.scalar_multiply][msl.examples.loadlib.cpp64.Cpp64.scalar_multiply] function takes a pointer to an array as an input argument, see the [source code][cpp-lib]. One cannot pass pointers from [Client64][msl.loadlib.client64.Client64] to [Server32][msl.loadlib.server32.Server32] because a 64-bit process cannot share the same memory space as a 32-bit process. All 32-bit pointers must be created (using [ctypes][]{:target="_blank"}) in the class that is a subclass of [Server32][msl.loadlib.server32.Server32] and only the **value** that is stored at that address can be returned to [Client64][msl.loadlib.client64.Client64] for use in the 64-bit program.
+    The [Cpp64.scalar_multiply][msl.examples.loadlib.cpp64.Cpp64.scalar_multiply] function takes a pointer to an array as an input argument, see the [source code][cpp-lib]. One cannot pass pointers from [Client64][] to [Server32][] because a 64-bit process cannot share the same memory space as a 32-bit process. All 32-bit pointers must be created (using [ctypes][]{:target="_blank"}) in the class that is a subclass of [Server32][] and only the **value** that is stored at that address can be returned to [Client64][] for use in the 64-bit program.
 
 ```pycon
 >>> a = [float(val) for val in range(10)]
@@ -65,7 +65,7 @@ Multiply a 1D array by a number, see [Cpp64.scalar_multiply][msl.examples.loadli
 
 ```
 
-If you have a [numpy.ndarray][]{:target="_blank"} in 64-bit Python then you cannot pass the `ndarray` object to [Server32][msl.loadlib.server32.Server32] because the 32-bit server would need to load the `ndarray` in a 32-bit version of numpy (which is not included by default in the 32-bit server, but could be &ndash; see [refreeze][] for more details). To simplify the procedure you could convert the `ndarray` to a [list][]{:target="_blank"} using the [numpy.ndarray.tolist][]{:target="_blank"} method
+If you have a [numpy.ndarray][]{:target="_blank"} in 64-bit Python then you cannot pass the `ndarray` object to [Server32][] because the 32-bit server would need to load the `ndarray` in a 32-bit version of numpy (which is not included by default in the 32-bit server, but could be &ndash; see [refreeze][] for more details). To simplify the procedure you could convert the `ndarray` to a [list][]{:target="_blank"} using the [numpy.ndarray.tolist][]{:target="_blank"} method
 
 ```pycon
 >>> import numpy as np

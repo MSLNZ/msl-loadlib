@@ -7,7 +7,7 @@ This section of the documentation shows examples for how a module running within
 
 ## Example Server
 
-Suppose you want to load a 32-bit C library, `my_lib.dll`, from a 64-bit Python interpreter. This library is loaded by the `MyServer` class which is running within a 32-bit process. `MyServer` hosts the library at a specified host address and port number. Any class that is a subclass of [Server32][msl.loadlib.server32.Server32] **must** provide two arguments in its constructor: `host` and `port`. Including keyword arguments in the constructor is optional.
+Suppose you want to load a 32-bit C library, `my_lib.dll`, from a 64-bit Python interpreter. This library is loaded by the `MyServer` class which is running within a 32-bit process. `MyServer` hosts the library at a specified host address and port number. Any class that is a subclass of [Server32][] **must** provide two arguments in its constructor: `host` and `port`. Including keyword arguments in the constructor is optional.
 
 !!! example "my_server.py"
 
@@ -40,7 +40,7 @@ Suppose you want to load a 32-bit C library, `my_lib.dll`, from a 64-bit Python 
 
 ## Example Client
 
-`MyClient` is a subclass of [Client64][msl.loadlib.client64.Client64] which sends requests to `MyServer` to call the `add` function in the library and to get the value of `version` from the server. `MyServer` processes the request and sends the response back to `MyClient`.
+`MyClient` is a subclass of [Client64][] which sends requests to `MyServer` to call the `add` function in the library and to get the value of `version` from the server. `MyServer` processes the request and sends the response back to `MyClient`.
 
 !!! example "my_client.py"
 
@@ -83,11 +83,11 @@ with MyClient() as c:
     v = c.version()
 ```
 
-Keyword arguments, `kwargs`, that the [Server32][msl.loadlib.server32.Server32] subclass requires can be passed to the server from the [Client64][msl.loadlib.client64.Client64]; however, the data types for the values of the `kwargs` are not preserved (since they are ultimately parsed from the command line). All data types for the values of `kwargs` will be of type [str][]{:target="_blank"} at the `__init__` method of the [Server32][msl.loadlib.server32.Server32] subclass. These `kwargs` are the only values where the data type is not preserved for the client-server protocol. See the [Echo][tutorials_echo] example which shows that data types are preserved between client-server method calls (provided that the value is [pickle][]{:target="_blank"}able).
+Keyword arguments, `kwargs`, that the [Server32][] subclass requires can be passed to the server from the [Client64][]; however, the data types for the values of the `kwargs` are not preserved (since they are ultimately parsed from the command line). All data types for the values of `kwargs` will be of type [str][]{:target="_blank"} at the `__init__` method of the [Server32][] subclass. These `kwargs` are the only values where the data type is not preserved for the client-server protocol. See the [Echo][tutorials_echo] example which shows that data types are preserved between client-server method calls (provided that the value is [pickle][]{:target="_blank"}able).
 
 ??? tip "Simplifying the Client"
 
-    If you find yourself repeatedly implementing each method in your [Client64][msl.loadlib.client64.Client64] subclass in the following way (i.e., you are essentially duplicating the code for each method)
+    If you find yourself repeatedly implementing each method in your [Client64][] subclass in the following way (i.e., you are essentially duplicating the code for each method)
 
     ```python
     from msl.loadlib import Client64
@@ -113,7 +113,7 @@ Keyword arguments, `kwargs`, that the [Server32][msl.loadlib.server32.Server32] 
             return self.request32("cross_product", vector1, vector2)
     ```
 
-    Then you can simplify the implementation by defining your [Client64][msl.loadlib.client64.Client64] subclass as
+    Then you can simplify the implementation by defining your [Client64][] subclass as
 
     ```python
     from msl.loadlib import Client64
@@ -129,15 +129,15 @@ Keyword arguments, `kwargs`, that the [Server32][msl.loadlib.server32.Server32] 
             return send
     ```
 
-    and you will get the same behaviour. If you call a method that does not exist on the [Server32][msl.loadlib.server32.Server32] subclass or if you specify the wrong number of arguments or keyword arguments then a [Server32Error][msl.loadlib.exceptions.Server32Error] will be raised.
+    and you will get the same behaviour. If you call a method that does not exist on the [Server32][] subclass or if you specify the wrong number of arguments or keyword arguments then a [Server32Error][msl.loadlib.exceptions.Server32Error] will be raised.
 
-    There are situations where you may want to explicitly write some (or all) of the methods in the [Client64][msl.loadlib.client64.Client64] subclass in addition to (or instead of) implementing the [`__getattr__`][object.__getattr__]{:target="_blank"} method, e.g.,
+    There are situations where you may want to explicitly write some (or all) of the methods in the [Client64][] subclass in addition to (or instead of) implementing the [`__getattr__`][object.__getattr__]{:target="_blank"} method, e.g.,
 
     * you are writing an API for others to use and you want features like autocomplete or docstrings to be available in the IDE that the person using your API is using
 
-    * you want the [Client64][msl.loadlib.client64.Client64] subclass to do error checking on the `*args`, `**kwargs` and/or on the result from the [Server32][msl.loadlib.server32.Server32] subclass (this allows you to have control over the type of [Exception][bltin-exceptions]{:target="_blank"} that is raised because if the [Server32][msl.loadlib.server32.Server32] subclass raises an exception then it is a [Server32Error][msl.loadlib.exceptions.Server32Error])
+    * you want the [Client64][] subclass to do error checking on the `*args`, `**kwargs` and/or on the result from the [Server32][] subclass (this allows you to have control over the type of [Exception][bltin-exceptions]{:target="_blank"} that is raised because if the [Server32][] subclass raises an exception then it is a [Server32Error][msl.loadlib.exceptions.Server32Error])
 
-    * you want to modify the returned object from a particular [Server32][msl.loadlib.server32.Server32] method, for example, a [list][]{:target="_blank"} is returned but you want the corresponding [Client64][msl.loadlib.client64.Client64] method to return a [numpy.ndarray][]{:target="_blank"}
+    * you want to modify the returned object from a particular [Server32][] method, for example, a [list][]{:target="_blank"} is returned but you want the corresponding [Client64][] method to return a [numpy.ndarray][]{:target="_blank"}
 
 ## Runnable Examples
 

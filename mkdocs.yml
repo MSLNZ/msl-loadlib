@@ -72,6 +72,9 @@ nav:
       - usage/ipc/labview.md
     - usage/refreeze.md
   - API:
+    - api/load_library.md
+    - api/client64.md
+    - api/server32.md
     - api/activex.md
   - FAQ: faq.md
   - About:

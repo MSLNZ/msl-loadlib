@@ -1,9 +1,7 @@
-"""
-Contains the base class for loading a 32-bit shared library in 32-bit Python.
+"""Base class for loading a 32-bit library in 32-bit Python.
 
-The :class:`~.server32.Server32` class is used in combination with the
-:class:`~.client64.Client64` class to communicate with a 32-bit shared library
-from 64-bit Python.
+[Server32][] is used in combination with [Client64][] to communicate with
+a 32-bit library from 64-bit Python.
 """
 
 from __future__ import annotations
@@ -32,29 +30,30 @@ ERROR: int = 500
 
 
 class Server32(HTTPServer):
+    """Base class for loading a 32-bit library in 32-bit Python."""
+
     def __init__(self, path: str, libtype: LibType, host: str, port: int, **kwargs: Any) -> None:
         """Base class for loading a 32-bit library in 32-bit Python.
 
         All modules that are to be run on the 32-bit server must contain a class
-        that is inherited from this class. The module may import most of the
-        `standard <https://docs.python.org/3/py-modindex.html>`_ python modules.
+        that inherits this class. The module may import most of the
+        [standard](https://docs.python.org/3/py-modindex.html){:target="_blank"}
+        python modules (graphic-related modules, e.g., [tkinter][]{:target="_blank"},
+        are not available).
 
-        All modules that are run on the 32-bit server must be able to run on the Python
-        interpreter that the server is running on, see :meth:`.version` for how to
-        determine the version of the Python interpreter.
+        Args:
+            path: The path to the 32-bit library (see [LoadLibrary][])
+            libtype: The library type (see [LoadLibrary][]).
 
-        :param path: The path to the 32-bit library (see :class:`.LoadLibrary`)
-        :param libtype: The library type (see :class:`.LoadLibrary`).
+                !!! attention
+                    Since Java byte code is executed on the
+                    [JVM](https://en.wikipedia.org/wiki/Java_virtual_machine){:target="_blank"}
+                    it does not make sense to use [Server32][] for a Java `.jar` or `.class` file.
+                    Use [LoadLibrary][] to load a Java library.
 
-            .. note::
-               Since Java byte code is executed on the
-               `JVM <https://en.wikipedia.org/wiki/Java_virtual_machine>`_
-               it does not make sense to use :class:`Server32` for a Java
-               ``.jar`` or ``.class`` file.
-
-        :param host: The IP address (or hostname) to use for the server.
-        :param port: The port to open for the server.
-        :param kwargs: All keyword arguments are passed to :class:`.LoadLibrary`.
+            host: The IP address (or hostname) to use for the server.
+            port: The port to open for the server.
+            kwargs: All keyword arguments are passed to [LoadLibrary][].
         """
         self._library = LoadLibrary(path, libtype=libtype, **kwargs)
         self._assembly = self._library.assembly
@@ -63,56 +62,58 @@ class Server32(HTTPServer):
         super().__init__((host, int(port)), _RequestHandler, bind_and_activate=False)
 
     @property
-    def assembly(self):
-        """
-        Returns a reference to the `.NET Runtime Assembly <NET_>`_ object if
-        the shared library is .NET, otherwise returns :data:`None`.
+    def assembly(self) -> Any:
+        """Returns a reference to the [.NET Runtime Assembly]{:target="_blank"} object.
 
-        .. tip::
-           The `JetBrains dotPeek`_ program can be used to reliably decompile any
-           .NET Assembly into the equivalent source code.
+        If the loaded library is not a .NET library, returns `None`.
 
-        .. _NET: https://docs.microsoft.com/en-us/dotnet/api/system.reflection.assembly
-        .. _JetBrains dotPeek: https://www.jetbrains.com/decompiler/
+        !!! tip
+            The [JetBrains dotPeek][]{:target="_blank"} program can be used to
+            decompile a .NET Assembly in to the equivalent source code.
+
+        [.NET Runtime Assembly]: https://docs.microsoft.com/en-us/dotnet/api/system.reflection.assembly
+        [JetBrains dotPeek]: https://www.jetbrains.com/decompiler/
         """
         return self._assembly
 
     @property
-    def lib(self):
+    def lib(self) -> Any:
         """Returns the reference to the library object.
 
         For example, if `libtype` is
 
-            * `cdll` :math:`\\rightarrow` :class:`~ctypes.CDLL`
-            * `windll` :math:`\\rightarrow` :class:`~ctypes.WinDLL`
-            * `oledll` :math:`\\rightarrow` :class:`~ctypes.OleDLL`
-            * `net` or `clr` :math:`\\rightarrow` :class:`~.load_library.DotNet`
-            * `com` or `activex` :math:`\\rightarrow` :func:`POINTER <ctypes.POINTER>`
+        * `cdll` &#8594; [ctypes.CDLL][]{:target="_blank"}
+        * `windll` &#8594; [ctypes.WinDLL][]{:target="_blank"}
+        * `oledll` &#8594; [ctypes.OleDLL][]{:target="_blank"}
+        * `net` or `clr` &#8594; [DotNet][msl.loadlib.load_library.DotNet]
+        * `com` or `activex` &#8594; [ctypes.POINTER][]{:target="_blank"}
         """
         return self._lib
 
     @property
     def path(self) -> str:
-        """The path to the shared library file."""
+        """[str][] &mdash; The path to the library file."""
         return self._path
 
     @staticmethod
     def version() -> str:
-        """Returns the version of Python that the 32-bit server is running on.
-
-        .. note::
-            This method takes about 1 second to finish because the 32-bit server
-            needs to start in order to determine the version of the Python interpreter.
-        """
+        """[str][] &mdash; The version of Python that the 32-bit server is running on."""
         exe = os.path.join(os.path.dirname(__file__), SERVER_FILENAME)
         return subprocess.check_output([exe, "--version"]).decode().strip()
 
     @staticmethod
     def interactive_console() -> None:
-        """Start an interactive console.
+        """Start an [interactive console]{:target="_blank"}.
 
-        This method starts an interactive console, in a new terminal, with the
-        Python interpreter on the 32-bit server.
+        This method starts an [interactive console]{:target="_blank"}, in a new terminal,
+        with the Python interpreter on the 32-bit server.
+
+        You can start the console by running
+        ```console
+        python -c "from msl.loadlib import Server32; Server32.interactive_console()"
+        ```
+
+        [interactive console]: https://docs.python.org/3/tutorial/interpreter.html#interactive-mode
         """
         exe = os.path.join(os.path.dirname(__file__), SERVER_FILENAME)
         if IS_WINDOWS:
@@ -123,38 +124,42 @@ class Server32(HTTPServer):
 
     @staticmethod
     def remove_site_packages_64bit() -> str:
-        """Remove the site-packages directory from the 64-bit process.
+        """Remove the _site-packages_ directory from the 64-bit process.
 
-        By default, the site-packages directory of the 64-bit process is
-        included in :data:`sys.path` of the 32-bit process. Having the
-        64-bit site-packages directory available can sometimes cause issues.
-        For example, comtypes imports numpy so if numpy is installed in the
-        64-bit process then comtypes will import the 64-bit version of numpy
-        in the 32-bit process. Depending on the version of Python and/or numpy
-        this can cause the 32-bit server to crash.
+        By default, the _site-packages_ directory of the 64-bit process is
+        included in [sys.path][] of the 32-bit process. Having the
+        64-bit _site-packages_ directory available can sometimes cause issues.
+        For example, `comtypes` tries to import `numpy` so if `numpy` is
+        installed in the 64-bit process then `comtypes` will import the
+        64-bit version of `numpy` in the 32-bit process. Depending on the
+        version of Python and/or `numpy` this can cause the 32-bit server
+        to crash.
 
-        .. versionadded:: 0.9
+        **Example:**
 
-        Example::
+        ```python
+        import sys
+        from msl.loadlib import Server32
 
-            import sys
-            from msl.loadlib import Server32
+        class FileSystem(Server32):
 
-            class FileSystem(Server32):
+            def __init__(self, host, port):
 
-                def __init__(self, host, port, **kwargs):
+                # Remove the site-packages directory that was passed from 64-bit Python
+                path = Server32.remove_site_packages_64bit()
 
-                    # remove the site-packages directory that was passed from 64-bit Python
-                    # before calling the super() function to load the COM library
-                    path = Server32.remove_site_packages_64bit()
+                # Load the COM library (this is when `comtypes` gets imported)
+                super().__init__("Scripting.FileSystemObject", "com", host, port)
 
-                    super().__init__('Scripting.FileSystemObject', 'com', host, port)
+                # Optional: add the site-packages directory back into sys.path
+                sys.path.append(path)
+        ```
 
-                    # optional: add the site-packages directory back into sys.path
-                    sys.path.append(path)
+        Returns:
+            The path to the _site-packages_ directory that was removed.
+                Can be an empty string if the directory was not found in [sys.path][].
 
-        :return: The path of the site-packages directory that was removed.
-            Can be an empty string if the directory was not found in :data:`sys.path`.
+        !!! note "Added in version 0.9"
         """
         for index, path in enumerate(sys.path):
             if path.endswith("site-packages"):
@@ -165,31 +170,33 @@ class Server32(HTTPServer):
     def is_interpreter() -> bool:
         """Check if code is running on the 32-bit server.
 
-        If the same module is executed by both
-        :class:`~msl.loadlib.client64.Client64` and :class:`.Server32`
-        then there may be only parts of the code that should only be executed
+        If the same module is executed by both [Client64][] and [Server32][]
+        then there may be sections of the code that should only be executed
         by the correct bitness of the Python interpreter.
 
-        .. versionadded:: 0.9
+        **Example:**
 
-        Example::
+        ```python
+        import sys
+        from msl.loadlib import Server32
 
-            import sys
-            from msl.loadlib import Server32
+        if Server32.is_interpreter():
+            # This block only gets executed on the 32-bit server
+            assert sys.maxsize < 2**32
+        ```
 
-            if Server32.is_interpreter():
-                # this only gets executed on the 32-bit server
-                assert sys.maxsize < 2**32
+        Returns:
+            Whether the module is running on the 32-bit server.
 
-        :return: Whether the code is running on the 32-bit server.
+        !!! note "Added in version 0.9"
         """
         return sys.executable.endswith(SERVER_FILENAME)
 
     @staticmethod
     def examples_dir() -> str:
-        """Returns the directory where the example libraries are located.
+        """[str][] &mdash; The directory where the [example][direct] libraries are located.
 
-        .. versionadded:: 0.9
+        !!! note "Added in version 0.9"
         """
         if Server32.is_interpreter():
             root = os.path.dirname(sys.executable)
@@ -199,14 +206,13 @@ class Server32(HTTPServer):
         return os.path.abspath(path)
 
     def shutdown_handler(self) -> None:
-        """Proxy function that is called immediately prior to the server shutting down.
+        """Called just before the server shuts down.
 
-        The intended use case is for the server to do any necessary cleanup, such as stopping
-        locally started threads or closing file handles before it shuts down.
+        Override this method to do any necessary cleanup, such as stopping
+        threads or closing file handles, before the server shuts down.
 
-        .. versionadded:: 0.6
+        !!! note "Added in version 0.6"
         """
-        pass
 
 
 class _RequestHandler(BaseHTTPRequestHandler):
@@ -268,9 +274,7 @@ class _RequestHandler(BaseHTTPRequestHandler):
             self.end_headers()
 
     def log_message(self, fmt: str, *args: Any) -> None:
-        """
-        Overrides: :meth:`~http.server.BaseHTTPRequestHandler.log_message`
+        """Overrides: http.server.BaseHTTPRequestHandler.log_message.
 
-        Ignore all log messages from being displayed in :data:`sys.stdout`.
+        Ignore all log messages from being displayed in `sys.stdout`.
         """
-        pass

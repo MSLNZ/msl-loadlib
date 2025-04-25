@@ -1,6 +1,4 @@
-"""
-Load a shared library.
-"""
+"""Load a shared library."""
 
 from __future__ import annotations
 
@@ -42,70 +40,65 @@ if IS_WINDOWS and not hasattr(sys, "coinit_flags"):
 
 
 class LoadLibrary:
+    """Load a shared library."""
+
     def __init__(self, path: PathLike, libtype: LibType | None = None, **kwargs: Any) -> None:
         """Load a shared library.
 
-        For example, a C/C++, FORTRAN, C#, Java, Delphi, LabVIEW, ActiveX, ... library.
+        For example, a C/C++, FORTRAN, .NET, Java, Delphi, LabVIEW, ActiveX, ... library.
 
-        .. versionchanged:: 0.4
-           Added support for Java archives.
+        Args:
+            path: The path to the library.
+                The search order to find the library is:
 
-        .. versionchanged:: 0.5
-           Added support for COM_ libraries.
+                1. assume that a full or a relative (to the current working directory) path is specified
+                2. use [ctypes.util.find_library][]{:target="_blank"}
+                3. search [sys.path][]{:target="_blank"}
+                4. search [os.environ["PATH"]][os.environ]{:target="_blank"}.
 
-        .. versionchanged:: 0.9
-           Added support for ActiveX_ libraries.
+                If loading a [COM](https://en.wikipedia.org/wiki/Component_Object_Model){:target="_blank"} library,
+                `path` may either be the
 
-        .. _Assembly: https://docs.microsoft.com/en-us/dotnet/api/system.reflection.assembly
-        .. _comtypes.CreateObject: https://pythonhosted.org/comtypes/#creating-and-accessing-com-objects
-        .. _COM: https://en.wikipedia.org/wiki/Component_Object_Model
-        .. _ActiveX: https://en.wikipedia.org/wiki/ActiveX
+                * ProgID (e.g, `"InternetExplorer.Application"`), or the
+                * CLSID (e.g., `"{2F7860A2-1473-4D75-827D-6C4E27600CAC}"`).
 
-        :param path: The path to the shared library.
+            libtype: The library type.
+                The following values are supported:
 
-            The search order for finding the shared library is:
-
-                1. assume that a full or a relative (to the current working directory)
-                   path is specified, then
-                2. use :func:`ctypes.util.find_library`, then
-                3. search :data:`sys.path`, then
-                4. search :data:`os.environ['PATH'] <os.environ>`.
-
-            If loading a COM_ library, `path` may either be the
-
-                * ProgID (e.g., ``InternetExplorer.Application``), or the
-                * CLSID (e.g., ``{2F7860A2-1473-4D75-827D-6C4E27600CAC}``).
-
-        :param libtype: The library type.
-
-            The following values are currently supported:
-
-                * `cdll`: a library that uses the __cdecl calling convention (default)
-                * `windll` or `oledll`: a library that uses the __stdcall calling convention
-                * `net`: a Microsoft .NET library
+                * `cdll`: a library that uses the `__cdecl` calling convention
+                    (default value if not specified and not a Java library)
+                * `windll` or `oledll`: a library that uses the `__stdcall` calling convention
+                * `net`: a .NET library
                 * `clr`: alias for `net` (Common Language Runtime)
-                * `java`: a Java archive (``.jar`` or ``.class`` files)
-                * `com`: a COM_ library
-                * `activex`: an ActiveX_ library
+                * `java`: a Java archive (`.jar` or `.class` files)
+                * `com`: a [COM](https://en.wikipedia.org/wiki/Component_Object_Model){:target="_blank"} library
+                * `activex`: an [ActiveX](https://en.wikipedia.org/wiki/ActiveX){:target="_blank"} library
 
-            .. tip::
-               Since the ``.jar`` or ``.class`` extension uniquely defines a Java library,
-               `libtype` will automatically be set to `java` if `path` ends with
-               ``.jar`` or ``.class``.
+                !!! tip
+                    Since the `.jar` or `.class` extension uniquely defines a Java library,
+                    `libtype` will automatically be set to `java` if `path` ends with
+                    `.jar` or `.class`.
 
-        :param kwargs: All additional keyword arguments are passed to the object that loads the library.
-            If `libtype` is
+                !!! note "Support for library types were added in the following `msl-loadlib` versions"
+                    * 0.1: __cdecl, __stdcall, .NET
+                    * 0.4: Java
+                    * 0.5: COM
+                    * 0.9: ActiveX
 
-                * `cdll` :math:`\\rightarrow` :class:`~ctypes.CDLL`
-                * `windll` :math:`\\rightarrow` :class:`~ctypes.WinDLL`
-                * `oledll` :math:`\\rightarrow` :class:`~ctypes.OleDLL`
-                * `net` or `clr` :math:`\\rightarrow` all keyword arguments are ignored
-                * `java` :math:`\\rightarrow` :class:`~.py4j.java_gateway.JavaGateway`
-                * `com` :math:`\\rightarrow` comtypes.CreateObject_
-                * `activex` :math:`\\rightarrow` :meth:`Application.load <msl.loadlib.activex.Application.load>`
+            kwargs: All additional keyword arguments are passed to the object that loads the library.
+                If `libtype` is
 
-        :raises OSError: If the shared library cannot be loaded.
-        :raises ValueError: If the value of `libtype` is not supported.
+                * `cdll` &#8594; [ctypes.CDLL][]{:target="_blank"}
+                * `windll` &#8594; [ctypes.WinDLL][]{:target="_blank"}
+                * `oledll` &#8594; [ctypes.OleDLL][]{:target="_blank"}
+                * `net` or `clr` &#8594; all keyword arguments are ignored
+                * `java` &#8594; [JavaGateway][py4j.java_gateway.JavaGateway]{:target="_blank"}
+                * `com` &#8594; [comtypes.CreateObject](https://comtypes.readthedocs.io/en/stable/client.html#CreateObject){:target="_blank"}
+                * `activex` &#8594; [Application.load][msl.loadlib.activex.Application.load]
+
+        Raises:
+            OSError: If the shared library cannot be loaded.
+            ValueError: If the value of `libtype` is not supported.
         """
         # a reference to the ActiveX application
         self._app = None
@@ -362,35 +355,42 @@ class LoadLibrary:
         utils.logger.debug("Loaded %s", self._path)
 
     def __del__(self) -> None:
+        """Calls cleanup."""
         if hasattr(self, "_gateway"):
             self.cleanup()
 
     def __repr__(self) -> str:
-        return f"<LoadLibrary libtype={self._lib.__class__.__name__} path={self._path}>"
+        """Returns the string representation."""
+        lib_name: str = self._lib.__class__.__name__
+        return f"<{self.__class__.__name__} libtype={lib_name} path={self._path}>"
 
     def __enter__(self: Self) -> Self:
+        """Enter a context manager."""
         return self
 
     def __exit__(self, *ignore) -> None:
+        """Exit a context manager."""
         self.cleanup()
 
     @property
     def app(self) -> Application | None:
-        """Returns a reference to the ActiveX main application window.
+        """[Application][msl.loadlib.activex.Application] | `None` &mdash; Reference to the ActiveX application window.
+
+        If the loaded library is not an ActiveX library, returns `None`.
 
         When an ActiveX library is loaded, the window is not shown
-        (to show it call :meth:`~msl.loadlib.activex.Application.show`)
+        (to show it call [Application.show][msl.loadlib.activex.Application.show])
         and the message loop is not running
-        (to run it call :meth:`~msl.loadlib.activex.Application.run`).
+        (to run it call [Application.run][msl.loadlib.activex.Application.run]).
 
-        .. versionadded:: 1.0
+        !!! note "Added in version 1.0"
         """
         return self._app
 
     def cleanup(self) -> None:
         """Clean up references to the library.
 
-        .. versionadded:: 0.10
+        !!! note "Added in version 0.10"
         """
         self._assembly = None
         self._lib = None
@@ -405,23 +405,24 @@ class LoadLibrary:
 
     @property
     def assembly(self) -> Any:
-        """
-        Returns a reference to the `.NET Runtime Assembly <Assembly_>`_ object if
-        the shared library is .NET, otherwise returns :data:`None`.
+        """Returns a reference to the [.NET Runtime Assembly]{:target="_blank"} object.
 
-        .. tip::
-           The `JetBrains dotPeek`_ program can be used to reliably decompile any
-           .NET Assembly into the equivalent source code.
+        If the loaded library is not a .NET library, returns `None`.
 
-        .. _JetBrains dotPeek: https://www.jetbrains.com/decompiler/
+        !!! tip
+            The [JetBrains dotPeek][]{:target="_blank"} program can be used to
+            decompile a .NET Assembly in to the equivalent source code.
+
+        [.NET Runtime Assembly]: https://docs.microsoft.com/en-us/dotnet/api/system.reflection.assembly
+        [JetBrains dotPeek]: https://www.jetbrains.com/decompiler/
         """
         return self._assembly
 
     @property
     def gateway(self):
-        """
-        Returns the :class:`~py4j.java_gateway.JavaGateway` object, only if
-        the shared library is a Java archive, otherwise returns :data:`None`.
+        """[JavaGateway][py4j.java_gateway.JavaGateway] | `None` &mdash; Reference to the Java gateway.
+
+        If the loaded library is not a Java library, returns `None`.
         """
         return self._gateway
 
@@ -431,22 +432,23 @@ class LoadLibrary:
 
         For example, if `libtype` is
 
-            * `cdll` :math:`\\rightarrow` :class:`~ctypes.CDLL`
-            * `windll` :math:`\\rightarrow` :class:`~ctypes.WinDLL`
-            * `oledll` :math:`\\rightarrow` :class:`~ctypes.OleDLL`
-            * `net` or `clr` :math:`\\rightarrow` :class:`~.load_library.DotNet`
-            * `java` :math:`\\rightarrow` :class:`~py4j.java_gateway.JVMView`
-            * `com` or `activex` :math:`\\rightarrow` :func:`POINTER <ctypes.POINTER>`
+        * `cdll` &#8594; [ctypes.CDLL][]{:target="_blank"}
+        * `windll` &#8594; [ctypes.WinDLL][]{:target="_blank"}
+        * `oledll` &#8594; [ctypes.OleDLL][]{:target="_blank"}
+        * `net` or `clr` &#8594; [DotNet][msl.loadlib.load_library.DotNet]
+        * `com` or `activex` &#8594; [ctypes.POINTER][]{:target="_blank"}
         """
         return self._lib
 
     @property
     def path(self) -> str:
-        """The path to the shared library file."""
+        """[str][] &mdash; The path to the library file."""
         return self._path
 
 
 class DotNet:
+    """Container class for .NET objects."""
+
     def __init__(self, items: dict, path: str) -> None:
         """Contains the namespace_ modules, classes and `System.Type`_ objects of a .NET Assembly.
 
@@ -462,4 +464,5 @@ class DotNet:
         self._path = path
 
     def __repr__(self) -> str:
+        """Returns the string representation."""
         return f"<{self.__class__.__name__} path={self._path}>"

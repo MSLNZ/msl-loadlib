@@ -618,7 +618,7 @@ class Icon:
 
     @property
     def hicon(self) -> int | None:
-        """[int][] | `None`: The handle to the icon or `None` if no icon was found."""
+        """[int][] | `None` &mdash; The handle to the icon or `None` an icon was not found in the `file`."""
         return self._hicon
 
     def destroy(self) -> None:
@@ -663,12 +663,12 @@ class MenuItem:
 
     @property
     def callback(self) -> Callback | None:
-        """[Callback][] | `None`: The callback function to call when the menu item is clicked."""
+        """[Callback][] | `None` &mdash; The callback function to call when the menu item is clicked."""
         return self._callback
 
     @property
     def checked(self) -> bool:
-        """[bool][]: Whether the menu item's check mark is shown."""
+        """[bool][] &mdash; Whether the menu item's check mark is shown."""
         return self._checked
 
     @checked.setter
@@ -687,22 +687,22 @@ class MenuItem:
 
     @property
     def flags(self) -> int:
-        """[int][]: The flags that were used to create the menu item."""
+        """[int][] &mdash; The flags that were used to create the menu item."""
         return self._flags
 
     @property
     def hmenu(self) -> int:
-        """[int][]" The handle to the popup menu that the menu item belongs to."""
+        """[int][] &mdash; The handle to the popup menu that the menu item belongs to."""
         return self._hmenu
 
     @property
     def id(self) -> int:
-        """[int][]: The identifier of the menu item."""
+        """[int][] &mdash; The identifier of the menu item."""
         return self._id
 
     @property
     def text(self) -> str:
-        """[str][]: The content of the menu item."""
+        """[str][] &mdash; The content of the menu item."""
         return self._text
 
 
@@ -756,7 +756,7 @@ class MenuGroup:
 
     @property
     def checked(self) -> MenuItem | None:
-        """[MenuItem][msl.loadlib.activex.MenuItem] | `None`: The menu item that is currently checked in the group."""
+        """[MenuItem][msl.loadlib.activex.MenuItem] | `None` &mdash; The menu item that is currently checked in the group."""
         for item in self:
             if item.checked:
                 return item
@@ -773,7 +773,7 @@ class MenuGroup:
 
     @property
     def name(self) -> str:
-        """[str][]: The name of the menu group."""
+        """[str][] &mdash; The name of the menu group."""
         return self._name
 
 
@@ -865,7 +865,7 @@ class Menu:
 
     @property
     def hmenu(self) -> int:
-        """[int][]: The handle to the main menu."""
+        """[int][] &mdash; The handle to the main menu."""
         return self._hmenu
 
 
@@ -997,7 +997,7 @@ class Application:
             interface: The COM interface to use.
 
         Returns:
-            An `AdviseConnection` object from `comtypes`.
+            An `_AdviseConnection` object from `comtypes`.
         """
         cxn = client.GetEvents(source, sink or self, interface=interface)
         self._event_connections.append(cxn)
@@ -1005,7 +1005,7 @@ class Application:
 
     @property
     def hwnd(self) -> int:
-        """[int][]: The handle to the main application window."""
+        """[int][] &mdash; The handle to the main application window."""
         return self._hwnd
 
     def load(
@@ -1078,7 +1078,7 @@ class Application:
 
     @property
     def menu(self) -> Menu:
-        """[Menu][msl.loadlib.activex.Menu]: The menu instance."""
+        """[Menu][msl.loadlib.activex.Menu] &mdash; The menu instance."""
         return self._menu
 
     @staticmethod
@@ -1165,13 +1165,10 @@ class Application:
 
     @property
     def thread_id(self) -> int:
-        """[int][]: The identifier of the thread that created the main application window."""
+        """[int][] &mdash; The identifier of the thread that created the main application window."""
         return self._thread_id
 
 
 # TypeAlias
 Callback = Callable[[MenuItem], None]
-"""[TypeAlias][typing.TypeAlias] for a callable object to handle a [MenuItem] callback.
-
-[MenuItem]: [msl.loadlib.activex.MenuItem]
-"""
+"""[TypeAlias][typing.TypeAlias] for a callable object to handle a [MenuItem][msl.loadlib.activex.MenuItem] callback."""

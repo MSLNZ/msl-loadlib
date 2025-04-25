@@ -29,7 +29,7 @@ You have two options to create the 32-bit server
 and you have two options to use the newly-created server
 
 1. Copy the `server32-*` file to the `../site-packages/msl/loadlib` directory where you have `msl-loadlib` installed in your 64-bit version of Python to replace the existing server file.
-2. Specify the directory where the `server32-*` file is located as the value of the `server32_dir` keyword argument in [Client64][msl.loadlib.client64.Client64].
+2. Specify the directory where the `server32-*` file is located as the value of the `server32_dir` keyword argument in [Client64][].
 
 ## Using the API {: #refreeze-api }
 
