@@ -1,6 +1,4 @@
-"""
-Common functions used by the **MSL-LoadLib** package.
-"""
+"""Common utility functions."""
 
 from __future__ import annotations
 
@@ -28,16 +26,10 @@ logger = logging.getLogger(__package__)
 
 
 def is_pythonnet_installed() -> bool:
-    """Checks if `Python for .NET`_ is installed.
+    """Checks if `pythonnet` is installed.
 
-    .. _Python for .NET: https://pythonnet.github.io/
-
-    :return: Whether `Python for .NET`_ is installed.
-
-    .. note::
-        For help getting `Python for .NET`_ installed on a non-Windows operating system look at
-        the :ref:`prerequisites <loadlib-prerequisites>`, the `Mono <https://www.mono-project.com/>`_
-        project and the `Python for .NET documentation <Python for .NET_>`_.
+    Returns:
+        Whether `pythonnet` is installed.
     """
     try:
         import clr
@@ -47,13 +39,12 @@ def is_pythonnet_installed() -> bool:
 
 
 def is_py4j_installed() -> bool:
-    """Checks if Py4J_ is installed.
+    """Checks if `py4j` is installed.
 
-    .. versionadded:: 0.4
+    Returns:
+        Whether `py4j` is installed.
 
-    .. _Py4J: https://www.py4j.org/index.html#
-
-    :return: Whether Py4J_ is installed.
+    !!! note "Added in version 0.4"
     """
     try:
         import py4j
@@ -63,13 +54,12 @@ def is_py4j_installed() -> bool:
 
 
 def is_comtypes_installed() -> bool:
-    """Checks if comtypes_ is installed.
+    """Checks if `comtypes` is installed.
 
-    .. versionadded:: 0.5
+    Returns:
+        Whether `comtypes` is installed.
 
-    .. _comtypes: https://pythonhosted.org/comtypes/#
-
-    :return: Whether comtypes_ is installed.
+    !!! note "Added in version 0.5"
     """
     try:
         import comtypes
@@ -79,32 +69,37 @@ def is_comtypes_installed() -> bool:
 
 
 def check_dot_net_config(py_exe_path: str) -> tuple[int, str]:
-    """Check if the **useLegacyV2RuntimeActivationPolicy** property is enabled.
+    """Checks if the **useLegacyV2RuntimeActivationPolicy** property is enabled.
 
-    By default, `Python for .NET <https://pythonnet.github.io/>`_ works with .NET
-    4.0+ and therefore it cannot automatically load a shared library that was compiled
-    with .NET <4.0. This method ensures that the **useLegacyV2RuntimeActivationPolicy**
-    property exists in the **<python-executable>.config** file and that it is enabled.
+    By default, [Python for .NET](https://pythonnet.github.io/){:target="_blank"} works
+    with .NET 4.0+ and therefore it cannot automatically load a library that was compiled
+    with .NET &lt;4.0.
 
-    This `link <https://stackoverflow.com/questions/14508627/>`_ provides an overview
-    explaining why the **useLegacyV2RuntimeActivationPolicy** property is required.
+    This function ensures that the **useLegacyV2RuntimeActivationPolicy** property is
+    defined in the *py_exe_path*.config file and that it is enabled.
 
-    The **<python-executable>.config** file should look like
+    This [link](https://stackoverflow.com/questions/14508627/){:target="_blank"} provides
+    an overview explaining why the **useLegacyV2RuntimeActivationPolicy** property is required.
 
-    .. code-block:: xml
+    The *py_exe_path*.config file is
 
-        <?xml version="1.0" encoding="utf-8" ?>
-        <configuration>
-            <startup useLegacyV2RuntimeActivationPolicy="true">
-                <supportedRuntime version="v4.0" />
-                <supportedRuntime version="v2.0.50727" />
-            </startup>
-        </configuration>
+    ```xml
+    <?xml version="1.0" encoding="utf-8" ?>
+    <configuration>
+        <startup useLegacyV2RuntimeActivationPolicy="true">
+            <supportedRuntime version="v4.0" />
+            <supportedRuntime version="v2.0.50727" />
+        </startup>
+    </configuration>
+    ```
 
-    :param py_exe_path: The path to a Python executable.
-    :return: A status flag and a message describing the outcome.
+    Args:
+        py_exe_path: The path to a Python executable.
 
-        The flag will be one of the following values:
+    Returns:
+        A status flag and a message describing the outcome.
+
+            The flag will be one of the following values:
 
             * -1: if there was a problem
             * 0: if the .NET property was already enabled, or
@@ -182,15 +177,18 @@ def check_dot_net_config(py_exe_path: str) -> tuple[int, str]:
 def is_port_in_use(port: int) -> bool:
     """Checks whether the TCP port is in use.
 
-    .. versionchanged:: 0.10.0
-       Only check TCP ports (instead of both TCP and UDP ports).
-       Uses the ``ss`` command instead of ``netstat`` on Linux.
+    Args:
+        port: The port number to test.
 
-    .. versionchanged:: 0.7.0
-       Renamed from `port_in_use` and added support for macOS.
+    Returns:
+        Whether the TCP port is in use.
 
-    :param port: The port number to test.
-    :return: Whether the TCP port is in use.
+    !!! note "Changed in version 0.10"
+        Only check TCP ports (instead of both TCP and UDP ports).
+        Uses the ``ss`` command instead of ``netstat`` on Linux.
+
+    !!! note "Changed in version 0.7"
+        Renamed from `port_in_use` and added support for macOS.
     """
     flags = 0
     if IS_WINDOWS:
@@ -208,7 +206,7 @@ def is_port_in_use(port: int) -> bool:
 
 
 def get_available_port() -> int:
-    """Returns a port number that is available."""
+    """[int][] &mdash; Returns a port number that is available."""
     with socket.socket() as sock:
         sock.bind(("", 0))
         port = sock.getsockname()[1]
@@ -218,10 +216,13 @@ def get_available_port() -> int:
 def wait_for_server(host: str, port: int, timeout: float) -> None:
     """Wait for the 32-bit server to start.
 
-    :param host: The hostname or IP address of the server.
-    :param port: The port number of the server.
-    :param timeout: The maximum number of seconds to wait to establish a connection to the server.
-    :raises ConnectionTimeoutError: If a timeout occurred.
+    Args:
+        host: The hostname or IP address of the server.
+        port: The port number of the server.
+        timeout: The maximum number of seconds to wait to establish a connection to the server.
+
+    Raises:
+        ConnectionTimeoutError: If a timeout occurred.
     """
     stop = time.time() + max(0.0, timeout)
     while True:
@@ -234,27 +235,34 @@ def wait_for_server(host: str, port: int, timeout: float) -> None:
 
 
 def get_com_info(*additional_keys: str) -> dict[str, dict[str, str | None]]:
-    """Reads the registry for the COM_ libraries that are available.
+    """Reads the registry for the [COM]{:target="_blank"} libraries that are available.
 
-    This function is only supported on Windows.
+    [COM]: https://en.wikipedia.org/wiki/Component_Object_Model
 
-    .. versionadded:: 0.5
+    !!! attention
+        This function is only supported on Windows.
 
-    .. _COM: https://en.wikipedia.org/wiki/Component_Object_Model
-    .. _Class ID: https://docs.microsoft.com/en-us/windows/desktop/com/clsid-key-hklm
+    Args:
+        additional_keys: The Program ID (`ProgID`) key is returned automatically.
+            You can include additional keys (e.g., `Version`, `InprocHandler32`, `ToolboxBitmap32`,
+            `VersionIndependentProgID`, ...) if you also want this additional
+            information to be returned for each [Class ID]{:target="_blank"}.
 
-    :param additional_keys: The Program ID (ProgID) key is returned automatically.
-        You can include additional keys (e.g., Version, InprocHandler32, ToolboxBitmap32,
-        VersionIndependentProgID, ...) if you also want this additional
-        information to be returned for each `Class ID`_.
-    :return: The keys are the Class ID's and each value is a :class:`dict`
-        of the information that was requested.
+            [Class ID]: https://docs.microsoft.com/en-us/windows/desktop/com/clsid-key-hklm
 
-    Example::
+    **Example:**
 
-        >>> from msl.loadlib import utils
-        >>> info = utils.get_com_info()
-        >>> more_info = utils.get_com_info('Version', 'ToolboxBitmap32')
+    ```python
+    from msl.loadlib import utils
+
+    info = utils.get_com_info()
+    more_info = utils.get_com_info("Version", "ToolboxBitmap32")
+    ```
+
+    Returns:
+        The keys are the Class ID's and each value is a [dict][] of the information that was requested.
+
+    !!! note "Added in version 0.5"
     """
     if winreg is None:
         return {}
@@ -302,33 +310,40 @@ def get_com_info(*additional_keys: str) -> dict[str, dict[str, str | None]]:
 
 
 def generate_com_wrapper(lib: Any, out_dir: str | None = None) -> ModuleType:
-    """Generate a Python wrapper module around a COM library.
+    """Generate a Python wrapper module around a [COM]{:target="_blank"} library.
 
-    For more information see `Accessing type libraries`_.
+    For more information see [Accessing type libraries]{:target="_blank"}.
 
-    .. versionadded:: 0.9
+    [COM]: https://en.wikipedia.org/wiki/Component_Object_Model
+    [Accessing type libraries]: https://comtypes.readthedocs.io/en/stable/client.html#accessing-type-libraries
 
-    .. _Accessing type libraries: https://pythonhosted.org/comtypes/#accessing-type-libraries
+    !!! attention
+        This function is only supported on Windows.
 
-    :param lib: The COM library to create a wrapper of.
+    Args:
+        lib: The COM library to create a wrapper of.
 
-        Can be any of the following
+            Can be any of the following:
 
-            * a :class:`~msl.loadlib.load_library.LoadLibrary` object
-            * the `ProgID` or `CLSID` of a registered COM library as a :class:`str`
-            * a COM pointer instance (:func:`~ctypes.POINTER`)
-            * an ITypeLib COM pointer instance (:func:`~ctypes.POINTER`)
-            * a path to a library file (.tlb, .exe or .dll) as a :class:`str`
-            * a :class:`tuple` or :class:`list` specifying the GUID of a library,
-              a major and a minor version number, plus optionally an LCID number, e.g.,
+            * a [LoadLibrary][] instance
+            * the `ProgID` or `CLSID` of a registered COM library as a [str][]
+            * a `comtypes` pointer instance
+            * an `ITypeLib` COM pointer from a loaded type library
+            * the path to a library file (.tlb, .exe or .dll) as a [str][]
+            * a sequence specifying the `GUID` of a library, a major and a minor
+                version number, plus optionally an `LCID` number, e.g.,
 
-                 ``['{EAB22AC0-30C1-11CF-A7EB-0000C05BAE0B}', 1, 1]``
+                `["{EAB22AC0-30C1-11CF-A7EB-0000C05BAE0B}", 1, 1]`
 
-            * an object with ``_reg_libid_`` and ``_reg_version_`` attributes
+            * an object with `_reg_libid_` and `_reg_version_` attributes
 
-    :param out_dir: The output directory to save the wrapper to. If not specified,
-        the module is saved to the ``../site-packages/comtypes/gen`` directory.
-    :return: The wrapper module that was generated.
+        out_dir: The output directory to save the wrapper to. If not specified,
+            the module is saved to the `../site-packages/comtypes/gen` directory.
+
+    Returns:
+        The wrapper module that was generated.
+
+    !!! note "Added in version 0.9"
     """
     if not is_comtypes_installed():
         msg = "Cannot create a COM wrapper because comtypes is not installed, run\n  pip install comtypes"

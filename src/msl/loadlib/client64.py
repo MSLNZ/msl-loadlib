@@ -235,10 +235,6 @@ class Client64:
         This method shuts down the 32-bit server, closes the client connection, and
         deletes the temporary file that was used to store the serialized [pickle][]d data.
 
-        Limit the total number of characters that are written to either `stdout`
-        or `stderr` on the 32-bit server to be &lt; 4096. This will avoid potential
-        blocking when reading the `stdout` and `stderr` PIPE buffers.
-
         Args:
             kill_timeout: If the 32-bit server is still running after `kill_timeout`
                 seconds, the server will be killed using brute force. A warning will be
@@ -247,11 +243,14 @@ class Client64:
                 !!! note "Added in version 0.6"
 
         Returns:
-            The `stdout` stream from the 32-bit server.
-            The `stderr` stream from the 32-bit server.
+            The `(stdout, stderr)` streams from the 32-bit server.
 
-        !!! note "Changed in version 0.8"
-            Prior to version 0.8 this method returned `None`
+                Limit the total number of characters that are written to either `stdout`
+                or `stderr` on the 32-bit server to be &lt;4096. This will avoid potential
+                blocking when reading the `stdout` and `stderr` PIPE buffers.
+
+                !!! note "Changed in version 0.8"
+                    Prior to version 0.8 this method returned `None`
 
         !!! tip
             This method gets called automatically when the reference count to the

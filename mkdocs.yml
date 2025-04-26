@@ -71,11 +71,18 @@ nav:
       - usage/ipc/stdcall.md
       - usage/ipc/labview.md
     - usage/refreeze.md
+  - Examples:
+    - examples/index.md
+    - examples/cpp32.md
+    - examples/cpp64.md
   - API:
-    - api/load_library.md
     - api/client64.md
+    - api/load_library.md
     - api/server32.md
     - api/activex.md
+    - api/exceptions.md
+    - api/freeze_server32.md
+    - api/utils.md
   - FAQ: faq.md
   - About:
     - Developers: about/developers.md
@@ -105,6 +112,7 @@ plugins:
               domains: [std, py]
             - https://numpy.org/doc/stable/objects.inv
             - https://www.py4j.org/objects.inv
+            - https://comtypes.readthedocs.io/en/stable/objects.inv
           options:
             # General
             show_source: true
@@ -114,7 +122,7 @@ plugins:
 
             # Members
             filters: ["!^_"]
-            inherited_members: true
+            inherited_members: false
 
             # Docstrings
             docstring_options:

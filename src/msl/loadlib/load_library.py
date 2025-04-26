@@ -1,4 +1,4 @@
-"""Load a shared library."""
+"""Load a library."""
 
 from __future__ import annotations
 
@@ -22,14 +22,17 @@ if TYPE_CHECKING:
 _LIBTYPES: set[str] = {"cdll", "windll", "oledll", "net", "clr", "java", "com", "activex"}
 
 LibType = Literal["cdll", "windll", "oledll", "net", "clr", "java", "com", "activex"]
-"""The library type."""
+"""Supported library types."""
 
 # the Self type was added in Python 3.11 (PEP 673)
 # using TypeVar is equivalent for < 3.11
 Self = TypeVar("Self", bound="LoadLibrary")
 
-PathLike = TypeVar("PathLike", str, bytes, os.PathLike)
-"""A :term:`path-like object`."""
+PathLike = TypeVar("PathLike", str, bytes, os.PathLike[str], os.PathLike[bytes])
+"""A [path-like]{:target="_blank"} object ([str][], [bytes][] or [os.PathLike][]).
+
+[path-like]: https://docs.python.org/3/glossary.html#term-path-like-object
+"""
 
 if IS_WINDOWS and not hasattr(sys, "coinit_flags"):
     # https://pywinauto.readthedocs.io/en/latest/HowTo.html#com-threading-model
@@ -40,10 +43,10 @@ if IS_WINDOWS and not hasattr(sys, "coinit_flags"):
 
 
 class LoadLibrary:
-    """Load a shared library."""
+    """Load a library."""
 
     def __init__(self, path: PathLike, libtype: LibType | None = None, **kwargs: Any) -> None:
-        """Load a shared library.
+        """Load a library.
 
         For example, a C/C++, FORTRAN, .NET, Java, Delphi, LabVIEW, ActiveX, ... library.
 
@@ -68,8 +71,7 @@ class LoadLibrary:
                 * `cdll`: a library that uses the `__cdecl` calling convention
                     (default value if not specified and not a Java library)
                 * `windll` or `oledll`: a library that uses the `__stdcall` calling convention
-                * `net`: a .NET library
-                * `clr`: alias for `net` (Common Language Runtime)
+                * `net` or `clr`: a .NET library (Common Language Runtime)
                 * `java`: a Java archive (`.jar` or `.class` files)
                 * `com`: a [COM](https://en.wikipedia.org/wiki/Component_Object_Model){:target="_blank"} library
                 * `activex`: an [ActiveX](https://en.wikipedia.org/wiki/ActiveX){:target="_blank"} library
@@ -93,7 +95,7 @@ class LoadLibrary:
                 * `oledll` &#8594; [ctypes.OleDLL][]{:target="_blank"}
                 * `net` or `clr` &#8594; all keyword arguments are ignored
                 * `java` &#8594; [JavaGateway][py4j.java_gateway.JavaGateway]{:target="_blank"}
-                * `com` &#8594; [comtypes.CreateObject](https://comtypes.readthedocs.io/en/stable/client.html#CreateObject){:target="_blank"}
+                * `com` &#8594; [comtypes.CreateObject][CreateObject]{:target="_blank"}
                 * `activex` &#8594; [Application.load][msl.loadlib.activex.Application.load]
 
         Raises:
@@ -347,7 +349,7 @@ class LoadLibrary:
                     if obj.__name__ not in dotnet:
                         dotnet[obj.__name__] = obj
 
-            self._lib = DotNet(dotnet, self._path)
+            self._lib = DotNet(self._path, dotnet)
 
         else:
             assert False, "Should not get here -- contact developers"
@@ -410,8 +412,7 @@ class LoadLibrary:
         If the loaded library is not a .NET library, returns `None`.
 
         !!! tip
-            The [JetBrains dotPeek][]{:target="_blank"} program can be used to
-            decompile a .NET Assembly in to the equivalent source code.
+            The [JetBrains dotPeek]{:target="_blank"} program can be used to decompile a .NET Assembly.
 
         [.NET Runtime Assembly]: https://docs.microsoft.com/en-us/dotnet/api/system.reflection.assembly
         [JetBrains dotPeek]: https://www.jetbrains.com/decompiler/
@@ -435,8 +436,12 @@ class LoadLibrary:
         * `cdll` &#8594; [ctypes.CDLL][]{:target="_blank"}
         * `windll` &#8594; [ctypes.WinDLL][]{:target="_blank"}
         * `oledll` &#8594; [ctypes.OleDLL][]{:target="_blank"}
-        * `net` or `clr` &#8594; [DotNet][msl.loadlib.load_library.DotNet]
+        * `net` or `clr` &#8594; An object containing .NET [namespace]{:target="_blank"}s,
+            classes and [System.Type]{:target="_blank"}s
         * `com` or `activex` &#8594; [ctypes.POINTER][]{:target="_blank"}
+
+        [namespace]: https://learn.microsoft.com/en-us/dotnet/csharp/language-reference/keywords/namespace
+        [System.Type]: https://learn.microsoft.com/en-us/dotnet/api/system.type
         """
         return self._lib
 
@@ -449,19 +454,15 @@ class LoadLibrary:
 class DotNet:
     """Container class for .NET objects."""
 
-    def __init__(self, items: dict, path: str) -> None:
-        """Contains the namespace_ modules, classes and `System.Type`_ objects of a .NET Assembly.
+    def __init__(self, path: str, items: dict[str, Any]) -> None:
+        """Contains the namespaces, classes and System.Type objects of a .NET Assembly.
 
-        Do not instantiate this class directly.
-
-        .. _namespace: https://msdn.microsoft.com/en-us/library/z2kcy19k.aspx
-        .. _System.Type: https://docs.microsoft.com/en-us/dotnet/api/system.type
-
-        :param items: The items to use to update the internal __dict__ attribute.
-        :param path: The path to the .NET library file.
+        Args:
+            path: The path to the .NET library file.
+            items: The items to use to update the internal __dict__ attribute.
         """
+        self._path: str = path
         self.__dict__.update(items)
-        self._path = path
 
     def __repr__(self) -> str:
         """Returns the string representation."""

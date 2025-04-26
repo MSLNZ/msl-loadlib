@@ -1,4 +1,4 @@
-"""Helper module for loading an ActiveX library in an application window.
+"""Load ActiveX controls in an application window.
 
 The following classes are available to interact with ActiveX controls
 
@@ -645,10 +645,8 @@ class MenuItem:
         self._text: str = kwargs["text"]
         self._callback: Callback | None = kwargs["callback"]
         self._flags: int = kwargs["flags"]
-        self._checked = False
-
-        self.data: Any = kwargs["data"]
-        """User data associated with the menu item."""
+        self._checked: bool = False
+        self._data: Any = kwargs["data"]
 
     def __eq__(self, other: MenuItem) -> bool:
         """Checks for equal id's."""
@@ -674,6 +672,25 @@ class MenuItem:
     @checked.setter
     def checked(self, value: bool) -> None:
         """Set the checked state of the menu item."""
+        if self._hmenu == -1:
+            msg = "A MenuItem must first be added to a Menu before it can be checked"
+            raise ValueError(msg)
+
+        # MF_CHECKED=8, MF_UNCHECKED=0
+        state = 8 if value else 0
+        previous = user32.CheckMenuItem(self._hmenu, self._id, state)
+        if previous == -1:
+            raise ctypes.WinError()
+        self._checked = bool(value)
+
+    @property
+    def data(self) -> Any:
+        """[Any][typing.Any] &mdash; User-defined data associated with the menu item."""
+        return self._data
+
+    @data.setter
+    def data(self, value: Any) -> None:
+        """Set the user data."""
         if self._hmenu == -1:
             msg = "A MenuItem must first be added to a Menu before it can be checked"
             raise ValueError(msg)

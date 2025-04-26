@@ -68,8 +68,7 @@ class Server32(HTTPServer):
         If the loaded library is not a .NET library, returns `None`.
 
         !!! tip
-            The [JetBrains dotPeek][]{:target="_blank"} program can be used to
-            decompile a .NET Assembly in to the equivalent source code.
+            The [JetBrains dotPeek]{:target="_blank"} program can be used to decompile a .NET Assembly.
 
         [.NET Runtime Assembly]: https://docs.microsoft.com/en-us/dotnet/api/system.reflection.assembly
         [JetBrains dotPeek]: https://www.jetbrains.com/decompiler/
@@ -85,8 +84,12 @@ class Server32(HTTPServer):
         * `cdll` &#8594; [ctypes.CDLL][]{:target="_blank"}
         * `windll` &#8594; [ctypes.WinDLL][]{:target="_blank"}
         * `oledll` &#8594; [ctypes.OleDLL][]{:target="_blank"}
-        * `net` or `clr` &#8594; [DotNet][msl.loadlib.load_library.DotNet]
+        * `net` or `clr` &#8594; An object containing .NET [namespace]{:target="_blank"}s,
+            classes and [System.Type]{:target="_blank"}s
         * `com` or `activex` &#8594; [ctypes.POINTER][]{:target="_blank"}
+
+        [namespace]: https://learn.microsoft.com/en-us/dotnet/csharp/language-reference/keywords/namespace
+        [System.Type]: https://learn.microsoft.com/en-us/dotnet/api/system.type
         """
         return self._lib
 
@@ -97,7 +100,14 @@ class Server32(HTTPServer):
 
     @staticmethod
     def version() -> str:
-        """[str][] &mdash; The version of Python that the 32-bit server is running on."""
+        """[str][] &mdash; The version of Python that the 32-bit server is running on.
+
+        !!! tip
+            You can get the version from a terminal by running
+            ```console
+            python -c "from msl.loadlib import Server32; Server32.version()"
+            ```
+        """
         exe = os.path.join(os.path.dirname(__file__), SERVER_FILENAME)
         return subprocess.check_output([exe, "--version"]).decode().strip()
 
@@ -108,10 +118,11 @@ class Server32(HTTPServer):
         This method starts an [interactive console]{:target="_blank"}, in a new terminal,
         with the Python interpreter on the 32-bit server.
 
-        You can start the console by running
-        ```console
-        python -c "from msl.loadlib import Server32; Server32.interactive_console()"
-        ```
+        !!! tip
+            You can start the console from a terminal by running
+            ```console
+            python -c "from msl.loadlib import Server32; Server32.interactive_console()"
+            ```
 
         [interactive console]: https://docs.python.org/3/tutorial/interpreter.html#interactive-mode
         """

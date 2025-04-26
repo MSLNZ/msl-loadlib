@@ -1,8 +1,15 @@
-"""
-Create a 32-bit server for
-`inter-process communication <https://en.wikipedia.org/wiki/Inter-process_communication>`_.
+"""Create a 32-bit server for [inter-process communication]{:target="_blank"}.
 
-There is also a :ref:`command-line utility <refreeze-cli>` to create a server.
+**Example:**
+```python
+from msl.loadlib import freeze_server32
+freeze_server32.main(imports="numpy")
+```
+
+!!! note
+    There is also a [command-line utility][refreeze-cli] to create a new server.
+
+[inter-process communication]: https://en.wikipedia.org/wiki/Inter-process_communication
 """
 
 from __future__ import annotations
@@ -29,62 +36,47 @@ from msl.loadlib import version_info
 
 def main(
     *,
-    spec: str | None = None,
+    data: str | Iterable[str] | None = None,
     dest: str | None = None,
     imports: str | Iterable[str] | None = None,
-    data: str | Iterable[str] | None = None,
-    skip_32bit_check: bool = False,
-    save_spec: bool = False,
+    keep_spec: bool = False,
     keep_tk: bool = False,
+    skip_32bit_check: bool = False,
+    spec: str | None = None,
 ) -> None:
     """Create a frozen server.
 
     This function should be run using a 32-bit Python interpreter with
-    `PyInstaller`_ installed.
+    [PyInstaller](https://www.pyinstaller.org/){:target="_blank"} installed.
 
-    .. versionchanged:: 0.5
-       Added the `requires_pythonnet` and `requires_comtypes` arguments.
+    Args:
+        data: The path(s) to additional data files, or directories containing
+            data files, to be added to the frozen server. Each value should be in
+            the form `source:dest_dir`, where `:dest_dir` is optional. `source` is
+            the path to a file (or a directory of files) to add. `dest_dir` is an
+            optional destination directory, relative to the top-level directory of
+            the frozen server, to add the file(s) to. If `dest_dir` is not specified,
+            the file(s) will be added to the top-level directory of the server.
+        dest: The destination directory to save the server to. Default is
+            the current working directory.
+        imports: The names of additional modules and packages that must be
+            importable on the server.
+        keep_spec: By default, the `.spec` file that is created (during the freezing
+            process) is deleted. Setting this value to `True` will keep the `.spec` file,
+            so that it may be modified and then passed as the value to the `spec` parameter.
+        keep_tk: By default, the [tkinter][]{:target="_blank"} package is excluded from the
+            server. Setting this value to `True` will bundle `tkinter` with the server.
+        skip_32bit_check: In the rare situation that you want to create a
+            frozen 64-bit server, you can set this value to `True` which skips
+            the requirement that a 32-bit version of Python must be used to create
+            the server. Before you create a 64-bit server, decide if
+            [mocking][faq-mock] the connection is a better solution for your
+            application.
+        spec: The path to a [spec]{:target="_blank"} file to use to create the frozen server.
+            [spec]: https://pyinstaller.org/en/stable/spec-files.html#using-spec-files
 
-    .. versionchanged:: 0.10
-       Added the `dest` argument.
-
-    .. versionchanged:: 1.0
-       Removed the `requires_pythonnet` and `requires_comtypes` arguments.
-       Added the `imports`, `data`, `skip_32bit_check`, `save_spec` and `keep_tk`
-       arguments.
-
-    .. _PyInstaller: https://www.pyinstaller.org/
-
-    :param spec: The path to a :ref:`spec file <using spec files>` to use to
-        create the frozen server.
-    :param dest: The destination directory to save the server to. Default is
-        the current directory.
-    :param imports: The names of additional modules and packages that must be
-        importable on the server.
-    :param data: The path(s) to additional data files, or directories containing
-        data files, to be added to the frozen server. Each value should be in
-        the form `source:dest_dir`, where `:dest_dir` is optional. `source` is
-        the path to a file (or a directory of files) to add. `dest_dir` is an
-        optional destination directory, relative to the top-level directory of
-        the frozen server, to add the file(s) to. If `dest_dir` is not specified,
-        the file(s) will be added to the top-level directory of the server.
-    :param skip_32bit_check: In the rare situation that you want to create a
-        frozen 64-bit server, you can set this value to :data:`True` which skips
-        the requirement that a 32-bit version of Python must be used to create
-        the server. Before you create a 64-bit server, decide if
-        :ref:`msl-loadlib-mock-connection` is a better solution for your
-        application.
-    :param save_spec: By default, the `.spec` file that is created (when the
-        server is frozen) is deleted. Setting this value to :data:`True` will
-        save the `.spec` file, so that it may be modified and then passed as
-        the value to the `spec` parameter.
-    :param keep_tk: By default, the :mod:`tkinter` module is excluded from the
-        server. Setting this value to :data:`True` will bundle :mod:`tkinter`
-        with the server.
-
-    .. attention::
-        If a value for `spec` is specified, then `imports` nor `data` may be
-        specified.
+            !!! attention
+                If a value for `spec` is specified, then `imports` nor `data` may be specified.
     """
     if not skip_32bit_check and constants.IS_PYTHON_64BIT:
         msg = ""
@@ -214,7 +206,7 @@ def main(
     if imports and ("pythonnet" in imports):
         loadlib.utils.check_dot_net_config(server_path)
 
-    if save_spec:
+    if keep_spec:
         print(f"The following files were saved to {dist_path}\n  {constants.SERVER_FILENAME}")
 
         if os.path.isfile(f"{server_path}.config"):
@@ -233,9 +225,7 @@ def main(
 
 
 def _get_standard_modules(keep_tk: bool) -> list[str]:
-    """
-    Returns a list of standard python modules to include and exclude in the
-    frozen application.
+    """Returns a list of standard python modules to include and exclude in the frozen application.
 
     PyInstaller does not automatically bundle all the standard Python modules
     into the frozen application. This method parses the 'docs.python.org'
@@ -247,8 +237,6 @@ def _get_standard_modules(keep_tk: bool) -> list[str]:
     The 'pyinstaller --hidden-import' option ensures that the module is included
     into the frozen application (only if the module is available for the operating
     system that is running this script).
-
-    :return: A list of modules to be included and excluded.
     """
     # The frozen application is not meant to create GUIs or to add
     # support for building and installing Python modules.
@@ -308,10 +296,13 @@ def _get_standard_modules(keep_tk: bool) -> list[str]:
 
 
 def _create_version_info_file(root_dir: str) -> str:
-    """Create the version info file for Windows.
+    """Create the version-info file for Windows.
 
-    :param root_dir: The directory to save the version file to.
-    :return: The filename of the version file.
+    Args:
+        root_dir: The directory to save the version file to.
+
+    Returns:
+        The filename of the version file.
     """
     text = f"""# UTF-8
 #
@@ -404,11 +395,11 @@ def _cli() -> None:
         "to create the server.",
     )
     parser.add_argument(
-        "--save-spec",
+        "--keep-spec",
         action="store_true",
         help='By default, the PyInstaller ".spec" file (that is created\n'
         "when the server is frozen) is deleted. Including this\n"
-        'flag will save the ".spec" file, so that it may be modified\n'
+        'flag will keep the ".spec" file, so that it may be modified\n'
         'and then passed as the value to the "--spec" option.',
     )
     parser.add_argument(
@@ -422,12 +413,12 @@ def _cli() -> None:
 
     sys.exit(
         main(
-            spec=args.spec,
+            data=args.data,
             dest=args.dest,
             imports=args.imports,
-            data=args.data,
-            skip_32bit_check=args.skip_32bit_check,
-            save_spec=args.save_spec,
+            keep_spec=args.keep_spec,
             keep_tk=args.keep_tk,
+            skip_32bit_check=args.skip_32bit_check,
+            spec=args.spec,
         )
     )

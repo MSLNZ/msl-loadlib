@@ -1,3 +1,3 @@
-# activex {: #api-activex }
+# activex
 
 ::: msl.loadlib.activex

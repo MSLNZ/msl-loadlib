@@ -1,13 +1,4 @@
-"""
-This module is built in to a 32-bit executable by running :mod:`.freeze_server32`.
-
-The executable is used to host a 32-bit library, :class:`~.server32.Server32`,
-so that a module running in a 64-bit Python interpreter, :class:`~.client64.Client64`,
-can communicate with the library. This client-server exchange of information is a
-form of `inter-process communication <ipc_>`_.
-
-.. _ipc: https://en.wikipedia.org/wiki/Inter-process_communication
-"""
+"""This module is built in to a 32-bit executable by running `freeze_server32`."""
 
 import argparse
 import code
@@ -23,15 +14,7 @@ from msl.loadlib.constants import SERVER_FILENAME
 
 
 def main():
-    """Starts a 32-bit server (which is a subclass of :class:`~.server32.Server32`).
-
-    Parses the command-line arguments to run a Python module on a 32-bit server
-    to host a 32-bit library. To see the list of command-line arguments that are
-    allowed, run the executable with the ``--help`` flag (or click here_ to view
-    the source code of the :class:`argparse.ArgumentParser` implementation).
-
-    .. _here: https://msl-loadlib.readthedocs.io/en/stable/_modules/msl/loadlib/start_server32.html#main
-    """
+    """Starts a 32-bit server (which is a subclass of [Server32][])."""
     parser = argparse.ArgumentParser(
         description="Created by the msl-loadlib Python package.\n\n"
         "Runs a 32-bit Python interpreter for inter-process communication for the client-server\n"

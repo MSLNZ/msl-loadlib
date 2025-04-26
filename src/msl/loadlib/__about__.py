@@ -1,13 +1,10 @@
-"""
-Project information.
-"""
+"""Project information."""
 
 from __future__ import annotations
 
 from typing import NamedTuple
 
-from ._version import __version__
-from ._version import version_tuple
+from ._version import __version__, version_tuple
 
 __all__: list[str] = [
     "__author__",
@@ -17,12 +14,11 @@ __all__: list[str] = [
 ]
 
 __author__: str = "Measurement Standards Laboratory of New Zealand"
-__copyright__: str = f"\xa9 2017 - 2024, {__author__}"
+__copyright__: str = f"\xa9 2017 - 2025, {__author__}"
 
 
 class VersionInfo(NamedTuple):
-    """Contains the version information as a
-    (major, minor, micro, releaselevel) named tuple."""
+    """Contains version information as a (major, minor, micro, releaselevel) named tuple."""
 
     major: int
     minor: int
