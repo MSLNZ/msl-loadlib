@@ -28,7 +28,7 @@ LibType = Literal["cdll", "windll", "oledll", "net", "clr", "java", "com", "acti
 # using TypeVar is equivalent for < 3.11
 Self = TypeVar("Self", bound="LoadLibrary")
 
-PathLike = TypeVar("PathLike", str, bytes, os.PathLike[str], os.PathLike[bytes])
+PathLike = TypeVar("PathLike", str, bytes, os.PathLike)
 """A [path-like]{:target="_blank"} object ([str][], [bytes][] or [os.PathLike][]).
 
 [path-like]: https://docs.python.org/3/glossary.html#term-path-like-object
