@@ -74,7 +74,7 @@ pip install comtypes
 ```
 
 !!! tip "Managing library dependencies"
-    When loading a shared library it is vital that all dependencies of the library are also on the computer and that the directory that the dependencies are located in is available on the [PATH]{:target="_blank"} variable (and possibly you may need to add a directory with [os.add_dll_directory][]{:target="_blank"}). A helpful utility to determine the dependencies of a shared library on Windows is [Dependencies]{:target="_blank"} (which is a modern [Dependency Walker]{:target="_blank"}). Microsoft also provides the [DUMPBIN]{:target="_blank"} tool. For finding the dependencies of a .NET library the [Dependency Walker for .NET]{:target="_blank"} may also be helpful.
+    When loading a library it is vital that all dependencies of the library are also on the computer and that the directory that the dependencies are located in is available on the [PATH]{:target="_blank"} variable (and possibly you may need to add a directory with [os.add_dll_directory][]{:target="_blank"}). A helpful utility to determine the dependencies of a library on Windows is [Dependencies]{:target="_blank"} (which is a modern [Dependency Walker]{:target="_blank"}). Microsoft also provides the [DUMPBIN]{:target="_blank"} tool. For finding the dependencies of a .NET library the [Dependency Walker for .NET]{:target="_blank"} may also be helpful.
 
 ### Linux
 
@@ -119,7 +119,7 @@ sudo apt install default-jre
 ```
 
 !!! tip
-    When loading a shared library it is vital that all dependencies of the library are also on the computer and that the directory that the dependency is located in is available on the [PATH]{:target="_blank"} variable. A helpful utility to determine the dependencies of a shared library on Unix is [ldd]{:target="_blank"}.
+    When loading a library it is vital that all dependencies of the library are also on the computer and that the directory that the dependency is located in is available on the [PATH]{:target="_blank"} variable. A helpful utility to determine the dependencies of a library on Unix is [ldd]{:target="_blank"}.
 
 ### macOS
 
@@ -160,8 +160,8 @@ and a [Java Runtime Environment]{:target="_blank"}
 brew cask install java
 ```
 
-[ActiveX]: https://en.wikipedia.org/wiki/ActiveX
-[Component Object Model]: https://en.wikipedia.org/wiki/Component_Object_Model
+[ActiveX]: https://learn.microsoft.com/en-us/windows/win32/com/activex-controls
+[Component Object Model]: https://learn.microsoft.com/en-us/windows/win32/com/component-object-model--com--portal
 [comtypes]: https://comtypes.readthedocs.io/en/stable/index.html
 [Dependencies]: https://github.com/lucasg/Dependencies
 [Dependency Walker]: https://www.dependencywalker.com/

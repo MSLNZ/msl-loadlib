@@ -50,6 +50,6 @@ True
 
 -->
 
-[Component Object Model]: https://en.wikipedia.org/wiki/Component_Object_Model
+[Component Object Model]: https://learn.microsoft.com/en-us/windows/win32/com/component-object-model--com--portal
 [FileSystemObject]: https://learn.microsoft.com/en-us/office/vba/language/reference/user-interface-help/filesystemobject-object
 [CreateTextFile]: https://learn.microsoft.com/en-us/office/vba/language/reference/user-interface-help/createtextfile-method

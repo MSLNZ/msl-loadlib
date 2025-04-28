@@ -245,7 +245,7 @@ The 32-bit server is frozen with the following versions
 
 ***Added:***
 
-- include `os.environ['PATH']` as a search path when loading a shared library
+- include `os.environ['PATH']` as a search path when loading a library
 - support that the package can now be installed by `pip install msl-loadlib`
 
 ***Fixed:***
@@ -272,7 +272,7 @@ The 32-bit server is frozen with the following versions
 
 ## 0.2.3 (2017-04-11)
 - the frozen server32 executable (for Windows/Linux) now uses Python v3.6.1 and Python.NET v2.3.0
-- include `ctypes.util.find_library` and `sys.path` when searching for a shared library
+- include `ctypes.util.find_library` and `sys.path` when searching for a library
 
 ## 0.2.2 (2017-03-03)
 - refreeze server32 executables

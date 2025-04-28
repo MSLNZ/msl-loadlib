@@ -65,5 +65,5 @@ app.show()
 app.run()
 ```
 
-[ActiveX]: https://en.wikipedia.org/wiki/ActiveX
+[ActiveX]: https://learn.microsoft.com/en-us/windows/win32/com/activex-controls
 [comtypes]: https://comtypes.readthedocs.io/en/stable/index.html

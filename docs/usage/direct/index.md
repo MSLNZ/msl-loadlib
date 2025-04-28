@@ -16,5 +16,5 @@ The following examples are included with the `msl-loadlib` package:
 * [Windows __stdcall][direct-stdcall] &ndash; load a 32-bit library that uses the `__stdcall` calling convention
 * [LabVIEW][direct-labview] &ndash; built using 32- and 64-bit LabVIEW on Windows
 
-[Component Object Model]: https://en.wikipedia.org/wiki/Component_Object_Model
+[Component Object Model]: https://learn.microsoft.com/en-us/windows/win32/com/component-object-model--com--portal
 [JVM]: https://en.wikipedia.org/wiki/Java_virtual_machine

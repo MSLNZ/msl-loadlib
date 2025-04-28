@@ -2,7 +2,7 @@
 name = "msl-loadlib"
 dynamic = ["version"]
 dependencies = []
-description = "Load a shared library (and access a 32-bit library from 64-bit Python)"
+description = "Load a library (and access a 32-bit library from 64-bit Python)"
 license = {file = "LICENSE.txt"}
 authors =[
     {name = "Measurement Standards Laboratory of New Zealand", email = "info@measurement.govt.nz"},

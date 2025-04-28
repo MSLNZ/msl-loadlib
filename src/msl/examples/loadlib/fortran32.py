@@ -1,11 +1,10 @@
-"""
-A wrapper around a 32-bit FORTRAN library, :ref:`fortran_lib32 <fortran-lib>`.
+"""Wrapper around a 32-bit FORTRAN library.
 
-Example of a server that loads a 32-bit FORTRAN library, :ref:`fortran_lib32 <fortran-lib>`,
-in a 32-bit Python interpreter to host the library. The corresponding :mod:`~.fortran64`
-module can be executed by a 64-bit Python interpreter and the :class:`~.fortran64.Fortran64`
-class can send a request to the :class:`~.fortran32.Fortran32` class which calls the 32-bit
-library to execute the request and then return the response from the library.
+Example of a server that loads a 32-bit library, [fortran_lib32][fortran-lib],
+in a 32-bit Python interpreter to host the library. The corresponding [Fortran64][] class
+is created in a 64-bit Python interpreter and the [Fortran64][] class sends requests
+to the [Fortran32][] class which calls the 32-bit library to execute the request and
+then returns the response from the library.
 """
 
 from __future__ import annotations
@@ -18,16 +17,17 @@ from msl.loadlib import Server32
 
 
 class Fortran32(Server32):
-    def __init__(self, host: str, port: int, **kwargs: str) -> None:
-        """A wrapper around a 32-bit FORTRAN library, :ref:`fortran_lib32 <fortran-lib>`.
+    """Wrapper around a 32-bit FORTRAN library."""
 
-        This class demonstrates how to send/receive various data types to/from a
-        32-bit FORTRAN library via :py:mod:`ctypes`. For a summary of the FORTRAN
-        data types see `here <https://earth.uni-muenster.de/~joergs/doc/f90/unix-um/dfum_034.html>`_.
+    def __init__(self, host: str, port: int) -> None:
+        """A wrapper around a 32-bit FORTRAN library, [fortran_lib32][fortran-lib].
 
-        :param host: The IP address (or hostname) to use for the server.
-        :param port: The port to open for the server.
-        :param kwargs: Optional keyword arguments. The keys and values are of type :class:`str`.
+        This class demonstrates how to pass various data types to/from a
+        32-bit FORTRAN library via [ctypes][]{:target="_blank"}.
+
+        Args:
+            host: The IP address (or hostname) to use for the server.
+            port: The port to open for the server.
         """
         # By not specifying the extension of the library file the server will open
         # the appropriate file based on the operating system.
@@ -37,117 +37,133 @@ class Fortran32(Server32):
     def sum_8bit(self, a: int, b: int) -> int:
         """Add two 8-bit signed integers.
 
-        Python only has one :class:`int` data type to represent integer values.
-        The :meth:`~.fortran32.Fortran32.sum_8bit` method converts the data types
-        of `a` and `b` to be :class:`ctypes.c_int8`.
+        Python only has one [int][] data type to represent integer values.
+        This method converts the data types of `a` and `b` to be [ctypes.c_int8][].
 
         The corresponding FORTRAN code is
 
-        .. code-block:: fortran
+        ```fortran
+        function sum_8bit(a, b) result(value)
+            !DEC$ ATTRIBUTES DLLEXPORT, ALIAS:'sum_8bit' :: sum_8bit
+            implicit none
+            integer(1) :: a, b, value
+            value = a + b
+        end function sum_8bit
+        ```
 
-            function sum_8bit(a, b) result(value)
-                !DEC$ ATTRIBUTES DLLEXPORT, ALIAS:'sum_8bit' :: sum_8bit
-                implicit none
-                integer(1) :: a, b, value
-                value = a + b
-            end function sum_8bit
+        See the corresponding [Fortran64.sum_8bit][msl.examples.loadlib.fortran64.Fortran64.sum_8bit] method.
 
-        See the corresponding 64-bit :meth:`~.fortran64.Fortran64.sum_8bit` method.
+        Args:
+            a: First 8-bit signed integer.
+            b: Second 8-bit signed integer.
 
-        :param a: First 8-bit signed integer.
-        :param b: Second 8-bit signed integer.
-        :return: The sum of `a` and `b`.
+        Returns:
+            The sum, `a + b`.
         """
+        # restype should be defined elsewhere, shown here for illustrative purposes
+        self.lib.sum_8bit.restype = ctypes.c_int8
+
         ac = ctypes.c_int8(a)
         bc = ctypes.c_int8(b)
-        self.lib.sum_8bit.restype = ctypes.c_int8
         return self.lib.sum_8bit(ctypes.byref(ac), ctypes.byref(bc))
 
     def sum_16bit(self, a: int, b: int) -> int:
-        """Add two 16-bit signed integers
+        """Add two 16-bit signed integers.
 
-        Python only has one :class:`int` data type to represent integer values.
-        The :meth:`~.fortran32.Fortran32.sum_16bit` method converts the data
-        types of `a` and `b` to be :class:`ctypes.c_int16`.
+        Python only has one [int][] data type to represent integer values.
+        This method converts the data types of `a` and `b` to be [ctypes.c_int16][].
 
         The corresponding FORTRAN code is
 
-        .. code-block:: fortran
+        ```fortran
+        function sum_16bit(a, b) result(value)
+            !DEC$ ATTRIBUTES DLLEXPORT, ALIAS:'sum_16bit' :: sum_16bit
+            implicit none
+            integer(2) :: a, b, value
+            value = a + b
+        end function sum_16bit
+        ```
 
-            function sum_16bit(a, b) result(value)
-                !DEC$ ATTRIBUTES DLLEXPORT, ALIAS:'sum_16bit' :: sum_16bit
-                implicit none
-                integer(2) :: a, b, value
-                value = a + b
-            end function sum_16bit
+        See the corresponding [Fortran64.sum_16bit][msl.examples.loadlib.fortran64.Fortran64.sum_16bit] method.
 
-        See the corresponding 64-bit :meth:`~.fortran64.Fortran64.sum_16bit` method.
+        Args:
+            a: First 16-bit signed integer.
+            b: Second 16-bit signed integer.
 
-        :param a: First 16-bit signed integer.
-        :param b: Second 16-bit signed integer.
-        :return: The sum of `a` and `b`.
+        Returns:
+            The sum, `a + b`.
         """
+        # restype should be defined elsewhere, shown here for illustrative purposes
+        self.lib.sum_16bit.restype = ctypes.c_int16
+
         ac = ctypes.c_int16(a)
         bc = ctypes.c_int16(b)
-        self.lib.sum_16bit.restype = ctypes.c_int16
         return self.lib.sum_16bit(ctypes.byref(ac), ctypes.byref(bc))
 
     def sum_32bit(self, a: int, b: int) -> int:
         """Add two 32-bit signed integers.
 
-        Python only has one :class:`int` data type to represent integer values.
-        The :meth:`~.fortran32.Fortran32.sum_32bit` method converts the data types
-        of `a` and `b` to be :class:`ctypes.c_int32`.
+        Python only has one [int][] data type to represent integer values.
+        This method converts the data types of `a` and `b` to be [ctypes.c_int32][].
 
         The corresponding FORTRAN code is
 
-        .. code-block:: fortran
+        ```fortran
+        function sum_32bit(a, b) result(value)
+            !DEC$ ATTRIBUTES DLLEXPORT, ALIAS:'sum_32bit' :: sum_32bit
+            implicit none
+            integer(4) :: a, b, value
+            value = a + b
+        end function sum_32bit
+        ```
 
-            function sum_32bit(a, b) result(value)
-                !DEC$ ATTRIBUTES DLLEXPORT, ALIAS:'sum_32bit' :: sum_32bit
-                implicit none
-                integer(4) :: a, b, value
-                value = a + b
-            end function sum_32bit
+        See the corresponding [Fortran64.sum_32bit][msl.examples.loadlib.fortran64.Fortran64.sum_32bit] method.
 
-        See the corresponding 64-bit :meth:`~.fortran64.Fortran64.sum_32bit` method.
+        Args:
+            a: First 32-bit signed integer.
+            b: Second 32-bit signed integer.
 
-        :param a: First 32-bit signed integer.
-        :param b: Second 32-bit signed integer.
-        :return: The sum of `a` and `b`.
+        Returns:
+            The sum, `a + b`.
         """
+        # restype should be defined elsewhere, shown here for illustrative purposes
+        self.lib.sum_32bit.restype = ctypes.c_int32
+
         ac = ctypes.c_int32(a)
         bc = ctypes.c_int32(b)
-        self.lib.sum_32bit.restype = ctypes.c_int32
         return self.lib.sum_32bit(ctypes.byref(ac), ctypes.byref(bc))
 
     def sum_64bit(self, a: int, b: int) -> int:
         """Add two 64-bit signed integers.
 
-        Python only has one :class:`int` data type to represent integer values.
-        The :meth:`~.fortran32.Fortran32.sum_64bit` method converts the data types
-        of `a` and `b` to be :class:`ctypes.c_int64`.
+        Python only has one [int][] data type to represent integer values.
+        This method converts the data types of `a` and `b` to be [ctypes.c_int64][].
 
         The corresponding FORTRAN code is
 
-        .. code-block:: fortran
+        ```fortran
+        function sum_64bit(a, b) result(value)
+            !DEC$ ATTRIBUTES DLLEXPORT, ALIAS:'sum_64bit' :: sum_64bit
+            implicit none
+            integer(8) :: a, b, value
+            value = a + b
+        end function sum_64bit
+        ```
 
-            function sum_64bit(a, b) result(value)
-                !DEC$ ATTRIBUTES DLLEXPORT, ALIAS:'sum_64bit' :: sum_64bit
-                implicit none
-                integer(8) :: a, b, value
-                value = a + b
-            end function sum_64bit
+        See the corresponding [Fortran64.sum_64bit][msl.examples.loadlib.fortran64.Fortran64.sum_64bit] method.
 
-        See the corresponding 64-bit :meth:`~.fortran64.Fortran64.sum_64bit` method.
+        Args:
+            a: First 64-bit signed integer.
+            b: Second 64-bit signed integer.
 
-        :param a: First 64-bit signed integer.
-        :param b: Second 64-bit signed integer.
-        :return: The sum of `a` and `b`.
+        Returns:
+            The sum, `a + b`.
         """
+        # restype should be defined elsewhere, shown here for illustrative purposes
+        self.lib.sum_64bit.restype = ctypes.c_int64
+
         ac = ctypes.c_int64(a)
         bc = ctypes.c_int64(b)
-        self.lib.sum_64bit.restype = ctypes.c_int64
         return self.lib.sum_64bit(ctypes.byref(ac), ctypes.byref(bc))
 
     def multiply_float32(self, a: float, b: float) -> float:
@@ -155,24 +171,30 @@ class Fortran32(Server32):
 
         The corresponding FORTRAN code is
 
-        .. code-block:: fortran
+        ```fortran
+        function multiply_float32(a, b) result(value)
+            !DEC$ ATTRIBUTES DLLEXPORT, ALIAS:'multiply_float32' :: multiply_float32
+            implicit none
+            real(4) :: a, b, value
+            value = a * b
+        end function multiply_float32
+        ```
 
-            function multiply_float32(a, b) result(value)
-                !DEC$ ATTRIBUTES DLLEXPORT, ALIAS:'multiply_float32' :: multiply_float32
-                implicit none
-                real(4) :: a, b, value
-                value = a * b
-            end function multiply_float32
+        See the corresponding [Fortran64.multiply_float32][msl.examples.loadlib.fortran64.Fortran64.multiply_float32]
+        method.
 
-        See the corresponding 64-bit :meth:`~.fortran64.Fortran64.multiply_float32` method.
+        Args:
+            a: First floating-point number.
+            b: Second floating-point number.
 
-        :param a: First floating-point number.
-        :param b: Second floating-point number.
-        :return: The product of `a` and `b`.
+        Returns:
+            The product, `a * b`.
         """
+        # restype should be defined elsewhere, shown here for illustrative purposes
+        self.lib.multiply_float32.restype = ctypes.c_float
+
         ac = ctypes.c_float(a)
         bc = ctypes.c_float(b)
-        self.lib.multiply_float32.restype = ctypes.c_float
         return self.lib.multiply_float32(ctypes.byref(ac), ctypes.byref(bc))
 
     def multiply_float64(self, a: float, b: float) -> float:
@@ -180,24 +202,30 @@ class Fortran32(Server32):
 
         The corresponding FORTRAN code is
 
-        .. code-block:: fortran
+        ```fortran
+        function multiply_float64(a, b) result(value)
+            !DEC$ ATTRIBUTES DLLEXPORT, ALIAS:'multiply_float64' :: multiply_float64
+            implicit none
+            real(8) :: a, b, value
+            value = a * b
+        end function multiply_float64
+        ```
 
-            function multiply_float64(a, b) result(value)
-                !DEC$ ATTRIBUTES DLLEXPORT, ALIAS:'multiply_float64' :: multiply_float64
-                implicit none
-                real(8) :: a, b, value
-                value = a * b
-            end function multiply_float64
+        See the corresponding [Fortran64.multiply_float64][msl.examples.loadlib.fortran64.Fortran64.multiply_float64]
+        method.
 
-        See the corresponding 64-bit :meth:`~.fortran64.Fortran64.multiply_float64` method.
+        Args:
+            a: First double-precision number.
+            b: Second double-precision number.
 
-        :param a: First double-precision number.
-        :param b: Second double-precision number.
-        :return: The product of `a` and `b`.
+        Returns:
+            The product, `a * b`.
         """
+        # restype should be defined elsewhere, shown here for illustrative purposes
+        self.lib.multiply_float64.restype = ctypes.c_double
+
         ac = ctypes.c_double(a)
         bc = ctypes.c_double(b)
-        self.lib.multiply_float64.restype = ctypes.c_double
         return self.lib.multiply_float64(ctypes.byref(ac), ctypes.byref(bc))
 
     def is_positive(self, a: float) -> bool:
@@ -205,23 +233,29 @@ class Fortran32(Server32):
 
         The corresponding FORTRAN code is
 
-        .. code-block:: fortran
+        ```fortran
+        function is_positive(a) result(value)
+            !DEC$ ATTRIBUTES DLLEXPORT, ALIAS:'is_positive' :: is_positive
+            implicit none
+            logical :: value
+            real(8) :: a
+            value = a > 0.d0
+        end function is_positive
+        ```
 
-            function is_positive(a) result(value)
-                !DEC$ ATTRIBUTES DLLEXPORT, ALIAS:'is_positive' :: is_positive
-                implicit none
-                logical :: value
-                real(8) :: a
-                value = a > 0.d0
-            end function is_positive
+        See the corresponding [Fortran64.is_positive][msl.examples.loadlib.fortran64.Fortran64.is_positive] method.
 
-        See the corresponding 64-bit :meth:`~.fortran64.Fortran64.is_positive` method.
+        Args:
+            a: Double-precision number.
 
-        :param a: Double-precision number.
-        :return: Whether the value of `a` is > 0.
+
+        Returns:
+            Whether the value of `a` is &gt; 0.
         """
-        ac = ctypes.c_double(a)
+        # restype should be defined elsewhere, shown here for illustrative purposes
         self.lib.is_positive.restype = ctypes.c_bool
+
+        ac = ctypes.c_double(a)
         return self.lib.is_positive(ctypes.byref(ac))
 
     def add_or_subtract(self, a: int, b: int, do_addition: bool) -> int:
@@ -229,31 +263,36 @@ class Fortran32(Server32):
 
         The corresponding FORTRAN code is
 
-        .. code-block:: fortran
+        ```fortran
+        function add_or_subtract(a, b, do_addition) result(value)
+            !DEC$ ATTRIBUTES DLLEXPORT, ALIAS:'add_or_subtract' :: add_or_subtract
+            implicit none
+            logical :: do_addition
+            integer(4) :: a, b, value
+            if (do_addition) then
+                value = a + b
+            else
+                value = a - b
+            endif
+        end function add_or_subtract
+        ```
 
-            function add_or_subtract(a, b, do_addition) result(value)
-                !DEC$ ATTRIBUTES DLLEXPORT, ALIAS:'add_or_subtract' :: add_or_subtract
-                implicit none
-                logical :: do_addition
-                integer(4) :: a, b, value
-                if (do_addition) then
-                    value = a + b
-                else
-                    value = a - b
-                endif
-            end function add_or_subtract
+        See the corresponding [Fortran64.add_or_subtract][msl.examples.loadlib.fortran64.Fortran64.add_or_subtract] method.
 
-        See the corresponding 64-bit :meth:`~.fortran64.Fortran64.add_or_subtract` method.
+        Args:
+            a: First integer.
+            b: Second integer.
+            do_addition: Whether to add or subtract the numbers.
 
-        :param a: First integer.
-        :param b: Second integer.
-        :param do_addition: Whether to add or subtract the numbers.
-        :return: `a+b` if `do_addition` is :data:`True` else `a-b`.
+        Return:
+            `a + b` if `do_addition` is `True` else `a - b`.
         """
+        # restype should be defined elsewhere, shown here for illustrative purposes
+        self.lib.add_or_subtract.restype = ctypes.c_int32
+
         ac = ctypes.c_int32(a)
         bc = ctypes.c_int32(b)
         logical = ctypes.c_bool(do_addition)
-        self.lib.add_or_subtract.restype = ctypes.c_int32
         return self.lib.add_or_subtract(ctypes.byref(ac), ctypes.byref(bc), ctypes.byref(logical))
 
     def factorial(self, n: int) -> float:
@@ -261,32 +300,37 @@ class Fortran32(Server32):
 
         The corresponding FORTRAN code is
 
-        .. code-block:: fortran
+        ```fortran
+        function factorial(n) result(value)
+            !DEC$ ATTRIBUTES DLLEXPORT, ALIAS:'factorial' :: factorial
+            implicit none
+            integer(1) :: n
+            integer(4) :: i
+            double precision value
+            if (n < 0) then
+                value = 0.d0
+                print *, "Cannot compute the factorial of a negative number", n
+            else
+                value = 1.d0
+                do i = 2, n
+                    value = value * i
+                enddo
+            endif
+        end function factorial
+        ```
 
-            function factorial(n) result(value)
-                !DEC$ ATTRIBUTES DLLEXPORT, ALIAS:'factorial' :: factorial
-                implicit none
-                integer(1) :: n
-                integer(4) :: i
-                double precision value
-                if (n < 0) then
-                    value = 0.d0
-                    print *, "Cannot compute the factorial of a negative number", n
-                else
-                    value = 1.d0
-                    do i = 2, n
-                        value = value * i
-                    enddo
-                endif
-            end function factorial
+        See the corresponding [Fortran64.factorial][msl.examples.loadlib.fortran64.Fortran64.factorial] method.
 
-        See the corresponding 64-bit :meth:`~.fortran64.Fortran64.factorial` method.
+        Args:
+            n: The integer to computer the factorial of. The maximum allowed value is 127.
 
-        :param n: The integer to computer the factorial of. The maximum allowed value is 127.
-        :return: The factorial of `n`.
+        Returns:
+            The factorial of `n`.
         """
-        ac = ctypes.c_int8(n)
+        # restype should be defined elsewhere, shown here for illustrative purposes
         self.lib.factorial.restype = ctypes.c_double
+
+        ac = ctypes.c_int8(n)
         return self.lib.factorial(ctypes.byref(ac))
 
     def standard_deviation(self, data: Sequence[float]) -> float:
@@ -294,25 +338,31 @@ class Fortran32(Server32):
 
         The corresponding FORTRAN code is
 
-        .. code-block:: fortran
+        ```fortran
+        function standard_deviation(a, n) result(var)
+            !DEC$ ATTRIBUTES DLLEXPORT, ALIAS:'standard_deviation' :: standard_deviation
+            integer :: n ! the length of the array
+            double precision :: var, a(n)
+            var = SUM(a)/SIZE(a) ! SUM is a built-in fortran function
+            var = SQRT(SUM((a-var)**2)/(SIZE(a)-1.0))
+        end function standard_deviation
+        ```
 
-            function standard_deviation(a, n) result(var)
-                !DEC$ ATTRIBUTES DLLEXPORT, ALIAS:'standard_deviation' :: standard_deviation
-                integer :: n ! the length of the array
-                double precision :: var, a(n)
-                var = SUM(a)/SIZE(a) ! SUM is a built-in fortran function
-                var = SQRT(SUM((a-var)**2)/(SIZE(a)-1.0))
-            end function standard_deviation
+        See the corresponding [Fortran64.standard_deviation][msl.examples.loadlib.fortran64.Fortran64.standard_deviation]
+        method.
 
-        See the corresponding 64-bit :meth:`~.fortran64.Fortran64.standard_deviation` method.
+        Args:
+            data: The values to compute the standard deviation of.
 
-        :param data: The values to compute the standard deviation of.
-        :return: The standard deviation of `data`.
+        Returns:
+            The standard deviation of `data`.
         """
+        # restype should be defined elsewhere, shown here for illustrative purposes
+        self.lib.standard_deviation.restype = ctypes.c_double
+
         n = len(data)
         nc = ctypes.c_int32(n)
         data_c = (ctypes.c_double * n)(*data)
-        self.lib.standard_deviation.restype = ctypes.c_double
         return self.lib.standard_deviation(ctypes.byref(data_c), ctypes.byref(nc))
 
     def besselJ0(self, x: float) -> float:
@@ -320,21 +370,26 @@ class Fortran32(Server32):
 
         The corresponding FORTRAN code is
 
-        .. code-block:: fortran
+        ```fortran
+        function besselj0(x) result(val)
+            !DEC$ ATTRIBUTES DLLEXPORT, ALIAS:'besselj0' :: besselj0
+            double precision :: x, val
+            val = BESSEL_J0(x)
+        end function besselJ0
+        ```
 
-            function besselj0(x) result(val)
-                !DEC$ ATTRIBUTES DLLEXPORT, ALIAS:'besselj0' :: besselj0
-                double precision :: x, val
-                val = BESSEL_J0(x)
-            end function besselJ0
+        See the corresponding [Fortran64.besselJ0][msl.examples.loadlib.fortran64.Fortran64.besselJ0] method.
 
-        See the corresponding 64-bit :meth:`~.fortran64.Fortran64.besselJ0` method.
+        Args:
+            x: The value to compute `BESSEL_J0` of.
 
-        :param x: The value to compute ``BESSEL_J0`` of.
-        :return: The value of ``BESSEL_J0(x)``.
+        Returns:
+            The value of `BESSEL_J0(x)`.
         """
-        xc = ctypes.c_double(x)
+        # restype should be defined elsewhere, shown here for illustrative purposes
         self.lib.besselj0.restype = ctypes.c_double
+
+        xc = ctypes.c_double(x)
         return self.lib.besselj0(ctypes.byref(xc))
 
     def reverse_string(self, original: str) -> str:
@@ -342,28 +397,33 @@ class Fortran32(Server32):
 
         The corresponding FORTRAN code is
 
-        .. code-block:: fortran
+        ```fortran
+        subroutine reverse_string(original, n, reversed)
+            !DEC$ ATTRIBUTES DLLEXPORT, ALIAS:'reverse_string' :: reverse_string
+            !DEC$ ATTRIBUTES REFERENCE :: original, reversed
+            implicit none
+            integer :: i, n
+            character(len=n) :: original, reversed
+            do i = 1, n
+                reversed(i:i) = original(n-i+1:n-i+1)
+            end do
+        end subroutine reverse_string
+        ```
 
-            subroutine reverse_string(original, n, reversed)
-                !DEC$ ATTRIBUTES DLLEXPORT, ALIAS:'reverse_string' :: reverse_string
-                !DEC$ ATTRIBUTES REFERENCE :: original, reversed
-                implicit none
-                integer :: i, n
-                character(len=n) :: original, reversed
-                do i = 1, n
-                    reversed(i:i) = original(n-i+1:n-i+1)
-                end do
-            end subroutine reverse_string
+        See the corresponding [Fortran64.reverse_string][msl.examples.loadlib.fortran64.Fortran64.reverse_string] method.
 
-        See the corresponding 64-bit :meth:`~.fortran64.Fortran64.reverse_string` method.
+        Args:
+            original: The original string.
 
-        :param original: The original string.
-        :return: The string reversed.
+        Returns:
+            The string reversed.
         """
+        # restype should be defined elsewhere, shown here for illustrative purposes
+        self.lib.reverse_string.restype = None
+
         n = len(original)
         nc = ctypes.c_int32(n)
         rev = ctypes.create_string_buffer(n)
-        self.lib.reverse_string.restype = None
         self.lib.reverse_string(ctypes.c_char_p(original.encode()), ctypes.byref(nc), rev)
         return rev.raw.decode()
 
@@ -372,28 +432,32 @@ class Fortran32(Server32):
 
         The corresponding FORTRAN code is
 
-        .. code-block:: fortran
+        ```fortran
+        subroutine add_1d_arrays(a, in1, in2, n)
+            !DEC$ ATTRIBUTES DLLEXPORT, ALIAS:'add_1d_arrays' :: add_1d_arrays
+            implicit none
+            integer(4) :: n ! the length of the input arrays
+            double precision :: in1(n), in2(n) ! the arrays to add (element-wise)
+            double precision :: a(n) ! the array that will contain the element-wise sum
+            a(:) = in1(:) + in2(:)
+        end subroutine add_1d_arrays
+        ```
 
-            subroutine add_1d_arrays(a, in1, in2, n)
-                !DEC$ ATTRIBUTES DLLEXPORT, ALIAS:'add_1d_arrays' :: add_1d_arrays
-                implicit none
-                integer(4) :: n ! the length of the input arrays
-                double precision :: in1(n), in2(n) ! the arrays to add (element-wise)
-                double precision :: a(n) ! the array that will contain the element-wise sum
-                a(:) = in1(:) + in2(:)
-            end subroutine add_1d_arrays
+        See the corresponding [Fortran64.add_1d_arrays][msl.examples.loadlib.fortran64.Fortran64.add_1d_arrays] method.
 
-        See the corresponding 64-bit :meth:`~.fortran64.Fortran64.add_1d_arrays` method.
+        Args:
+            a1: First array.
+            a2: Second array.
 
-        :param a1: First array.
-        :param a2: Second array.
-        :return: The element-wise addition of `a1` + `a2`.
+        Returns:
+            The element-wise addition of `a1 + a2`.
         """
+        # restype should be defined elsewhere, shown here for illustrative purposes
+        self.lib.add_1d_arrays.restype = None
+
         n = len(a1)
         nc = ctypes.c_int32(n)
         out = (ctypes.c_double * n)()
-
-        self.lib.add_1d_arrays.restype = None
         self.lib.add_1d_arrays(out, (ctypes.c_double * n)(*a1), (ctypes.c_double * n)(*a2), ctypes.byref(nc))
         return [val for val in out]
 
@@ -402,31 +466,38 @@ class Fortran32(Server32):
 
         The corresponding FORTRAN code is
 
-        .. code-block:: fortran
+        ```fortran
+        subroutine matrix_multiply(a, a1, r1, c1, a2, r2, c2)
+            !DEC$ ATTRIBUTES DLLEXPORT, ALIAS:'matrix_multiply' :: matrix_multiply
+            implicit none
+            integer(4) :: r1, c1, r2, c2 ! the dimensions of the input arrays
+            double precision :: a1(r1,c1), a2(r2,c2) ! the arrays to multiply
+            double precision :: a(r1,c2) ! resultant array
+            a = MATMUL(a1, a2)
+        end subroutine matrix_multiply
+        ```
 
-            subroutine matrix_multiply(a, a1, r1, c1, a2, r2, c2)
-                !DEC$ ATTRIBUTES DLLEXPORT, ALIAS:'matrix_multiply' :: matrix_multiply
-                implicit none
-                integer(4) :: r1, c1, r2, c2 ! the dimensions of the input arrays
-                double precision :: a1(r1,c1), a2(r2,c2) ! the arrays to multiply
-                double precision :: a(r1,c2) ! resultant array
-                a = MATMUL(a1, a2)
-            end subroutine matrix_multiply
+        !!! note
+            FORTRAN stores multidimensional arrays in [column-major order][order]{:target="_blank"},
+            as opposed to [row-major order][order]{:target="_blank"} like C (Python) arrays. Therefore,
+            the input matrices need to be transposed before sending the matrices to FORTRAN
+            and also the result needs to be transposed.
 
-        .. note::
-            FORTRAN stores multidimensional arrays in `column-major order <order_>`_, as
-            opposed to `row-major order <order_>`_ for C (Python) arrays. Therefore, the
-            input matrices need to be transposed before sending the matrices to FORTRAN
-            and also the result needs to be transposed before returned.
+            [order]: https://en.wikipedia.org/wiki/Row-_and_column-major_order
 
-        .. _order: https://en.wikipedia.org/wiki/Row-_and_column-major_order
+        See the corresponding [Fortran64.matrix_multiply][msl.examples.loadlib.fortran64.Fortran64.matrix_multiply]
+        method.
 
-        See the corresponding 64-bit :meth:`~.fortran64.Fortran64.matrix_multiply` method.
+        Args:
+            a1: First matrix.
+            a2: Second matrix.
 
-        :param a1: First matrix.
-        :param a2: Second matrix.
-        :return: The product of `a1` * `a2`.
+        Returns:
+            The product, `a1 @ a2`.
         """
+        # restype should be defined elsewhere, shown here for illustrative purposes
+        self.lib.matrix_multiply.restype = None
+
         n_rows1 = ctypes.c_int32(len(a1))
         n_cols1 = ctypes.c_int32(len(a1[0]))
 
@@ -452,7 +523,6 @@ class Fortran32(Server32):
 
         out = ((ctypes.c_double * n_rows1.value) * n_cols2.value)()
 
-        self.lib.matrix_multiply.restype = None
         self.lib.matrix_multiply(
             out, m1, ctypes.byref(n_rows1), ctypes.byref(n_cols1), m2, ctypes.byref(n_rows2), ctypes.byref(n_cols2)
         )

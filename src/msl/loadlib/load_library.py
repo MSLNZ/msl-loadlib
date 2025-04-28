@@ -59,7 +59,7 @@ class LoadLibrary:
                 3. search [sys.path][]{:target="_blank"}
                 4. search [os.environ["PATH"]][os.environ]{:target="_blank"}.
 
-                If loading a [COM](https://en.wikipedia.org/wiki/Component_Object_Model){:target="_blank"} library,
+                If loading a [COM](https://learn.microsoft.com/en-us/windows/win32/com/component-object-model--com--portal){:target="_blank"} library,
                 `path` may either be the
 
                 * ProgID (e.g, `"InternetExplorer.Application"`), or the
@@ -73,8 +73,11 @@ class LoadLibrary:
                 * `windll` or `oledll`: a library that uses the `__stdcall` calling convention
                 * `net` or `clr`: a .NET library (Common Language Runtime)
                 * `java`: a Java archive (`.jar` or `.class` files)
-                * `com`: a [COM](https://en.wikipedia.org/wiki/Component_Object_Model){:target="_blank"} library
-                * `activex`: an [ActiveX](https://en.wikipedia.org/wiki/ActiveX){:target="_blank"} library
+                * `com`: a [COM]{:target="_blank"} library
+                * `activex`: an [ActiveX]{:target="_blank"} library
+
+                [COM]: https://learn.microsoft.com/en-us/windows/win32/com/component-object-model--com--portal
+                [ActiveX]: https://learn.microsoft.com/en-us/windows/win32/com/activex-controls
 
                 !!! tip
                     Since the `.jar` or `.class` extension uniquely defines a Java library,
@@ -99,13 +102,13 @@ class LoadLibrary:
                 * `activex` &#8594; [Application.load][msl.loadlib.activex.Application.load]
 
         Raises:
-            OSError: If the shared library cannot be loaded.
+            OSError: If the library cannot be loaded.
             ValueError: If the value of `libtype` is not supported.
         """
         # a reference to the ActiveX application
         self._app = None
 
-        # a reference to the shared library
+        # a reference to the library
         self._lib = None
 
         # a reference to the .NET Runtime Assembly
@@ -281,7 +284,7 @@ class LoadLibrary:
 
             dotnet = {"System": System}
 
-            # the shared library must be available in sys.path
+            # the library must be available in sys.path
             head, tail = os.path.split(self._path)
             sys.path.insert(0, head)
 

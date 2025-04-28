@@ -1,4 +1,4 @@
-"""Load a shared library."""
+"""Load a library."""
 
 from .__about__ import __author__
 from .__about__ import __copyright__

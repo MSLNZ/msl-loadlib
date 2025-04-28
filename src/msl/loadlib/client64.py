@@ -406,7 +406,7 @@ class _HTTPClient:
 
     @property
     def lib32_path(self) -> str:
-        """The path to the 32-bit shared-library file."""
+        """The path to the 32-bit library file."""
         return self._meta32["path"]
 
     def cleanup(self) -> None:
@@ -599,7 +599,7 @@ class _MockClient:
 
     @property
     def lib32_path(self) -> str:
-        """The path to the shared-library file."""
+        """The path to the library file."""
         return self.server.path
 
     @property

@@ -1,5 +1,5 @@
 site_name: MSL-LoadLib
-site_description: Load a shared library (and access a 32-bit library from 64-bit Python)
+site_description: Load a library (and access a 32-bit library from 64-bit Python)
 copyright: Copyright &copy; 2017 - 2025 Measurement Standards Laboratory of New Zealand
 repo_url: https://github.com/MSLNZ/msl-loadlib/
 site_url: https://github.com/MSLNZ/msl-loadlib/
@@ -47,9 +47,11 @@ theme:
 watch: [src]
 
 nav:
-  - Overview:
+  - Home:
     - index.md
     - install.md
+    - release-notes.md
+    - license.md
   - User Guide:
     - usage/overview.md
     - Direct:
@@ -75,6 +77,16 @@ nav:
     - examples/index.md
     - examples/cpp32.md
     - examples/cpp64.md
+    - examples/dotnet32.md
+    - examples/dotnet64.md
+    - examples/echo32.md
+    - examples/echo64.md
+    - examples/fortran32.md
+    - examples/fortran64.md
+    - examples/kernel32.md
+    - examples/kernel64.md
+    - examples/labview32.md
+    - examples/labview64.md
   - API:
     - api/client64.md
     - api/load_library.md
@@ -83,11 +95,10 @@ nav:
     - api/exceptions.md
     - api/freeze_server32.md
     - api/utils.md
-  - FAQ: faq.md
-  - About:
-    - Developers: about/developers.md
-    - Release Notes: about/release-notes.md
-    - License: about/license.md
+  - FAQ:
+    - faq/streams.md
+    - faq/freeze.md
+    - faq/mock.md
 
 markdown_extensions:
   - admonition  # enables: !!! tip

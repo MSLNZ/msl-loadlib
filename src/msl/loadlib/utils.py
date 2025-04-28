@@ -237,7 +237,7 @@ def wait_for_server(host: str, port: int, timeout: float) -> None:
 def get_com_info(*additional_keys: str) -> dict[str, dict[str, str | None]]:
     """Reads the registry for the [COM]{:target="_blank"} libraries that are available.
 
-    [COM]: https://en.wikipedia.org/wiki/Component_Object_Model
+    [COM]: https://learn.microsoft.com/en-us/windows/win32/com/component-object-model--com--portal
 
     !!! attention
         This function is only supported on Windows.
@@ -314,7 +314,7 @@ def generate_com_wrapper(lib: Any, out_dir: str | None = None) -> ModuleType:
 
     For more information see [Accessing type libraries]{:target="_blank"}.
 
-    [COM]: https://en.wikipedia.org/wiki/Component_Object_Model
+    [COM]: https://learn.microsoft.com/en-us/windows/win32/com/component-object-model--com--portal
     [Accessing type libraries]: https://comtypes.readthedocs.io/en/stable/client.html#accessing-type-libraries
 
     !!! attention

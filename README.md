@@ -4,7 +4,7 @@
 [![Docs Status](https://github.com/MSLNZ/msl-loadlib/actions/workflows/docs.yml/badge.svg)](https://github.com/MSLNZ/msl-loadlib/actions/workflows/docs.yml)
 [![PyPI - Version](https://img.shields.io/pypi/v/msl-loadlib?logo=pypi&logoColor=gold&label=PyPI&color=blue)](https://pypi.org/project/msl-loadlib/)
 
-This package loads a shared library in Python. It is basically just a thin wrapper around [ctypes] (for libraries that use the `__cdecl` or `__stdcall` calling convention), [Python for .NET] (for libraries that use Microsoft .NET, `CLR`), [Py4J] (for Java `.jar` or `.class` files) and [comtypes] (for libraries that use the [Component Object Model] or [ActiveX]).
+This package loads a library in Python. It is basically just a thin wrapper around [ctypes] (for libraries that use the `__cdecl` or `__stdcall` calling convention), [Python for .NET] (for libraries that use Microsoft .NET, `CLR`), [Py4J] (for Java `.jar` or `.class` files) and [comtypes] (for libraries that use the [Component Object Model] or [ActiveX]).
 
 However, the primary advantage is that it is possible to communicate with a 32-bit library from 64-bit Python.
 
@@ -138,7 +138,7 @@ We then use the library to create, edit and close a text file
 
 -->
 
-[Inter-process communication] is used to access a 32-bit shared library from a module that is running within a 64-bit Python interpreter. The procedure uses a client-server protocol where the client is a subclass of ``msl.loadlib.Client64`` and the server is a subclass of ``msl.loadlib.Server32``. See the [tutorials](https://msl-loadlib.readthedocs.io/en/stable/interprocess_communication.html) for examples on how to implement [Inter-process communication].
+[Inter-process communication] is used to access a 32-bit library from a module that is running within a 64-bit Python interpreter. The procedure uses a client-server protocol where the client is a subclass of ``msl.loadlib.Client64`` and the server is a subclass of ``msl.loadlib.Server32``. See the [tutorials](https://msl-loadlib.readthedocs.io/en/stable/interprocess_communication.html) for examples on how to implement [Inter-process communication].
 
 ## Documentation
 The documentation for `msl-loadlib` can be found [here](https://msl-loadlib.readthedocs.io/en/stable/index.html).
@@ -149,5 +149,5 @@ The documentation for `msl-loadlib` can be found [here](https://msl-loadlib.read
 [Inter-process communication]: https://en.wikipedia.org/wiki/Inter-process_communication
 [Java Virtual Machine]: https://en.wikipedia.org/wiki/Java_virtual_machine
 [comtypes]: https://comtypes.readthedocs.io/en/stable/index.html
-[Component Object Model]: https://en.wikipedia.org/wiki/Component_Object_Model
-[ActiveX]: https://en.wikipedia.org/wiki/ActiveX
+[Component Object Model]: https://learn.microsoft.com/en-us/windows/win32/com/component-object-model--com--portal
+[ActiveX]: https://learn.microsoft.com/en-us/windows/win32/com/activex-controls

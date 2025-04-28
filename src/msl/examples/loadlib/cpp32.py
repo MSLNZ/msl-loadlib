@@ -1,6 +1,6 @@
 """Wrapper around a 32-bit C++ library.
 
-Example of a server that loads a 32-bit shared library, [cpp_lib][cpp-lib],
+Example of a server that loads a 32-bit library, [cpp_lib][cpp-lib],
 in a 32-bit Python interpreter to host the library. The corresponding [Cpp64][] class
 is created in a 64-bit Python interpreter and the [Cpp64][] class sends requests
 to the [Cpp32][] class which calls the 32-bit library to execute the request and

@@ -1,11 +1,10 @@
-"""
-A wrapper around a 32-bit .NET library, :ref:`dotnet_lib32 <dotnet-lib>`.
+"""Wrapper around a 32-bit .NET library.
 
-Example of a server that loads a 32-bit .NET library, :ref:`dotnet_lib32.dll <dotnet-lib>`
-in a 32-bit Python interpreter to host the library. The corresponding :mod:`~.dotnet64`
-module can be executed by a 64-bit Python interpreter and the :class:`~.dotnet64.DotNet64`
-class can send a request to the :class:`~.dotnet32.DotNet32` class which calls the
-32-bit library to execute the request and then return the response from the library.
+Example of a server that loads a 32-bit library, [dotnet_lib32.dll][dotnet-lib],
+in a 32-bit Python interpreter to host the library. The corresponding [DotNet64][] class
+is created in a 64-bit Python interpreter and the [DotNet64][] class sends requests
+to the [DotNet32][] class which calls the 32-bit library to execute the request and
+then returns the response from the library.
 """
 
 from __future__ import annotations
@@ -17,15 +16,17 @@ from msl.loadlib import Server32
 
 
 class DotNet32(Server32):
-    def __init__(self, host: str, port: int, **kwargs: str) -> None:
-        """
-        Example of a class that is a wrapper around a 32-bit .NET Framework library,
-        :ref:`dotnet_lib32.dll <dotnet-lib>`. `Python for .NET <https://pythonnet.github.io/>`_
+    """Wrapper around a 32-bit .NET library."""
+
+    def __init__(self, host: str, port: int) -> None:
+        """Wrapper around a 32-bit .NET library.
+
+        [Python for .NET](https://pythonnet.github.io/){:target="_blank"}
         can handle many native Python data types as input arguments.
 
-        :param host: The IP address (or hostname) to use for the server.
-        :param port: The port to open for the server.
-        :param kwargs: Optional keyword arguments. The keys and values are of type :class:`str`.
+        Args:
+            host: The IP address (or hostname) to use for the server.
+            port: The port to open for the server.
         """
         path = os.path.join(os.path.dirname(__file__), "dotnet_lib32.dll")
         super().__init__(path, "net", host, port)
@@ -34,11 +35,15 @@ class DotNet32(Server32):
         self.ArrayManipulation = self.lib.DotNetMSL.ArrayManipulation()
 
     def get_class_names(self) -> list[str]:
-        """Returns the class names in the library.
+        """Gets the class names in the library.
 
-        See the corresponding 64-bit :meth:`~.dotnet64.DotNet64.get_class_names` method.
+        Calls [GetTypes](https://learn.microsoft.com/en-us/dotnet/api/system.reflection.assembly.gettypes){:target="_blank"}
+        using the [assembly][msl.loadlib.load_library.LoadLibrary.assembly] property.
 
-        :return: The names of the classes that are available in :ref:`dotnet_lib32.dll <dotnet-lib>`.
+        See the corresponding [DotNet64.get_class_names][msl.examples.loadlib.dotnet64.DotNet64.get_class_names] method.
+
+        Returns:
+            The names of the classes that are available in [dotnet_lib32.dll][dotnet-lib].
         """
         return ";".join(str(name) for name in self.assembly.GetTypes()).split(";")
 
@@ -47,18 +52,21 @@ class DotNet32(Server32):
 
         The corresponding C# code is
 
-        .. code-block:: csharp
+        ```csharp
+        public int add_integers(int a, int b)
+        {
+            return a + b;
+        }
+        ```
 
-            public int add_integers(int a, int b)
-            {
-                return a + b;
-            }
+        See the corresponding [DotNet64.add_integers][msl.examples.loadlib.dotnet64.DotNet64.add_integers] method.
 
-        See the corresponding 64-bit :meth:`~.dotnet64.DotNet64.add_integers` method.
+        Args:
+            a: First integer.
+            b: Second integer.
 
-        :param a: First integer.
-        :param b: Second integer.
-        :return: The sum of `a` and `b`.
+        Returns:
+            The sum, `a + b`.
         """
         return self.BasicMath.add_integers(a, b)
 
@@ -67,18 +75,21 @@ class DotNet32(Server32):
 
         The corresponding C# code is
 
-        .. code-block:: csharp
+        ```csharp
+        public float divide_floats(float a, float b)
+        {
+            return a / b;
+        }
+        ```
 
-            public float divide_floats(float a, float b)
-            {
-                return a / b;
-            }
+        See the corresponding [DotNet64.divide_floats][msl.examples.loadlib.dotnet64.DotNet64.divide_floats] method.
 
-        See the corresponding 64-bit :meth:`~.dotnet64.DotNet64.divide_floats` method.
+        Args:
+            a: The numerator.
+            b: The denominator.
 
-        :param a: First floating-point number.
-        :param b: Second floating-point number.
-        :return: The quotient of `a` / `b`.
+        Returns:
+            The quotient, `a / b`.
         """
         return self.BasicMath.divide_floats(a, b)
 
@@ -87,18 +98,22 @@ class DotNet32(Server32):
 
         The corresponding C# code is
 
-        .. code-block:: csharp
+        ```csharp
+        public double multiply_doubles(double a, double b)
+        {
+            return a * b;
+        }
+        ```
 
-            public double multiply_doubles(double a, double b)
-            {
-                return a * b;
-            }
+        See the corresponding [DotNet64.multiply_doubles][msl.examples.loadlib.dotnet64.DotNet64.multiply_doubles]
+        method.
 
-        See the corresponding 64-bit :meth:`~.dotnet64.DotNet64.multiply_doubles` method.
+        Args:
+            a: First double-precision number.
+            b: Second double-precision number.
 
-        :param a: First double-precision number.
-        :param b: Second double-precision number.
-        :return: The product of `a` * `b`.
+        Returns:
+            The product, `a * b`.
         """
         return self.BasicMath.multiply_doubles(a, b)
 
@@ -107,26 +122,29 @@ class DotNet32(Server32):
 
         The corresponding C# code is
 
-        .. code-block:: csharp
-
-            public double add_or_subtract(double a, double b, bool do_addition)
+        ```csharp
+        public double add_or_subtract(double a, double b, bool do_addition)
+        {
+            if (do_addition)
             {
-                if (do_addition)
-                {
-                    return a + b;
-                }
-                else
-                {
-                    return a - b;
-                }
+                return a + b;
             }
+            else
+            {
+                return a - b;
+            }
+        }
+        ```
 
-        See the corresponding 64-bit :meth:`~.dotnet64.DotNet64.add_or_subtract` method.
+        See the corresponding [DotNet64.add_or_subtract][msl.examples.loadlib.dotnet64.DotNet64.add_or_subtract] method.
 
-        :param a: First double-precision number.
-        :param b: Second double-precision number.
-        :param do_addition: Whether to add or subtract the numbers.
-        :return: `a+b` if `do_addition` is :data:`True` else `a-b`.
+        Args:
+            a: First double-precision number.
+            b: Second double-precision number.
+            do_addition: Whether to add or subtract the numbers.
+
+        Returns:
+            `a + b` if `do_addition` is `True` else `a - b`.
         """
         return self.BasicMath.add_or_subtract(a, b, do_addition)
 
@@ -135,24 +153,27 @@ class DotNet32(Server32):
 
         The corresponding C# code is
 
-        .. code-block:: csharp
-
-            public double[] scalar_multiply(double a, double[] xin)
+        ```csharp
+        public double[] scalar_multiply(double a, double[] xin)
+        {
+            int n = xin.GetLength(0);
+            double[] xout = new double[n];
+            for (int i = 0; i < n; i++)
             {
-                int n = xin.GetLength(0);
-                double[] xout = new double[n];
-                for (int i = 0; i < n; i++)
-                {
-                    xout[i] = a * xin[i];
-                }
-                return xout;
+                xout[i] = a * xin[i];
             }
+            return xout;
+        }
+        ```
 
-        See the corresponding 64-bit :meth:`~.dotnet64.DotNet64.scalar_multiply` method.
+        See the corresponding [DotNet64.scalar_multiply][msl.examples.loadlib.dotnet64.DotNet64.scalar_multiply] method.
 
-        :param a: Scalar value.
-        :param xin: Array to modify.
-        :return: A new array with each element in `xin` multiplied by `a`.
+        Args:
+            a: Scalar value.
+            xin: Array to modify.
+
+        Returns:
+            A new array with each element in `xin` multiplied by `a`.
         """
         ret = self.ArrayManipulation.scalar_multiply(a, xin)
         return [val for val in ret]
@@ -162,44 +183,48 @@ class DotNet32(Server32):
 
         The corresponding C# code is
 
-        .. code-block:: csharp
-
-            public double[,] multiply_matrices(double[,] A, double[,] B)
+        ```csharp
+        public double[,] multiply_matrices(double[,] A, double[,] B)
+        {
+            int rA = A.GetLength(0);
+            int cA = A.GetLength(1);
+            int rB = B.GetLength(0);
+            int cB = B.GetLength(1);
+            double temp = 0;
+            double[,] C = new double[rA, cB];
+            if (cA != rB)
             {
-                int rA = A.GetLength(0);
-                int cA = A.GetLength(1);
-                int rB = B.GetLength(0);
-                int cB = B.GetLength(1);
-                double temp = 0;
-                double[,] C = new double[rA, cB];
-                if (cA != rB)
-                {
-                    Console.WriteLine("matrices can't be multiplied!");
-                    return new double[0, 0];
-                }
-                else
-                {
-                    for (int i = 0; i < rA; i++)
-                    {
-                        for (int j = 0; j < cB; j++)
-                        {
-                            temp = 0;
-                            for (int k = 0; k < cA; k++)
-                            {
-                                temp += A[i, k] * B[k, j];
-                            }
-                            C[i, j] = temp;
-                        }
-                    }
-                    return C;
-                }
+                Console.WriteLine("matrices can't be multiplied!");
+                return new double[0, 0];
             }
+            else
+            {
+                for (int i = 0; i < rA; i++)
+                {
+                    for (int j = 0; j < cB; j++)
+                    {
+                        temp = 0;
+                        for (int k = 0; k < cA; k++)
+                        {
+                            temp += A[i, k] * B[k, j];
+                        }
+                        C[i, j] = temp;
+                    }
+                }
+                return C;
+            }
+        }
+        ```
 
-        See the corresponding 64-bit :meth:`~.dotnet64.DotNet64.multiply_matrices` method.
+        See the corresponding [DotNet64.multiply_matrices][msl.examples.loadlib.dotnet64.DotNet64.multiply_matrices]
+        method.
 
-        :param a1: First matrix.
-        :param a2: Second matrix.
-        :return: The result of `a1` * `a2`.
+        Args:
+            a1: First matrix.
+            a2: Second matrix.
+
+        Returns:
+            The result, `a1 @ a2`.
         """
         n_rows1 = len(a1)
         n_cols1 = len(a1[0])
@@ -229,69 +254,82 @@ class DotNet32(Server32):
 
         The corresponding C# code is
 
-        .. code-block:: csharp
+        ```csharp
+        public string reverse_string(string original)
+        {
+            char[] charArray = original.ToCharArray();
+            Array.Reverse(charArray);
+            return new string(charArray);
+        }
+        ```
 
-            public string reverse_string(string original)
-            {
-                char[] charArray = original.ToCharArray();
-                Array.Reverse(charArray);
-                return new string(charArray);
-            }
+        See the corresponding [DotNet64.reverse_string][msl.examples.loadlib.dotnet64.DotNet64.reverse_string] method.
 
-        See the corresponding 64-bit :meth:`~.dotnet64.DotNet64.reverse_string` method.
+        Args:
+            original: The original string.
 
-        :param original: The original string.
-        :return: The string reversed.
+        Returns:
+            The string reversed.
         """
         return self.lib.StringManipulation().reverse_string(original)
 
     def add_multiple(self, a: int, b: int, c: int, d: int, e: int) -> int:
-        """Add multiple integers. *Calls a static method in a static class.*
+        """Add multiple integers.
+
+        Calls a static method in a static class.
 
         The corresponding C# code is
 
-        .. code-block:: csharp
+        ```csharp
+        public static int add_multiple(int a, int b, int c, int d, int e)
+        {
+            return a + b + c + d + e;
+        }
+        ```
 
-            public static int add_multiple(int a, int b, int c, int d, int e)
-            {
-                return a + b + c + d + e;
-            }
+        See the corresponding [DotNet64.add_multiple][msl.examples.loadlib.dotnet64.DotNet64.add_multiple] method.
 
-        See the corresponding 64-bit :meth:`~.dotnet64.DotNet64.add_multiple` method.
+        Args:
+            a: First integer.
+            b: Second integer.
+            c: Third integer.
+            d: Fourth integer.
+            e: Fifth integer.
 
-        :param a: First integer.
-        :param b: Second integer.
-        :param c: Third integer.
-        :param d: Fourth integer.
-        :param e: Fifth integer.
-        :return: The sum of the input arguments.
+        Returns:
+            The sum of the input arguments.
         """
         return self.lib.StaticClass.add_multiple(a, b, c, d, e)
 
     def concatenate(self, a: str, b: str, c: str, d: bool, e: str) -> str:
-        """Concatenate strings. *Calls a static method in a static class.*
+        """Concatenate strings.
+
+        Calls a static method in a static class.
 
         The corresponding C# code is
 
-        .. code-block:: csharp
-
-            public static string concatenate(string a, string b, string c, bool d, string e)
+        ```csharp
+        public static string concatenate(string a, string b, string c, bool d, string e)
+        {
+            string res = a + b + c;
+            if (d)
             {
-                string res = a + b + c;
-                if (d)
-                {
-                    res += e;
-                }
-                return res;
+                res += e;
             }
+            return res;
+        }
+        ```
 
-        See the corresponding 64-bit :meth:`~.dotnet64.DotNet64.concatenate` method.
+        See the corresponding [DotNet64.concatenate][msl.examples.loadlib.dotnet64.DotNet64.concatenate] method.
 
-        :param a: First string.
-        :param b: Second string.
-        :param c: Third string.
-        :param d: Whether to include `e` in the concatenation.
-        :param e: Fourth string.
-        :return: The strings concatenated together.
+        Args:
+            a: First string.
+            b: Second string.
+            c: Third string.
+            d: Whether to include `e` in the concatenation.
+            e: Fourth string.
+
+        Returns:
+            The strings concatenated together.
         """
         return self.lib.StaticClass.concatenate(a, b, c, d, e)
