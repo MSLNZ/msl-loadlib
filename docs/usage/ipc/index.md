@@ -83,7 +83,7 @@ with MyClient() as c:
     v = c.version()
 ```
 
-Keyword arguments, `kwargs`, that the [Server32][] subclass requires can be passed to the server from the [Client64][]; however, the data types for the values of the `kwargs` are not preserved (since they are ultimately parsed from the command line). All data types for the values of `kwargs` will be of type [str][]{:target="_blank"} at the `__init__` method of the [Server32][] subclass. These `kwargs` are the only values where the data type is not preserved for the client-server protocol. See the [Echo][tutorials_echo] example which shows that data types are preserved between client-server method calls (provided that the value is [pickle][]{:target="_blank"}able).
+Keyword arguments, `kwargs`, that the [Server32][] subclass requires can be passed to the server from the [Client64][]; however, the data types for the values of the `kwargs` are not preserved (since they are ultimately parsed from the command line). All data types for the values of `kwargs` will be of type [str][]{:target="_blank"} at the `__init__` method of the [Server32][] subclass. These `kwargs` are the only values where the data type is not preserved for the client-server protocol. See the [Echo][ipc-echo] example which shows that data types are preserved between client-server method calls (provided that the value is [pickle][]{:target="_blank"}able).
 
 ??? tip "Simplifying the Client"
 

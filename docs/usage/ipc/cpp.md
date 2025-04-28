@@ -2,7 +2,7 @@
 
 This example shows how to access a 32-bit C++ library from 64-bit Python. [Cpp32][msl.examples.loadlib.cpp32.Cpp32] is the 32-bit server and [Cpp64][msl.examples.loadlib.cpp64.Cpp64] is the 64-bit client.
 
-The source code of the C++ program is available [here][cpp_lib].
+The source code of the C++ program is available [here][cpp-lib].
 
 !!! attention
     If you have issues running the example make sure that you have the [prerequisites][] installed.
