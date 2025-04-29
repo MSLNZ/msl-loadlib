@@ -18,7 +18,6 @@ from ctypes import create_string_buffer
 import pytest
 
 from conftest import IS_MACOS_ARM64
-from conftest import add_py4j_in_eggs
 from conftest import skipif_no_comtypes
 from conftest import skipif_no_labview_runtime
 from conftest import skipif_no_pythonnet
@@ -359,13 +358,7 @@ def test_labview():
 
 
 def test_java():
-    try:
-        jar = LoadLibrary(f"{EXAMPLES_DIR}/java_lib.jar")
-    except OSError as e:
-        if "Create a PY4J_JAR environment variable" not in str(e):
-            raise
-        add_py4j_in_eggs()
-        jar = LoadLibrary(f"{EXAMPLES_DIR}/java_lib.jar")
+    jar = LoadLibrary(f"{EXAMPLES_DIR}/java_lib.jar")
 
     Math = jar.lib.nz.msl.examples.MathUtils
     Matrix = jar.lib.nz.msl.examples.Matrix

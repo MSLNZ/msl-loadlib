@@ -1,116 +1,122 @@
+"""Configuration file for pytest."""
+
+from __future__ import annotations
+
 import os
 import platform
 import sys
+from pathlib import Path
+from typing import Callable
 
 import pytest
 
 try:
-    import clr
+    import clr  # type: ignore[import-untyped]  # pyright: ignore[reportMissingTypeStubs]
 except (ImportError, RuntimeError):
     clr = None
 
-from msl.loadlib.constants import *
-
-# Using the --doctest-modules option with pytest for an implicit
-# namespace package does not work properly, see
-#   https://github.com/pytest-dev/pytest/issues/1927
-#   https://github.com/pytest-dev/pytest/issues/2371
-#   https://github.com/pytest-dev/pytest/issues/5147
-#   https://github.com/pytest-dev/pytest/issues/6966
-# Consider using the hack in msl-nlf (where a hack with Sybil is used)
-# instead of the following hack that adds loadlib to sys.modules
-from msl import loadlib
-
-sys.modules["loadlib"] = loadlib
+from msl.loadlib.constants import IS_MAC, IS_PYTHON_64BIT, IS_WINDOWS
 
 IS_MACOS_ARM64 = sys.platform == "darwin" and platform.machine() == "arm64"
 
 
-def add_py4j_in_eggs():
-    # if py4j is located in the .eggs directory and not in the site-packages directory
-    # then the py4j*.jar file cannot be found, so we need to create a PY4J_JAR env variable
-    import py4j
-
-    os.environ["PY4J_JAR"] = os.path.join(
-        ".eggs",
-        f"py4j-{py4j.__version__}-py{sys.version_info.major}.{sys.version_info.minor}.egg",
-        "share",
-        "py4j",
-        f"py4j{py4j.__version__}.jar",
-    )
-
-
-def has_labview_runtime():
+def has_labview_runtime() -> bool:
+    """Checks if a LabVIEW runtime is installed."""
+    root: Path
     if IS_PYTHON_64BIT:
-        root = r"C:\Program Files\National Instruments\Shared\LabVIEW Run-Time"
+        root = Path(r"C:\Program Files\National Instruments\Shared\LabVIEW Run-Time")
     else:
-        root = r"C:\Program Files (x86)\National Instruments\Shared\LabVIEW Run-Time"
+        root = Path(r"C:\Program Files (x86)\National Instruments\Shared\LabVIEW Run-Time")
 
-    if not os.path.isdir(root):
+    if not root.is_dir():
         return False
 
-    for item in os.listdir(root):
-        path = os.path.join(root, item, "lvrt.dll")  # cSpell: ignore lvrt
-        if os.path.isfile(path):
+    for item in root.iterdir():
+        path = root / item / "lvrt.dll"  # cSpell: ignore lvrt
+        if path.is_file():
             return True
 
     return False
 
 
-@pytest.fixture(autouse=True)
-def doctest_skipif(doctest_namespace):
+def not_windows() -> None:
+    """Skip doctest if not Windows."""
     if not IS_WINDOWS:
-        not_windows = lambda: pytest.skip("not Windows")
-        readme_com = lambda: pytest.skip("skipped at COM test")
-    else:
-        not_windows = lambda: None
-        readme_com = lambda: None
+        pytest.skip("not Windows")
 
+
+def is_mac() -> None:
+    """Skip doctest if macOS."""
     if IS_MAC:
-        is_mac = lambda: pytest.skip("is macOS")
-    else:
-        is_mac = lambda: None
+        pytest.skip("is macOS")
 
+
+def bit64() -> None:
+    """Skip doctest if 64-bit Python."""
     if IS_PYTHON_64BIT:
-        bit64 = lambda: pytest.skip("requires 32-bit Python")
-        bit32 = lambda: None
-    else:
-        bit64 = lambda: None
-        bit32 = lambda: pytest.skip("requires 64-bit Python")
+        pytest.skip("requires 32-bit Python")
 
+
+def bit32() -> None:
+    """Skip doctest if 32-bit Python."""
+    if not IS_PYTHON_64BIT:
+        pytest.skip("requires 64-bit Python")
+
+
+def readme_all() -> None:
+    """Skip all doctest in README."""
     if not IS_PYTHON_64BIT or IS_MACOS_ARM64:
-        readme_all = lambda: pytest.skip("skipped all tests")
-    else:
-        readme_all = lambda: None
+        pytest.skip("skipped all tests")
 
-    if IS_MACOS_ARM64:
-        is_mac_arm64 = lambda: pytest.skip("ignore on macOS arm64")
-    else:
-        is_mac_arm64 = lambda: None
 
-    if IS_PYTHON_64BIT and has_labview_runtime():
-        no_labview64 = lambda: None
-    else:
-        no_labview64 = lambda: pytest.skip("requires 64-bit LabVIEW Run-Time Engine")
-
-    no_labview32 = lambda: pytest.skip("not checking if 32-bit LabVIEW is installed")
-
+def readme_dotnet() -> None:
+    """Skip from .NET doctest in README."""
     if clr is None:
-        readme_dotnet = lambda: pytest.skip("skipped at .NET test")
-        no_pythonnet = lambda: pytest.skip("pythonnet is not installed")
-    else:
-        readme_dotnet = lambda: None
-        no_pythonnet = lambda: None
+        pytest.skip("skipped at .NET test")
 
+
+def readme_com() -> None:
+    """Skip from COM doctest in README."""
+    if not IS_WINDOWS:
+        pytest.skip("skipped at COM test")
+
+
+def mac_arm64() -> None:
+    """Skip doctest if macOS and ARM64."""
+    if IS_MACOS_ARM64:
+        pytest.skip("ignore on macOS arm64")
+
+
+def no_labview64() -> None:
+    """Skip doctest if a 64-bit LabVIEW Run-Time Engine is not installed."""
+    if not (IS_PYTHON_64BIT and has_labview_runtime()):
+        pytest.skip("requires 64-bit LabVIEW Run-Time Engine")
+
+
+def no_labview32() -> None:
+    """Skip doctest if a 32-bit LabVIEW Run-Time Engine is not installed."""
+    pytest.skip("not checking if 32-bit LabVIEW is installed")
+
+
+def no_pythonnet() -> None:
+    """Skip doctest if pythonnet is not installed."""
+    if clr is None:
+        pytest.skip("pythonnet is not installed")
+
+
+def win32_github_actions() -> None:
+    """Skip doctest if using a Windows running on GitHub Actions."""
     if IS_WINDOWS and os.getenv("GITHUB_ACTIONS") == "true":
-        win32_github_actions = lambda: pytest.skip("flaky test on Windows and GA")
-    else:
-        win32_github_actions = lambda: None
+        pytest.skip("flaky test on Windows and GHA")
 
+
+@pytest.fixture(autouse=True)
+def doctest_skipif(doctest_namespace: dict[str, Callable[[], None]]) -> None:
+    """Inject skipif conditions for doctest."""
     doctest_namespace["SKIP_IF_WINDOWS_GITHUB_ACTIONS"] = win32_github_actions
     doctest_namespace["SKIP_IF_NOT_WINDOWS"] = not_windows
     doctest_namespace["SKIP_IF_MACOS"] = is_mac
-    doctest_namespace["SKIP_IF_MACOS_ARM64"] = is_mac_arm64
+    doctest_namespace["SKIP_IF_MACOS_ARM64"] = mac_arm64
     doctest_namespace["SKIP_IF_64BIT"] = bit64
     doctest_namespace["SKIP_IF_32BIT"] = bit32
     doctest_namespace["SKIP_IF_LABVIEW64_NOT_INSTALLED"] = no_labview64
@@ -128,5 +134,5 @@ skipif_no_server32 = pytest.mark.skipif(IS_MAC, reason="32-bit server does not e
 skipif_not_windows = pytest.mark.skipif(not IS_WINDOWS, reason="not Windows")
 
 xfail_windows_ga = pytest.mark.xfail(
-    IS_WINDOWS and os.getenv("GITHUB_ACTIONS") == "true", reason="flaky test on Windows and GA"
+    IS_WINDOWS and os.getenv("GITHUB_ACTIONS") == "true", reason="flaky test on Windows and GHA"
 )
