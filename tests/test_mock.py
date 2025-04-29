@@ -1,5 +1,6 @@
 import os
 import sys
+import platform
 from ctypes import c_int
 from http.client import HTTPConnection
 from unittest.mock import Mock
@@ -11,12 +12,13 @@ from msl.loadlib import Server32Error
 if Server32.is_interpreter():
     pytest = Mock()
     skipif_no_server32 = Mock()
-    IS_MACOS_ARM64 = False
 else:
     import pytest
-    from conftest import IS_MACOS_ARM64
     from conftest import skipif_no_server32
     from msl.loadlib.constants import DEFAULT_EXTENSION
+
+
+IS_MACOS_ARM64 = sys.platform == "darwin" and platform.machine() == "arm64"
 
 
 class Server(Server32):
