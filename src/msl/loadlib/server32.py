@@ -59,7 +59,7 @@ class Server32(HTTPServer):
             kwargs: All keyword arguments are passed to [LoadLibrary][msl.loadlib.load_library.LoadLibrary].
         """
         self._library = LoadLibrary(path, libtype=libtype, **kwargs)
-        self._app = self._library.app
+        self._app = self._library.application
         self._assembly = self._library.assembly
         self._lib = self._library.lib
         self._path = self._library.path
