@@ -7,32 +7,28 @@ import ctypes.util
 import os
 import subprocess
 import sys
-from typing import Any
-from typing import Literal
 from typing import TYPE_CHECKING
-from typing import TypeVar
 
 from . import utils
 from .constants import DEFAULT_EXTENSION
 from .constants import IS_WINDOWS
 
 if TYPE_CHECKING:
+    from typing import Any, TypeVar
+
+    from ._types import LibType, PathLike
     from .activex import Application
+
+    # the Self type was added in Python 3.11 (PEP 673)
+    # using TypeVar is equivalent for < 3.11
+    if sys.version_info[:2] < (3, 11):
+        Self = TypeVar("Self", bound="LoadLibrary")
+    else:
+        from typing import Self
+
 
 _LIBTYPES: set[str] = {"cdll", "windll", "oledll", "net", "clr", "java", "com", "activex"}
 
-LibType = Literal["cdll", "windll", "oledll", "net", "clr", "java", "com", "activex"]
-"""Supported library types."""
-
-# the Self type was added in Python 3.11 (PEP 673)
-# using TypeVar is equivalent for < 3.11
-Self = TypeVar("Self", bound="LoadLibrary")
-
-PathLike = TypeVar("PathLike", str, bytes, os.PathLike)
-"""A [path-like]{:target="_blank"} object ([str][], [bytes][] or [os.PathLike][]).
-
-[path-like]: https://docs.python.org/3/glossary.html#term-path-like-object
-"""
 
 if IS_WINDOWS and not hasattr(sys, "coinit_flags"):
     # https://pywinauto.readthedocs.io/en/latest/HowTo.html#com-threading-model

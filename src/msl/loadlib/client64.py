@@ -21,10 +21,7 @@ import time
 import warnings
 from http.client import CannotSendRequest
 from http.client import HTTPConnection
-from typing import Any
-from typing import BinaryIO
-from typing import Iterable
-from typing import TypeVar
+from typing import TYPE_CHECKING
 
 from . import utils
 from .constants import IS_WINDOWS
@@ -32,15 +29,23 @@ from .constants import SERVER_FILENAME
 from .exceptions import ConnectionTimeoutError
 from .exceptions import ResponseTimeoutError
 from .exceptions import Server32Error
-from .load_library import PathLike
 from .server32 import METADATA
 from .server32 import OK
 from .server32 import SHUTDOWN
 from .server32 import Server32
 
-# the Self type was added in Python 3.11 (PEP 673)
-# using TypeVar is equivalent for < 3.11
-Self = TypeVar("Self", bound="Client64")
+if TYPE_CHECKING:
+    from collections.abc import Iterable
+    from typing import Any, BinaryIO, TypeVar
+
+    from ._types import PathLike
+
+    # the Self type was added in Python 3.11 (PEP 673)
+    # using TypeVar is equivalent for < 3.11
+    if sys.version_info[:2] < (3, 11):
+        Self = TypeVar("Self", bound="Client64")
+    else:
+        from typing import Self
 
 
 class Client64:

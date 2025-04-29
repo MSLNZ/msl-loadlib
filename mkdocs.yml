@@ -94,6 +94,7 @@ nav:
     - api/activex.md
     - api/exceptions.md
     - api/freeze_server32.md
+    - api/types.md
     - api/utils.md
   - FAQ:
     - faq/streams.md

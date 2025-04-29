@@ -17,15 +17,17 @@ import traceback
 from pathlib import Path
 from http.server import BaseHTTPRequestHandler
 from http.server import HTTPServer
-from typing import Any, TYPE_CHECKING
+from typing import TYPE_CHECKING
 
 from .constants import IS_WINDOWS
 from .constants import SERVER_FILENAME
-from .load_library import LibType
 from .load_library import LoadLibrary
 
 if TYPE_CHECKING:
-    from msl.loadlib.activex import Application
+    from typing import Any
+
+    from ._types import LibType, PathLike
+    from .activex import Application
 
 METADATA: str = "-METADATA-"
 SHUTDOWN: str = "-SHUTDOWN-"
@@ -36,7 +38,7 @@ ERROR: int = 500
 class Server32(HTTPServer):
     """Base class for loading a 32-bit library in 32-bit Python."""
 
-    def __init__(self, path: str, libtype: LibType, host: str, port: int, **kwargs: Any) -> None:
+    def __init__(self, path: PathLike, libtype: LibType, host: str, port: int, **kwargs: Any) -> None:
         """Base class for loading a 32-bit library in 32-bit Python.
 
         All modules that are to be run on the 32-bit server must contain a class
