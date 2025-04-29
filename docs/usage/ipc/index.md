@@ -7,7 +7,7 @@ This section of the documentation shows examples for how a module running within
 
 ## Example Server
 
-Suppose you want to load a 32-bit C library, `my_lib.dll`, from a 64-bit Python interpreter. This library is loaded by the `MyServer` class which is running within a 32-bit process. `MyServer` hosts the library at a specified host address and port number. Any class that is a subclass of [Server32][] **must** provide two arguments in its constructor: `host` and `port`. Including keyword arguments in the constructor is optional.
+Suppose you want to call functions in a 32-bit C library, `my_lib.dll`, from a 64-bit Python interpreter. This C library is loaded by the following `MyServer` class, which is running within a 32-bit process. `MyServer` hosts the C library at a specified host address and port number. Any class that is a subclass of [Server32][] **must** provide two arguments in its constructor: `host` and `port`. Including keyword arguments in the constructor is optional.
 
 !!! example "my_server.py"
 
@@ -40,7 +40,7 @@ Suppose you want to load a 32-bit C library, `my_lib.dll`, from a 64-bit Python 
 
 ## Example Client
 
-`MyClient` is a subclass of [Client64][] which sends requests to `MyServer` to call the `add` function in the library and to get the value of `version` from the server. `MyServer` processes the request and sends the response back to `MyClient`.
+The following `MyClient` is a subclass of [Client64][] and it will communicate with `MyServer` to call functions in the C library. When an instance of `MyClient` is created, the server starts automatically so that `MyClient` can send requests to `MyServer` to call the `add` function in the C library and to get the value of the `version` attribute of `MyServer`. `MyServer` processes the request and sends the response back to `MyClient`.
 
 !!! example "my_client.py"
 
