@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-import os
+from pathlib import Path
 
 from .cpp32 import Cpp32
 from .cpp32 import FourPoints
@@ -20,4 +20,4 @@ from .kernel64 import Kernel64
 from .labview32 import Labview32
 from .labview64 import Labview64
 
-EXAMPLES_DIR: str = os.path.abspath(os.path.dirname(__file__))
+EXAMPLES_DIR: Path = Path(__file__).parent

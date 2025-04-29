@@ -18,7 +18,7 @@ Load the example [LabVIEW library][labview-lib]
 ```pycon
 >>> from msl.loadlib import LoadLibrary
 >>> from msl.examples.loadlib import EXAMPLES_DIR
->>> labview = LoadLibrary(EXAMPLES_DIR + "/labview_lib64.dll")
+>>> labview = LoadLibrary(EXAMPLES_DIR / "labview_lib64.dll")
 >>> labview
 <LoadLibrary libtype=CDLL path=...labview_lib64.dll>
 >>> labview.lib

@@ -8,7 +8,7 @@ Load the example [Java archive][java-lib], `java_lib.jar`
 ```pycon
 >>> from msl.loadlib import LoadLibrary
 >>> from msl.examples.loadlib import EXAMPLES_DIR
->>> jar = LoadLibrary(EXAMPLES_DIR + "/java_lib.jar")
+>>> jar = LoadLibrary(EXAMPLES_DIR / "java_lib.jar")
 >>> jar
 <LoadLibrary libtype=JVMView path=...java_lib.jar>
 >>> jar.gateway
@@ -77,7 +77,7 @@ Shutdown the connection to the [JVM]{:target="_blank"} when finished
 Load the example [Java byte code][java-lib], `Trig.class`
 
 ```pycon
->>> cls = LoadLibrary(EXAMPLES_DIR + "/Trig.class")
+>>> cls = LoadLibrary(EXAMPLES_DIR / "Trig.class")
 >>> cls
 <LoadLibrary libtype=JVMView path=...Trig.class>
 >>> cls.lib

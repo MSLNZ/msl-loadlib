@@ -14,8 +14,9 @@
 ***Changed:***
 
 - convert to an implicit namespace package ([PEP-420](https://peps.python.org/pep-0420/))
-- the `requires_pythonnet` and `requires_comtypes` arguments to `freeze_server32.main()` were removed and the `imports`, `data` `skip_32bit_check`, `save_spec` and `keep_tk` arguments were added
+- the `requires_pythonnet` and `requires_comtypes` arguments to `freeze_server32.main()` were removed and the `imports`, `data` `skip_32bit_check`, `keep_spec` and `keep_tk` arguments were added
 - all constants (e.g., `IS_WINDOWS`) were moved to a `constants.py` file
+- data type of `EXAMPLES_DIR` and the return type from `Server32.examples_dir()` changed from [str][] to [Path][pathlib.Path]
 
 ***Removed:***
 

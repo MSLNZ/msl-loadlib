@@ -14,6 +14,7 @@ import subprocess
 import sys
 import threading
 import traceback
+from pathlib import Path
 from http.server import BaseHTTPRequestHandler
 from http.server import HTTPServer
 from typing import Any, TYPE_CHECKING
@@ -223,17 +224,15 @@ class Server32(HTTPServer):
         return sys.executable.endswith(SERVER_FILENAME)
 
     @staticmethod
-    def examples_dir() -> str:
-        """[str][] &mdash; The directory where the [example][direct] libraries are located.
+    def examples_dir() -> Path:
+        """[Path][pathlib.Path] &mdash; The directory where the [example][direct] libraries are located.
 
         !!! note "Added in version 0.9"
+        !!! note "Changed in version 1.0"
+            The return type changed from [str][]{:target="_blank"} to [Path][pathlib.Path]{:target="_blank"}.
         """
-        if Server32.is_interpreter():
-            root = os.path.dirname(sys.executable)
-        else:
-            root = os.path.dirname(__file__)
-        path = os.path.join(root, os.pardir, "examples", "loadlib")
-        return os.path.abspath(path)
+        path = sys.executable if Server32.is_interpreter() else __file__
+        return Path(path).parent.parent / "examples" / "loadlib"
 
     def shutdown_handler(self) -> None:
         """Called just before the server shuts down.

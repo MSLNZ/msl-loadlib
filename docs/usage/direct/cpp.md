@@ -17,7 +17,7 @@ Load the example [C++ library][cpp-lib]
 ```pycon
 >>> from msl.loadlib import LoadLibrary
 >>> from msl.examples.loadlib import EXAMPLES_DIR
->>> cpp = LoadLibrary(EXAMPLES_DIR + "/cpp_lib64")
+>>> cpp = LoadLibrary(EXAMPLES_DIR / "cpp_lib64")
 
 ```
 

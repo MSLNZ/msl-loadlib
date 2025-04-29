@@ -17,7 +17,7 @@ Load the example [.NET library][dotnet-lib]
 ```pycon
 >>> from msl.loadlib import LoadLibrary
 >>> from msl.examples.loadlib import EXAMPLES_DIR
->>> net = LoadLibrary(EXAMPLES_DIR + "/dotnet_lib64.dll", "net")
+>>> net = LoadLibrary(EXAMPLES_DIR / "dotnet_lib64.dll", "net")
 
 ```
 

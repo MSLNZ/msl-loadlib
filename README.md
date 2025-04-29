@@ -50,7 +50,7 @@ If the file extension is not included then a default extension, `.dll` (Windows)
 Load the [example C++](https://github.com/MSLNZ/msl-loadlib/blob/main/src/msl/examples/loadlib/cpp_lib.cpp) library and call the `add` function
 
 ```pycon
->>> cpp = LoadLibrary(EXAMPLES_DIR + "/cpp_lib64")
+>>> cpp = LoadLibrary(EXAMPLES_DIR / "cpp_lib64")
 >>> cpp.lib.add(1, 2)
 3
 
@@ -59,7 +59,7 @@ Load the [example C++](https://github.com/MSLNZ/msl-loadlib/blob/main/src/msl/ex
 Load the [example FORTRAN](https://github.com/MSLNZ/msl-loadlib/blob/main/src/msl/examples/loadlib/fortran_lib.f90) library and call the `factorial` function
 
 ```pycon
->>> fortran = LoadLibrary(EXAMPLES_DIR + "/fortran_lib64")
+>>> fortran = LoadLibrary(EXAMPLES_DIR / "fortran_lib64")
 
 ```
 
@@ -76,7 +76,7 @@ With a FORTRAN library you must pass values by reference using [ctypes], and, si
 Load the [example Java](https://github.com/MSLNZ/msl-loadlib/blob/main/src/msl/examples/loadlib/Trig.java) byte code and call the `cos` function
 
 ```pycon
->>> java = LoadLibrary(EXAMPLES_DIR + "/Trig.class")
+>>> java = LoadLibrary(EXAMPLES_DIR / "Trig.class")
 >>> java.lib.Trig.cos(1.234)
 0.33046510807172985
 
@@ -97,7 +97,7 @@ Load the [example .NET](https://github.com/MSLNZ/msl-loadlib/blob/main/src/msl/e
 -->
 
 ```pycon
->>> net = LoadLibrary(EXAMPLES_DIR + "/dotnet_lib64.dll", "net")
+>>> net = LoadLibrary(EXAMPLES_DIR / "dotnet_lib64.dll", "net")
 >>> net.lib.StringManipulation().reverse_string("abcdefghijklmnopqrstuvwxyz")
 'zyxwvutsrqponmlkjihgfedcba'
 

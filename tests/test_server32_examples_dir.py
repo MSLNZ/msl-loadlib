@@ -40,5 +40,5 @@ def test_examples_dir():
     assert Server32.examples_dir() == EXAMPLES_DIR
 
     e = Ex64()
-    assert e.examples_dir() == EXAMPLES_DIR
-    assert e.ex_dir() == EXAMPLES_DIR
+    assert e.examples_dir() == str(EXAMPLES_DIR)
+    assert e.ex_dir() == str(EXAMPLES_DIR)

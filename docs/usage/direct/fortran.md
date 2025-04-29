@@ -17,7 +17,7 @@ Load the example [FORTRAN library][fortran-lib]
 ```pycon
 >>> from msl.loadlib import LoadLibrary
 >>> from msl.examples.loadlib import EXAMPLES_DIR
->>> fortran = LoadLibrary(EXAMPLES_DIR + "/fortran_lib64")
+>>> fortran = LoadLibrary(EXAMPLES_DIR / "fortran_lib64")
 
 ```
 
