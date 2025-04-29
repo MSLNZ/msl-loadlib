@@ -2,31 +2,14 @@
 
 from __future__ import annotations
 
-from typing import NamedTuple
-
 from ._version import __version__, version_tuple
+
+__author__: str = "Measurement Standards Laboratory of New Zealand"
+__copyright__: str = f"\xa9 2017 - 2025, {__author__}"
 
 __all__: list[str] = [
     "__author__",
     "__copyright__",
     "__version__",
-    "version_info",
+    "version_tuple",
 ]
-
-__author__: str = "Measurement Standards Laboratory of New Zealand"
-__copyright__: str = f"\xa9 2017 - 2025, {__author__}"
-
-
-class VersionInfo(NamedTuple):
-    """Contains version information as a (major, minor, micro, releaselevel) named tuple."""
-
-    major: int
-    minor: int
-    micro: int
-    releaselevel: str
-
-
-major, minor, micro, *releaselevel = version_tuple
-release_level = "".join(releaselevel) or "final"
-
-version_info: VersionInfo = VersionInfo(major, minor, micro, release_level)
