@@ -25,7 +25,7 @@ from urllib.request import urlopen
 
 from msl import loadlib
 from msl.loadlib import constants
-from msl.loadlib import version_info
+from msl.loadlib import version_tuple
 
 
 # Command to run when freezing the server for a new release
@@ -312,7 +312,7 @@ def _create_version_info_file(root_dir: str) -> str:
 # https://docs.microsoft.com/en-us/windows/win32/menurc/stringfileinfo-block
 VSVersionInfo(
   ffi=FixedFileInfo(
-    filevers=({version_info.major}, {version_info.minor}, {version_info.micro}, 0),
+    filevers=({version_tuple[0]}, {version_tuple[1]}, {version_tuple[2]}, 0),
     prodvers=({sys.version_info.major}, {sys.version_info.minor}, {sys.version_info.micro}, 0),
     mask=0x3f,
     flags=0x0,
@@ -328,7 +328,7 @@ VSVersionInfo(
         '000004B0',
         [StringStruct('CompanyName', '{loadlib.__author__}'),
         StringStruct('FileDescription', 'Access a 32-bit library from 64-bit Python'),
-        StringStruct('FileVersion', '{version_info.major}.{version_info.minor}.{version_info.micro}.0'),
+        StringStruct('FileVersion', '{version_tuple[0]}.{version_tuple[1]}.{version_tuple[2]}.0'),
         StringStruct('InternalName', '{constants.SERVER_FILENAME}'),
         StringStruct('LegalCopyright', '\xc2{loadlib.__copyright__}'),
         StringStruct('OriginalFilename', '{constants.SERVER_FILENAME}'),
