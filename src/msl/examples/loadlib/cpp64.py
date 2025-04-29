@@ -1,17 +1,4 @@
-"""
-Communicates with :ref:`cpp_lib32 <cpp-lib>` via the :class:`~.cpp32.Cpp32` class.
-
-Example of a module that can be executed within a 64-bit Python interpreter which can
-communicate with a 32-bit library, :ref:`cpp_lib32 <cpp-lib>`, that is hosted
-by a 32-bit Python server, :mod:`.cpp32`. A 64-bit process cannot load a
-32-bit library and therefore `inter-process communication <ipc_>`_ is used to
-interact with a 32-bit library from a 64-bit process.
-
-:class:`~.cpp64.Cpp64` is the 64-bit client and :class:`~.cpp32.Cpp32`
-is the 32-bit server for `inter-process communication <ipc_>`_.
-
-.. _ipc: https://en.wikipedia.org/wiki/Inter-process_communication
-"""
+"""Communicates with the [cpp_lib][cpp-lib] library via the [Cpp32][] class that is running on a server."""
 
 from __future__ import annotations
 
@@ -23,8 +10,10 @@ from msl.loadlib import Client64
 
 
 class Cpp64(Client64):
+    """Communicates with a 32-bit C++ library."""
+
     def __init__(self) -> None:
-        """Communicates with a 32-bit C++ library, :ref:`cpp_lib32 <cpp-lib>`.
+        """Communicates with a 32-bit C++ library via the server running [Cpp32][].
 
         This class demonstrates how to communicate with a 32-bit C++ library if an
         instance of this class is created within a 64-bit Python interpreter.
@@ -36,45 +25,57 @@ class Cpp64(Client64):
     def add(self, a: int, b: int) -> int:
         """Add two integers.
 
-        See the corresponding 32-bit :meth:`~.cpp32.Cpp32.add` method.
+        See the corresponding [Cpp32.add][msl.examples.loadlib.cpp32.Cpp32.add] method.
 
-        :param a: First integer.
-        :param b: Second integer.
-        :return: The sum of `a` and `b`.
+        Args:
+            a: First integer.
+            b: Second integer.
+
+        Returns:
+            The sum, `a + b`.
         """
         return self.request32("add", a, b)
 
     def subtract(self, a: float, b: float) -> float:
         """Subtract two floating-point numbers *('float' refers to the C++ data type)*.
 
-        See the corresponding 32-bit :meth:`~.cpp32.Cpp32.subtract` method.
+        See the corresponding [Cpp32.subtract][msl.examples.loadlib.cpp32.Cpp32.subtract] method.
 
-        :param a: First floating-point number.
-        :param b: Second floating-point number.
-        :return: The difference between `a` and `b`.
+        Args:
+            a: First floating-point number.
+            b: Second floating-point number.
+
+        Returns:
+            The difference, `a - b`.
         """
         return self.request32("subtract", a, b)
 
     def add_or_subtract(self, a: float, b: float, do_addition: bool) -> float:
         """Add or subtract two floating-point numbers *('double' refers to the C++ data type)*.
 
-        See the corresponding 32-bit :meth:`~.cpp32.Cpp32.add_or_subtract` method.
+        See the corresponding [Cpp32.add_or_subtract][msl.examples.loadlib.cpp32.Cpp32.add_or_subtract] method.
 
-        :param a: First double-precision number.
-        :param b: Second double-precision number.
-        :param do_addition: Whether to add or subtract the numbers.
-        :return: `a+b` if `do_addition` is :data:`True` else `a-b`.
+        Args:
+            a: First double-precision number.
+            b: Second double-precision number.
+            do_addition: Whether to add or subtract the numbers.
+
+        Returns:
+            `a + b` if `do_addition` is `True` else `a - b`.
         """
         return self.request32("add_or_subtract", a, b, do_addition)
 
     def scalar_multiply(self, a: float, xin: Sequence[float]) -> list[float]:
         """Multiply each element in an array by a number.
 
-        See the corresponding 32-bit :meth:`~.cpp32.Cpp32.scalar_multiply` method.
+        See the corresponding [Cpp32.scalar_multiply][msl.examples.loadlib.cpp32.Cpp32.scalar_multiply] method.
 
-        :param a: Scalar value.
-        :param xin: Array to modify.
-        :return: A new array with each element in `xin` multiplied by `a`.
+        Args:
+            a: Scalar value.
+            xin: Array to modify.
+
+        Returns:
+            A new array with each element in `xin` multiplied by `a`.
         """
         return self.request32("scalar_multiply", a, xin)
 
@@ -84,10 +85,13 @@ class Cpp64(Client64):
         In this method Python allocates the memory for the reversed string
         and passes the string to C++.
 
-        See the corresponding 32-bit :meth:`~.cpp32.Cpp32.reverse_string_v1` method.
+        See the corresponding [Cpp32.reverse_string_v1][msl.examples.loadlib.cpp32.Cpp32.reverse_string_v1] method.
 
-        :param original: The original string.
-        :return: The string reversed.
+        Args:
+            original: The original string.
+
+        Returns:
+            The string reversed.
         """
         return self.request32("reverse_string_v1", original)
 
@@ -97,24 +101,30 @@ class Cpp64(Client64):
         In this method C++ allocates the memory for the reversed string and passes
         the string to Python.
 
-        See the corresponding 32-bit :meth:`~.cpp32.Cpp32.reverse_string_v2` method.
+        See the corresponding [Cpp32.reverse_string_v2][msl.examples.loadlib.cpp32.Cpp32.reverse_string_v2] method.
 
-        :param original: The original string.
-        :return: The string reversed.
+        Args:
+            original: The original string.
+
+        Returns:
+            The string reversed.
         """
         return self.request32("reverse_string_v2", original)
 
     def distance_4_points(self, points: FourPoints) -> float:
-        """Calculates the total distance connecting 4 :class:`~msl.examples.loadlib.cpp32.Point`\'s.
+        """Calculates the total distance connecting 4 [Point][msl.examples.loadlib.cpp32.Point]s.
 
-        See the corresponding 32-bit :meth:`~.cpp32.Cpp32.distance_4_points` method.
+        See the corresponding [Cpp32.distance_4_points][msl.examples.loadlib.cpp32.Cpp32.distance_4_points] method.
 
-        :param points: The points to use to calculate the total distance.
-            Since `points` is a struct that is a fixed size we can pass the
-            :class:`ctypes.Structure` object directly from 64-bit Python to
-            the 32-bit Python. The :mod:`ctypes` module on the 32-bit server
-            can load the :mod:`pickle`\'d :class:`ctypes.Structure`.
-        :return: The total distance connecting the 4 points.
+        Args:
+            points: The points to use to calculate the total distance.
+                Since `points` is a struct that is a fixed size we can pass the
+                [ctypes.Structure][]{:target="_blank"} object directly from 64-bit Python to
+                the 32-bit Python. The [ctypes][]{:target="_blank"} module on the 32-bit server
+                can load the [pickle][]{:target="_blank"}d [ctypes.Structure][]{:target="_blank"}.
+
+        Returns:
+            The total distance connecting the 4 points.
         """
         if not isinstance(points, FourPoints):
             msg = f"Must pass in a FourPoints object. Got {type(points)}"
@@ -124,12 +134,15 @@ class Cpp64(Client64):
     def circumference(self, radius: float, n: int) -> float:
         """Estimates the circumference of a circle.
 
-        This method calls the ``distance_n_points`` function in :ref:`cpp_lib32 <cpp-lib>`.
+        This method calls the `distance_n_points` function in [cpp_lib][cpp-lib].
 
-        See the corresponding 32-bit :meth:`~.cpp32.Cpp32.circumference` method.
+        See the corresponding [Cpp32.circumference][msl.examples.loadlib.cpp32.Cpp32.circumference] method.
 
-        :param radius: The radius of the circle.
-        :param n: The number of points to use to estimate the circumference.
-        :return: The estimated circumference of the circle.
+        Args:
+            radius: The radius of the circle.
+            n: The number of points to use to estimate the circumference.
+
+        Returns:
+            The estimated circumference of the circle.
         """
         return self.request32("circumference", radius, n)

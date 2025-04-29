@@ -1,0 +1,41 @@
+name: Docs
+
+on:
+  push:
+    branches: ['main']
+    tags:
+      - '*'
+  pull_request:
+    branches: ['main']
+
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
+jobs:
+  deploy:
+    name: Build and deploy documentation
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      - name: Install uv
+        uses: astral-sh/setup-uv@v5
+        with:
+          enable-cache: false
+      - name: Configure Git for GitHub Actions bot
+        run: |
+          git config --local user.name "github-actions[bot]"
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+      - name: Validate docs
+        run: uv run --only-group doc -- mkdocs build --strict
+      - name: Deploy dev docs
+        if: github.ref == 'refs/heads/main'
+        run: |
+          uv run --only-group doc -- mike deploy --push --update-aliases dev
+          uv run --only-group doc -- mike set-default --push dev
+      - name: Deploy release docs
+        if: github.ref_type == 'tag'
+        run: |
+          uv run --only-group doc -- mike deploy --push --update-aliases ${{ github.ref_name }} latest

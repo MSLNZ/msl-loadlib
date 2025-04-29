@@ -1,6 +1,4 @@
-"""
-Package constants.
-"""
+"""Package constants."""
 
 from __future__ import annotations
 

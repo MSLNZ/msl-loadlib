@@ -17,9 +17,9 @@
         "useCache": true
     },
     "ignorePaths": [
-        ".readthedocs.yml",
         "cspell.json",
         "docs/conf.py",
+        "mkdocs.yml",
         "pyproject.toml",
         "tests/dotnet_config/legacy_v2_runtime/legacy_v2_runtime.vcproj",
         "tests/namespace_with_dots/Namespace.With.Dots.csproj",
@@ -31,6 +31,7 @@
         "APPLMODAL",
         "APPWINDOW",
         "arange",
+        "argtypes",
         "ASYNCWINDOWPOS",
         "autoclass",
         "autointenum",

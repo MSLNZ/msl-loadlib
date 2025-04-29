@@ -1,0 +1,153 @@
+site_name: MSL-LoadLib
+site_description: Load a library (and access a 32-bit library from 64-bit Python)
+copyright: Copyright &copy; 2017 - 2025 Measurement Standards Laboratory of New Zealand
+repo_url: https://github.com/MSLNZ/msl-loadlib/
+site_url: https://github.com/MSLNZ/msl-loadlib/
+
+theme:
+  name: material
+  language: en
+  favicon: assets/images/favicon.ico
+  features:
+    - content.code.copy
+    - navigation.footer
+    - navigation.indexes
+    - navigation.top
+    - navigation.tabs
+    - navigation.tabs.sticky
+    - search.highlight
+    - search.suggest
+  palette:
+    # Palette toggle for automatic mode
+    - media: '(prefers-color-scheme)'
+      primary: indigo
+      accent: indigo
+      toggle:
+        icon: material/brightness-auto
+        name: Switch to light mode
+
+    # Palette toggle for light mode
+    - media: "(prefers-color-scheme: light)"
+      scheme: default
+      primary: indigo
+      accent: indigo
+      toggle:
+        icon: material/weather-sunny
+        name: Switch to dark mode
+
+    # Palette toggle for dark mode
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
+      primary: black
+      accent: deep orange
+      toggle:
+        icon: material/weather-night
+        name: Switch to system preference
+
+watch: [src]
+
+nav:
+  - Home:
+    - index.md
+    - install.md
+    - release-notes.md
+    - license.md
+  - User Guide:
+    - usage/overview.md
+    - Direct:
+      - usage/direct/index.md
+      - usage/direct/cpp.md
+      - usage/direct/fortran.md
+      - usage/direct/dotnet.md
+      - usage/direct/java.md
+      - usage/direct/com.md
+      - usage/direct/activex.md
+      - usage/direct/stdcall.md
+      - usage/direct/labview.md
+    - Client-Server:
+      - usage/ipc/index.md
+      - usage/ipc/echo.md
+      - usage/ipc/cpp.md
+      - usage/ipc/fortran.md
+      - usage/ipc/dotnet.md
+      - usage/ipc/stdcall.md
+      - usage/ipc/labview.md
+    - usage/refreeze.md
+  - Examples:
+    - examples/index.md
+    - examples/cpp32.md
+    - examples/cpp64.md
+    - examples/dotnet32.md
+    - examples/dotnet64.md
+    - examples/echo32.md
+    - examples/echo64.md
+    - examples/fortran32.md
+    - examples/fortran64.md
+    - examples/kernel32.md
+    - examples/kernel64.md
+    - examples/labview32.md
+    - examples/labview64.md
+  - API:
+    - api/client64.md
+    - api/load_library.md
+    - api/server32.md
+    - api/activex.md
+    - api/exceptions.md
+    - api/freeze_server32.md
+    - api/utils.md
+  - FAQ:
+    - faq/streams.md
+    - faq/freeze.md
+    - faq/mock.md
+
+markdown_extensions:
+  - admonition  # enables: !!! tip
+  - attr_list  # enables: [link](url){:target="_blank"} and {: #rename-permalink }
+  - pymdownx.details  # enables collapsable admonition
+  - pymdownx.snippets  # enables: --8<--
+  - pymdownx.superfences  # enables tabs in admonition
+  - pymdownx.tabbed:
+      alternate_style: true  # tabs look better on narrower screen sizes (like mobile)
+  - toc:
+      permalink: "¤"
+
+plugins:
+  - search
+  - autorefs
+  - mkdocstrings:
+      handlers:
+        python:
+          paths: [src]
+          inventories:
+            - url: https://docs.python.org/3/objects.inv
+              domains: [std, py]
+            - https://numpy.org/doc/stable/objects.inv
+            - https://www.py4j.org/objects.inv
+            - https://comtypes.readthedocs.io/en/stable/objects.inv
+          options:
+            # General
+            show_source: true
+
+            # Headings
+            show_root_toc_entry: false
+
+            # Members
+            filters: ["!^_"]
+            inherited_members: false
+
+            # Docstrings
+            docstring_options:
+              ignore_init_summary: true
+            merge_init_into_class: true
+
+            # Signatures
+            separate_signature: true
+
+extra:
+  version:
+    provider: mike
+  social:
+  - icon: fontawesome/brands/github
+    link: https://github.com/MSLNZ/msl-loadlib/
+  - icon: fontawesome/brands/python
+    link: https://pypi.org/project/msl-loadlib/

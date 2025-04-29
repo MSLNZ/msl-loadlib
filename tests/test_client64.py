@@ -80,7 +80,7 @@ def test_module32_as_path():
     path = os.path.join(EXAMPLES_DIR, "kernel32.py")
     assert os.path.isfile(path)
     client = Client64(module32=path)
-    assert isinstance(client.request32("get_time"), datetime)
+    assert isinstance(client.request32("get_local_time"), datetime)
 
 
 def test_build_paths_none():

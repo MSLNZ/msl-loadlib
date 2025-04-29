@@ -1,11 +1,10 @@
-"""
-A wrapper around a 32-bit C++ library, :ref:`cpp_lib32 <cpp-lib>`.
+"""Wrapper around a 32-bit C++ library.
 
-Example of a server that loads a 32-bit shared library, :ref:`cpp_lib <cpp-lib>`,
-in a 32-bit Python interpreter to host the library. The corresponding :mod:`~.cpp64` module
-can be executed by a 64-bit Python interpreter and the :class:`~.cpp64.Cpp64` class can send
-a request to the :class:`~.cpp32.Cpp32` class which calls the 32-bit library to execute the
-request and then return the response from the library.
+Example of a server that loads a 32-bit library, [cpp_lib][cpp-lib],
+in a 32-bit Python interpreter to host the library. The corresponding [Cpp64][] class
+is created in a 64-bit Python interpreter and the [Cpp64][] class sends requests
+to the [Cpp32][] class which calls the 32-bit library to execute the request and
+then returns the response from the library.
 """
 
 from __future__ import annotations
@@ -19,15 +18,17 @@ from msl.loadlib import Server32
 
 
 class Cpp32(Server32):
-    def __init__(self, host: str, port: int, **kwargs: str) -> None:
-        """Wrapper around the 32-bit C++ library, :ref:`cpp_lib32 <cpp-lib>`.
+    """Wrapper around a 32-bit C++ library."""
+
+    def __init__(self, host: str, port: int) -> None:
+        """Wrapper around a 32-bit C++ library.
 
         This class demonstrates how to send/receive various data types to/from a
-        32-bit C++ library via :mod:`ctypes`.
+        32-bit C++ library via [ctypes][]{:target="_blank"}.
 
-        :param host: The IP address (or hostname) to use for the server.
-        :param port: The port to open for the server.
-        :param kwargs: Optional keyword arguments. The keys and values are of type :class:`str`.
+        Args:
+            host: The IP address (or hostname) to use for the server.
+            port: The port to open for the server.
         """
         # By not specifying the extension of the library file the server will open
         # the appropriate file based on the operating system.
@@ -39,19 +40,22 @@ class Cpp32(Server32):
 
         The corresponding C++ code is
 
-        .. code-block:: cpp
+        ```cpp
+        int add(int a, int b) {
+            return a + b;
+        }
+        ```
 
-            int add(int a, int b) {
-                return a + b;
-            }
+        See the corresponding [Cpp64.add][msl.examples.loadlib.Cpp64.add] method.
 
-        See the corresponding 64-bit :meth:`~.cpp64.Cpp64.add` method.
+        Args:
+            a: First integer.
+            b: Second integer.
 
-        :param a: First integer.
-        :param b: Second integer.
-        :return: The sum of `a` and `b`.
+        Returns:
+            The sum, `a + b`.
         """
-        # restype and argtypes could be defined in the __init__ method
+        # restype and argtypes should be defined elsewhere, shown here for illustrative purposes
         self.lib.add.restype = ctypes.c_int32
         self.lib.add.argtypes = [ctypes.c_int32, ctypes.c_int32]
         return self.lib.add(a, b)
@@ -61,19 +65,22 @@ class Cpp32(Server32):
 
         The corresponding C++ code is
 
-        .. code-block:: cpp
+        ```cpp
+        float subtract(float a, float b) {
+            return a - b;
+        }
+        ```
 
-            float subtract(float a, float b) {
-                return a - b;
-            }
+        See the corresponding [Cpp64.subtract][msl.examples.loadlib.Cpp64.subtract] method.
 
-        See the corresponding 64-bit :meth:`~.cpp64.Cpp64.subtract` method.
+        Args:
+            a: First floating-point number.
+            b: Second floating-point number.
 
-        :param a: First floating-point number.
-        :param b: Second floating-point number.
-        :return: The difference between `a` and `b`.
+        Returns:
+            The difference, `a - b`.
         """
-        # restype and argtypes could be defined in the __init__ method
+        # restype and argtypes should be defined elsewhere, shown here for illustrative purposes
         self.lib.subtract.restype = ctypes.c_float
         self.lib.subtract.argtypes = [ctypes.c_float, ctypes.c_float]
         return self.lib.subtract(a, b)
@@ -83,24 +90,27 @@ class Cpp32(Server32):
 
         The corresponding C++ code is
 
-        .. code-block:: cpp
-
-            double add_or_subtract(double a, double b, bool do_addition) {
-                if (do_addition) {
-                    return a + b;
-                } else {
-                    return a - b;
-                }
+        ```cpp
+        double add_or_subtract(double a, double b, bool do_addition) {
+            if (do_addition) {
+                return a + b;
+            } else {
+                return a - b;
             }
+        }
+        ```
 
-        See the corresponding 64-bit :meth:`~.cpp64.Cpp64.add_or_subtract` method.
+        See the corresponding [Cpp64.add_or_subtract][msl.examples.loadlib.Cpp64.add_or_subtract] method.
 
-        :param a: First double-precision number.
-        :param b: Second double-precision number.
-        :param do_addition: Whether to add or subtract the numbers.
-        :return: `a+b` if `do_addition` is :data:`True` else `a-b`.
+        Args:
+            a: First double-precision number.
+            b: Second double-precision number.
+            do_addition: Whether to add or subtract the numbers.
+
+        Returns:
+            `a + b` if `do_addition` is `True` else `a - b`.
         """
-        # restype and argtypes could be defined in the __init__ method
+        # restype and argtypes should be defined elsewhere, shown here for illustrative purposes
         self.lib.add_or_subtract.restype = ctypes.c_double
         self.lib.add_or_subtract.argtypes = [ctypes.c_double, ctypes.c_double, ctypes.c_bool]
         return self.lib.add_or_subtract(a, b, do_addition)
@@ -110,21 +120,24 @@ class Cpp32(Server32):
 
         The corresponding C++ code is
 
-        .. code-block:: cpp
-
-            void scalar_multiply(double a, double* xin, int n, double* xout) {
-                for (int i = 0; i < n; i++) {
-                    xout[i] = a * xin[i];
-                }
+        ```cpp
+        void scalar_multiply(double a, double* xin, int n, double* xout) {
+            for (int i = 0; i < n; i++) {
+                xout[i] = a * xin[i];
             }
+        }
+        ```
 
-        See the corresponding 64-bit :meth:`~.cpp64.Cpp64.scalar_multiply` method.
+        See the corresponding [Cpp64.scalar_multiply][msl.examples.loadlib.Cpp64.scalar_multiply] method.
 
-        :param a: Scalar value.
-        :param xin: Array to modify.
-        :return: A new array with each element in `xin` multiplied by `a`.
+        Args:
+            a: Scalar value.
+            xin: Array to modify.
+
+        Returns:
+            A new array with each element in `xin` multiplied by `a`.
         """
-        # restype and argtypes could be defined in the __init__ method
+        # restype and argtypes should be defined elsewhere, shown here for illustrative purposes
         self.lib.scalar_multiply.restype = None
         self.lib.scalar_multiply.argtypes = [
             ctypes.c_double,
@@ -147,20 +160,23 @@ class Cpp32(Server32):
 
         The corresponding C++ code is
 
-        .. code-block:: cpp
-
-            void reverse_string_v1(const char* original, int n, char* reversed) {
-                for (int i = 0; i < n; i++) {
-                    reversed[i] = original[n-i-1];
-                }
+        ```cpp
+        void reverse_string_v1(const char* original, int n, char* reversed) {
+            for (int i = 0; i < n; i++) {
+                reversed[i] = original[n-i-1];
             }
+        }
+        ```
 
-        See the corresponding 64-bit :meth:`~.cpp64.Cpp64.reverse_string_v1` method.
+        See the corresponding [Cpp64.reverse_string_v1][msl.examples.loadlib.Cpp64.reverse_string_v1] method.
 
-        :param original: The original string.
-        :return: The string reversed.
+        Args:
+            original: The original string.
+
+        Returns:
+            The string reversed.
         """
-        # restype and argtypes could be defined in the __init__ method
+        # restype and argtypes should be defined elsewhere, shown here for illustrative purposes
         self.lib.reverse_string_v1.restype = None
         self.lib.reverse_string_v1.argtypes = [ctypes.c_char_p, ctypes.c_int32, ctypes.c_char_p]
 
@@ -177,22 +193,25 @@ class Cpp32(Server32):
 
         The corresponding C++ code is
 
-        .. code-block:: cpp
-
-            char* reverse_string_v2(char* original, int n) {
-                char* reversed = new char[n];
-                for (int i = 0; i < n; i++) {
-                    reversed[i] = original[n - i - 1];
-                }
-                return reversed;
+        ```cpp
+        char* reverse_string_v2(char* original, int n) {
+            char* reversed = new char[n];
+            for (int i = 0; i < n; i++) {
+                reversed[i] = original[n - i - 1];
             }
+            return reversed;
+        }
+        ```
 
-        See the corresponding 64-bit :meth:`~.cpp64.Cpp64.reverse_string_v2` method.
+        See the corresponding [Cpp64.reverse_string_v2][msl.examples.loadlib.Cpp64.reverse_string_v2] method.
 
-        :param original: The original string.
-        :return: The string reversed.
+        Args:
+            original: The original string.
+
+        Returns:
+            The string reversed.
         """
-        # restype and argtypes could be defined in the __init__ method
+        # restype and argtypes should be defined elsewhere, shown here for illustrative purposes
         self.lib.reverse_string_v2.restype = ctypes.c_char_p
         self.lib.reverse_string_v2.argtypes = [ctypes.c_char_p, ctypes.c_int32]
 
@@ -201,56 +220,63 @@ class Cpp32(Server32):
         return ctypes.string_at(rev, n).decode()
 
     def distance_4_points(self, four_points: FourPoints) -> float:
-        """Calculates the total distance connecting 4 :class:`~.Point`\'s.
+        """Calculates the total distance connecting 4 [Point][msl.examples.loadlib.cpp32.Point]s.
 
         The corresponding C++ code is
 
-        .. code-block:: cpp
-
-            double distance_4_points(FourPoints p) {
-                double d = distance(p.points[0], p.points[3]);
-                for (int i = 1; i < 4; i++) {
-                    d += distance(p.points[i], p.points[i-1]);
-                }
-                return d;
+        ```cpp
+        double distance_4_points(FourPoints p) {
+            double d = distance(p.points[0], p.points[3]);
+            for (int i = 1; i < 4; i++) {
+                d += distance(p.points[i], p.points[i-1]);
             }
+            return d;
+        }
+        ```
 
-        See the corresponding 64-bit :meth:`~.cpp64.Cpp64.distance_4_points` method.
+        See the corresponding [Cpp64.distance_4_points][msl.examples.loadlib.Cpp64.distance_4_points] method.
 
-        :param four_points: The points to use to calculate the total distance.
-        :return: The total distance connecting the 4 points.
+        Args:
+            four_points: The points to use to calculate the total distance.
+
+        Returns:
+            The total distance connecting the 4 points.
         """
+        # restype should be defined elsewhere, shown here for illustrative purposes
         self.lib.distance_4_points.restype = ctypes.c_double
         return self.lib.distance_4_points(four_points)
 
     def circumference(self, radius: float, n: int) -> float:
         """Estimates the circumference of a circle.
 
-        This method calls the ``distance_n_points`` function in :ref:`cpp_lib32 <cpp-lib>`.
+        This method calls the `distance_n_points` function in [cpp_lib][cpp-lib].
 
-        See the corresponding 64-bit :meth:`~.cpp64.Cpp64.circumference` method.
+        The corresponding C++ code uses the [NPoints][msl.examples.loadlib.cpp32.NPoints]
+        struct as the input parameter to sum the distance between adjacent points on the circle.
 
-        The corresponding C++ code uses the :class:`.NPoints` struct as the input
-        parameter to sum the distance between adjacent points on the circle.
-
-        .. code-block:: cpp
-
-            double distance_n_points(NPoints p) {
-                if (p.n < 2) {
-                    return 0.0;
-                }
-                double d = distance(p.points[0], p.points[p.n-1]);
-                for (int i = 1; i < p.n; i++) {
-                    d += distance(p.points[i], p.points[i-1]);
-                }
-                return d;
+        ```cpp
+        double distance_n_points(NPoints p) {
+            if (p.n < 2) {
+                return 0.0;
             }
+            double d = distance(p.points[0], p.points[p.n-1]);
+            for (int i = 1; i < p.n; i++) {
+                d += distance(p.points[i], p.points[i-1]);
+            }
+            return d;
+        }
+        ```
 
-        :param radius: The radius of the circle.
-        :param n: The number of points to use to estimate the circumference.
-        :return: The estimated circumference of the circle.
+        See the corresponding [Cpp64.circumference][msl.examples.loadlib.Cpp64.circumference] method.
+
+        Args:
+            radius: The radius of the circle.
+            n: The number of points to use to estimate the circumference.
+
+        Returns:
+            The estimated circumference of the circle.
         """
-        # restype and argtypes could be defined in the __init__ method
+        # restype and argtypes should be defined elsewhere, shown here for illustrative purposes
         self.lib.distance_n_points.restype = ctypes.c_double
         self.lib.distance_n_points.argtypes = [NPoints]
 
@@ -269,14 +295,14 @@ class Cpp32(Server32):
 class Point(ctypes.Structure):
     """C++ struct that is a fixed size in memory.
 
-    This object can be :mod:`pickle`\'d.
+    This object can be [pickle][]{:target="_blank"}d.
 
-    .. code-block:: cpp
-
-       struct Point {
-           double x;
-           double y;
-       };
+    ```cpp
+    struct Point {
+        double x;
+        double y;
+    };
+    ```
     """
 
     _fields_ = [
@@ -286,6 +312,8 @@ class Point(ctypes.Structure):
 
 
 class FourPoints(ctypes.Structure):
+    """C++ struct that is a fixed size in memory."""
+
     _fields_ = [
         ("points", (Point * 4)),
     ]
@@ -293,18 +321,19 @@ class FourPoints(ctypes.Structure):
     def __init__(self, point1: Point, point2: Point, point3: Point, point4: Point) -> None:
         """C++ struct that is a fixed size in memory.
 
-        This object can be :mod:`pickle`\'d.
+        This object can be [pickle][]{:target="_blank"}d.
 
-        .. code-block:: cpp
+        ```cpp
+        struct FourPoints {
+            Point points[4];
+        };
+        ```
 
-           struct FourPoints {
-               Point points[4];
-           };
-
-        :param point1: The first point.
-        :param point2: The second point.
-        :param point3: The third point.
-        :param point4: The fourth point.
+        Args:
+            point1: The first point.
+            point2: The second point.
+            point3: The third point.
+            point4: The fourth point.
         """
         super().__init__()
         self.points = (Point * 4)(point1, point2, point3, point4)
@@ -313,15 +342,15 @@ class FourPoints(ctypes.Structure):
 class NPoints(ctypes.Structure):
     """C++ struct that is **not** a fixed size in memory.
 
-    This object cannot be :mod:`pickle`\'d because it contains a pointer.
+    This object cannot be [pickle][]{:target="_blank"}d because it contains a pointer.
     A 32-bit process and a 64-bit process cannot share a pointer.
 
-    .. code-block:: cpp
-
-       struct NPoints {
-           int n;
-           Point *points;
-       };
+    ```cpp
+    struct NPoints {
+        int n;
+        Point *points;
+    };
+    ```
     """
 
     _fields_ = [
