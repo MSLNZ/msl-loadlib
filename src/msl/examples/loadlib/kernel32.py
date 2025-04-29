@@ -7,7 +7,7 @@ to the [Kernel32][] class which calls the 32-bit library to execute the request 
 then returns the response from the library.
 
 !!! note
-    This example is only valid on a Windows computer.
+    This example is only valid on Windows.
 
 [kernel32.dll]: https://www.geoffchappell.com/studies/windows/win32/kernel32/api/
 """
@@ -15,6 +15,7 @@ then returns the response from the library.
 from __future__ import annotations
 
 import ctypes
+from ctypes.wintypes import WORD
 from datetime import datetime
 
 from msl.loadlib import Server32
@@ -45,7 +46,7 @@ class Kernel32(Server32):
             The current date and time.
         """
         st = SystemTime()
-        self.lib.GetLocalTime(ctypes.pointer(st))
+        self.lib.GetLocalTime(ctypes.byref(st))
         return datetime(
             st.wYear,
             month=st.wMonth,
@@ -58,12 +59,10 @@ class Kernel32(Server32):
 
 
 class SystemTime(ctypes.Structure):
-    """A [SYSTEMTIME]{:target="_blank"} [ctypes.Structure][]{:target="_blank"}.
+    """A [SYSTEMTIME]{:target="_blank"} [Structure][ctypes.Structure]{:target="_blank"}.
 
     [SYSTEMTIME]: https://msdn.microsoft.com/en-us/library/windows/desktop/ms724950(v=vs.85).aspx
     """
-
-    WORD = ctypes.c_uint16
 
     _fields_ = [
         ("wYear", WORD),

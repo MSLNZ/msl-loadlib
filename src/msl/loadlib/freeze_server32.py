@@ -76,7 +76,7 @@ def main(
             [spec]: https://pyinstaller.org/en/stable/spec-files.html#using-spec-files
 
             !!! attention
-                If a value for `spec` is specified, then `imports` nor `data` may be specified.
+                If a value for `spec` is specified, then `imports` and `data` are ignored.
     """
     if not skip_32bit_check and constants.IS_PYTHON_64BIT:
         msg = ""

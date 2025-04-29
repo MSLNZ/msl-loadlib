@@ -73,30 +73,31 @@ class Client64:
                 32-bit server. The module must contain a class that inherits from [Server32][].
 
             add_dll_directory: Add path(s) to the 32-bit server's DLL search path.
-                See [os.add_dll_directory][] for more details. Available on Windows only.
+                See [os.add_dll_directory][]{:target="_blank"} for more details.
+                Supported on Windows only.
 
                 !!! note "Added in version 1.0"
 
             append_environ_path: Append path(s) to the 32-bit server's
-                [os.environ["PATH"]][os.environ] variable. This may be useful if
+                [os.environ["PATH"]][os.environ]{:target="_blank"} variable. This may be useful if
                 the library that is being loaded requires additional libraries that
                 must be available on `PATH`.
 
-            append_sys_path: Append path(s) to the 32-bit server's [sys.path][]
-                variable. The value of [sys.path][] from the 64-bit process is
+            append_sys_path: Append path(s) to the 32-bit server's [sys.path][]{:target="_blank"}
+                variable. The value of [sys.path][]{:target="_blank"} from the 64-bit process is
                 automatically included, i.e.,
 
                 <code>path<sub>32</sub> = path<sub>64</sub> + append_sys_path</code>
 
             host: The hostname (IP address) of the 32-bit server. If `None` then the
-                connection to the server is mocked. See [here][faq-mock] for more details.
+                connection to the server is [mocked][faq-mock].
 
                 !!! note "Changed in version 1.0"
                     A value of `None` is allowed.
 
             port: The port to open on the 32-bit server. If `0`, any available port will be used.
 
-            protocol: The [pickle][] [protocol][pickle-protocols] to use.
+            protocol: The [pickle protocol][pickle-protocols]{:target="_blank"} to use.
                 !!! note "Added in version 0.8"
 
             rpc_timeout: The maximum number of seconds to wait for a response from the 32-bit server.
@@ -104,7 +105,7 @@ class Client64:
                 timeout value is used for *all* requests from the server. If you want different
                 requests to have different timeout values, you will need to implement custom
                 timeout handling for each method on the server. Default is `None`, which will
-                call [socket.getdefaulttimeout][] to get the timeout value.
+                call [socket.getdefaulttimeout][]{:target="_blank"} to get the timeout value.
 
                 !!! note "Added in version 0.6"
 
@@ -130,7 +131,7 @@ class Client64:
             specify the folder where `module32` is located by passing a value to the
             `append_sys_path` parameter. Using the `append_sys_path` option also allows
             for any other modules that `module32` may depend on to also be included
-            in [sys.path][] so that those modules can be imported when `module32`
+            in [sys.path][]{:target="_blank"} so that those modules can be imported when `module32`
             is imported.
         """
         self._client: _MockClient | _HTTPClient | None = None
@@ -232,8 +233,8 @@ class Client64:
     def shutdown_server32(self, kill_timeout: float = 10) -> tuple[BinaryIO, BinaryIO]:
         """Shut down the 32-bit server.
 
-        This method shuts down the 32-bit server, closes the client connection, and
-        deletes the temporary file that was used to store the serialized [pickle][]d data.
+        This method shuts down the 32-bit server, closes the client connection, and deletes
+        the temporary file that was used to store the serialized [pickle][]{:target="_blank"}d data.
 
         Args:
             kill_timeout: If the 32-bit server is still running after `kill_timeout`
@@ -246,7 +247,7 @@ class Client64:
             The `(stdout, stderr)` streams from the 32-bit server.
 
                 Limit the total number of characters that are written to either `stdout`
-                or `stderr` on the 32-bit server to be &lt;4096. This will avoid potential
+                or `stderr` on the 32-bit server to be &lt; 4096. This will avoid potential
                 blocking when reading the `stdout` and `stderr` PIPE buffers.
 
                 !!! note "Changed in version 0.8"
@@ -254,7 +255,7 @@ class Client64:
 
         !!! tip
             This method gets called automatically when the reference count to the
-            [Client64][] instance reaches zero (see [`object.__del__`][]).
+            [Client64][] instance reaches zero (see [`object.__del__`][]{:target="_blank"}).
         """
         return self._client.shutdown_server32(kill_timeout=kill_timeout)
 

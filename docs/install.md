@@ -8,11 +8,11 @@ pip install msl-loadlib
 
 ## Optional dependencies
 
-* [Python for .NET]{:target="_blank"}
+* [Python.NET]{:target="_blank"}
 * [Py4J]{:target="_blank"}
 * [comtypes]{:target="_blank"}
 
-You can install `msl-loadlib` and [Python for .NET]{:target="_blank"} using,
+You can install `msl-loadlib` and [Python.NET]{:target="_blank"} using,
 
 ```console
 pip install msl-loadlib[clr]
@@ -38,7 +38,7 @@ pip install msl-loadlib[all]
 
 ## Compatibility
 * The 32-bit server is built into a [frozen]{:target="_blank"} executable for Windows and Linux (glibc).
-* You may create a new 32-bit server. See [here][refreeze] for more details.
+* You may also [create a custom 32-bit server][refreeze].
 
 ## Prerequisites
 
@@ -46,7 +46,7 @@ pip install msl-loadlib[all]
 
 64-bit Windows already comes with [WoW64]{:target="_blank"} to run 32-bit software and therefore no prerequisites are required to load 32-bit libraries. However, the library might have its own dependencies, such as a particular Visual C++ Redistributable, that may need to be installed.
 
-If you need to load a .NET library, you must install [Python for .NET]{:target="_blank"}
+If you need to load a .NET library, you must install [Python.NET]{:target="_blank"}
 
 ```console
 pip install pythonnet
@@ -97,7 +97,7 @@ The following ensures that the [ss]{:target="_blank"} command is available
 sudo apt install iproute2
 ```
 
-If you need to load a .NET library then you must install [Mono]{:target="_blank"} and [Python for .NET]{:target="_blank"}
+If you need to load a .NET library then you must install [Mono]{:target="_blank"} and [Python.NET]{:target="_blank"}
 
 ```console
 pip3 install pythonnet
@@ -142,7 +142,7 @@ If you need to load a .NET library, you must install [Mono]{:target="_blank"},
 brew install mono
 ```
 
-and [Python for .NET]{:target="_blank"}
+and [Python.NET]{:target="_blank"}
 
 ```console
 pip3 install pythonnet
@@ -175,7 +175,7 @@ brew cask install java
 [Mono]: https://www.mono-project.com/download/stable/
 [PATH]: https://en.wikipedia.org/wiki/PATH_(variable)
 [Py4J]: https://www.py4j.org/
-[Python for .NET]: https://pythonnet.github.io/
+[Python.NET]: https://pythonnet.github.io/
 [Python Package Index]: https://pypi.org/project/msl-loadlib/
 [ss]: https://man7.org/linux/man-pages/man8/ss.8.html
 [WoW64]: https://en.wikipedia.org/wiki/WoW64

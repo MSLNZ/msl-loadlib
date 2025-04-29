@@ -38,3 +38,4 @@ You have access to the server's `stdout` and `stderr` streams when you shut down
 ```
 
 [kernel32]: https://www.geoffchappell.com/studies/windows/win32/kernel32/api/
+[SYSTEMTIME]: https://docs.microsoft.com/en-us/windows/win32/api/minwinbase/ns-minwinbase-systemtime

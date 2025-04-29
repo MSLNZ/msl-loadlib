@@ -65,7 +65,7 @@ class DotNet64(Client64):
     def multiply_doubles(self, a: float, b: float) -> float:
         """Multiply two C# double-precision numbers.
 
-        See the corresponding [DotN0et32.multiply_doubles][msl.examples.loadlib.dotnet32.DotNet32.multiply_doubles]
+        See the corresponding [DotNet32.multiply_doubles][msl.examples.loadlib.dotnet32.DotNet32.multiply_doubles]
         method.
 
         Args:

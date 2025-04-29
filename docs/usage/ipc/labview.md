@@ -29,7 +29,7 @@ Calculate the mean, the *sample* variance and the standard deviation of some dat
 Calculate the mean, the *population* variance and the standard deviation of `data`
 
 ```pycon
->>> labview.stdev(data, 1)
+>>> labview.stdev(data, weighting=1)
 (5.0, 6.666666666666667, 2.581988897471611)
 
 ```

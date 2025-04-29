@@ -53,7 +53,7 @@ app.menu.append(numbers, "Not in Group")
 width = 300
 height = 300
 
-# Uncomment the next line to load an ActiveX control in the main application window
+# Uncomment the next line to load your ActiveX control in the main window
 # ocx = app.load("My.OCX.Application", width=width, height=height)
 
 app.set_window_size(width, height)

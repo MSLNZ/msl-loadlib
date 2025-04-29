@@ -6,7 +6,7 @@ When the connection is mocked, both [Client64][] and [Server32][] instances will
 
 One reason that you may want to mock the connection is that you wrote a lot of code that had to load a 32-bit library but now a 64-bit version of the library is available. You may also need to support the 32-bit and 64-bit libraries at the same time. Instead of making a relatively large change to your code, or managing different code bases, you can simply specify a keyword argument when instantiating your client class to decide whether to use the 32-bit library or the 64-bit library and the client class behaves exactly the same.
 
-Here is an example on how a client (running within 64-bit Python) can have a server load a 32-bit library or a 64-bit library.
+Here is an example on how a client (running within 64-bit Python) can have a [Server32][] subclass load a 32-bit library or a 64-bit library.
 
 ```python
 from msl.loadlib import Client64, Server32

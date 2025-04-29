@@ -249,7 +249,7 @@ class Cpp32(Server32):
     def circumference(self, radius: float, n: int) -> float:
         """Estimates the circumference of a circle.
 
-        This method calls the `distance_n_points` function in [cpp_lib32][cpp-lib].
+        This method calls the `distance_n_points` function in [cpp_lib][cpp-lib].
 
         The corresponding C++ code uses the [NPoints][msl.examples.loadlib.cpp32.NPoints]
         struct as the input parameter to sum the distance between adjacent points on the circle.

@@ -6,7 +6,7 @@ This example shows how to access a 32-bit FORTRAN library from 64-bit Python. [F
     If you have issues running the example make sure that you have the [prerequisites][] installed.
 
 !!! important
-    By default, [ctypes][]{:target="_blank"} expects that a [ctypes.c_int][]{:target="_blank"} data type is returned from the library call. If the returned value from the library is not a [ctypes.c_int][]{:target="_blank"} then you must redefine the ctypes [restype][ctypes-return-types]{:target="_blank"} value to be the appropriate data type. The [Fortran32][msl.examples.loadlib.fortran32.Fortran32] class shows various examples of redefining the [restype][ctypes-return-types]{:target="_blank"} value.
+    By default, [ctypes][]{:target="_blank"} expects that a [c_int][ctypes.c_int]{:target="_blank"} data type is returned from the library call. If the returned value from the library is not a [c_int][ctypes.c_int]{:target="_blank"} then you must redefine the ctypes [restype][ctypes-return-types]{:target="_blank"} value to be the appropriate data type. Also, the input arguments must be passed [by reference][ctypes.byref]{:target="_blank"}. The [Fortran32][msl.examples.loadlib.fortran32.Fortran32] class shows various examples of passing arguments by reference and defining the [restype][ctypes-return-types]{:target="_blank"} value.
 
 Create a [Fortran64][msl.examples.loadlib.fortran64.Fortran64] client to communicate with the 32-bit [fortran_lib32][fortran-lib] library
 

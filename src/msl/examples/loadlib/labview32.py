@@ -7,7 +7,7 @@ to the [Labview32][] class which calls the 32-bit library to execute the request
 then returns the response from the library.
 
 !!! attention
-    This example requires that the appropriate
+    This example requires that a 32-bit
     [LabVIEW Run-Time Engine](https://www.ni.com/en/support/downloads/software-products/download.labview-runtime.html){:target="_blank"}
     is installed and that the operating system is Windows.
 """

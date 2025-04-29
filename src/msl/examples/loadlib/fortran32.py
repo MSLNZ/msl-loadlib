@@ -37,8 +37,9 @@ class Fortran32(Server32):
     def sum_8bit(self, a: int, b: int) -> int:
         """Add two 8-bit signed integers.
 
-        Python only has one [int][] data type to represent integer values.
-        This method converts the data types of `a` and `b` to be [ctypes.c_int8][].
+        Python only has one [int][]{:target="_blank"} data type to represent integer values.
+        This method converts the data types of `a` and `b` to be
+        [c_int8][ctypes.c_int8]{:target="_blank"}.
 
         The corresponding FORTRAN code is
 
@@ -70,8 +71,9 @@ class Fortran32(Server32):
     def sum_16bit(self, a: int, b: int) -> int:
         """Add two 16-bit signed integers.
 
-        Python only has one [int][] data type to represent integer values.
-        This method converts the data types of `a` and `b` to be [ctypes.c_int16][].
+        Python only has one [int][]{:target="_blank"} data type to represent integer values.
+        This method converts the data types of `a` and `b` to be
+        [c_int16][ctypes.c_int16]{:target="_blank"}.
 
         The corresponding FORTRAN code is
 
@@ -103,8 +105,9 @@ class Fortran32(Server32):
     def sum_32bit(self, a: int, b: int) -> int:
         """Add two 32-bit signed integers.
 
-        Python only has one [int][] data type to represent integer values.
-        This method converts the data types of `a` and `b` to be [ctypes.c_int32][].
+        Python only has one [int][]{:target="_blank"} data type to represent integer values.
+        This method converts the data types of `a` and `b` to be
+        [c_int32][ctypes.c_int32]{:target="_blank"}.
 
         The corresponding FORTRAN code is
 
@@ -136,8 +139,9 @@ class Fortran32(Server32):
     def sum_64bit(self, a: int, b: int) -> int:
         """Add two 64-bit signed integers.
 
-        Python only has one [int][] data type to represent integer values.
-        This method converts the data types of `a` and `b` to be [ctypes.c_int64][].
+        Python only has one [int][]{:target="_blank"} data type to represent integer values.
+        This method converts the data types of `a` and `b` to be
+        [c_int64][ctypes.c_int64]{:target="_blank"}.
 
         The corresponding FORTRAN code is
 

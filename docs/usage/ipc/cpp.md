@@ -8,7 +8,7 @@ The source code of the C++ program is available [here][cpp-lib].
     If you have issues running the example make sure that you have the [prerequisites][] installed.
 
 !!! important
-    By default, [ctypes][]{:target="_blank"} expects that a [ctypes.c_int][]{:target="_blank"} data type is returned from the library call. If the returned value from the library is not a [ctypes.c_int][]{:target="_blank"} then you must redefine the ctypes [restype][ctypes-return-types]{:target="_blank"} value to be the appropriate data type. The [Cpp32][msl.examples.loadlib.cpp32.Cpp32] class shows various examples of redefining the [restype][ctypes-return-types]{:target="_blank"} value.
+    By default, [ctypes][]{:target="_blank"} treats all input argument types and the return type of a library function to be a [c_int][ctypes.c_int]{:target="_blank"}. Therefore, the [argtypes][ctypes-specifying-required-argument-types]{:target="_blank"} and the [restype][ctypes-return-types]{:target="_blank"} should be defined for each function in the library. The [Cpp32][msl.examples.loadlib.cpp32.Cpp32] class shows various examples of defining the [argtypes][ctypes-specifying-required-argument-types]{:target="_blank"} and the [restype][ctypes-return-types]{:target="_blank"} value.
 
 Create a [Cpp64][msl.examples.loadlib.cpp64.Cpp64] client to communicate with the 32-bit library from 64-bit Python
 

@@ -1,12 +1,9 @@
 # .NET {: #ipc-dotnet }
 
-This example shows how to access a 32-bit .NET library from 64-bit Python. [DotNet32][msl.examples.loadlib.dotnet32.DotNet32] is the 32-bit server and [DotNet64][msl.examples.loadlib.dotnet64.DotNet64] is the 64-bit client. The source code of the C# program is available [here][dotnet-lib].
-
-!!! attention
-    If you have issues running the example make sure that you have the [prerequisites][] installed.
+This example shows how to access a 32-bit .NET library from 64-bit Python (Windows only &mdash; [Mono]{:target="_blank"} can load both 32-bit and 64-bit libraries on 64-bit Linux and therefore a 32-bit .NET library can be loaded directly via [LoadLibrary][msl.loadlib.load_library.LoadLibrary] on 64-bit Linux). [DotNet32][msl.examples.loadlib.dotnet32.DotNet32] is the 32-bit server and [DotNet64][msl.examples.loadlib.dotnet64.DotNet64] is the 64-bit client. The source code of the C# program is available [here][dotnet-lib].
 
 ??? tip "Decompile a .NET assembly"
-    The [JetBrains dotPeek]{:target="_blank"} program can be used to decompile a .NET assembly in to the equivalent source code. For example, *peeking* inside the example [dotnet_lib32.dll][dotnet-lib] library, that the [DotNet32][msl.examples.loadlib.dotnet32.DotNet32] class is a wrapper around, gives
+    The [JetBrains dotPeek]{:target="_blank"} program can be used to decompile a .NET assembly. For example, *peeking* inside the example [dotnet_lib32.dll][dotnet-lib] library, that the [DotNet32][msl.examples.loadlib.dotnet32.DotNet32] class is a wrapper around, gives
 
     ![dotpeek_lib.png](../../assets/images/dotpeek_lib.png)
 
@@ -125,9 +122,9 @@ Call the static methods in the `StaticClass` class
 ```pycon
 >>> dn.add_multiple(1, 2, 3, 4, 5)
 15
->>> dn.concatenate("the ", "experiment ", "worked ", False, "temporarily")
-'the experiment worked '
->>> dn.concatenate("the ", "experiment ", "worked ", True, "temporarily")
+>>> dn.concatenate("the", " experiment", " worked", False, " temporarily")
+'the experiment worked'
+>>> dn.concatenate("the", " experiment", " worked", True, " temporarily")
 'the experiment worked temporarily'
 
 ```
@@ -140,3 +137,4 @@ You have access to the server's `stdout` and `stderr` streams when you shut down
 ```
 
 [JetBrains dotPeek]: https://www.jetbrains.com/decompiler/
+[Mono]: https://www.mono-project.com/download/stable/

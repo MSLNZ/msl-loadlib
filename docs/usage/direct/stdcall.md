@@ -20,10 +20,10 @@ Load a 32-bit Windows `__stdcall` library in 32-bit Python, see [kernel32]{:targ
 Create an instance of the [SYSTEMTIME]{:target="_blank"} structure
 
 ```pycon
->>> from ctypes import pointer
+>>> from ctypes import byref
 >>> from msl.examples.loadlib.kernel32 import SystemTime
 >>> st = SystemTime()
->>> time = kernel.lib.GetLocalTime(pointer(st))
+>>> time = kernel.lib.GetLocalTime(byref(st))
 
 ```
 

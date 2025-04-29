@@ -1,6 +1,6 @@
 # COM {: #direct-com }
 
-To load a [Component Object Model]{:target="_blank"} (COM library) you pass in the library's Program ID. To view the COM libraries that are available on your computer you can use the [get_com_info][msl.loadlib.utils.get_com_info] function.
+To load a [Component Object Model]{:target="_blank"} (COM) library you pass in the library's Program or Class ID. To view the COM libraries that are available on your computer you can use the [get_com_info][msl.loadlib.utils.get_com_info] function.
 
 !!! attention
     This example is only valid on Windows.

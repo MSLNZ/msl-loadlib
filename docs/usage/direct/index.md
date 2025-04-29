@@ -9,12 +9,13 @@ The following examples are included with the `msl-loadlib` package:
 
 * [C++][direct-cpp] &ndash; compiled in 32- and 64-bit Windows and Linux and in 64-bit macOS
 * [FORTRAN][direct-fortran] &ndash; compiled in 32- and 64-bit Windows and Linux and in 64-bit macOS
-* [Microsoft .NET][direct-dotnet] &ndash; complied in 32- and 64-bit using Microsoft Visual Studio 2017
-* [Java][direct-java] &ndash; platform and bitness independent since they run in the [JVM]{:target="_blank"}
+* [.NET][direct-dotnet] &ndash; complied in 32- and 64-bit using Microsoft Visual Studio 2017
+* [Java][direct-java] &ndash; platform and bitness independent since it runs in the [JVM]{:target="_blank"}
 * [COM][direct-com] &ndash; load a [Component Object Model]{:target="_blank"} library on Windows
-* [ActiveX][direct-activex] &ndash; illustrates how to load ActiveX controls on Windows
-* [Windows __stdcall][direct-stdcall] &ndash; load a 32-bit library that uses the `__stdcall` calling convention
+* [ActiveX][direct-activex] &ndash; illustrates how to load [ActiveX]{:target="_blank"} controls on Windows
+* [Windows __stdcall][direct-stdcall] &ndash; a 32-bit library that uses the `__stdcall` calling convention
 * [LabVIEW][direct-labview] &ndash; built using 32- and 64-bit LabVIEW on Windows
 
 [Component Object Model]: https://learn.microsoft.com/en-us/windows/win32/com/component-object-model--com--portal
 [JVM]: https://en.wikipedia.org/wiki/Java_virtual_machine
+[ActiveX]: https://learn.microsoft.com/en-us/windows/win32/com/activex-controls

@@ -1,4 +1,4 @@
-"""Load ActiveX controls in an application window.
+"""Load [ActiveX controls]{:target="_blank"} in an application window.
 
 The following classes are available to interact with ActiveX controls
 
@@ -18,6 +18,8 @@ and the following enumerations
 * [WindowClassStyle][msl.loadlib.activex.WindowClassStyle]
 * [WindowPosition][msl.loadlib.activex.WindowPosition]
 * [WindowStyle][msl.loadlib.activex.WindowStyle]
+
+[ActiveX controls]: https://learn.microsoft.com/en-us/windows/win32/com/activex-controls
 """
 
 from __future__ import annotations
@@ -345,7 +347,7 @@ class ShowWindow(IntEnum):
 class WindowStyle(IntFlag):
     """[Window style]{:target="_blank"} flags.
 
-    [Window styles]: https://learn.microsoft.com/en-us/windows/win32/winmsg/window-styles
+    [Window style]: https://learn.microsoft.com/en-us/windows/win32/winmsg/window-styles
 
     Attributes:
         OVERLAPPED (int): 0x00000000
@@ -618,7 +620,7 @@ class Icon:
 
     @property
     def hicon(self) -> int | None:
-        """[int][] | `None` &mdash; The handle to the icon or `None` an icon was not found in the `file`."""
+        """[int][] | `None` &mdash; The handle to the icon or `None` if an icon was not found in the `file`."""
         return self._hicon
 
     def destroy(self) -> None:
@@ -643,7 +645,7 @@ class MenuItem:
         self._hmenu: int = kwargs["hmenu"]
         self._id: int = kwargs["id"]
         self._text: str = kwargs["text"]
-        self._callback: Callback | None = kwargs["callback"]
+        self._callback: Callable[[MenuItem], None] | None = kwargs["callback"]
         self._flags: int = kwargs["flags"]
         self._checked: bool = False
         self._data: Any = kwargs["data"]
@@ -660,8 +662,12 @@ class MenuItem:
         return f"<{self.__class__.__name__} id={self._id} text={self._text!r}>"
 
     @property
-    def callback(self) -> Callback | None:
-        """[Callback][] | `None` &mdash; The callback function to call when the menu item is clicked."""
+    def callback(self) -> Callable[[MenuItem], None] | None:
+        """[Callable][] | `None` &mdash; The function to call when the menu item is clicked.
+
+        The function receives an instance of the [MenuItem][msl.loadlib.activex.MenuItem]
+        that was selected as an argument and the return type is `None`.
+        """
         return self._callback
 
     @property
@@ -747,7 +753,7 @@ class MenuGroup:
         return iter(self._items)
 
     def append(
-        self, text: str, *, callback: Callback | None = None, data: Any = None, flags: MenuFlag = MenuFlag.STRING
+        self, text: str, *, callback: Callable[[MenuItem], None] | None = None, data: Any = None, flags: MenuFlag = MenuFlag.STRING
     ) -> MenuItem:
         """Create a new [MenuItem][msl.loadlib.activex.MenuItem] and append it to the group.
 
@@ -818,7 +824,7 @@ class Menu:
         hmenu: int,
         text: str,
         *,
-        callback: Callback | None = None,
+        callback: Callable[[MenuItem], None] | None = None,
         data: Any = None,
         flags: MenuFlag = MenuFlag.STRING,
     ) -> MenuItem:
@@ -1003,7 +1009,7 @@ class Application:
         user32.PostMessageW(self._hwnd, WM_DESTROY, 0, 0)
 
     def handle_events(self, source: Any, sink: Callable[..., Any] | None = None, *, interface: Any = None) -> Any:
-        """Handle events from an ActiveX object.
+        """Handle events from an ActiveX object (see [GetEvents][]{:target="_blank"}).
 
         Args:
             source: An ActiveX object that emits events.
@@ -1107,7 +1113,9 @@ class Application:
         text: str = "",
         title: str = "",
     ) -> int:
-        """Display a modal dialog box.
+        """Display a modal dialog box (see [MessageBoxExW]{:target="_blank"}).
+
+        [MessageBoxExW]: https://learn.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-messageboxexw
 
         Args:
             hwnd: A handle to the owner window of the message box to be created.
@@ -1184,8 +1192,3 @@ class Application:
     def thread_id(self) -> int:
         """[int][] &mdash; The identifier of the thread that created the main application window."""
         return self._thread_id
-
-
-# TypeAlias
-Callback = Callable[[MenuItem], None]
-"""[TypeAlias][typing.TypeAlias] for a callable object to handle a [MenuItem][msl.loadlib.activex.MenuItem] callback."""

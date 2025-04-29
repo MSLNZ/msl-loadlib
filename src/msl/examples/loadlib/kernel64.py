@@ -1,7 +1,7 @@
 """Communicate with the [kernel32.dll]{:target="_blank"} library via the [Kernel32][] class that is running on a server.
 
 !!! note
-    This example is only valid on a Windows computer.
+    This example is only valid on Windows.
 
 [kernel32.dll]: https://www.geoffchappell.com/studies/windows/win32/kernel32/api/
 """

@@ -16,12 +16,15 @@ import threading
 import traceback
 from http.server import BaseHTTPRequestHandler
 from http.server import HTTPServer
-from typing import Any
+from typing import Any, TYPE_CHECKING
 
 from .constants import IS_WINDOWS
 from .constants import SERVER_FILENAME
 from .load_library import LibType
 from .load_library import LoadLibrary
+
+if TYPE_CHECKING:
+    from msl.loadlib.activex import Application
 
 METADATA: str = "-METADATA-"
 SHUTDOWN: str = "-SHUTDOWN-"
@@ -42,24 +45,40 @@ class Server32(HTTPServer):
         are not available).
 
         Args:
-            path: The path to the 32-bit library (see [LoadLibrary][])
-            libtype: The library type (see [LoadLibrary][]).
+            path: The path to the 32-bit library (see [LoadLibrary][msl.loadlib.load_library.LoadLibrary])
+            libtype: The library type (see [LoadLibrary][msl.loadlib.load_library.LoadLibrary]).
 
                 !!! attention
                     Since Java byte code is executed on the
                     [JVM](https://en.wikipedia.org/wiki/Java_virtual_machine){:target="_blank"}
                     it does not make sense to use [Server32][] for a Java `.jar` or `.class` file.
-                    Use [LoadLibrary][] to load a Java library.
+                    Use [LoadLibrary][msl.loadlib.load_library.LoadLibrary] to load a Java library.
 
             host: The IP address (or hostname) to use for the server.
             port: The port to open for the server.
-            kwargs: All keyword arguments are passed to [LoadLibrary][].
+            kwargs: All keyword arguments are passed to [LoadLibrary][msl.loadlib.load_library.LoadLibrary].
         """
         self._library = LoadLibrary(path, libtype=libtype, **kwargs)
+        self._app = self._library.app
         self._assembly = self._library.assembly
         self._lib = self._library.lib
         self._path = self._library.path
         super().__init__((host, int(port)), _RequestHandler, bind_and_activate=False)
+
+    @property
+    def application(self) -> Application | None:
+        """[Application][msl.loadlib.activex.Application] | `None` &mdash; Reference to the ActiveX application window.
+
+        If the loaded library is not an ActiveX library, returns `None`.
+
+        When an ActiveX library is loaded, the window is not shown
+        (to show it call [Application.show][msl.loadlib.activex.Application.show])
+        and the message loop is not running
+        (to run it call [Application.run][msl.loadlib.activex.Application.run]).
+
+        !!! note "Added in version 1.0"
+        """
+        return self._app
 
     @property
     def assembly(self) -> Any:
@@ -189,10 +208,10 @@ class Server32(HTTPServer):
 
         ```python
         import sys
-        from msl.loadlib import Server32
+        from msl.loadlib import Client64, Server32
 
         if Server32.is_interpreter():
-            # This block only gets executed on the 32-bit server
+            # Only executed on the 32-bit server
             assert sys.maxsize < 2**32
         ```
 

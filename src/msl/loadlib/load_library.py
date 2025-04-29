@@ -378,7 +378,7 @@ class LoadLibrary:
         self.cleanup()
 
     @property
-    def app(self) -> Application | None:
+    def application(self) -> Application | None:
         """[Application][msl.loadlib.activex.Application] | `None` &mdash; Reference to the ActiveX application window.
 
         If the loaded library is not an ActiveX library, returns `None`.
@@ -439,6 +439,7 @@ class LoadLibrary:
         * `cdll` &#8594; [ctypes.CDLL][]{:target="_blank"}
         * `windll` &#8594; [ctypes.WinDLL][]{:target="_blank"}
         * `oledll` &#8594; [ctypes.OleDLL][]{:target="_blank"}
+        * `java` &#8594; [JVMView][py4j.java_gateway.JVMView]{:target="_blank"}
         * `net` or `clr` &#8594; An object containing .NET [namespace]{:target="_blank"}s,
             classes and [System.Type]{:target="_blank"}s
         * `com` or `activex` &#8594; [ctypes.POINTER][]{:target="_blank"}

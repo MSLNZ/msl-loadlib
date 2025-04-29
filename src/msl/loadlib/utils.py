@@ -71,7 +71,7 @@ def is_comtypes_installed() -> bool:
 def check_dot_net_config(py_exe_path: str) -> tuple[int, str]:
     """Checks if the **useLegacyV2RuntimeActivationPolicy** property is enabled.
 
-    By default, [Python for .NET](https://pythonnet.github.io/){:target="_blank"} works
+    By default, [Python.NET](https://pythonnet.github.io/){:target="_blank"} works
     with .NET 4.0+ and therefore it cannot automatically load a library that was compiled
     with .NET &lt;4.0.
 
@@ -81,7 +81,7 @@ def check_dot_net_config(py_exe_path: str) -> tuple[int, str]:
     This [link](https://stackoverflow.com/questions/14508627/){:target="_blank"} provides
     an overview explaining why the **useLegacyV2RuntimeActivationPolicy** property is required.
 
-    The *py_exe_path*.config file is
+    The *py_exe_path*.config file that is created is
 
     ```xml
     <?xml version="1.0" encoding="utf-8" ?>

@@ -1,7 +1,7 @@
 """Communicates with the [labview_lib][labview-lib] library via the [Labview32][] class that is running on a server.
 
 !!! attention
-    This example requires that the appropriate
+    This example requires that a 32-bit
     [LabVIEW Run-Time Engine](https://www.ni.com/en/support/downloads/software-products/download.labview-runtime.html){:target="_blank"}
     is installed and that the operating system is Windows.
 """

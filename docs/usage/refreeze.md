@@ -8,39 +8,37 @@ If you want to create a custom 32-bit server, you will need
 Some reasons why you may want to create a custom 32-bit server are that you want to
 
 * run the server with a different version of Python,
+* build the server for a different architecture,
 * install a different version of `comtypes` or `pythonnet` (on Windows),
 * install additional packages on the server (e.g., `numpy`, `my_custom_package`),
-* embed your own data files in the frozen server
+* embed your own data files in the frozen server.
 
 Using pip from a 32-bit Python interpreter, run
 
-!!! note
-    You may want to install additional packages as well.
+!!! note "You may also want to install additional packages."
 
 ```console
 pip install msl-loadlib pyinstaller
 ```
 
-You have two options to create the 32-bit server
+You have two options to create a 32-bit server
 
 1. [Using the API][refreeze-api]
 2. [Using the CLI][refreeze-cli]
 
-and you have two options to use the newly-created server
+and you have two options to use your custom server
 
-1. Copy the `server32-*` file to the `../site-packages/msl/loadlib` directory where you have `msl-loadlib` installed in your 64-bit version of Python to replace the existing server file.
-2. Specify the directory where the `server32-*` file is located as the value of the `server32_dir` keyword argument in [Client64][].
+1. Copy your `server32-*` file to the `../site-packages/msl/loadlib` directory where you have `msl-loadlib` installed in your 64-bit version of Python to replace the existing server file.
+2. Specify the directory where your `server32-*` file is located as the value of the `server32_dir` keyword argument in [Client64][].
 
 ## Using the API {: #refreeze-api }
 
-Create a script that calls the [freeze_server32.main][msl.loadlib.freeze_server32.main] function with the appropriate keyword arguments, for example,
+Create a script that calls the [freeze_server32.main][msl.loadlib.freeze_server32.main] function with the appropriate keyword arguments and run your script using a 32-bit Python interpreter. For example, the following script will include 32-bit `numpy` on the server
 
 ```python
 from msl.loadlib import freeze_server32
 freeze_server32.main(imports="numpy")
 ```
-
-and run your script using a 32-bit Python interpreter.
 
 ## Using the CLI {: #refreeze-cli }
 

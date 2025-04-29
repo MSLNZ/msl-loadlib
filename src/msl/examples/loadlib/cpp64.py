@@ -1,4 +1,4 @@
-"""Communicates with the [cpp_lib32][cpp-lib] library via the [Cpp32][] class that is running on a server."""
+"""Communicates with the [cpp_lib][cpp-lib] library via the [Cpp32][] class that is running on a server."""
 
 from __future__ import annotations
 
@@ -134,7 +134,7 @@ class Cpp64(Client64):
     def circumference(self, radius: float, n: int) -> float:
         """Estimates the circumference of a circle.
 
-        This method calls the `distance_n_points` function in [cpp_lib32][cpp-lib].
+        This method calls the `distance_n_points` function in [cpp_lib][cpp-lib].
 
         See the corresponding [Cpp32.circumference][msl.examples.loadlib.cpp32.Cpp32.circumference] method.
 

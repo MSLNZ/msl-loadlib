@@ -21,7 +21,7 @@ class DotNet32(Server32):
     def __init__(self, host: str, port: int) -> None:
         """Wrapper around a 32-bit .NET library.
 
-        [Python for .NET](https://pythonnet.github.io/){:target="_blank"}
+        [Python.NET](https://pythonnet.github.io/){:target="_blank"}
         can handle many native Python data types as input arguments.
 
         Args:
