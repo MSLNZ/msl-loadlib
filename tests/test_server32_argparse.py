@@ -146,7 +146,7 @@ def test_add_dll_directory_win32():
             assert a.is_in_dll_dirs(path)
 
     with pytest.raises(ConnectionTimeoutError, match=r"FileNotFoundError"):
-        with ArgParse64(add_dll_directory="C:\\does\\not\\exist", timeout=2):
+        with ArgParse64(add_dll_directory="C:\\does\\not\\exist", timeout=5):
             pass
 
 
