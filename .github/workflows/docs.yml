@@ -26,6 +26,8 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # fetch all commits/branches
       - name: Install uv
         uses: astral-sh/setup-uv@v5
         with:
@@ -40,8 +42,8 @@ jobs:
         if: github.ref == 'refs/heads/main'
         run: |
           uv run -- mike deploy --push --update-aliases dev
-          uv run -- mike set-default --push dev
       - name: Deploy release docs
         if: github.ref_type == 'tag'
         run: |
           uv run -- mike deploy --push --update-aliases ${{ github.ref_name }} latest
+          uv run -- mike set-default --push latest
