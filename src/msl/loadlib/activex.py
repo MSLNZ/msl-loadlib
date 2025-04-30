@@ -21,25 +21,49 @@ and the following enumerations
 
 [ActiveX controls]: https://learn.microsoft.com/en-us/windows/win32/com/activex-controls
 """
+# pyright: reportMissingTypeStubs=false
 
 from __future__ import annotations
 
 import ctypes
+import os
 from ctypes import wintypes as wt
-from enum import IntEnum
-from enum import IntFlag
-from typing import Any
-from typing import Callable
-from typing import Iterator
+from enum import IntEnum, IntFlag
+from typing import TYPE_CHECKING
 
 try:
-    import comtypes
-    import comtypes.client as client
+    import comtypes  # type: ignore[import-untyped]
+    from comtypes import client
 except ImportError:
     comtypes = client = None
 
+if TYPE_CHECKING:
+    from collections.abc import Iterator
+    from typing import Any, Callable
+
+    from ._types import PathLike
+
+__all__: list[str] = [
+    "Application",
+    "Colour",
+    "ExtendedWindowStyle",
+    "Icon",
+    "Menu",
+    "MenuFlag",
+    "MenuGroup",
+    "MenuItem",
+    "MessageBoxOption",
+    "ShowWindow",
+    "WindowClassStyle",
+    "WindowPosition",
+    "WindowStyle",
+]
+
 LRESULT = wt.LPARAM
 
+CW_USEDEFAULT = 0x80000000
+IDI_APPLICATION = 32512
+IDC_ARROW = 32512
 WM_COMMAND = 0x0111
 WM_DESTROY = 0x0002
 
@@ -408,12 +432,6 @@ class WindowStyle(IntFlag):
     TILEDWINDOW = OVERLAPPEDWINDOW
 
 
-def _err_check(result, func, arguments):  # noqa: func and arguments are not used
-    if not result:
-        raise ctypes.WinError()
-    return result
-
-
 try:
     kernel32 = ctypes.windll.kernel32
     gdi32 = ctypes.windll.gdi32
@@ -426,7 +444,7 @@ try:
     class WNDCLASSEXW(ctypes.Structure):
         """Contains window class information."""
 
-        _fields_ = (
+        _fields_ = (  # pyright: ignore[reportUnannotatedClassAttribute]
             ("cbSize", wt.UINT),
             ("style", wt.UINT),
             ("lpfnWndProc", WNDPROC),
@@ -440,6 +458,11 @@ try:
             ("lpszClassName", wt.LPCWSTR),
             ("hIconSm", wt.HICON),
         )
+
+    def _err_check(result, func, arguments):  # type: ignore[no-untyped-def] # pyright: ignore[reportUnknownParameterType, reportMissingParameterType, reportUnusedParameter]  # noqa: ANN001, ANN202, ARG001
+        if not result:
+            raise ctypes.WinError()
+        return result  # pyright: ignore[reportUnknownVariableType]
 
     kernel32.GetModuleHandleW.restype = wt.HMODULE
     kernel32.GetModuleHandleW.argtypes = [wt.LPCWSTR]
@@ -554,14 +577,12 @@ try:
     atl.AtlAxGetControl.restype = ctypes.HRESULT
     atl.AtlAxGetControl.argtypes = [wt.HWND, ctypes.c_void_p]
 
+    windll_initialised = True
 except AttributeError:
-    kernel32 = user32 = atl = gdi32 = shell32 = WNDCLASSEXW = None
+    windll_initialised = False
 
 
-CW_USEDEFAULT = 0x80000000
-
-
-def _create_window(
+def _create_window(  # noqa: PLR0913
     *,
     ex_style: int = 0,
     class_name: str = "",
@@ -577,15 +598,16 @@ def _create_window(
     param: int | None = None,
 ) -> int:
     """Create a new Window and return the handle."""
-    return user32.CreateWindowExW(
+    ret: int = user32.CreateWindowExW(
         ex_style, class_name, window_name, style, x, y, width, height, parent, menu, instance, param
     )
+    return ret
 
 
 class Icon:
     """Extract an icon from an executable file, DLL or icon file."""
 
-    def __init__(self, file: str, *, index: int = 0, hinstance: int | None = None) -> None:
+    def __init__(self, file: PathLike, *, index: int = 0, hinstance: int | None = None) -> None:
         """Extract an icon from an executable file, DLL or icon file.
 
         Args:
@@ -595,7 +617,7 @@ class Icon:
         """
         self._hicon: int | None = None
 
-        if shell32 is None:
+        if not windll_initialised:
             msg = "Loading an icon is not supported on this platform"
             raise OSError(msg)
 
@@ -606,8 +628,8 @@ class Icon:
         if hinstance is None:
             hinstance = kernel32.GetModuleHandleW(None)
 
-        self._file = file
-        self._index = index
+        self._file: str = os.fsdecode(file)
+        self._index: int = index
         self._hicon = shell32.ExtractIconW(hinstance, file, index)
 
     def __repr__(self) -> str:
@@ -633,7 +655,7 @@ class Icon:
 class MenuItem:
     """A menu item that belongs to a popup menu."""
 
-    def __init__(self, **kwargs) -> None:
+    def __init__(self, **kwargs: Any) -> None:
         """A menu item that belongs to a popup menu.
 
         !!! warning
@@ -650,12 +672,11 @@ class MenuItem:
         self._checked: bool = False
         self._data: Any = kwargs["data"]
 
-    def __eq__(self, other: MenuItem) -> bool:
+    def __eq__(self, other: object) -> bool:
         """Checks for equal id's."""
-        try:
+        if isinstance(other, MenuItem):
             return self.id == other.id
-        except AttributeError:
-            return False
+        return NotImplemented
 
     def __repr__(self) -> str:
         """Returns the string representation."""
@@ -690,7 +711,7 @@ class MenuItem:
         self._checked = bool(value)
 
     @property
-    def data(self) -> Any:
+    def data(self) -> Any:  # type: ignore[misc]
         """[Any][typing.Any] &mdash; User-defined data associated with the menu item."""
         return self._data
 
@@ -741,7 +762,7 @@ class MenuGroup:
         Args:
             name: A name to associate with the group.
         """
-        self._name = name
+        self._name: str = name
         self._items: list[MenuItem] = []
 
     def __repr__(self) -> str:
@@ -753,7 +774,12 @@ class MenuGroup:
         return iter(self._items)
 
     def append(
-        self, text: str, *, callback: Callable[[MenuItem], None] | None = None, data: Any = None, flags: MenuFlag = MenuFlag.STRING
+        self,
+        text: str,
+        *,
+        callback: Callable[[MenuItem], None] | None = None,
+        data: Any = None,
+        flags: MenuFlag = MenuFlag.STRING,
     ) -> MenuItem:
         """Create a new [MenuItem][msl.loadlib.activex.MenuItem] and append it to the group.
 
@@ -779,7 +805,7 @@ class MenuGroup:
 
     @property
     def checked(self) -> MenuItem | None:
-        """[MenuItem][msl.loadlib.activex.MenuItem] | `None` &mdash; The menu item that is currently checked in the group."""
+        """[MenuItem][msl.loadlib.activex.MenuItem] | `None` &mdash; The menu item in the group that is checked."""
         for item in self:
             if item.checked:
                 return item
@@ -811,7 +837,7 @@ class Menu:
             [Application.menu][msl.loadlib.activex.Application.menu]
             property to access the menu instance.
         """
-        self._id = 0
+        self._id: int = 0
         self._items: dict[int, MenuItem] = {}
         self._hmenu: int = user32.CreateMenu()
 
@@ -858,8 +884,8 @@ class Menu:
         """
         for item in menu_group:
             self._id += 1
-            item._hmenu = hmenu
-            item._id = self._id
+            item._hmenu = hmenu  # noqa: SLF001  # pyright: ignore[reportPrivateUsage]
+            item._id = self._id  # noqa: SLF001  # pyright: ignore[reportPrivateUsage]
             user32.AppendMenuW(hmenu, item.flags, self._id, item.text)
             self._items[self._id] = item
 
@@ -916,21 +942,18 @@ class Application:
             title: The text to display in the titlebar (if one is visible).
         """
         super().__init__()
-        self._atom = None
-        self._icon = icon  # prevent an icon from being garbage collected
-        self._event_connections = []
+        self._atom: wt.ATOM | None = None
+        self._icon: Icon | None = icon  # prevent an icon from being garbage collected
+        self._event_connections: list[Any] = []  # actually list[_AdviseConnection]
         self._msg_handlers: list[Callable[[int, int, int, int], None]] = []
 
-        if WNDCLASSEXW is None:
+        if not windll_initialised:
             msg = "An ActiveX application is not supported on this platform"
             raise OSError(msg)
 
-        if isinstance(icon, Icon):
-            h_icon = icon.hicon
-        else:
-            h_icon = user32.LoadIconW(None, wt.LPCWSTR(32512))  # IDI_APPLICATION
+        h_icon = icon.hicon if isinstance(icon, Icon) else user32.LoadIconW(None, wt.LPCWSTR(IDI_APPLICATION))
 
-        self._window = WNDCLASSEXW()
+        self._window: WNDCLASSEXW = WNDCLASSEXW()
         self._window.cbSize = ctypes.sizeof(WNDCLASSEXW)
         self._window.style = class_style
         self._window.lpfnWndProc = WNDPROC(self._window_procedure)
@@ -938,7 +961,7 @@ class Application:
         self._window.cbWndExtra = 0
         self._window.hInstance = kernel32.GetModuleHandleW(None)
         self._window.hIcon = h_icon
-        self._window.hCursor = user32.LoadCursorW(None, wt.LPCWSTR(32512))  # IDC_ARROW
+        self._window.hCursor = user32.LoadCursorW(None, wt.LPCWSTR(IDC_ARROW))
         self._window.hbrBackground = gdi32.GetStockObject(background)
         self._window.lpszMenuName = f"ActiveXMenu{id(self._window)}"  # make the name unique
         self._window.lpszClassName = f"ActiveXClass{id(self._window)}"
@@ -946,16 +969,16 @@ class Application:
 
         self._atom = user32.RegisterClassExW(self._window)
 
-        self._menu = Menu()
+        self._menu: Menu = Menu()
 
-        self._hwnd = _create_window(
+        self._hwnd: int = _create_window(
             class_name=self._window.lpszClassName,
             window_name=title,
             style=style,
             instance=self._window.hInstance,
         )
 
-        self._thread_id = user32.GetWindowThreadProcessId(self._hwnd, None)
+        self._thread_id: int = user32.GetWindowThreadProcessId(self._hwnd, None)
 
         # calling AtlAxWinInit initializes ATL's control hosting code
         # by registering the "AtlAxWin" window class so that this window
@@ -988,7 +1011,8 @@ class Application:
             user32.PostQuitMessage(0)
             return 0
 
-        return user32.DefWindowProcW(hwnd, message, w_param, l_param)
+        ret: int = user32.DefWindowProcW(hwnd, message, w_param, l_param)
+        return ret
 
     def add_message_handler(self, handler: Callable[[int, int, int, int], None]) -> None:
         """Add a custom handler for processing window messages.
@@ -1022,7 +1046,8 @@ class Application:
         Returns:
             An `_AdviseConnection` object from `comtypes`.
         """
-        cxn = client.GetEvents(source, sink or self, interface=interface)
+        assert client is not None  # noqa: S101
+        cxn = client.GetEvents(source, sink or self, interface=interface)  # pyright: ignore[reportUnknownMemberType]
         self._event_connections.append(cxn)
         return cxn
 
@@ -1031,7 +1056,7 @@ class Application:
         """[int][] &mdash; The handle to the main application window."""
         return self._hwnd
 
-    def load(
+    def load(  # noqa: PLR0913
         self,
         activex_id: str,
         *,
@@ -1097,6 +1122,7 @@ class Application:
         if ret != 0:
             msg = f"AtlAxGetControl {ctypes.WinError()}"
             raise OSError(msg)
+        assert client is not None  # noqa: S101
         return client.GetBestInterface(unknown)
 
     @property
@@ -1128,7 +1154,8 @@ class Application:
         Returns:
             An indication of how the message box was closed.
         """
-        return user32.MessageBoxExW(hwnd, text, title, options, language_id)
+        ret: int = user32.MessageBoxExW(hwnd, text, title, options, language_id)
+        return ret
 
     @staticmethod
     def run() -> None:
@@ -1167,8 +1194,8 @@ class Application:
             width: The new width (in pixels) of the window.
             height: The new height (in pixels) of the window.
         """
-        # SWP_NOMOVE = 0x0002  Retains the current position (ignores X and Y parameters)
-        self.set_window_position(0, 0, width, height, flags=0x0002)
+        # SWP_NOMOVE Retains the current position (ignores X and Y parameters)
+        self.set_window_position(0, 0, width, height, flags=WindowPosition.NOMOVE)
 
     def set_window_title(self, title: str) -> None:
         """Set the text to display in the window's title bar.

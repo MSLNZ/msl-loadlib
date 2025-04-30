@@ -217,6 +217,7 @@ exclude = [
 ]
 reportAny = false
 reportExplicitAny = false
+reportImplicitOverride = false
 
 [tool.ruff]
 cache-dir = ".cache/ruff"
