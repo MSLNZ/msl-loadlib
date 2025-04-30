@@ -44,9 +44,9 @@ Subtract two C++ floating-point numbers, see [Cpp64.subtract][msl.examples.loadl
 Add or subtract two C++ double-precision numbers, see [Cpp64.add_or_subtract][msl.examples.loadlib.cpp64.Cpp64.add_or_subtract]
 
 ```pycon
->>> cpp.add_or_subtract(1.0, 2.0, True)
+>>> cpp.add_or_subtract(1.0, 2.0, do_addition=True)
 3.0
->>> cpp.add_or_subtract(1.0, 2.0, False)
+>>> cpp.add_or_subtract(1.0, 2.0, do_addition=False)
 -1.0
 
 ```

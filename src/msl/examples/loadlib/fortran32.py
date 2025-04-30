@@ -10,10 +10,13 @@ then returns the response from the library.
 from __future__ import annotations
 
 import ctypes
-import os
-from typing import Sequence
+from pathlib import Path
+from typing import TYPE_CHECKING
 
 from msl.loadlib import Server32
+
+if TYPE_CHECKING:
+    from collections.abc import Sequence
 
 
 class Fortran32(Server32):
@@ -31,7 +34,7 @@ class Fortran32(Server32):
         """
         # By not specifying the extension of the library file the server will open
         # the appropriate file based on the operating system.
-        path = os.path.join(os.path.dirname(__file__), "fortran_lib32")
+        path = Path(__file__).parent / "fortran_lib32"
         super().__init__(path, "cdll", host, port)
 
     def sum_8bit(self, a: int, b: int) -> int:
@@ -66,7 +69,8 @@ class Fortran32(Server32):
 
         ac = ctypes.c_int8(a)
         bc = ctypes.c_int8(b)
-        return self.lib.sum_8bit(ctypes.byref(ac), ctypes.byref(bc))
+        result: int = self.lib.sum_8bit(ctypes.byref(ac), ctypes.byref(bc))
+        return result
 
     def sum_16bit(self, a: int, b: int) -> int:
         """Add two 16-bit signed integers.
@@ -100,7 +104,8 @@ class Fortran32(Server32):
 
         ac = ctypes.c_int16(a)
         bc = ctypes.c_int16(b)
-        return self.lib.sum_16bit(ctypes.byref(ac), ctypes.byref(bc))
+        result: int = self.lib.sum_16bit(ctypes.byref(ac), ctypes.byref(bc))
+        return result
 
     def sum_32bit(self, a: int, b: int) -> int:
         """Add two 32-bit signed integers.
@@ -134,7 +139,8 @@ class Fortran32(Server32):
 
         ac = ctypes.c_int32(a)
         bc = ctypes.c_int32(b)
-        return self.lib.sum_32bit(ctypes.byref(ac), ctypes.byref(bc))
+        result: int = self.lib.sum_32bit(ctypes.byref(ac), ctypes.byref(bc))
+        return result
 
     def sum_64bit(self, a: int, b: int) -> int:
         """Add two 64-bit signed integers.
@@ -168,7 +174,8 @@ class Fortran32(Server32):
 
         ac = ctypes.c_int64(a)
         bc = ctypes.c_int64(b)
-        return self.lib.sum_64bit(ctypes.byref(ac), ctypes.byref(bc))
+        result: int = self.lib.sum_64bit(ctypes.byref(ac), ctypes.byref(bc))
+        return result
 
     def multiply_float32(self, a: float, b: float) -> float:
         """Multiply two FORTRAN floating-point numbers.
@@ -199,7 +206,8 @@ class Fortran32(Server32):
 
         ac = ctypes.c_float(a)
         bc = ctypes.c_float(b)
-        return self.lib.multiply_float32(ctypes.byref(ac), ctypes.byref(bc))
+        result: float = self.lib.multiply_float32(ctypes.byref(ac), ctypes.byref(bc))
+        return result
 
     def multiply_float64(self, a: float, b: float) -> float:
         """Multiply two FORTRAN double-precision numbers.
@@ -230,7 +238,8 @@ class Fortran32(Server32):
 
         ac = ctypes.c_double(a)
         bc = ctypes.c_double(b)
-        return self.lib.multiply_float64(ctypes.byref(ac), ctypes.byref(bc))
+        result: float = self.lib.multiply_float64(ctypes.byref(ac), ctypes.byref(bc))
+        return result
 
     def is_positive(self, a: float) -> bool:
         """Returns whether the value of the input argument is > 0.
@@ -260,9 +269,10 @@ class Fortran32(Server32):
         self.lib.is_positive.restype = ctypes.c_bool
 
         ac = ctypes.c_double(a)
-        return self.lib.is_positive(ctypes.byref(ac))
+        result: bool = self.lib.is_positive(ctypes.byref(ac))
+        return result
 
-    def add_or_subtract(self, a: int, b: int, do_addition: bool) -> int:
+    def add_or_subtract(self, a: int, b: int, *, do_addition: bool) -> int:
         """Add or subtract two integers.
 
         The corresponding FORTRAN code is
@@ -281,7 +291,8 @@ class Fortran32(Server32):
         end function add_or_subtract
         ```
 
-        See the corresponding [Fortran64.add_or_subtract][msl.examples.loadlib.fortran64.Fortran64.add_or_subtract] method.
+        See the corresponding [Fortran64.add_or_subtract][msl.examples.loadlib.fortran64.Fortran64.add_or_subtract]
+        method.
 
         Args:
             a: First integer.
@@ -297,7 +308,8 @@ class Fortran32(Server32):
         ac = ctypes.c_int32(a)
         bc = ctypes.c_int32(b)
         logical = ctypes.c_bool(do_addition)
-        return self.lib.add_or_subtract(ctypes.byref(ac), ctypes.byref(bc), ctypes.byref(logical))
+        result: int = self.lib.add_or_subtract(ctypes.byref(ac), ctypes.byref(bc), ctypes.byref(logical))
+        return result
 
     def factorial(self, n: int) -> float:
         """Compute the n'th factorial.
@@ -335,7 +347,8 @@ class Fortran32(Server32):
         self.lib.factorial.restype = ctypes.c_double
 
         ac = ctypes.c_int8(n)
-        return self.lib.factorial(ctypes.byref(ac))
+        result: float = self.lib.factorial(ctypes.byref(ac))
+        return result
 
     def standard_deviation(self, data: Sequence[float]) -> float:
         """Compute the standard deviation.
@@ -352,7 +365,8 @@ class Fortran32(Server32):
         end function standard_deviation
         ```
 
-        See the corresponding [Fortran64.standard_deviation][msl.examples.loadlib.fortran64.Fortran64.standard_deviation]
+        See the corresponding
+        [Fortran64.standard_deviation][msl.examples.loadlib.fortran64.Fortran64.standard_deviation]
         method.
 
         Args:
@@ -367,9 +381,10 @@ class Fortran32(Server32):
         n = len(data)
         nc = ctypes.c_int32(n)
         data_c = (ctypes.c_double * n)(*data)
-        return self.lib.standard_deviation(ctypes.byref(data_c), ctypes.byref(nc))
+        result: float = self.lib.standard_deviation(ctypes.byref(data_c), ctypes.byref(nc))
+        return result
 
-    def besselJ0(self, x: float) -> float:
+    def besselJ0(self, x: float) -> float:  # noqa: N802
         """Compute the Bessel function of the first kind of order 0 of x.
 
         The corresponding FORTRAN code is
@@ -394,7 +409,8 @@ class Fortran32(Server32):
         self.lib.besselj0.restype = ctypes.c_double
 
         xc = ctypes.c_double(x)
-        return self.lib.besselj0(ctypes.byref(xc))
+        result: float = self.lib.besselj0(ctypes.byref(xc))
+        return result
 
     def reverse_string(self, original: str) -> str:
         """Reverse a string.
@@ -414,7 +430,8 @@ class Fortran32(Server32):
         end subroutine reverse_string
         ```
 
-        See the corresponding [Fortran64.reverse_string][msl.examples.loadlib.fortran64.Fortran64.reverse_string] method.
+        See the corresponding [Fortran64.reverse_string][msl.examples.loadlib.fortran64.Fortran64.reverse_string]
+        method.
 
         Args:
             original: The original string.
@@ -463,7 +480,7 @@ class Fortran32(Server32):
         nc = ctypes.c_int32(n)
         out = (ctypes.c_double * n)()
         self.lib.add_1d_arrays(out, (ctypes.c_double * n)(*a1), (ctypes.c_double * n)(*a2), ctypes.byref(nc))
-        return [val for val in out]
+        return list(out)
 
     def matrix_multiply(self, a1: Sequence[Sequence[float]], a2: Sequence[Sequence[float]]) -> list[list[float]]:
         """Multiply two matrices.

@@ -2,10 +2,13 @@
 
 from __future__ import annotations
 
-import os
-from typing import Sequence
+from pathlib import Path
+from typing import TYPE_CHECKING
 
 from msl.loadlib import Client64
+
+if TYPE_CHECKING:
+    from collections.abc import Sequence
 
 
 class DotNet64(Client64):
@@ -19,7 +22,7 @@ class DotNet64(Client64):
         """
         # specify the name of the corresponding 32-bit server module, dotnet32, which hosts
         # the 32-bit .NET library -- dotnet_lib32.dll.
-        super().__init__(module32="dotnet32", append_sys_path=os.path.dirname(__file__))
+        super().__init__("dotnet32", append_sys_path=Path(__file__).parent)
 
     def get_class_names(self) -> list[str]:
         """Gets the class names in the library.
@@ -32,7 +35,8 @@ class DotNet64(Client64):
         Returns:
             The names of the classes that are available in [dotnet_lib32.dll][dotnet-lib].
         """
-        return self.request32("get_class_names")
+        reply: list[str] = self.request32("get_class_names")
+        return reply
 
     def add_integers(self, a: int, b: int) -> int:
         """Add two integers.
@@ -46,7 +50,8 @@ class DotNet64(Client64):
         Returns:
             The sum, `a + b`.
         """
-        return self.request32("add_integers", a, b)
+        reply: int = self.request32("add_integers", a, b)
+        return reply
 
     def divide_floats(self, a: float, b: float) -> float:
         """Divide two C# floating-point numbers.
@@ -60,7 +65,8 @@ class DotNet64(Client64):
         Returns:
             The quotient, `a / b`.
         """
-        return self.request32("divide_floats", a, b)
+        reply: float = self.request32("divide_floats", a, b)
+        return reply
 
     def multiply_doubles(self, a: float, b: float) -> float:
         """Multiply two C# double-precision numbers.
@@ -75,9 +81,10 @@ class DotNet64(Client64):
         Returns:
             The product, `a * b`.
         """
-        return self.request32("multiply_doubles", a, b)
+        reply: float = self.request32("multiply_doubles", a, b)
+        return reply
 
-    def add_or_subtract(self, a: float, b: float, do_addition: bool) -> float:
+    def add_or_subtract(self, a: float, b: float, *, do_addition: bool) -> float:
         """Add or subtract two C# double-precision numbers.
 
         See the corresponding [DotNet32.add_or_subtract][msl.examples.loadlib.dotnet32.DotNet32.add_or_subtract] method.
@@ -90,7 +97,8 @@ class DotNet64(Client64):
         Returns:
             `a + b` if `do_addition` is `True` else `a - b`.
         """
-        return self.request32("add_or_subtract", a, b, do_addition)
+        reply: float = self.request32("add_or_subtract", a, b, do_addition=do_addition)
+        return reply
 
     def scalar_multiply(self, a: float, xin: Sequence[float]) -> list[float]:
         """Multiply each element in an array by a number.
@@ -104,7 +112,8 @@ class DotNet64(Client64):
         Returns:
             A new array with each element in `xin` multiplied by `a`.
         """
-        return self.request32("scalar_multiply", a, xin)
+        reply: list[float] = self.request32("scalar_multiply", a, xin)
+        return reply
 
     def multiply_matrices(self, a1: Sequence[Sequence[float]], a2: Sequence[Sequence[float]]) -> list[list[float]]:
         """Multiply two matrices.
@@ -117,9 +126,10 @@ class DotNet64(Client64):
             a2: Second matrix.
 
         Return:
-            The result, `a1 @ a2`.
+            The product, `a1 @ a2`.
         """
-        return self.request32("multiply_matrices", a1, a2)
+        reply: list[list[float]] = self.request32("multiply_matrices", a1, a2)
+        return reply
 
     def reverse_string(self, original: str) -> str:
         """Reverse a string.
@@ -132,7 +142,8 @@ class DotNet64(Client64):
         Returns:
             The string reversed.
         """
-        return self.request32("reverse_string", original)
+        reply: str = self.request32("reverse_string", original)
+        return reply
 
     def add_multiple(self, a: int, b: int, c: int, d: int, e: int) -> int:
         """Add multiple integers.
@@ -151,9 +162,10 @@ class DotNet64(Client64):
         Returns:
             The sum of the input arguments.
         """
-        return self.request32("add_multiple", a, b, c, d, e)
+        reply: int = self.request32("add_multiple", a, b, c, d, e)
+        return reply
 
-    def concatenate(self, a: str, b: str, c: str, d: bool, e: str) -> str:
+    def concatenate(self, a: str, b: str, c: str, d: bool, e: str) -> str:  # noqa: FBT001
         """Concatenate strings.
 
         Calls a static method in a static class.
@@ -170,4 +182,5 @@ class DotNet64(Client64):
         Returns:
             The strings concatenated together.
         """
-        return self.request32("concatenate", a, b, c, d, e)
+        reply: str = self.request32("concatenate", a, b, c, d, e)
+        return reply

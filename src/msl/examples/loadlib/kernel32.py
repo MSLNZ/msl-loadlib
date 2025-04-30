@@ -47,7 +47,7 @@ class Kernel32(Server32):
         """
         st = SystemTime()
         self.lib.GetLocalTime(ctypes.byref(st))
-        return datetime(
+        return datetime(  # noqa: DTZ001
             st.wYear,
             month=st.wMonth,
             day=st.wDay,
@@ -64,7 +64,7 @@ class SystemTime(ctypes.Structure):
     [SYSTEMTIME]: https://msdn.microsoft.com/en-us/library/windows/desktop/ms724950(v=vs.85).aspx
     """
 
-    _fields_ = [
+    _fields_ = (  # pyright: ignore[reportUnannotatedClassAttribute]
         ("wYear", WORD),
         ("wMonth", WORD),
         ("wDayOfWeek", WORD),
@@ -73,4 +73,4 @@ class SystemTime(ctypes.Structure):
         ("wMinute", WORD),
         ("wSecond", WORD),
         ("wMilliseconds", WORD),
-    ]
+    )

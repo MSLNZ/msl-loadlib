@@ -9,7 +9,7 @@ the same data type in the 32-bit process and vice versa.
 
 from __future__ import annotations
 
-import os
+from pathlib import Path
 from typing import Any
 
 from msl.loadlib import Server32
@@ -27,11 +27,11 @@ class Echo32(Server32):
         """
         # even though this is a *echo* class that does not call a library
         # we still need to provide a library file that exists. Use the C++ library.
-        path = os.path.join(os.path.dirname(__file__), "cpp_lib32")
+        path = Path(__file__).parent / "cpp_lib32"
         super().__init__(path, "cdll", host, port)
 
     @staticmethod
-    def received_data(*args: Any, **kwargs: Any) -> tuple[tuple[Any, ...], dict[str, Any]]:
+    def received_data(*args: Any, **kwargs: Any) -> tuple[tuple[Any, ...], dict[str, Any]]:  # type: ignore[misc]
         """Process a request from the [Echo64.send_data][msl.examples.loadlib.echo64.Echo64.send_data] method.
 
         Args:

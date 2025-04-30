@@ -8,10 +8,13 @@
 
 from __future__ import annotations
 
-import os
-from datetime import datetime
+from pathlib import Path
+from typing import TYPE_CHECKING
 
 from msl.loadlib import Client64
+
+if TYPE_CHECKING:
+    from datetime import datetime
 
 
 class Kernel64(Client64):
@@ -27,7 +30,7 @@ class Kernel64(Client64):
         """
         # specify the name of the corresponding 32-bit server module, kernel32, which hosts
         # the Windows 32-bit library -- kernel32.dll
-        super().__init__(module32="kernel32", append_sys_path=os.path.dirname(__file__))
+        super().__init__(module32="kernel32", append_sys_path=Path(__file__).parent)
 
     def get_local_time(self) -> datetime:
         """Requests [kernel32.GetLocalTime]{:target="_blank"} function to get the current date and time.
@@ -39,4 +42,5 @@ class Kernel64(Client64):
         Returns:
             The current date and time.
         """
-        return self.request32("get_local_time")
+        reply: datetime = self.request32("get_local_time")
+        return reply

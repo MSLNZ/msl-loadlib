@@ -14,12 +14,14 @@ then returns the response from the library.
 
 from __future__ import annotations
 
-import os
-from ctypes import byref
-from ctypes import c_double
-from typing import Sequence
+from ctypes import byref, c_double
+from pathlib import Path
+from typing import TYPE_CHECKING
 
 from msl.loadlib import Server32
+
+if TYPE_CHECKING:
+    from collections.abc import Sequence
 
 
 class Labview32(Server32):
@@ -32,7 +34,7 @@ class Labview32(Server32):
             host: The IP address (or hostname) to use for the server.
             port: The port to open for the server.
         """
-        path = os.path.join(os.path.dirname(__file__), "labview_lib32.dll")
+        path = Path(__file__).parent / "labview_lib32.dll"
         super().__init__(path, "cdll", host, port)
 
     def stdev(self, x: Sequence[float], weighting: int = 0) -> tuple[float, float, float]:

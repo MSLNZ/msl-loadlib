@@ -11,10 +11,14 @@ from __future__ import annotations
 
 import ctypes
 import math
-import os
-from typing import Sequence
+from pathlib import Path
+from typing import TYPE_CHECKING
 
 from msl.loadlib import Server32
+
+if TYPE_CHECKING:
+    from collections.abc import Sequence
+    from ctypes import Array
 
 
 class Cpp32(Server32):
@@ -32,7 +36,7 @@ class Cpp32(Server32):
         """
         # By not specifying the extension of the library file the server will open
         # the appropriate file based on the operating system.
-        path = os.path.join(os.path.dirname(__file__), "cpp_lib32")
+        path = Path(__file__).parent / "cpp_lib32"
         super().__init__(path, "cdll", host, port)
 
     def add(self, a: int, b: int) -> int:
@@ -58,7 +62,8 @@ class Cpp32(Server32):
         # restype and argtypes should be defined elsewhere, shown here for illustrative purposes
         self.lib.add.restype = ctypes.c_int32
         self.lib.add.argtypes = [ctypes.c_int32, ctypes.c_int32]
-        return self.lib.add(a, b)
+        result: int = self.lib.add(a, b)
+        return result
 
     def subtract(self, a: float, b: float) -> float:
         """Subtract two floating-point numbers *('float' refers to the C++ data type)*.
@@ -83,9 +88,10 @@ class Cpp32(Server32):
         # restype and argtypes should be defined elsewhere, shown here for illustrative purposes
         self.lib.subtract.restype = ctypes.c_float
         self.lib.subtract.argtypes = [ctypes.c_float, ctypes.c_float]
-        return self.lib.subtract(a, b)
+        result: float = self.lib.subtract(a, b)
+        return result
 
-    def add_or_subtract(self, a: float, b: float, do_addition: bool) -> float:
+    def add_or_subtract(self, a: float, b: float, *, do_addition: bool) -> float:
         """Add or subtract two double-precision numbers *('double' refers to the C++ data type)*.
 
         The corresponding C++ code is
@@ -113,7 +119,8 @@ class Cpp32(Server32):
         # restype and argtypes should be defined elsewhere, shown here for illustrative purposes
         self.lib.add_or_subtract.restype = ctypes.c_double
         self.lib.add_or_subtract.argtypes = [ctypes.c_double, ctypes.c_double, ctypes.c_bool]
-        return self.lib.add_or_subtract(a, b, do_addition)
+        result: float = self.lib.add_or_subtract(a, b, do_addition)
+        return result
 
     def scalar_multiply(self, a: float, xin: Sequence[float]) -> list[float]:
         """Multiply each element in an array by a number.
@@ -150,7 +157,7 @@ class Cpp32(Server32):
         c_xin = (ctypes.c_double * n)(*xin)  # convert input array to ctypes
         c_xout = (ctypes.c_double * n)()  # allocate memory for output array
         self.lib.scalar_multiply(a, c_xin, n, c_xout)
-        return [value for value in c_xout]
+        return list(c_xout)
 
     def reverse_string_v1(self, original: str) -> str:
         """Reverse a string (version 1).
@@ -244,7 +251,8 @@ class Cpp32(Server32):
         """
         # restype should be defined elsewhere, shown here for illustrative purposes
         self.lib.distance_4_points.restype = ctypes.c_double
-        return self.lib.distance_4_points(four_points)
+        result: float = self.lib.distance_4_points(four_points)
+        return result
 
     def circumference(self, radius: float, n: int) -> float:
         """Estimates the circumference of a circle.
@@ -289,7 +297,8 @@ class Cpp32(Server32):
         for i in range(n):
             pts.points[i] = Point(radius * math.cos(theta), radius * math.sin(theta))
             theta += delta
-        return self.lib.distance_n_points(pts)
+        result: float = self.lib.distance_n_points(pts)
+        return result
 
 
 class Point(ctypes.Structure):
@@ -305,18 +314,18 @@ class Point(ctypes.Structure):
     ```
     """
 
-    _fields_ = [
+    _fields_ = (  # pyright: ignore[reportUnannotatedClassAttribute]
         ("x", ctypes.c_double),
         ("y", ctypes.c_double),
-    ]
+    )
 
 
 class FourPoints(ctypes.Structure):
     """C++ struct that is a fixed size in memory."""
 
-    _fields_ = [
+    _fields_ = (  # pyright: ignore[reportUnannotatedClassAttribute]
         ("points", (Point * 4)),
-    ]
+    )
 
     def __init__(self, point1: Point, point2: Point, point3: Point, point4: Point) -> None:
         """C++ struct that is a fixed size in memory.
@@ -336,7 +345,7 @@ class FourPoints(ctypes.Structure):
             point4: The fourth point.
         """
         super().__init__()
-        self.points = (Point * 4)(point1, point2, point3, point4)
+        self.points: Array[Point] = (Point * 4)(point1, point2, point3, point4)
 
 
 class NPoints(ctypes.Structure):
@@ -353,7 +362,7 @@ class NPoints(ctypes.Structure):
     ```
     """
 
-    _fields_ = [
+    _fields_ = (  # pyright: ignore[reportUnannotatedClassAttribute]
         ("n", ctypes.c_int),
         ("points", ctypes.POINTER(Point)),
-    ]
+    )

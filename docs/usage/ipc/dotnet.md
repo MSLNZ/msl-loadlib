@@ -67,9 +67,9 @@ Multiple two C# double-precision numbers, see [DotNet64.multiply_doubles][msl.ex
 Add or subtract two C# double-precision numbers, see [DotNet64.add_or_subtract][msl.examples.loadlib.dotnet64.DotNet64.add_or_subtract]
 
 ```pycon
->>> dn.add_or_subtract(99., 9., True)
+>>> dn.add_or_subtract(99., 9., do_addition=True)
 108.0
->>> dn.add_or_subtract(99., 9., False)
+>>> dn.add_or_subtract(99., 9., do_addition=False)
 90.0
 
 ```

@@ -2,11 +2,15 @@
 
 from __future__ import annotations
 
-import os
-from typing import Sequence
+from pathlib import Path
+from typing import TYPE_CHECKING
 
-from msl.examples.loadlib import FourPoints
 from msl.loadlib import Client64
+
+if TYPE_CHECKING:
+    from collections.abc import Sequence
+
+    from .cpp32 import FourPoints
 
 
 class Cpp64(Client64):
@@ -18,9 +22,9 @@ class Cpp64(Client64):
         This class demonstrates how to communicate with a 32-bit C++ library if an
         instance of this class is created within a 64-bit Python interpreter.
         """
-        # specify the name of the corresponding 32-bit server module, cpp32, which hosts
-        # the 32-bit C++ library -- cpp_lib32.
-        super().__init__(module32="cpp32", append_sys_path=os.path.dirname(__file__))
+        # specify the name of the corresponding 32-bit server module, cpp32,
+        # which hosts the 32-bit C++ library -- cpp_lib32.
+        super().__init__("cpp32", append_sys_path=Path(__file__).parent)
 
     def add(self, a: int, b: int) -> int:
         """Add two integers.
@@ -34,7 +38,8 @@ class Cpp64(Client64):
         Returns:
             The sum, `a + b`.
         """
-        return self.request32("add", a, b)
+        reply: int = self.request32("add", a, b)
+        return reply
 
     def subtract(self, a: float, b: float) -> float:
         """Subtract two floating-point numbers *('float' refers to the C++ data type)*.
@@ -48,9 +53,10 @@ class Cpp64(Client64):
         Returns:
             The difference, `a - b`.
         """
-        return self.request32("subtract", a, b)
+        reply: float = self.request32("subtract", a, b)
+        return reply
 
-    def add_or_subtract(self, a: float, b: float, do_addition: bool) -> float:
+    def add_or_subtract(self, a: float, b: float, *, do_addition: bool) -> float:
         """Add or subtract two floating-point numbers *('double' refers to the C++ data type)*.
 
         See the corresponding [Cpp32.add_or_subtract][msl.examples.loadlib.cpp32.Cpp32.add_or_subtract] method.
@@ -63,7 +69,8 @@ class Cpp64(Client64):
         Returns:
             `a + b` if `do_addition` is `True` else `a - b`.
         """
-        return self.request32("add_or_subtract", a, b, do_addition)
+        reply: float = self.request32("add_or_subtract", a, b, do_addition=do_addition)
+        return reply
 
     def scalar_multiply(self, a: float, xin: Sequence[float]) -> list[float]:
         """Multiply each element in an array by a number.
@@ -77,7 +84,8 @@ class Cpp64(Client64):
         Returns:
             A new array with each element in `xin` multiplied by `a`.
         """
-        return self.request32("scalar_multiply", a, xin)
+        reply: list[float] = self.request32("scalar_multiply", a, xin)
+        return reply
 
     def reverse_string_v1(self, original: str) -> str:
         """Reverse a string (version 1).
@@ -93,7 +101,8 @@ class Cpp64(Client64):
         Returns:
             The string reversed.
         """
-        return self.request32("reverse_string_v1", original)
+        reply: str = self.request32("reverse_string_v1", original)
+        return reply
 
     def reverse_string_v2(self, original: str) -> str:
         """Reverse a string (version 2).
@@ -109,7 +118,8 @@ class Cpp64(Client64):
         Returns:
             The string reversed.
         """
-        return self.request32("reverse_string_v2", original)
+        reply: str = self.request32("reverse_string_v2", original)
+        return reply
 
     def distance_4_points(self, points: FourPoints) -> float:
         """Calculates the total distance connecting 4 [Point][msl.examples.loadlib.cpp32.Point]s.
@@ -126,10 +136,8 @@ class Cpp64(Client64):
         Returns:
             The total distance connecting the 4 points.
         """
-        if not isinstance(points, FourPoints):
-            msg = f"Must pass in a FourPoints object. Got {type(points)}"
-            raise TypeError(msg)
-        return self.request32("distance_4_points", points)
+        reply: float = self.request32("distance_4_points", points)
+        return reply
 
     def circumference(self, radius: float, n: int) -> float:
         """Estimates the circumference of a circle.
@@ -145,4 +153,5 @@ class Cpp64(Client64):
         Returns:
             The estimated circumference of the circle.
         """
-        return self.request32("circumference", radius, n)
+        reply: float = self.request32("circumference", radius, n)
+        return reply

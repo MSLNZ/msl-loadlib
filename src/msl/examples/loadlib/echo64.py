@@ -9,7 +9,7 @@ the same data type in the 32-bit process and vice versa
 
 from __future__ import annotations
 
-import os
+from pathlib import Path
 from typing import Any
 
 from msl.loadlib import Client64
@@ -20,7 +20,7 @@ class Echo64(Client64):
 
     def __init__(self) -> None:
         """Example that shows Python data types are preserved between [Echo32][] and [Echo64][]."""
-        super().__init__(module32="echo32", append_sys_path=os.path.dirname(__file__))
+        super().__init__("echo32", append_sys_path=Path(__file__).parent)
 
     def send_data(self, *args: Any, **kwargs: Any) -> tuple[tuple[Any, ...], dict[str, Any]]:
         """Send a request to [Echo32.received_data][msl.examples.loadlib.echo32.Echo32.received_data].
@@ -32,4 +32,5 @@ class Echo64(Client64):
         Returns:
             The `args` and `kwargs` that were sent.
         """
-        return self.request32("received_data", *args, **kwargs)
+        reply: tuple[tuple[Any, ...], dict[str, Any]] = self.request32("received_data", *args, **kwargs)
+        return reply

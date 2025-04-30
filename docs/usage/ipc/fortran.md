@@ -84,9 +84,9 @@ False
 Add or subtract two integers, see [Fortran64.add_or_subtract][msl.examples.loadlib.fortran64.Fortran64.add_or_subtract]
 
 ```pycon
->>> f.add_or_subtract(1000, 2000, True)
+>>> f.add_or_subtract(1000, 2000, do_addition=True)
 3000
->>> f.add_or_subtract(1000, 2000, False)
+>>> f.add_or_subtract(1000, 2000, do_addition=False)
 -1000
 
 ```

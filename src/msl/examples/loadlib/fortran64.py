@@ -2,10 +2,13 @@
 
 from __future__ import annotations
 
-import os
-from typing import Sequence
+from pathlib import Path
+from typing import TYPE_CHECKING
 
 from msl.loadlib import Client64
+
+if TYPE_CHECKING:
+    from collections.abc import Sequence
 
 
 class Fortran64(Client64):
@@ -19,7 +22,7 @@ class Fortran64(Client64):
         """
         # specify the name of the corresponding 32-bit server module, fortran32, which hosts
         # the 32-bit FORTRAN library -- fortran_lib32.
-        super().__init__(module32="fortran32", append_sys_path=os.path.dirname(__file__))
+        super().__init__(module32="fortran32", append_sys_path=Path(__file__).parent)
 
     def sum_8bit(self, a: int, b: int) -> int:
         """Send a request to add two 8-bit signed integers.
@@ -33,7 +36,8 @@ class Fortran64(Client64):
         Returns:
             The sum, `a + b`.
         """
-        return self.request32("sum_8bit", a, b)
+        reply: int = self.request32("sum_8bit", a, b)
+        return reply
 
     def sum_16bit(self, a: int, b: int) -> int:
         """Send a request to add two 16-bit signed integers.
@@ -47,7 +51,8 @@ class Fortran64(Client64):
         Returns:
             The sum, `a + b`.
         """
-        return self.request32("sum_16bit", a, b)
+        reply: int = self.request32("sum_16bit", a, b)
+        return reply
 
     def sum_32bit(self, a: int, b: int) -> int:
         """Send a request to add two 32-bit signed integers.
@@ -61,7 +66,8 @@ class Fortran64(Client64):
         Returns:
             The sum, `a + b`.
         """
-        return self.request32("sum_32bit", a, b)
+        reply: int = self.request32("sum_32bit", a, b)
+        return reply
 
     def sum_64bit(self, a: int, b: int) -> int:
         """Send a request to add two 64-bit signed integers.
@@ -75,7 +81,8 @@ class Fortran64(Client64):
         Returns:
             The sum, `a + b`.
         """
-        return self.request32("sum_64bit", a, b)
+        reply: int = self.request32("sum_64bit", a, b)
+        return reply
 
     def multiply_float32(self, a: float, b: float) -> float:
         """Send a request to multiply two FORTRAN floating-point numbers.
@@ -90,7 +97,8 @@ class Fortran64(Client64):
         Returns:
             The product, `a * b`.
         """
-        return self.request32("multiply_float32", a, b)
+        reply: float = self.request32("multiply_float32", a, b)
+        return reply
 
     def multiply_float64(self, a: float, b: float) -> float:
         """Send a request to multiply two FORTRAN double-precision numbers.
@@ -105,7 +113,8 @@ class Fortran64(Client64):
         Returns:
             The product, `a * b`.
         """
-        return self.request32("multiply_float64", a, b)
+        reply: float = self.request32("multiply_float64", a, b)
+        return reply
 
     def is_positive(self, a: float) -> bool:
         """Returns whether the value of the input argument is > 0.
@@ -118,9 +127,10 @@ class Fortran64(Client64):
         Returns:
             Whether the value of `a` is &gt; 0.
         """
-        return self.request32("is_positive", a)
+        reply: bool = self.request32("is_positive", a)
+        return reply
 
-    def add_or_subtract(self, a: int, b: int, do_addition: bool) -> int:
+    def add_or_subtract(self, a: int, b: int, *, do_addition: bool) -> int:
         """Add or subtract two integers.
 
         See the corresponding [Fortran32.add_or_subtract][msl.examples.loadlib.fortran32.Fortran32.add_or_subtract]
@@ -134,7 +144,8 @@ class Fortran64(Client64):
         Returns:
             `a + b` if `do_addition` is `True` else `a - b`.
         """
-        return self.request32("add_or_subtract", a, b, do_addition)
+        reply: int = self.request32("add_or_subtract", a, b, do_addition=do_addition)
+        return reply
 
     def factorial(self, n: int) -> float:
         """Compute the n'th factorial.
@@ -147,12 +158,14 @@ class Fortran64(Client64):
         Returns:
             The factorial of `n`.
         """
-        return self.request32("factorial", n)
+        reply: float = self.request32("factorial", n)
+        return reply
 
     def standard_deviation(self, data: Sequence[float]) -> float:
         """Compute the standard deviation.
 
-        See the corresponding [Fortran32.standard_deviation][msl.examples.loadlib.fortran32.Fortran32.standard_deviation]
+        See the corresponding
+        [Fortran32.standard_deviation][msl.examples.loadlib.fortran32.Fortran32.standard_deviation]
         method.
 
         Args:
@@ -161,9 +174,10 @@ class Fortran64(Client64):
         Returns:
             The standard deviation of `data`.
         """
-        return self.request32("standard_deviation", data)
+        reply: float = self.request32("standard_deviation", data)
+        return reply
 
-    def besselJ0(self, x: float) -> float:
+    def besselJ0(self, x: float) -> float:  # noqa: N802
         """Compute the Bessel function of the first kind of order 0 of x.
 
         See the corresponding [Fortran32.besselJ0][msl.examples.loadlib.fortran32.Fortran32.besselJ0] method.
@@ -174,7 +188,8 @@ class Fortran64(Client64):
         Returns:
             The value of `BESSEL_J0(x)`.
         """
-        return self.request32("besselJ0", x)
+        reply: float = self.request32("besselJ0", x)
+        return reply
 
     def reverse_string(self, original: str) -> str:
         """Reverse a string.
@@ -188,7 +203,8 @@ class Fortran64(Client64):
         Returns:
             The string reversed.
         """
-        return self.request32("reverse_string", original)
+        reply: str = self.request32("reverse_string", original)
+        return reply
 
     def add_1d_arrays(self, a1: Sequence[float], a2: Sequence[float]) -> list[float]:
         """Perform an element-wise addition of two 1D double-precision arrays.
@@ -202,7 +218,8 @@ class Fortran64(Client64):
         Returns:
             The element-wise addition of `a1 + a2`.
         """
-        return self.request32("add_1d_arrays", a1, a2)
+        reply: list[float] = self.request32("add_1d_arrays", a1, a2)
+        return reply
 
     def matrix_multiply(self, a1: Sequence[Sequence[float]], a2: Sequence[Sequence[float]]) -> list[list[float]]:
         """Multiply two matrices.
@@ -217,4 +234,5 @@ class Fortran64(Client64):
         Returns:
             The product, `a1 @ a2`.
         """
-        return self.request32("matrix_multiply", a1, a2)
+        reply: list[list[float]] = self.request32("matrix_multiply", a1, a2)
+        return reply

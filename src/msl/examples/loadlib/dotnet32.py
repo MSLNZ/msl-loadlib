@@ -6,13 +6,17 @@ is created in a 64-bit Python interpreter and the [DotNet64][] class sends reque
 to the [DotNet32][] class which calls the 32-bit library to execute the request and
 then returns the response from the library.
 """
+# pyright: reportUnannotatedClassAttribute=false
 
 from __future__ import annotations
 
-import os
-from typing import Sequence
+from pathlib import Path
+from typing import TYPE_CHECKING
 
 from msl.loadlib import Server32
+
+if TYPE_CHECKING:
+    from collections.abc import Sequence
 
 
 class DotNet32(Server32):
@@ -28,7 +32,7 @@ class DotNet32(Server32):
             host: The IP address (or hostname) to use for the server.
             port: The port to open for the server.
         """
-        path = os.path.join(os.path.dirname(__file__), "dotnet_lib32.dll")
+        path = Path(__file__).parent / "dotnet_lib32.dll"
         super().__init__(path, "net", host, port)
 
         self.BasicMath = self.lib.DotNetMSL.BasicMath()
@@ -68,7 +72,8 @@ class DotNet32(Server32):
         Returns:
             The sum, `a + b`.
         """
-        return self.BasicMath.add_integers(a, b)
+        result: int = self.BasicMath.add_integers(a, b)
+        return result
 
     def divide_floats(self, a: float, b: float) -> float:
         """Divide two C# floating-point numbers.
@@ -91,7 +96,8 @@ class DotNet32(Server32):
         Returns:
             The quotient, `a / b`.
         """
-        return self.BasicMath.divide_floats(a, b)
+        result: float = self.BasicMath.divide_floats(a, b)
+        return result
 
     def multiply_doubles(self, a: float, b: float) -> float:
         """Multiply two C# double-precision numbers.
@@ -115,9 +121,10 @@ class DotNet32(Server32):
         Returns:
             The product, `a * b`.
         """
-        return self.BasicMath.multiply_doubles(a, b)
+        result: float = self.BasicMath.multiply_doubles(a, b)
+        return result
 
-    def add_or_subtract(self, a: float, b: float, do_addition: bool) -> float:
+    def add_or_subtract(self, a: float, b: float, *, do_addition: bool) -> float:
         """Add or subtract two C# double-precision numbers.
 
         The corresponding C# code is
@@ -146,7 +153,8 @@ class DotNet32(Server32):
         Returns:
             `a + b` if `do_addition` is `True` else `a - b`.
         """
-        return self.BasicMath.add_or_subtract(a, b, do_addition)
+        result: float = self.BasicMath.add_or_subtract(a, b, do_addition=do_addition)
+        return result
 
     def scalar_multiply(self, a: float, xin: Sequence[float]) -> list[float]:
         """Multiply each element in an array by a number.
@@ -176,7 +184,7 @@ class DotNet32(Server32):
             A new array with each element in `xin` multiplied by `a`.
         """
         ret = self.ArrayManipulation.scalar_multiply(a, xin)
-        return [val for val in ret]
+        return list(ret)
 
     def multiply_matrices(self, a1: Sequence[Sequence[float]], a2: Sequence[Sequence[float]]) -> list[list[float]]:
         """Multiply two matrices.
@@ -271,7 +279,8 @@ class DotNet32(Server32):
         Returns:
             The string reversed.
         """
-        return self.lib.StringManipulation().reverse_string(original)
+        result: str = self.lib.StringManipulation().reverse_string(original)
+        return result
 
     def add_multiple(self, a: int, b: int, c: int, d: int, e: int) -> int:
         """Add multiple integers.
@@ -299,9 +308,10 @@ class DotNet32(Server32):
         Returns:
             The sum of the input arguments.
         """
-        return self.lib.StaticClass.add_multiple(a, b, c, d, e)
+        result: int = self.lib.StaticClass.add_multiple(a, b, c, d, e)
+        return result
 
-    def concatenate(self, a: str, b: str, c: str, d: bool, e: str) -> str:
+    def concatenate(self, a: str, b: str, c: str, d: bool, e: str) -> str:  # noqa: FBT001
         """Concatenate strings.
 
         Calls a static method in a static class.
@@ -332,4 +342,5 @@ class DotNet32(Server32):
         Returns:
             The strings concatenated together.
         """
-        return self.lib.StaticClass.concatenate(a, b, c, d, e)
+        result: str = self.lib.StaticClass.concatenate(a, b, c, d, e)
+        return result

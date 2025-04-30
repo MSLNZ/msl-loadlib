@@ -81,8 +81,8 @@ def test_cpp():
     assert -1002 == c.add(-1000, -2)
     assert 10.0 == pytest.approx(c.subtract(20.0, 10.0))
     assert -10.0 == pytest.approx(c.subtract(90.0, 100.0))
-    assert 0.0 == pytest.approx(c.add_or_subtract(0.1234, -0.1234, True))
-    assert 100.0 == pytest.approx(c.add_or_subtract(123.456, 23.456, False))
+    assert 0.0 == pytest.approx(c.add_or_subtract(0.1234, -0.1234, do_addition=True))
+    assert 100.0 == pytest.approx(c.add_or_subtract(123.456, 23.456, do_addition=False))
 
     a = 3.1415926
     values = [float(x) for x in range(100)]
@@ -112,8 +112,8 @@ def test_fortran():
     assert 2.31e300 == pytest.approx(f.multiply_float64(1.1e100, 2.1e200))
     assert f.is_positive(1e-100)
     assert not f.is_positive(-1e-100)
-    assert 3000 == f.add_or_subtract(1000, 2000, True)
-    assert -1000 == f.add_or_subtract(1000, 2000, False)
+    assert 3000 == f.add_or_subtract(1000, 2000, do_addition=True)
+    assert -1000 == f.add_or_subtract(1000, 2000, do_addition=False)
     assert 1 == int(f.factorial(0))
     assert 1 == int(f.factorial(1))
     assert 120 == int(f.factorial(5))
@@ -170,8 +170,8 @@ def test_dotnet():
     assert 9 == n.add_integers(4, 5)
     assert 0.8 == pytest.approx(n.divide_floats(4.0, 5.0))
     assert 458383.926 == pytest.approx(n.multiply_doubles(872.24, 525.525))
-    assert 108.0 == pytest.approx(n.add_or_subtract(99.0, 9.0, True))
-    assert 90.0 == pytest.approx(n.add_or_subtract(99.0, 9.0, False))
+    assert 108.0 == pytest.approx(n.add_or_subtract(99.0, 9.0, do_addition=True))
+    assert 90.0 == pytest.approx(n.add_or_subtract(99.0, 9.0, do_addition=False))
 
     a = 7.13141
     values = [float(x) for x in range(1000)]
@@ -227,7 +227,7 @@ def test_server32_error():
     except loadlib.Server32Error as err:
         assert err.name == "ArgumentError"
         assert "argument 1: TypeError:" in err.value
-        assert err.traceback.endswith("return self.lib.add(a, b)")
+        assert err.traceback.endswith("result: int = self.lib.add(a, b)")
 
 
 @skipif_not_windows
