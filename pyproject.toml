@@ -150,6 +150,7 @@ addopts = [
     "--ignore=docs/conf.py",
     "--ignore=docs/_ext/autodoc_intenum.py",
     "--ignore=src/msl/examples",
+    "--ignore=src/msl/loadlib/_types.py",
     "--ignore=tests/check_pythonw.py",
     "--ignore=tests/check_server32_imports.py",
     "--ignore=tests/bad_servers",
