@@ -35,13 +35,13 @@ jobs:
           git config --local user.name "github-actions[bot]"
           git config --local user.email "github-actions[bot]@users.noreply.github.com"
       - name: Validate docs
-        run: uv run --with ruff --only-group doc -- mkdocs build --strict
+        run: uv run -- mkdocs build --strict
       - name: Deploy dev docs
         if: github.ref == 'refs/heads/main'
         run: |
-          uv run --with ruff --only-group doc -- mike deploy --push --update-aliases dev
-          uv run --with ruff --only-group doc -- mike set-default --push dev
+          uv run -- mike deploy --push --update-aliases dev
+          uv run -- mike set-default --push dev
       - name: Deploy release docs
         if: github.ref_type == 'tag'
         run: |
-          uv run --with ruff --only-group doc -- mike deploy --push --update-aliases ${{ github.ref_name }} latest
+          uv run -- mike deploy --push --update-aliases ${{ github.ref_name }} latest
