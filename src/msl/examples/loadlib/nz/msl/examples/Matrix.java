@@ -2,427 +2,343 @@ package nz.msl.examples;
 
 import java.util.Random;
 
-
+/**
+ * A simple Matrix class supporting basic operations:
+ * multiplication, solving linear systems, LU decomposition
+ * with partial pivoting, QR decomposition, inversion, etc.
+ */
 public class Matrix {
 
-  /** The matrix, M */
-  private double[][] m;
-  
-  /** Lower-triangular matrix representation, M=LU, in LU Decomposition */
-  private Matrix L;
+    /** The matrix data */
+    private double[][] m;
 
-  /** Upper-triangular matrix representation, M=LU, in LU Decomposition */
-  private Matrix U;
+    /** Lower-triangular matrix in LU, M = L⋅U */
+    private Matrix L;
 
-  /** A NxM orthogonal matrix representation, M=QR, in QR Decomposition */
-  private Matrix Q;
+    /** Upper-triangular matrix in LU, M = L⋅U */
+    private Matrix U;
 
-  /** Upper-triangular matrix representation, M=QR, in QR Decomposition */
-  private Matrix R;
-  
-  /** When calculating the inverse we calculate the LU matrices once */
-  static private boolean calculatingInverse = false;
-  
-  /*
-   * 
-   * Define the constructors.
-   * 
-   *    
-   */
-  
-  /** Create a Matrix that is a copy of another Matrix. */
-  public Matrix(Matrix m) {
-    this.m = new double[m.getNumberOfRows()][m.getNumberOfColumns()];
-    for (int i=0; i<m.getNumberOfRows(); i++)
-      for (int j=0; j<m.getNumberOfColumns(); j++)
-        this.m[i][j] = m.getValue(i,j);
-  }
-  
-  /** Create a {@code n} x {@code n} identity Matrix */
-  public Matrix(int n) {
-    m = new double[n][n];
-    for (int i=0; i<n; i++) 
-      m[i][i] = 1.0;
-  }
-  
-  /** Create a {@code rows} x {@code cols} Matrix filled with zeros. */
-  public Matrix(int rows, int cols) {
-    m = new double[rows][cols];
-  }
+    /** Orthogonal matrix in QR, M = Q⋅R */
+    private Matrix Q;
 
-  /** Create a {@code rows} x {@code cols} Matrix filled with a value. */
-  public Matrix(int rows, int cols, double value) {
-    m = new double[rows][cols];
-    for (int i=0; i<rows; i++)
-      for (int j=0; j<cols; j++)
-        m[i][j] = value;
-  }
+    /** Upper-triangular matrix in QR, M = Q⋅R */
+    private Matrix R;
 
-  /**
-   * Create a {@code rows} x {@code cols} Matrix that is filled with 
-   * uniformly-distributed random values that are within the range 
-   * {@code min} to {@code max}.
-   */
-  public Matrix(int rows, int cols, double min, double max) {
-    Random rand = new Random();
-    m = new double[rows][cols];    
-    for (int i=0; i<rows; i++)
-      for (int j=0; j<cols; j++)        
-        m[i][j] = (max-min)*rand.nextDouble()+min;
-  }
+    /** Number of row swaps performed during LU (for determinant sign) */
+    private int pivotCount = 0;
 
-  /** Create a Matrix from {@code m}. */
-  public Matrix(Double[][] m) {    
-    this.m = new double[m.length][m[0].length];
-    for (int i=0; i<m.length; i++)
-      for (int j=0; j<m[0].length; j++)        
-        this.m[i][j] = m[i][j];
-  }
+    /** When calculating inverse we reuse LU; avoid repeated pivots */
+    static private boolean calculatingInverse = false;
 
-  /** Create a Matrix from a vector. */
-  public Matrix(Double[] vector) {
-    m = new double[1][vector.length];
-    for (int i=0; i<vector.length; i++)
-      m[0][i] = vector[i];    
-  }  
+    // ==== Constructors ====
 
-  /*
-   * 
-   * The public static methods.
-   *
-   * 
-   */
-  
-  /** Returns the product of two Matrices as a new Matrix, C=AB. */
-  public static Matrix multiply(Matrix a, Matrix b) {    
-    if (a.getNumberOfColumns() != b.getNumberOfRows()) {
-      throw new IllegalArgumentException(
-          String.format("ERROR! Cannot multiply a %dx%d matrix "
-            + "with a %dx%d matrix",
-            a.getNumberOfRows(), a.getNumberOfColumns(),
-            b.getNumberOfRows(), b.getNumberOfColumns()));
-    } else {
-      Matrix c = new Matrix(a.getNumberOfRows(), b.getNumberOfColumns());
-      double sum = 0.0;
-      for (int i = 0; i < a.getNumberOfRows() ; i++) {
-        for (int j = 0; j < b.getNumberOfColumns(); j++) {
-                 for (int k = 0 ; k < b.getNumberOfRows() ; k++) {
-                    sum += a.getValue(i,k)*b.getValue(k,j);
-                 }
-                 c.setValue(i, j, sum);
-                 sum = 0.0;
-              }
-           }
-      return c;
-    }
-  }
-
-  /** 
-   * Solves {@code b = Ax} for {@code x}.
-   * 
-   * @param A - the coefficient matrix
-   * @param b - the expected values
-   * @return x - the solution to the system of equations
-   */
-  public static Matrix solve(Matrix A, Matrix b) {
-
-    // ensure that 'b' is a column vector
-    if (b.getNumberOfColumns() > 1)  b = b.transpose();
-    
-    // ensure that 'A' and 'b' have the correct dimensions
-    if (b.getNumberOfRows() != A.getNumberOfRows()) {
-      throw new IllegalArgumentException(
-        String.format("ERROR! Dimension mismatch when solving the "
-          + "system of equations using b=Ax, b has dimension "
-          + " %dx%d and A is %dx%d.", b.getNumberOfRows(), 
-          b.getNumberOfColumns(), A.getNumberOfRows(),
-          A.getNumberOfColumns()));
+    /** Copy constructor */
+    public Matrix(Matrix m) {
+        this.m = new double[m.getNumberOfRows()][m.getNumberOfColumns()];
+        for (int i = 0; i < m.getNumberOfRows(); i++)
+            for (int j = 0; j < m.getNumberOfColumns(); j++)
+                this.m[i][j] = m.getValue(i, j);
     }
 
-    // if A is an under-determined system of equations then use the 
-    // matrix-multiplication expression to solve for x
-    if (A.getNumberOfRows() < A.getNumberOfColumns()) {
-      Matrix At = A.transpose();
-      return Matrix.multiply(Matrix.multiply(At, 
-          Matrix.multiply(A, At).getInverse() ), b);
+    /** Identity matrix (n×n) */
+    public Matrix(int n) {
+        m = new double[n][n];
+        for (int i = 0; i < n; i++)
+            m[i][i] = 1.0;
     }
-    
-    // If A is a square matrix then use LU Decomposition, if it is an 
-    // over-determined system of equations then use QR Decomposition
-    Double[] x = new Double[A.getNumberOfColumns()];
-    if (A.isSquare()) {
-      
-      // when using 'solve' to calculate the inverse of a matrix we
-      // only need to generate the LU Decomposition matrices once
-      if (!calculatingInverse) A.makeLU();
-      
-      // solve Ly=b for y using forward substitution
-      double[] y = new double[b.getNumberOfRows()];
-      y[0] = b.getValue(0,0);
-      for (int i=1; i<y.length; i++) {
-        y[i] = b.getValue(i,0);
-        for (int j=0; j<i; j++)
-          y[i] -= A.getL().getValue(i,j)*y[j];
-      }
-      
-      // solve Ux=y for x using backward substitution
-      for (int i=x.length-1; i>-1; i--) {
-        x[i] = y[i];
-        for (int j=i+1; j<x.length; j++)
-          x[i] -= A.getU().getValue(i,j)*x[j];
-        x[i] /= A.getU().getValue(i,i);
-      }
-      
-    } else {
-      
-      A.makeQR();
-      Matrix d = Matrix.multiply(A.getQ().transpose(), b);
 
-      // solve Rx=d for x using backward substitution
-      for (int i=x.length-1; i>-1; i--) {
-        x[i] = d.getValue(i, 0);
-        for (int j=i+1; j<x.length; j++)
-          x[i] -= A.getR().getValue(i,j)*x[j];
-        x[i] /= A.getR().getValue(i,i);
-      }      
-    }    
-    
-    return new Matrix(x).transpose();
-  }
-
-  /*
-   * 
-   * The public methods.
-   *
-   * 
-   */
-
-  /** Returns the primitive data of the Matrix. */
-  public double[][] primitive() {
-    return m;
-  }
-  
-  /** Convert the Matrix to a string. */
-  @Override
-  public String toString() {
-    StringBuffer sb = new StringBuffer();
-    for (int i=0; i<m.length; i++) {
-      for (int j=0; j<m[0].length; j++) {
-        sb.append(String.format("%+.6e\t", m[i][j]));
-      }
-      sb.append("\n");
+    /** Zero matrix (rows×cols) */
+    public Matrix(int rows, int cols) {
+        m = new double[rows][cols];
     }
-    return sb.toString();
-  }
 
-  /** Returns the number of rows in the Matrix. */
-  public int getNumberOfRows() {
-    return m.length;
-  }
-
-  /** Returns the number of columns in the Matrix. */
-  public int getNumberOfColumns() {
-    try {
-      return m[0].length; 
-    } catch (ArrayIndexOutOfBoundsException e) {
-      return 0;
+    /** Constant-filled matrix */
+    public Matrix(int rows, int cols, double value) {
+        m = new double[rows][cols];
+        for (int i = 0; i < rows; i++)
+            for (int j = 0; j < cols; j++)
+                m[i][j] = value;
     }
-  }
-  
-  /** Returns the value at {@code row} and {@code col}. */
-  public double getValue(int row, int col) {
-    return m[row][col];
-  }
 
-  /** Sets the value at {@code row} and {@code col} to be {@code value}. */
-  public void setValue(int row, int col, double value) {
-    m[row][col] = value;
-  }  
-
-  /** Returns the transpose of the Matrix. */
-  public Matrix transpose() {
-    Matrix mt = new Matrix(m[0].length, m.length);
-    for (int i=0; i<m.length; i++)
-      for (int j=0; j<m[0].length; j++)
-        mt.setValue(j, i, m[i][j]);
-    return mt;
-  }
-
-  /** Returns whether the Matrix is a square Matrix. */
-  public boolean isSquare() {
-    return m.length == m[0].length;
-  }
-  
-  /** Returns the determinant of the Matrix. */
-  public double getDeterminant() {
-    if (isSquare()) {
-      makeLU();
-      double det = 1.0;
-      for (int i=0; i<m.length; i++)
-        det *= U.getValue(i,i);
-      // 's' is the number of row and column exchanges in LU Decomposition
-      // but we are currently not using pivoting
-      int s = 0;
-      return Math.pow(-1.0, s)*det;
-    } else {
-      return Double.NaN;
+    /** Random uniform(min–max) matrix */
+    public Matrix(int rows, int cols, double min, double max) {
+        Random rand = new Random();
+        m = new double[rows][cols];
+        for (int i = 0; i < rows; i++)
+            for (int j = 0; j < cols; j++)
+                m[i][j] = (max - min) * rand.nextDouble() + min;
     }
-  }
-  
-  /** Returns the lower-triangular Matrix, L, from a LU Decomposition */
-  public Matrix getL() {
-    if (L==null) makeLU();
-    return L;
-  }
-  
-  /** Returns the upper-triangular Matrix, U, from a LU Decomposition */
-  public Matrix getU() {
-    if (U==null) makeLU();
-    return U;
-  }
 
-  /** Returns the orthogonal Matrix, Q, from a QR Decomposition */
-  public Matrix getQ() {
-    if (Q==null) makeQR();
-    return Q;
-  }
-  
-  /** Returns the upper-triangular Matrix, R, from a QR Decomposition */
-  public Matrix getR() {
-    if (R==null) makeQR();
-    return R;
-  }
+    /** From Double[][] */
+    public Matrix(Double[][] m) {
+        this.m = new double[m.length][m[0].length];
+        for (int i = 0; i < m.length; i++)
+            for (int j = 0; j < m[0].length; j++)
+                this.m[i][j] = m[i][j];
+    }
 
-  /** Returns the inverse of the Matrix, if it exists. */
-  public Matrix getInverse() {
-    if (isSquare()) {
-      Matrix inv = new Matrix(m.length);
-      Matrix bb = new Matrix(m.length);
-      for (int i=0; i<m.length; i++) {
-        inv.setColumn(i, Matrix.solve(this, bb.getColumn(i)));
+    /** From Double[] vector (1×N) */
+    public Matrix(Double[] vector) {
+        m = new double[1][vector.length];
+        for (int i = 0; i < vector.length; i++)
+            m[0][i] = vector[i];
+    }
+
+    // ==== Public static operations ====
+
+    /** C = A⋅B */
+    public static Matrix multiply(Matrix a, Matrix b) {
+        if (a.getNumberOfColumns() != b.getNumberOfRows()) {
+            throw new IllegalArgumentException(
+                String.format("Cannot multiply %dx%d by %dx%d",
+                    a.getNumberOfRows(), a.getNumberOfColumns(),
+                    b.getNumberOfRows(), b.getNumberOfColumns()));
+        }
+        Matrix c = new Matrix(a.getNumberOfRows(), b.getNumberOfColumns());
+        for (int i = 0; i < a.getNumberOfRows(); i++) {
+            for (int j = 0; j < b.getNumberOfColumns(); j++) {
+                double sum = 0.0;
+                for (int k = 0; k < b.getNumberOfRows(); k++) {
+                    sum += a.getValue(i, k) * b.getValue(k, j);
+                }
+                c.setValue(i, j, sum);
+            }
+        }
+        return c;
+    }
+
+    /**
+     * Solve b = A x for x
+     */
+    public static Matrix solve(Matrix A, Matrix b) {
+        if (b.getNumberOfColumns() > 1) b = b.transpose();
+        if (b.getNumberOfRows() != A.getNumberOfRows()) {
+            throw new IllegalArgumentException("Dimension mismatch in solve()");
+        }
+        if (A.getNumberOfRows() < A.getNumberOfColumns()) {
+            Matrix At = A.transpose();
+            return multiply(multiply(At, multiply(A, At).getInverse()), b);
+        }
+
+        Double[] x = new Double[A.getNumberOfColumns()];
+        if (A.isSquare()) {
+            if (!calculatingInverse) A.makeLU();
+            // forward substitute Ly = b
+            double[] y = new double[b.getNumberOfRows()];
+            y[0] = b.getValue(0, 0);
+            for (int i = 1; i < y.length; i++) {
+                y[i] = b.getValue(i, 0);
+                for (int j = 0; j < i; j++)
+                    y[i] -= A.getL().getValue(i, j) * y[j];
+            }
+            // backward substitute Ux = y
+            for (int i = x.length - 1; i >= 0; i--) {
+                x[i] = y[i];
+                for (int j = i + 1; j < x.length; j++)
+                    x[i] -= A.getU().getValue(i, j) * x[j];
+                x[i] /= A.getU().getValue(i, i);
+            }
+        } else {
+            A.makeQR();
+            Matrix d = multiply(A.getQ().transpose(), b);
+            for (int i = x.length - 1; i >= 0; i--) {
+                x[i] = d.getValue(i, 0);
+                for (int j = i + 1; j < x.length; j++)
+                    x[i] -= A.getR().getValue(i, j) * x[j];
+                x[i] /= A.getR().getValue(i, i);
+            }
+        }
+        return new Matrix(x).transpose();
+    }
+
+    // ==== Public instance methods ====
+
+    public double[][] primitive() { return m; }
+
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        for (double[] row : m) {
+            for (double v : row) {
+                sb.append(String.format("%+.6e\t", v));
+            }
+            sb.append("\n");
+        }
+        return sb.toString();
+    }
+
+    public int getNumberOfRows() { return m.length; }
+    public int getNumberOfColumns() {
+        return (m.length == 0) ? 0 : m[0].length;
+    }
+    public double getValue(int row, int col) { return m[row][col]; }
+    public void setValue(int row, int col, double value) { m[row][col] = value; }
+    public boolean isSquare() { return m.length == m[0].length; }
+
+    public Matrix transpose() {
+        Matrix t = new Matrix(m[0].length, m.length);
+        for (int i = 0; i < m.length; i++)
+            for (int j = 0; j < m[0].length; j++)
+                t.setValue(j, i, m[i][j]);
+        return t;
+    }
+
+    // ==== LU with Partial Pivoting ====
+
+    /**
+     * Builds L and U with partial pivoting: M = P⋅L⋅U.
+     * We track the number of row swaps in pivotCount.
+     */
+    private void makeLU() {
+        int n = m.length;
+        L = new Matrix(n);
+        U = new Matrix(this);
+        pivotCount = 0;
+
+        for (int k = 0; k < n; k++) {
+            // find pivot row
+            int pivot = k;
+            double max = Math.abs(U.getValue(k, k));
+            for (int i = k + 1; i < n; i++) {
+                double v = Math.abs(U.getValue(i, k));
+                if (v > max) {
+                    max = v; pivot = i;
+                }
+            }
+            // swap rows if needed
+            if (pivot != k) {
+                swapRows(U.m, k, pivot);
+                swapRows(L.m, k, pivot, k);
+                pivotCount++;
+            }
+            // elimination
+            for (int i = k + 1; i < n; i++) {
+                double factor = U.getValue(i, k) / U.getValue(k, k);
+                L.setValue(i, k, factor);
+                for (int j = k; j < n; j++) {
+                    U.setValue(i, j, U.getValue(i, j) - factor * U.getValue(k, j));
+                }
+            }
+        }
+    }
+
+    /** Swap two entire rows in a 2D array */
+    private void swapRows(double[][] A, int r1, int r2) {
+        double[] tmp = A[r1];
+        A[r1] = A[r2];
+        A[r2] = tmp;
+    }
+
+    /** Swap two rows up to a given column in L (to preserve previous L entries) */
+    private void swapRows(double[][] A, int r1, int r2, int uptoCol) {
+        for (int j = 0; j < uptoCol; j++) {
+            double tmp = A[r1][j];
+            A[r1][j] = A[r2][j];
+            A[r2][j] = tmp;
+        }
+    }
+
+    /** Returns the lower-triangular factor L */
+    public Matrix getL() {
+        if (L == null) makeLU();
+        return L;
+    }
+
+    /** Returns the upper-triangular factor U */
+    public Matrix getU() {
+        if (U == null) makeLU();
+        return U;
+    }
+
+    /** Compute determinant = (−1)^pivotCount × ∏ diagonal(U) */
+    public double getDeterminant() {
+        if (!isSquare()) return Double.NaN;
+        makeLU();
+        double det = Math.pow(-1.0, pivotCount);
+        for (int i = 0; i < m.length; i++) {
+            det *= U.getValue(i, i);
+        }
+        return det;
+    }
+
+    // ==== QR Decomposition ====
+
+    private void makeQR() {
+        int rows = m.length, cols = m[0].length;
+        Q = new Matrix(rows, cols);
+        R = new Matrix(cols, cols);
+        Matrix A = new Matrix(this);
+
+        for (int k = 0; k < cols; k++) {
+            double norm = 0;
+            for (int i = 0; i < rows; i++) norm += A.getValue(i, k) * A.getValue(i, k);
+            norm = Math.sqrt(norm);
+            R.setValue(k, k, norm);
+            for (int i = 0; i < rows; i++) {
+                Q.setValue(i, k, A.getValue(i, k) / norm);
+            }
+            for (int j = k + 1; j < cols; j++) {
+                double dot = 0;
+                for (int i = 0; i < rows; i++) {
+                    dot += A.getValue(i, j) * Q.getValue(i, k);
+                }
+                R.setValue(k, j, dot);
+                for (int i = 0; i < rows; i++) {
+                    A.setValue(i, j, A.getValue(i, j) - dot * Q.getValue(i, k));
+                }
+            }
+        }
+    }
+
+    public Matrix getQ() {
+        if (Q == null) makeQR();
+        return Q;
+    }
+
+    public Matrix getR() {
+        if (R == null) makeQR();
+        return R;
+    }
+
+    /** Returns the inverse via repeated solves */
+    public Matrix getInverse() {
+        if (!isSquare()) {
+            throw new IllegalArgumentException("Cannot invert non-square matrix");
+        }
+        Matrix inv = new Matrix(m.length);
+        Matrix e = new Matrix(m.length); // identity columns
         calculatingInverse = true;
-      }
-      calculatingInverse = false;
-      return inv;
-    } else {
-      throw new IllegalArgumentException(
-        String.format("ERROR! Cannot calculate the inverse of a "
-          + "%dx%d matrix, it must be a square Matrix", 
-          m.length, m[0].length));
-    }
-  }
-
-  
-  /*
-   * 
-   * Private methods.
-   * 
-   * 
-   */
-
-  /** 
-   * Create the Lower, L, and Upper, U, triangular matrices, such that M=LU.
-   * Does not use pivoting. 
-   */
-  private void makeLU() {
-    L = new Matrix(m.length); // create an identity matrix
-    U = new Matrix(this); // copy the values of this matrix
-    double val;
-    for (int k=0; k<m[0].length; k++) {
-      for (int i=k+1; i<m.length; i++) {
-        val = U.getValue(i,k)/U.getValue(k,k);
-        L.setValue(i, k, val);
-        for (int j=k; j<m[0].length; j++)
-          U.setValue(i, j, U.getValue(i,j)-val*U.getValue(k,j));
-      }
-    }    
-  }
-
-  /** 
-   * Computes the QR Factorization matrices using a modified 
-   * Gram–Schmidt process.<p>
-   * 
-   * @see https://people.inf.ethz.ch/gander/papers/qrneu.pdf
-   */
-  private void makeQR() {
-    
-    Q = new Matrix(m.length, m[0].length);
-    R = new Matrix(m[0].length, m[0].length);
-    Matrix A = new Matrix(this);
-    
-    double s;
-    for (int k=0; k<m[0].length; k++) {
-      s = 0.0;
-      for (int j=0; j<m.length; j++)
-        s += Math.pow(A.getValue(j, k), 2);
-      s = Math.sqrt(s);
-      R.setValue(k, k, s);
-      for (int j=0; j<m.length; j++)
-        Q.setValue(j, k, A.getValue(j, k)/s);
-      for (int i=k+1; i<m[0].length; i++) {
-        s = 0.0;
-        for (int j=0; j<m.length; j++)
-          s += A.getValue(j, i)*Q.getValue(j, k);
-        R.setValue(k, i, s);
-        for (int j=0; j<m.length; j++)
-          A.setValue(j, i, A.getValue(j,i)-R.getValue(k,i)*Q.getValue(j,k));
-      }
-    }
-  }
-
-  /** Returns a copy of the specified column. */
-  private Matrix getColumn(int column) {
-    if (column < m[0].length) {
-      Matrix c = new Matrix(m.length, 1);
-      for (int i=0; i<m.length; i++)
-        c.setValue(i, 0, m[i][column]);
-      return c;
-    } else {
-      throw new IllegalArgumentException(
-        String.format("ERROR! Cannot get column %d in the Matrix "
-          + "since it is > the number of columns in the "
-          + "Matrix, %d.", column, m[0].length));
-    }
-  }
-
-  /** 
-   * Replace the values in the specified column of the matrix to the values in
-   * {@code vector}.
-   *  
-   * The {@code vector} must be a 1D vector, can have dimension 1xN or Nx1.
-   */
-  private void setColumn(int column, Matrix vector) {
-    
-    // make sure that 'vector' is either a 1xN or Nx1 vector and not a NxM Matrix
-    if ( (vector.getNumberOfColumns() != 1) && (vector.getNumberOfRows() != 1) ) {
-      throw new IllegalArgumentException(
-        String.format("ERROR! Require a 1D vector to replace the values "
-          + "in a column of a matrix. Got a %dx%d vector.", 
-          vector.getNumberOfRows(), vector.getNumberOfColumns()));
-    }
-    
-    // make sure we have a column vector
-    if (vector.getNumberOfColumns() != 1) {
-      vector = vector.transpose();
-    }
-    
-    // make sure the 'vector' has the correct length
-    if (vector.getNumberOfRows() != m.length) {
-      throw new IllegalArgumentException(
-        String.format("ERROR! Cannot replace a Matrix column of length "
-          + "%d, with a column vector of length %d.",
-          m.length, vector.getNumberOfRows()));
+        for (int i = 0; i < m.length; i++) {
+            inv.setColumn(i, solve(this, e.getColumn(i)));
+        }
+        calculatingInverse = false;
+        return inv;
     }
 
-    // make sure the column is valid
-    if (column >= m[0].length) {
-      throw new IllegalArgumentException(
-        String.format("ERROR! Cannot replace column %d in the Matrix "
-        + "since it is > the number of columns in the matrix.", column));
+    // ==== Helper for inverse ====
+
+    /** Extract column as vector */
+    private Matrix getColumn(int col) {
+        Matrix c = new Matrix(m.length, 1);
+        for (int i = 0; i < m.length; i++) {
+            c.setValue(i, 0, m[i][col]);
+        }
+        return c;
     }
 
-    for (int i=0; i<m.length; i++)
-      m[i][column] = vector.getValue(i,0);
-  }
-
+    /** Replace column */
+    private void setColumn(int col, Matrix vector) {
+        if (vector.getNumberOfColumns() != 1 && vector.getNumberOfRows() != 1) {
+            throw new IllegalArgumentException("Vector must be 1D");
+        }
+        if (vector.getNumberOfColumns() != 1) {
+            vector = vector.transpose();
+        }
+        if (vector.getNumberOfRows() != m.length) {
+            throw new IllegalArgumentException("Column length mismatch");
+        }
+        for (int i = 0; i < m.length; i++) {
+            m[i][col] = vector.getValue(i, 0);
+        }
+    }
 }

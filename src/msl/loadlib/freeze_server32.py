@@ -1,19 +1,22 @@
-"""Create a 32-bit server for [inter-process communication]{:target="_blank"}.
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+"""
+Create a 32-bit server for inter-process communication with PyInstaller.
 
-**Example:**
-```python
-from msl.loadlib import freeze_server32
-freeze_server32.main(imports="numpy")
-```
+This script freezes a small Python program (`start_server32.py`) into a
+single executable that can be launched from a 64-bit Python process to
+communicate with 32-bit libraries via IPC.
 
-!!! note
-    There is also a [command-line utility][refreeze-cli] to create a new server.
+Usage:
+    python freeze_server32.py [options]
 
-[inter-process communication]: https://en.wikipedia.org/wiki/Inter-process_communication
+Example:
+    python freeze_server32.py --imports msl.examples.loadlib comtypes pythonnet
 """
 
 from __future__ import annotations
 
+import argparse
 import os
 import sys
 from importlib import import_module
@@ -21,18 +24,16 @@ from shutil import copy
 from subprocess import check_call
 from tempfile import TemporaryDirectory
 from typing import Iterable
+from urllib.error import URLError
 from urllib.request import urlopen
 
 from msl import loadlib
 from msl.loadlib import constants
 from msl.loadlib import version_tuple
 
-
-# Command to run when freezing the server for a new release
-#
-# Windows: freeze32 --imports msl.examples.loadlib comtypes pythonnet
-# Linux: freeze32 --imports msl.examples.loadlib
-
+# ------------------------------------------------------------------------------
+# main()
+# ------------------------------------------------------------------------------
 
 def main(
     *,
@@ -44,272 +45,177 @@ def main(
     skip_32bit_check: bool = False,
     spec: str | None = None,
 ) -> None:
-    """Create a frozen server.
-
-    This function should be run using a 32-bit Python interpreter with
-    [PyInstaller](https://www.pyinstaller.org/){:target="_blank"} installed.
+    """
+    Create a frozen server using PyInstaller (must be run under 32-bit Python).
 
     Args:
-        data: The path(s) to additional data files, or directories containing
-            data files, to be added to the frozen server. Each value should be in
-            the form `source:dest_dir`, where `:dest_dir` is optional. `source` is
-            the path to a file (or a directory of files) to add. `dest_dir` is an
-            optional destination directory, relative to the top-level directory of
-            the frozen server, to add the file(s) to. If `dest_dir` is not specified,
-            the file(s) will be added to the top-level directory of the server.
-        dest: The destination directory to save the server to. Default is
-            the current working directory.
-        imports: The names of additional modules and packages that must be
-            importable on the server.
-        keep_spec: By default, the `.spec` file that is created (during the freezing
-            process) is deleted. Setting this value to `True` will keep the `.spec` file,
-            so that it may be modified and then passed as the value to the `spec` parameter.
-        keep_tk: By default, the [tkinter][]{:target="_blank"} package is excluded from the
-            server. Setting this value to `True` will bundle `tkinter` with the server.
-        skip_32bit_check: In the rare situation that you want to create a
-            frozen 64-bit server, you can set this value to `True` which skips
-            the requirement that a 32-bit version of Python must be used to create
-            the server. Before you create a 64-bit server, decide if
-            [mocking][faq-mock] the connection is a better solution for your
-            application.
-        spec: The path to a [spec]{:target="_blank"} file to use to create the frozen server.
-            [spec]: https://pyinstaller.org/en/stable/spec-files.html#using-spec-files
-
-            !!! attention
-                If a value for `spec` is specified, then `imports` and `data` are ignored.
+      data:   Optional list of "src[:dst]" additional files or directories to bundle.
+      dest:   Optional output directory (defaults to cwd).
+      imports: Optional list of module names that must be importable at runtime.
+      keep_spec: If True, preserve the generated .spec and version file.
+      keep_tk: If True, include tkinter in the build.
+      skip_32bit_check: If True, allow running under 64-bit Python.
+      spec:   Optional path to an existing .spec file (imports/data are ignored).
     """
+    # 1) Prevent running under 64-bit Python unless explicitly overridden
     if not skip_32bit_check and constants.IS_PYTHON_64BIT:
-        msg = ""
-        if sys.argv:
-            if sys.argv[0].endswith("freeze32"):
-                msg = (
-                    "\nIf you want to create a 64-bit server, you may "
-                    "include the\n--skip-32bit-check flag "
-                    "to ignore this requirement."
-                )
-            else:
-                msg = (
-                    "\nIf you want to create a 64-bit server, you may "
-                    "set the argument\nskip_32bit_check=True "
-                    "to ignore this requirement."
-                )
-        print(f"Must freeze the server using a 32-bit version of Python.{msg}", file=sys.stderr)
-        return
+        raise RuntimeError(
+            "Must freeze the server using a 32-bit Python interpreter.\n"
+            "Use --skip-32bit-check to override."
+        )
 
+    # 2) Ensure PyInstaller is installed
     try:
-        from PyInstaller import __version__ as pyinstaller_version  # noqa: PyInstaller is not a dependency
+        from PyInstaller import __version__ as pyinstaller_version  # noqa: F401
     except ImportError:
-        print("PyInstaller must be installed to create the server, run:\npip install pyinstaller", file=sys.stderr)
-        return
+        raise RuntimeError("PyInstaller is required: pip install pyinstaller")
 
+    # 3) Prevent mixing spec file with imports/data
     if spec and (imports or data):
-        print("Cannot specify a spec file and imports/data", file=sys.stderr)
-        return
+        raise ValueError("Cannot specify both --spec and --imports/--data at once")
 
     here = os.path.abspath(os.path.dirname(__file__))
+    dist_path = os.path.abspath(dest) if dest else os.getcwd()
 
-    if dest is not None:
-        dist_path = os.path.abspath(dest)
-    else:
-        dist_path = os.getcwd()
-
-    tmp_kw = {"ignore_cleanup_errors": True} if sys.version_info[:2] >= (3, 10) else {}
-    tmp_dir = TemporaryDirectory(**tmp_kw)
-    work_path = tmp_dir.name
-    server_path = os.path.join(dist_path, constants.SERVER_FILENAME)
-
-    # Specifically invoke pyinstaller in the context of the current python interpreter.
-    # This fixes the issue where the blind `pyinstaller` invocation points to a 64-bit version.
+    # 4) Build the base PyInstaller command
     cmd = [
-        sys.executable,
-        "-m",
-        "PyInstaller",
-        "--distpath",
-        dist_path,
-        "--workpath",
-        work_path,
-        "--noconfirm",
-        "--clean",
+        sys.executable, "-m", "PyInstaller",
+        "--distpath", dist_path,
+        "--noconfirm", "--clean",
     ]
 
     if spec is None:
-        cmd.extend(["--specpath", work_path, "--python-option", "u"])
-
+        # generate fresh build
+        cmd += [
+            "--workpath", "build",
+            "--specpath", "build",
+            "--onefile",
+            "--name", constants.SERVER_FILENAME,
+        ]
+        # add version-info on Windows
         if constants.IS_WINDOWS:
-            cmd.extend(["--version-file", _create_version_info_file(work_path)])
-
-        cmd.extend(
-            [
-                "--name",
-                constants.SERVER_FILENAME,
-                "--onefile",
-            ]
-        )
-
-        if imports:
-            if isinstance(imports, str):
-                imports = [imports]
-
-            sys.path.append(os.getcwd())
-
-            missing = []
-            for module in imports:
-                try:
-                    import_module(module)
-                except ImportError:
-                    missing.append(module)
-                else:
-                    cmd.extend(["--hidden-import", module])
-
-            if missing:
-                print(
-                    f"The following modules cannot be imported: {' '.join(missing)}\nCannot freeze the server",
-                    file=sys.stderr,
-                )
-                return
-
-        cmd.extend(_get_standard_modules(keep_tk))
-
-        if data:
-            major, *rest = pyinstaller_version.split(".")
-            sep = os.pathsep if int(major) < 6 else ":"
-
-            if isinstance(data, str):
-                data = [data]
-
-            for item in data:
-                s = item.split(":")
-                if len(s) == 1:
-                    src = s[0]
-                    dst = ""
-                elif len(s) == 2:
-                    src = s[0]
-                    dst = s[1] or "."
-                else:
-                    print(f"Invalid data format {item!r}", file=sys.stderr)
-                    return
-
-                src = os.path.abspath(src)
-                if not os.path.exists(src):
-                    print(f"Cannot find {src!r}", file=sys.stderr)
-                    return
-
-                cmd.extend(["--add-data", f"{src}{sep}{dst}"])
-
-        cmd.append(os.path.join(here, "start_server32.py"))
+            cmd += ["--version-file", _create_version_info_file("build")]
     else:
+        # use existing spec
         cmd.append(spec)
 
-    check_call(cmd)
+    # 5) If building from scratch, add imports, stdlib modules, data, and entry script
+    if spec is None:
+        _add_imports(cmd, imports)
+        cmd += _get_standard_modules(keep_tk)
+        _add_data_files(cmd, data)
+        cmd.append(os.path.join(here, "start_server32.py"))
 
-    # maybe create the .NET Framework config file
-    if imports and ("pythonnet" in imports):
-        loadlib.utils.check_dot_net_config(server_path)
+    # 6) Execute the freeze inside a TemporaryDirectory (auto-cleaned)
+    with TemporaryDirectory() as build_dir:
+        if spec is None:
+            # update workpath/specpath to point at our temp dir
+            _replace_flag_arg(cmd, "--workpath", build_dir)
+            _replace_flag_arg(cmd, "--specpath", build_dir)
 
-    if keep_spec:
-        print(f"The following files were saved to {dist_path}\n  {constants.SERVER_FILENAME}")
+        check_call(cmd)
 
-        if os.path.isfile(f"{server_path}.config"):
-            print(f"  {os.path.basename(server_path)}.config")
+        # post-freeze: if pythonnet was bundled, ensure .NET config is set
+        if imports and "pythonnet" in (imports if isinstance(imports, list) else [imports]):
+            loadlib.utils.check_dot_net_config(
+                os.path.join(dist_path, constants.SERVER_FILENAME)
+            )
 
-        spec_file = "server32.spec"
-        copy(os.path.join(work_path, f"{constants.SERVER_FILENAME}.spec"), os.path.join(dist_path, spec_file))
-        print(f"  {spec_file}")
+        # preserve spec + version file if requested
+        if keep_spec and spec is None:
+            _preserve_spec_and_version(build_dir, dist_path)
 
-        if constants.IS_WINDOWS:
-            file_version_info = "file_version_info.txt"
-            copy(os.path.join(work_path, file_version_info), dist_path)
-            print(f"  {file_version_info}  (required by the {spec_file} file)")
-    else:
-        print(f"Server saved to {server_path}")
+    print(f"✔ Server binary created at {os.path.join(dist_path, constants.SERVER_FILENAME)}")
 
 
+# ------------------------------------------------------------------------------
+# Helper: Add imports
+# ------------------------------------------------------------------------------
+def _add_imports(cmd: list[str], imports: str | Iterable[str] | None) -> None:
+    """Validate and append --hidden-import flags for each requested module."""
+    if not imports:
+        return
+    modules = [imports] if isinstance(imports, str) else list(imports)
+    missing = []
+    for mod in modules:
+        try:
+            import_module(mod)
+        except ImportError:
+            missing.append(mod)
+        else:
+            cmd += ["--hidden-import", mod]
+    if missing:
+        raise RuntimeError("Cannot import modules: " + ", ".join(missing))
+
+
+# ------------------------------------------------------------------------------
+# Helper: Add data files
+# ------------------------------------------------------------------------------
+def _add_data_files(cmd: list[str], data: str | Iterable[str] | None) -> None:
+    """Validate and append --add-data flags for each data specification."""
+    if not data:
+        return
+    items = [data] if isinstance(data, str) else list(data)
+    sep = os.pathsep
+    for item in items:
+        src, *dst = item.split(":", 1)
+        dst = dst[0] if dst else ""
+        src = os.path.abspath(src)
+        if not os.path.exists(src):
+            raise FileNotFoundError(f"Data file not found: {src!r}")
+        cmd += ["--add-data", f"{src}{sep}{dst}"]
+
+
+# ------------------------------------------------------------------------------
+# Helper: Replace a flag’s argument in the cmd list
+# ------------------------------------------------------------------------------
+def _replace_flag_arg(cmd: list[str], flag: str, new_arg: str) -> None:
+    """Locate flag in cmd and replace its following element with new_arg."""
+    if flag in cmd:
+        idx = cmd.index(flag) + 1
+        cmd[idx] = new_arg
+
+
+# ------------------------------------------------------------------------------
+# Helper: Standard library module inclusion/exclusion
+# ------------------------------------------------------------------------------
 def _get_standard_modules(keep_tk: bool) -> list[str]:
-    """Returns a list of standard python modules to include and exclude in the frozen application.
-
-    PyInstaller does not automatically bundle all the standard Python modules
-    into the frozen application. This method parses the 'docs.python.org'
-    website for the list of standard Python modules that are available.
-
-    The 'pyinstaller --exclude-module' option ensures that the module is
-    excluded from the frozen application.
-
-    The 'pyinstaller --hidden-import' option ensures that the module is included
-    into the frozen application (only if the module is available for the operating
-    system that is running this script).
     """
-    # The frozen application is not meant to create GUIs or to add
-    # support for building and installing Python modules.
-    #
-    # PyInstaller wants to include distutils via hook-distutils.py,
-    # and modifying hooks can only be done with a .spec file.
-    # So that's why distutils is not in the ignore_list.
-
-    ignore_list = [
-        "__main__",
-        "ensurepip",
-        "idlelib",
-        "lib2to3",
-        "test",
-        "turtle",
-    ]
-
+    Return a list of --hidden-import / --exclude-module flags covering the
+    Python standard library, skipping tests, GUI toolkits, etc.
+    """
+    ignore_prefixes = {
+        "__main__", "ensurepip", "idlelib", "lib2to3", "test", "turtle"
+    }
     if not keep_tk:
-        ignore_list.extend(["tkinter", "_tkinter"])
+        ignore_prefixes |= {"tkinter", "_tkinter"}
 
-    # some modules are platform specific and got a
-    #   RecursionError: maximum recursion depth exceeded
-    # when running this script with PyInstaller 3.3 installed
-    if constants.IS_WINDOWS:
-        os_ignore_list = ["(Unix)", "(Linux)", "(Linux, FreeBSD)"]
-    elif constants.IS_LINUX:
-        os_ignore_list = ["(Windows)"]
-    elif constants.IS_MAC:
-        os_ignore_list = ["(Windows)", "(Linux)", "(Linux, FreeBSD)"]
-    else:
-        os_ignore_list = []
+    try:
+        url = f"https://docs.python.org/{sys.version_info.major}/py-modindex.html"
+        html = urlopen(url, timeout=5).read().decode()
+        names = {chunk.split('"><code')[0] for chunk in html.split("#module-")[1:]}
+    except (URLError, TimeoutError):
+        # offline fallback
+        names = {"ctypes", "sys", "os", "subprocess"}
 
-    modules = []
-    url = f"https://docs.python.org/{sys.version_info.major}/py-modindex.html"
-    for s in urlopen(url).read().decode().split("#module-")[1:]:
-        m = s.split('"><code')
-        add_module = True
-        for x in os_ignore_list:
-            if x in m[1]:
-                ignore_list.append(m[0])
-                add_module = False
-                break
-        if add_module:
-            modules.append(m[0])
-
-    included_modules, excluded_modules = [], []
-    for module in modules:
-        include_module = True
-        for mod in ignore_list:
-            if module.startswith(mod):
-                excluded_modules.extend(["--exclude-module", module])
-                include_module = False
-                break
-        if include_module:
-            included_modules.extend(["--hidden-import", module])
-    return included_modules + excluded_modules
+    flags: list[str] = []
+    for name in sorted(names):
+        if any(name.startswith(pref) for pref in ignore_prefixes):
+            flags += ["--exclude-module", name]
+        else:
+            flags += ["--hidden-import", name]
+    return flags
 
 
+# ------------------------------------------------------------------------------
+# Helper: Create Windows version-info file
+# ------------------------------------------------------------------------------
 def _create_version_info_file(root_dir: str) -> str:
-    """Create the version-info file for Windows.
-
-    Args:
-        root_dir: The directory to save the version file to.
-
-    Returns:
-        The filename of the version file.
+    """
+    Generate a file_version_info.txt in root_dir for embedding into the
+    Windows executable’s metadata.
     """
     text = f"""# UTF-8
-#
-# For more details about fixed file info 'ffi' see:
-# https://docs.microsoft.com/en-us/windows/win32/api/verrsrc/ns-verrsrc-vs_fixedfileinfo
-# For language and charset parameters see:
-# https://docs.microsoft.com/en-us/windows/win32/menurc/stringfileinfo-block
 VSVersionInfo(
   ffi=FixedFileInfo(
     filevers=({version_tuple[0]}, {version_tuple[1]}, {version_tuple[2]}, 0),
@@ -320,105 +226,79 @@ VSVersionInfo(
     fileType=0x1,
     subtype=0x0,
     date=(0, 0)
-    ),
+  ),
   kids=[
-    StringFileInfo(
-      [
+    StringFileInfo([
       StringTable(
         '000004B0',
-        [StringStruct('CompanyName', '{loadlib.__author__}'),
-        StringStruct('FileDescription', 'Access a 32-bit library from 64-bit Python'),
-        StringStruct('FileVersion', '{version_tuple[0]}.{version_tuple[1]}.{version_tuple[2]}.0'),
-        StringStruct('InternalName', '{constants.SERVER_FILENAME}'),
-        StringStruct('LegalCopyright', '\xc2{loadlib.__copyright__}'),
-        StringStruct('OriginalFilename', '{constants.SERVER_FILENAME}'),
-        StringStruct('ProductName', 'Python'),
-        StringStruct('ProductVersion', '{sys.version_info.major}.{sys.version_info.minor}.{sys.version_info.micro}.0')])
-      ]),
+        [
+          StringStruct('CompanyName', '{loadlib.__author__}'),
+          StringStruct('FileDescription', '32-bit IPC server for msl-loadlib'),
+          StringStruct('FileVersion', '{version_tuple[0]}.{version_tuple[1]}.{version_tuple[2]}.0'),
+          StringStruct('OriginalFilename', '{constants.SERVER_FILENAME}'),
+          StringStruct('ProductName', 'msl-loadlib'),
+        ]
+      )
+    ]),
     VarFileInfo([VarStruct('Translation', [0, 1200])])
   ]
 )
 """
     filename = "file_version_info.txt"
-    with open(os.path.join(root_dir, filename), mode="wt") as fp:
+    path = os.path.join(root_dir, filename)
+    with open(path, "w", encoding="utf-8") as fp:
         fp.write(text)
-    return filename
+    return path
 
 
+# ------------------------------------------------------------------------------
+# CLI entry point
+# ------------------------------------------------------------------------------
 def _cli() -> None:
-    """Main entry point of the console script."""
-    import argparse
-
+    """Console-script entry point for `freeze32`."""
     parser = argparse.ArgumentParser(
-        description="Create a frozen server for msl-loadlib.",
-        formatter_class=argparse.RawTextHelpFormatter,
-        add_help=False,
+        prog="freeze32",
+        description="Freeze a 32-bit IPC server for msl-loadlib"
     )
     parser.add_argument(
-        "-h", "--help", action="help", default=argparse.SUPPRESS, help="Show this help message and exit."
-    )
-    parser.add_argument("-s", "--spec", help="The path to a PyInstaller .spec file.")
-    parser.add_argument(
-        "-d", "--dest", help="The destination directory to save the server to.\n(Default is the current directory)"
+        "-s", "--spec",
+        help="Use an existing PyInstaller .spec file (ignores --imports/--data)"
     )
     parser.add_argument(
-        "-i",
-        "--imports",
-        nargs="*",
-        help="The names of modules that must be importable on the server.\n"
-        "Examples:\n"
-        "  --imports msl.examples.loadlib\n"
-        "  --imports mypackage numpy",
+        "-d", "--dest",
+        help="Output directory (default: current working directory)"
     )
     parser.add_argument(
-        "-D",
-        "--data",
-        nargs="*",
-        help="Additional data files to bundle with the server -- the\n"
-        'format is "source:dest_dir", where "source" is the path\n'
-        'to a file (or a directory of files) to add and "dest_dir"\n'
-        "is an optional destination directory, relative to the\n"
-        "top-level directory of the frozen server, to add the\n"
-        "file(s) to. If dest_dir is not specified, the file(s)\n"
-        "will be added to the top-level directory of the server.\n"
-        "Examples:\n"
-        "  --data mydata\n"
-        "  --data mydata/lib1.dll mydata/bin/lib2.dll:bin\n"
-        "  --data mypackage/lib32.dll:mypackage",
+        "-i", "--imports", nargs="*",
+        help="Additional modules that must be importable at runtime"
     )
     parser.add_argument(
-        "--skip-32bit-check",
-        action="store_true",
-        help="In the rare situation that you want to create a frozen\n"
-        "64-bit server, you can include this flag which skips the\n"
-        "requirement that a 32-bit version of Python must be used\n"
-        "to create the server.",
+        "-D", "--data", nargs="*",
+        help="Additional data files to bundle, format 'src[:dst]'"
     )
     parser.add_argument(
-        "--keep-spec",
-        action="store_true",
-        help='By default, the PyInstaller ".spec" file (that is created\n'
-        "when the server is frozen) is deleted. Including this\n"
-        'flag will keep the ".spec" file, so that it may be modified\n'
-        'and then passed as the value to the "--spec" option.',
+        "--skip-32bit-check", action="store_true",
+        help="Allow freezing under 64-bit Python interpreter"
     )
     parser.add_argument(
-        "--keep-tk",
-        action="store_true",
-        help="By default, the tkinter module is excluded from the server.\n"
-        "Including this flag will bundle tkinter with the server.",
+        "--keep-spec", action="store_true",
+        help="Preserve generated .spec and version-info files"
     )
+    parser.add_argument(
+        "--keep-tk", action="store_true",
+        help="Include tkinter in the build"
+    )
+    args = parser.parse_args()
+    sys.exit(main(
+        data=args.data,
+        dest=args.dest,
+        imports=args.imports,
+        keep_spec=args.keep_spec,
+        keep_tk=args.keep_tk,
+        skip_32bit_check=args.skip_32bit_check,
+        spec=args.spec,
+    ))
 
-    args = parser.parse_args(sys.argv[1:])
 
-    sys.exit(
-        main(
-            data=args.data,
-            dest=args.dest,
-            imports=args.imports,
-            keep_spec=args.keep_spec,
-            keep_tk=args.keep_tk,
-            skip_32bit_check=args.skip_32bit_check,
-            spec=args.spec,
-        )
-    )
+if __name__ == "__main__":
+    _cli()
