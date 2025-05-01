@@ -14,13 +14,11 @@ import subprocess
 import sys
 import threading
 import traceback
+from http.server import BaseHTTPRequestHandler, HTTPServer
 from pathlib import Path
-from http.server import BaseHTTPRequestHandler
-from http.server import HTTPServer
 from typing import TYPE_CHECKING
 
-from ._constants import IS_WINDOWS
-from ._constants import server_filename
+from ._constants import IS_WINDOWS, server_filename
 from .load_library import LoadLibrary
 
 if TYPE_CHECKING:
@@ -61,11 +59,11 @@ class Server32(HTTPServer):
             port: The port to open for the server.
             kwargs: All keyword arguments are passed to [LoadLibrary][msl.loadlib.load_library.LoadLibrary].
         """
-        self._library = LoadLibrary(path, libtype=libtype, **kwargs)
-        self._app = self._library.application
-        self._assembly = self._library.assembly
-        self._lib = self._library.lib
-        self._path = self._library.path
+        self._library: LoadLibrary = LoadLibrary(path, libtype=libtype, **kwargs)
+        self._app: Application | None = self._library.application
+        self._assembly: Any = self._library.assembly
+        self._lib: Any = self._library.lib
+        self._path: str = self._library.path
         super().__init__((host, int(port)), _RequestHandler, bind_and_activate=False)
 
     @property
@@ -84,7 +82,7 @@ class Server32(HTTPServer):
         return self._app
 
     @property
-    def assembly(self) -> Any:
+    def assembly(self) -> Any:  # type: ignore[misc]
         """Returns a reference to the [.NET Runtime Assembly]{:target="_blank"} object.
 
         If the loaded library is not a .NET library, returns `None`.
@@ -98,7 +96,7 @@ class Server32(HTTPServer):
         return self._assembly
 
     @property
-    def lib(self) -> Any:
+    def lib(self) -> Any:  # type: ignore[misc]
         """Returns the reference to the library object.
 
         For example, if `libtype` is
@@ -130,8 +128,8 @@ class Server32(HTTPServer):
             python -c "from msl.loadlib import Server32; Server32.version()"
             ```
         """
-        exe = os.path.join(os.path.dirname(__file__), server_filename)
-        return subprocess.check_output([exe, "--version"]).decode().strip()
+        exe = Path(__file__).parent / server_filename
+        return subprocess.check_output([exe, "--version"]).decode().strip()  # noqa: S603
 
     @staticmethod
     def interactive_console() -> None:
@@ -148,12 +146,12 @@ class Server32(HTTPServer):
 
         [interactive console]: https://docs.python.org/3/tutorial/interpreter.html#interactive-mode
         """
-        exe = os.path.join(os.path.dirname(__file__), server_filename)
+        exe = Path(__file__).parent / server_filename
         if IS_WINDOWS:
             cmd = f'start "msl.loadlib.Server32 || interactive console" "{exe}" --interactive'
         else:
             cmd = f"gnome-terminal --command='{exe} --interactive'"
-        os.system(cmd)
+        _ = os.system(cmd)  # noqa: S605
 
     @staticmethod
     def remove_site_packages_64bit() -> str:
@@ -249,62 +247,63 @@ class Server32(HTTPServer):
 class _RequestHandler(BaseHTTPRequestHandler):
     """Handles a request that was sent to the 32-bit server."""
 
-    def do_GET(self):
+    pickle_protocol: int = 5
+    pickle_file: str = ""
+
+    def do_GET(self) -> None:  # noqa: N802
         """Handle a GET request."""
         try:
             if self.path == METADATA:
-                response = {
-                    "path": self.server.path,
+                response = {  # pyright: ignore[reportUnknownVariableType]
+                    "path": self.server.path,  # type: ignore[attr-defined] # pyright: ignore[reportUnknownMemberType,reportAttributeAccessIssue]
                     "pid": os.getpid(),
-                    "unfrozen_dir": sys._MEIPASS,
+                    "unfrozen_dir": sys._MEIPASS,  # type: ignore[attr-defined] # pyright: ignore[reportAttributeAccessIssue, reportUnknownMemberType] # noqa: SLF001
                 }
             else:
-                with open(self.server.pickle_path, mode="rb") as f:
-                    args = pickle.load(f)
-                    kwargs = pickle.load(f)
+                with open(_RequestHandler.pickle_file, mode="rb") as f:  # noqa: PTH123
+                    args = pickle.load(f)  # noqa: S301
+                    kwargs = pickle.load(f)  # noqa: S301
 
                 attr = getattr(self.server, self.path)
-                if callable(attr):
-                    response = attr(*args, **kwargs)
-                else:
-                    response = attr
+                response = attr(*args, **kwargs) if callable(attr) else attr
 
-            with open(self.server.pickle_path, mode="wb") as f:
-                pickle.dump(response, f, protocol=self.server.pickle_protocol)
+            with open(_RequestHandler.pickle_file, mode="wb") as f:  # noqa: PTH123
+                pickle.dump(response, f, protocol=_RequestHandler.pickle_protocol)
 
             self.send_response(OK)
             self.end_headers()
 
-        except:  # noqa: PEP 8: E722 do not use bare 'except'
+        except:  # noqa: E722
             exc_type, exc_value, exc_traceback = sys.exc_info()
+            name = exc_type.__name__ if exc_type else "Exception"
             tb_list = traceback.extract_tb(exc_traceback)
             tb = tb_list[min(len(tb_list) - 1, 1)]  # get the Server32 subclass exception
-            response = {"name": exc_type.__name__, "value": str(exc_value)}
+            response = {"name": name, "value": str(exc_value)}
             traceback_ = f"  File {tb[0]!r}, line {tb[1]}, in {tb[2]}"
             if tb[3]:
                 traceback_ += f"\n    {tb[3]}"
             response["traceback"] = traceback_
             self.send_response(ERROR)
             self.end_headers()
-            self.wfile.write(json.dumps(response).encode())
+            _ = self.wfile.write(json.dumps(response).encode())
 
-    def do_POST(self):
+    def do_POST(self) -> None:  # noqa: N802
         """Handle a POST request."""
         if self.path == SHUTDOWN:
-            self.server.shutdown_handler()
+            self.server.shutdown_handler()  # type: ignore[attr-defined] # pyright: ignore[reportUnknownMemberType,reportAttributeAccessIssue]
             threading.Thread(target=self.server.shutdown).start()
         else:  # the pickle info
             match = re.match(r"protocol=(\d+)&path=(.*)", self.path)
             if match:
-                self.server.pickle_protocol = int(match.group(1))
-                self.server.pickle_path = match.group(2)
+                _RequestHandler.pickle_protocol = int(match.group(1))
+                _RequestHandler.pickle_file = match.group(2)
                 code = OK
             else:
                 code = ERROR
             self.send_response(code)
             self.end_headers()
 
-    def log_message(self, fmt: str, *args: Any) -> None:
+    def log_message(self, fmt: str, *args: Any) -> None:  # pyright: ignore[reportIncompatibleMethodOverride]
         """Overrides: http.server.BaseHTTPRequestHandler.log_message.
 
         Ignore all log messages from being displayed in `sys.stdout`.
