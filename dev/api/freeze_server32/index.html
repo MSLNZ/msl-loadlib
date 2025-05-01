@@ -2041,7 +2041,7 @@
                 <code>data</code>
             </td>
             <td>
-                  <code><a class="autorefs autorefs-external" href="https://docs.python.org/3/library/stdtypes.html#str">str</a> | <a class="autorefs autorefs-external" title="typing.Iterable" href="https://docs.python.org/3/library/typing.html#typing.Iterable">Iterable</a>[<a class="autorefs autorefs-external" href="https://docs.python.org/3/library/stdtypes.html#str">str</a>] | None</code>
+                  <code><a class="autorefs autorefs-external" href="https://docs.python.org/3/library/stdtypes.html#str">str</a> | <a class="autorefs autorefs-external" title="collections.abc.Iterable" href="https://docs.python.org/3/library/collections.abc.html#collections.abc.Iterable">Iterable</a>[<a class="autorefs autorefs-external" href="https://docs.python.org/3/library/stdtypes.html#str">str</a>] | None</code>
             </td>
             <td>
               <div class="doc-md-description">
@@ -2080,7 +2080,7 @@ the current working directory.</p>
                 <code>imports</code>
             </td>
             <td>
-                  <code><a class="autorefs autorefs-external" href="https://docs.python.org/3/library/stdtypes.html#str">str</a> | <a class="autorefs autorefs-external" title="typing.Iterable" href="https://docs.python.org/3/library/typing.html#typing.Iterable">Iterable</a>[<a class="autorefs autorefs-external" href="https://docs.python.org/3/library/stdtypes.html#str">str</a>] | None</code>
+                  <code><a class="autorefs autorefs-external" href="https://docs.python.org/3/library/stdtypes.html#str">str</a> | <a class="autorefs autorefs-external" title="collections.abc.Iterable" href="https://docs.python.org/3/library/collections.abc.html#collections.abc.Iterable">Iterable</a>[<a class="autorefs autorefs-external" href="https://docs.python.org/3/library/stdtypes.html#str">str</a>] | None</code>
             </td>
             <td>
               <div class="doc-md-description">
@@ -2160,7 +2160,7 @@ application.</p>
                 <p>The path to a <a href="https://pyinstaller.org/en/stable/spec-files.html#using-spec-files" target="_blank">spec</a> file to use to create the frozen server.</p>
 <div class="admonition attention">
 <p class="admonition-title">Attention</p>
-<p>If a value for <code>spec</code> is specified, then <code>imports</code> and <code>data</code> are ignored.</p>
+<p>If a value for <code>spec</code> is specified, then <code>imports</code> or <code>data</code> cannot be specified.</p>
 </div>
               </div>
             </td>
@@ -2174,11 +2174,7 @@ application.</p>
 
             <details class="quote">
               <summary>Source code in <code>src/msl/loadlib/freeze_server32.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 36</span>
-<span class="normal"> 37</span>
-<span class="normal"> 38</span>
-<span class="normal"> 39</span>
-<span class="normal"> 40</span>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 40</span>
 <span class="normal"> 41</span>
 <span class="normal"> 42</span>
 <span class="normal"> 43</span>
@@ -2361,7 +2357,12 @@ application.</p>
 <span class="normal">220</span>
 <span class="normal">221</span>
 <span class="normal">222</span>
-<span class="normal">223</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">main</span><span class="p">(</span>
+<span class="normal">223</span>
+<span class="normal">224</span>
+<span class="normal">225</span>
+<span class="normal">226</span>
+<span class="normal">227</span>
+<span class="normal">228</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">main</span><span class="p">(</span>  <span class="c1"># noqa: C901, PLR0912, PLR0913, PLR0915</span>
     <span class="o">*</span><span class="p">,</span>
     <span class="n">data</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="n">Iterable</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="n">dest</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
@@ -2403,7 +2404,7 @@ application.</p>
 <span class="sd">            [spec]: https://pyinstaller.org/en/stable/spec-files.html#using-spec-files</span>
 
 <span class="sd">            !!! attention</span>
-<span class="sd">                If a value for `spec` is specified, then `imports` and `data` are ignored.</span>
+<span class="sd">                If a value for `spec` is specified, then `imports` or `data` cannot be specified.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="n">skip_32bit_check</span> <span class="ow">and</span> <span class="n">IS_PYTHON_64BIT</span><span class="p">:</span>
         <span class="n">msg</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
@@ -2420,47 +2421,48 @@ application.</p>
                     <span class="s2">&quot;set the argument</span><span class="se">\n</span><span class="s2">skip_32bit_check=True &quot;</span>
                     <span class="s2">&quot;to ignore this requirement.&quot;</span>
                 <span class="p">)</span>
-        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Must freeze the server using a 32-bit version of Python.</span><span class="si">{</span><span class="n">msg</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">file</span><span class="o">=</span><span class="n">sys</span><span class="o">.</span><span class="n">stderr</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;ERROR! Must freeze the server using a 32-bit version of Python.</span><span class="si">{</span><span class="n">msg</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">file</span><span class="o">=</span><span class="n">sys</span><span class="o">.</span><span class="n">stderr</span><span class="p">)</span>
         <span class="k">return</span>
 
     <span class="k">try</span><span class="p">:</span>
-        <span class="kn">from</span><span class="w"> </span><span class="nn">PyInstaller</span><span class="w"> </span><span class="kn">import</span> <span class="n">__version__</span> <span class="k">as</span> <span class="n">pyinstaller_version</span>  <span class="c1"># noqa: PyInstaller is not a dependency</span>
+        <span class="kn">from</span><span class="w"> </span><span class="nn">PyInstaller</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>  <span class="c1"># type: ignore[import-untyped] # pyright: ignore[reportMissingModuleSource]</span>
+            <span class="n">__version__</span> <span class="k">as</span> <span class="n">pyinstaller_version</span><span class="p">,</span>
+        <span class="p">)</span>
     <span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
-        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;PyInstaller must be installed to create the server, run:</span><span class="se">\n</span><span class="s2">pip install pyinstaller&quot;</span><span class="p">,</span> <span class="n">file</span><span class="o">=</span><span class="n">sys</span><span class="o">.</span><span class="n">stderr</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span>
+            <span class="s2">&quot;ERROR! PyInstaller must be installed to create the server, run:</span><span class="se">\n</span><span class="s2">pip install pyinstaller&quot;</span><span class="p">,</span> <span class="n">file</span><span class="o">=</span><span class="n">sys</span><span class="o">.</span><span class="n">stderr</span>
+        <span class="p">)</span>
         <span class="k">return</span>
 
     <span class="k">if</span> <span class="n">spec</span> <span class="ow">and</span> <span class="p">(</span><span class="n">imports</span> <span class="ow">or</span> <span class="n">data</span><span class="p">):</span>
-        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Cannot specify a spec file and imports/data&quot;</span><span class="p">,</span> <span class="n">file</span><span class="o">=</span><span class="n">sys</span><span class="o">.</span><span class="n">stderr</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;ERROR! Cannot specify a spec file and imports/data&quot;</span><span class="p">,</span> <span class="n">file</span><span class="o">=</span><span class="n">sys</span><span class="o">.</span><span class="n">stderr</span><span class="p">)</span>
         <span class="k">return</span>
 
-    <span class="n">here</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="vm">__file__</span><span class="p">))</span>
+    <span class="n">here</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="vm">__file__</span><span class="p">)</span><span class="o">.</span><span class="n">parent</span>
+    <span class="n">dist_path</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">dest</span><span class="p">)</span> <span class="k">if</span> <span class="n">dest</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">Path</span><span class="o">.</span><span class="n">cwd</span><span class="p">()</span>
+    <span class="n">server_path</span> <span class="o">=</span> <span class="n">dist_path</span> <span class="o">/</span> <span class="n">server_filename</span>
 
-    <span class="k">if</span> <span class="n">dest</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">dist_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="n">dest</span><span class="p">)</span>
-    <span class="k">else</span><span class="p">:</span>
-        <span class="n">dist_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">getcwd</span><span class="p">()</span>
-
-    <span class="n">tmp_kw</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;ignore_cleanup_errors&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">}</span> <span class="k">if</span> <span class="n">sys</span><span class="o">.</span><span class="n">version_info</span><span class="p">[:</span><span class="mi">2</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">10</span><span class="p">)</span> <span class="k">else</span> <span class="p">{}</span>
-    <span class="n">tmp_dir</span> <span class="o">=</span> <span class="n">TemporaryDirectory</span><span class="p">(</span><span class="o">**</span><span class="n">tmp_kw</span><span class="p">)</span>
-    <span class="n">work_path</span> <span class="o">=</span> <span class="n">tmp_dir</span><span class="o">.</span><span class="n">name</span>
-    <span class="n">server_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">dist_path</span><span class="p">,</span> <span class="n">server_filename</span><span class="p">)</span>
+    <span class="n">tmp_dir</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="n">TemporaryDirectory</span><span class="p">(</span><span class="n">ignore_cleanup_errors</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span> <span class="k">if</span> <span class="n">sys</span><span class="o">.</span><span class="n">version_info</span><span class="p">[:</span><span class="mi">2</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">10</span><span class="p">)</span> <span class="k">else</span> <span class="n">TemporaryDirectory</span><span class="p">()</span>
+    <span class="p">)</span>
+    <span class="n">work_path</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">tmp_dir</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
 
     <span class="c1"># Specifically invoke pyinstaller in the context of the current python interpreter.</span>
     <span class="c1"># This fixes the issue where the blind `pyinstaller` invocation points to a 64-bit version.</span>
-    <span class="n">cmd</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="n">cmd</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span>
         <span class="n">sys</span><span class="o">.</span><span class="n">executable</span><span class="p">,</span>
         <span class="s2">&quot;-m&quot;</span><span class="p">,</span>
         <span class="s2">&quot;PyInstaller&quot;</span><span class="p">,</span>
         <span class="s2">&quot;--distpath&quot;</span><span class="p">,</span>
-        <span class="n">dist_path</span><span class="p">,</span>
+        <span class="nb">str</span><span class="p">(</span><span class="n">dist_path</span><span class="p">),</span>
         <span class="s2">&quot;--workpath&quot;</span><span class="p">,</span>
-        <span class="n">work_path</span><span class="p">,</span>
+        <span class="nb">str</span><span class="p">(</span><span class="n">work_path</span><span class="p">),</span>
         <span class="s2">&quot;--noconfirm&quot;</span><span class="p">,</span>
         <span class="s2">&quot;--clean&quot;</span><span class="p">,</span>
     <span class="p">]</span>
 
     <span class="k">if</span> <span class="n">spec</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">cmd</span><span class="o">.</span><span class="n">extend</span><span class="p">([</span><span class="s2">&quot;--specpath&quot;</span><span class="p">,</span> <span class="n">work_path</span><span class="p">,</span> <span class="s2">&quot;--python-option&quot;</span><span class="p">,</span> <span class="s2">&quot;u&quot;</span><span class="p">])</span>
+        <span class="n">cmd</span><span class="o">.</span><span class="n">extend</span><span class="p">([</span><span class="s2">&quot;--specpath&quot;</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">work_path</span><span class="p">),</span> <span class="s2">&quot;--python-option&quot;</span><span class="p">,</span> <span class="s2">&quot;u&quot;</span><span class="p">])</span>
 
         <span class="k">if</span> <span class="n">IS_WINDOWS</span><span class="p">:</span>
             <span class="n">cmd</span><span class="o">.</span><span class="n">extend</span><span class="p">([</span><span class="s2">&quot;--version-file&quot;</span><span class="p">,</span> <span class="n">_create_version_info_file</span><span class="p">(</span><span class="n">work_path</span><span class="p">)])</span>
@@ -2477,29 +2479,29 @@ application.</p>
             <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">imports</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
                 <span class="n">imports</span> <span class="o">=</span> <span class="p">[</span><span class="n">imports</span><span class="p">]</span>
 
-            <span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">getcwd</span><span class="p">())</span>
+            <span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">Path</span><span class="o">.</span><span class="n">cwd</span><span class="p">()))</span>
 
-            <span class="n">missing</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="n">missing</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
             <span class="k">for</span> <span class="n">module</span> <span class="ow">in</span> <span class="n">imports</span><span class="p">:</span>
                 <span class="k">try</span><span class="p">:</span>
-                    <span class="n">import_module</span><span class="p">(</span><span class="n">module</span><span class="p">)</span>
-                <span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
+                    <span class="n">_</span> <span class="o">=</span> <span class="n">import_module</span><span class="p">(</span><span class="n">module</span><span class="p">)</span>
+                <span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>  <span class="c1"># noqa: PERF203</span>
                     <span class="n">missing</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">module</span><span class="p">)</span>
                 <span class="k">else</span><span class="p">:</span>
                     <span class="n">cmd</span><span class="o">.</span><span class="n">extend</span><span class="p">([</span><span class="s2">&quot;--hidden-import&quot;</span><span class="p">,</span> <span class="n">module</span><span class="p">])</span>
 
             <span class="k">if</span> <span class="n">missing</span><span class="p">:</span>
                 <span class="nb">print</span><span class="p">(</span>
-                    <span class="sa">f</span><span class="s2">&quot;The following modules cannot be imported: </span><span class="si">{</span><span class="s1">&#39; &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">missing</span><span class="p">)</span><span class="si">}</span><span class="se">\n</span><span class="s2">Cannot freeze the server&quot;</span><span class="p">,</span>
+                    <span class="sa">f</span><span class="s2">&quot;ERROR! The following modules cannot be imported: </span><span class="si">{</span><span class="s1">&#39; &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">missing</span><span class="p">)</span><span class="si">}</span><span class="se">\n</span><span class="s2">Cannot freeze the server&quot;</span><span class="p">,</span>
                     <span class="n">file</span><span class="o">=</span><span class="n">sys</span><span class="o">.</span><span class="n">stderr</span><span class="p">,</span>
                 <span class="p">)</span>
                 <span class="k">return</span>
 
-        <span class="n">cmd</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">_get_standard_modules</span><span class="p">(</span><span class="n">keep_tk</span><span class="p">))</span>
+        <span class="n">cmd</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">_get_standard_modules</span><span class="p">(</span><span class="n">keep_tk</span><span class="o">=</span><span class="n">keep_tk</span><span class="p">))</span>
 
         <span class="k">if</span> <span class="n">data</span><span class="p">:</span>
-            <span class="n">major</span><span class="p">,</span> <span class="o">*</span><span class="n">rest</span> <span class="o">=</span> <span class="n">pyinstaller_version</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;.&quot;</span><span class="p">)</span>
-            <span class="n">sep</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">pathsep</span> <span class="k">if</span> <span class="nb">int</span><span class="p">(</span><span class="n">major</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">6</span> <span class="k">else</span> <span class="s2">&quot;:&quot;</span>
+            <span class="n">major</span><span class="p">,</span> <span class="o">*</span><span class="n">_</span> <span class="o">=</span> <span class="n">pyinstaller_version</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;.&quot;</span><span class="p">)</span>
+            <span class="n">sep</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">pathsep</span> <span class="k">if</span> <span class="nb">int</span><span class="p">(</span><span class="n">major</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">6</span> <span class="k">else</span> <span class="s2">&quot;:&quot;</span>  <span class="c1"># noqa: PLR2004</span>
 
             <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
                 <span class="n">data</span> <span class="o">=</span> <span class="p">[</span><span class="n">data</span><span class="p">]</span>
@@ -2508,44 +2510,44 @@ application.</p>
                 <span class="n">s</span> <span class="o">=</span> <span class="n">item</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;:&quot;</span><span class="p">)</span>
                 <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">s</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
                     <span class="n">src</span> <span class="o">=</span> <span class="n">s</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-                    <span class="n">dst</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
-                <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="n">s</span><span class="p">)</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
+                    <span class="n">dst</span> <span class="o">=</span> <span class="s2">&quot;.&quot;</span>
+                <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="n">s</span><span class="p">)</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>  <span class="c1"># noqa: PLR2004</span>
                     <span class="n">src</span> <span class="o">=</span> <span class="n">s</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
                     <span class="n">dst</span> <span class="o">=</span> <span class="n">s</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="ow">or</span> <span class="s2">&quot;.&quot;</span>
                 <span class="k">else</span><span class="p">:</span>
-                    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Invalid data format </span><span class="si">{</span><span class="n">item</span><span class="si">!r}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">file</span><span class="o">=</span><span class="n">sys</span><span class="o">.</span><span class="n">stderr</span><span class="p">)</span>
+                    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;ERROR! Invalid data format </span><span class="si">{</span><span class="n">item</span><span class="si">!r}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">file</span><span class="o">=</span><span class="n">sys</span><span class="o">.</span><span class="n">stderr</span><span class="p">)</span>
                     <span class="k">return</span>
 
-                <span class="n">src</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="n">src</span><span class="p">)</span>
-                <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">src</span><span class="p">):</span>
-                    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Cannot find </span><span class="si">{</span><span class="n">src</span><span class="si">!r}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">file</span><span class="o">=</span><span class="n">sys</span><span class="o">.</span><span class="n">stderr</span><span class="p">)</span>
+                <span class="n">source</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">src</span><span class="p">)</span><span class="o">.</span><span class="n">resolve</span><span class="p">()</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="n">source</span><span class="o">.</span><span class="n">exists</span><span class="p">():</span>
+                    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;ERROR! Cannot find </span><span class="si">{</span><span class="n">source</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">file</span><span class="o">=</span><span class="n">sys</span><span class="o">.</span><span class="n">stderr</span><span class="p">)</span>
                     <span class="k">return</span>
 
-                <span class="n">cmd</span><span class="o">.</span><span class="n">extend</span><span class="p">([</span><span class="s2">&quot;--add-data&quot;</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">src</span><span class="si">}{</span><span class="n">sep</span><span class="si">}{</span><span class="n">dst</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">])</span>
+                <span class="n">cmd</span><span class="o">.</span><span class="n">extend</span><span class="p">([</span><span class="s2">&quot;--add-data&quot;</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">source</span><span class="si">}{</span><span class="n">sep</span><span class="si">}{</span><span class="n">dst</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">])</span>
 
-        <span class="n">cmd</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">here</span><span class="p">,</span> <span class="s2">&quot;start_server32.py&quot;</span><span class="p">))</span>
+        <span class="n">cmd</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">here</span> <span class="o">/</span> <span class="s2">&quot;start_server32.py&quot;</span><span class="p">))</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="n">cmd</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">spec</span><span class="p">)</span>
 
-    <span class="n">check_call</span><span class="p">(</span><span class="n">cmd</span><span class="p">)</span>
+    <span class="n">_</span> <span class="o">=</span> <span class="n">check_call</span><span class="p">(</span><span class="n">cmd</span><span class="p">)</span>  <span class="c1"># noqa: S603</span>
 
     <span class="c1"># maybe create the .NET Framework config file</span>
     <span class="k">if</span> <span class="n">imports</span> <span class="ow">and</span> <span class="p">(</span><span class="s2">&quot;pythonnet&quot;</span> <span class="ow">in</span> <span class="n">imports</span><span class="p">):</span>
-        <span class="n">check_dot_net_config</span><span class="p">(</span><span class="n">server_path</span><span class="p">)</span>
+        <span class="n">_</span> <span class="o">=</span> <span class="n">check_dot_net_config</span><span class="p">(</span><span class="n">server_path</span><span class="p">)</span>
 
-    <span class="k">if</span> <span class="n">keep_spec</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">keep_spec</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">spec</span><span class="p">:</span>
         <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;The following files were saved to </span><span class="si">{</span><span class="n">dist_path</span><span class="si">}</span><span class="se">\n</span><span class="s2">  </span><span class="si">{</span><span class="n">server_filename</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 
-        <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">server_path</span><span class="si">}</span><span class="s2">.config&quot;</span><span class="p">):</span>
-            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  </span><span class="si">{</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">server_path</span><span class="p">)</span><span class="si">}</span><span class="s2">.config&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">Path</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">server_path</span><span class="si">}</span><span class="s2">.config&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">is_file</span><span class="p">():</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  </span><span class="si">{</span><span class="n">server_path</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">.config&quot;</span><span class="p">)</span>
 
         <span class="n">spec_file</span> <span class="o">=</span> <span class="s2">&quot;server32.spec&quot;</span>
-        <span class="n">copy</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">work_path</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">server_filename</span><span class="si">}</span><span class="s2">.spec&quot;</span><span class="p">),</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">dist_path</span><span class="p">,</span> <span class="n">spec_file</span><span class="p">))</span>
+        <span class="n">_</span> <span class="o">=</span> <span class="n">copy</span><span class="p">(</span><span class="n">work_path</span> <span class="o">/</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">server_filename</span><span class="si">}</span><span class="s2">.spec&quot;</span><span class="p">,</span> <span class="n">dist_path</span> <span class="o">/</span> <span class="n">spec_file</span><span class="p">)</span>
         <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  </span><span class="si">{</span><span class="n">spec_file</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="n">IS_WINDOWS</span><span class="p">:</span>
             <span class="n">file_version_info</span> <span class="o">=</span> <span class="s2">&quot;file_version_info.txt&quot;</span>
-            <span class="n">copy</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">work_path</span><span class="p">,</span> <span class="n">file_version_info</span><span class="p">),</span> <span class="n">dist_path</span><span class="p">)</span>
+            <span class="n">_</span> <span class="o">=</span> <span class="n">copy</span><span class="p">(</span><span class="n">work_path</span> <span class="o">/</span> <span class="n">file_version_info</span><span class="p">,</span> <span class="n">dist_path</span><span class="p">)</span>
             <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  </span><span class="si">{</span><span class="n">file_version_info</span><span class="si">}</span><span class="s2">  (required by the </span><span class="si">{</span><span class="n">spec_file</span><span class="si">}</span><span class="s2"> file)&quot;</span><span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Server saved to </span><span class="si">{</span><span class="n">server_path</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
