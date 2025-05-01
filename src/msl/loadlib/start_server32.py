@@ -1,4 +1,7 @@
 """This module is built in to a 32-bit executable by running `freeze_server32`."""
+# pyright: reportUnusedCallResult=false, reportUnknownParameterType=false, reportUnknownMemberType=false
+
+from __future__ import annotations
 
 import argparse
 import code
@@ -9,16 +12,18 @@ import sys
 import tempfile
 import traceback
 
-from .server32 import Server32
-from ._constants import server_filename
+from msl.loadlib._constants import server_filename
+from msl.loadlib.server32 import Server32
 
 
-def main():
+def main() -> int:  # noqa: C901, PLR0911, PLR0912, PLR0915
     """Starts a 32-bit server (which is a subclass of [Server32][])."""
     parser = argparse.ArgumentParser(
-        description="Created by the msl-loadlib Python package.\n\n"
-        "Runs a 32-bit Python interpreter for inter-process communication for the client-server\n"
-        "protocol, i.e., call a 32-bit process (server) from a 64-bit process (client).",
+        description=(
+            "Created by the msl-loadlib package.\n\n"
+            "Runs a 32-bit Python interpreter for inter-process communication for the client-server\n"
+            "protocol, i.e., call a 32-bit process (server) from a 64-bit process (client)."
+        ),
         formatter_class=argparse.RawTextHelpFormatter,
     )
 
@@ -34,25 +39,31 @@ def main():
         "-d",
         "--add-dll-directory",
         default=None,
-        help="add path(s) to os.add_dll_directory() on the 32-bit server\n"
-        "(to add multiple paths, separate each path with a semicolon)\n"
-        "Supported on Windows only",
+        help=(
+            "add path(s) to os.add_dll_directory() on the 32-bit server\n"
+            "(to add multiple paths, separate each path with a semicolon)\n"
+            "Supported on Windows only"
+        ),
     )
 
     parser.add_argument(
         "-s",
         "--append-sys-path",
         default=None,
-        help="append path(s) to sys.path on the 32-bit server\n"
-        "(to append multiple paths, separate each path with a semicolon)",
+        help=(
+            "append path(s) to sys.path on the 32-bit server\n"
+            "(to append multiple paths, separate each path with a semicolon)"
+        ),
     )
 
     parser.add_argument(
         "-e",
         "--append-environ-path",
         default=None,
-        help='append path(s) to os.environ["PATH"] on the 32-bit server\n'
-        "(to append multiple paths, separate each path with a semicolon)",
+        help=(
+            "append path(s) to os.environ['PATH'] on the 32-bit server\n"
+            "(to append multiple paths, separate each path with a semicolon)"
+        ),
     )
 
     parser.add_argument(
@@ -72,9 +83,11 @@ def main():
         "-k",
         "--kwargs",
         default=None,
-        help="keyword arguments that are passed to the constructor of the\n"
-        "Server32 subclass as name=value pairs separated with a semicolon\n"
-        "e.g., --kwargs a=100;b=3.14;c=filename.csv",
+        help=(
+            "keyword arguments that are passed to the constructor of the\n"
+            "Server32 subclass as name=value pairs separated with a semicolon\n"
+            "e.g., --kwargs a=100;b=3.14;c=filename.csv"
+        ),
     )
 
     args = parser.parse_args()
@@ -84,9 +97,9 @@ def main():
         return 0
 
     # include directories in sys.path
-    sys.path.append(os.path.abspath(""))
+    sys.path.append(os.path.abspath(""))  # noqa: PTH100
     if args.module is not None:
-        mod_dir = os.path.dirname(args.module)
+        mod_dir = os.path.dirname(args.module)  # noqa: PTH120
         if mod_dir and mod_dir not in sys.path:
             sys.path.append(mod_dir)
     if args.append_sys_path is not None:
@@ -121,24 +134,24 @@ def main():
                     )
                     print(err, file=sys.stderr)
                     return -1
-        os.added_dll_directories = dll_dirs
+        os.added_dll_directories = dll_dirs  # type: ignore[attr-defined] # pyright: ignore[reportAttributeAccessIssue]
 
     if args.interactive:
         import builtins
 
         class Quitter:
-            def __repr__(self):
+            def __repr__(self) -> str:
                 ctrl = '"Ctrl-Z then Enter"' if sys.platform == "win32" else "Ctrl-D (i.e. EOF)"
                 return f"Use exit(), quit() or {ctrl} to exit the 32-bit server console"
 
-            def __call__(self, *args, **kwargs):
+            def __call__(self, *args, **kwargs):  # type: ignore[no-untyped-def] # pyright: ignore[reportMissingParameterType] # noqa: ANN002, ANN003, ANN204, ARG002
                 raise SystemExit
 
         quitter = Quitter()
-        builtins.exit = quitter
-        builtins.quit = quitter
+        builtins.exit = quitter  # type: ignore[assignment]
+        builtins.quit = quitter  # type: ignore[assignment]
 
-        locs = dict((k, v) for k, v in globals().items() if k.startswith("_"))
+        locs = {k: v for k, v in globals().items() if k.startswith("_")}
         locs["__doc__"] = "Interactive console for the 32-bit server (msl-loadlib)."
         console = code.InteractiveConsole(locals=locs)
         try:
@@ -146,7 +159,7 @@ def main():
         except SystemExit:
             console.write("\n")
         finally:
-            for directory in dll_dirs:
+            for directory in dll_dirs:  # pyright: ignore[reportUnknownVariableType]
                 if directory.path:
                     directory.close()
         return 0
@@ -176,7 +189,7 @@ def main():
         print(err, file=sys.stderr)
         return -1
 
-    args.module = os.path.basename(args.module)
+    args.module = os.path.basename(args.module)  # noqa: PTH119
     if args.module.endswith(".py"):
         args.module = args.module[:-3]
 
@@ -185,15 +198,15 @@ def main():
         print(err, file=sys.stderr)
         return -1
 
-    f = os.path.join(tempfile.gettempdir(), f"msl-loadlib-{args.host}-{args.port}.txt")
-    with open(f, mode="wt") as fp:
-        fp.write(f"{os.getpid()}\n{sys._MEIPASS}")  # noqa: sys._MEIPASS exists
+    f = os.path.join(tempfile.gettempdir(), f"msl-loadlib-{args.host}-{args.port}.txt")  # noqa: PTH118
+    with open(f, mode="w") as fp:  # noqa: PTH123
+        fp.write(f"{os.getpid()}\n{sys._MEIPASS}")  # type: ignore[attr-defined] # pyright: ignore[reportAttributeAccessIssue] # noqa: SLF001
 
     try:
         mod = importlib.import_module(args.module)
     except ImportError as e:
         # ignore the folders from the unfrozen application
-        paths = "\n  ".join(item for item in sys.path if not item.startswith(sys._MEIPASS))  # noqa: sys._MEIPASS exists
+        paths = "\n  ".join(item for item in sys.path if not item.startswith(sys._MEIPASS))  # type: ignore[attr-defined] # pyright: ignore[reportAttributeAccessIssue,reportUnknownArgumentType] # noqa: SLF001
         err = (
             f"ImportError: {e}\n"
             f"The missing module must be in sys.path (see the --append-sys-path option)\n"
@@ -202,7 +215,7 @@ def main():
         )
         print(err, file=sys.stderr)
         return -1
-    except:  # noqa: PEP 8: E722 do not use bare 'except'
+    except:  # noqa: E722
         err = (
             f"Importing {args.module!r} on the 32-bit server raised "
             f"the following exception:\n\n{traceback.format_exc()}\n"
@@ -229,8 +242,8 @@ def main():
 
     server, error, tb = None, None, None
     try:
-        server = cls(args.host, args.port, **kwargs)
-    except Exception as e:
+        server = cls(args.host, args.port, **kwargs)  # type: ignore[arg-type] # pyright: ignore[reportUnknownArgumentType]
+    except Exception as e:  # noqa: BLE001
         error = e
         tb = traceback.format_exc()
 
@@ -262,13 +275,15 @@ def main():
         print(err, file=sys.stderr)
         return -1
 
+    assert server is not None  # noqa: S101
+
     try:
         server.server_bind()
         server.server_activate()
         server.serve_forever()
     except (SystemExit, KeyboardInterrupt):
         pass
-    except:  # noqa: PEP 8: E722 do not use bare 'except'
+    except:  # noqa: E722
         # Can only get here if starting the HTTPServer raised an exception.
         # Error handling for a request is handled by the RequestHandler class.
         print(
@@ -278,9 +293,11 @@ def main():
         return -1
     finally:
         server.server_close()
-        for directory in dll_dirs:
+        for directory in dll_dirs:  # pyright: ignore[reportUnknownVariableType]
             if directory.path:
                 directory.close()
+
+    return 0
 
 
 if __name__ == "__main__":
