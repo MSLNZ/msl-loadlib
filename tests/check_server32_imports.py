@@ -1,4 +1,5 @@
-r"""
+r"""Check the server's imports.
+
 Run this script using the server32 executable to see which modules from
 the standard library cannot be imported.
 
@@ -337,16 +338,17 @@ from msl import loadlib
 from msl.loadlib import LoadLibrary
 from msl.loadlib import Client64
 from msl.loadlib import Server32
-from msl.loadlib import constants
+from msl.loadlib import IS_PYTHON_64BIT
 from msl.loadlib import utils
+from msl.loadlib import activex
 from msl.loadlib.activex import Application
-from msl.loadlib.activex import Background
+from msl.loadlib.activex import Colour
 from msl.examples.loadlib import EXAMPLES_DIR
 
 if sys.version_info[:2] >= (3, 12):
     from sys import monitoring
 
-if constants.IS_WINDOWS:
+if sys.platform == "win32":
     import clr
     import comtypes
     import pythonnet

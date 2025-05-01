@@ -16,13 +16,43 @@ try:
 except ImportError:
     winreg = None  # not Windows
 
-from .constants import IS_LINUX
-from .constants import IS_WINDOWS
-from .constants import NET_FRAMEWORK_FIX
-from .constants import NET_FRAMEWORK_DESCRIPTION
+from ._constants import IS_LINUX
+from ._constants import IS_WINDOWS
 from .exceptions import ConnectionTimeoutError
 
 logger = logging.getLogger(__package__)
+
+_NET_FRAMEWORK_DESCRIPTION: str = """
+<!--
+  Created by the MSL-LoadLib package.
+
+  By default, applications that target the .NET Framework version 4.0+ cannot load
+  assemblies from previous .NET Framework versions. You must add and modify the
+  <app>.config file and set the useLegacyV2RuntimeActivationPolicy property to be
+  "true". For the Python executable this would be a python.exe.config (Windows)
+  or python.config (Linux) configuration file.
+
+  Python for .NET (https://pythonnet.github.io/) works with .NET 4.0+ and
+  therefore it cannot automatically load a shared library that was compiled with
+  .NET < 4.0. If you try to load the library and a System.IO.FileLoadException is
+  raised then that might mean that the library is from .NET < 4.0.
+
+  The System.IO.FileLoadException exception could also be raised if the directory
+  that the DLL is located in, or a dependency of the library, is not within PATH.
+
+  See https://support.microsoft.com/kb/2572158 for an overview.
+
+  NOTE: To install pythonnet, run:
+  $ pip install pythonnet
+-->
+"""
+
+_NET_FRAMEWORK_FIX: str = """
+    <startup useLegacyV2RuntimeActivationPolicy="true">
+        <supportedRuntime version="v4.0" />
+        <supportedRuntime version="v2.0.50727" />
+    </startup>
+"""
 
 
 def is_pythonnet_installed() -> bool:
@@ -124,7 +154,7 @@ def check_dot_net_config(py_exe_path: str) -> tuple[int, str]:
                 f"file which enables the useLegacyV2RuntimeActivationPolicy property.\n"
                 f"To load an assembly from a .NET Framework version < 4.0 the following\n"
                 f"must be in {config_path}\n\n"
-                f"<configuration>{NET_FRAMEWORK_FIX}</configuration>\n"
+                f"<configuration>{_NET_FRAMEWORK_FIX}</configuration>\n"
             )
             logger.warning(msg)
             return -1, msg
@@ -135,7 +165,7 @@ def check_dot_net_config(py_exe_path: str) -> tuple[int, str]:
             with open(config_path, mode="rt") as fp:
                 lines = fp.readlines()
 
-            lines.insert(-1, NET_FRAMEWORK_FIX)
+            lines.insert(-1, _NET_FRAMEWORK_FIX)
             with open(config_path, mode="wt") as fp:
                 fp.writelines(lines)
             msg = (
@@ -158,9 +188,9 @@ def check_dot_net_config(py_exe_path: str) -> tuple[int, str]:
     else:
         with open(config_path, mode="wt") as f:
             f.write('<?xml version="1.0" encoding="utf-8" ?>')
-            f.write(NET_FRAMEWORK_DESCRIPTION)
+            f.write(_NET_FRAMEWORK_DESCRIPTION)
             f.write("<configuration>")
-            f.write(NET_FRAMEWORK_FIX)
+            f.write(_NET_FRAMEWORK_FIX)
             f.write("</configuration>\n")
 
         msg = (

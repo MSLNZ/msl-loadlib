@@ -9,7 +9,7 @@ path = os.path.abspath(os.path.join(os.path.dirname(__file__), os.pardir, os.par
 sys.path.insert(0, path)
 
 from msl.loadlib import LoadLibrary
-from msl.loadlib.constants import IS_PYTHON_64BIT
+from msl.loadlib import IS_PYTHON_64BIT
 
 bitness = "x64" if IS_PYTHON_64BIT else "x86"
 filename = f"legacy_v2_runtime_{bitness}.dll"

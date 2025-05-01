@@ -1,11 +1,10 @@
 import sys
 
 from msl.loadlib import activex
-from msl.loadlib.constants import IS_WINDOWS
 
 import pytest
 
-from conftest import skipif_not_windows
+from conftest import skipif_not_windows, IS_WINDOWS
 
 
 def test_menu_item():

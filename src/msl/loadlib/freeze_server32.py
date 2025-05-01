@@ -23,10 +23,9 @@ from tempfile import TemporaryDirectory
 from typing import Iterable
 from urllib.request import urlopen
 
-from msl import loadlib
-from msl.loadlib import constants
-from msl.loadlib import version_tuple
-
+from .__about__ import version_tuple, __author__, __copyright__
+from ._constants import IS_WINDOWS, IS_LINUX, IS_MAC, IS_PYTHON_64BIT, server_filename
+from .utils import check_dot_net_config
 
 # Command to run when freezing the server for a new release
 #
@@ -78,7 +77,7 @@ def main(
             !!! attention
                 If a value for `spec` is specified, then `imports` and `data` are ignored.
     """
-    if not skip_32bit_check and constants.IS_PYTHON_64BIT:
+    if not skip_32bit_check and IS_PYTHON_64BIT:
         msg = ""
         if sys.argv:
             if sys.argv[0].endswith("freeze32"):
@@ -116,7 +115,7 @@ def main(
     tmp_kw = {"ignore_cleanup_errors": True} if sys.version_info[:2] >= (3, 10) else {}
     tmp_dir = TemporaryDirectory(**tmp_kw)
     work_path = tmp_dir.name
-    server_path = os.path.join(dist_path, constants.SERVER_FILENAME)
+    server_path = os.path.join(dist_path, server_filename)
 
     # Specifically invoke pyinstaller in the context of the current python interpreter.
     # This fixes the issue where the blind `pyinstaller` invocation points to a 64-bit version.
@@ -135,13 +134,13 @@ def main(
     if spec is None:
         cmd.extend(["--specpath", work_path, "--python-option", "u"])
 
-        if constants.IS_WINDOWS:
+        if IS_WINDOWS:
             cmd.extend(["--version-file", _create_version_info_file(work_path)])
 
         cmd.extend(
             [
                 "--name",
-                constants.SERVER_FILENAME,
+                server_filename,
                 "--onefile",
             ]
         )
@@ -204,19 +203,19 @@ def main(
 
     # maybe create the .NET Framework config file
     if imports and ("pythonnet" in imports):
-        loadlib.utils.check_dot_net_config(server_path)
+        check_dot_net_config(server_path)
 
     if keep_spec:
-        print(f"The following files were saved to {dist_path}\n  {constants.SERVER_FILENAME}")
+        print(f"The following files were saved to {dist_path}\n  {server_filename}")
 
         if os.path.isfile(f"{server_path}.config"):
             print(f"  {os.path.basename(server_path)}.config")
 
         spec_file = "server32.spec"
-        copy(os.path.join(work_path, f"{constants.SERVER_FILENAME}.spec"), os.path.join(dist_path, spec_file))
+        copy(os.path.join(work_path, f"{server_filename}.spec"), os.path.join(dist_path, spec_file))
         print(f"  {spec_file}")
 
-        if constants.IS_WINDOWS:
+        if IS_WINDOWS:
             file_version_info = "file_version_info.txt"
             copy(os.path.join(work_path, file_version_info), dist_path)
             print(f"  {file_version_info}  (required by the {spec_file} file)")
@@ -260,11 +259,11 @@ def _get_standard_modules(keep_tk: bool) -> list[str]:
     # some modules are platform specific and got a
     #   RecursionError: maximum recursion depth exceeded
     # when running this script with PyInstaller 3.3 installed
-    if constants.IS_WINDOWS:
+    if IS_WINDOWS:
         os_ignore_list = ["(Unix)", "(Linux)", "(Linux, FreeBSD)"]
-    elif constants.IS_LINUX:
+    elif IS_LINUX:
         os_ignore_list = ["(Windows)"]
-    elif constants.IS_MAC:
+    elif IS_MAC:
         os_ignore_list = ["(Windows)", "(Linux)", "(Linux, FreeBSD)"]
     else:
         os_ignore_list = []
@@ -326,12 +325,12 @@ VSVersionInfo(
       [
       StringTable(
         '000004B0',
-        [StringStruct('CompanyName', '{loadlib.__author__}'),
+        [StringStruct('CompanyName', '{__author__}'),
         StringStruct('FileDescription', 'Access a 32-bit library from 64-bit Python'),
         StringStruct('FileVersion', '{version_tuple[0]}.{version_tuple[1]}.{version_tuple[2]}.0'),
-        StringStruct('InternalName', '{constants.SERVER_FILENAME}'),
-        StringStruct('LegalCopyright', '\xc2{loadlib.__copyright__}'),
-        StringStruct('OriginalFilename', '{constants.SERVER_FILENAME}'),
+        StringStruct('InternalName', '{server_filename}'),
+        StringStruct('LegalCopyright', '\xc2{__copyright__}'),
+        StringStruct('OriginalFilename', '{server_filename}'),
         StringStruct('ProductName', 'Python'),
         StringStruct('ProductVersion', '{sys.version_info.major}.{sys.version_info.minor}.{sys.version_info.micro}.0')])
       ]),

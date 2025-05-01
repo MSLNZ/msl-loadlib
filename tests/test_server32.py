@@ -4,7 +4,7 @@ from typing import Optional
 
 import pytest
 
-from conftest import skipif_no_server32
+from conftest import skipif_no_server32, IS_MAC, IS_WINDOWS
 from conftest import skipif_not_windows
 from msl import loadlib
 from msl.examples.loadlib import Cpp64
@@ -14,8 +14,6 @@ from msl.examples.loadlib import Fortran64
 from msl.examples.loadlib import FourPoints
 from msl.examples.loadlib import Point
 from msl.loadlib import ConnectionTimeoutError
-from msl.loadlib.constants import IS_MAC
-from msl.loadlib.constants import IS_WINDOWS
 
 c: Optional[Cpp64] = None
 f: Optional[Fortran64] = None

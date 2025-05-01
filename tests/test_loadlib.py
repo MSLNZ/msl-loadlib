@@ -27,7 +27,7 @@ from msl.examples.loadlib import FourPoints
 from msl.examples.loadlib import NPoints
 from msl.examples.loadlib import Point
 from msl.loadlib import LoadLibrary
-from msl.loadlib.constants import *
+from msl.loadlib._constants import *
 from msl.loadlib.utils import get_com_info
 
 if IS_MACOS_ARM64:
@@ -51,7 +51,7 @@ def test_invalid_path(path):
 @pytest.mark.parametrize("filename", ["cpp_lib", "fortran_lib"])
 def test_wrong_bitness(filename):
     suffix = "32" if IS_PYTHON_64BIT else "64"
-    path = os.path.join(EXAMPLES_DIR, f"{filename}{suffix}{DEFAULT_EXTENSION}")
+    path = os.path.join(EXAMPLES_DIR, f"{filename}{suffix}{default_extension}")
     assert os.path.isfile(path)
     with pytest.raises(OSError):
         LoadLibrary(path)
@@ -546,7 +546,7 @@ def test_issue8():
 
 def test_path_attrib():
     path = os.path.join(EXAMPLES_DIR, f"cpp_lib{suffix}")
-    expected = path + DEFAULT_EXTENSION
+    expected = path + default_extension
     assert LoadLibrary(path).path == expected
     assert LoadLibrary(path.encode()).path == expected
     assert LoadLibrary(pathlib.Path(path)).path == expected

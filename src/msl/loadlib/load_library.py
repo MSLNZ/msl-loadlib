@@ -10,8 +10,8 @@ import sys
 from typing import TYPE_CHECKING
 
 from . import utils
-from .constants import DEFAULT_EXTENSION
-from .constants import IS_WINDOWS
+from ._constants import default_extension
+from ._constants import IS_WINDOWS
 
 if TYPE_CHECKING:
     from typing import Any, TypeVar
@@ -142,7 +142,7 @@ class LoadLibrary:
         # assume a default extension if no extension was provided
         ext = os.path.splitext(path)[1]
         if not ext and libtype not in ["java", "com", "activex"]:
-            _path += DEFAULT_EXTENSION
+            _path += default_extension
 
         if libtype not in ["com", "activex"]:
             self._path = os.path.abspath(_path)

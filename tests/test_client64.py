@@ -11,7 +11,7 @@ from msl.examples.loadlib import Cpp64
 from msl.examples.loadlib import EXAMPLES_DIR
 from msl.loadlib import Client64
 from msl.loadlib.client64 import _build_paths
-from msl.loadlib.constants import SERVER_FILENAME
+from msl.loadlib._constants import server_filename
 
 
 @skipif_no_server32
@@ -63,7 +63,7 @@ def test_bad_del():
 
 
 def test_invalid_server32_dir():
-    with pytest.raises(OSError, match=rf"^Cannot find {SERVER_FILENAME}$"):
+    with pytest.raises(OSError, match=rf"^Cannot find {server_filename}$"):
         Client64(__file__, server32_dir="")
 
 

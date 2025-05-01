@@ -15,8 +15,10 @@ try:
 except (ImportError, RuntimeError):
     clr = None
 
-from msl.loadlib.constants import IS_MAC, IS_PYTHON_64BIT, IS_WINDOWS
+from msl.loadlib import IS_PYTHON_64BIT
 
+IS_WINDOWS: bool = sys.platform == "win32"
+IS_MAC: bool = sys.platform == "darwin"
 IS_MACOS_ARM64 = sys.platform == "darwin" and platform.machine() == "arm64"
 
 

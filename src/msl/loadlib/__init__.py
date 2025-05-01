@@ -3,8 +3,8 @@
 from __future__ import annotations
 
 from .__about__ import __author__, __copyright__, __version__, version_tuple
+from ._constants import IS_PYTHON_64BIT
 from .client64 import Client64
-from .constants import IS_PYTHON_64BIT
 from .exceptions import ConnectionTimeoutError, ResponseTimeoutError, Server32Error
 from .load_library import LoadLibrary
 from .server32 import Server32

@@ -16,13 +16,12 @@ if Server32.is_interpreter():
     pytest = Mock()
     skipif_no_server32 = Mock()
     skipif_not_windows = Mock()
-    IS_WINDOWS = Mock()
 else:
     import pytest
     from conftest import skipif_no_server32
     from conftest import skipif_not_windows
-    from msl.loadlib.constants import IS_WINDOWS
 
+IS_WINDOWS: bool = sys.platform == "win32"
 
 class ArgParse32(Server32):
     def __init__(self, host, port, **kwargs):

@@ -7,10 +7,9 @@ from xml.etree import ElementTree
 
 import pytest
 
-from conftest import IS_MACOS_ARM64
+from conftest import IS_MACOS_ARM64, IS_WINDOWS
 from conftest import skipif_not_windows
 from msl.loadlib import utils
-from msl.loadlib.constants import IS_WINDOWS
 
 
 def test_timeout():

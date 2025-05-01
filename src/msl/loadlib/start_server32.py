@@ -9,8 +9,8 @@ import sys
 import tempfile
 import traceback
 
-from msl.loadlib import Server32
-from msl.loadlib.constants import SERVER_FILENAME
+from .server32 import Server32
+from ._constants import server_filename
 
 
 def main():
@@ -170,7 +170,7 @@ def main():
     if not args.module:
         err = (
             f"You must specify a Python module to run on the 32-bit server.\n"
-            f"For example: {SERVER_FILENAME} -m my_module\n"
+            f"For example: {server_filename} -m my_module\n"
             f"Cannot start the 32-bit server."
         )
         print(err, file=sys.stderr)

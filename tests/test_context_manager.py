@@ -12,8 +12,8 @@ from conftest import skipif_no_server32
 from msl.examples.loadlib import Cpp64
 from msl.examples.loadlib import EXAMPLES_DIR
 from msl.loadlib import LoadLibrary
-from msl.loadlib.constants import DEFAULT_EXTENSION
-from msl.loadlib.constants import IS_PYTHON_64BIT
+from msl.loadlib._constants import default_extension
+from msl.loadlib import IS_PYTHON_64BIT
 from msl.loadlib.load_library import DotNet
 from msl.loadlib.utils import logger
 
@@ -35,7 +35,7 @@ def test_raises():
 
 
 def test_cpp():
-    path = os.path.join(EXAMPLES_DIR, "cpp_lib" + suffix + DEFAULT_EXTENSION)
+    path = os.path.join(EXAMPLES_DIR, "cpp_lib" + suffix + default_extension)
     with LoadLibrary(path) as library:
         assert library.assembly is None
         assert library.gateway is None

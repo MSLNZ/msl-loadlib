@@ -24,8 +24,8 @@ from http.client import HTTPConnection
 from typing import TYPE_CHECKING
 
 from . import utils
-from .constants import IS_WINDOWS
-from .constants import SERVER_FILENAME
+from ._constants import IS_WINDOWS
+from ._constants import server_filename
 from .exceptions import ConnectionTimeoutError
 from .exceptions import ResponseTimeoutError
 from .exceptions import Server32Error
@@ -312,18 +312,18 @@ class _HTTPClient:
 
         server_exe = None
         for d in dirs:
-            f = os.path.join(d, SERVER_FILENAME)
+            f = os.path.join(d, server_filename)
             if os.path.isfile(f):
                 server_exe = f
                 break
 
         if server_exe is None:
             if len(dirs) == 1:
-                msg = f"Cannot find {os.path.join(dirs[0], SERVER_FILENAME)}"
+                msg = f"Cannot find {os.path.join(dirs[0], server_filename)}"
                 raise OSError(msg)
             else:
                 directories = "\n  ".join(sorted(set(dirs)))
-                msg = f"Cannot find {SERVER_FILENAME!r} in any of the following directories:\n  {directories}"
+                msg = f"Cannot find {server_filename!r} in any of the following directories:\n  {directories}"
                 raise OSError(msg)
 
         cmd = [

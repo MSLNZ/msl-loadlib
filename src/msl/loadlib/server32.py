@@ -19,8 +19,8 @@ from http.server import BaseHTTPRequestHandler
 from http.server import HTTPServer
 from typing import TYPE_CHECKING
 
-from .constants import IS_WINDOWS
-from .constants import SERVER_FILENAME
+from ._constants import IS_WINDOWS
+from ._constants import server_filename
 from .load_library import LoadLibrary
 
 if TYPE_CHECKING:
@@ -130,7 +130,7 @@ class Server32(HTTPServer):
             python -c "from msl.loadlib import Server32; Server32.version()"
             ```
         """
-        exe = os.path.join(os.path.dirname(__file__), SERVER_FILENAME)
+        exe = os.path.join(os.path.dirname(__file__), server_filename)
         return subprocess.check_output([exe, "--version"]).decode().strip()
 
     @staticmethod
@@ -148,7 +148,7 @@ class Server32(HTTPServer):
 
         [interactive console]: https://docs.python.org/3/tutorial/interpreter.html#interactive-mode
         """
-        exe = os.path.join(os.path.dirname(__file__), SERVER_FILENAME)
+        exe = os.path.join(os.path.dirname(__file__), server_filename)
         if IS_WINDOWS:
             cmd = f'start "msl.loadlib.Server32 || interactive console" "{exe}" --interactive'
         else:
@@ -223,7 +223,7 @@ class Server32(HTTPServer):
 
         !!! note "Added in version 0.9"
         """
-        return sys.executable.endswith(SERVER_FILENAME)
+        return sys.executable.endswith(server_filename)
 
     @staticmethod
     def examples_dir() -> Path:

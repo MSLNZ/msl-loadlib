@@ -15,7 +15,7 @@ if Server32.is_interpreter():
 else:
     import pytest
     from conftest import skipif_no_server32
-    from msl.loadlib.constants import DEFAULT_EXTENSION
+    from msl.loadlib._constants import default_extension
 
 
 IS_MACOS_ARM64 = sys.platform == "darwin" and platform.machine() == "arm64"
@@ -66,16 +66,16 @@ def test_equivalent(host):
         assert c.host is None
         if sys.maxsize > 2**32:
             # client and server are running in 64-bit Python
-            assert c.lib32_path.endswith(f"cpp_lib64{DEFAULT_EXTENSION}")
+            assert c.lib32_path.endswith(f"cpp_lib64{default_extension}")
         else:
             # client and server are running in 32-bit Python
-            assert c.lib32_path.endswith(f"cpp_lib32{DEFAULT_EXTENSION}")
+            assert c.lib32_path.endswith(f"cpp_lib32{default_extension}")
         assert c.port == -1
         assert str(c) == f"<Client lib={basename} address=None (mocked)>"
     else:
         assert isinstance(c.connection, HTTPConnection)
         assert c.host == host
-        assert c.lib32_path.endswith(f"cpp_lib32{DEFAULT_EXTENSION}")
+        assert c.lib32_path.endswith(f"cpp_lib32{default_extension}")
         assert isinstance(c.port, int) and c.port > 0
         assert str(c) == f"<Client lib={basename} address={host}:{c.port}>"
 
@@ -97,12 +97,12 @@ def test_attributes():
     if sys.maxsize > 2**32:
         # client and server are running in 64-bit Python
         if IS_MACOS_ARM64:
-            assert c.lib32_path.endswith(f"cpp_libarm64{DEFAULT_EXTENSION}")
+            assert c.lib32_path.endswith(f"cpp_libarm64{default_extension}")
         else:
-            assert c.lib32_path.endswith(f"cpp_lib64{DEFAULT_EXTENSION}")
+            assert c.lib32_path.endswith(f"cpp_lib64{default_extension}")
     else:
         # client and server are running in 32-bit Python
-        assert c.lib32_path.endswith(f"cpp_lib32{DEFAULT_EXTENSION}")
+        assert c.lib32_path.endswith(f"cpp_lib32{default_extension}")
     assert c.port == -1
     assert str(c) == f"<Client lib={os.path.basename(c.lib32_path)} address=None (mocked)>"
     assert c.add(1, 2) == 3
