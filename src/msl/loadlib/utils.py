@@ -7,18 +7,23 @@ import os
 import socket
 import subprocess
 import time
-from types import ModuleType
-from typing import Any
-from xml.etree import ElementTree
+from pathlib import Path
+from typing import TYPE_CHECKING
+from xml.etree import ElementTree as ET
 
 try:
     import winreg
 except ImportError:
-    winreg = None  # not Windows
+    winreg = None  # type: ignore[assignment]
 
-from ._constants import IS_LINUX
-from ._constants import IS_WINDOWS
+from ._constants import IS_LINUX, IS_WINDOWS
 from .exceptions import ConnectionTimeoutError
+
+if TYPE_CHECKING:
+    from types import ModuleType
+    from typing import Any
+
+    from ._types import PathLike
 
 logger = logging.getLogger(__package__)
 
@@ -27,23 +32,16 @@ _NET_FRAMEWORK_DESCRIPTION: str = """
   Created by the MSL-LoadLib package.
 
   By default, applications that target the .NET Framework version 4.0+ cannot load
-  assemblies from previous .NET Framework versions. You must add and modify the
+  assemblies from older .NET Framework versions. You must create and modify the
   <app>.config file and set the useLegacyV2RuntimeActivationPolicy property to be
-  "true". For the Python executable this would be a python.exe.config (Windows)
-  or python.config (Linux) configuration file.
+  "true" for the application to load an assembly from .NET < 4.0.
 
-  Python for .NET (https://pythonnet.github.io/) works with .NET 4.0+ and
-  therefore it cannot automatically load a shared library that was compiled with
-  .NET < 4.0. If you try to load the library and a System.IO.FileLoadException is
-  raised then that might mean that the library is from .NET < 4.0.
+  For Python.NET to load an assembly from .NET < 4.0, this corresponds to creating
+  a python.exe.config (Windows) or python.config (Linux) configuration file that
+  is saved in the same directory as the executable.
 
-  The System.IO.FileLoadException exception could also be raised if the directory
-  that the DLL is located in, or a dependency of the library, is not within PATH.
-
-  See https://support.microsoft.com/kb/2572158 for an overview.
-
-  NOTE: To install pythonnet, run:
-  $ pip install pythonnet
+  See https://support.microsoft.com/kb/2572158 for more information about the
+  "Mixed mode assembly" error.
 -->
 """
 
@@ -62,7 +60,7 @@ def is_pythonnet_installed() -> bool:
         Whether `pythonnet` is installed.
     """
     try:
-        import clr
+        import clr  # type: ignore[import-untyped] # pyright: ignore[reportMissingTypeStubs, reportUnusedImport] # noqa: F401
     except ImportError:
         return False
     return True
@@ -77,7 +75,7 @@ def is_py4j_installed() -> bool:
     !!! note "Added in version 0.4"
     """
     try:
-        import py4j
+        import py4j  # type: ignore[import-untyped] # pyright: ignore[reportMissingTypeStubs, reportUnusedImport] # noqa: F401
     except ImportError:
         return False
     return True
@@ -92,18 +90,18 @@ def is_comtypes_installed() -> bool:
     !!! note "Added in version 0.5"
     """
     try:
-        import comtypes
+        import comtypes  # type: ignore[import-untyped] # pyright: ignore[reportMissingTypeStubs, reportUnusedImport] # noqa: F401
     except ImportError:
         return False
     return True
 
 
-def check_dot_net_config(py_exe_path: str) -> tuple[int, str]:
+def check_dot_net_config(py_exe_path: PathLike) -> tuple[int, str]:
     """Checks if the **useLegacyV2RuntimeActivationPolicy** property is enabled.
 
     By default, [Python.NET](https://pythonnet.github.io/){:target="_blank"} works
     with .NET 4.0+ and therefore it cannot automatically load a library that was compiled
-    with .NET &lt;4.0.
+    with .NET &lt; 4.0.
 
     This function ensures that the **useLegacyV2RuntimeActivationPolicy** property is
     defined in the *py_exe_path*.config file and that it is enabled.
@@ -135,12 +133,12 @@ def check_dot_net_config(py_exe_path: str) -> tuple[int, str]:
             * 0: if the .NET property was already enabled, or
             * 1: if the property was created successfully.
     """
-    config_path = f"{py_exe_path}.config"
+    config_path: str = os.fsdecode(py_exe_path) + ".config"
 
-    if os.path.isfile(config_path):
+    if Path(config_path).is_file():
         try:
-            tree = ElementTree.parse(config_path)
-        except ElementTree.ParseError:
+            tree = ET.parse(config_path)  # noqa: S314
+        except ET.ParseError:
             msg = f"Invalid XML file {config_path}\nCannot create the useLegacyV2RuntimeActivationPolicy property.\n"
             logger.warning(msg)
             return -1, msg
@@ -162,46 +160,45 @@ def check_dot_net_config(py_exe_path: str) -> tuple[int, str]:
         # check if the policy exists
         policy = root.find("startup/[@useLegacyV2RuntimeActivationPolicy]")
         if policy is None:
-            with open(config_path, mode="rt") as fp:
-                lines = fp.readlines()
-
+            lines = Path(config_path).read_text().splitlines()
             lines.insert(-1, _NET_FRAMEWORK_FIX)
-            with open(config_path, mode="wt") as fp:
-                fp.writelines(lines)
+            _ = Path(config_path).write_text("\n".join(lines))
             msg = (
                 f"Added the useLegacyV2RuntimeActivationPolicy property to\n"
                 f"{config_path}\n"
                 f"Try again to see if Python can now load the .NET library.\n"
             )
             return 1, msg
-        else:
-            if not policy.attrib["useLegacyV2RuntimeActivationPolicy"].lower() == "true":
-                msg = (
-                    f"The useLegacyV2RuntimeActivationPolicy in\n{config_path}\n"
-                    f'is "false". Cannot load an assembly from a .NET Framework '
-                    f"version < 4.0.\n"
-                )
-                logger.warning(msg)
-                return -1, msg
-            return 0, "The useLegacyV2RuntimeActivationPolicy property is enabled"
 
-    else:
-        with open(config_path, mode="wt") as f:
-            f.write('<?xml version="1.0" encoding="utf-8" ?>')
-            f.write(_NET_FRAMEWORK_DESCRIPTION)
-            f.write("<configuration>")
-            f.write(_NET_FRAMEWORK_FIX)
-            f.write("</configuration>\n")
+        if policy.attrib["useLegacyV2RuntimeActivationPolicy"].lower() != "true":
+            msg = (
+                f'The useLegacyV2RuntimeActivationPolicy attribute is "false" in\n'
+                f"{config_path}\n"
+                f"Cannot load an assembly from a .NET Framework version < 4.0.\n"
+            )
+            logger.warning(msg)
+            return -1, msg
 
-        msg = (
-            f"The library appears to be from a .NET Framework version < 4.0.\n"
-            f"The useLegacyV2RuntimeActivationPolicy property was added to\n"
-            f"{config_path}\n"
-            f'to fix the "System.IO.FileLoadException: Mixed mode assembly..." error.\n'
-            f"Rerun the script, or restart the interactive console, to see if\n"
-            f"Python can now load the .NET library.\n"
-        )
-        return 1, msg
+        return 0, "The useLegacyV2RuntimeActivationPolicy property is enabled"
+
+    text = (
+        f'<?xml version="1.0" encoding="utf-8" ?>'
+        f"{_NET_FRAMEWORK_DESCRIPTION}"
+        f"<configuration>"
+        f"{_NET_FRAMEWORK_FIX}"
+        f"</configuration>\n"
+    )
+    _ = Path(config_path).write_text(text)
+
+    msg = (
+        f"The library appears to be from a .NET Framework version < 4.0.\n"
+        f'To fix the "Mixed mode assembly is built against ..." error\n'
+        f"the useLegacyV2RuntimeActivationPolicy property was added to\n"
+        f"{config_path}\n\n"
+        f"Rerun the script, or restart the interactive console, to see if\n"
+        f"Python can now load the .NET library.\n"
+    )
+    return 1, msg
 
 
 def is_port_in_use(port: int) -> bool:
@@ -228,7 +225,7 @@ def is_port_in_use(port: int) -> bool:
         cmd = ["ss", "-ant"]
     else:
         cmd = ["lsof", "-nPw", "-iTCP"]
-    p = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, creationflags=flags)
+    p = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, creationflags=flags)  # noqa: S603
     out, err = p.communicate()
     if err:
         raise RuntimeError(err.decode(errors="ignore"))
@@ -237,10 +234,11 @@ def is_port_in_use(port: int) -> bool:
 
 def get_available_port() -> int:
     """[int][] &mdash; Returns a port number that is available."""
+    port: int
     with socket.socket() as sock:
         sock.bind(("", 0))
-        port = sock.getsockname()[1]
-    return port
+        _, port = sock.getsockname()
+        return port
 
 
 def wait_for_server(host: str, port: int, timeout: float) -> None:
@@ -264,7 +262,7 @@ def wait_for_server(host: str, port: int, timeout: float) -> None:
             raise ConnectionTimeoutError(msg)
 
 
-def get_com_info(*additional_keys: str) -> dict[str, dict[str, str | None]]:
+def get_com_info(*additional_keys: str) -> dict[str, dict[str, str | None]]:  # noqa: C901
     """Reads the registry for the [COM]{:target="_blank"} libraries that are available.
 
     [COM]: https://learn.microsoft.com/en-us/windows/win32/com/component-object-model--com--portal
@@ -295,9 +293,9 @@ def get_com_info(*additional_keys: str) -> dict[str, dict[str, str | None]]:
     !!! note "Added in version 0.5"
     """
     if winreg is None:
-        return {}
+        return {}  # type: ignore[unreachable]
 
-    results = {}
+    results: dict[str, dict[str, str | None]] = {}
     for item in ["CLSID", r"Wow6432Node\CLSID"]:
         try:
             key = winreg.OpenKey(winreg.HKEY_CLASSES_ROOT, item)
@@ -329,7 +327,7 @@ def get_com_info(*additional_keys: str) -> dict[str, dict[str, str | None]]:
                 for name in additional_keys:
                     try:
                         results[clsid][name] = winreg.QueryValue(sub_key, name)
-                    except OSError:
+                    except OSError:  # noqa: PERF203
                         results[clsid][name] = None
             finally:
                 winreg.CloseKey(sub_key)
@@ -339,7 +337,7 @@ def get_com_info(*additional_keys: str) -> dict[str, dict[str, str | None]]:
     return results
 
 
-def generate_com_wrapper(lib: Any, out_dir: str | None = None) -> ModuleType:
+def generate_com_wrapper(lib: Any, out_dir: PathLike | None = None) -> ModuleType:
     """Generate a Python wrapper module around a [COM]{:target="_blank"} library.
 
     For more information see [Accessing type libraries]{:target="_blank"}.
@@ -379,27 +377,29 @@ def generate_com_wrapper(lib: Any, out_dir: str | None = None) -> ModuleType:
         msg = "Cannot create a COM wrapper because comtypes is not installed, run\n  pip install comtypes"
         raise OSError(msg)
 
-    import comtypes.client
-
-    mod = None
+    import comtypes.client  # type: ignore[import-untyped] # pyright: ignore[reportMissingTypeStubs]
 
     # cache the value of gen_dir to reset it later
     cached_gen_dir = comtypes.client.gen_dir
     if out_dir is not None:
-        gen_dir = os.path.abspath(out_dir)
-        if not os.path.isdir(gen_dir):
-            os.makedirs(gen_dir)
+        gen_dir = Path(os.fsdecode(out_dir)).resolve()
+        gen_dir.mkdir(parents=True, exist_ok=True)
         comtypes.client.gen_dir = gen_dir
 
-    def from_pointer(p):
+    def from_pointer(p: Any) -> ModuleType:
         info = p.GetTypeInfo(0)
-        type_lib, index = info.GetContainingTypeLib()
-        return comtypes.client.GetModule(type_lib)
+        type_lib, _ = info.GetContainingTypeLib()
+        module: ModuleType = comtypes.client.GetModule(type_lib)
+        return module
 
+    mod: ModuleType
     try:
         mod = comtypes.client.GetModule(lib)
     except OSError:
-        pass
+        if not isinstance(lib, str):
+            raise
+        obj = comtypes.client.CreateObject(lib)
+        mod = from_pointer(obj)
     except (AttributeError, TypeError) as e:
         if "LoadLibrary" in str(e):
             mod = from_pointer(lib.lib)
@@ -407,10 +407,6 @@ def generate_com_wrapper(lib: Any, out_dir: str | None = None) -> ModuleType:
             mod = from_pointer(lib)
         else:
             raise
-
-    if not mod and isinstance(lib, str):
-        obj = comtypes.client.CreateObject(lib)
-        mod = from_pointer(obj)
 
     if out_dir is not None:
         comtypes.client.gen_dir = cached_gen_dir
