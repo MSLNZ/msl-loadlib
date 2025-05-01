@@ -2703,7 +2703,7 @@ If <code>libtype</code> is</p>
     <span class="c1"># assume a default extension if no extension was provided</span>
     <span class="n">ext</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">splitext</span><span class="p">(</span><span class="n">path</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="n">ext</span> <span class="ow">and</span> <span class="n">libtype</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;java&quot;</span><span class="p">,</span> <span class="s2">&quot;com&quot;</span><span class="p">,</span> <span class="s2">&quot;activex&quot;</span><span class="p">]:</span>
-        <span class="n">_path</span> <span class="o">+=</span> <span class="n">DEFAULT_EXTENSION</span>
+        <span class="n">_path</span> <span class="o">+=</span> <span class="n">default_extension</span>
 
     <span class="k">if</span> <span class="n">libtype</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;com&quot;</span><span class="p">,</span> <span class="s2">&quot;activex&quot;</span><span class="p">]:</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="n">_path</span><span class="p">)</span>

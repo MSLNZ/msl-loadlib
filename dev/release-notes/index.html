@@ -2262,7 +2262,7 @@
 <ul>
 <li>convert to an implicit namespace package (<a href="https://peps.python.org/pep-0420/">PEP-420</a>)</li>
 <li>the <code>requires_pythonnet</code> and <code>requires_comtypes</code> arguments to <code>freeze_server32.main()</code> were removed and the <code>imports</code>, <code>data</code> <code>skip_32bit_check</code>, <code>keep_spec</code> and <code>keep_tk</code> arguments were added</li>
-<li>all constants (e.g., <code>IS_WINDOWS</code>) were moved to a <code>constants.py</code> file</li>
+<li>all constants (e.g., <code>IS_WINDOWS</code>) were moved to a (private) <code>_constants.py</code> file</li>
 <li>data type of <code>EXAMPLES_DIR</code> and the return type from <code>Server32.examples_dir()</code> changed from <a class="autorefs autorefs-external" href="https://docs.python.org/3/library/stdtypes.html#str">str</a> to <a class="autorefs autorefs-external" href="https://docs.python.org/3/library/pathlib.html#pathlib.Path">Path</a></li>
 </ul>
 <p><strong><em>Removed:</em></strong></p>

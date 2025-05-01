@@ -2642,7 +2642,7 @@ with the Python interpreter on the 32-bit server.</p>
 
 <span class="sd">    [interactive console]: https://docs.python.org/3/tutorial/interpreter.html#interactive-mode</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">exe</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="vm">__file__</span><span class="p">),</span> <span class="n">SERVER_FILENAME</span><span class="p">)</span>
+    <span class="n">exe</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="vm">__file__</span><span class="p">),</span> <span class="n">server_filename</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">IS_WINDOWS</span><span class="p">:</span>
         <span class="n">cmd</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;start &quot;msl.loadlib.Server32 || interactive console&quot; &quot;</span><span class="si">{</span><span class="n">exe</span><span class="si">}</span><span class="s1">&quot; --interactive&#39;</span>
     <span class="k">else</span><span class="p">:</span>
@@ -2761,7 +2761,7 @@ by the correct bitness of the Python interpreter.</p>
 
 <span class="sd">    !!! note &quot;Added in version 0.9&quot;</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">return</span> <span class="n">sys</span><span class="o">.</span><span class="n">executable</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="n">SERVER_FILENAME</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">sys</span><span class="o">.</span><span class="n">executable</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="n">server_filename</span><span class="p">)</span>
 </code></pre></div></td></tr></table></div>
             </details>
     </div>
@@ -3026,7 +3026,7 @@ threads or closing file handles, before the server shuts down.</p>
 <span class="sd">        python -c &quot;from msl.loadlib import Server32; Server32.version()&quot;</span>
 <span class="sd">        ```</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">exe</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="vm">__file__</span><span class="p">),</span> <span class="n">SERVER_FILENAME</span><span class="p">)</span>
+    <span class="n">exe</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="vm">__file__</span><span class="p">),</span> <span class="n">server_filename</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">subprocess</span><span class="o">.</span><span class="n">check_output</span><span class="p">([</span><span class="n">exe</span><span class="p">,</span> <span class="s2">&quot;--version&quot;</span><span class="p">])</span><span class="o">.</span><span class="n">decode</span><span class="p">()</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
 </code></pre></div></td></tr></table></div>
             </details>
