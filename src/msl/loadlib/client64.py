@@ -383,10 +383,16 @@ class _HTTPClient:
         self._conn.request("POST", f"protocol={self._pickle_protocol}&path={self._pickle_path}")
         response = self._conn.getresponse()
         if response.status != OK:
+            _ = self.shutdown_server32()
             value = "Cannot set pickle info"
             raise Server32Error(value)
 
-        self._meta32 = self.request32(METADATA)
+        try:
+            self._meta32 = self.request32(METADATA)
+        except ValueError:  # could happen if the pickle-protocol value is invalid for the client
+            _ = self.shutdown_server32()
+            raise
+
         self._lib32_path: str = str(self._meta32["path"])
 
     @property
