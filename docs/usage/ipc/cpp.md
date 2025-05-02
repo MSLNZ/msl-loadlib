@@ -65,7 +65,7 @@ Multiply a 1D array by a number, see [Cpp64.scalar_multiply][msl.examples.loadli
 
 ```
 
-If you have a [numpy.ndarray][]{:target="_blank"} in 64-bit Python then you cannot pass the `ndarray` object to [Server32][] because the 32-bit server would need to load the `ndarray` in a 32-bit version of numpy (which is not included by default in the 32-bit server, but could be &ndash; see [refreeze][] for more details). To simplify the procedure you could convert the `ndarray` to a [list][]{:target="_blank"} using the [numpy.ndarray.tolist][]{:target="_blank"} method
+If you have a [numpy.ndarray][]{:target="_blank"} in 64-bit Python then you cannot pass the `ndarray` object to [Server32][] because the 32-bit server would need to load the `ndarray` in a 32-bit version of numpy (which is not included by default in the 32-bit server, but could be &mdash; see [refreeze][] for more details). To simplify the procedure you could convert the `ndarray` to a [list][]{:target="_blank"} using the [numpy.ndarray.tolist][]{:target="_blank"} method
 
 ```pycon
 >>> import numpy as np
