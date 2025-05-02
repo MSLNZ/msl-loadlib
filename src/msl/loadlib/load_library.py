@@ -9,9 +9,16 @@ import subprocess
 import sys
 from typing import TYPE_CHECKING
 
-from . import utils
-from ._constants import default_extension
-from ._constants import IS_WINDOWS
+from ._constants import IS_WINDOWS, default_extension
+from .utils import (
+    check_dot_net_config,
+    get_available_port,
+    is_comtypes_installed,
+    is_py4j_installed,
+    is_pythonnet_installed,
+    logger,
+    wait_for_server,
+)
 
 if TYPE_CHECKING:
     from typing import Any, TypeVar
@@ -21,10 +28,7 @@ if TYPE_CHECKING:
 
     # the Self type was added in Python 3.11 (PEP 673)
     # using TypeVar is equivalent for < 3.11
-    if sys.version_info[:2] < (3, 11):
-        Self = TypeVar("Self", bound="LoadLibrary")
-    else:
-        from typing import Self
+    Self = TypeVar("Self", bound="LoadLibrary")
 
 
 _LIBTYPES: set[str] = {"cdll", "windll", "oledll", "net", "clr", "java", "com", "activex"}
@@ -35,13 +39,13 @@ if IS_WINDOWS and not hasattr(sys, "coinit_flags"):
     # Configure comtypes for Multi-Threaded Apartment model (MTA)
     # This avoids the following exception from being raised:
     #   [WinError -2147417850] Cannot change thread mode after it is set
-    sys.coinit_flags = 0
+    sys.coinit_flags = 0  # type: ignore[attr-defined] # pyright: ignore[reportAttributeAccessIssue]
 
 
 class LoadLibrary:
     """Load a library."""
 
-    def __init__(self, path: PathLike, libtype: LibType | None = None, **kwargs: Any) -> None:
+    def __init__(self, path: PathLike, libtype: LibType | None = None, **kwargs: Any) -> None:  # noqa: C901, PLR0912, PLR0915
         """Load a library.
 
         For example, a C/C++, FORTRAN, .NET, Java, Delphi, LabVIEW, ActiveX, ... library.
@@ -55,11 +59,12 @@ class LoadLibrary:
                 3. search [sys.path][]{:target="_blank"}
                 4. search [os.environ["PATH"]][os.environ]{:target="_blank"}.
 
-                If loading a [COM](https://learn.microsoft.com/en-us/windows/win32/com/component-object-model--com--portal){:target="_blank"} library,
-                `path` may either be the
+                If loading a [COM]{:target="_blank"} library, `path` may either be the
 
                 * ProgID (e.g, `"InternetExplorer.Application"`), or the
                 * CLSID (e.g., `"{2F7860A2-1473-4D75-827D-6C4E27600CAC}"`).
+
+                [COM]: https://learn.microsoft.com/en-us/windows/win32/com/component-object-model--com--portal
 
             libtype: The library type.
                 The following values are supported:
@@ -102,16 +107,16 @@ class LoadLibrary:
             ValueError: If the value of `libtype` is not supported.
         """
         # a reference to the ActiveX application
-        self._app = None
+        self._app: Application | None = None
 
         # a reference to the library
-        self._lib = None
+        self._lib: Any = None
 
         # a reference to the .NET Runtime Assembly
-        self._assembly = None
+        self._assembly: Any = None
 
         # a reference to the Py4J JavaGateway
-        self._gateway = None
+        self._gateway: Any = None
 
         if not path:
             msg = f"Must specify a non-empty path, got {path!r}"
@@ -120,37 +125,37 @@ class LoadLibrary:
         # fixes Issue #8, if `path` is a <class 'pathlib.Path'> object
         path = os.fsdecode(path)
 
-        if libtype is None:
-            # automatically determine the libtype
-            if path.endswith(".jar") or path.endswith(".class"):
-                libtype = "java"
-            else:
-                libtype = "cdll"
+        _libtype: str
+        if libtype is None:  # noqa: SIM108
+            _libtype = "java" if path.endswith((".jar", ".class")) else "cdll"
         else:
-            libtype = libtype.lower()
+            _libtype = libtype.lower()
 
-        if libtype not in _LIBTYPES:
-            msg = f"Invalid libtype {libtype!r}\nMust be one of: {', '.join(_LIBTYPES)}"
+        if _libtype not in _LIBTYPES:
+            msg = f"Invalid libtype {_libtype!r}\nMust be one of: {', '.join(_LIBTYPES)}"
             raise ValueError(msg)
 
         # create a new reference to `path` just in case the
-        # DEFAULT_EXTENSION is appended below so that the
+        # default_extension is appended below so that the
         # ctypes.util.find_library function call will use the
         # unmodified value of `path`
         _path = path
 
         # assume a default extension if no extension was provided
-        ext = os.path.splitext(path)[1]
-        if not ext and libtype not in ["java", "com", "activex"]:
+        _, ext = os.path.splitext(path)
+        if not ext and _libtype not in {"java", "com", "activex"}:
             _path += default_extension
 
-        if libtype not in ["com", "activex"]:
-            self._path = os.path.abspath(_path)
-            if not os.path.isfile(self._path):
+        self._path: str
+        if _libtype not in {"com", "activex"}:
+            file = os.path.abspath(_path)
+            if os.path.isfile(file):
+                self._path = file
+            else:
                 # for find_library use the original 'path' value since it may be a library name
                 # without any prefix like 'lib', suffix like '.so', '.dylib' or version number
-                self._path = ctypes.util.find_library(path)
-                if self._path is None:  # then search sys.path and os.environ['PATH']
+                file2 = ctypes.util.find_library(path)
+                if file2 is None:  # then search sys.path and os.environ['PATH']
                     success = False
                     search_dirs = sys.path + os.environ["PATH"].split(os.pathsep)
                     for directory in search_dirs:
@@ -160,53 +165,59 @@ class LoadLibrary:
                             success = True
                             break
                     if not success:
-                        msg = f"Cannot find {path!r} for libtype={libtype!r}"
+                        msg = f"Cannot find {path!r} for libtype={_libtype!r}"
                         raise OSError(msg)
+                else:
+                    self._path = file2
         else:
             self._path = _path
 
-        if libtype == "cdll":
+        if _libtype == "cdll":
             self._lib = ctypes.CDLL(self._path, **kwargs)
-        elif libtype == "windll":
+        elif _libtype == "windll":
             self._lib = ctypes.WinDLL(self._path, **kwargs)
-        elif libtype == "oledll":
+        elif _libtype == "oledll":
             self._lib = ctypes.OleDLL(self._path, **kwargs)
-        elif libtype == "com":
-            if not utils.is_comtypes_installed():
+        elif _libtype == "com":
+            if not is_comtypes_installed():
                 msg = "Cannot load a COM library because comtypes is not installed.\nRun: pip install comtypes"
                 raise OSError(msg)
 
-            from comtypes import GUID
-            from comtypes.client import CreateObject
+            from comtypes import GUID  # type: ignore[import-untyped] # pyright: ignore[reportMissingTypeStubs]
+            from comtypes.client import (  # type: ignore[import-untyped] # pyright: ignore[reportMissingTypeStubs]
+                CreateObject,
+            )
 
             try:
                 clsid = GUID.from_progid(self._path)
             except (TypeError, OSError):
-                clsid = None
-
-            if clsid is None:
                 msg = f"Cannot find {path!r} for libtype='com'"
-                raise OSError(msg)
+                raise OSError(msg) from None
 
             self._lib = CreateObject(clsid, **kwargs)
 
-        elif libtype == "activex":
+        elif _libtype == "activex":
             from .activex import Application
 
             self._app = Application()
             self._lib = self._app.load(self._path, **kwargs)
 
-        elif libtype == "java":
-            if not utils.is_py4j_installed():
+        elif _libtype == "java":
+            if not is_py4j_installed():
                 msg = "Cannot load a Java file because Py4J is not installed.\nRun: pip install py4j"
                 raise OSError(msg)
 
-            from py4j.version import __version__
-            from py4j.java_gateway import JavaGateway, GatewayParameters
+            from py4j.java_gateway import (  # type: ignore[import-untyped] # pyright: ignore[reportMissingTypeStubs]
+                GatewayParameters,
+                JavaGateway,
+            )
+            from py4j.version import (  # type: ignore[import-untyped] # pyright: ignore[reportMissingTypeStubs]
+                __version__,
+            )
 
             # the address and port to use to host the py4j.GatewayServer
             address = kwargs.pop("address", "127.0.0.1")
-            port = kwargs.pop("port", utils.get_available_port())
+            port = kwargs.pop("port", get_available_port())
 
             # find the py4j*.jar file (needed to import the py4j.GatewayServer on the Java side)
             filename = f"py4j{__version__}.jar"
@@ -245,38 +256,33 @@ class LoadLibrary:
             else:  # it is a .class file
                 cmd.append(f"{os.path.dirname(self._path)}/")
 
-            err = None
             try:
                 # start the py4j.GatewayServer
                 flags = 0x08000000 if IS_WINDOWS else 0  # fixes issue 31, CREATE_NO_WINDOW = 0x08000000
-                subprocess.Popen(cmd, stderr=subprocess.PIPE, stdout=subprocess.PIPE, creationflags=flags)
+                _ = subprocess.Popen(cmd, stderr=subprocess.PIPE, stdout=subprocess.PIPE, creationflags=flags)  # noqa: S603
             except OSError as e:
                 err = str(e).rstrip()
                 err += "\nYou must have a Java Runtime Environment installed and available on PATH"
-
-            if err:
-                raise OSError(err)
+                raise OSError(err) from None
 
             try:
-                utils.wait_for_server(address, port, 10.0)
+                wait_for_server(address, port, 10.0)
             except OSError as e:
                 err = str(e).rstrip()
                 err += "\nCould not start the Py4J GatewayServer"
-
-            if err:
-                raise OSError(err)
+                raise OSError(err) from None
 
             self._gateway = JavaGateway(gateway_parameters=GatewayParameters(address=address, port=port, **kwargs))
 
             self._lib = self._gateway.jvm
 
-        elif libtype == "net" or libtype == "clr":
-            if not utils.is_pythonnet_installed():
+        elif _libtype in {"net", "clr"}:
+            if not is_pythonnet_installed():
                 msg = "Cannot load a .NET Assembly because pythonnet is not installed.\nRun: pip install pythonnet"
                 raise OSError(msg)
 
-            import clr  # noqa: clr is an alias for pythonnet
-            import System  # noqa: available once pythonnet is imported
+            import clr  # type: ignore[import-untyped] # pyright: ignore[reportMissingTypeStubs]
+            import System  # type: ignore[import-not-found] # pyright: ignore[reportMissingImports]
 
             dotnet = {"System": System}
 
@@ -284,9 +290,10 @@ class LoadLibrary:
             head, tail = os.path.split(self._path)
             sys.path.insert(0, head)
 
-            try:
+            System: Any  # type: ignore[no-redef] # noqa: N806  # cSpell: ignore redef
+            try:  # noqa: SIM105
                 # don't include the library extension
-                clr.AddReference(os.path.splitext(tail)[0])  # noqa: AddReference exists
+                clr.AddReference(os.path.splitext(tail)[0])  # pyright: ignore[reportUnknownMemberType,reportAttributeAccessIssue]
             except (System.IO.FileNotFoundException, System.IO.FileLoadException):
                 # The file must exist since its existence is checked above.
                 # There must be another reason why loading the DLL raises this
@@ -319,29 +326,26 @@ class LoadLibrary:
                         # Python is running in a venv/virtualenv
                         # When using conda environments, sys.prefix == sys.base_prefix
                         py_exe = os.path.join(sys.base_prefix, os.path.basename(py_exe))
-                    status, msg = utils.check_dot_net_config(py_exe)
+                    status, msg = check_dot_net_config(py_exe)
                     if status == 0:
                         msg = f"Checking .NET config returned {msg!r} and still cannot load the library.\n{err}"
-                    raise OSError(msg)
+                    raise OSError(msg) from err
 
                 msg = "The above 'System.IO.FileLoadException' is not handled.\n"
-                raise OSError(msg)
+                raise OSError(msg) from err
 
             try:
                 types = self._assembly.GetTypes()
-            except Exception as e:
-                utils.logger.error(e)
-                utils.logger.error("The LoaderExceptions are:")
-                for item in e.LoaderExceptions:  # noqa: LoaderExceptions comes from .NET
-                    utils.logger.error("  %s", item.Message)
+            except Exception as e:  # noqa: BLE001
+                logger.error(e)
+                logger.error("The LoaderExceptions are:")
+                for item in e.LoaderExceptions:  # type: ignore[attr-defined] # pyright: ignore[reportUnknownMemberType,reportAttributeAccessIssue,reportUnknownVariableType]
+                    logger.error("  %s", item.Message)  # type: ignore[attr-defined] # pyright: ignore[reportUnknownMemberType,reportUnknownArgumentType]
             else:
                 for t in types:
                     try:
-                        if t.Namespace:
-                            obj = __import__(t.Namespace)
-                        else:
-                            obj = getattr(__import__("clr"), t.FullName)
-                    except:  # noqa: PEP 8: E722 do not use bare 'except'
+                        obj = __import__(t.Namespace) if t.Namespace else getattr(__import__("clr"), t.FullName)
+                    except:  # noqa: E722
                         obj = t
                         obj.__name__ = t.FullName
 
@@ -351,9 +355,10 @@ class LoadLibrary:
             self._lib = DotNet(self._path, dotnet)
 
         else:
-            assert False, "Should not get here -- contact developers"
+            msg = "Should not get here -- contact developers"
+            raise AssertionError(msg)
 
-        utils.logger.debug("Loaded %s", self._path)
+        logger.debug("Loaded %s", self._path)
 
     def __del__(self) -> None:
         """Calls cleanup."""
@@ -365,11 +370,11 @@ class LoadLibrary:
         lib_name: str = self._lib.__class__.__name__
         return f"<{self.__class__.__name__} libtype={lib_name} path={self._path}>"
 
-    def __enter__(self: Self) -> Self:
+    def __enter__(self: Self) -> Self:  # noqa: PYI019
         """Enter a context manager."""
         return self
 
-    def __exit__(self, *ignore) -> None:
+    def __exit__(self, *ignore: object) -> None:
         """Exit a context manager."""
         self.cleanup()
 
@@ -398,14 +403,14 @@ class LoadLibrary:
         if self._gateway:
             self._gateway.shutdown()
             self._gateway = None
-            utils.logger.debug("shutdown Py4J.GatewayServer")
+            logger.debug("shutdown Py4J.GatewayServer")
         if self._app:
             self._app.close()
             self._app = None
-            utils.logger.debug("close ActiveX application")
+            logger.debug("close ActiveX application")
 
     @property
-    def assembly(self) -> Any:
+    def assembly(self) -> Any:  # type: ignore[misc]
         """Returns a reference to the [.NET Runtime Assembly]{:target="_blank"} object.
 
         If the loaded library is not a .NET library, returns `None`.
@@ -419,7 +424,7 @@ class LoadLibrary:
         return self._assembly
 
     @property
-    def gateway(self):
+    def gateway(self) -> Any:  # type: ignore[misc]
         """[JavaGateway][py4j.java_gateway.JavaGateway] | `None` &mdash; Reference to the Java gateway.
 
         If the loaded library is not a Java library, returns `None`.
@@ -427,7 +432,7 @@ class LoadLibrary:
         return self._gateway
 
     @property
-    def lib(self) -> Any:
+    def lib(self) -> Any:  # type: ignore[misc]
         """Returns the reference to the library object.
 
         For example, if `libtype` is

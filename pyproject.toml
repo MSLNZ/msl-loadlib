@@ -230,6 +230,7 @@ exclude = [
     "build",
     "dist",
     "venv",
+    "src/msl/loadlib/_version.py"
 ]
 namespace-packages = ["src/msl"]
 target-version = "py38"
@@ -248,10 +249,19 @@ ignore = [
 ]
 
 [tool.ruff.lint.per-file-ignores]
-"src/msl/loadlib/start_server32.py" = [
+"src/msl/loadlib/freeze_server32.py" = [
     "T201", # allow print()
 ]
-"src/msl/loadlib/freeze_server32.py" = [
+"src/msl/loadlib/load_library.py" = [
+    "PTH100", # os-path-abspath
+    "PTH111", # os-path-expanduser
+    "PTH113", # os-path-isfile
+    "PTH118", # os-path-join
+    "PTH119", # os-path-basename
+    "PTH120", # os-path-dirname
+    "PTH122", # os-path-splitext
+]
+"src/msl/loadlib/start_server32.py" = [
     "T201", # allow print()
 ]
 "tests/*.py" = [
@@ -264,12 +274,6 @@ ignore = [
     "S101", # Use of `assert` detected
     "PLR2004", # Magic value used in comparison
     "INP001", # implicit-namespace-package
-]
-"docs/*.py" = [
-    "D100", # Missing docstring in public module
-    "D101", # Missing docstring in public class
-    "D102", # Missing docstring in public method
-    "D103", # Missing docstring in public function
 ]
 
 [tool.ruff.lint.pydocstyle]
