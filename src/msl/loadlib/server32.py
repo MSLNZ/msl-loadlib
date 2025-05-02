@@ -24,7 +24,7 @@ from .load_library import LoadLibrary
 if TYPE_CHECKING:
     from typing import Any
 
-    from ._types import LibType, PathLike
+    from ._types import LibType, PathLike, Server32Subclass
     from .activex import Application
 
 METADATA: str = "-METADATA-"
@@ -249,13 +249,14 @@ class _RequestHandler(BaseHTTPRequestHandler):
 
     pickle_protocol: int = 5
     pickle_file: str = ""
+    server: Server32Subclass  # type: ignore[assignment]  # pyright: ignore[reportIncompatibleVariableOverride]
 
     def do_GET(self) -> None:  # noqa: N802
         """Handle a GET request."""
         try:
             if self.path == METADATA:
                 response = {  # pyright: ignore[reportUnknownVariableType]
-                    "path": self.server.path,  # type: ignore[attr-defined] # pyright: ignore[reportUnknownMemberType,reportAttributeAccessIssue]
+                    "path": self.server.path,
                     "pid": os.getpid(),
                     "unfrozen_dir": sys._MEIPASS,  # type: ignore[attr-defined] # pyright: ignore[reportAttributeAccessIssue, reportUnknownMemberType] # noqa: SLF001
                 }
@@ -290,7 +291,7 @@ class _RequestHandler(BaseHTTPRequestHandler):
     def do_POST(self) -> None:  # noqa: N802
         """Handle a POST request."""
         if self.path == SHUTDOWN:
-            self.server.shutdown_handler()  # type: ignore[attr-defined] # pyright: ignore[reportUnknownMemberType,reportAttributeAccessIssue]
+            self.server.shutdown_handler()
             threading.Thread(target=self.server.shutdown).start()
         else:  # the pickle info
             match = re.match(r"protocol=(\d+)&path=(.*)", self.path)
