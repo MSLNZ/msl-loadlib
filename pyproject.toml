@@ -241,6 +241,10 @@ ignore = [
 "src/msl/loadlib/start_server32.py" = [
     "T201", # allow print()
 ]
+"tests/check_server32_imports.py" = [
+    "F401", # unused-import
+    "T201", # allow print()
+]
 "tests/*.py" = [
     "D100", # Missing docstring in public module
     "D101", # Missing docstring in public class

@@ -18,11 +18,28 @@ The following error will be displayed when the script exits (but that's ok)
 
 """
 
-import sys
+# pyright: reportUnusedImport=false, reportMissingTypeStubs=false
+from __future__ import annotations
+
 import importlib
+import sys
+
+# these are mandatory
+from msl import loadlib
+from msl.examples.loadlib import EXAMPLES_DIR
+from msl.loadlib import IS_PYTHON_64BIT, Client64, LoadLibrary, Server32, __version__, activex, utils, version_tuple
+from msl.loadlib.activex import Application, Colour, Icon
+from msl.loadlib.utils import generate_com_wrapper, get_com_info
+
+if sys.version_info[:2] >= (3, 12):
+    from sys import monitoring
+
+if sys.platform == "win32":
+    import clr  # type: ignore[import-untyped]
+    import comtypes  # type: ignore[import-untyped]
+    import pythonnet  # type: ignore[import-untyped]
 
 # Builtin modules in Python 3 (https://docs.python.org/3/py-modindex.html)
-# (module-name, comment)
 modules = [
     ("__future__", ""),
     ("__main__", ""),
@@ -333,31 +350,11 @@ modules = [
     ("zoneinfo", "Added in 3.9"),
 ]
 
-# these are mandatory
-from msl import loadlib
-from msl.loadlib import LoadLibrary
-from msl.loadlib import Client64
-from msl.loadlib import Server32
-from msl.loadlib import IS_PYTHON_64BIT
-from msl.loadlib import utils
-from msl.loadlib import activex
-from msl.loadlib.activex import Application
-from msl.loadlib.activex import Colour
-from msl.examples.loadlib import EXAMPLES_DIR
-
-if sys.version_info[:2] >= (3, 12):
-    from sys import monitoring
-
-if sys.platform == "win32":
-    import clr
-    import comtypes
-    import pythonnet
-
-failed = []
+failed: list[tuple[str, str]] = []
 for name, comment in modules:
     try:
-        importlib.import_module(name)
-    except ImportError:
+        _ = importlib.import_module(name)
+    except ImportError:  # noqa: PERF203
         failed.append((name, comment))
 
 version = ".".join(str(v) for v in sys.version_info[:3])
@@ -365,4 +362,4 @@ print(f"These modules cannot be imported by the server running on Python {versio
 length = max(len(name) for name, _ in failed)
 for name, comment in failed:
     print(f"  {name:{length}s} {comment}")
-print("")
+print()

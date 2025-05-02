@@ -1,30 +1,34 @@
-"""
-Checks that running a script with pythonw.exe does not
+r"""Checks that running a script with pythonw.exe does not do the following.
+
 1) create a new console
 2) the console that pythonw.exe is executing in does not "flash"
+
+If the script executes successfully, a new file \tests\check_pythonw.txt is created.
+
+See Issue #31 https://github.com/MSLNZ/msl-loadlib/issues/31
+
+Usage
+
+  .\.venv\Scripts\pythonw.exe .\tests\check_pythonw.py
+
 """
 
-import os
 import sys
+from pathlib import Path
 
-# make sure that msl.loadlib is importable
-path = os.path.abspath(os.path.join(os.path.dirname(__file__), os.pardir))
-sys.path.insert(0, path)
-
-from msl.examples.loadlib import Cpp64
-from msl.examples.loadlib import EXAMPLES_DIR
+from msl.examples.loadlib import EXAMPLES_DIR, Cpp64
 from msl.loadlib import LoadLibrary
 
-if os.path.basename(sys.executable) != "pythonw.exe":
+if Path(sys.executable).name != "pythonw.exe":
     raise RuntimeError("Must run this script using,\n  pythonw.exe " + __file__)
 
-sys.stdout = open(__file__[:-3] + ".txt", mode="wt")
+sys.stdout = open(f"{__file__[:-3]}.txt", mode="w")  # noqa: PTH123, SIM115
 sys.stderr = sys.stdout
 
-with LoadLibrary(os.path.join(EXAMPLES_DIR, "Trig.class")) as java:
-    print(java)
+with LoadLibrary(EXAMPLES_DIR / "Trig.class") as java:
+    print(java)  # noqa: T201
 
 with Cpp64() as cpp:
-    print(cpp)
+    print(cpp)  # noqa: T201
 
-print("You should delete this file")
+print("You should delete this file")  # noqa: T201
