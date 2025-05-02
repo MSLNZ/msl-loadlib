@@ -1,5 +1,4 @@
 """This module is built in to a 32-bit executable by running `freeze_server32`."""
-# pyright: reportUnusedCallResult=false, reportUnknownParameterType=false, reportUnknownMemberType=false
 
 from __future__ import annotations
 
@@ -11,9 +10,15 @@ import os
 import sys
 import tempfile
 import traceback
+from typing import TYPE_CHECKING, cast
 
 from msl.loadlib._constants import server_filename
 from msl.loadlib.server32 import Server32
+
+if TYPE_CHECKING:
+    from typing import Any
+
+    from msl.loadlib._types import Server32Subclass
 
 
 def main() -> int:  # noqa: C901, PLR0911, PLR0912, PLR0915
@@ -27,15 +32,15 @@ def main() -> int:  # noqa: C901, PLR0911, PLR0912, PLR0915
         formatter_class=argparse.RawTextHelpFormatter,
     )
 
-    parser.add_argument(
+    _ = parser.add_argument(
         "-i", "--interactive", action="store_true", help="run an interactive console with the 32-bit server and exit"
     )
 
-    parser.add_argument(
+    _ = parser.add_argument(
         "-v", "--version", action="store_true", help="show the Python version of the 32-bit server and exit"
     )
 
-    parser.add_argument(
+    _ = parser.add_argument(
         "-d",
         "--add-dll-directory",
         default=None,
@@ -46,7 +51,7 @@ def main() -> int:  # noqa: C901, PLR0911, PLR0912, PLR0915
         ),
     )
 
-    parser.add_argument(
+    _ = parser.add_argument(
         "-s",
         "--append-sys-path",
         default=None,
@@ -56,7 +61,7 @@ def main() -> int:  # noqa: C901, PLR0911, PLR0912, PLR0915
         ),
     )
 
-    parser.add_argument(
+    _ = parser.add_argument(
         "-e",
         "--append-environ-path",
         default=None,
@@ -66,20 +71,20 @@ def main() -> int:  # noqa: C901, PLR0911, PLR0912, PLR0915
         ),
     )
 
-    parser.add_argument(
+    _ = parser.add_argument(
         "-m",
         "--module",
         default=None,
         help="a Python module to run on the 32-bit server\n(the module must contain a subclass of Server32)",
     )
 
-    parser.add_argument(
+    _ = parser.add_argument(
         "-H", "--host", default="127.0.0.1", help="hostname or IP address to run the server on [default: 127.0.0.1]"
     )
 
-    parser.add_argument("-p", "--port", default=8080, help="the port to open on the host [default: 8080]")
+    _ = parser.add_argument("-p", "--port", default=8080, help="the port to open on the host [default: 8080]")
 
-    parser.add_argument(
+    _ = parser.add_argument(
         "-k",
         "--kwargs",
         default=None,
@@ -114,7 +119,7 @@ def main() -> int:  # noqa: C901, PLR0911, PLR0912, PLR0915
                 os.environ["PATH"] += os.pathsep + path
 
     # include directories with os.add_dll_directory()
-    dll_dirs = []
+    dll_dirs: list[Any] = []
     if args.add_dll_directory is not None:
         for path in args.add_dll_directory.split(";"):
             if path:
@@ -144,7 +149,7 @@ def main() -> int:  # noqa: C901, PLR0911, PLR0912, PLR0915
                 ctrl = '"Ctrl-Z then Enter"' if sys.platform == "win32" else "Ctrl-D (i.e. EOF)"
                 return f"Use exit(), quit() or {ctrl} to exit the 32-bit server console"
 
-            def __call__(self, *args, **kwargs):  # type: ignore[no-untyped-def] # pyright: ignore[reportMissingParameterType] # noqa: ANN002, ANN003, ANN204, ARG002
+            def __call__(self, *args, **kwargs):  # type: ignore[no-untyped-def] # pyright: ignore[reportMissingParameterType,reportUnknownParameterType] # noqa: ANN002, ANN003, ANN204, ARG002
                 raise SystemExit
 
         quitter = Quitter()
@@ -159,13 +164,13 @@ def main() -> int:  # noqa: C901, PLR0911, PLR0912, PLR0915
         except SystemExit:
             console.write("\n")
         finally:
-            for directory in dll_dirs:  # pyright: ignore[reportUnknownVariableType]
+            for directory in dll_dirs:
                 if directory.path:
                     directory.close()
         return 0
 
     # build the keyword-argument dictionary
-    kwargs = {}
+    kwargs: dict[str, str] = {}
     if args.kwargs is not None:
         for item in args.kwargs.split(";"):
             item_split = item.split("=")
@@ -200,13 +205,13 @@ def main() -> int:  # noqa: C901, PLR0911, PLR0912, PLR0915
 
     f = os.path.join(tempfile.gettempdir(), f"msl-loadlib-{args.host}-{args.port}.txt")  # noqa: PTH118
     with open(f, mode="w") as fp:  # noqa: PTH123
-        fp.write(f"{os.getpid()}\n{sys._MEIPASS}")  # type: ignore[attr-defined] # pyright: ignore[reportAttributeAccessIssue] # noqa: SLF001
+        _ = fp.write(f"{os.getpid()}\n{sys._MEIPASS}")  # type: ignore[attr-defined] # pyright: ignore[reportAttributeAccessIssue,reportUnknownMemberType] # noqa: SLF001
 
     try:
         mod = importlib.import_module(args.module)
     except ImportError as e:
         # ignore the folders from the unfrozen application
-        paths = "\n  ".join(item for item in sys.path if not item.startswith(sys._MEIPASS))  # type: ignore[attr-defined] # pyright: ignore[reportAttributeAccessIssue,reportUnknownArgumentType] # noqa: SLF001
+        paths = "\n  ".join(item for item in sys.path if not item.startswith(sys._MEIPASS))  # type: ignore[attr-defined] # pyright: ignore[reportAttributeAccessIssue,reportUnknownArgumentType,reportUnknownMemberType] # noqa: SLF001
         err = (
             f"ImportError: {e}\n"
             f"The missing module must be in sys.path (see the --append-sys-path option)\n"
@@ -225,10 +230,10 @@ def main() -> int:  # noqa: C901, PLR0911, PLR0912, PLR0915
         return -1
 
     # ensure that there is a subclass of Server32 in the module
-    cls = None
+    cls: type[Server32Subclass] | None = None
     for name, obj in inspect.getmembers(mod, inspect.isclass):
         if name != "Server32" and issubclass(obj, Server32):
-            cls = obj
+            cls = cast("type[Server32Subclass]", obj)
             break
 
     if cls is None:
@@ -242,7 +247,7 @@ def main() -> int:  # noqa: C901, PLR0911, PLR0912, PLR0915
 
     server, error, tb = None, None, None
     try:
-        server = cls(args.host, args.port, **kwargs)  # type: ignore[arg-type] # pyright: ignore[reportUnknownArgumentType]
+        server = cls(args.host, args.port, **kwargs)
     except Exception as e:  # noqa: BLE001
         error = e
         tb = traceback.format_exc()
@@ -293,7 +298,7 @@ def main() -> int:  # noqa: C901, PLR0911, PLR0912, PLR0915
         return -1
     finally:
         server.server_close()
-        for directory in dll_dirs:  # pyright: ignore[reportUnknownVariableType]
+        for directory in dll_dirs:
             if directory.path:
                 directory.close()
 
