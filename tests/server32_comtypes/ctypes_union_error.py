@@ -12,7 +12,7 @@ from msl.loadlib import Server32
 
 
 class FileSystemObjectServer(Server32):
-    def __init__(self, host, port, **kwargs):
+    def __init__(self, host: str, port: int) -> None:
         # comtypes will try to import numpy to see if it is available.
         # Since Client64 passes its sys.path to Server32 the modules that
         # are available to Client64 to import are also available to Server32.
@@ -27,12 +27,12 @@ class FileSystemObjectServer(Server32):
         if path:
             sys.path.append(path)
 
-        self.temp_file = os.path.join(tempfile.gettempdir(), "msl-loadlib-FileSystemObject.txt")
+        self.temp_file: str = os.path.join(tempfile.gettempdir(), "msl-loadlib-FileSystemObject.txt")  # noqa: PTH118
 
-    def get_temp_file(self):
+    def get_temp_file(self) -> str:
         return self.temp_file
 
-    def create_and_write(self, text):
+    def create_and_write(self, text: str) -> None:
         fp = self.lib.CreateTextFile(self.temp_file)
         fp.WriteLine(text)
         fp.Close()
