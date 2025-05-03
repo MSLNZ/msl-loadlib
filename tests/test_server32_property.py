@@ -1,86 +1,94 @@
+from __future__ import annotations
+
 import os
 from ctypes import c_float
 
-from msl.loadlib import Client64
-from msl.loadlib import Server32
-from msl.loadlib import Server32Error
+from msl.loadlib import Client64, Server32, Server32Error
 
 if Server32.is_interpreter():
+    from unittest.mock import Mock
 
-    def skipif_no_server32(*args):
-        pass
+    skipif_no_server32 = Mock()
 else:
-    import pytest
-    from conftest import skipif_no_server32
+    from conftest import skipif_no_server32  # type: ignore[assignment]
 
 
 class Property32(Server32):
-    CONSTANT = 2
+    CONSTANT: int = 2
 
-    def __init__(self, host, port):
-        path = os.path.join(Server32.examples_dir(), "cpp_lib32")
+    def __init__(self, host: str, port: int) -> None:
+        path = os.path.join(Server32.examples_dir(), "cpp_lib32")  # noqa: PTH118
         super().__init__(path, "cdll", host, port)
 
-        self.three = self.lib.add(1, 2)
+        self.three: int = self.lib.add(1, 2)
 
-    def subtract(self, a, b):
+    def subtract(self, a: float, b: float) -> float:
         self.lib.subtract.restype = c_float
-        return self.lib.subtract(c_float(a), c_float(b))
+        result: float = self.lib.subtract(c_float(a), c_float(b))
+        return result
 
     @property
-    def seven(self):
+    def seven(self) -> int:
         return 7
 
     @property
-    def parameters(self):
+    def parameters(self) -> dict[str, int | str | complex]:
         return {"one": 1, "string": "hey", "complex": 7j}
 
     @property
-    def multiple(self):
+    def multiple(self) -> tuple[int, str, complex]:
         return 1, "hey", 7j
 
 
 class Property64(Client64):
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__(__file__)
 
-        self.CONSTANT = self.request32("CONSTANT")
-        self.three = self.request32("three")
+        self.CONSTANT: int = self.request32("CONSTANT")
+        self.three: int = self.request32("three")
 
-    def add(self, a, b):
-        return self.request32("add", a, b)
+    def add(self, a: int, b: int) -> int:
+        reply: int = self.request32("add", a, b)
+        return reply
 
-    def subtract(self, a, b):
-        return self.request32("subtract", a, b)
-
-    @property
-    def seven(self):
-        return self.request32("seven")
+    def subtract(self, a: float, b: float) -> float:
+        reply: float = self.request32("subtract", a, b)
+        return reply
 
     @property
-    def parameters(self):
-        return self.request32("parameters")
+    def seven(self) -> int:
+        reply: int = self.request32("seven")
+        return reply
 
     @property
-    def foo(self):
-        return self.request32("foo")
+    def parameters(self) -> dict[str, int | str | complex]:
+        reply: dict[str, int | str | complex] = self.request32("parameters")
+        return reply
 
-    def multiple(self):
-        return self.request32("multiple")
+    @property
+    def foo(self) -> int:
+        reply: int = self.request32("foo")
+        return reply
+
+    def multiple(self) -> tuple[int, str, complex]:
+        reply: tuple[int, str, complex] = self.request32("multiple")
+        return reply
 
 
 @skipif_no_server32
-def test_request_property():
-    p = Property64()
-    assert p.subtract(100, 100) == 0
-    assert p.CONSTANT == 2
-    assert p.three == 3
-    assert p.seven == 7
-    assert p.parameters == {"one": 1, "string": "hey", "complex": 7j}
-    assert p.multiple() == (1, "hey", 7j)
+def test_request_property() -> None:  # type: ignore[misc]
+    import pytest
 
-    with pytest.raises(Server32Error, match=r"'Property32' object has no attribute 'add'"):
-        p.add(1, 2)
+    with Property64() as p:
+        assert p.subtract(100, 100) == 0
+        assert p.CONSTANT == 2
+        assert p.three == 3
+        assert p.seven == 7
+        assert p.parameters == {"one": 1, "string": "hey", "complex": 7j}
+        assert p.multiple() == (1, "hey", 7j)
 
-    with pytest.raises(Server32Error, match=r"'Property32' object has no attribute 'foo'"):
-        ret = p.foo
+        with pytest.raises(Server32Error, match=r"'Property32' object has no attribute 'add'"):
+            _ = p.add(1, 2)
+
+        with pytest.raises(Server32Error, match=r"'Property32' object has no attribute 'foo'"):
+            _ = p.foo
