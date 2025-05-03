@@ -1,6 +1,6 @@
 # MSL-LoadLib
 
-[![Tests Status](https://github.com/MSLNZ/msl-loadlib/actions/workflows/tests.yml/badge.svg)](https://github.com/MSLNZ/msl-loadlib/actions/workflows/tests.yml)
+[![CI Status](https://github.com/MSLNZ/msl-loadlib/actions/workflows/ci.yml/badge.svg)](https://github.com/MSLNZ/msl-loadlib/actions/workflows/ci.yml)
 [![Docs Status](https://github.com/MSLNZ/msl-loadlib/actions/workflows/docs.yml/badge.svg)](https://github.com/MSLNZ/msl-loadlib/actions/workflows/docs.yml)
 [![PyPI - Version](https://img.shields.io/pypi/v/msl-loadlib?logo=pypi&logoColor=gold&label=PyPI&color=blue)](https://pypi.org/project/msl-loadlib/)
 
