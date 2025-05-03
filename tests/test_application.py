@@ -1,13 +1,12 @@
 import sys
 
-from msl.loadlib import activex
-
 import pytest
 
-from conftest import skipif_not_windows, IS_WINDOWS
+from conftest import IS_WINDOWS, skipif_not_windows
+from msl.loadlib import activex
 
 
-def test_menu_item():
+def test_menu_item() -> None:
     mi = activex.MenuItem(hmenu=123, id=7, text="hello world", callback=None, flags=1, data=[-1, 0, 1])
     assert mi.hmenu == 123
     assert mi.id == 7
@@ -15,8 +14,8 @@ def test_menu_item():
     assert mi.text == "hello world"
     assert mi.callback is None
     assert mi.flags == 1
-    assert mi == mi
-    assert mi is mi
+    assert mi == mi  # noqa: PLR0124
+    assert mi is mi  # noqa: PLR0124
     assert str(mi) == "<MenuItem id=7 text='hello world'>"
     assert mi.data == [-1, 0, 1]
 
@@ -29,7 +28,7 @@ def test_menu_item():
         mi3.checked = True
 
 
-def test_menu_group():
+def test_menu_group() -> None:
     mg = activex.MenuGroup()
     assert mg.name == ""
     assert mg.checked is None
@@ -38,9 +37,9 @@ def test_menu_group():
     mg = activex.MenuGroup("click")
     a = mg.append("a")
     assert isinstance(a, activex.MenuItem)
-    mg.append("b", data=8, flags=activex.MenuFlag.POPUP)
+    _ = mg.append("b", data=8, flags=activex.MenuFlag.POPUP)
     mg.append_separator()
-    mg.append("c", callback=None)
+    _ = mg.append("c", callback=None)
     assert mg.name == "click"
     assert mg.checked is None
     assert str(mg) == "<MenuGroup name='click' size=4>"
@@ -49,13 +48,13 @@ def test_menu_group():
         assert isinstance(item, activex.MenuItem)
         assert item.checked is False
 
-    for item in [a, None]:
+    for item in [a, None]:  # type: ignore[assignment]
         with pytest.raises(ValueError, match="A MenuGroup must first be added to a Menu"):
             mg.checked = item
 
 
 @skipif_not_windows
-def test_menu():
+def test_menu() -> None:  # noqa: PLR0915
     m = activex.Menu()
     assert m.hmenu > 0
 
@@ -113,7 +112,7 @@ def test_menu():
     group.checked = a
     assert group.checked is a
     assert a.checked is True
-    assert b.checked is False
+    assert b.checked is False  # type: ignore[unreachable]
     assert c.checked is False
 
     group.checked = b
@@ -135,9 +134,9 @@ def test_menu():
     assert c.checked is False
 
 
-@pytest.mark.filterwarnings(pytest.PytestUnhandledThreadExceptionWarning)
+@pytest.mark.filterwarnings(pytest.PytestUnhandledThreadExceptionWarning)  # type: ignore[arg-type] # pyright: ignore[reportArgumentType]
 @skipif_not_windows
-def test_application():
+def test_application() -> None:
     app = activex.Application()
     assert app.hwnd > 0
     assert app.thread_id > 0
@@ -154,13 +153,13 @@ def test_application():
 
 
 @pytest.mark.skipif(IS_WINDOWS, reason="do not test on Windows")
-def test_application_raises():
+def test_application_raises() -> None:
     with pytest.raises(OSError, match="not supported on this platform"):
-        activex.Application()
+        _ = activex.Application()
 
 
 @skipif_not_windows
-def test_icon():
+def test_icon() -> None:
     icon = activex.Icon("does not exist")
     assert str(icon) == "<Icon file='does not exist' index=0>"
     assert icon.hicon is None
@@ -172,8 +171,9 @@ def test_icon():
     icon.destroy()
 
     with pytest.raises(ValueError, match="negative index"):
-        activex.Icon("", index=-1)
+        _ = activex.Icon("", index=-1)
 
     icon = activex.Icon(sys.executable)
+    assert icon.hicon is not None
     assert icon.hicon > 0
     icon.destroy()
