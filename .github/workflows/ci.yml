@@ -75,6 +75,7 @@ jobs:
         uses: astral-sh/setup-uv@v5
         with:
           enable-cache: false
+          python-version: '3.13'
       - name: Install cSpell
         run: npm install -g cspell@latest
       - name: Spelling
