@@ -103,6 +103,8 @@ versions = [
     "linux_x86_64",
     "macos_arm64",
     "macos_x86_64",
+    "musl_aarch64",
+    "musl_x86_64",
     "win32",
     "win_amd64",
 ]

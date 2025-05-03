@@ -41,6 +41,8 @@ versions: dict[str, tuple[str, ...]] = {
     "linux_x86_64": (*include, ".so", "linux", "linux.config", "dotnet_lib32.dll", "dotnet_lib64.dll"),
     "macos_arm64": (*include, "libarm64.dylib"),
     "macos_x86_64": (*include, "lib64.dylib", "dotnet_lib32.dll", "dotnet_lib64.dll"),
+    "musl_aarch64": (*include,),
+    "musl_x86_64": (*include,),
     "win32": (*include, ".dll", ".exe", ".exe.config"),
     "win_amd64": (*include, ".dll", ".exe", ".exe.config"),
 }
@@ -75,6 +77,18 @@ class CustomWheelBuilder(WheelBuilder):
         build_data["tag"] = "py3-none-macosx_10_6_x86_64"
         return self.build_standard(directory, **build_data)
 
+    def build_musl_aarch64(self, directory: str, **build_data: Any) -> str:
+        """Update the tag for a musl_aarch64 build."""
+        self.current_api = "musl_aarch64"
+        build_data["tag"] = "py3-none-musllinux_1_1_aarch64"
+        return self.build_standard(directory, **build_data)
+
+    def build_musl_x86_64(self, directory: str, **build_data: Any) -> str:
+        """Update the tag for a musl_x86_64 build."""
+        self.current_api = "musl_x86_64"
+        build_data["tag"] = "py3-none-musllinux_1_1_x86_64"
+        return self.build_standard(directory, **build_data)
+
     def build_win32(self, directory: str, **build_data: Any) -> str:
         """Update the tag for a win32 build."""
         self.current_api = "win32"
@@ -94,6 +108,8 @@ class CustomWheelBuilder(WheelBuilder):
             "linux_x86_64": self.build_linux_x86_64,
             "macos_arm64": self.build_macos_arm64,
             "macos_x86_64": self.build_macos_x86_64,
+            "musl_aarch64": self.build_musl_aarch64,
+            "musl_x86_64": self.build_musl_x86_64,
             "win32": self.build_win32,
             "win_amd64": self.build_win_amd64,
         }
