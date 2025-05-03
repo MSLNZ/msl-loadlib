@@ -28,8 +28,8 @@
 
 The 32-bit server is frozen with the following versions
 
-- `server32-windows.exe` &ndash; Python 3.11.4, pythonnet 3.0.1, comtypes 1.2.0
-- `server32-linux` &ndash; Python 3.11.4 (built with GLIBC 2.27)
+- `server32-windows.exe` &mdash; Python 3.11.4, pythonnet 3.0.1, comtypes 1.2.0
+- `server32-linux` &mdash; Python 3.11.4 (built with GLIBC 2.27)
 
 ***Added:***
 
@@ -47,20 +47,20 @@ The 32-bit server is frozen with the following versions
 
 ***Fixed:***
 
-- issue [#31](https://github.com/MSLNZ/msl-loadlib/issues/31) &ndash; suppress console popups when using `pythonw.exe`
-- issue [#24](https://github.com/MSLNZ/msl-loadlib/issues/24) &ndash; starting the 32-bit server could block forever by not honouring the timeout
+- issue [#31](https://github.com/MSLNZ/msl-loadlib/issues/31) &mdash; suppress console popups when using `pythonw.exe`
+- issue [#24](https://github.com/MSLNZ/msl-loadlib/issues/24) &mdash; starting the 32-bit server could block forever by not honouring the timeout
 
 ## 0.9.0 (2021-05-13)
 
 The 32-bit server is frozen with the following versions
 
-- `server32-windows.exe` &ndash; Python 3.7.10, pythonnet 2.5.2, comtypes 1.1.10
-- `server32-linux` &ndash; Python 3.7.10, pythonnet 2.4.0
+- `server32-windows.exe` &mdash; Python 3.7.10, pythonnet 2.5.2, comtypes 1.1.10
+- `server32-linux` &mdash; Python 3.7.10, pythonnet 2.4.0
 
 ***Added:***
 
 - support for loading an ActiveX library
-- the following static methods to `Server32` &ndash; `remove_site_packages_64bit`, `is_interpreter`, `examples_dir`
+- the following static methods to `Server32` &mdash; `remove_site_packages_64bit`, `is_interpreter`, `examples_dir`
 - the `utils.generate_com_wrapper` function
 
 ***Changed:***
@@ -71,14 +71,14 @@ The 32-bit server is frozen with the following versions
 
 - `Client64.__del__` could have written a warning to stderr indicating that no `self._conn` attribute existed
 - `sys:1: ResourceWarning: unclosed file <_io.BufferedReader name=...>` warnings could be written to stderr when a `Client64` object is destroyed
-- issue [#23](https://github.com/MSLNZ/msl-loadlib/issues/23) &ndash; the `useLegacyV2RuntimeActivationPolicy` property was no longer created
+- issue [#23](https://github.com/MSLNZ/msl-loadlib/issues/23) &mdash; the `useLegacyV2RuntimeActivationPolicy` property was no longer created
 
 ## 0.8.0 (2021-02-20)
 
 The 32-bit server is frozen with the following versions
 
-- `server32-windows.exe` &ndash; Python 3.7.10, pythonnet 2.5.2 and comtypes 1.1.8
-- `server32-linux` &ndash; Python 3.7.10 and pythonnet 2.4.0
+- `server32-windows.exe` &mdash; Python 3.7.10, pythonnet 2.5.2 and comtypes 1.1.8
+- `server32-linux` &mdash; Python 3.7.10 and pythonnet 2.4.0
 
 ***Added:***
 
@@ -95,7 +95,7 @@ The 32-bit server is frozen with the following versions
 
 ***Fixed:***
 
-- issue [#21](https://github.com/MSLNZ/msl-loadlib/issues/21) &ndash; an `UnsupportedOperation: fileno` exception was raised when running within the Spyder IDE
+- issue [#21](https://github.com/MSLNZ/msl-loadlib/issues/21) &mdash; an `UnsupportedOperation: fileno` exception was raised when running within the Spyder IDE
 
 ***Removed:***
 
@@ -105,8 +105,8 @@ The 32-bit server is frozen with the following versions
 
 The 32-bit server is frozen with the following versions
 
-- `server32-windows.exe` &ndash; Python 3.7.7, pythonnet 2.4.0 and comtypes 1.1.7
-- `server32-linux` &ndash; Python 3.7.7 and pythonnet 2.4.0
+- `server32-windows.exe` &mdash; Python 3.7.7, pythonnet 2.4.0 and comtypes 1.1.7
+- `server32-linux` &mdash; Python 3.7.7 and pythonnet 2.4.0
 
 ***Added:***
 
@@ -127,8 +127,8 @@ The 32-bit server is frozen with the following versions
 
 The 32-bit server is frozen with the following versions
 
-- `server32-windows.exe` &ndash; Python 3.7.3, pythonnet 2.4.0 and comtypes 1.1.7
-- `server32-linux` &ndash; Python 3.7.3 and pythonnet 2.4.0
+- `server32-windows.exe` &mdash; Python 3.7.3, pythonnet 2.4.0 and comtypes 1.1.7
+- `server32-linux` &mdash; Python 3.7.3 and pythonnet 2.4.0
 
 ***Added:***
 
@@ -149,15 +149,15 @@ The 32-bit server is frozen with the following versions
 
 - use `sys.executable -m PyInstaller` to create the 32-bit server (cherry picked from PR [#18](https://github.com/MSLNZ/msl-loadlib/pull/18))
 - the 32-bit server prints error messages to `sys.stderr` instead of `sys.stdout`
-- issue [#15](https://github.com/MSLNZ/msl-loadlib/issues/15) &ndash; wait for the subprocess that starts the 32-bit server to terminate and set a value for the `returncode`
-- issue [#14](https://github.com/MSLNZ/msl-loadlib/issues/14) &ndash; use `os.kill` to stop the 32-bit server if it won't stop after `kill_timeout` seconds
+- issue [#15](https://github.com/MSLNZ/msl-loadlib/issues/15) &mdash; wait for the subprocess that starts the 32-bit server to terminate and set a value for the `returncode`
+- issue [#14](https://github.com/MSLNZ/msl-loadlib/issues/14) &mdash; use `os.kill` to stop the 32-bit server if it won't stop after `kill_timeout` seconds
 
 ## 0.5.0 (2019-01-06)
 
 The 32-bit server is frozen with the following versions
 
-- `server32-windows.exe` &ndash; Python 3.6.8, pythonnet 2.3.0 and comtypes 1.1.7
-- `server32-linux` &ndash; Python 3.6.8 and pythonnet 2.3.0
+- `server32-windows.exe` &mdash; Python 3.6.8, pythonnet 2.3.0 and comtypes 1.1.7
+- `server32-linux` &mdash; Python 3.6.8 and pythonnet 2.3.0
 
 ***Added:***
 
@@ -184,8 +184,8 @@ The 32-bit server is frozen with the following versions
 
 The 32-bit server is frozen with the following versions
 
-- `server32-windows.exe` &ndash; Python 3.6.6 and pythonnet 2.3.0
-- `server32-linux` &ndash; Python 3.6.6 and pythonnet 2.3.0
+- `server32-windows.exe` &mdash; Python 3.6.6 and pythonnet 2.3.0
+- `server32-linux` &mdash; Python 3.6.6 and pythonnet 2.3.0
 
 ***Added:***
 
@@ -212,8 +212,8 @@ The 32-bit server is frozen with the following versions
 
 The 32-bit server is frozen with the following versions
 
-- `server32-windows.exe` &ndash; Python 3.6.4 and pythonnet 2.3.0
-- `server32-linux` &ndash; Python 3.6.4 and pythonnet 2.3.0
+- `server32-windows.exe` &mdash; Python 3.6.4 and pythonnet 2.3.0
+- `server32-linux` &mdash; Python 3.6.4 and pythonnet 2.3.0
 
 ***Added:***
 
@@ -241,8 +241,8 @@ The 32-bit server is frozen with the following versions
 
 The 32-bit server is frozen with the following versions
 
-- `server32-windows.exe` &ndash; Python 3.6.3 and pythonnet 2.3.0
-- `server32-linux` &ndash; Python 3.6.3 and pythonnet 2.3.0
+- `server32-windows.exe` &mdash; Python 3.6.3 and pythonnet 2.3.0
+- `server32-linux` &mdash; Python 3.6.3 and pythonnet 2.3.0
 
 ***Added:***
 
@@ -258,7 +258,7 @@ The 32-bit server is frozen with the following versions
 
 ## 0.3.1 (2017-05-15)
 
-- fix ReadTheDocs build error &ndash; AttributeError: module 'site' has no attribute 'getsitepackages'
+- fix ReadTheDocs build error &mdash; AttributeError: module 'site' has no attribute 'getsitepackages'
 - strip whitespace from append_sys_path and append_environ_path
 - make pythonnet a required dependency only for Windows
 
