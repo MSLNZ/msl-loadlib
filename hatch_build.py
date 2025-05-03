@@ -87,7 +87,7 @@ class CustomWheelBuilder(WheelBuilder):
         build_data["tag"] = "py3-none-win_amd64"
         return self.build_standard(directory, **build_data)
 
-    def get_version_api(self) -> dict[str, Callable[..., str]]:  # pyright: ignore[reportImplicitOverride]
+    def get_version_api(self) -> dict[str, Callable[..., str]]:
         """Overrides abstractmethod BuilderInterface.get_version_api()."""
         return {
             "linux_i686": self.build_linux_i686,
@@ -98,7 +98,7 @@ class CustomWheelBuilder(WheelBuilder):
             "win_amd64": self.build_win_amd64,
         }
 
-    def recurse_included_files(self) -> Iterable[IncludedFile]:  # pyright: ignore[reportImplicitOverride]
+    def recurse_included_files(self) -> Iterable[IncludedFile]:
         """Overrides WheelBuilder.recurse_included_files()."""
         for file in super().recurse_project_files():
             if file.path.endswith(versions[self.current_api]):
