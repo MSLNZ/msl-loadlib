@@ -156,8 +156,10 @@ class Client64:
 
     def __del__(self) -> None:
         """Call the cleanup() method from the client."""
-        if hasattr(self, "_client"):
+        try:  # noqa: SIM105
             self._client.cleanup()
+        except AttributeError:
+            pass
 
     def __enter__(self: Self) -> Self:  # noqa: PYI019
         """Enter the context manager."""
@@ -165,8 +167,10 @@ class Client64:
 
     def __exit__(self, *ignored: object) -> None:
         """Exit the context manager."""
-        if hasattr(self, "_client"):
+        try:  # noqa: SIM105
             self._client.cleanup()
+        except AttributeError:
+            pass
 
     def __repr__(self) -> str:
         """Returns the string representation."""
