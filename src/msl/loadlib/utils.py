@@ -384,7 +384,7 @@ def generate_com_wrapper(lib: Any, out_dir: PathLike | None = None) -> ModuleTyp
     if out_dir is not None:
         gen_dir = Path(os.fsdecode(out_dir)).resolve()
         gen_dir.mkdir(parents=True, exist_ok=True)
-        comtypes.client.gen_dir = gen_dir
+        comtypes.client.gen_dir = str(gen_dir)
 
     def from_pointer(p: Any) -> ModuleType:
         info = p.GetTypeInfo(0)

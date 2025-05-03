@@ -1,23 +1,22 @@
-import os
 import shutil
 import socket
 import sys
 import tempfile
-from xml.etree import ElementTree
+from pathlib import Path
+from xml.etree import ElementTree as ET
 
 import pytest
 
-from conftest import IS_MACOS_ARM64, IS_WINDOWS
-from conftest import skipif_not_windows
-from msl.loadlib import utils
+from conftest import IS_MACOS_ARM64, IS_WINDOWS, skipif_not_windows
+from msl.loadlib import ConnectionTimeoutError, LoadLibrary, utils
 
 
-def test_timeout():
-    with pytest.raises(utils.ConnectionTimeoutError):
+def test_timeout() -> None:
+    with pytest.raises(ConnectionTimeoutError):
         utils.wait_for_server("localhost", utils.get_available_port(), 2)
 
 
-def test_port_functions():
+def test_port_functions() -> None:
     port = utils.get_available_port()
     assert not utils.is_port_in_use(port)
     with socket.socket() as sock:
@@ -28,79 +27,82 @@ def test_port_functions():
 
 
 @pytest.mark.skipif(IS_MACOS_ARM64, reason="macOS and arm64")
-def test_is_pythonnet_installed():
+def test_is_pythonnet_installed() -> None:
     assert utils.is_pythonnet_installed()
 
 
-def test_is_py4j_installed():
+def test_is_py4j_installed() -> None:
     assert utils.is_py4j_installed()
 
 
-def test_is_comtypes_installed():
+def test_is_comtypes_installed() -> None:
     if IS_WINDOWS:
         assert utils.is_comtypes_installed()
     else:
         assert not utils.is_comtypes_installed()
 
 
-def test_check_dot_net_config():
-    base = os.path.join(os.path.dirname(os.path.realpath(__file__)), "dotnet_config")
+def test_check_dot_net_config() -> None:
+    base = Path(__file__).parent / "dotnet_config"
 
     # create the .config file
-    exe = os.path.join(base, "no_config_exists.exe")
-    cfg = f"{exe}.config"
-    assert os.path.isfile(exe)
-    assert not os.path.isfile(cfg)
+    exe = base / "no_config_exists.exe"
+    cfg = Path(f"{exe}.config")
+    assert exe.is_file()
+    assert not cfg.is_file()
     val, msg = utils.check_dot_net_config(exe)
     assert val == 1
     assert msg.startswith("The library appears to be from a .NET Framework version < 4.0")
-    assert os.path.isfile(f"{exe}.config")
+    assert cfg.is_file()
 
     # the useLegacyV2RuntimeActivationPolicy was already enabled
     val, msg = utils.check_dot_net_config(exe)
     assert val == 0
     assert msg == "The useLegacyV2RuntimeActivationPolicy property is enabled"
 
-    os.remove(cfg)
+    cfg.unlink()
 
     # the useLegacyV2RuntimeActivationPolicy was set to false
-    exe = os.path.join(base, "set_to_false.exe")
+    exe = base / "set_to_false.exe"
     val, msg = utils.check_dot_net_config(exe)
     assert val == -1
     assert 'is "false"' in msg
 
     # the startup element does not exist, it gets inserted
-    exe = os.path.join(base, "startup_element_does_not_exist.exe")
-    cfg = f"{exe}.config"
+    exe = base / "startup_element_does_not_exist.exe"
+    cfg = Path(f"{exe}.config")
     cfg_string = """<?xml version ="1.0"?>
 <configuration>
     <something>7</something>
 </configuration>
 """
-    with open(cfg, mode="wt") as f:
-        f.write(cfg_string)
+    _ = cfg.write_text(cfg_string)
     val, msg = utils.check_dot_net_config(exe)
     assert val == 1
     assert msg.startswith("Added")
-    root = ElementTree.parse(cfg).getroot()
-    assert root.find("something").text == "7"
-    assert root.find("startup").attrib["useLegacyV2RuntimeActivationPolicy"].lower() == "true"
-    os.remove(cfg)
+    root = ET.parse(cfg).getroot()  # noqa: S314
+    something = root.find("something")
+    assert something is not None
+    assert something.text == "7"
+    startup = root.find("startup")
+    assert startup is not None
+    assert startup.attrib["useLegacyV2RuntimeActivationPolicy"].lower() == "true"
+    cfg.unlink()
 
     # the config file exists, but it is not a valid XML file
-    exe = os.path.join(base, "invalid_xml.exe")
+    exe = base / "invalid_xml.exe"
     val, msg = utils.check_dot_net_config(exe)
     assert val == -1
     assert msg.startswith("Invalid XML file")
 
     # the config file exists but the root tag is not <configuration>
-    exe = os.path.join(base, "root_tag_is_not_configuration.exe")
+    exe = base / "root_tag_is_not_configuration.exe"
     val, msg = utils.check_dot_net_config(exe)
     assert val == -1
     assert msg.startswith("The root tag in")
 
 
-def test_get_com_info():
+def test_get_com_info() -> None:
     info = utils.get_com_info()
     if IS_WINDOWS:
         assert len(info) > 0
@@ -121,35 +123,32 @@ def test_get_com_info():
 
 
 @skipif_not_windows
-def test_generate_com_wrapper():
-    import comtypes.client
-    from msl.loadlib import LoadLibrary
+def test_generate_com_wrapper() -> None:
+    import comtypes.client  # type: ignore[import-untyped] # pyright: ignore[reportMissingTypeStubs]
 
     expected_mod_names = [
         "comtypes.gen.SHDocVw",
         "comtypes.gen._EAB22AC0_30C1_11CF_A7EB_0000C05BAE0B_0_1_1",
     ]
 
-    out_dir = os.path.join(tempfile.gettempdir(), "msl-loadlib-com-wrapper")
+    out_dir = Path(tempfile.gettempdir()) / "msl-loadlib-com-wrapper"
 
-    def cleanup():
+    def cleanup() -> None:
         for n in expected_mod_names:
-            sys.modules.pop(n, None)
+            _ = sys.modules.pop(n, None)
         shutil.rmtree(out_dir)
 
     # comtypes is buggy and sometimes, at random, the following exception is raised
     #   OSError: [WinError -2147467259] Unspecified error
     # when generating the wrapper
-    # therefore we
-    def run():
+    def run() -> None:
         assert comtypes.client.gen_dir.endswith("site-packages\\comtypes\\gen")
 
         # do not want to save any files in the site-packages/comtypes/gen directory
         # when the LoadLibrary class is called
-        if not os.path.isdir(out_dir):
-            os.makedirs(out_dir)
+        out_dir.mkdir(exist_ok=True)
         cached_gen_dir = comtypes.client.gen_dir
-        comtypes.client.gen_dir = out_dir
+        comtypes.client.gen_dir = str(out_dir)
         com = LoadLibrary("InternetExplorer.Application.1", "com")
         comtypes.client.gen_dir = cached_gen_dir
         cleanup()
@@ -168,7 +167,7 @@ def test_generate_com_wrapper():
             # make sure that each iteration through this loop generates a new
             # 'mod' object and comtypes does not load the object from the
             # previous loop iteration
-            assert not os.path.isdir(out_dir)
+            assert not out_dir.is_dir()
             for name in expected_mod_names:
                 assert name not in sys.modules
 
@@ -177,27 +176,27 @@ def test_generate_com_wrapper():
             assert mod.IWebBrowser2
             for name in expected_mod_names:
                 filename = name.split(".")[2] + ".py"
-                assert os.path.isfile(os.path.join(out_dir, filename))
+                assert (out_dir / filename).is_file()
 
             cleanup()
 
         assert comtypes.client.gen_dir.endswith("site-packages\\comtypes\\gen")
 
-        with pytest.raises(OSError):
-            utils.generate_com_wrapper("progid.does.not.exist")
+        with pytest.raises(OSError):  # noqa: PT011
+            _ = utils.generate_com_wrapper("progid.does.not.exist")
 
         assert comtypes.client.gen_dir.endswith("site-packages\\comtypes\\gen")
 
         # a non-LoadLib object should still raise an error
-        for obj in [dict(), None, True]:
+        for obj in [{}, None, True]:  # type: ignore[var-annotated] # pyright: ignore[reportUnknownVariableType]
             with pytest.raises((AttributeError, TypeError)):
-                utils.generate_com_wrapper(obj)
+                _ = utils.generate_com_wrapper(obj)
 
         assert comtypes.client.gen_dir.endswith("site-packages\\comtypes\\gen")
 
     try:
         run()
-    except (WindowsError, OSError) as e:
+    except OSError as e:
         msg = str(e)
         if msg.endswith("-2147467259] Unspecified error"):
             pytest.xfail(msg)
