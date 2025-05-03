@@ -2636,7 +2636,8 @@ the module is saved to the <code>../site-packages/comtypes/gen</code> directory.
 <span class="normal">411</span>
 <span class="normal">412</span>
 <span class="normal">413</span>
-<span class="normal">414</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">generate_com_wrapper</span><span class="p">(</span><span class="n">lib</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span> <span class="n">out_dir</span><span class="p">:</span> <span class="n">PathLike</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ModuleType</span><span class="p">:</span>
+<span class="normal">414</span>
+<span class="normal">415</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">generate_com_wrapper</span><span class="p">(</span><span class="n">lib</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span> <span class="n">out_dir</span><span class="p">:</span> <span class="n">PathLike</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ModuleType</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Generate a Python wrapper module around a [COM]{:target=&quot;_blank&quot;} library.</span>
 
 <span class="sd">    For more information see [Accessing type libraries]{:target=&quot;_blank&quot;}.</span>
@@ -2679,7 +2680,8 @@ the module is saved to the <code>../site-packages/comtypes/gen</code> directory.
     <span class="kn">import</span><span class="w"> </span><span class="nn">comtypes.client</span>  <span class="c1"># type: ignore[import-untyped] # pyright: ignore[reportMissingTypeStubs]</span>
 
     <span class="c1"># cache the value of gen_dir to reset it later</span>
-    <span class="n">cached_gen_dir</span> <span class="o">=</span> <span class="n">comtypes</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">gen_dir</span>
+    <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">comtypes</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">gen_dir</span><span class="p">,</span> <span class="nb">str</span><span class="p">)</span>  <span class="c1"># pyright: ignore[reportUnknownMemberType] # noqa: S101</span>
+    <span class="n">cached_gen_dir</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">comtypes</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">gen_dir</span>
     <span class="k">if</span> <span class="n">out_dir</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">gen_dir</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">fsdecode</span><span class="p">(</span><span class="n">out_dir</span><span class="p">))</span><span class="o">.</span><span class="n">resolve</span><span class="p">()</span>
         <span class="n">gen_dir</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">parents</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
