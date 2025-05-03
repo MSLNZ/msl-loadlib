@@ -142,12 +142,13 @@ def test_generate_com_wrapper() -> None:
     #   OSError: [WinError -2147467259] Unspecified error
     # when generating the wrapper
     def run() -> None:
+        assert isinstance(comtypes.client.gen_dir, str)  # pyright: ignore[reportUnknownMemberType]
         assert comtypes.client.gen_dir.endswith("site-packages\\comtypes\\gen")
 
         # do not want to save any files in the site-packages/comtypes/gen directory
         # when the LoadLibrary class is called
         out_dir.mkdir(exist_ok=True)
-        cached_gen_dir = comtypes.client.gen_dir
+        cached_gen_dir: str = comtypes.client.gen_dir
         comtypes.client.gen_dir = str(out_dir)
         com = LoadLibrary("InternetExplorer.Application.1", "com")
         comtypes.client.gen_dir = cached_gen_dir

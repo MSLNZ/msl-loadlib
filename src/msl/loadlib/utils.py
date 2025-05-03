@@ -380,7 +380,8 @@ def generate_com_wrapper(lib: Any, out_dir: PathLike | None = None) -> ModuleTyp
     import comtypes.client  # type: ignore[import-untyped] # pyright: ignore[reportMissingTypeStubs]
 
     # cache the value of gen_dir to reset it later
-    cached_gen_dir = comtypes.client.gen_dir
+    assert isinstance(comtypes.client.gen_dir, str)  # pyright: ignore[reportUnknownMemberType] # noqa: S101
+    cached_gen_dir: str = comtypes.client.gen_dir
     if out_dir is not None:
         gen_dir = Path(os.fsdecode(out_dir)).resolve()
         gen_dir.mkdir(parents=True, exist_ok=True)
