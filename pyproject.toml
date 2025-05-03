@@ -92,16 +92,6 @@ version-file = "src/msl/loadlib/_version.py"
 
 [tool.hatch.build.targets.sdist]
 include = ["src"]
-exclude = [
-    "*.dll",
-    "*.dylib",
-    "*.so",
-    "Trig.class",
-    "java_lib.jar",
-    "labview_lib.h",
-    "server32-linux*",
-    "server32-windows.exe*",
-]
 
 [tool.hatch.build.targets.wheel]
 packages = ["src/msl"]
