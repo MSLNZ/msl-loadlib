@@ -7,7 +7,7 @@ from xml.etree import ElementTree as ET
 
 import pytest
 
-from conftest import IS_MACOS_ARM64, IS_WINDOWS, skipif_not_windows
+from conftest import IS_MAC_ARM64, IS_WINDOWS, skipif_not_windows
 from msl.loadlib import ConnectionTimeoutError, LoadLibrary, utils
 
 
@@ -26,7 +26,7 @@ def test_port_functions() -> None:
     assert not utils.is_port_in_use(port)
 
 
-@pytest.mark.skipif(IS_MACOS_ARM64, reason="macOS and arm64")
+@pytest.mark.skipif(IS_MAC_ARM64, reason="macOS and arm64")
 def test_is_pythonnet_installed() -> None:
     assert utils.is_pythonnet_installed()
 

@@ -19,7 +19,7 @@ from msl.loadlib import IS_PYTHON_64BIT
 
 IS_WINDOWS: bool = sys.platform == "win32"
 IS_MAC: bool = sys.platform == "darwin"
-IS_MACOS_ARM64 = sys.platform == "darwin" and platform.machine() == "arm64"
+IS_MAC_ARM64 = IS_MAC and platform.machine() == "arm64"
 
 
 def has_labview_runtime(*, x86: bool) -> bool:
@@ -63,7 +63,7 @@ def bit32() -> None:
 
 def readme_all() -> None:
     """Skip all doctest in README."""
-    if not IS_PYTHON_64BIT or IS_MACOS_ARM64:
+    if not IS_PYTHON_64BIT or IS_MAC_ARM64:
         pytest.skip("skipped all tests")
 
 
@@ -81,7 +81,7 @@ def readme_com() -> None:
 
 def mac_arm64() -> None:
     """Skip doctest if macOS and ARM64."""
-    if IS_MACOS_ARM64:
+    if IS_MAC_ARM64:
         pytest.skip("ignore on macOS arm64")
 
 
