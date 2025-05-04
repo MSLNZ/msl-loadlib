@@ -1981,16 +1981,15 @@
 
 
 <h1 id="direct-labview">LabVIEW<a class="headerlink" href="#direct-labview" title="Permanent link">¤</a></h1>
-<p>Load a 64-bit <a href="https://www.ni.com/en-us/shop/labview.html" target="_blank">LabVIEW</a> library in 64-bit Python. An appropriate <a href="https://www.ni.com/en/support/downloads/software-products/download.labview-runtime.html" target="_blank">LabVIEW Run-Time Engine</a> must be installed. The <a href="https://www.ni.com/en-us/shop/labview.html" target="_blank">LabVIEW</a> example is only valid on Windows. <em>To load the 32-bit library in 32-bit Python use <code>labview_lib32.dll</code> as the filename.</em></p>
+<p>Load a 64-bit <a href="https://www.ni.com/en-us/shop/labview.html" target="_blank">LabVIEW</a> library in 64-bit Python. A <a href="https://www.ni.com/en/support/downloads/software-products/download.labview-runtime.html" target="_blank">LabVIEW Run-Time Engine</a> &ge; 2017 (of the appropriate bitness) must be installed. The <a href="https://www.ni.com/en-us/shop/labview.html" target="_blank">LabVIEW</a> example is only valid on Windows. <em>To load the 32-bit library in 32-bit Python use <code>labview_lib32.dll</code> as the filename.</em></p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>A LabVIEW library can be built into a DLL using the <code>__cdecl</code> or <code>__stdcall</code> calling convention. Make sure that you specify the appropriate <code>libtype</code> when instantiating the
-<a class="autorefs autorefs-internal" title="LoadLibrary" href="../../../api/load_library/#msl.loadlib.load_library.LoadLibrary">LoadLibrary</a> class for your LabVIEW library. The example library uses <code>__cdecl</code>.</p>
+<p>A LabVIEW library can be built into a DLL using the <code>__cdecl</code> or <code>__stdcall</code> calling convention. Make sure that you specify the appropriate <code>libtype</code> when instantiating the <a class="autorefs autorefs-internal" title="LoadLibrary" href="../../../api/load_library/#msl.loadlib.load_library.LoadLibrary">LoadLibrary</a> class for your LabVIEW library. The example library uses the C calling convention <code>__cdecl</code>.</p>
 </div>
 <h2 id="example">Example<a class="headerlink" href="#example" title="Permanent link">¤</a></h2>
 <p>Load the example <a class="autorefs autorefs-internal" title="LabVIEW Source Code" href="#labview-lib">LabVIEW library</a></p>
 <!-- invisible-code-block: pycon
->>> SKIP_IF_NOT_WINDOWS() or SKIP_IF_LABVIEW64_NOT_INSTALLED() or SKIP_IF_32BIT()
+>>> SKIP_IF_NOT_WINDOWS() or SKIP_IF_32BIT() or SKIP_IF_NO_LABVIEW64()
 
 -->
 

@@ -1908,11 +1908,12 @@
 <p>This example shows how to access a 32-bit LabVIEW library from 64-bit Python. <a class="autorefs autorefs-internal" title="Labview32" href="../../../examples/labview32/#msl.examples.loadlib.labview32.Labview32">Labview32</a> is the 32-bit server and <a class="autorefs autorefs-internal" title="Labview64" href="../../../examples/labview64/#msl.examples.loadlib.labview64.Labview64">Labview64</a> is the 64-bit client. The source code of the LabVIEW program is available <a class="autorefs autorefs-internal" title="LabVIEW Source Code" href="../../direct/labview/#labview-lib">here</a>.</p>
 <div class="admonition attention">
 <p class="admonition-title">Attention</p>
-<p>This example requires that a 32-bit <a href="https://www.ni.com/en/support/downloads/software-products/download.labview-runtime.html" target="_blank">LabVIEW Run-Time Engine</a> is installed and that the operating system is Windows.</p>
+<p>This example requires that a 32-bit <a href="https://www.ni.com/en/support/downloads/software-products/download.labview-runtime.html" target="_blank">LabVIEW Run-Time Engine</a> &ge; 2017 is installed and that the operating system is Windows.</p>
 </div>
 <p>Create a <a class="autorefs autorefs-internal" title="Labview64" href="../../../examples/labview64/#msl.examples.loadlib.labview64.Labview64">Labview64</a> client to communicate with the 32-bit <a class="autorefs autorefs-internal" title="LabVIEW Source Code" href="../../direct/labview/#labview-lib">labview_lib32</a> library</p>
 <!-- invisible-code-block: pycon
->>> SKIP_LABVIEW32()
+>>> SKIP_IF_NOT_WINDOWS() or SKIP_IF_NO_LABVIEW32()
+
 -->
 
 <div class="highlight"><pre><span></span><code><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">msl.examples.loadlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">Labview64</span>
