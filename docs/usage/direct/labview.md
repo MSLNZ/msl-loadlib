@@ -1,17 +1,16 @@
 # LabVIEW  {: #direct-labview }
 
-Load a 64-bit [LabVIEW]{:target="_blank"} library in 64-bit Python. An appropriate [LabVIEW Run-Time Engine]{:target="_blank"} must be installed. The [LabVIEW]{:target="_blank"} example is only valid on Windows. *To load the 32-bit library in 32-bit Python use `labview_lib32.dll` as the filename.*
+Load a 64-bit [LabVIEW]{:target="_blank"} library in 64-bit Python. A [LabVIEW Run-Time Engine]{:target="_blank"} &ge; 2017 (of the appropriate bitness) must be installed. The [LabVIEW]{:target="_blank"} example is only valid on Windows. *To load the 32-bit library in 32-bit Python use `labview_lib32.dll` as the filename.*
 
 !!! note
-    A LabVIEW library can be built into a DLL using the `__cdecl` or `__stdcall` calling convention. Make sure that you specify the appropriate `libtype` when instantiating the
-    [LoadLibrary][msl.loadlib.load_library.LoadLibrary] class for your LabVIEW library. The example library uses `__cdecl`.
+    A LabVIEW library can be built into a DLL using the `__cdecl` or `__stdcall` calling convention. Make sure that you specify the appropriate `libtype` when instantiating the [LoadLibrary][msl.loadlib.load_library.LoadLibrary] class for your LabVIEW library. The example library uses the C calling convention `__cdecl`.
 
 ## Example
 
 Load the example [LabVIEW library][labview-lib]
 
 <!-- invisible-code-block: pycon
->>> SKIP_IF_NOT_WINDOWS() or SKIP_IF_LABVIEW64_NOT_INSTALLED() or SKIP_IF_32BIT()
+>>> SKIP_IF_NOT_WINDOWS() or SKIP_IF_32BIT() or SKIP_IF_NO_LABVIEW64()
 
 -->
 

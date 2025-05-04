@@ -3,12 +3,13 @@
 This example shows how to access a 32-bit LabVIEW library from 64-bit Python. [Labview32][msl.examples.loadlib.labview32.Labview32] is the 32-bit server and [Labview64][msl.examples.loadlib.labview64.Labview64] is the 64-bit client. The source code of the LabVIEW program is available [here][labview-lib].
 
 !!! attention
-    This example requires that a 32-bit [LabVIEW Run-Time Engine]{:target="_blank"} is installed and that the operating system is Windows.
+    This example requires that a 32-bit [LabVIEW Run-Time Engine]{:target="_blank"} &ge; 2017 is installed and that the operating system is Windows.
 
 Create a [Labview64][msl.examples.loadlib.labview64.Labview64] client to communicate with the 32-bit [labview_lib32][labview-lib] library
 
 <!-- invisible-code-block: pycon
->>> SKIP_LABVIEW32()
+>>> SKIP_IF_NOT_WINDOWS() or SKIP_IF_NO_LABVIEW32()
+
 -->
 
 ```pycon

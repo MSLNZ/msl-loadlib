@@ -3,7 +3,7 @@
 !!! attention
     This example requires that a 32-bit
     [LabVIEW Run-Time Engine](https://www.ni.com/en/support/downloads/software-products/download.labview-runtime.html){:target="_blank"}
-    is installed and that the operating system is Windows.
+    &ge; 2017 is installed and that the operating system is Windows.
 """
 
 from __future__ import annotations

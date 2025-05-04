@@ -24,11 +24,12 @@ from ctypes import (
 import pytest
 
 from conftest import (
+    HAS_32BIT_LABVIEW_RUNTIME,
+    HAS_64BIT_LABVIEW_RUNTIME,
     IS_MAC,
     IS_MACOS_ARM64,
     IS_WINDOWS,
     skipif_no_comtypes,
-    skipif_no_labview_runtime,
     skipif_no_pythonnet,
     skipif_not_windows,
 )
@@ -332,7 +333,9 @@ def test_dotnet() -> None:
     net.cleanup()
 
 
-@skipif_no_labview_runtime
+@pytest.mark.skipif(not IS_WINDOWS, reason="not Windows")
+@pytest.mark.skipif(IS_PYTHON_64BIT and not HAS_64BIT_LABVIEW_RUNTIME, reason="no 64-bit LabVIEW Run-Time Engine")
+@pytest.mark.skipif(not IS_PYTHON_64BIT and not HAS_32BIT_LABVIEW_RUNTIME, reason="no 32-bit LabVIEW Run-Time Engine")
 def test_labview() -> None:
     bit = "64" if IS_PYTHON_64BIT else "32"
     path = EXAMPLES_DIR / f"labview_lib{bit}.dll"

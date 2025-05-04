@@ -22,23 +22,19 @@ IS_MAC: bool = sys.platform == "darwin"
 IS_MACOS_ARM64 = sys.platform == "darwin" and platform.machine() == "arm64"
 
 
-def has_labview_runtime() -> bool:
-    """Checks if a LabVIEW runtime is installed."""
-    root: Path
-    if IS_PYTHON_64BIT:
-        root = Path(r"C:\Program Files\National Instruments\Shared\LabVIEW Run-Time")
-    else:
-        root = Path(r"C:\Program Files (x86)\National Instruments\Shared\LabVIEW Run-Time")
-
+def has_labview_runtime(*, x86: bool) -> bool:
+    """Check if a LabVIEW Run-Time Engine >= 2017 is installed."""
+    root = Path("C:/Program Files (x86)") if x86 else Path("C:/Program Files")
+    root = root / "National Instruments" / "Shared" / "LabVIEW Run-Time"
     if not root.is_dir():
         return False
+    # cSpell: ignore lvrt
+    return any(int(folder.name) >= MIN_LABVIEW_RUNTIME and (folder / "lvrt.dll").is_file() for folder in root.iterdir())
 
-    for item in root.iterdir():
-        path = root / item / "lvrt.dll"  # cSpell: ignore lvrt
-        if path.is_file():
-            return True
 
-    return False
+MIN_LABVIEW_RUNTIME = 2017
+HAS_32BIT_LABVIEW_RUNTIME = has_labview_runtime(x86=True)
+HAS_64BIT_LABVIEW_RUNTIME = has_labview_runtime(x86=False)
 
 
 def not_windows() -> None:
@@ -90,14 +86,15 @@ def mac_arm64() -> None:
 
 
 def no_labview64() -> None:
-    """Skip doctest if a 64-bit LabVIEW Run-Time Engine is not installed."""
-    if not (IS_PYTHON_64BIT and has_labview_runtime()):
+    """Skip doctest if an appropriate 64-bit LabVIEW Run-Time Engine is not installed."""
+    if not HAS_64BIT_LABVIEW_RUNTIME:
         pytest.skip("requires 64-bit LabVIEW Run-Time Engine")
 
 
 def no_labview32() -> None:
-    """Skip doctest if a 32-bit LabVIEW Run-Time Engine is not installed."""
-    pytest.skip("not checking if 32-bit LabVIEW is installed")
+    """Skip doctest if an appropriate 32-bit LabVIEW Run-Time Engine is not installed."""
+    if not HAS_32BIT_LABVIEW_RUNTIME:
+        pytest.skip("requires 32-bit LabVIEW Run-Time Engine")
 
 
 def no_pythonnet() -> None:
@@ -115,22 +112,25 @@ def win32_github_actions() -> None:
 @pytest.fixture(autouse=True)
 def doctest_skipif(doctest_namespace: dict[str, Callable[[], None]]) -> None:
     """Inject skipif conditions for doctest."""
-    doctest_namespace["SKIP_IF_WINDOWS_GITHUB_ACTIONS"] = win32_github_actions
-    doctest_namespace["SKIP_IF_NOT_WINDOWS"] = not_windows
-    doctest_namespace["SKIP_IF_MACOS"] = is_mac
-    doctest_namespace["SKIP_IF_MACOS_ARM64"] = mac_arm64
-    doctest_namespace["SKIP_IF_64BIT"] = bit64
-    doctest_namespace["SKIP_IF_32BIT"] = bit32
-    doctest_namespace["SKIP_IF_LABVIEW64_NOT_INSTALLED"] = no_labview64
-    doctest_namespace["SKIP_LABVIEW32"] = no_labview32
-    doctest_namespace["SKIP_README_DOTNET"] = readme_dotnet
-    doctest_namespace["SKIP_README_COM"] = readme_com
-    doctest_namespace["SKIP_README_ALL"] = readme_all
-    doctest_namespace["SKIP_IF_NO_PYTHONNET"] = no_pythonnet
+    doctest_namespace.update(
+        {
+            "SKIP_IF_32BIT": bit32,
+            "SKIP_IF_64BIT": bit64,
+            "SKIP_IF_MACOS": is_mac,
+            "SKIP_IF_MACOS_ARM64": mac_arm64,
+            "SKIP_IF_NO_LABVIEW32": no_labview32,
+            "SKIP_IF_NO_LABVIEW64": no_labview64,
+            "SKIP_IF_NO_PYTHONNET": no_pythonnet,
+            "SKIP_IF_NOT_WINDOWS": not_windows,
+            "SKIP_IF_WINDOWS_GITHUB_ACTIONS": win32_github_actions,
+            "SKIP_README_ALL": readme_all,
+            "SKIP_README_COM": readme_com,
+            "SKIP_README_DOTNET": readme_dotnet,
+        }
+    )
 
 
 skipif_no_comtypes = pytest.mark.skipif(not IS_WINDOWS, reason="comtypes is only supported on Windows")
-skipif_no_labview_runtime = pytest.mark.skipif(not has_labview_runtime(), reason="requires LabVIEW Run-Time Engine")
 skipif_no_pythonnet = pytest.mark.skipif(clr is None, reason="pythonnet is not installed")
 skipif_no_server32 = pytest.mark.skipif(IS_MAC, reason="32-bit server does not exist")
 skipif_not_windows = pytest.mark.skipif(not IS_WINDOWS, reason="not Windows")
