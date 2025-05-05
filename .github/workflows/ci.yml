@@ -71,11 +71,15 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
-      - name: Install uv
+      - name: Setup uv
         uses: astral-sh/setup-uv@v5
         with:
           enable-cache: false
           python-version: '3.13'
+      - name: Setup node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 'latest'
       - name: Install cSpell
         run: npm install -g cspell@latest
       - name: Spelling
