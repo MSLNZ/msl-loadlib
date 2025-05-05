@@ -4,12 +4,12 @@ from __future__ import annotations
 
 import os
 from socket import socket as _socket  # noqa: TC003
-from typing import Literal, Protocol
+from typing import Literal, Protocol, Union  # pyright: ignore[reportDeprecated]
 
 LibType = Literal["cdll", "windll", "oledll", "net", "clr", "java", "com", "activex"]
 """Supported library types."""
 
-PathLike = str | bytes | os.PathLike[str] | os.PathLike[bytes]
+PathLike = Union[str, bytes, os.PathLike[str], os.PathLike[bytes]]  # pyright: ignore[reportDeprecated]
 """A [path-like object][]{:target="_blank"}."""
 
 
