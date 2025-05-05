@@ -2690,16 +2690,16 @@ the module is saved to the <code>../site-packages/comtypes/gen</code> directory.
     <span class="k">def</span><span class="w"> </span><span class="nf">from_pointer</span><span class="p">(</span><span class="n">p</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ModuleType</span><span class="p">:</span>
         <span class="n">info</span> <span class="o">=</span> <span class="n">p</span><span class="o">.</span><span class="n">GetTypeInfo</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
         <span class="n">type_lib</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">info</span><span class="o">.</span><span class="n">GetContainingTypeLib</span><span class="p">()</span>
-        <span class="n">module</span><span class="p">:</span> <span class="n">ModuleType</span> <span class="o">=</span> <span class="n">comtypes</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">GetModule</span><span class="p">(</span><span class="n">type_lib</span><span class="p">)</span>
-        <span class="k">return</span> <span class="n">module</span>
+        <span class="n">module</span><span class="p">:</span> <span class="n">ModuleType</span> <span class="o">=</span> <span class="n">comtypes</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">GetModule</span><span class="p">(</span><span class="n">type_lib</span><span class="p">)</span>  <span class="c1"># pyright: ignore[reportUnknownMemberType,reportUnknownVariableType]</span>
+        <span class="k">return</span> <span class="n">module</span>  <span class="c1"># pyright: ignore[reportUnknownVariableType]</span>
 
     <span class="n">mod</span><span class="p">:</span> <span class="n">ModuleType</span>
     <span class="k">try</span><span class="p">:</span>
-        <span class="n">mod</span> <span class="o">=</span> <span class="n">comtypes</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">GetModule</span><span class="p">(</span><span class="n">lib</span><span class="p">)</span>
+        <span class="n">mod</span> <span class="o">=</span> <span class="n">comtypes</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">GetModule</span><span class="p">(</span><span class="n">lib</span><span class="p">)</span>  <span class="c1"># pyright: ignore[reportUnknownMemberType,reportUnknownVariableType]</span>
     <span class="k">except</span> <span class="ne">OSError</span><span class="p">:</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">lib</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
             <span class="k">raise</span>
-        <span class="n">obj</span> <span class="o">=</span> <span class="n">comtypes</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">CreateObject</span><span class="p">(</span><span class="n">lib</span><span class="p">)</span>
+        <span class="n">obj</span> <span class="o">=</span> <span class="n">comtypes</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">CreateObject</span><span class="p">(</span><span class="n">lib</span><span class="p">)</span>  <span class="c1"># pyright: ignore[reportUnknownMemberType,reportUnknownVariableType]</span>
         <span class="n">mod</span> <span class="o">=</span> <span class="n">from_pointer</span><span class="p">(</span><span class="n">obj</span><span class="p">)</span>
     <span class="k">except</span> <span class="p">(</span><span class="ne">AttributeError</span><span class="p">,</span> <span class="ne">TypeError</span><span class="p">)</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
         <span class="k">if</span> <span class="s2">&quot;LoadLibrary&quot;</span> <span class="ow">in</span> <span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">):</span>
@@ -2712,7 +2712,7 @@ the module is saved to the <code>../site-packages/comtypes/gen</code> directory.
     <span class="k">if</span> <span class="n">out_dir</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">comtypes</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">gen_dir</span> <span class="o">=</span> <span class="n">cached_gen_dir</span>
 
-    <span class="k">return</span> <span class="n">mod</span>
+    <span class="k">return</span> <span class="n">mod</span>  <span class="c1"># pyright: ignore[reportUnknownVariableType]</span>
 </code></pre></div></td></tr></table></div>
             </details>
     </div>

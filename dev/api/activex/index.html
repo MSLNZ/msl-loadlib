@@ -3441,9 +3441,9 @@ is used as the <code>sink</code>.</p>
 <span class="sd">        An `_AdviseConnection` object from `comtypes`.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">assert</span> <span class="n">client</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>  <span class="c1"># noqa: S101</span>
-    <span class="n">cxn</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">GetEvents</span><span class="p">(</span><span class="n">source</span><span class="p">,</span> <span class="n">sink</span> <span class="ow">or</span> <span class="bp">self</span><span class="p">,</span> <span class="n">interface</span><span class="o">=</span><span class="n">interface</span><span class="p">)</span>  <span class="c1"># pyright: ignore[reportUnknownMemberType]</span>
+    <span class="n">cxn</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">GetEvents</span><span class="p">(</span><span class="n">source</span><span class="p">,</span> <span class="n">sink</span> <span class="ow">or</span> <span class="bp">self</span><span class="p">,</span> <span class="n">interface</span><span class="o">=</span><span class="n">interface</span><span class="p">)</span>  <span class="c1"># pyright: ignore[reportUnknownMemberType,reportUnknownVariableType]</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">_event_connections</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">cxn</span><span class="p">)</span>
-    <span class="k">return</span> <span class="n">cxn</span>
+    <span class="k">return</span> <span class="n">cxn</span>  <span class="c1"># pyright: ignore[reportUnknownVariableType]</span>
 </code></pre></div></td></tr></table></div>
             </details>
     </div>
@@ -3753,7 +3753,7 @@ the ActiveX object. Can be any combination (bitwise OR) of
         <span class="k">raise</span> <span class="ne">OSError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
 
     <span class="k">try</span><span class="p">:</span>
-        <span class="n">window_name</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">comtypes</span><span class="o">.</span><span class="n">GUID</span><span class="o">.</span><span class="n">from_progid</span><span class="p">(</span><span class="n">activex_id</span><span class="p">))</span>
+        <span class="n">window_name</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">comtypes</span><span class="o">.</span><span class="n">GUID</span><span class="o">.</span><span class="n">from_progid</span><span class="p">(</span><span class="n">activex_id</span><span class="p">))</span>  <span class="c1"># pyright: ignore[reportUnknownMemberType,reportUnknownArgumentType]</span>
     <span class="k">except</span> <span class="p">(</span><span class="ne">TypeError</span><span class="p">,</span> <span class="ne">OSError</span><span class="p">):</span>
         <span class="n">window_name</span> <span class="o">=</span> <span class="kc">None</span>
 
@@ -3777,13 +3777,13 @@ the ActiveX object. Can be any combination (bitwise OR) of
         <span class="n">instance</span><span class="o">=</span><span class="n">kernel32</span><span class="o">.</span><span class="n">GetModuleHandleW</span><span class="p">(</span><span class="kc">None</span><span class="p">),</span>
     <span class="p">)</span>
 
-    <span class="n">unknown</span> <span class="o">=</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">POINTER</span><span class="p">(</span><span class="n">comtypes</span><span class="o">.</span><span class="n">IUnknown</span><span class="p">)()</span>
-    <span class="n">ret</span> <span class="o">=</span> <span class="n">atl</span><span class="o">.</span><span class="n">AtlAxGetControl</span><span class="p">(</span><span class="n">hwnd</span><span class="p">,</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">byref</span><span class="p">(</span><span class="n">unknown</span><span class="p">))</span>
+    <span class="n">unknown</span> <span class="o">=</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">POINTER</span><span class="p">(</span><span class="n">comtypes</span><span class="o">.</span><span class="n">IUnknown</span><span class="p">)()</span>  <span class="c1"># pyright: ignore[reportUnknownMemberType,reportUnknownVariableType,reportUnknownArgumentType]</span>
+    <span class="n">ret</span> <span class="o">=</span> <span class="n">atl</span><span class="o">.</span><span class="n">AtlAxGetControl</span><span class="p">(</span><span class="n">hwnd</span><span class="p">,</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">byref</span><span class="p">(</span><span class="n">unknown</span><span class="p">))</span>  <span class="c1"># pyright: ignore[reportUnknownArgumentType]</span>
     <span class="k">if</span> <span class="n">ret</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
         <span class="n">msg</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;AtlAxGetControl </span><span class="si">{</span><span class="n">ctypes</span><span class="o">.</span><span class="n">WinError</span><span class="p">()</span><span class="si">}</span><span class="s2">&quot;</span>
         <span class="k">raise</span> <span class="ne">OSError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
     <span class="k">assert</span> <span class="n">client</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>  <span class="c1"># noqa: S101</span>
-    <span class="k">return</span> <span class="n">client</span><span class="o">.</span><span class="n">GetBestInterface</span><span class="p">(</span><span class="n">unknown</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">client</span><span class="o">.</span><span class="n">GetBestInterface</span><span class="p">(</span><span class="n">unknown</span><span class="p">)</span>  <span class="c1"># pyright: ignore[reportUnknownMemberType,reportUnknownVariableType]</span>
 </code></pre></div></td></tr></table></div>
             </details>
     </div>
