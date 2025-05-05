@@ -76,14 +76,8 @@ jobs:
         with:
           enable-cache: false
           python-version: '3.13'
-      - name: Setup node
-        uses: actions/setup-node@v4
-        with:
-          node-version: 'latest'
-      - name: Install cSpell
-        run: npm install -g cspell@latest
       - name: Spelling
-        run: cspell .
+        uses: streetsidesoftware/cspell-action@v6
       - name: Linting
         run: uv run -- ruff check --force-exclude --no-fix .
       - name: Formatting
