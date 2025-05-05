@@ -64,6 +64,7 @@ test = [
 ]
 type = [
     "basedpyright>=1.28.1",
+    "comtypes>=1.4.10",
     "mypy>=1.14.1",
 ]
 dev = [
@@ -151,6 +152,7 @@ title = "MSL-LoadLib coverage report"
 
 [tool.mypy]
 cache_dir = ".cache/mypy"
+platform = "win32"
 strict = true
 strict_bytes = true
 
@@ -177,6 +179,8 @@ warn_unreachable = true
 [tool.basedpyright]
 failOnWarnings = true
 typeCheckingMode = "recommended"
+useLibraryCodeForTypes = false
+pythonPlatform = "Windows"
 exclude = [
     "**/.*",
     "**/__pycache__",

@@ -3,8 +3,8 @@ from ctypes import CDLL
 
 import pytest
 from py4j.java_gateway import (  # type: ignore[import-untyped] # pyright: ignore[reportMissingTypeStubs]
-    JavaGateway,
-    JVMView,
+    JavaGateway,  # pyright: ignore[reportUnknownVariableType]
+    JVMView,  # pyright: ignore[reportUnknownVariableType]
 )
 
 from conftest import IS_MAC_ARM64, skipif_no_pythonnet, skipif_no_server32
@@ -79,7 +79,7 @@ def test_java(caplog: pytest.LogCaptureFixture) -> None:
         assert isinstance(library.gateway, JavaGateway)
         assert library.path == path
         assert isinstance(library.lib, JVMView)
-        assert library.lib.Trig.cos(0.0) == 1.0  # pyright: ignore[reportUnknownMemberType,reportCallIssue,reportOptionalCall,reportAttributeAccessIssue]
+        assert library.lib.Trig.cos(0.0) == 1.0
     assert library.path == path
     assert library.assembly is None
     assert library.gateway is None

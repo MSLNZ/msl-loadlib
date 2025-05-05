@@ -183,13 +183,15 @@ class LoadLibrary:
                 msg = "Cannot load a COM library because comtypes is not installed.\nRun: pip install comtypes"
                 raise OSError(msg)
 
-            from comtypes import GUID  # type: ignore[import-untyped] # pyright: ignore[reportMissingTypeStubs]
+            from comtypes import (  # type: ignore[import-untyped] # pyright: ignore[reportMissingTypeStubs]
+                GUID,  # pyright: ignore[reportUnknownVariableType]
+            )
             from comtypes.client import (  # type: ignore[import-untyped] # pyright: ignore[reportMissingTypeStubs]
-                CreateObject,
+                CreateObject,  # pyright: ignore[reportUnknownVariableType]
             )
 
             try:
-                clsid = GUID.from_progid(self._path)
+                clsid = GUID.from_progid(self._path)  # pyright: ignore[reportUnknownVariableType,reportUnknownMemberType]
             except (TypeError, OSError):
                 msg = f"Cannot find {path!r} for libtype='com'"
                 raise OSError(msg) from None
@@ -208,11 +210,11 @@ class LoadLibrary:
                 raise OSError(msg)
 
             from py4j.java_gateway import (  # type: ignore[import-untyped] # pyright: ignore[reportMissingTypeStubs]
-                GatewayParameters,
-                JavaGateway,
+                GatewayParameters,  # pyright: ignore[reportUnknownVariableType]
+                JavaGateway,  # pyright: ignore[reportUnknownVariableType]
             )
             from py4j.version import (  # type: ignore[import-untyped] # pyright: ignore[reportMissingTypeStubs]
-                __version__,
+                __version__,  # pyright: ignore[reportUnknownVariableType]
             )
 
             # the address and port to use to host the py4j.GatewayServer
@@ -274,7 +276,7 @@ class LoadLibrary:
 
             self._gateway = JavaGateway(gateway_parameters=GatewayParameters(address=address, port=port, **kwargs))
 
-            self._lib = self._gateway.jvm
+            self._lib = self._gateway.jvm  # pyright: ignore[reportUnknownMemberType]
 
         elif _libtype in {"net", "clr"}:
             if not is_pythonnet_installed():
@@ -293,7 +295,7 @@ class LoadLibrary:
             System: Any  # type: ignore[no-redef] # noqa: N806  # cSpell: ignore redef
             try:  # noqa: SIM105
                 # don't include the library extension
-                clr.AddReference(os.path.splitext(tail)[0])  # pyright: ignore[reportUnknownMemberType,reportAttributeAccessIssue]
+                clr.AddReference(os.path.splitext(tail)[0])  # pyright: ignore[reportUnknownMemberType]
             except (System.IO.FileNotFoundException, System.IO.FileLoadException):
                 # The file must exist since its existence is checked above.
                 # There must be another reason why loading the DLL raises this

@@ -390,16 +390,16 @@ def generate_com_wrapper(lib: Any, out_dir: PathLike | None = None) -> ModuleTyp
     def from_pointer(p: Any) -> ModuleType:
         info = p.GetTypeInfo(0)
         type_lib, _ = info.GetContainingTypeLib()
-        module: ModuleType = comtypes.client.GetModule(type_lib)
-        return module
+        module: ModuleType = comtypes.client.GetModule(type_lib)  # pyright: ignore[reportUnknownMemberType,reportUnknownVariableType]
+        return module  # pyright: ignore[reportUnknownVariableType]
 
     mod: ModuleType
     try:
-        mod = comtypes.client.GetModule(lib)
+        mod = comtypes.client.GetModule(lib)  # pyright: ignore[reportUnknownMemberType,reportUnknownVariableType]
     except OSError:
         if not isinstance(lib, str):
             raise
-        obj = comtypes.client.CreateObject(lib)
+        obj = comtypes.client.CreateObject(lib)  # pyright: ignore[reportUnknownMemberType,reportUnknownVariableType]
         mod = from_pointer(obj)
     except (AttributeError, TypeError) as e:
         if "LoadLibrary" in str(e):
@@ -412,4 +412,4 @@ def generate_com_wrapper(lib: Any, out_dir: PathLike | None = None) -> ModuleTyp
     if out_dir is not None:
         comtypes.client.gen_dir = cached_gen_dir
 
-    return mod
+    return mod  # pyright: ignore[reportUnknownVariableType]

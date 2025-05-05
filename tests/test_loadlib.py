@@ -576,7 +576,7 @@ def test_dotnet_nested_namespace() -> None:  # noqa: PLR0915
     # (e.g. MyEnum(42) or MyEnum(42, True) when MyEnum does not have a member with value 42).
     import clr  # type: ignore[import-untyped] # pyright: ignore[reportMissingTypeStubs]
 
-    if int(clr.__version__.split(".")[0]) < 3:  # pyright: ignore[reportUnknownArgumentType,reportAttributeAccessIssue]
+    if int(clr.__version__.split(".")[0]) < 3:  # pyright: ignore[reportUnknownArgumentType]
         # an enum in a namespace
         assert lib.A.B.C.ErrorCode.Unknown == 0
         assert lib.A.B.C.ErrorCode.ConnectionLost == 100

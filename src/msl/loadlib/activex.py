@@ -33,7 +33,7 @@ from typing import TYPE_CHECKING
 
 try:
     import comtypes  # type: ignore[import-untyped]
-    from comtypes import client
+    from comtypes import client  # pyright: ignore[reportUnknownVariableType]
 except ImportError:
     comtypes = client = None
 
@@ -1047,9 +1047,9 @@ class Application:
             An `_AdviseConnection` object from `comtypes`.
         """
         assert client is not None  # noqa: S101
-        cxn = client.GetEvents(source, sink or self, interface=interface)  # pyright: ignore[reportUnknownMemberType]
+        cxn = client.GetEvents(source, sink or self, interface=interface)  # pyright: ignore[reportUnknownMemberType,reportUnknownVariableType]
         self._event_connections.append(cxn)
-        return cxn
+        return cxn  # pyright: ignore[reportUnknownVariableType]
 
     @property
     def hwnd(self) -> int:
@@ -1093,7 +1093,7 @@ class Application:
             raise OSError(msg)
 
         try:
-            window_name = str(comtypes.GUID.from_progid(activex_id))
+            window_name = str(comtypes.GUID.from_progid(activex_id))  # pyright: ignore[reportUnknownMemberType,reportUnknownArgumentType]
         except (TypeError, OSError):
             window_name = None
 
@@ -1117,13 +1117,13 @@ class Application:
             instance=kernel32.GetModuleHandleW(None),
         )
 
-        unknown = ctypes.POINTER(comtypes.IUnknown)()
-        ret = atl.AtlAxGetControl(hwnd, ctypes.byref(unknown))
+        unknown = ctypes.POINTER(comtypes.IUnknown)()  # pyright: ignore[reportUnknownMemberType,reportUnknownVariableType,reportUnknownArgumentType]
+        ret = atl.AtlAxGetControl(hwnd, ctypes.byref(unknown))  # pyright: ignore[reportUnknownArgumentType]
         if ret != 0:
             msg = f"AtlAxGetControl {ctypes.WinError()}"
             raise OSError(msg)
         assert client is not None  # noqa: S101
-        return client.GetBestInterface(unknown)
+        return client.GetBestInterface(unknown)  # pyright: ignore[reportUnknownMemberType,reportUnknownVariableType]
 
     @property
     def menu(self) -> Menu:
