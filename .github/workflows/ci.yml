@@ -78,6 +78,8 @@ jobs:
           python-version: '3.13'
       - name: Spelling
         uses: streetsidesoftware/cspell-action@v6
+        with:
+          incremental_files_only: false
       - name: Linting
         run: uv run -- ruff check --force-exclude --no-fix .
       - name: Formatting
