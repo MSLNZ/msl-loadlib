@@ -36,7 +36,7 @@ from conftest import (
 from msl.examples.loadlib import EXAMPLES_DIR, FourPoints, NPoints, Point
 from msl.loadlib import IS_PYTHON_64BIT, LoadLibrary
 from msl.loadlib._constants import default_extension
-from msl.loadlib.utils import get_com_info
+from msl.loadlib.utils import get_available_port, get_com_info
 
 suffix = "arm64" if IS_MAC_ARM64 else "64" if IS_PYTHON_64BIT else "32"
 
@@ -461,7 +461,18 @@ def test_java() -> None:  # noqa: PLR0915
     assert pytest.approx(math.atan(x)) == Trig.atan(x)
     assert pytest.approx(math.atan2(-4.321, x)) == Trig.atan2(-4.321, x)
 
-    cls.gateway.shutdown()
+
+def test_java_gateway_parameters() -> None:
+    from py4j.java_gateway import (  # type: ignore[import-untyped] # pyright: ignore[reportMissingTypeStubs]
+        GatewayParameters,  # pyright: ignore[reportUnknownVariableType]
+    )
+
+    port = get_available_port()
+    gp = GatewayParameters(port=port)  # pyright: ignore[reportUnknownVariableType]
+
+    with LoadLibrary(f"{EXAMPLES_DIR}/java_lib.jar", gateway_parameters=gp) as jar:
+        assert 0.0 <= jar.lib.nz.msl.examples.MathUtils.random() < 1.0
+        assert jar.gateway.gateway_parameters.port == port
 
 
 @skipif_no_comtypes

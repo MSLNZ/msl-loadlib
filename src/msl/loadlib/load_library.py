@@ -21,14 +21,19 @@ from .utils import (
 )
 
 if TYPE_CHECKING:
-    from typing import Any, TypeVar
+    from typing import Any
 
     from ._types import LibType, PathLike
     from .activex import Application
 
     # the Self type was added in Python 3.11 (PEP 673)
     # using TypeVar is equivalent for < 3.11
-    Self = TypeVar("Self", bound="LoadLibrary")
+    if sys.version_info >= (3, 11):
+        from typing import Self
+    else:
+        from typing import TypeVar
+
+        Self = TypeVar("Self", bound="LoadLibrary")  # pyright: ignore[reportUnreachable]
 
 
 _LIBTYPES: set[str] = {"cdll", "windll", "oledll", "net", "clr", "java", "com", "activex"}
@@ -217,10 +222,6 @@ class LoadLibrary:
                 __version__,  # pyright: ignore[reportUnknownVariableType]
             )
 
-            # the address and port to use to host the py4j.GatewayServer
-            address = kwargs.pop("address", "127.0.0.1")
-            port = kwargs.pop("port", get_available_port())
-
             # find the py4j*.jar file (needed to import the py4j.GatewayServer on the Java side)
             filename = f"py4j{__version__}.jar"
             py4j_jar = os.environ.get("PY4J_JAR", "")
@@ -241,14 +242,15 @@ class LoadLibrary:
                 if not os.path.isfile(py4j_jar):
                     msg = (
                         f"Cannot find {filename}\n"
-                        f"Create a PY4J_JAR environment variable "
-                        f"to be equal to the full path to {filename}"
+                        f"Create a PY4J_JAR environment variable to be equal to the full path to {filename}"
                     )
                     raise OSError(msg)
 
+            gp = kwargs.pop("gateway_parameters", GatewayParameters(address="127.0.0.1", port=get_available_port()))
+
             # build the java command
             wrapper = os.path.join(os.path.dirname(__file__), "py4j-wrapper.jar")
-            cmd = ["java", "-cp", f"{py4j_jar}{os.pathsep}{wrapper}", "Py4JWrapper", str(port)]
+            cmd = ["java", "-cp", f"{py4j_jar}{os.pathsep}{wrapper}", "Py4JWrapper", str(gp.port)]
 
             # from the URLClassLoader documentation:
             #   Any URL that ends with a '/' is assumed to refer to a directory. Otherwise, the URL
@@ -268,13 +270,13 @@ class LoadLibrary:
                 raise OSError(err) from None
 
             try:
-                wait_for_server(address, port, 10.0)
+                wait_for_server(gp.address, gp.port, 10.0)
             except OSError as e:
                 err = str(e).rstrip()
                 err += "\nCould not start the Py4J GatewayServer"
                 raise OSError(err) from None
 
-            self._gateway = JavaGateway(gateway_parameters=GatewayParameters(address=address, port=port, **kwargs))
+            self._gateway = JavaGateway(gateway_parameters=gp, **kwargs)
 
             self._lib = self._gateway.jvm  # pyright: ignore[reportUnknownMemberType]
 
