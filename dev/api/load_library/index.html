@@ -2289,12 +2289,7 @@ If <code>libtype</code> is</p>
 
                   <details class="quote">
                     <summary>Source code in <code>src/msl/loadlib/load_library.py</code></summary>
-                    <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 48</span>
-<span class="normal"> 49</span>
-<span class="normal"> 50</span>
-<span class="normal"> 51</span>
-<span class="normal"> 52</span>
-<span class="normal"> 53</span>
+                    <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 53</span>
 <span class="normal"> 54</span>
 <span class="normal"> 55</span>
 <span class="normal"> 56</span>
@@ -2604,7 +2599,9 @@ If <code>libtype</code> is</p>
 <span class="normal">360</span>
 <span class="normal">361</span>
 <span class="normal">362</span>
-<span class="normal">363</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="p">:</span> <span class="n">PathLike</span><span class="p">,</span> <span class="n">libtype</span><span class="p">:</span> <span class="n">LibType</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>  <span class="c1"># noqa: C901, PLR0912, PLR0915</span>
+<span class="normal">363</span>
+<span class="normal">364</span>
+<span class="normal">365</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="p">:</span> <span class="n">PathLike</span><span class="p">,</span> <span class="n">libtype</span><span class="p">:</span> <span class="n">LibType</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>  <span class="c1"># noqa: C901, PLR0912, PLR0915</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Load a library.</span>
 
 <span class="sd">    For example, a C/C++, FORTRAN, .NET, Java, Delphi, LabVIEW, ActiveX, ... library.</span>
@@ -2776,10 +2773,6 @@ If <code>libtype</code> is</p>
             <span class="n">__version__</span><span class="p">,</span>  <span class="c1"># pyright: ignore[reportUnknownVariableType]</span>
         <span class="p">)</span>
 
-        <span class="c1"># the address and port to use to host the py4j.GatewayServer</span>
-        <span class="n">address</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s2">&quot;address&quot;</span><span class="p">,</span> <span class="s2">&quot;127.0.0.1&quot;</span><span class="p">)</span>
-        <span class="n">port</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s2">&quot;port&quot;</span><span class="p">,</span> <span class="n">get_available_port</span><span class="p">())</span>
-
         <span class="c1"># find the py4j*.jar file (needed to import the py4j.GatewayServer on the Java side)</span>
         <span class="n">filename</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;py4j</span><span class="si">{</span><span class="n">__version__</span><span class="si">}</span><span class="s2">.jar&quot;</span>
         <span class="n">py4j_jar</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;PY4J_JAR&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
@@ -2800,14 +2793,15 @@ If <code>libtype</code> is</p>
             <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="n">py4j_jar</span><span class="p">):</span>
                 <span class="n">msg</span> <span class="o">=</span> <span class="p">(</span>
                     <span class="sa">f</span><span class="s2">&quot;Cannot find </span><span class="si">{</span><span class="n">filename</span><span class="si">}</span><span class="se">\n</span><span class="s2">&quot;</span>
-                    <span class="sa">f</span><span class="s2">&quot;Create a PY4J_JAR environment variable &quot;</span>
-                    <span class="sa">f</span><span class="s2">&quot;to be equal to the full path to </span><span class="si">{</span><span class="n">filename</span><span class="si">}</span><span class="s2">&quot;</span>
+                    <span class="sa">f</span><span class="s2">&quot;Create a PY4J_JAR environment variable to be equal to the full path to </span><span class="si">{</span><span class="n">filename</span><span class="si">}</span><span class="s2">&quot;</span>
                 <span class="p">)</span>
                 <span class="k">raise</span> <span class="ne">OSError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
 
+        <span class="n">gp</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s2">&quot;gateway_parameters&quot;</span><span class="p">,</span> <span class="n">GatewayParameters</span><span class="p">(</span><span class="n">address</span><span class="o">=</span><span class="s2">&quot;127.0.0.1&quot;</span><span class="p">,</span> <span class="n">port</span><span class="o">=</span><span class="n">get_available_port</span><span class="p">()))</span>
+
         <span class="c1"># build the java command</span>
         <span class="n">wrapper</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="vm">__file__</span><span class="p">),</span> <span class="s2">&quot;py4j-wrapper.jar&quot;</span><span class="p">)</span>
-        <span class="n">cmd</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;java&quot;</span><span class="p">,</span> <span class="s2">&quot;-cp&quot;</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">py4j_jar</span><span class="si">}{</span><span class="n">os</span><span class="o">.</span><span class="n">pathsep</span><span class="si">}{</span><span class="n">wrapper</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="s2">&quot;Py4JWrapper&quot;</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">port</span><span class="p">)]</span>
+        <span class="n">cmd</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;java&quot;</span><span class="p">,</span> <span class="s2">&quot;-cp&quot;</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">py4j_jar</span><span class="si">}{</span><span class="n">os</span><span class="o">.</span><span class="n">pathsep</span><span class="si">}{</span><span class="n">wrapper</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="s2">&quot;Py4JWrapper&quot;</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">gp</span><span class="o">.</span><span class="n">port</span><span class="p">)]</span>
 
         <span class="c1"># from the URLClassLoader documentation:</span>
         <span class="c1">#   Any URL that ends with a &#39;/&#39; is assumed to refer to a directory. Otherwise, the URL</span>
@@ -2827,13 +2821,13 @@ If <code>libtype</code> is</p>
             <span class="k">raise</span> <span class="ne">OSError</span><span class="p">(</span><span class="n">err</span><span class="p">)</span> <span class="kn">from</span><span class="w"> </span><span class="kc">None</span>
 
         <span class="k">try</span><span class="p">:</span>
-            <span class="n">wait_for_server</span><span class="p">(</span><span class="n">address</span><span class="p">,</span> <span class="n">port</span><span class="p">,</span> <span class="mf">10.0</span><span class="p">)</span>
+            <span class="n">wait_for_server</span><span class="p">(</span><span class="n">gp</span><span class="o">.</span><span class="n">address</span><span class="p">,</span> <span class="n">gp</span><span class="o">.</span><span class="n">port</span><span class="p">,</span> <span class="mf">10.0</span><span class="p">)</span>
         <span class="k">except</span> <span class="ne">OSError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
             <span class="n">err</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">)</span><span class="o">.</span><span class="n">rstrip</span><span class="p">()</span>
             <span class="n">err</span> <span class="o">+=</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Could not start the Py4J GatewayServer&quot;</span>
             <span class="k">raise</span> <span class="ne">OSError</span><span class="p">(</span><span class="n">err</span><span class="p">)</span> <span class="kn">from</span><span class="w"> </span><span class="kc">None</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">_gateway</span> <span class="o">=</span> <span class="n">JavaGateway</span><span class="p">(</span><span class="n">gateway_parameters</span><span class="o">=</span><span class="n">GatewayParameters</span><span class="p">(</span><span class="n">address</span><span class="o">=</span><span class="n">address</span><span class="p">,</span> <span class="n">port</span><span class="o">=</span><span class="n">port</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_gateway</span> <span class="o">=</span> <span class="n">JavaGateway</span><span class="p">(</span><span class="n">gateway_parameters</span><span class="o">=</span><span class="n">gp</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">_lib</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_gateway</span><span class="o">.</span><span class="n">jvm</span>  <span class="c1"># pyright: ignore[reportUnknownMemberType]</span>
 
@@ -3105,9 +3099,7 @@ and the message loop is not running
 
             <details class="quote">
               <summary>Source code in <code>src/msl/loadlib/load_library.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">398</span>
-<span class="normal">399</span>
-<span class="normal">400</span>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">400</span>
 <span class="normal">401</span>
 <span class="normal">402</span>
 <span class="normal">403</span>
@@ -3119,7 +3111,9 @@ and the message loop is not running
 <span class="normal">409</span>
 <span class="normal">410</span>
 <span class="normal">411</span>
-<span class="normal">412</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">cleanup</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="normal">412</span>
+<span class="normal">413</span>
+<span class="normal">414</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">cleanup</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Clean up references to the library.</span>
 
 <span class="sd">    !!! note &quot;Added in version 0.10&quot;</span>
