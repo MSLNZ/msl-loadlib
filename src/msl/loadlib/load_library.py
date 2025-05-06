@@ -475,4 +475,4 @@ class DotNet:
 
     def __repr__(self) -> str:
         """Returns the string representation."""
-        return f"<{self.__class__.__name__} path={self._path}>"
+        return f"<.NET path={self._path}>"
