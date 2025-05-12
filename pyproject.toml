@@ -31,11 +31,14 @@ classifiers = [
 ]
 
 [project.urls]
-Changes = "https://msl-loadlib.readthedocs.io/en/stable/changelog.html"
-Documentation = "https://msl-loadlib.readthedocs.io/en/stable/"
-Homepage = "https://msl-loadlib.readthedocs.io/en/stable/"
+Changes = "https://mslnz.github.io/msl-loadlib/latest/release-notes/"
+Documentation = "https://mslnz.github.io/msl-loadlib/latest/"
+Homepage = "https://mslnz.github.io/msl-loadlib/latest/"
 Source = "https://github.com/MSLNZ/msl-loadlib"
 Tracker = "https://github.com/MSLNZ/msl-loadlib/issues"
+
+[project.scripts]
+freeze32 = "msl.loadlib.freeze_server32:_cli"
 
 [project.optional-dependencies]
 all = [
@@ -64,11 +67,10 @@ test = [
 ]
 type = [
     "basedpyright>=1.28.1",
-    "comtypes>=1.4.10",
     "mypy>=1.14.1",
 ]
 dev = [
-    "comtypes>=1.4.10;sys_platform=='win32'",
+    "comtypes>=1.4.10",
     "hatch>=1.14.0",
     "py4j>=0.10.9.9",
     "pythonnet>=3.0.5",
@@ -77,9 +79,6 @@ dev = [
     {include-group = "test"},
     {include-group = "type"},
 ]
-
-[project.scripts]
-freeze32 = "msl.loadlib.freeze_server32:_cli"
 
 [build-system]
 requires = ["hatchling", "hatch-vcs"]
