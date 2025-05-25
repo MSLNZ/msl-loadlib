@@ -13,11 +13,6 @@ __pycache__/
 /site/
 /venv/
 
-# Sphinx documentation
-/docs/_build/
-/docs/_autosummary/
-/docs/.doctrees/
-
 # Eclipse project files for Py4JWrapper
 py4jwrapper/bin/
 py4jwrapper/.classpath
@@ -25,7 +20,7 @@ py4jwrapper/.classpath
 # Root files
 /uv.lock
 
-# Auto-generated during builds
+# Auto-generated during build
 /src/msl/loadlib/_version.py
 
 # Auto-generated during tests
