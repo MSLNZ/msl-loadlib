@@ -111,6 +111,9 @@ versions = [
 
 [tool.pytest.ini_options]
 addopts = [
+    "--cov=src",
+    "--cov-report=html",
+    "--cov-config=pyproject.toml",
     "--verbose",
     "--doctest-modules",
     "--doctest-glob=*.md",
@@ -139,9 +142,10 @@ omit = [
 
 [tool.coverage.report]
 exclude_lines = [
-  "no cov",
-  "if __name__ == .__main__.:",
+  "pragma: no cover",
+  "pragma: no branch",
   "if TYPE_CHECKING:",
+  "if __name__ == .__main__.:",
 ]
 include_namespace_packages = true
 
