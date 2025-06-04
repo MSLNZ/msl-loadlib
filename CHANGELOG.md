@@ -9,7 +9,7 @@
 - `Client64` now accepts `host=None` which will mock the connection to the server
 - `freeze32` console script to create a new 32-bit server
 - support for Python 3.12 and 3.13
-- type annotations
+- [PEP-484](https://peps.python.org/pep-0484/) type annotations
 
 ***Changed:***
 
