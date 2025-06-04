@@ -31,7 +31,7 @@ class Echo32(Server32):
         super().__init__(path, "cdll", host, port)
 
     @staticmethod
-    def received_data(*args: Any, **kwargs: Any) -> tuple[tuple[Any, ...], dict[str, Any]]:  # type: ignore[misc]
+    def received_data(*args: Any, **kwargs: Any) -> tuple[tuple[Any, ...], dict[str, Any]]:
         """Process a request from the [Echo64.send_data][msl.examples.loadlib.echo64.Echo64.send_data] method.
 
         Args:

@@ -711,7 +711,7 @@ class MenuItem:
         self._checked = bool(value)
 
     @property
-    def data(self) -> Any:  # type: ignore[misc]
+    def data(self) -> Any:
         """[Any][typing.Any] &mdash; User-defined data associated with the menu item."""
         return self._data
 

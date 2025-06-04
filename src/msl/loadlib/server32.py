@@ -82,7 +82,7 @@ class Server32(HTTPServer):
         return self._app
 
     @property
-    def assembly(self) -> Any:  # type: ignore[misc]
+    def assembly(self) -> Any:
         """Returns a reference to the [.NET Runtime Assembly]{:target="_blank"} object.
 
         If the loaded library is not a .NET library, returns `None`.
@@ -96,7 +96,7 @@ class Server32(HTTPServer):
         return self._assembly
 
     @property
-    def lib(self) -> Any:  # type: ignore[misc]
+    def lib(self) -> Any:
         """Returns the reference to the library object.
 
         For example, if `libtype` is

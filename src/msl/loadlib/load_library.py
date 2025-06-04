@@ -344,7 +344,7 @@ class LoadLibrary:
                 logger.error(e)
                 logger.error("The LoaderExceptions are:")
                 for item in e.LoaderExceptions:  # type: ignore[attr-defined] # pyright: ignore[reportUnknownMemberType,reportAttributeAccessIssue,reportUnknownVariableType]
-                    logger.error("  %s", item.Message)  # type: ignore[attr-defined] # pyright: ignore[reportUnknownMemberType,reportUnknownArgumentType]
+                    logger.error("  %s", item.Message)  # pyright: ignore[reportUnknownMemberType,reportUnknownArgumentType]
             else:
                 for t in types:
                     try:
@@ -414,7 +414,7 @@ class LoadLibrary:
             logger.debug("close ActiveX application")
 
     @property
-    def assembly(self) -> Any:  # type: ignore[misc]
+    def assembly(self) -> Any:
         """Returns a reference to the [.NET Runtime Assembly]{:target="_blank"} object.
 
         If the loaded library is not a .NET library, returns `None`.
@@ -428,7 +428,7 @@ class LoadLibrary:
         return self._assembly
 
     @property
-    def gateway(self) -> Any:  # type: ignore[misc]
+    def gateway(self) -> Any:
         """[JavaGateway][py4j.java_gateway.JavaGateway] | `None` &mdash; Reference to the Java gateway.
 
         If the loaded library is not a Java library, returns `None`.
@@ -436,7 +436,7 @@ class LoadLibrary:
         return self._gateway
 
     @property
-    def lib(self) -> Any:  # type: ignore[misc]
+    def lib(self) -> Any:
         """Returns the reference to the library object.
 
         For example, if `libtype` is
