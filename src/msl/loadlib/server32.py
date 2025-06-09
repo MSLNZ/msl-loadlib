@@ -123,9 +123,9 @@ class Server32(HTTPServer):
         """[str][] &mdash; The version of Python that the 32-bit server is running on.
 
         !!! tip
-            You can get the version from a terminal by running
+            You can view the version from a terminal by running
             ```console
-            python -c "from msl.loadlib import Server32; Server32.version()"
+            python -c "from msl.loadlib import Server32; print(Server32.version())"
             ```
         """
         exe = Path(__file__).parent / server_filename
