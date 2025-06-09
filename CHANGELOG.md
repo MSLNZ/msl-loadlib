@@ -7,6 +7,7 @@
 The 32-bit server is frozen with the following versions
 
 - `server32-windows.exe` &mdash; Python 3.13.4, pythonnet 3.0.5, comtypes 1.4.11
+- `server32-linux` &mdash; Python 3.13.4
 
 ***Added:***
 
