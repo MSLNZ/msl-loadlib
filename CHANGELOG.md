@@ -2,7 +2,7 @@
 
 ---
 
-## unreleased
+## 1.0.0 (2025-06-09)
 
 The 32-bit server is frozen with the following versions
 
