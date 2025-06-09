@@ -4,6 +4,10 @@
 
 ## unreleased
 
+The 32-bit server is frozen with the following versions
+
+- `server32-windows.exe` &mdash; Python 3.13.4, pythonnet 3.0.5, comtypes 1.4.11
+
 ***Added:***
 
 - `Client64` now accepts `host=None` which will mock the connection to the server

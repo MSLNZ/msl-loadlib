@@ -73,7 +73,7 @@ def test_module32_as_name() -> None:
     # Trying to load another module will look for the shared library in the tmp/_MEI*
     # directory since Path(__file__).parent is used to locate the shared library
     with Client64("msl.examples.loadlib.kernel32") as c:
-        assert isinstance(c.request32("get_time"), datetime)
+        assert isinstance(c.request32("get_local_time"), datetime)
 
 
 @skipif_no_server32

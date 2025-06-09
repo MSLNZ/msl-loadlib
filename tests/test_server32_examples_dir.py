@@ -1,4 +1,3 @@
-import os
 from pathlib import Path
 
 from msl.examples.loadlib import EXAMPLES_DIR
@@ -17,8 +16,7 @@ class Ex32(Server32):
         # this class would not instantiate if Server32.examples_dir()
         # was incorrect, so the fact that the server starts already
         # demonstrates that this test passes
-        path = os.path.join(Server32.examples_dir(), "cpp_lib32")  # noqa: PTH118
-        super().__init__(path, "cdll", host, port)
+        super().__init__(Server32.examples_dir() / "cpp_lib32", "cdll", host, port)
 
     def ex_dir(self) -> Path:
         return self.examples_dir()
@@ -28,12 +26,12 @@ class Ex64(Client64):
     def __init__(self) -> None:
         super().__init__(__file__)
 
-    def examples_dir(self) -> str:
-        reply: str = self.request32("examples_dir")
+    def examples_dir(self) -> Path:
+        reply: Path = self.request32("examples_dir")
         return reply
 
-    def ex_dir(self) -> str:
-        reply: str = self.request32("ex_dir")
+    def ex_dir(self) -> Path:
+        reply: Path = self.request32("ex_dir")
         return reply
 
 
@@ -42,5 +40,5 @@ def test_examples_dir() -> None:  # type: ignore[misc]
     assert Server32.examples_dir() == EXAMPLES_DIR
 
     with Ex64() as e:
-        assert e.examples_dir() == str(EXAMPLES_DIR)
-        assert e.ex_dir() == str(EXAMPLES_DIR)
+        assert e.examples_dir() == EXAMPLES_DIR
+        assert e.ex_dir() == EXAMPLES_DIR
