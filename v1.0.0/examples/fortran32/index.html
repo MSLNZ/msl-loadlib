@@ -1,0 +1,4921 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Load a library (and access a 32-bit library from 64-bit Python)">
+      
+      
+      
+        <link rel="canonical" href="https://github.com/MSLNZ/msl-loadlib/v1.0.0/examples/fortran32/">
+      
+      
+        <link rel="prev" href="../echo64/">
+      
+      
+        <link rel="next" href="../fortran64/">
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.ico">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.6.14">
+    
+    
+      
+        <title>Fortran32 - MSL-LoadLib</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.342714a4.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.06af60db.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/_mkdocstrings.css">
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#fortran32" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+      <div data-md-color-scheme="default" data-md-component="outdated" hidden>
+        
+      </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow md-header--lifted" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="MSL-LoadLib" class="md-header__button md-logo" aria-label="MSL-LoadLib" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            MSL-LoadLib
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Fortran32
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme)" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m14.3 16-.7-2h-3.2l-.7 2H7.8L11 7h2l3.2 9zM20 8.69V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12zm-9.15 3.96h2.3L12 9z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_2" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 7a5 5 0 0 1 5 5 5 5 0 0 1-5 5 5 5 0 0 1-5-5 5 5 0 0 1 5-5m0 2a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3m0-7 2.39 3.42C13.65 5.15 12.84 5 12 5s-1.65.15-2.39.42zM3.34 7l4.16-.35A7.2 7.2 0 0 0 5.94 8.5c-.44.74-.69 1.5-.83 2.29zm.02 10 1.76-3.77a7.131 7.131 0 0 0 2.38 4.14zM20.65 7l-1.77 3.79a7.02 7.02 0 0 0-2.38-4.15zm-.01 10-4.14.36c.59-.51 1.12-1.14 1.54-1.86.42-.73.69-1.5.83-2.29zM12 22l-2.41-3.44c.74.27 1.55.44 2.41.44.82 0 1.63-.17 2.37-.44z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="black" data-md-color-accent="deep-orange"  aria-label="Switch to system preference"  type="radio" name="__palette" id="__palette_2">
+    
+      <label class="md-header__button md-icon" title="Switch to system preference" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m17.75 4.09-2.53 1.94.91 3.06-2.63-1.81-2.63 1.81.91-3.06-2.53-1.94L12.44 4l1.06-3 1.06 3zm3.5 6.91-1.64 1.25.59 1.98-1.7-1.17-1.7 1.17.59-1.98L15.75 11l2.06-.05L18.5 9l.69 1.95zm-2.28 4.95c.83-.08 1.72 1.1 1.19 1.85-.32.45-.66.87-1.08 1.27C15.17 23 8.84 23 4.94 19.07c-3.91-3.9-3.91-10.24 0-14.14.4-.4.82-.76 1.27-1.08.75-.53 1.93.36 1.85 1.19-.27 2.86.69 5.83 2.89 8.02a9.96 9.96 0 0 0 8.02 2.89m-1.64 2.02a12.08 12.08 0 0 1-7.8-3.47c-2.17-2.19-3.33-5-3.49-7.82-2.81 3.14-2.7 7.96.31 10.98 3.02 3.01 7.84 3.12 10.98.31"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/MSLNZ/msl-loadlib/" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.7.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+    
+      
+<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../.." class="md-tabs__link">
+          
+  
+  
+    
+  
+  Home
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../usage/overview/" class="md-tabs__link">
+          
+  
+  
+    
+  
+  User Guide
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+    
+  
+  
+    
+    
+      <li class="md-tabs__item md-tabs__item--active">
+        <a href="../" class="md-tabs__link">
+          
+  
+  
+    
+  
+  Examples
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../api/client64/" class="md-tabs__link">
+          
+  
+  
+    
+  
+  API
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../faq/streams/" class="md-tabs__link">
+          
+  
+  
+    
+  
+  FAQ
+
+        </a>
+      </li>
+    
+  
+
+      
+    </ul>
+  </div>
+</nav>
+    
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="MSL-LoadLib" class="md-nav__button md-logo" aria-label="MSL-LoadLib" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    MSL-LoadLib
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/MSLNZ/msl-loadlib/" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.7.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_1" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../.." class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    Home
+    
+  </span>
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_1" id="__nav_1_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_1_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_1">
+            <span class="md-nav__icon md-icon"></span>
+            Home
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../install/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Install
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../release-notes/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Release Notes
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../license/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    License
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    User Guide
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            User Guide
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../usage/overview/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Overview
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_2" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../usage/direct/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    Direct
+    
+  </span>
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_2_2" id="__nav_2_2_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_2">
+            <span class="md-nav__icon md-icon"></span>
+            Direct
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../usage/direct/cpp/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    C++
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../usage/direct/fortran/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    FORTRAN
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../usage/direct/dotnet/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    .NET
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../usage/direct/java/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Java
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../usage/direct/com/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    COM
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../usage/direct/activex/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    ActiveX
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../usage/direct/stdcall/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Windows __stdcall
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../usage/direct/labview/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    LabVIEW
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_3" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../usage/ipc/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    Client-Server
+    
+  </span>
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_2_3" id="__nav_2_3_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_3">
+            <span class="md-nav__icon md-icon"></span>
+            Client-Server
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../usage/ipc/echo/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Echo
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../usage/ipc/cpp/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    C++
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../usage/ipc/fortran/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    FORTRAN
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../usage/ipc/dotnet/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    .NET
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../usage/ipc/stdcall/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Windows __stdcall
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../usage/ipc/labview/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    LabVIEW
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../usage/refreeze/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Custom Server
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+        
+        
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" checked>
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    Examples
+    
+  </span>
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_3" id="__nav_3_label" tabindex="">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            Examples
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../cpp32/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Cpp32
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../cpp64/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Cpp64
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../dotnet32/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    DotNet32
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../dotnet64/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    DotNet64
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../echo32/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Echo32
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../echo64/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Echo64
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    Fortran32
+    
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    Fortran32
+    
+  </span>
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#msl.examples.loadlib.fortran32.Fortran32" class="md-nav__link">
+    <span class="md-ellipsis">
+      Fortran32
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Fortran32">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#msl.examples.loadlib.fortran32.Fortran32.add_1d_arrays" class="md-nav__link">
+    <span class="md-ellipsis">
+      add_1d_arrays
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#msl.examples.loadlib.fortran32.Fortran32.add_or_subtract" class="md-nav__link">
+    <span class="md-ellipsis">
+      add_or_subtract
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#msl.examples.loadlib.fortran32.Fortran32.besselJ0" class="md-nav__link">
+    <span class="md-ellipsis">
+      besselJ0
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#msl.examples.loadlib.fortran32.Fortran32.factorial" class="md-nav__link">
+    <span class="md-ellipsis">
+      factorial
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#msl.examples.loadlib.fortran32.Fortran32.is_positive" class="md-nav__link">
+    <span class="md-ellipsis">
+      is_positive
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#msl.examples.loadlib.fortran32.Fortran32.matrix_multiply" class="md-nav__link">
+    <span class="md-ellipsis">
+      matrix_multiply
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#msl.examples.loadlib.fortran32.Fortran32.multiply_float32" class="md-nav__link">
+    <span class="md-ellipsis">
+      multiply_float32
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#msl.examples.loadlib.fortran32.Fortran32.multiply_float64" class="md-nav__link">
+    <span class="md-ellipsis">
+      multiply_float64
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#msl.examples.loadlib.fortran32.Fortran32.reverse_string" class="md-nav__link">
+    <span class="md-ellipsis">
+      reverse_string
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#msl.examples.loadlib.fortran32.Fortran32.standard_deviation" class="md-nav__link">
+    <span class="md-ellipsis">
+      standard_deviation
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#msl.examples.loadlib.fortran32.Fortran32.sum_16bit" class="md-nav__link">
+    <span class="md-ellipsis">
+      sum_16bit
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#msl.examples.loadlib.fortran32.Fortran32.sum_32bit" class="md-nav__link">
+    <span class="md-ellipsis">
+      sum_32bit
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#msl.examples.loadlib.fortran32.Fortran32.sum_64bit" class="md-nav__link">
+    <span class="md-ellipsis">
+      sum_64bit
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#msl.examples.loadlib.fortran32.Fortran32.sum_8bit" class="md-nav__link">
+    <span class="md-ellipsis">
+      sum_8bit
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../fortran64/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Fortran64
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../kernel32/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Kernel32 (Windows __stdcall)
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../kernel64/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Kernel64 (Windows __stdcall)
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../labview32/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Labview32
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../labview64/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Labview64
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    API
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            API
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../api/client64/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Client64
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../api/load_library/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    LoadLibrary
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../api/server32/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Server32
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../api/activex/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    activex
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../api/exceptions/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    exceptions
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../api/freeze_server32/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    freeze_server32
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../api/types/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    types
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../api/utils/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    utils
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    FAQ
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            FAQ
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../faq/streams/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Access stdout and stderr from the server
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../faq/freeze/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Freezing the msl-loadlib package
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../faq/mock/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Mocking the connection to the server
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#msl.examples.loadlib.fortran32.Fortran32" class="md-nav__link">
+    <span class="md-ellipsis">
+      Fortran32
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Fortran32">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#msl.examples.loadlib.fortran32.Fortran32.add_1d_arrays" class="md-nav__link">
+    <span class="md-ellipsis">
+      add_1d_arrays
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#msl.examples.loadlib.fortran32.Fortran32.add_or_subtract" class="md-nav__link">
+    <span class="md-ellipsis">
+      add_or_subtract
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#msl.examples.loadlib.fortran32.Fortran32.besselJ0" class="md-nav__link">
+    <span class="md-ellipsis">
+      besselJ0
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#msl.examples.loadlib.fortran32.Fortran32.factorial" class="md-nav__link">
+    <span class="md-ellipsis">
+      factorial
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#msl.examples.loadlib.fortran32.Fortran32.is_positive" class="md-nav__link">
+    <span class="md-ellipsis">
+      is_positive
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#msl.examples.loadlib.fortran32.Fortran32.matrix_multiply" class="md-nav__link">
+    <span class="md-ellipsis">
+      matrix_multiply
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#msl.examples.loadlib.fortran32.Fortran32.multiply_float32" class="md-nav__link">
+    <span class="md-ellipsis">
+      multiply_float32
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#msl.examples.loadlib.fortran32.Fortran32.multiply_float64" class="md-nav__link">
+    <span class="md-ellipsis">
+      multiply_float64
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#msl.examples.loadlib.fortran32.Fortran32.reverse_string" class="md-nav__link">
+    <span class="md-ellipsis">
+      reverse_string
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#msl.examples.loadlib.fortran32.Fortran32.standard_deviation" class="md-nav__link">
+    <span class="md-ellipsis">
+      standard_deviation
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#msl.examples.loadlib.fortran32.Fortran32.sum_16bit" class="md-nav__link">
+    <span class="md-ellipsis">
+      sum_16bit
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#msl.examples.loadlib.fortran32.Fortran32.sum_32bit" class="md-nav__link">
+    <span class="md-ellipsis">
+      sum_32bit
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#msl.examples.loadlib.fortran32.Fortran32.sum_64bit" class="md-nav__link">
+    <span class="md-ellipsis">
+      sum_64bit
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#msl.examples.loadlib.fortran32.Fortran32.sum_8bit" class="md-nav__link">
+    <span class="md-ellipsis">
+      sum_8bit
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+  
+
+
+<h1 id="fortran32">Fortran32<a class="headerlink" href="#fortran32" title="Permanent link">¤</a></h1>
+
+
+<div class="doc doc-object doc-module">
+
+
+
+
+    <div class="doc doc-contents first">
+
+        <p>Wrapper around a 32-bit FORTRAN library.</p>
+<p>Example of a server that loads a 32-bit library, <a class="autorefs autorefs-internal" title="FORTRAN Source Code" href="../../usage/direct/fortran/#fortran-lib">fortran_lib32</a>,
+in a 32-bit Python interpreter to host the library. The corresponding <a class="autorefs autorefs-internal" href="../fortran64/#fortran64">Fortran64</a> class
+is created in a 64-bit Python interpreter and the <a class="autorefs autorefs-internal" href="../fortran64/#fortran64">Fortran64</a> class sends requests
+to the <a class="autorefs autorefs-internal" href="#fortran32">Fortran32</a> class which calls the 32-bit library to execute the request and
+then returns the response from the library.</p>
+
+
+
+
+
+
+
+
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+<div class="doc doc-object doc-class">
+
+
+
+<h2 id="msl.examples.loadlib.fortran32.Fortran32" class="doc doc-heading">
+            <span class="doc doc-object-name doc-class-name">Fortran32</span>
+
+
+<a href="#msl.examples.loadlib.fortran32.Fortran32" class="headerlink" title="Permanent link">¤</a></h2>
+<div class="doc-signature highlight"><pre><span></span><code><span class="nf">Fortran32</span><span class="p">(</span><span class="n">host</span><span class="p">,</span> <span class="n">port</span><span class="p">)</span>
+</code></pre></div>
+
+    <div class="doc doc-contents ">
+            <p class="doc doc-class-bases">
+              Bases: <code><a class="autorefs autorefs-internal" title="Server32 (msl.loadlib.Server32)" href="../../api/server32/#msl.loadlib.server32.Server32">Server32</a></code></p>
+
+
+        <p>Wrapper around a 32-bit FORTRAN library.</p>
+
+        <p>This class demonstrates how to pass various data types to/from a
+32-bit FORTRAN library via <a class="autorefs autorefs-external" href="https://docs.python.org/3/library/ctypes.html#module-ctypes" target="_blank">ctypes</a>.</p>
+
+
+<p><span class="doc-section-title">Parameters:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Description</th>
+          <th>Default</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td>
+                <code>host</code>
+            </td>
+            <td>
+                  <code><a class="autorefs autorefs-external" href="https://docs.python.org/3/library/stdtypes.html#str">str</a></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>The IP address (or hostname) to use for the server.</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>port</code>
+            </td>
+            <td>
+                  <code><a class="autorefs autorefs-external" href="https://docs.python.org/3/library/functions.html#int">int</a></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>The port to open for the server.</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+
+
+
+
+
+
+                  <details class="quote">
+                    <summary>Source code in <code>src/msl/examples/loadlib/fortran32.py</code></summary>
+                    <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">25</span>
+<span class="normal">26</span>
+<span class="normal">27</span>
+<span class="normal">28</span>
+<span class="normal">29</span>
+<span class="normal">30</span>
+<span class="normal">31</span>
+<span class="normal">32</span>
+<span class="normal">33</span>
+<span class="normal">34</span>
+<span class="normal">35</span>
+<span class="normal">36</span>
+<span class="normal">37</span>
+<span class="normal">38</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">host</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">port</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;A wrapper around a 32-bit FORTRAN library, [fortran_lib32][fortran-lib].</span>
+
+<span class="sd">    This class demonstrates how to pass various data types to/from a</span>
+<span class="sd">    32-bit FORTRAN library via [ctypes][]{:target=&quot;_blank&quot;}.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        host: The IP address (or hostname) to use for the server.</span>
+<span class="sd">        port: The port to open for the server.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># By not specifying the extension of the library file the server will open</span>
+    <span class="c1"># the appropriate file based on the operating system.</span>
+    <span class="n">path</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="vm">__file__</span><span class="p">)</span><span class="o">.</span><span class="n">parent</span> <span class="o">/</span> <span class="s2">&quot;fortran_lib32&quot;</span>
+    <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="s2">&quot;cdll&quot;</span><span class="p">,</span> <span class="n">host</span><span class="p">,</span> <span class="n">port</span><span class="p">)</span>
+</code></pre></div></td></tr></table></div>
+                  </details>
+
+
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+<div class="doc doc-object doc-function">
+
+
+<h3 id="msl.examples.loadlib.fortran32.Fortran32.add_1d_arrays" class="doc doc-heading">
+            <span class="doc doc-object-name doc-function-name">add_1d_arrays</span>
+
+
+<a href="#msl.examples.loadlib.fortran32.Fortran32.add_1d_arrays" class="headerlink" title="Permanent link">¤</a></h3>
+<div class="doc-signature highlight"><pre><span></span><code><span class="nf">add_1d_arrays</span><span class="p">(</span><span class="n">a1</span><span class="p">,</span> <span class="n">a2</span><span class="p">)</span>
+</code></pre></div>
+
+    <div class="doc doc-contents ">
+
+        <p>Perform an element-wise addition of two 1D double-precision arrays.</p>
+<p>The corresponding FORTRAN code is</p>
+<div class="highlight"><pre><span></span><code><span class="k">subroutine </span><span class="n">add_1d_arrays</span><span class="p">(</span><span class="n">a</span><span class="p">,</span><span class="w"> </span><span class="n">in1</span><span class="p">,</span><span class="w"> </span><span class="n">in2</span><span class="p">,</span><span class="w"> </span><span class="n">n</span><span class="p">)</span>
+<span class="w">    </span><span class="c">!DEC$ ATTRIBUTES DLLEXPORT, ALIAS:&#39;add_1d_arrays&#39; :: add_1d_arrays</span>
+<span class="w">    </span><span class="k">implicit none</span>
+<span class="k">    </span><span class="kt">integer</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">n</span><span class="w"> </span><span class="c">! the length of the input arrays</span>
+<span class="w">    </span><span class="kt">double precision</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">in1</span><span class="p">(</span><span class="n">n</span><span class="p">),</span><span class="w"> </span><span class="n">in2</span><span class="p">(</span><span class="n">n</span><span class="p">)</span><span class="w"> </span><span class="c">! the arrays to add (element-wise)</span>
+<span class="w">    </span><span class="kt">double precision</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">a</span><span class="p">(</span><span class="n">n</span><span class="p">)</span><span class="w"> </span><span class="c">! the array that will contain the element-wise sum</span>
+<span class="w">    </span><span class="n">a</span><span class="p">(:)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">in1</span><span class="p">(:)</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">in2</span><span class="p">(:)</span>
+<span class="k">end subroutine </span><span class="n">add_1d_arrays</span>
+</code></pre></div>
+<p>See the corresponding <a class="autorefs autorefs-internal" title="add_1d_arrays" href="../fortran64/#msl.examples.loadlib.fortran64.Fortran64.add_1d_arrays">Fortran64.add_1d_arrays</a> method.</p>
+
+
+<p><span class="doc-section-title">Parameters:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Description</th>
+          <th>Default</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td>
+                <code>a1</code>
+            </td>
+            <td>
+                  <code><a class="autorefs autorefs-external" title="collections.abc.Sequence" href="https://docs.python.org/3/library/collections.abc.html#collections.abc.Sequence">Sequence</a>[<a class="autorefs autorefs-external" href="https://docs.python.org/3/library/functions.html#float">float</a>]</code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>First array.</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>a2</code>
+            </td>
+            <td>
+                  <code><a class="autorefs autorefs-external" title="collections.abc.Sequence" href="https://docs.python.org/3/library/collections.abc.html#collections.abc.Sequence">Sequence</a>[<a class="autorefs autorefs-external" href="https://docs.python.org/3/library/functions.html#float">float</a>]</code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Second array.</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+
+    <p><span class="doc-section-title">Returns:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Type</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td>
+                  <code><a class="autorefs autorefs-external" href="https://docs.python.org/3/glossary.html#term-list">list</a>[<a class="autorefs autorefs-external" href="https://docs.python.org/3/library/functions.html#float">float</a>]</code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>The element-wise addition of <code>a1 + a2</code>.</p>
+              </div>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+
+            <details class="quote">
+              <summary>Source code in <code>src/msl/examples/loadlib/fortran32.py</code></summary>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">451</span>
+<span class="normal">452</span>
+<span class="normal">453</span>
+<span class="normal">454</span>
+<span class="normal">455</span>
+<span class="normal">456</span>
+<span class="normal">457</span>
+<span class="normal">458</span>
+<span class="normal">459</span>
+<span class="normal">460</span>
+<span class="normal">461</span>
+<span class="normal">462</span>
+<span class="normal">463</span>
+<span class="normal">464</span>
+<span class="normal">465</span>
+<span class="normal">466</span>
+<span class="normal">467</span>
+<span class="normal">468</span>
+<span class="normal">469</span>
+<span class="normal">470</span>
+<span class="normal">471</span>
+<span class="normal">472</span>
+<span class="normal">473</span>
+<span class="normal">474</span>
+<span class="normal">475</span>
+<span class="normal">476</span>
+<span class="normal">477</span>
+<span class="normal">478</span>
+<span class="normal">479</span>
+<span class="normal">480</span>
+<span class="normal">481</span>
+<span class="normal">482</span>
+<span class="normal">483</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">add_1d_arrays</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">a1</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">float</span><span class="p">],</span> <span class="n">a2</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">float</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">float</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Perform an element-wise addition of two 1D double-precision arrays.</span>
+
+<span class="sd">    The corresponding FORTRAN code is</span>
+
+<span class="sd">    ```fortran</span>
+<span class="sd">    subroutine add_1d_arrays(a, in1, in2, n)</span>
+<span class="sd">        !DEC$ ATTRIBUTES DLLEXPORT, ALIAS:&#39;add_1d_arrays&#39; :: add_1d_arrays</span>
+<span class="sd">        implicit none</span>
+<span class="sd">        integer(4) :: n ! the length of the input arrays</span>
+<span class="sd">        double precision :: in1(n), in2(n) ! the arrays to add (element-wise)</span>
+<span class="sd">        double precision :: a(n) ! the array that will contain the element-wise sum</span>
+<span class="sd">        a(:) = in1(:) + in2(:)</span>
+<span class="sd">    end subroutine add_1d_arrays</span>
+<span class="sd">    ```</span>
+
+<span class="sd">    See the corresponding [Fortran64.add_1d_arrays][msl.examples.loadlib.fortran64.Fortran64.add_1d_arrays] method.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        a1: First array.</span>
+<span class="sd">        a2: Second array.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        The element-wise addition of `a1 + a2`.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># restype should be defined elsewhere, shown here for illustrative purposes</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">lib</span><span class="o">.</span><span class="n">add_1d_arrays</span><span class="o">.</span><span class="n">restype</span> <span class="o">=</span> <span class="kc">None</span>
+
+    <span class="n">n</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">a1</span><span class="p">)</span>
+    <span class="n">nc</span> <span class="o">=</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">c_int32</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
+    <span class="n">out</span> <span class="o">=</span> <span class="p">(</span><span class="n">ctypes</span><span class="o">.</span><span class="n">c_double</span> <span class="o">*</span> <span class="n">n</span><span class="p">)()</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">lib</span><span class="o">.</span><span class="n">add_1d_arrays</span><span class="p">(</span><span class="n">out</span><span class="p">,</span> <span class="p">(</span><span class="n">ctypes</span><span class="o">.</span><span class="n">c_double</span> <span class="o">*</span> <span class="n">n</span><span class="p">)(</span><span class="o">*</span><span class="n">a1</span><span class="p">),</span> <span class="p">(</span><span class="n">ctypes</span><span class="o">.</span><span class="n">c_double</span> <span class="o">*</span> <span class="n">n</span><span class="p">)(</span><span class="o">*</span><span class="n">a2</span><span class="p">),</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">byref</span><span class="p">(</span><span class="n">nc</span><span class="p">))</span>
+    <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="n">out</span><span class="p">)</span>
+</code></pre></div></td></tr></table></div>
+            </details>
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h3 id="msl.examples.loadlib.fortran32.Fortran32.add_or_subtract" class="doc doc-heading">
+            <span class="doc doc-object-name doc-function-name">add_or_subtract</span>
+
+
+<a href="#msl.examples.loadlib.fortran32.Fortran32.add_or_subtract" class="headerlink" title="Permanent link">¤</a></h3>
+<div class="doc-signature highlight"><pre><span></span><code><span class="nf">add_or_subtract</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">do_addition</span><span class="p">)</span>
+</code></pre></div>
+
+    <div class="doc doc-contents ">
+
+        <p>Add or subtract two integers.</p>
+<p>The corresponding FORTRAN code is</p>
+<div class="highlight"><pre><span></span><code><span class="k">function </span><span class="n">add_or_subtract</span><span class="p">(</span><span class="n">a</span><span class="p">,</span><span class="w"> </span><span class="n">b</span><span class="p">,</span><span class="w"> </span><span class="n">do_addition</span><span class="p">)</span><span class="w"> </span><span class="k">result</span><span class="p">(</span><span class="k">value</span><span class="p">)</span>
+<span class="w">    </span><span class="c">!DEC$ ATTRIBUTES DLLEXPORT, ALIAS:&#39;add_or_subtract&#39; :: add_or_subtract</span>
+<span class="w">    </span><span class="k">implicit none</span>
+<span class="k">    </span><span class="kt">logical</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">do_addition</span>
+<span class="w">    </span><span class="kt">integer</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">a</span><span class="p">,</span><span class="w"> </span><span class="n">b</span><span class="p">,</span><span class="w"> </span><span class="k">value</span>
+<span class="k">    if</span><span class="w"> </span><span class="p">(</span><span class="n">do_addition</span><span class="p">)</span><span class="w"> </span><span class="k">then</span>
+<span class="k">        value</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">a</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">b</span>
+<span class="w">    </span><span class="k">else</span>
+<span class="k">        value</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">a</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">b</span>
+<span class="w">    </span><span class="k">endif</span>
+<span class="k">end function </span><span class="n">add_or_subtract</span>
+</code></pre></div>
+<p>See the corresponding <a class="autorefs autorefs-internal" title="add_or_subtract" href="../fortran64/#msl.examples.loadlib.fortran64.Fortran64.add_or_subtract">Fortran64.add_or_subtract</a>
+method.</p>
+
+
+<p><span class="doc-section-title">Parameters:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Description</th>
+          <th>Default</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td>
+                <code>a</code>
+            </td>
+            <td>
+                  <code><a class="autorefs autorefs-external" href="https://docs.python.org/3/library/functions.html#int">int</a></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>First integer.</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>b</code>
+            </td>
+            <td>
+                  <code><a class="autorefs autorefs-external" href="https://docs.python.org/3/library/functions.html#int">int</a></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Second integer.</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>do_addition</code>
+            </td>
+            <td>
+                  <code><a class="autorefs autorefs-external" href="https://docs.python.org/3/library/functions.html#bool">bool</a></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Whether to add or subtract the numbers.</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+
+<details class="return" open>
+  <summary>Return</summary>
+  <p><code>a + b</code> if <code>do_addition</code> is <code>True</code> else <code>a - b</code>.</p>
+</details>
+
+            <details class="quote">
+              <summary>Source code in <code>src/msl/examples/loadlib/fortran32.py</code></summary>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">275</span>
+<span class="normal">276</span>
+<span class="normal">277</span>
+<span class="normal">278</span>
+<span class="normal">279</span>
+<span class="normal">280</span>
+<span class="normal">281</span>
+<span class="normal">282</span>
+<span class="normal">283</span>
+<span class="normal">284</span>
+<span class="normal">285</span>
+<span class="normal">286</span>
+<span class="normal">287</span>
+<span class="normal">288</span>
+<span class="normal">289</span>
+<span class="normal">290</span>
+<span class="normal">291</span>
+<span class="normal">292</span>
+<span class="normal">293</span>
+<span class="normal">294</span>
+<span class="normal">295</span>
+<span class="normal">296</span>
+<span class="normal">297</span>
+<span class="normal">298</span>
+<span class="normal">299</span>
+<span class="normal">300</span>
+<span class="normal">301</span>
+<span class="normal">302</span>
+<span class="normal">303</span>
+<span class="normal">304</span>
+<span class="normal">305</span>
+<span class="normal">306</span>
+<span class="normal">307</span>
+<span class="normal">308</span>
+<span class="normal">309</span>
+<span class="normal">310</span>
+<span class="normal">311</span>
+<span class="normal">312</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">add_or_subtract</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">a</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">b</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">do_addition</span><span class="p">:</span> <span class="nb">bool</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Add or subtract two integers.</span>
+
+<span class="sd">    The corresponding FORTRAN code is</span>
+
+<span class="sd">    ```fortran</span>
+<span class="sd">    function add_or_subtract(a, b, do_addition) result(value)</span>
+<span class="sd">        !DEC$ ATTRIBUTES DLLEXPORT, ALIAS:&#39;add_or_subtract&#39; :: add_or_subtract</span>
+<span class="sd">        implicit none</span>
+<span class="sd">        logical :: do_addition</span>
+<span class="sd">        integer(4) :: a, b, value</span>
+<span class="sd">        if (do_addition) then</span>
+<span class="sd">            value = a + b</span>
+<span class="sd">        else</span>
+<span class="sd">            value = a - b</span>
+<span class="sd">        endif</span>
+<span class="sd">    end function add_or_subtract</span>
+<span class="sd">    ```</span>
+
+<span class="sd">    See the corresponding [Fortran64.add_or_subtract][msl.examples.loadlib.fortran64.Fortran64.add_or_subtract]</span>
+<span class="sd">    method.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        a: First integer.</span>
+<span class="sd">        b: Second integer.</span>
+<span class="sd">        do_addition: Whether to add or subtract the numbers.</span>
+
+<span class="sd">    Return:</span>
+<span class="sd">        `a + b` if `do_addition` is `True` else `a - b`.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># restype should be defined elsewhere, shown here for illustrative purposes</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">lib</span><span class="o">.</span><span class="n">add_or_subtract</span><span class="o">.</span><span class="n">restype</span> <span class="o">=</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">c_int32</span>
+
+    <span class="n">ac</span> <span class="o">=</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">c_int32</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>
+    <span class="n">bc</span> <span class="o">=</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">c_int32</span><span class="p">(</span><span class="n">b</span><span class="p">)</span>
+    <span class="n">logical</span> <span class="o">=</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">c_bool</span><span class="p">(</span><span class="n">do_addition</span><span class="p">)</span>
+    <span class="n">result</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">lib</span><span class="o">.</span><span class="n">add_or_subtract</span><span class="p">(</span><span class="n">ctypes</span><span class="o">.</span><span class="n">byref</span><span class="p">(</span><span class="n">ac</span><span class="p">),</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">byref</span><span class="p">(</span><span class="n">bc</span><span class="p">),</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">byref</span><span class="p">(</span><span class="n">logical</span><span class="p">))</span>
+    <span class="k">return</span> <span class="n">result</span>
+</code></pre></div></td></tr></table></div>
+            </details>
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h3 id="msl.examples.loadlib.fortran32.Fortran32.besselJ0" class="doc doc-heading">
+            <span class="doc doc-object-name doc-function-name">besselJ0</span>
+
+
+<a href="#msl.examples.loadlib.fortran32.Fortran32.besselJ0" class="headerlink" title="Permanent link">¤</a></h3>
+<div class="doc-signature highlight"><pre><span></span><code><span class="nf">besselJ0</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+</code></pre></div>
+
+    <div class="doc doc-contents ">
+
+        <p>Compute the Bessel function of the first kind of order 0 of x.</p>
+<p>The corresponding FORTRAN code is</p>
+<div class="highlight"><pre><span></span><code><span class="k">function </span><span class="n">besselj0</span><span class="p">(</span><span class="n">x</span><span class="p">)</span><span class="w"> </span><span class="k">result</span><span class="p">(</span><span class="n">val</span><span class="p">)</span>
+<span class="w">    </span><span class="c">!DEC$ ATTRIBUTES DLLEXPORT, ALIAS:&#39;besselj0&#39; :: besselj0</span>
+<span class="w">    </span><span class="kt">double precision</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">x</span><span class="p">,</span><span class="w"> </span><span class="n">val</span>
+<span class="w">    </span><span class="n">val</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">BESSEL_J0</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+<span class="k">end function </span><span class="n">besselJ0</span>
+</code></pre></div>
+<p>See the corresponding <a class="autorefs autorefs-internal" title="besselJ0" href="../fortran64/#msl.examples.loadlib.fortran64.Fortran64.besselJ0">Fortran64.besselJ0</a> method.</p>
+
+
+<p><span class="doc-section-title">Parameters:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Description</th>
+          <th>Default</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td>
+                <code>x</code>
+            </td>
+            <td>
+                  <code><a class="autorefs autorefs-external" href="https://docs.python.org/3/library/functions.html#float">float</a></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>The value to compute <code>BESSEL_J0</code> of.</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+
+    <p><span class="doc-section-title">Returns:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Type</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td>
+                  <code><a class="autorefs autorefs-external" href="https://docs.python.org/3/library/functions.html#float">float</a></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>The value of <code>BESSEL_J0(x)</code>.</p>
+              </div>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+
+            <details class="quote">
+              <summary>Source code in <code>src/msl/examples/loadlib/fortran32.py</code></summary>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">387</span>
+<span class="normal">388</span>
+<span class="normal">389</span>
+<span class="normal">390</span>
+<span class="normal">391</span>
+<span class="normal">392</span>
+<span class="normal">393</span>
+<span class="normal">394</span>
+<span class="normal">395</span>
+<span class="normal">396</span>
+<span class="normal">397</span>
+<span class="normal">398</span>
+<span class="normal">399</span>
+<span class="normal">400</span>
+<span class="normal">401</span>
+<span class="normal">402</span>
+<span class="normal">403</span>
+<span class="normal">404</span>
+<span class="normal">405</span>
+<span class="normal">406</span>
+<span class="normal">407</span>
+<span class="normal">408</span>
+<span class="normal">409</span>
+<span class="normal">410</span>
+<span class="normal">411</span>
+<span class="normal">412</span>
+<span class="normal">413</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">besselJ0</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>  <span class="c1"># noqa: N802</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Compute the Bessel function of the first kind of order 0 of x.</span>
+
+<span class="sd">    The corresponding FORTRAN code is</span>
+
+<span class="sd">    ```fortran</span>
+<span class="sd">    function besselj0(x) result(val)</span>
+<span class="sd">        !DEC$ ATTRIBUTES DLLEXPORT, ALIAS:&#39;besselj0&#39; :: besselj0</span>
+<span class="sd">        double precision :: x, val</span>
+<span class="sd">        val = BESSEL_J0(x)</span>
+<span class="sd">    end function besselJ0</span>
+<span class="sd">    ```</span>
+
+<span class="sd">    See the corresponding [Fortran64.besselJ0][msl.examples.loadlib.fortran64.Fortran64.besselJ0] method.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        x: The value to compute `BESSEL_J0` of.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        The value of `BESSEL_J0(x)`.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># restype should be defined elsewhere, shown here for illustrative purposes</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">lib</span><span class="o">.</span><span class="n">besselj0</span><span class="o">.</span><span class="n">restype</span> <span class="o">=</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">c_double</span>
+
+    <span class="n">xc</span> <span class="o">=</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">c_double</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+    <span class="n">result</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">lib</span><span class="o">.</span><span class="n">besselj0</span><span class="p">(</span><span class="n">ctypes</span><span class="o">.</span><span class="n">byref</span><span class="p">(</span><span class="n">xc</span><span class="p">))</span>
+    <span class="k">return</span> <span class="n">result</span>
+</code></pre></div></td></tr></table></div>
+            </details>
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h3 id="msl.examples.loadlib.fortran32.Fortran32.factorial" class="doc doc-heading">
+            <span class="doc doc-object-name doc-function-name">factorial</span>
+
+
+<a href="#msl.examples.loadlib.fortran32.Fortran32.factorial" class="headerlink" title="Permanent link">¤</a></h3>
+<div class="doc-signature highlight"><pre><span></span><code><span class="nf">factorial</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
+</code></pre></div>
+
+    <div class="doc doc-contents ">
+
+        <p>Compute the n'th factorial.</p>
+<p>The corresponding FORTRAN code is</p>
+<div class="highlight"><pre><span></span><code><span class="k">function </span><span class="n">factorial</span><span class="p">(</span><span class="n">n</span><span class="p">)</span><span class="w"> </span><span class="k">result</span><span class="p">(</span><span class="k">value</span><span class="p">)</span>
+<span class="w">    </span><span class="c">!DEC$ ATTRIBUTES DLLEXPORT, ALIAS:&#39;factorial&#39; :: factorial</span>
+<span class="w">    </span><span class="k">implicit none</span>
+<span class="k">    </span><span class="kt">integer</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">n</span>
+<span class="w">    </span><span class="kt">integer</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">i</span>
+<span class="w">    </span><span class="kt">double precision </span><span class="k">value</span>
+<span class="k">    if</span><span class="w"> </span><span class="p">(</span><span class="n">n</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="k">then</span>
+<span class="k">        value</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">0.d0</span>
+<span class="w">        </span><span class="k">print</span><span class="w"> </span><span class="o">*</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;Cannot compute the factorial of a negative number&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">n</span>
+<span class="w">    </span><span class="k">else</span>
+<span class="k">        value</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">1.d0</span>
+<span class="w">        </span><span class="k">do </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="n">n</span>
+<span class="w">            </span><span class="k">value</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">value</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">i</span>
+<span class="w">        </span><span class="k">enddo</span>
+<span class="k">    endif</span>
+<span class="k">end function </span><span class="n">factorial</span>
+</code></pre></div>
+<p>See the corresponding <a class="autorefs autorefs-internal" title="factorial" href="../fortran64/#msl.examples.loadlib.fortran64.Fortran64.factorial">Fortran64.factorial</a> method.</p>
+
+
+<p><span class="doc-section-title">Parameters:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Description</th>
+          <th>Default</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td>
+                <code>n</code>
+            </td>
+            <td>
+                  <code><a class="autorefs autorefs-external" href="https://docs.python.org/3/library/functions.html#int">int</a></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>The integer to computer the factorial of. The maximum allowed value is 127.</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+
+    <p><span class="doc-section-title">Returns:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Type</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td>
+                  <code><a class="autorefs autorefs-external" href="https://docs.python.org/3/library/functions.html#float">float</a></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>The factorial of <code>n</code>.</p>
+              </div>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+
+            <details class="quote">
+              <summary>Source code in <code>src/msl/examples/loadlib/fortran32.py</code></summary>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">314</span>
+<span class="normal">315</span>
+<span class="normal">316</span>
+<span class="normal">317</span>
+<span class="normal">318</span>
+<span class="normal">319</span>
+<span class="normal">320</span>
+<span class="normal">321</span>
+<span class="normal">322</span>
+<span class="normal">323</span>
+<span class="normal">324</span>
+<span class="normal">325</span>
+<span class="normal">326</span>
+<span class="normal">327</span>
+<span class="normal">328</span>
+<span class="normal">329</span>
+<span class="normal">330</span>
+<span class="normal">331</span>
+<span class="normal">332</span>
+<span class="normal">333</span>
+<span class="normal">334</span>
+<span class="normal">335</span>
+<span class="normal">336</span>
+<span class="normal">337</span>
+<span class="normal">338</span>
+<span class="normal">339</span>
+<span class="normal">340</span>
+<span class="normal">341</span>
+<span class="normal">342</span>
+<span class="normal">343</span>
+<span class="normal">344</span>
+<span class="normal">345</span>
+<span class="normal">346</span>
+<span class="normal">347</span>
+<span class="normal">348</span>
+<span class="normal">349</span>
+<span class="normal">350</span>
+<span class="normal">351</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">factorial</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">n</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Compute the n&#39;th factorial.</span>
+
+<span class="sd">    The corresponding FORTRAN code is</span>
+
+<span class="sd">    ```fortran</span>
+<span class="sd">    function factorial(n) result(value)</span>
+<span class="sd">        !DEC$ ATTRIBUTES DLLEXPORT, ALIAS:&#39;factorial&#39; :: factorial</span>
+<span class="sd">        implicit none</span>
+<span class="sd">        integer(1) :: n</span>
+<span class="sd">        integer(4) :: i</span>
+<span class="sd">        double precision value</span>
+<span class="sd">        if (n &lt; 0) then</span>
+<span class="sd">            value = 0.d0</span>
+<span class="sd">            print *, &quot;Cannot compute the factorial of a negative number&quot;, n</span>
+<span class="sd">        else</span>
+<span class="sd">            value = 1.d0</span>
+<span class="sd">            do i = 2, n</span>
+<span class="sd">                value = value * i</span>
+<span class="sd">            enddo</span>
+<span class="sd">        endif</span>
+<span class="sd">    end function factorial</span>
+<span class="sd">    ```</span>
+
+<span class="sd">    See the corresponding [Fortran64.factorial][msl.examples.loadlib.fortran64.Fortran64.factorial] method.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        n: The integer to computer the factorial of. The maximum allowed value is 127.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        The factorial of `n`.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># restype should be defined elsewhere, shown here for illustrative purposes</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">lib</span><span class="o">.</span><span class="n">factorial</span><span class="o">.</span><span class="n">restype</span> <span class="o">=</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">c_double</span>
+
+    <span class="n">ac</span> <span class="o">=</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">c_int8</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
+    <span class="n">result</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">lib</span><span class="o">.</span><span class="n">factorial</span><span class="p">(</span><span class="n">ctypes</span><span class="o">.</span><span class="n">byref</span><span class="p">(</span><span class="n">ac</span><span class="p">))</span>
+    <span class="k">return</span> <span class="n">result</span>
+</code></pre></div></td></tr></table></div>
+            </details>
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h3 id="msl.examples.loadlib.fortran32.Fortran32.is_positive" class="doc doc-heading">
+            <span class="doc doc-object-name doc-function-name">is_positive</span>
+
+
+<a href="#msl.examples.loadlib.fortran32.Fortran32.is_positive" class="headerlink" title="Permanent link">¤</a></h3>
+<div class="doc-signature highlight"><pre><span></span><code><span class="nf">is_positive</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>
+</code></pre></div>
+
+    <div class="doc doc-contents ">
+
+        <p>Returns whether the value of the input argument is &gt; 0.</p>
+<p>The corresponding FORTRAN code is</p>
+<div class="highlight"><pre><span></span><code><span class="k">function </span><span class="n">is_positive</span><span class="p">(</span><span class="n">a</span><span class="p">)</span><span class="w"> </span><span class="k">result</span><span class="p">(</span><span class="k">value</span><span class="p">)</span>
+<span class="w">    </span><span class="c">!DEC$ ATTRIBUTES DLLEXPORT, ALIAS:&#39;is_positive&#39; :: is_positive</span>
+<span class="w">    </span><span class="k">implicit none</span>
+<span class="k">    </span><span class="kt">logical</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="k">value</span>
+<span class="k">    </span><span class="kt">real</span><span class="p">(</span><span class="mi">8</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">a</span>
+<span class="w">    </span><span class="k">value</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">a</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="mf">0.d0</span>
+<span class="k">end function </span><span class="n">is_positive</span>
+</code></pre></div>
+<p>See the corresponding <a class="autorefs autorefs-internal" title="is_positive" href="../fortran64/#msl.examples.loadlib.fortran64.Fortran64.is_positive">Fortran64.is_positive</a> method.</p>
+
+
+<p><span class="doc-section-title">Parameters:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Description</th>
+          <th>Default</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td>
+                <code>a</code>
+            </td>
+            <td>
+                  <code><a class="autorefs autorefs-external" href="https://docs.python.org/3/library/functions.html#float">float</a></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Double-precision number.</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+
+    <p><span class="doc-section-title">Returns:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Type</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td>
+                  <code><a class="autorefs autorefs-external" href="https://docs.python.org/3/library/functions.html#bool">bool</a></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Whether the value of <code>a</code> is &gt; 0.</p>
+              </div>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+
+            <details class="quote">
+              <summary>Source code in <code>src/msl/examples/loadlib/fortran32.py</code></summary>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">244</span>
+<span class="normal">245</span>
+<span class="normal">246</span>
+<span class="normal">247</span>
+<span class="normal">248</span>
+<span class="normal">249</span>
+<span class="normal">250</span>
+<span class="normal">251</span>
+<span class="normal">252</span>
+<span class="normal">253</span>
+<span class="normal">254</span>
+<span class="normal">255</span>
+<span class="normal">256</span>
+<span class="normal">257</span>
+<span class="normal">258</span>
+<span class="normal">259</span>
+<span class="normal">260</span>
+<span class="normal">261</span>
+<span class="normal">262</span>
+<span class="normal">263</span>
+<span class="normal">264</span>
+<span class="normal">265</span>
+<span class="normal">266</span>
+<span class="normal">267</span>
+<span class="normal">268</span>
+<span class="normal">269</span>
+<span class="normal">270</span>
+<span class="normal">271</span>
+<span class="normal">272</span>
+<span class="normal">273</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">is_positive</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">a</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Returns whether the value of the input argument is &gt; 0.</span>
+
+<span class="sd">    The corresponding FORTRAN code is</span>
+
+<span class="sd">    ```fortran</span>
+<span class="sd">    function is_positive(a) result(value)</span>
+<span class="sd">        !DEC$ ATTRIBUTES DLLEXPORT, ALIAS:&#39;is_positive&#39; :: is_positive</span>
+<span class="sd">        implicit none</span>
+<span class="sd">        logical :: value</span>
+<span class="sd">        real(8) :: a</span>
+<span class="sd">        value = a &gt; 0.d0</span>
+<span class="sd">    end function is_positive</span>
+<span class="sd">    ```</span>
+
+<span class="sd">    See the corresponding [Fortran64.is_positive][msl.examples.loadlib.fortran64.Fortran64.is_positive] method.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        a: Double-precision number.</span>
+
+
+<span class="sd">    Returns:</span>
+<span class="sd">        Whether the value of `a` is &amp;gt; 0.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># restype should be defined elsewhere, shown here for illustrative purposes</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">lib</span><span class="o">.</span><span class="n">is_positive</span><span class="o">.</span><span class="n">restype</span> <span class="o">=</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">c_bool</span>
+
+    <span class="n">ac</span> <span class="o">=</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">c_double</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>
+    <span class="n">result</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">lib</span><span class="o">.</span><span class="n">is_positive</span><span class="p">(</span><span class="n">ctypes</span><span class="o">.</span><span class="n">byref</span><span class="p">(</span><span class="n">ac</span><span class="p">))</span>
+    <span class="k">return</span> <span class="n">result</span>
+</code></pre></div></td></tr></table></div>
+            </details>
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h3 id="msl.examples.loadlib.fortran32.Fortran32.matrix_multiply" class="doc doc-heading">
+            <span class="doc doc-object-name doc-function-name">matrix_multiply</span>
+
+
+<a href="#msl.examples.loadlib.fortran32.Fortran32.matrix_multiply" class="headerlink" title="Permanent link">¤</a></h3>
+<div class="doc-signature highlight"><pre><span></span><code><span class="nf">matrix_multiply</span><span class="p">(</span><span class="n">a1</span><span class="p">,</span> <span class="n">a2</span><span class="p">)</span>
+</code></pre></div>
+
+    <div class="doc doc-contents ">
+
+        <p>Multiply two matrices.</p>
+<p>The corresponding FORTRAN code is</p>
+<div class="highlight"><pre><span></span><code><span class="k">subroutine </span><span class="n">matrix_multiply</span><span class="p">(</span><span class="n">a</span><span class="p">,</span><span class="w"> </span><span class="n">a1</span><span class="p">,</span><span class="w"> </span><span class="n">r1</span><span class="p">,</span><span class="w"> </span><span class="n">c1</span><span class="p">,</span><span class="w"> </span><span class="n">a2</span><span class="p">,</span><span class="w"> </span><span class="n">r2</span><span class="p">,</span><span class="w"> </span><span class="n">c2</span><span class="p">)</span>
+<span class="w">    </span><span class="c">!DEC$ ATTRIBUTES DLLEXPORT, ALIAS:&#39;matrix_multiply&#39; :: matrix_multiply</span>
+<span class="w">    </span><span class="k">implicit none</span>
+<span class="k">    </span><span class="kt">integer</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">r1</span><span class="p">,</span><span class="w"> </span><span class="n">c1</span><span class="p">,</span><span class="w"> </span><span class="n">r2</span><span class="p">,</span><span class="w"> </span><span class="n">c2</span><span class="w"> </span><span class="c">! the dimensions of the input arrays</span>
+<span class="w">    </span><span class="kt">double precision</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">a1</span><span class="p">(</span><span class="n">r1</span><span class="p">,</span><span class="n">c1</span><span class="p">),</span><span class="w"> </span><span class="n">a2</span><span class="p">(</span><span class="n">r2</span><span class="p">,</span><span class="n">c2</span><span class="p">)</span><span class="w"> </span><span class="c">! the arrays to multiply</span>
+<span class="w">    </span><span class="kt">double precision</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">a</span><span class="p">(</span><span class="n">r1</span><span class="p">,</span><span class="n">c2</span><span class="p">)</span><span class="w"> </span><span class="c">! resultant array</span>
+<span class="w">    </span><span class="n">a</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">MATMUL</span><span class="p">(</span><span class="n">a1</span><span class="p">,</span><span class="w"> </span><span class="n">a2</span><span class="p">)</span>
+<span class="k">end subroutine </span><span class="n">matrix_multiply</span>
+</code></pre></div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>FORTRAN stores multidimensional arrays in <a href="https://en.wikipedia.org/wiki/Row-_and_column-major_order" target="_blank">column-major order</a>,
+as opposed to <a href="https://en.wikipedia.org/wiki/Row-_and_column-major_order" target="_blank">row-major order</a> like C (Python) arrays. Therefore,
+the input matrices need to be transposed before sending the matrices to FORTRAN
+and also the result needs to be transposed.</p>
+</div>
+<p>See the corresponding <a class="autorefs autorefs-internal" title="matrix_multiply" href="../fortran64/#msl.examples.loadlib.fortran64.Fortran64.matrix_multiply">Fortran64.matrix_multiply</a>
+method.</p>
+
+
+<p><span class="doc-section-title">Parameters:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Description</th>
+          <th>Default</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td>
+                <code>a1</code>
+            </td>
+            <td>
+                  <code><a class="autorefs autorefs-external" title="collections.abc.Sequence" href="https://docs.python.org/3/library/collections.abc.html#collections.abc.Sequence">Sequence</a>[<a class="autorefs autorefs-external" title="collections.abc.Sequence" href="https://docs.python.org/3/library/collections.abc.html#collections.abc.Sequence">Sequence</a>[<a class="autorefs autorefs-external" href="https://docs.python.org/3/library/functions.html#float">float</a>]]</code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>First matrix.</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>a2</code>
+            </td>
+            <td>
+                  <code><a class="autorefs autorefs-external" title="collections.abc.Sequence" href="https://docs.python.org/3/library/collections.abc.html#collections.abc.Sequence">Sequence</a>[<a class="autorefs autorefs-external" title="collections.abc.Sequence" href="https://docs.python.org/3/library/collections.abc.html#collections.abc.Sequence">Sequence</a>[<a class="autorefs autorefs-external" href="https://docs.python.org/3/library/functions.html#float">float</a>]]</code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Second matrix.</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+
+    <p><span class="doc-section-title">Returns:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Type</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td>
+                  <code><a class="autorefs autorefs-external" href="https://docs.python.org/3/glossary.html#term-list">list</a>[<a class="autorefs autorefs-external" href="https://docs.python.org/3/glossary.html#term-list">list</a>[<a class="autorefs autorefs-external" href="https://docs.python.org/3/library/functions.html#float">float</a>]]</code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>The product, <code>a1 @ a2</code>.</p>
+              </div>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+
+            <details class="quote">
+              <summary>Source code in <code>src/msl/examples/loadlib/fortran32.py</code></summary>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">485</span>
+<span class="normal">486</span>
+<span class="normal">487</span>
+<span class="normal">488</span>
+<span class="normal">489</span>
+<span class="normal">490</span>
+<span class="normal">491</span>
+<span class="normal">492</span>
+<span class="normal">493</span>
+<span class="normal">494</span>
+<span class="normal">495</span>
+<span class="normal">496</span>
+<span class="normal">497</span>
+<span class="normal">498</span>
+<span class="normal">499</span>
+<span class="normal">500</span>
+<span class="normal">501</span>
+<span class="normal">502</span>
+<span class="normal">503</span>
+<span class="normal">504</span>
+<span class="normal">505</span>
+<span class="normal">506</span>
+<span class="normal">507</span>
+<span class="normal">508</span>
+<span class="normal">509</span>
+<span class="normal">510</span>
+<span class="normal">511</span>
+<span class="normal">512</span>
+<span class="normal">513</span>
+<span class="normal">514</span>
+<span class="normal">515</span>
+<span class="normal">516</span>
+<span class="normal">517</span>
+<span class="normal">518</span>
+<span class="normal">519</span>
+<span class="normal">520</span>
+<span class="normal">521</span>
+<span class="normal">522</span>
+<span class="normal">523</span>
+<span class="normal">524</span>
+<span class="normal">525</span>
+<span class="normal">526</span>
+<span class="normal">527</span>
+<span class="normal">528</span>
+<span class="normal">529</span>
+<span class="normal">530</span>
+<span class="normal">531</span>
+<span class="normal">532</span>
+<span class="normal">533</span>
+<span class="normal">534</span>
+<span class="normal">535</span>
+<span class="normal">536</span>
+<span class="normal">537</span>
+<span class="normal">538</span>
+<span class="normal">539</span>
+<span class="normal">540</span>
+<span class="normal">541</span>
+<span class="normal">542</span>
+<span class="normal">543</span>
+<span class="normal">544</span>
+<span class="normal">545</span>
+<span class="normal">546</span>
+<span class="normal">547</span>
+<span class="normal">548</span>
+<span class="normal">549</span>
+<span class="normal">550</span>
+<span class="normal">551</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">matrix_multiply</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">a1</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">Sequence</span><span class="p">[</span><span class="nb">float</span><span class="p">]],</span> <span class="n">a2</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">Sequence</span><span class="p">[</span><span class="nb">float</span><span class="p">]])</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">list</span><span class="p">[</span><span class="nb">float</span><span class="p">]]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Multiply two matrices.</span>
+
+<span class="sd">    The corresponding FORTRAN code is</span>
+
+<span class="sd">    ```fortran</span>
+<span class="sd">    subroutine matrix_multiply(a, a1, r1, c1, a2, r2, c2)</span>
+<span class="sd">        !DEC$ ATTRIBUTES DLLEXPORT, ALIAS:&#39;matrix_multiply&#39; :: matrix_multiply</span>
+<span class="sd">        implicit none</span>
+<span class="sd">        integer(4) :: r1, c1, r2, c2 ! the dimensions of the input arrays</span>
+<span class="sd">        double precision :: a1(r1,c1), a2(r2,c2) ! the arrays to multiply</span>
+<span class="sd">        double precision :: a(r1,c2) ! resultant array</span>
+<span class="sd">        a = MATMUL(a1, a2)</span>
+<span class="sd">    end subroutine matrix_multiply</span>
+<span class="sd">    ```</span>
+
+<span class="sd">    !!! note</span>
+<span class="sd">        FORTRAN stores multidimensional arrays in [column-major order][order]{:target=&quot;_blank&quot;},</span>
+<span class="sd">        as opposed to [row-major order][order]{:target=&quot;_blank&quot;} like C (Python) arrays. Therefore,</span>
+<span class="sd">        the input matrices need to be transposed before sending the matrices to FORTRAN</span>
+<span class="sd">        and also the result needs to be transposed.</span>
+
+<span class="sd">        [order]: https://en.wikipedia.org/wiki/Row-_and_column-major_order</span>
+
+<span class="sd">    See the corresponding [Fortran64.matrix_multiply][msl.examples.loadlib.fortran64.Fortran64.matrix_multiply]</span>
+<span class="sd">    method.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        a1: First matrix.</span>
+<span class="sd">        a2: Second matrix.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        The product, `a1 @ a2`.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># restype should be defined elsewhere, shown here for illustrative purposes</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">lib</span><span class="o">.</span><span class="n">matrix_multiply</span><span class="o">.</span><span class="n">restype</span> <span class="o">=</span> <span class="kc">None</span>
+
+    <span class="n">n_rows1</span> <span class="o">=</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">c_int32</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">a1</span><span class="p">))</span>
+    <span class="n">n_cols1</span> <span class="o">=</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">c_int32</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">a1</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span>
+
+    <span class="n">n_rows2</span> <span class="o">=</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">c_int32</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">a2</span><span class="p">))</span>
+    <span class="n">n_cols2</span> <span class="o">=</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">c_int32</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">a2</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span>
+
+    <span class="k">if</span> <span class="n">n_cols1</span><span class="o">.</span><span class="n">value</span> <span class="o">!=</span> <span class="n">n_rows2</span><span class="o">.</span><span class="n">value</span><span class="p">:</span>
+        <span class="n">msg</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;Cannot multiply a </span><span class="si">{</span><span class="n">n_rows1</span><span class="o">.</span><span class="n">value</span><span class="si">}</span><span class="s2">x</span><span class="si">{</span><span class="n">n_cols1</span><span class="o">.</span><span class="n">value</span><span class="si">}</span><span class="s2"> matrix &quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;with a </span><span class="si">{</span><span class="n">n_rows2</span><span class="o">.</span><span class="n">value</span><span class="si">}</span><span class="s2">x</span><span class="si">{</span><span class="n">n_cols2</span><span class="o">.</span><span class="n">value</span><span class="si">}</span><span class="s2"> matrix&quot;</span>
+        <span class="p">)</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+
+    <span class="n">m1</span> <span class="o">=</span> <span class="p">((</span><span class="n">ctypes</span><span class="o">.</span><span class="n">c_double</span> <span class="o">*</span> <span class="n">n_rows1</span><span class="o">.</span><span class="n">value</span><span class="p">)</span> <span class="o">*</span> <span class="n">n_cols1</span><span class="o">.</span><span class="n">value</span><span class="p">)()</span>
+    <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_rows1</span><span class="o">.</span><span class="n">value</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_cols1</span><span class="o">.</span><span class="n">value</span><span class="p">):</span>
+            <span class="n">m1</span><span class="p">[</span><span class="n">c</span><span class="p">][</span><span class="n">r</span><span class="p">]</span> <span class="o">=</span> <span class="n">a1</span><span class="p">[</span><span class="n">r</span><span class="p">][</span><span class="n">c</span><span class="p">]</span>
+
+    <span class="n">m2</span> <span class="o">=</span> <span class="p">((</span><span class="n">ctypes</span><span class="o">.</span><span class="n">c_double</span> <span class="o">*</span> <span class="n">n_rows2</span><span class="o">.</span><span class="n">value</span><span class="p">)</span> <span class="o">*</span> <span class="n">n_cols2</span><span class="o">.</span><span class="n">value</span><span class="p">)()</span>
+    <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_rows2</span><span class="o">.</span><span class="n">value</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_cols2</span><span class="o">.</span><span class="n">value</span><span class="p">):</span>
+            <span class="n">m2</span><span class="p">[</span><span class="n">c</span><span class="p">][</span><span class="n">r</span><span class="p">]</span> <span class="o">=</span> <span class="n">a2</span><span class="p">[</span><span class="n">r</span><span class="p">][</span><span class="n">c</span><span class="p">]</span>
+
+    <span class="n">out</span> <span class="o">=</span> <span class="p">((</span><span class="n">ctypes</span><span class="o">.</span><span class="n">c_double</span> <span class="o">*</span> <span class="n">n_rows1</span><span class="o">.</span><span class="n">value</span><span class="p">)</span> <span class="o">*</span> <span class="n">n_cols2</span><span class="o">.</span><span class="n">value</span><span class="p">)()</span>
+
+    <span class="bp">self</span><span class="o">.</span><span class="n">lib</span><span class="o">.</span><span class="n">matrix_multiply</span><span class="p">(</span>
+        <span class="n">out</span><span class="p">,</span> <span class="n">m1</span><span class="p">,</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">byref</span><span class="p">(</span><span class="n">n_rows1</span><span class="p">),</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">byref</span><span class="p">(</span><span class="n">n_cols1</span><span class="p">),</span> <span class="n">m2</span><span class="p">,</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">byref</span><span class="p">(</span><span class="n">n_rows2</span><span class="p">),</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">byref</span><span class="p">(</span><span class="n">n_cols2</span><span class="p">)</span>
+    <span class="p">)</span>
+
+    <span class="k">return</span> <span class="p">[[</span><span class="n">out</span><span class="p">[</span><span class="n">c</span><span class="p">][</span><span class="n">r</span><span class="p">]</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_cols2</span><span class="o">.</span><span class="n">value</span><span class="p">)]</span> <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_rows1</span><span class="o">.</span><span class="n">value</span><span class="p">)]</span>
+</code></pre></div></td></tr></table></div>
+            </details>
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h3 id="msl.examples.loadlib.fortran32.Fortran32.multiply_float32" class="doc doc-heading">
+            <span class="doc doc-object-name doc-function-name">multiply_float32</span>
+
+
+<a href="#msl.examples.loadlib.fortran32.Fortran32.multiply_float32" class="headerlink" title="Permanent link">¤</a></h3>
+<div class="doc-signature highlight"><pre><span></span><code><span class="nf">multiply_float32</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">)</span>
+</code></pre></div>
+
+    <div class="doc doc-contents ">
+
+        <p>Multiply two FORTRAN floating-point numbers.</p>
+<p>The corresponding FORTRAN code is</p>
+<div class="highlight"><pre><span></span><code><span class="k">function </span><span class="n">multiply_float32</span><span class="p">(</span><span class="n">a</span><span class="p">,</span><span class="w"> </span><span class="n">b</span><span class="p">)</span><span class="w"> </span><span class="k">result</span><span class="p">(</span><span class="k">value</span><span class="p">)</span>
+<span class="w">    </span><span class="c">!DEC$ ATTRIBUTES DLLEXPORT, ALIAS:&#39;multiply_float32&#39; :: multiply_float32</span>
+<span class="w">    </span><span class="k">implicit none</span>
+<span class="k">    </span><span class="kt">real</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">a</span><span class="p">,</span><span class="w"> </span><span class="n">b</span><span class="p">,</span><span class="w"> </span><span class="k">value</span>
+<span class="k">    value</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">a</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">b</span>
+<span class="k">end function </span><span class="n">multiply_float32</span>
+</code></pre></div>
+<p>See the corresponding <a class="autorefs autorefs-internal" title="multiply_float32" href="../fortran64/#msl.examples.loadlib.fortran64.Fortran64.multiply_float32">Fortran64.multiply_float32</a>
+method.</p>
+
+
+<p><span class="doc-section-title">Parameters:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Description</th>
+          <th>Default</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td>
+                <code>a</code>
+            </td>
+            <td>
+                  <code><a class="autorefs autorefs-external" href="https://docs.python.org/3/library/functions.html#float">float</a></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>First floating-point number.</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>b</code>
+            </td>
+            <td>
+                  <code><a class="autorefs autorefs-external" href="https://docs.python.org/3/library/functions.html#float">float</a></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Second floating-point number.</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+
+    <p><span class="doc-section-title">Returns:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Type</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td>
+                  <code><a class="autorefs autorefs-external" href="https://docs.python.org/3/library/functions.html#float">float</a></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>The product, <code>a * b</code>.</p>
+              </div>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+
+            <details class="quote">
+              <summary>Source code in <code>src/msl/examples/loadlib/fortran32.py</code></summary>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">180</span>
+<span class="normal">181</span>
+<span class="normal">182</span>
+<span class="normal">183</span>
+<span class="normal">184</span>
+<span class="normal">185</span>
+<span class="normal">186</span>
+<span class="normal">187</span>
+<span class="normal">188</span>
+<span class="normal">189</span>
+<span class="normal">190</span>
+<span class="normal">191</span>
+<span class="normal">192</span>
+<span class="normal">193</span>
+<span class="normal">194</span>
+<span class="normal">195</span>
+<span class="normal">196</span>
+<span class="normal">197</span>
+<span class="normal">198</span>
+<span class="normal">199</span>
+<span class="normal">200</span>
+<span class="normal">201</span>
+<span class="normal">202</span>
+<span class="normal">203</span>
+<span class="normal">204</span>
+<span class="normal">205</span>
+<span class="normal">206</span>
+<span class="normal">207</span>
+<span class="normal">208</span>
+<span class="normal">209</span>
+<span class="normal">210</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">multiply_float32</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">a</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">b</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Multiply two FORTRAN floating-point numbers.</span>
+
+<span class="sd">    The corresponding FORTRAN code is</span>
+
+<span class="sd">    ```fortran</span>
+<span class="sd">    function multiply_float32(a, b) result(value)</span>
+<span class="sd">        !DEC$ ATTRIBUTES DLLEXPORT, ALIAS:&#39;multiply_float32&#39; :: multiply_float32</span>
+<span class="sd">        implicit none</span>
+<span class="sd">        real(4) :: a, b, value</span>
+<span class="sd">        value = a * b</span>
+<span class="sd">    end function multiply_float32</span>
+<span class="sd">    ```</span>
+
+<span class="sd">    See the corresponding [Fortran64.multiply_float32][msl.examples.loadlib.fortran64.Fortran64.multiply_float32]</span>
+<span class="sd">    method.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        a: First floating-point number.</span>
+<span class="sd">        b: Second floating-point number.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        The product, `a * b`.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># restype should be defined elsewhere, shown here for illustrative purposes</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">lib</span><span class="o">.</span><span class="n">multiply_float32</span><span class="o">.</span><span class="n">restype</span> <span class="o">=</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">c_float</span>
+
+    <span class="n">ac</span> <span class="o">=</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">c_float</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>
+    <span class="n">bc</span> <span class="o">=</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">c_float</span><span class="p">(</span><span class="n">b</span><span class="p">)</span>
+    <span class="n">result</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">lib</span><span class="o">.</span><span class="n">multiply_float32</span><span class="p">(</span><span class="n">ctypes</span><span class="o">.</span><span class="n">byref</span><span class="p">(</span><span class="n">ac</span><span class="p">),</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">byref</span><span class="p">(</span><span class="n">bc</span><span class="p">))</span>
+    <span class="k">return</span> <span class="n">result</span>
+</code></pre></div></td></tr></table></div>
+            </details>
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h3 id="msl.examples.loadlib.fortran32.Fortran32.multiply_float64" class="doc doc-heading">
+            <span class="doc doc-object-name doc-function-name">multiply_float64</span>
+
+
+<a href="#msl.examples.loadlib.fortran32.Fortran32.multiply_float64" class="headerlink" title="Permanent link">¤</a></h3>
+<div class="doc-signature highlight"><pre><span></span><code><span class="nf">multiply_float64</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">)</span>
+</code></pre></div>
+
+    <div class="doc doc-contents ">
+
+        <p>Multiply two FORTRAN double-precision numbers.</p>
+<p>The corresponding FORTRAN code is</p>
+<div class="highlight"><pre><span></span><code><span class="k">function </span><span class="n">multiply_float64</span><span class="p">(</span><span class="n">a</span><span class="p">,</span><span class="w"> </span><span class="n">b</span><span class="p">)</span><span class="w"> </span><span class="k">result</span><span class="p">(</span><span class="k">value</span><span class="p">)</span>
+<span class="w">    </span><span class="c">!DEC$ ATTRIBUTES DLLEXPORT, ALIAS:&#39;multiply_float64&#39; :: multiply_float64</span>
+<span class="w">    </span><span class="k">implicit none</span>
+<span class="k">    </span><span class="kt">real</span><span class="p">(</span><span class="mi">8</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">a</span><span class="p">,</span><span class="w"> </span><span class="n">b</span><span class="p">,</span><span class="w"> </span><span class="k">value</span>
+<span class="k">    value</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">a</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">b</span>
+<span class="k">end function </span><span class="n">multiply_float64</span>
+</code></pre></div>
+<p>See the corresponding <a class="autorefs autorefs-internal" title="multiply_float64" href="../fortran64/#msl.examples.loadlib.fortran64.Fortran64.multiply_float64">Fortran64.multiply_float64</a>
+method.</p>
+
+
+<p><span class="doc-section-title">Parameters:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Description</th>
+          <th>Default</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td>
+                <code>a</code>
+            </td>
+            <td>
+                  <code><a class="autorefs autorefs-external" href="https://docs.python.org/3/library/functions.html#float">float</a></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>First double-precision number.</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>b</code>
+            </td>
+            <td>
+                  <code><a class="autorefs autorefs-external" href="https://docs.python.org/3/library/functions.html#float">float</a></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Second double-precision number.</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+
+    <p><span class="doc-section-title">Returns:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Type</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td>
+                  <code><a class="autorefs autorefs-external" href="https://docs.python.org/3/library/functions.html#float">float</a></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>The product, <code>a * b</code>.</p>
+              </div>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+
+            <details class="quote">
+              <summary>Source code in <code>src/msl/examples/loadlib/fortran32.py</code></summary>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">212</span>
+<span class="normal">213</span>
+<span class="normal">214</span>
+<span class="normal">215</span>
+<span class="normal">216</span>
+<span class="normal">217</span>
+<span class="normal">218</span>
+<span class="normal">219</span>
+<span class="normal">220</span>
+<span class="normal">221</span>
+<span class="normal">222</span>
+<span class="normal">223</span>
+<span class="normal">224</span>
+<span class="normal">225</span>
+<span class="normal">226</span>
+<span class="normal">227</span>
+<span class="normal">228</span>
+<span class="normal">229</span>
+<span class="normal">230</span>
+<span class="normal">231</span>
+<span class="normal">232</span>
+<span class="normal">233</span>
+<span class="normal">234</span>
+<span class="normal">235</span>
+<span class="normal">236</span>
+<span class="normal">237</span>
+<span class="normal">238</span>
+<span class="normal">239</span>
+<span class="normal">240</span>
+<span class="normal">241</span>
+<span class="normal">242</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">multiply_float64</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">a</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">b</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Multiply two FORTRAN double-precision numbers.</span>
+
+<span class="sd">    The corresponding FORTRAN code is</span>
+
+<span class="sd">    ```fortran</span>
+<span class="sd">    function multiply_float64(a, b) result(value)</span>
+<span class="sd">        !DEC$ ATTRIBUTES DLLEXPORT, ALIAS:&#39;multiply_float64&#39; :: multiply_float64</span>
+<span class="sd">        implicit none</span>
+<span class="sd">        real(8) :: a, b, value</span>
+<span class="sd">        value = a * b</span>
+<span class="sd">    end function multiply_float64</span>
+<span class="sd">    ```</span>
+
+<span class="sd">    See the corresponding [Fortran64.multiply_float64][msl.examples.loadlib.fortran64.Fortran64.multiply_float64]</span>
+<span class="sd">    method.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        a: First double-precision number.</span>
+<span class="sd">        b: Second double-precision number.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        The product, `a * b`.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># restype should be defined elsewhere, shown here for illustrative purposes</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">lib</span><span class="o">.</span><span class="n">multiply_float64</span><span class="o">.</span><span class="n">restype</span> <span class="o">=</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">c_double</span>
+
+    <span class="n">ac</span> <span class="o">=</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">c_double</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>
+    <span class="n">bc</span> <span class="o">=</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">c_double</span><span class="p">(</span><span class="n">b</span><span class="p">)</span>
+    <span class="n">result</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">lib</span><span class="o">.</span><span class="n">multiply_float64</span><span class="p">(</span><span class="n">ctypes</span><span class="o">.</span><span class="n">byref</span><span class="p">(</span><span class="n">ac</span><span class="p">),</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">byref</span><span class="p">(</span><span class="n">bc</span><span class="p">))</span>
+    <span class="k">return</span> <span class="n">result</span>
+</code></pre></div></td></tr></table></div>
+            </details>
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h3 id="msl.examples.loadlib.fortran32.Fortran32.reverse_string" class="doc doc-heading">
+            <span class="doc doc-object-name doc-function-name">reverse_string</span>
+
+
+<a href="#msl.examples.loadlib.fortran32.Fortran32.reverse_string" class="headerlink" title="Permanent link">¤</a></h3>
+<div class="doc-signature highlight"><pre><span></span><code><span class="nf">reverse_string</span><span class="p">(</span><span class="n">original</span><span class="p">)</span>
+</code></pre></div>
+
+    <div class="doc doc-contents ">
+
+        <p>Reverse a string.</p>
+<p>The corresponding FORTRAN code is</p>
+<div class="highlight"><pre><span></span><code><span class="k">subroutine </span><span class="n">reverse_string</span><span class="p">(</span><span class="n">original</span><span class="p">,</span><span class="w"> </span><span class="n">n</span><span class="p">,</span><span class="w"> </span><span class="n">reversed</span><span class="p">)</span>
+<span class="w">    </span><span class="c">!DEC$ ATTRIBUTES DLLEXPORT, ALIAS:&#39;reverse_string&#39; :: reverse_string</span>
+<span class="w">    </span><span class="c">!DEC$ ATTRIBUTES REFERENCE :: original, reversed</span>
+<span class="w">    </span><span class="k">implicit none</span>
+<span class="k">    </span><span class="kt">integer</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">i</span><span class="p">,</span><span class="w"> </span><span class="n">n</span>
+<span class="w">    </span><span class="kt">character</span><span class="p">(</span><span class="nb">len</span><span class="o">=</span><span class="n">n</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">original</span><span class="p">,</span><span class="w"> </span><span class="n">reversed</span>
+<span class="w">    </span><span class="k">do </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="n">n</span>
+<span class="w">        </span><span class="n">reversed</span><span class="p">(</span><span class="n">i</span><span class="p">:</span><span class="n">i</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">original</span><span class="p">(</span><span class="n">n</span><span class="o">-</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">:</span><span class="n">n</span><span class="o">-</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span>
+<span class="w">    </span><span class="k">end do</span>
+<span class="k">end subroutine </span><span class="n">reverse_string</span>
+</code></pre></div>
+<p>See the corresponding <a class="autorefs autorefs-internal" title="reverse_string" href="../fortran64/#msl.examples.loadlib.fortran64.Fortran64.reverse_string">Fortran64.reverse_string</a>
+method.</p>
+
+
+<p><span class="doc-section-title">Parameters:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Description</th>
+          <th>Default</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td>
+                <code>original</code>
+            </td>
+            <td>
+                  <code><a class="autorefs autorefs-external" href="https://docs.python.org/3/library/stdtypes.html#str">str</a></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>The original string.</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+
+    <p><span class="doc-section-title">Returns:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Type</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td>
+                  <code><a class="autorefs autorefs-external" href="https://docs.python.org/3/library/stdtypes.html#str">str</a></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>The string reversed.</p>
+              </div>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+
+            <details class="quote">
+              <summary>Source code in <code>src/msl/examples/loadlib/fortran32.py</code></summary>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">415</span>
+<span class="normal">416</span>
+<span class="normal">417</span>
+<span class="normal">418</span>
+<span class="normal">419</span>
+<span class="normal">420</span>
+<span class="normal">421</span>
+<span class="normal">422</span>
+<span class="normal">423</span>
+<span class="normal">424</span>
+<span class="normal">425</span>
+<span class="normal">426</span>
+<span class="normal">427</span>
+<span class="normal">428</span>
+<span class="normal">429</span>
+<span class="normal">430</span>
+<span class="normal">431</span>
+<span class="normal">432</span>
+<span class="normal">433</span>
+<span class="normal">434</span>
+<span class="normal">435</span>
+<span class="normal">436</span>
+<span class="normal">437</span>
+<span class="normal">438</span>
+<span class="normal">439</span>
+<span class="normal">440</span>
+<span class="normal">441</span>
+<span class="normal">442</span>
+<span class="normal">443</span>
+<span class="normal">444</span>
+<span class="normal">445</span>
+<span class="normal">446</span>
+<span class="normal">447</span>
+<span class="normal">448</span>
+<span class="normal">449</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">reverse_string</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">original</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Reverse a string.</span>
+
+<span class="sd">    The corresponding FORTRAN code is</span>
+
+<span class="sd">    ```fortran</span>
+<span class="sd">    subroutine reverse_string(original, n, reversed)</span>
+<span class="sd">        !DEC$ ATTRIBUTES DLLEXPORT, ALIAS:&#39;reverse_string&#39; :: reverse_string</span>
+<span class="sd">        !DEC$ ATTRIBUTES REFERENCE :: original, reversed</span>
+<span class="sd">        implicit none</span>
+<span class="sd">        integer :: i, n</span>
+<span class="sd">        character(len=n) :: original, reversed</span>
+<span class="sd">        do i = 1, n</span>
+<span class="sd">            reversed(i:i) = original(n-i+1:n-i+1)</span>
+<span class="sd">        end do</span>
+<span class="sd">    end subroutine reverse_string</span>
+<span class="sd">    ```</span>
+
+<span class="sd">    See the corresponding [Fortran64.reverse_string][msl.examples.loadlib.fortran64.Fortran64.reverse_string]</span>
+<span class="sd">    method.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        original: The original string.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        The string reversed.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># restype should be defined elsewhere, shown here for illustrative purposes</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">lib</span><span class="o">.</span><span class="n">reverse_string</span><span class="o">.</span><span class="n">restype</span> <span class="o">=</span> <span class="kc">None</span>
+
+    <span class="n">n</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">original</span><span class="p">)</span>
+    <span class="n">nc</span> <span class="o">=</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">c_int32</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
+    <span class="n">rev</span> <span class="o">=</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">create_string_buffer</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">lib</span><span class="o">.</span><span class="n">reverse_string</span><span class="p">(</span><span class="n">ctypes</span><span class="o">.</span><span class="n">c_char_p</span><span class="p">(</span><span class="n">original</span><span class="o">.</span><span class="n">encode</span><span class="p">()),</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">byref</span><span class="p">(</span><span class="n">nc</span><span class="p">),</span> <span class="n">rev</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">rev</span><span class="o">.</span><span class="n">raw</span><span class="o">.</span><span class="n">decode</span><span class="p">()</span>
+</code></pre></div></td></tr></table></div>
+            </details>
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h3 id="msl.examples.loadlib.fortran32.Fortran32.standard_deviation" class="doc doc-heading">
+            <span class="doc doc-object-name doc-function-name">standard_deviation</span>
+
+
+<a href="#msl.examples.loadlib.fortran32.Fortran32.standard_deviation" class="headerlink" title="Permanent link">¤</a></h3>
+<div class="doc-signature highlight"><pre><span></span><code><span class="nf">standard_deviation</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+</code></pre></div>
+
+    <div class="doc doc-contents ">
+
+        <p>Compute the standard deviation.</p>
+<p>The corresponding FORTRAN code is</p>
+<div class="highlight"><pre><span></span><code><span class="k">function </span><span class="n">standard_deviation</span><span class="p">(</span><span class="n">a</span><span class="p">,</span><span class="w"> </span><span class="n">n</span><span class="p">)</span><span class="w"> </span><span class="k">result</span><span class="p">(</span><span class="n">var</span><span class="p">)</span>
+<span class="w">    </span><span class="c">!DEC$ ATTRIBUTES DLLEXPORT, ALIAS:&#39;standard_deviation&#39; :: standard_deviation</span>
+<span class="w">    </span><span class="kt">integer</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">n</span><span class="w"> </span><span class="c">! the length of the array</span>
+<span class="w">    </span><span class="kt">double precision</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">var</span><span class="p">,</span><span class="w"> </span><span class="n">a</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
+<span class="w">    </span><span class="n">var</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">SUM</span><span class="p">(</span><span class="n">a</span><span class="p">)</span><span class="o">/</span><span class="n">SIZE</span><span class="p">(</span><span class="n">a</span><span class="p">)</span><span class="w"> </span><span class="c">! SUM is a built-in fortran function</span>
+<span class="w">    </span><span class="n">var</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">SQRT</span><span class="p">(</span><span class="nb">SUM</span><span class="p">((</span><span class="n">a</span><span class="o">-</span><span class="n">var</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span><span class="o">/</span><span class="p">(</span><span class="n">SIZE</span><span class="p">(</span><span class="n">a</span><span class="p">)</span><span class="o">-</span><span class="mf">1.0</span><span class="p">))</span>
+<span class="k">end function </span><span class="n">standard_deviation</span>
+</code></pre></div>
+<p>See the corresponding
+<a class="autorefs autorefs-internal" title="standard_deviation" href="../fortran64/#msl.examples.loadlib.fortran64.Fortran64.standard_deviation">Fortran64.standard_deviation</a>
+method.</p>
+
+
+<p><span class="doc-section-title">Parameters:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Description</th>
+          <th>Default</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td>
+                <code>data</code>
+            </td>
+            <td>
+                  <code><a class="autorefs autorefs-external" title="collections.abc.Sequence" href="https://docs.python.org/3/library/collections.abc.html#collections.abc.Sequence">Sequence</a>[<a class="autorefs autorefs-external" href="https://docs.python.org/3/library/functions.html#float">float</a>]</code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>The values to compute the standard deviation of.</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+
+    <p><span class="doc-section-title">Returns:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Type</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td>
+                  <code><a class="autorefs autorefs-external" href="https://docs.python.org/3/library/functions.html#float">float</a></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>The standard deviation of <code>data</code>.</p>
+              </div>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+
+            <details class="quote">
+              <summary>Source code in <code>src/msl/examples/loadlib/fortran32.py</code></summary>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">353</span>
+<span class="normal">354</span>
+<span class="normal">355</span>
+<span class="normal">356</span>
+<span class="normal">357</span>
+<span class="normal">358</span>
+<span class="normal">359</span>
+<span class="normal">360</span>
+<span class="normal">361</span>
+<span class="normal">362</span>
+<span class="normal">363</span>
+<span class="normal">364</span>
+<span class="normal">365</span>
+<span class="normal">366</span>
+<span class="normal">367</span>
+<span class="normal">368</span>
+<span class="normal">369</span>
+<span class="normal">370</span>
+<span class="normal">371</span>
+<span class="normal">372</span>
+<span class="normal">373</span>
+<span class="normal">374</span>
+<span class="normal">375</span>
+<span class="normal">376</span>
+<span class="normal">377</span>
+<span class="normal">378</span>
+<span class="normal">379</span>
+<span class="normal">380</span>
+<span class="normal">381</span>
+<span class="normal">382</span>
+<span class="normal">383</span>
+<span class="normal">384</span>
+<span class="normal">385</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">standard_deviation</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">float</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Compute the standard deviation.</span>
+
+<span class="sd">    The corresponding FORTRAN code is</span>
+
+<span class="sd">    ```fortran</span>
+<span class="sd">    function standard_deviation(a, n) result(var)</span>
+<span class="sd">        !DEC$ ATTRIBUTES DLLEXPORT, ALIAS:&#39;standard_deviation&#39; :: standard_deviation</span>
+<span class="sd">        integer :: n ! the length of the array</span>
+<span class="sd">        double precision :: var, a(n)</span>
+<span class="sd">        var = SUM(a)/SIZE(a) ! SUM is a built-in fortran function</span>
+<span class="sd">        var = SQRT(SUM((a-var)**2)/(SIZE(a)-1.0))</span>
+<span class="sd">    end function standard_deviation</span>
+<span class="sd">    ```</span>
+
+<span class="sd">    See the corresponding</span>
+<span class="sd">    [Fortran64.standard_deviation][msl.examples.loadlib.fortran64.Fortran64.standard_deviation]</span>
+<span class="sd">    method.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        data: The values to compute the standard deviation of.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        The standard deviation of `data`.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># restype should be defined elsewhere, shown here for illustrative purposes</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">lib</span><span class="o">.</span><span class="n">standard_deviation</span><span class="o">.</span><span class="n">restype</span> <span class="o">=</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">c_double</span>
+
+    <span class="n">n</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+    <span class="n">nc</span> <span class="o">=</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">c_int32</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
+    <span class="n">data_c</span> <span class="o">=</span> <span class="p">(</span><span class="n">ctypes</span><span class="o">.</span><span class="n">c_double</span> <span class="o">*</span> <span class="n">n</span><span class="p">)(</span><span class="o">*</span><span class="n">data</span><span class="p">)</span>
+    <span class="n">result</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">lib</span><span class="o">.</span><span class="n">standard_deviation</span><span class="p">(</span><span class="n">ctypes</span><span class="o">.</span><span class="n">byref</span><span class="p">(</span><span class="n">data_c</span><span class="p">),</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">byref</span><span class="p">(</span><span class="n">nc</span><span class="p">))</span>
+    <span class="k">return</span> <span class="n">result</span>
+</code></pre></div></td></tr></table></div>
+            </details>
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h3 id="msl.examples.loadlib.fortran32.Fortran32.sum_16bit" class="doc doc-heading">
+            <span class="doc doc-object-name doc-function-name">sum_16bit</span>
+
+
+<a href="#msl.examples.loadlib.fortran32.Fortran32.sum_16bit" class="headerlink" title="Permanent link">¤</a></h3>
+<div class="doc-signature highlight"><pre><span></span><code><span class="nf">sum_16bit</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">)</span>
+</code></pre></div>
+
+    <div class="doc doc-contents ">
+
+        <p>Add two 16-bit signed integers.</p>
+<p>Python only has one <a class="autorefs autorefs-external" href="https://docs.python.org/3/library/functions.html#int" target="_blank">int</a> data type to represent integer values.
+This method converts the data types of <code>a</code> and <code>b</code> to be
+<a class="autorefs autorefs-external" href="https://docs.python.org/3/library/ctypes.html#ctypes.c_int16" target="_blank">c_int16</a>.</p>
+<p>The corresponding FORTRAN code is</p>
+<div class="highlight"><pre><span></span><code><span class="k">function </span><span class="n">sum_16bit</span><span class="p">(</span><span class="n">a</span><span class="p">,</span><span class="w"> </span><span class="n">b</span><span class="p">)</span><span class="w"> </span><span class="k">result</span><span class="p">(</span><span class="k">value</span><span class="p">)</span>
+<span class="w">    </span><span class="c">!DEC$ ATTRIBUTES DLLEXPORT, ALIAS:&#39;sum_16bit&#39; :: sum_16bit</span>
+<span class="w">    </span><span class="k">implicit none</span>
+<span class="k">    </span><span class="kt">integer</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">a</span><span class="p">,</span><span class="w"> </span><span class="n">b</span><span class="p">,</span><span class="w"> </span><span class="k">value</span>
+<span class="k">    value</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">a</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">b</span>
+<span class="k">end function </span><span class="n">sum_16bit</span>
+</code></pre></div>
+<p>See the corresponding <a class="autorefs autorefs-internal" title="sum_16bit" href="../fortran64/#msl.examples.loadlib.fortran64.Fortran64.sum_16bit">Fortran64.sum_16bit</a> method.</p>
+
+
+<p><span class="doc-section-title">Parameters:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Description</th>
+          <th>Default</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td>
+                <code>a</code>
+            </td>
+            <td>
+                  <code><a class="autorefs autorefs-external" href="https://docs.python.org/3/library/functions.html#int">int</a></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>First 16-bit signed integer.</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>b</code>
+            </td>
+            <td>
+                  <code><a class="autorefs autorefs-external" href="https://docs.python.org/3/library/functions.html#int">int</a></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Second 16-bit signed integer.</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+
+    <p><span class="doc-section-title">Returns:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Type</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td>
+                  <code><a class="autorefs autorefs-external" href="https://docs.python.org/3/library/functions.html#int">int</a></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>The sum, <code>a + b</code>.</p>
+              </div>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+
+            <details class="quote">
+              <summary>Source code in <code>src/msl/examples/loadlib/fortran32.py</code></summary>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 75</span>
+<span class="normal"> 76</span>
+<span class="normal"> 77</span>
+<span class="normal"> 78</span>
+<span class="normal"> 79</span>
+<span class="normal"> 80</span>
+<span class="normal"> 81</span>
+<span class="normal"> 82</span>
+<span class="normal"> 83</span>
+<span class="normal"> 84</span>
+<span class="normal"> 85</span>
+<span class="normal"> 86</span>
+<span class="normal"> 87</span>
+<span class="normal"> 88</span>
+<span class="normal"> 89</span>
+<span class="normal"> 90</span>
+<span class="normal"> 91</span>
+<span class="normal"> 92</span>
+<span class="normal"> 93</span>
+<span class="normal"> 94</span>
+<span class="normal"> 95</span>
+<span class="normal"> 96</span>
+<span class="normal"> 97</span>
+<span class="normal"> 98</span>
+<span class="normal"> 99</span>
+<span class="normal">100</span>
+<span class="normal">101</span>
+<span class="normal">102</span>
+<span class="normal">103</span>
+<span class="normal">104</span>
+<span class="normal">105</span>
+<span class="normal">106</span>
+<span class="normal">107</span>
+<span class="normal">108</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">sum_16bit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">a</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">b</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Add two 16-bit signed integers.</span>
+
+<span class="sd">    Python only has one [int][]{:target=&quot;_blank&quot;} data type to represent integer values.</span>
+<span class="sd">    This method converts the data types of `a` and `b` to be</span>
+<span class="sd">    [c_int16][ctypes.c_int16]{:target=&quot;_blank&quot;}.</span>
+
+<span class="sd">    The corresponding FORTRAN code is</span>
+
+<span class="sd">    ```fortran</span>
+<span class="sd">    function sum_16bit(a, b) result(value)</span>
+<span class="sd">        !DEC$ ATTRIBUTES DLLEXPORT, ALIAS:&#39;sum_16bit&#39; :: sum_16bit</span>
+<span class="sd">        implicit none</span>
+<span class="sd">        integer(2) :: a, b, value</span>
+<span class="sd">        value = a + b</span>
+<span class="sd">    end function sum_16bit</span>
+<span class="sd">    ```</span>
+
+<span class="sd">    See the corresponding [Fortran64.sum_16bit][msl.examples.loadlib.fortran64.Fortran64.sum_16bit] method.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        a: First 16-bit signed integer.</span>
+<span class="sd">        b: Second 16-bit signed integer.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        The sum, `a + b`.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># restype should be defined elsewhere, shown here for illustrative purposes</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">lib</span><span class="o">.</span><span class="n">sum_16bit</span><span class="o">.</span><span class="n">restype</span> <span class="o">=</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">c_int16</span>
+
+    <span class="n">ac</span> <span class="o">=</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">c_int16</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>
+    <span class="n">bc</span> <span class="o">=</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">c_int16</span><span class="p">(</span><span class="n">b</span><span class="p">)</span>
+    <span class="n">result</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">lib</span><span class="o">.</span><span class="n">sum_16bit</span><span class="p">(</span><span class="n">ctypes</span><span class="o">.</span><span class="n">byref</span><span class="p">(</span><span class="n">ac</span><span class="p">),</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">byref</span><span class="p">(</span><span class="n">bc</span><span class="p">))</span>
+    <span class="k">return</span> <span class="n">result</span>
+</code></pre></div></td></tr></table></div>
+            </details>
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h3 id="msl.examples.loadlib.fortran32.Fortran32.sum_32bit" class="doc doc-heading">
+            <span class="doc doc-object-name doc-function-name">sum_32bit</span>
+
+
+<a href="#msl.examples.loadlib.fortran32.Fortran32.sum_32bit" class="headerlink" title="Permanent link">¤</a></h3>
+<div class="doc-signature highlight"><pre><span></span><code><span class="nf">sum_32bit</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">)</span>
+</code></pre></div>
+
+    <div class="doc doc-contents ">
+
+        <p>Add two 32-bit signed integers.</p>
+<p>Python only has one <a class="autorefs autorefs-external" href="https://docs.python.org/3/library/functions.html#int" target="_blank">int</a> data type to represent integer values.
+This method converts the data types of <code>a</code> and <code>b</code> to be
+<a class="autorefs autorefs-external" href="https://docs.python.org/3/library/ctypes.html#ctypes.c_int32" target="_blank">c_int32</a>.</p>
+<p>The corresponding FORTRAN code is</p>
+<div class="highlight"><pre><span></span><code><span class="k">function </span><span class="n">sum_32bit</span><span class="p">(</span><span class="n">a</span><span class="p">,</span><span class="w"> </span><span class="n">b</span><span class="p">)</span><span class="w"> </span><span class="k">result</span><span class="p">(</span><span class="k">value</span><span class="p">)</span>
+<span class="w">    </span><span class="c">!DEC$ ATTRIBUTES DLLEXPORT, ALIAS:&#39;sum_32bit&#39; :: sum_32bit</span>
+<span class="w">    </span><span class="k">implicit none</span>
+<span class="k">    </span><span class="kt">integer</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">a</span><span class="p">,</span><span class="w"> </span><span class="n">b</span><span class="p">,</span><span class="w"> </span><span class="k">value</span>
+<span class="k">    value</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">a</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">b</span>
+<span class="k">end function </span><span class="n">sum_32bit</span>
+</code></pre></div>
+<p>See the corresponding <a class="autorefs autorefs-internal" title="sum_32bit" href="../fortran64/#msl.examples.loadlib.fortran64.Fortran64.sum_32bit">Fortran64.sum_32bit</a> method.</p>
+
+
+<p><span class="doc-section-title">Parameters:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Description</th>
+          <th>Default</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td>
+                <code>a</code>
+            </td>
+            <td>
+                  <code><a class="autorefs autorefs-external" href="https://docs.python.org/3/library/functions.html#int">int</a></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>First 32-bit signed integer.</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>b</code>
+            </td>
+            <td>
+                  <code><a class="autorefs autorefs-external" href="https://docs.python.org/3/library/functions.html#int">int</a></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Second 32-bit signed integer.</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+
+    <p><span class="doc-section-title">Returns:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Type</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td>
+                  <code><a class="autorefs autorefs-external" href="https://docs.python.org/3/library/functions.html#int">int</a></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>The sum, <code>a + b</code>.</p>
+              </div>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+
+            <details class="quote">
+              <summary>Source code in <code>src/msl/examples/loadlib/fortran32.py</code></summary>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">110</span>
+<span class="normal">111</span>
+<span class="normal">112</span>
+<span class="normal">113</span>
+<span class="normal">114</span>
+<span class="normal">115</span>
+<span class="normal">116</span>
+<span class="normal">117</span>
+<span class="normal">118</span>
+<span class="normal">119</span>
+<span class="normal">120</span>
+<span class="normal">121</span>
+<span class="normal">122</span>
+<span class="normal">123</span>
+<span class="normal">124</span>
+<span class="normal">125</span>
+<span class="normal">126</span>
+<span class="normal">127</span>
+<span class="normal">128</span>
+<span class="normal">129</span>
+<span class="normal">130</span>
+<span class="normal">131</span>
+<span class="normal">132</span>
+<span class="normal">133</span>
+<span class="normal">134</span>
+<span class="normal">135</span>
+<span class="normal">136</span>
+<span class="normal">137</span>
+<span class="normal">138</span>
+<span class="normal">139</span>
+<span class="normal">140</span>
+<span class="normal">141</span>
+<span class="normal">142</span>
+<span class="normal">143</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">sum_32bit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">a</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">b</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Add two 32-bit signed integers.</span>
+
+<span class="sd">    Python only has one [int][]{:target=&quot;_blank&quot;} data type to represent integer values.</span>
+<span class="sd">    This method converts the data types of `a` and `b` to be</span>
+<span class="sd">    [c_int32][ctypes.c_int32]{:target=&quot;_blank&quot;}.</span>
+
+<span class="sd">    The corresponding FORTRAN code is</span>
+
+<span class="sd">    ```fortran</span>
+<span class="sd">    function sum_32bit(a, b) result(value)</span>
+<span class="sd">        !DEC$ ATTRIBUTES DLLEXPORT, ALIAS:&#39;sum_32bit&#39; :: sum_32bit</span>
+<span class="sd">        implicit none</span>
+<span class="sd">        integer(4) :: a, b, value</span>
+<span class="sd">        value = a + b</span>
+<span class="sd">    end function sum_32bit</span>
+<span class="sd">    ```</span>
+
+<span class="sd">    See the corresponding [Fortran64.sum_32bit][msl.examples.loadlib.fortran64.Fortran64.sum_32bit] method.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        a: First 32-bit signed integer.</span>
+<span class="sd">        b: Second 32-bit signed integer.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        The sum, `a + b`.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># restype should be defined elsewhere, shown here for illustrative purposes</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">lib</span><span class="o">.</span><span class="n">sum_32bit</span><span class="o">.</span><span class="n">restype</span> <span class="o">=</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">c_int32</span>
+
+    <span class="n">ac</span> <span class="o">=</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">c_int32</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>
+    <span class="n">bc</span> <span class="o">=</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">c_int32</span><span class="p">(</span><span class="n">b</span><span class="p">)</span>
+    <span class="n">result</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">lib</span><span class="o">.</span><span class="n">sum_32bit</span><span class="p">(</span><span class="n">ctypes</span><span class="o">.</span><span class="n">byref</span><span class="p">(</span><span class="n">ac</span><span class="p">),</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">byref</span><span class="p">(</span><span class="n">bc</span><span class="p">))</span>
+    <span class="k">return</span> <span class="n">result</span>
+</code></pre></div></td></tr></table></div>
+            </details>
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h3 id="msl.examples.loadlib.fortran32.Fortran32.sum_64bit" class="doc doc-heading">
+            <span class="doc doc-object-name doc-function-name">sum_64bit</span>
+
+
+<a href="#msl.examples.loadlib.fortran32.Fortran32.sum_64bit" class="headerlink" title="Permanent link">¤</a></h3>
+<div class="doc-signature highlight"><pre><span></span><code><span class="nf">sum_64bit</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">)</span>
+</code></pre></div>
+
+    <div class="doc doc-contents ">
+
+        <p>Add two 64-bit signed integers.</p>
+<p>Python only has one <a class="autorefs autorefs-external" href="https://docs.python.org/3/library/functions.html#int" target="_blank">int</a> data type to represent integer values.
+This method converts the data types of <code>a</code> and <code>b</code> to be
+<a class="autorefs autorefs-external" href="https://docs.python.org/3/library/ctypes.html#ctypes.c_int64" target="_blank">c_int64</a>.</p>
+<p>The corresponding FORTRAN code is</p>
+<div class="highlight"><pre><span></span><code><span class="k">function </span><span class="n">sum_64bit</span><span class="p">(</span><span class="n">a</span><span class="p">,</span><span class="w"> </span><span class="n">b</span><span class="p">)</span><span class="w"> </span><span class="k">result</span><span class="p">(</span><span class="k">value</span><span class="p">)</span>
+<span class="w">    </span><span class="c">!DEC$ ATTRIBUTES DLLEXPORT, ALIAS:&#39;sum_64bit&#39; :: sum_64bit</span>
+<span class="w">    </span><span class="k">implicit none</span>
+<span class="k">    </span><span class="kt">integer</span><span class="p">(</span><span class="mi">8</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">a</span><span class="p">,</span><span class="w"> </span><span class="n">b</span><span class="p">,</span><span class="w"> </span><span class="k">value</span>
+<span class="k">    value</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">a</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">b</span>
+<span class="k">end function </span><span class="n">sum_64bit</span>
+</code></pre></div>
+<p>See the corresponding <a class="autorefs autorefs-internal" title="sum_64bit" href="../fortran64/#msl.examples.loadlib.fortran64.Fortran64.sum_64bit">Fortran64.sum_64bit</a> method.</p>
+
+
+<p><span class="doc-section-title">Parameters:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Description</th>
+          <th>Default</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td>
+                <code>a</code>
+            </td>
+            <td>
+                  <code><a class="autorefs autorefs-external" href="https://docs.python.org/3/library/functions.html#int">int</a></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>First 64-bit signed integer.</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>b</code>
+            </td>
+            <td>
+                  <code><a class="autorefs autorefs-external" href="https://docs.python.org/3/library/functions.html#int">int</a></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Second 64-bit signed integer.</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+
+    <p><span class="doc-section-title">Returns:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Type</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td>
+                  <code><a class="autorefs autorefs-external" href="https://docs.python.org/3/library/functions.html#int">int</a></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>The sum, <code>a + b</code>.</p>
+              </div>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+
+            <details class="quote">
+              <summary>Source code in <code>src/msl/examples/loadlib/fortran32.py</code></summary>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">145</span>
+<span class="normal">146</span>
+<span class="normal">147</span>
+<span class="normal">148</span>
+<span class="normal">149</span>
+<span class="normal">150</span>
+<span class="normal">151</span>
+<span class="normal">152</span>
+<span class="normal">153</span>
+<span class="normal">154</span>
+<span class="normal">155</span>
+<span class="normal">156</span>
+<span class="normal">157</span>
+<span class="normal">158</span>
+<span class="normal">159</span>
+<span class="normal">160</span>
+<span class="normal">161</span>
+<span class="normal">162</span>
+<span class="normal">163</span>
+<span class="normal">164</span>
+<span class="normal">165</span>
+<span class="normal">166</span>
+<span class="normal">167</span>
+<span class="normal">168</span>
+<span class="normal">169</span>
+<span class="normal">170</span>
+<span class="normal">171</span>
+<span class="normal">172</span>
+<span class="normal">173</span>
+<span class="normal">174</span>
+<span class="normal">175</span>
+<span class="normal">176</span>
+<span class="normal">177</span>
+<span class="normal">178</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">sum_64bit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">a</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">b</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Add two 64-bit signed integers.</span>
+
+<span class="sd">    Python only has one [int][]{:target=&quot;_blank&quot;} data type to represent integer values.</span>
+<span class="sd">    This method converts the data types of `a` and `b` to be</span>
+<span class="sd">    [c_int64][ctypes.c_int64]{:target=&quot;_blank&quot;}.</span>
+
+<span class="sd">    The corresponding FORTRAN code is</span>
+
+<span class="sd">    ```fortran</span>
+<span class="sd">    function sum_64bit(a, b) result(value)</span>
+<span class="sd">        !DEC$ ATTRIBUTES DLLEXPORT, ALIAS:&#39;sum_64bit&#39; :: sum_64bit</span>
+<span class="sd">        implicit none</span>
+<span class="sd">        integer(8) :: a, b, value</span>
+<span class="sd">        value = a + b</span>
+<span class="sd">    end function sum_64bit</span>
+<span class="sd">    ```</span>
+
+<span class="sd">    See the corresponding [Fortran64.sum_64bit][msl.examples.loadlib.fortran64.Fortran64.sum_64bit] method.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        a: First 64-bit signed integer.</span>
+<span class="sd">        b: Second 64-bit signed integer.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        The sum, `a + b`.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># restype should be defined elsewhere, shown here for illustrative purposes</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">lib</span><span class="o">.</span><span class="n">sum_64bit</span><span class="o">.</span><span class="n">restype</span> <span class="o">=</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">c_int64</span>
+
+    <span class="n">ac</span> <span class="o">=</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">c_int64</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>
+    <span class="n">bc</span> <span class="o">=</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">c_int64</span><span class="p">(</span><span class="n">b</span><span class="p">)</span>
+    <span class="n">result</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">lib</span><span class="o">.</span><span class="n">sum_64bit</span><span class="p">(</span><span class="n">ctypes</span><span class="o">.</span><span class="n">byref</span><span class="p">(</span><span class="n">ac</span><span class="p">),</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">byref</span><span class="p">(</span><span class="n">bc</span><span class="p">))</span>
+    <span class="k">return</span> <span class="n">result</span>
+</code></pre></div></td></tr></table></div>
+            </details>
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h3 id="msl.examples.loadlib.fortran32.Fortran32.sum_8bit" class="doc doc-heading">
+            <span class="doc doc-object-name doc-function-name">sum_8bit</span>
+
+
+<a href="#msl.examples.loadlib.fortran32.Fortran32.sum_8bit" class="headerlink" title="Permanent link">¤</a></h3>
+<div class="doc-signature highlight"><pre><span></span><code><span class="nf">sum_8bit</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">)</span>
+</code></pre></div>
+
+    <div class="doc doc-contents ">
+
+        <p>Add two 8-bit signed integers.</p>
+<p>Python only has one <a class="autorefs autorefs-external" href="https://docs.python.org/3/library/functions.html#int" target="_blank">int</a> data type to represent integer values.
+This method converts the data types of <code>a</code> and <code>b</code> to be
+<a class="autorefs autorefs-external" href="https://docs.python.org/3/library/ctypes.html#ctypes.c_int8" target="_blank">c_int8</a>.</p>
+<p>The corresponding FORTRAN code is</p>
+<div class="highlight"><pre><span></span><code><span class="k">function </span><span class="n">sum_8bit</span><span class="p">(</span><span class="n">a</span><span class="p">,</span><span class="w"> </span><span class="n">b</span><span class="p">)</span><span class="w"> </span><span class="k">result</span><span class="p">(</span><span class="k">value</span><span class="p">)</span>
+<span class="w">    </span><span class="c">!DEC$ ATTRIBUTES DLLEXPORT, ALIAS:&#39;sum_8bit&#39; :: sum_8bit</span>
+<span class="w">    </span><span class="k">implicit none</span>
+<span class="k">    </span><span class="kt">integer</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">a</span><span class="p">,</span><span class="w"> </span><span class="n">b</span><span class="p">,</span><span class="w"> </span><span class="k">value</span>
+<span class="k">    value</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">a</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">b</span>
+<span class="k">end function </span><span class="n">sum_8bit</span>
+</code></pre></div>
+<p>See the corresponding <a class="autorefs autorefs-internal" title="sum_8bit" href="../fortran64/#msl.examples.loadlib.fortran64.Fortran64.sum_8bit">Fortran64.sum_8bit</a> method.</p>
+
+
+<p><span class="doc-section-title">Parameters:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Description</th>
+          <th>Default</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td>
+                <code>a</code>
+            </td>
+            <td>
+                  <code><a class="autorefs autorefs-external" href="https://docs.python.org/3/library/functions.html#int">int</a></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>First 8-bit signed integer.</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>b</code>
+            </td>
+            <td>
+                  <code><a class="autorefs autorefs-external" href="https://docs.python.org/3/library/functions.html#int">int</a></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Second 8-bit signed integer.</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+
+    <p><span class="doc-section-title">Returns:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Type</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td>
+                  <code><a class="autorefs autorefs-external" href="https://docs.python.org/3/library/functions.html#int">int</a></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>The sum, <code>a + b</code>.</p>
+              </div>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+
+            <details class="quote">
+              <summary>Source code in <code>src/msl/examples/loadlib/fortran32.py</code></summary>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">40</span>
+<span class="normal">41</span>
+<span class="normal">42</span>
+<span class="normal">43</span>
+<span class="normal">44</span>
+<span class="normal">45</span>
+<span class="normal">46</span>
+<span class="normal">47</span>
+<span class="normal">48</span>
+<span class="normal">49</span>
+<span class="normal">50</span>
+<span class="normal">51</span>
+<span class="normal">52</span>
+<span class="normal">53</span>
+<span class="normal">54</span>
+<span class="normal">55</span>
+<span class="normal">56</span>
+<span class="normal">57</span>
+<span class="normal">58</span>
+<span class="normal">59</span>
+<span class="normal">60</span>
+<span class="normal">61</span>
+<span class="normal">62</span>
+<span class="normal">63</span>
+<span class="normal">64</span>
+<span class="normal">65</span>
+<span class="normal">66</span>
+<span class="normal">67</span>
+<span class="normal">68</span>
+<span class="normal">69</span>
+<span class="normal">70</span>
+<span class="normal">71</span>
+<span class="normal">72</span>
+<span class="normal">73</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">sum_8bit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">a</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">b</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Add two 8-bit signed integers.</span>
+
+<span class="sd">    Python only has one [int][]{:target=&quot;_blank&quot;} data type to represent integer values.</span>
+<span class="sd">    This method converts the data types of `a` and `b` to be</span>
+<span class="sd">    [c_int8][ctypes.c_int8]{:target=&quot;_blank&quot;}.</span>
+
+<span class="sd">    The corresponding FORTRAN code is</span>
+
+<span class="sd">    ```fortran</span>
+<span class="sd">    function sum_8bit(a, b) result(value)</span>
+<span class="sd">        !DEC$ ATTRIBUTES DLLEXPORT, ALIAS:&#39;sum_8bit&#39; :: sum_8bit</span>
+<span class="sd">        implicit none</span>
+<span class="sd">        integer(1) :: a, b, value</span>
+<span class="sd">        value = a + b</span>
+<span class="sd">    end function sum_8bit</span>
+<span class="sd">    ```</span>
+
+<span class="sd">    See the corresponding [Fortran64.sum_8bit][msl.examples.loadlib.fortran64.Fortran64.sum_8bit] method.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        a: First 8-bit signed integer.</span>
+<span class="sd">        b: Second 8-bit signed integer.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        The sum, `a + b`.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># restype should be defined elsewhere, shown here for illustrative purposes</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">lib</span><span class="o">.</span><span class="n">sum_8bit</span><span class="o">.</span><span class="n">restype</span> <span class="o">=</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">c_int8</span>
+
+    <span class="n">ac</span> <span class="o">=</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">c_int8</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>
+    <span class="n">bc</span> <span class="o">=</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">c_int8</span><span class="p">(</span><span class="n">b</span><span class="p">)</span>
+    <span class="n">result</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">lib</span><span class="o">.</span><span class="n">sum_8bit</span><span class="p">(</span><span class="n">ctypes</span><span class="o">.</span><span class="n">byref</span><span class="p">(</span><span class="n">ac</span><span class="p">),</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">byref</span><span class="p">(</span><span class="n">bc</span><span class="p">))</span>
+    <span class="k">return</span> <span class="n">result</span>
+</code></pre></div></td></tr></table></div>
+            </details>
+    </div>
+
+</div>
+
+
+
+  </div>
+
+    </div>
+
+</div>
+
+
+
+
+  </div>
+
+    </div>
+
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+    
+      
+      <nav class="md-footer__inner md-grid" aria-label="Footer" >
+        
+          
+          <a href="../echo64/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Echo64">
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+            </div>
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                Previous
+              </span>
+              <div class="md-ellipsis">
+                Echo64
+              </div>
+            </div>
+          </a>
+        
+        
+          
+          <a href="../fortran64/" class="md-footer__link md-footer__link--next" aria-label="Next: Fortran64">
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                Next
+              </span>
+              <div class="md-ellipsis">
+                Fortran64
+              </div>
+            </div>
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11z"/></svg>
+            </div>
+          </a>
+        
+      </nav>
+    
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+    <div class="md-copyright__highlight">
+      Copyright &copy; 2017 - 2025 Measurement Standards Laboratory of New Zealand
+    </div>
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+        <div class="md-social">
+  
+    
+    
+    
+    
+      
+      
+    
+    <a href="https://github.com/MSLNZ/msl-loadlib/" target="_blank" rel="noopener" title="github.com" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><!--! Font Awesome Free 6.7.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8M97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
+    </a>
+  
+    
+    
+    
+    
+      
+      
+    
+    <a href="https://pypi.org/project/msl-loadlib/" target="_blank" rel="noopener" title="pypi.org" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.7.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M439.8 200.5c-7.7-30.9-22.3-54.2-53.4-54.2h-40.1v47.4c0 36.8-31.2 67.8-66.8 67.8H172.7c-29.2 0-53.4 25-53.4 54.3v101.8c0 29 25.2 46 53.4 54.3 33.8 9.9 66.3 11.7 106.8 0 26.9-7.8 53.4-23.5 53.4-54.3v-40.7H226.2v-13.6h160.2c31.1 0 42.6-21.7 53.4-54.2 11.2-33.5 10.7-65.7 0-108.6M286.2 404c11.1 0 20.1 9.1 20.1 20.3 0 11.3-9 20.4-20.1 20.4-11 0-20.1-9.2-20.1-20.4.1-11.3 9.1-20.3 20.1-20.3M167.8 248.1h106.8c29.7 0 53.4-24.5 53.4-54.3V91.9c0-29-24.4-50.7-53.4-55.6-35.8-5.9-74.7-5.6-106.8.1-45.2 8-53.4 24.7-53.4 55.6v40.7h106.9v13.6h-147c-31.1 0-58.3 18.7-66.8 54.2-9.8 40.7-10.2 66.1 0 108.6 7.6 31.6 25.7 54.2 56.8 54.2H101v-48.8c0-35.3 30.5-66.4 66.8-66.4m-6.7-142.6c-11.1 0-20.1-9.1-20.1-20.3.1-11.3 9-20.4 20.1-20.4 11 0 20.1 9.2 20.1 20.4s-9 20.3-20.1 20.3"/></svg>
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      <script id="__config" type="application/json">{"base": "../..", "features": ["content.code.copy", "navigation.footer", "navigation.indexes", "navigation.top", "navigation.tabs", "navigation.tabs.sticky", "search.highlight", "search.suggest"], "search": "../../assets/javascripts/workers/search.d50fe291.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": {"provider": "mike"}}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.13a4f30d.min.js"></script>
+      
+    
+  </body>
+</html>
