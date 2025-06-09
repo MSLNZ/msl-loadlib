@@ -1,5 +1,3 @@
-from pathlib import Path
-
 from msl.examples.loadlib import EXAMPLES_DIR
 from msl.loadlib import Client64, Server32
 
@@ -18,20 +16,16 @@ class Ex32(Server32):
         # demonstrates that this test passes
         super().__init__(Server32.examples_dir() / "cpp_lib32", "cdll", host, port)
 
-    def ex_dir(self) -> Path:
-        return self.examples_dir()
+    def ex_dir(self) -> str:
+        return str(self.examples_dir())
 
 
 class Ex64(Client64):
     def __init__(self) -> None:
         super().__init__(__file__)
 
-    def examples_dir(self) -> Path:
-        reply: Path = self.request32("examples_dir")
-        return reply
-
-    def ex_dir(self) -> Path:
-        reply: Path = self.request32("ex_dir")
+    def ex_dir(self) -> str:
+        reply: str = self.request32("ex_dir")
         return reply
 
 
@@ -40,5 +34,4 @@ def test_examples_dir() -> None:  # type: ignore[misc]
     assert Server32.examples_dir() == EXAMPLES_DIR
 
     with Ex64() as e:
-        assert e.examples_dir() == EXAMPLES_DIR
-        assert e.ex_dir() == EXAMPLES_DIR
+        assert e.ex_dir() == str(EXAMPLES_DIR)
