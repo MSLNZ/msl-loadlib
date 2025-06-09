@@ -2997,8 +2997,8 @@ threads or closing file handles, before the server shuts down.</p>
         <p><a class="autorefs autorefs-external" href="https://docs.python.org/3/library/stdtypes.html#str">str</a> &mdash; The version of Python that the 32-bit server is running on.</p>
 <div class="admonition tip">
 <p class="admonition-title">Tip</p>
-<p>You can get the version from a terminal by running
-<div class="highlight"><pre><span></span><code><span class="go">python -c &quot;from msl.loadlib import Server32; Server32.version()&quot;</span>
+<p>You can view the version from a terminal by running
+<div class="highlight"><pre><span></span><code><span class="go">python -c &quot;from msl.loadlib import Server32; print(Server32.version())&quot;</span>
 </code></pre></div></p>
 </div>
 
@@ -3021,9 +3021,9 @@ threads or closing file handles, before the server shuts down.</p>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;[str][] &amp;mdash; The version of Python that the 32-bit server is running on.</span>
 
 <span class="sd">    !!! tip</span>
-<span class="sd">        You can get the version from a terminal by running</span>
+<span class="sd">        You can view the version from a terminal by running</span>
 <span class="sd">        ```console</span>
-<span class="sd">        python -c &quot;from msl.loadlib import Server32; Server32.version()&quot;</span>
+<span class="sd">        python -c &quot;from msl.loadlib import Server32; print(Server32.version())&quot;</span>
 <span class="sd">        ```</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">exe</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="vm">__file__</span><span class="p">)</span><span class="o">.</span><span class="n">parent</span> <span class="o">/</span> <span class="n">server_filename</span>
