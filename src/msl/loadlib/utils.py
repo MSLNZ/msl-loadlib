@@ -60,7 +60,7 @@ def is_pythonnet_installed() -> bool:
         Whether `pythonnet` is installed.
     """
     try:
-        import clr  # type: ignore[import-untyped] # pyright: ignore[reportMissingTypeStubs, reportUnusedImport] # noqa: F401
+        import clr  # type: ignore[import-untyped] # pyright: ignore[reportMissingTypeStubs, reportUnusedImport]  # noqa: F401, PLC0415
     except (ImportError, RuntimeError):
         return False
     return True
@@ -75,7 +75,7 @@ def is_py4j_installed() -> bool:
     !!! note "Added in version 0.4"
     """
     try:
-        import py4j  # type: ignore[import-untyped] # pyright: ignore[reportMissingTypeStubs, reportUnusedImport] # noqa: F401
+        import py4j  # type: ignore[import-untyped] # pyright: ignore[reportMissingTypeStubs, reportUnusedImport]  # noqa: F401, PLC0415
     except ImportError:
         return False
     return True
@@ -90,7 +90,7 @@ def is_comtypes_installed() -> bool:
     !!! note "Added in version 0.5"
     """
     try:
-        import comtypes  # type: ignore[import-untyped] # pyright: ignore[reportMissingTypeStubs, reportUnusedImport] # noqa: F401
+        import comtypes  # type: ignore[import-untyped] # pyright: ignore[reportMissingTypeStubs, reportUnusedImport]  # noqa: F401, PLC0415
     except ImportError:
         return False
     return True
@@ -377,7 +377,7 @@ def generate_com_wrapper(lib: Any, out_dir: PathLike | None = None) -> ModuleTyp
         msg = "Cannot create a COM wrapper because comtypes is not installed, run\n  pip install comtypes"
         raise OSError(msg)
 
-    import comtypes.client  # type: ignore[import-untyped] # pyright: ignore[reportMissingTypeStubs]
+    import comtypes.client  # type: ignore[import-untyped] # pyright: ignore[reportMissingTypeStubs]  # noqa: PLC0415
 
     # cache the value of gen_dir to reset it later
     assert isinstance(comtypes.client.gen_dir, str)  # pyright: ignore[reportUnknownMemberType] # noqa: S101

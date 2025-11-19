@@ -100,7 +100,7 @@ def main(  # noqa: C901, PLR0912, PLR0913, PLR0915
         return
 
     try:
-        from PyInstaller import (  # type: ignore[import-untyped] # pyright: ignore[reportMissingModuleSource]
+        from PyInstaller import (  # type: ignore[import-untyped] # pyright: ignore[reportMissingModuleSource]  # noqa: PLC0415
             __version__ as pyinstaller_version,
         )
     except ImportError:
@@ -350,7 +350,7 @@ VSVersionInfo(
 
 def _cli() -> None:  # pyright: ignore[reportUnusedFunction]
     """Main entry point of the console script."""
-    import argparse
+    import argparse  # noqa: PLC0415
 
     parser = argparse.ArgumentParser(
         description="Create a frozen server for msl-loadlib.",

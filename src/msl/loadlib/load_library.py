@@ -188,10 +188,10 @@ class LoadLibrary:
                 msg = "Cannot load a COM library because comtypes is not installed.\nRun: pip install comtypes"
                 raise OSError(msg)
 
-            from comtypes import (  # type: ignore[import-untyped] # pyright: ignore[reportMissingTypeStubs]
+            from comtypes import (  # type: ignore[import-untyped] # pyright: ignore[reportMissingTypeStubs]  # noqa: PLC0415
                 GUID,  # pyright: ignore[reportUnknownVariableType]
             )
-            from comtypes.client import (  # type: ignore[import-untyped] # pyright: ignore[reportMissingTypeStubs]
+            from comtypes.client import (  # type: ignore[import-untyped] # pyright: ignore[reportMissingTypeStubs]  # noqa: PLC0415
                 CreateObject,  # pyright: ignore[reportUnknownVariableType]
             )
 
@@ -204,7 +204,7 @@ class LoadLibrary:
             self._lib = CreateObject(clsid, **kwargs)
 
         elif _libtype == "activex":
-            from .activex import Application
+            from .activex import Application  # noqa: PLC0415
 
             self._app = Application()
             self._lib = self._app.load(self._path, **kwargs)
@@ -214,11 +214,11 @@ class LoadLibrary:
                 msg = "Cannot load a Java file because Py4J is not installed.\nRun: pip install py4j"
                 raise OSError(msg)
 
-            from py4j.java_gateway import (  # type: ignore[import-untyped] # pyright: ignore[reportMissingTypeStubs]
+            from py4j.java_gateway import (  # type: ignore[import-untyped] # pyright: ignore[reportMissingTypeStubs]  # noqa: PLC0415
                 GatewayParameters,  # pyright: ignore[reportUnknownVariableType]
                 JavaGateway,  # pyright: ignore[reportUnknownVariableType]
             )
-            from py4j.version import (  # type: ignore[import-untyped] # pyright: ignore[reportMissingTypeStubs]
+            from py4j.version import (  # type: ignore[import-untyped] # pyright: ignore[reportMissingTypeStubs]  # noqa: PLC0415
                 __version__,  # pyright: ignore[reportUnknownVariableType]
             )
 
@@ -288,8 +288,8 @@ class LoadLibrary:
                 )
                 raise OSError(msg)
 
-            import clr  # type: ignore[import-untyped] # pyright: ignore[reportMissingTypeStubs]
-            import System  # type: ignore[import-not-found] # pyright: ignore[reportMissingImports]
+            import clr  # type: ignore[import-untyped] # pyright: ignore[reportMissingTypeStubs]  # noqa: PLC0415
+            import System  # type: ignore[import-not-found] # pyright: ignore[reportMissingImports]  # noqa: PLC0415
 
             dotnet = {"System": System}
 

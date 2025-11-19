@@ -142,7 +142,7 @@ def main() -> int:  # noqa: C901, PLR0911, PLR0912, PLR0915
         os.added_dll_directories = dll_dirs  # type: ignore[attr-defined] # pyright: ignore[reportAttributeAccessIssue]
 
     if args.interactive:
-        import builtins
+        import builtins  # noqa: PLC0415
 
         class Quitter:
             def __repr__(self) -> str:

@@ -21,7 +21,6 @@ and the following enumerations
 
 [ActiveX controls]: https://learn.microsoft.com/en-us/windows/win32/com/activex-controls
 """
-# pyright: reportMissingTypeStubs=false
 
 from __future__ import annotations
 
@@ -32,8 +31,8 @@ from enum import IntEnum, IntFlag
 from typing import TYPE_CHECKING
 
 try:
-    import comtypes  # type: ignore[import-untyped]
-    from comtypes import client  # pyright: ignore[reportUnknownVariableType]
+    import comtypes  # type: ignore[import-untyped]  # pyright: ignore[reportMissingTypeStubs]
+    from comtypes import client  # pyright: ignore[reportUnknownVariableType, reportMissingTypeStubs]
 except ImportError:
     comtypes = client = None
 

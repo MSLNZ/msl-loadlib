@@ -65,7 +65,7 @@ def test_wrong_bitness(filename: str) -> None:
 @skipif_no_pythonnet
 @skipif_not_windows
 def test_wrong_bitness_dotnet() -> None:
-    import System  # type: ignore[import-not-found] # pyright: ignore[reportMissingImports]
+    import System  # type: ignore[import-not-found] # pyright: ignore[reportMissingImports]  # noqa: PLC0415
 
     suffix = "32" if IS_PYTHON_64BIT else "64"
     path = EXAMPLES_DIR / f"dotnet_lib{suffix}.dll"
@@ -463,7 +463,7 @@ def test_java() -> None:  # noqa: PLR0915
 
 
 def test_java_gateway_parameters() -> None:
-    from py4j.java_gateway import (  # type: ignore[import-untyped] # pyright: ignore[reportMissingTypeStubs]
+    from py4j.java_gateway import (  # type: ignore[import-untyped] # pyright: ignore[reportMissingTypeStubs]  # noqa: PLC0415
         GatewayParameters,  # pyright: ignore[reportUnknownVariableType]
     )
 
@@ -585,7 +585,7 @@ def test_dotnet_nested_namespace() -> None:  # noqa: PLR0915
     # pythonnet 3.0+ disabled implicit conversion from C# enums to Python int and back.
     # One must now either use enum members (e.g. MyEnum.Option), or use enum constructor
     # (e.g. MyEnum(42) or MyEnum(42, True) when MyEnum does not have a member with value 42).
-    import clr  # type: ignore[import-untyped] # pyright: ignore[reportMissingTypeStubs]
+    import clr  # type: ignore[import-untyped] # pyright: ignore[reportMissingTypeStubs]  # noqa: PLC0415
 
     if int(clr.__version__.split(".")[0]) < 3:  # pyright: ignore[reportUnknownArgumentType]
         # an enum in a namespace

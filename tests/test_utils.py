@@ -126,7 +126,7 @@ def test_get_com_info() -> None:
 
 @skipif_not_windows
 def test_generate_com_wrapper() -> None:
-    import comtypes.client  # type: ignore[import-untyped] # pyright: ignore[reportMissingTypeStubs]
+    import comtypes.client  # type: ignore[import-untyped] # pyright: ignore[reportMissingTypeStubs]  # noqa: PLC0415
 
     expected_mod_names = [
         "comtypes.gen.SHDocVw",

@@ -26,7 +26,7 @@ class ShutdownHangs(Server32):
 
 @skipif_no_server32
 def test_killed() -> None:  # type: ignore[misc]
-    import pytest
+    import pytest  # noqa: PLC0415
 
     class Hangs(Client64):
         def __init__(self) -> None:

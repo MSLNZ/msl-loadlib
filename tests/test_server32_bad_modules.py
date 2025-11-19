@@ -14,7 +14,7 @@ class Client(Client64):
 def check(module_name: str, match: str) -> None:
     # This test module is a bit buggy.
     # Sometimes we get a ConnectionRefusedError that we want to ignore.
-    attempts = 1
+    attempts: int = 1
 
     max_attempts = 3
     while True:

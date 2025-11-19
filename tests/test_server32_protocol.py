@@ -32,7 +32,7 @@ class Bounce64(Client64):
 
 @skipif_no_server32
 def test_protocol() -> None:  # type: ignore[misc]
-    import pytest
+    import pytest  # noqa: PLC0415
 
     args = (None, True, False, 1, -2.0, 5 - 6j, [1, [2.0, "hello"]], {"one": "1", "two": 2})
     kwargs = {

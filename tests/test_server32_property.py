@@ -77,7 +77,7 @@ class Property64(Client64):
 
 @skipif_no_server32
 def test_request_property() -> None:  # type: ignore[misc]
-    import pytest
+    import pytest  # noqa: PLC0415
 
     with Property64() as p:
         assert p.subtract(100, 100) == 0

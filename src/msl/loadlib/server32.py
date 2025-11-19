@@ -251,7 +251,7 @@ class _RequestHandler(BaseHTTPRequestHandler):
     pickle_file: str = ""
     server: Server32Subclass  # type: ignore[assignment]  # pyright: ignore[reportIncompatibleVariableOverride]
 
-    def do_GET(self) -> None:  # noqa: N802
+    def do_GET(self) -> None:
         """Handle a GET request."""
         try:
             if self.path == METADATA:
@@ -288,7 +288,7 @@ class _RequestHandler(BaseHTTPRequestHandler):
             self.end_headers()
             _ = self.wfile.write(json.dumps(response).encode())
 
-    def do_POST(self) -> None:  # noqa: N802
+    def do_POST(self) -> None:
         """Handle a POST request."""
         if self.path == SHUTDOWN:
             self.server.shutdown_handler()

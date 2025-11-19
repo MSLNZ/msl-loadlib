@@ -13,7 +13,7 @@ class HangsForever(Server32):
     def __init__(self, host: str, port: int) -> None:
         # Simulate the case where instantiating this class on the 32-bit server hangs
         print("import time")  # noqa: T201
-        import time
+        import time  # noqa: PLC0415
 
         print("now go to sleep")  # noqa: T201
         for _ in range(999):
@@ -24,13 +24,13 @@ class HangsForever(Server32):
 
 @skipif_no_server32
 def test_instantiating() -> None:  # type: ignore[misc]
-    import pytest
+    import pytest  # noqa: PLC0415
 
     class Issue24(Client64):
         def __init__(self) -> None:
             super().__init__(__file__, timeout=2)
 
-    with pytest.warns(UserWarning, match=r"killed the 32-bit server using brute force") as warn_info:  # noqa: SIM117
+    with pytest.warns(UserWarning, match=r"killed the 32-bit server using brute force") as warn_info:  # noqa: PT031, SIM117
         with pytest.raises(ConnectionTimeoutError, match=r"mock skipif_no_server32\s+import time\s+now go to sleep"):
             with Issue24():  # this line is what the lineno test should equal
                 pass

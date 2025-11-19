@@ -53,7 +53,7 @@ class RPCClient(Client64):
 
 @skipif_no_server32
 def test_rpc_timeout() -> None:  # type: ignore[misc]
-    import pytest
+    import pytest  # noqa: PLC0415
 
     with RPCClient() as c:
         assert c.no_delay(8, 3) == 11

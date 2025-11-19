@@ -20,7 +20,7 @@ def test_importing() -> None:
         def __init__(self) -> None:
             super().__init__(__file__, timeout=2)
 
-    with pytest.warns(UserWarning, match=r"killed the 32-bit server using brute force"):  # noqa: SIM117
+    with pytest.warns(UserWarning, match=r"killed the 32-bit server using brute force"):  # noqa: PT031, SIM117
         with pytest.raises(ConnectionTimeoutError, match=r"importing time\s+sleeping for 999 seconds"):
             with Issue24():
                 pass
