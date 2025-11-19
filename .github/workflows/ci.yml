@@ -27,7 +27,7 @@ jobs:
             architecture: x86
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
       - name: Install system dependencies (Ubuntu)
         if: ${{ matrix.os == 'ubuntu-22.04' }}
         run: |
@@ -70,7 +70,7 @@ jobs:
       MYPYPATH: src
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
       - name: Setup uv
         uses: astral-sh/setup-uv@v5
         with:
