@@ -53,7 +53,10 @@ jobs:
       - name: Upgrade pip
         run: python -m pip install --upgrade pip
       - name: Install test dependencies
-        run: python -m pip install "comtypes;sys_platform=='win32'" py4j pythonnet numpy pytest pytest-cov
+        run: python -m pip install "comtypes;sys_platform=='win32'" py4j numpy pytest pytest-cov
+      - name: Install pythonnet
+        if: ${{ matrix.python-version != '3.14' }}
+        run: python -m pip install pythonnet
       - name: Build custom wheels
         run: |
           python -m pip install --upgrade hatch
