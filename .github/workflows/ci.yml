@@ -41,13 +41,13 @@ jobs:
         run: java -version
       - name: Set up Python ${{ matrix.python-version }} (Windows)
         if: ${{ matrix.os == 'windows-latest' }}
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@v6
         with:
           python-version: ${{ matrix.python-version }}
           architecture: ${{ matrix.architecture }}
       - name: Set up Python ${{ matrix.python-version }} (non Windows)
         if: ${{ matrix.os != 'windows-latest' }}
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@v6
         with:
           python-version: ${{ matrix.python-version }}
       - name: Upgrade pip
