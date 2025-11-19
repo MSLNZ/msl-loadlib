@@ -282,7 +282,10 @@ class LoadLibrary:
 
         elif _libtype in {"net", "clr"}:
             if not is_pythonnet_installed():
-                msg = "Cannot load a .NET Assembly because pythonnet is not installed.\nRun: pip install pythonnet"
+                msg = (
+                    "Cannot load a .NET Assembly because pythonnet is not installed or not supported on this platform."
+                    "\nTo install it run: pip install pythonnet"
+                )
                 raise OSError(msg)
 
             import clr  # type: ignore[import-untyped] # pyright: ignore[reportMissingTypeStubs]

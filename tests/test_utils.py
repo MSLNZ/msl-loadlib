@@ -26,9 +26,11 @@ def test_port_functions() -> None:
     assert not utils.is_port_in_use(port)
 
 
-@pytest.mark.skipif(IS_MAC_ARM64, reason="macOS and arm64")
 def test_is_pythonnet_installed() -> None:
-    assert utils.is_pythonnet_installed()
+    if IS_MAC_ARM64 or sys.version_info[:2] == (3, 14):
+        assert not utils.is_pythonnet_installed()
+    else:
+        assert utils.is_pythonnet_installed()
 
 
 def test_is_py4j_installed() -> None:

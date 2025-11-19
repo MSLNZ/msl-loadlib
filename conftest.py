@@ -100,7 +100,7 @@ def no_labview32() -> None:
 def no_pythonnet() -> None:
     """Skip doctest if pythonnet is not installed."""
     if clr is None:
-        pytest.skip("pythonnet is not installed")
+        pytest.skip("pythonnet is not installed/supported on this platform")
 
 
 def win32_github_actions() -> None:
@@ -131,7 +131,7 @@ def doctest_skipif(doctest_namespace: dict[str, Callable[[], None]]) -> None:
 
 
 skipif_no_comtypes = pytest.mark.skipif(not IS_WINDOWS, reason="comtypes is only supported on Windows")
-skipif_no_pythonnet = pytest.mark.skipif(clr is None, reason="pythonnet is not installed")
+skipif_no_pythonnet = pytest.mark.skipif(clr is None, reason="pythonnet is not installed/supported on this platform")
 skipif_no_server32 = pytest.mark.skipif(IS_MAC, reason="32-bit server does not exist")
 skipif_not_windows = pytest.mark.skipif(not IS_WINDOWS, reason="not Windows")
 

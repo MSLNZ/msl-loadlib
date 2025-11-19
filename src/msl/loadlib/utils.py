@@ -61,7 +61,7 @@ def is_pythonnet_installed() -> bool:
     """
     try:
         import clr  # type: ignore[import-untyped] # pyright: ignore[reportMissingTypeStubs, reportUnusedImport] # noqa: F401
-    except ImportError:
+    except (ImportError, RuntimeError):
         return False
     return True
 
