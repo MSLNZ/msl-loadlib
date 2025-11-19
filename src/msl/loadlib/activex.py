@@ -677,6 +677,10 @@ class MenuItem:
             return self.id == other.id
         return NotImplemented
 
+    def __hash__(self) -> int:
+        """Return the hash value for the ID."""
+        return hash(self.id)
+
     def __repr__(self) -> str:
         """Returns the string representation."""
         return f"<{self.__class__.__name__} id={self._id} text={self._text!r}>"
