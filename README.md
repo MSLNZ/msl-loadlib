@@ -3,6 +3,7 @@
 [![CI Status](https://github.com/MSLNZ/msl-loadlib/actions/workflows/ci.yml/badge.svg)](https://github.com/MSLNZ/msl-loadlib/actions/workflows/ci.yml)
 [![Docs Status](https://github.com/MSLNZ/msl-loadlib/actions/workflows/docs.yml/badge.svg)](https://github.com/MSLNZ/msl-loadlib/actions/workflows/docs.yml)
 [![PyPI - Version](https://img.shields.io/pypi/v/msl-loadlib?logo=pypi&logoColor=gold&label=PyPI&color=blue)](https://pypi.org/project/msl-loadlib/)
+[![PyPI - Python Versions](https://img.shields.io/pypi/pyversions/msl-loadlib.svg?logo=python&label=Python&logoColor=gold)](https://pypi.org/project/msl-loadlib/)
 
 This package loads a library in Python. It is basically just a thin wrapper around [ctypes] (for libraries that use the `__cdecl` or `__stdcall` calling convention), [Python.NET] (for libraries that use Microsoft .NET, `CLR`), [Py4J] (for Java `.jar` or `.class` files) and [comtypes] (for libraries that use the [Component Object Model] or [ActiveX]).
 
