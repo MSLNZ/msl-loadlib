@@ -77,7 +77,7 @@ jobs:
           enable-cache: false
           python-version: '3.14'
       - name: Spelling
-        uses: streetsidesoftware/cspell-action@v6
+        uses: streetsidesoftware/cspell-action@v8
         with:
           incremental_files_only: false
       - name: Linting
