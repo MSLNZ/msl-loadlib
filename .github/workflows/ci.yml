@@ -16,12 +16,12 @@ jobs:
       fail-fast: false
       matrix:
         python-version: ["3.8", "3.9", "3.10", "3.11", "3.12", "3.13", "3.14"]
-        os: [windows-latest, ubuntu-22.04, macos-latest, macos-13]
+        os: [windows-latest, ubuntu-22.04, macos-14, macos-13]
         architecture: [x64, x86]
         exclude:
           - os: ubuntu-22.04
             architecture: x86
-          - os: macos-latest
+          - os: macos-14
             architecture: x86
           - os: macos-13
             architecture: x86
