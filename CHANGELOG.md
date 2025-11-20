@@ -8,6 +8,11 @@
 
 - support for Python 3.14
 
+***Changed:***
+
+- no longer set `sys.coinit_flags` to Multi-Threaded Apartment if the attribute has not already been set
+
+
 ## 1.0.0 (2025-06-09)
 
 The 32-bit server is frozen with the following versions

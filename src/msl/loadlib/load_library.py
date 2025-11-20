@@ -39,14 +39,6 @@ if TYPE_CHECKING:
 _LIBTYPES: set[str] = {"cdll", "windll", "oledll", "net", "clr", "java", "com", "activex"}
 
 
-if IS_WINDOWS and not hasattr(sys, "coinit_flags"):
-    # https://pywinauto.readthedocs.io/en/latest/HowTo.html#com-threading-model
-    # Configure comtypes for Multi-Threaded Apartment model (MTA)
-    # This avoids the following exception from being raised:
-    #   [WinError -2147417850] Cannot change thread mode after it is set
-    sys.coinit_flags = 0  # type: ignore[attr-defined] # pyright: ignore[reportAttributeAccessIssue]
-
-
 class LoadLibrary:
     """Load a library."""
 
