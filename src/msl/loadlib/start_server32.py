@@ -18,7 +18,7 @@ from msl.loadlib.server32 import Server32
 if TYPE_CHECKING:
     from typing import Any
 
-    from msl.loadlib._types import Server32Subclass
+    from msl.loadlib.types import Server32Subclass
 
 
 def main() -> int:  # noqa: C901, PLR0911, PLR0912, PLR0915

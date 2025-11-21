@@ -1,3 +1,3 @@
 # types
 
-::: msl.loadlib._types
+::: msl.loadlib.types

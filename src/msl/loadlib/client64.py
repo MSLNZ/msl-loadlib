@@ -32,7 +32,7 @@ if TYPE_CHECKING:
     from collections.abc import Iterable
     from typing import IO, Any, TypeVar
 
-    from ._types import PathLike, Server32Subclass
+    from .types import PathLike, Server32Subclass
 
     # the Self type was added in Python 3.11 (PEP 673)
     # using TypeVar is equivalent for < 3.11

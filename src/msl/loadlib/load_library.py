@@ -23,8 +23,8 @@ from .utils import (
 if TYPE_CHECKING:
     from typing import Any
 
-    from ._types import LibType, PathLike
     from .activex import Application
+    from .types import LibType, PathLike
 
     # the Self type was added in Python 3.11 (PEP 673)
     # using TypeVar is equivalent for < 3.11

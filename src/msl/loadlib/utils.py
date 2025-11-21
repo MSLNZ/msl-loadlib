@@ -23,7 +23,7 @@ if TYPE_CHECKING:
     from types import ModuleType
     from typing import Any
 
-    from ._types import PathLike
+    from .types import PathLike
 
 logger = logging.getLogger(__package__)
 
