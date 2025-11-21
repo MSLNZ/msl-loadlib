@@ -2624,7 +2624,17 @@
 <h2 id="unreleased">unreleased<a class="headerlink" href="#unreleased" title="Permanent link">¤</a></h2>
 <p><strong><em>Added:</em></strong></p>
 <ul>
+<li><code>Application.unhandle_events</code> method</li>
+<li><code>Application.wait_for_events</code> method</li>
 <li>support for Python 3.14</li>
+</ul>
+<p><strong><em>Changed:</em></strong></p>
+<ul>
+<li><code>LoadLibrary</code> can now pass keyword arguments to <code>Application</code> when loading ActiveX libraries</li>
+<li>rename <code>Application</code> <em>style</em> keyword argument to <em>window_style</em></li>
+<li><code>MenuGroup</code> now behaves like a sequence of <code>MenuItem</code>'s</li>
+<li>type annotation for <em>sink</em> argument is now <code>Any</code> in <code>Application.handle_events</code> method</li>
+<li>no longer set <code>sys.coinit_flags</code> to Multi-Threaded Apartment if the attribute has not already been set</li>
 </ul>
 <h2 id="100-2025-06-09">1.0.0 (2025-06-09)<a class="headerlink" href="#100-2025-06-09" title="Permanent link">¤</a></h2>
 <p>The 32-bit server is frozen with the following versions</p>

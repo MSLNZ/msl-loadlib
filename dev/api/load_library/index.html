@@ -2549,7 +2549,8 @@ If <code>libtype</code> is</p>
 <li><code>net</code> or <code>clr</code> &#8594; all keyword arguments are ignored</li>
 <li><code>java</code> &#8594; <a class="autorefs autorefs-external" href="https://www.py4j.org/py4j_java_gateway.html#py4j.java_gateway.JavaGateway" target="_blank">JavaGateway</a></li>
 <li><code>com</code> &#8594; <a class="autorefs autorefs-external" href="https://comtypes.readthedocs.io/en/stable/client.html#CreateObject" target="_blank">comtypes.CreateObject</a></li>
-<li><code>activex</code> &#8594; <a class="autorefs autorefs-internal" title="            load" href="../activex/#msl.loadlib.activex.Application.load">Application.load</a></li>
+<li><code>activex</code> &#8594; <a class="autorefs autorefs-internal" title="            Application" href="../activex/#msl.loadlib.activex.Application">Application</a> and
+    <a class="autorefs autorefs-internal" title="            load" href="../activex/#msl.loadlib.activex.Application.load">Application.load</a></li>
 </ul>
               </div>
             </td>
@@ -2602,7 +2603,15 @@ If <code>libtype</code> is</p>
 
                   <details class="mkdocstrings-source">
                     <summary>Source code in <code>src/msl/loadlib/load_library.py</code></summary>
-                    <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 53</span>
+                    <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 45</span>
+<span class="normal"> 46</span>
+<span class="normal"> 47</span>
+<span class="normal"> 48</span>
+<span class="normal"> 49</span>
+<span class="normal"> 50</span>
+<span class="normal"> 51</span>
+<span class="normal"> 52</span>
+<span class="normal"> 53</span>
 <span class="normal"> 54</span>
 <span class="normal"> 55</span>
 <span class="normal"> 56</span>
@@ -2972,7 +2981,8 @@ If <code>libtype</code> is</p>
 <span class="sd">            * `net` or `clr` &amp;#8594; all keyword arguments are ignored</span>
 <span class="sd">            * `java` &amp;#8594; [JavaGateway][py4j.java_gateway.JavaGateway]{:target=&quot;_blank&quot;}</span>
 <span class="sd">            * `com` &amp;#8594; [comtypes.CreateObject][CreateObject]{:target=&quot;_blank&quot;}</span>
-<span class="sd">            * `activex` &amp;#8594; [Application.load][msl.loadlib.activex.Application.load]</span>
+<span class="sd">            * `activex` &amp;#8594; [Application][msl.loadlib.activex.Application] and</span>
+<span class="sd">                [Application.load][msl.loadlib.activex.Application.load]</span>
 
 <span class="sd">    Raises:</span>
 <span class="sd">        OSError: If the library cannot be loaded.</span>
@@ -3071,9 +3081,16 @@ If <code>libtype</code> is</p>
         <span class="bp">self</span><span class="o">.</span><span class="n">_lib</span> <span class="o">=</span> <span class="n">CreateObject</span><span class="p">(</span><span class="n">clsid</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
 
     <span class="k">elif</span> <span class="n">_libtype</span> <span class="o">==</span> <span class="s2">&quot;activex&quot;</span><span class="p">:</span>
-        <span class="kn">from</span><span class="w"> </span><span class="nn">.activex</span><span class="w"> </span><span class="kn">import</span> <span class="n">Application</span>  <span class="c1"># noqa: PLC0415</span>
+        <span class="kn">from</span><span class="w"> </span><span class="nn">.activex</span><span class="w"> </span><span class="kn">import</span> <span class="n">Application</span><span class="p">,</span> <span class="n">Colour</span><span class="p">,</span> <span class="n">WindowClassStyle</span><span class="p">,</span> <span class="n">WindowStyle</span>  <span class="c1"># noqa: PLC0415</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">_app</span> <span class="o">=</span> <span class="n">Application</span><span class="p">()</span>
+        <span class="c1"># the default value for each kwargs.pop() should equal the corresponding Application kwarg value</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_app</span> <span class="o">=</span> <span class="n">Application</span><span class="p">(</span>
+            <span class="n">background</span><span class="o">=</span><span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s2">&quot;background&quot;</span><span class="p">,</span> <span class="n">Colour</span><span class="o">.</span><span class="n">WHITE</span><span class="p">),</span>
+            <span class="n">class_style</span><span class="o">=</span><span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s2">&quot;class_style&quot;</span><span class="p">,</span> <span class="n">WindowClassStyle</span><span class="o">.</span><span class="n">NONE</span><span class="p">),</span>
+            <span class="n">icon</span><span class="o">=</span><span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s2">&quot;icon&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span>
+            <span class="n">title</span><span class="o">=</span><span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s2">&quot;title&quot;</span><span class="p">,</span> <span class="s2">&quot;ActiveX&quot;</span><span class="p">),</span>
+            <span class="n">window_style</span><span class="o">=</span><span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s2">&quot;window_style&quot;</span><span class="p">,</span> <span class="n">WindowStyle</span><span class="o">.</span><span class="n">OVERLAPPEDWINDOW</span><span class="p">),</span>
+        <span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_lib</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_app</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_path</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
 
     <span class="k">elif</span> <span class="n">_libtype</span> <span class="o">==</span> <span class="s2">&quot;java&quot;</span><span class="p">:</span>

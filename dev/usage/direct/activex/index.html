@@ -2191,15 +2191,15 @@
 
 <span class="k">def</span><span class="w"> </span><span class="nf">letter_clicked</span><span class="p">(</span><span class="n">item</span><span class="p">:</span> <span class="n">MenuItem</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;A callback function. You could interact with the `ocx` object.&quot;&quot;&quot;</span>
-    <span class="nb">print</span><span class="p">(</span><span class="n">item</span><span class="p">,</span> <span class="n">item</span><span class="o">.</span><span class="n">data</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">item</span><span class="o">.</span><span class="n">text</span> <span class="o">==</span> <span class="s2">&quot;C&quot;</span><span class="p">:</span>
         <span class="n">item</span><span class="o">.</span><span class="n">checked</span> <span class="o">=</span> <span class="ow">not</span> <span class="n">item</span><span class="o">.</span><span class="n">checked</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">item</span><span class="p">)</span>
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">group_clicked</span><span class="p">(</span><span class="n">item</span><span class="p">:</span> <span class="n">MenuItem</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;A callback function. You could interact with the `ocx` object.&quot;&quot;&quot;</span>
-    <span class="nb">print</span><span class="p">(</span><span class="n">item</span><span class="p">)</span>
     <span class="n">group</span><span class="o">.</span><span class="n">checked</span> <span class="o">=</span> <span class="n">item</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">item</span><span class="p">)</span>
 
 
 <span class="c1"># Create an application window</span>
