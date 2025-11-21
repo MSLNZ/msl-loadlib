@@ -8,12 +8,13 @@ from msl.loadlib import Client64, ConnectionTimeoutError
 
 class Client(Client64):
     def __init__(self, module32: str) -> None:
-        super().__init__(module32, append_sys_path=Path(__file__).parent / "bad_servers", timeout=5)
+        super().__init__(module32, append_sys_path=Path(__file__).parent / "bad_servers", timeout=2)
 
 
 def check(module_name: str, match: str) -> None:
     # This test module is a bit buggy.
     # Sometimes we get a ConnectionRefusedError that we want to ignore.
+    # Sometimes we get a different ConnectionTimeoutError reason when using Windows on GitHub Actions
     attempts: int = 1
 
     max_attempts = 3
@@ -23,6 +24,10 @@ def check(module_name: str, match: str) -> None:
                 _ = Client(module_name)
         except ConnectionRefusedError:  # noqa: PERF203
             if attempts == max_attempts:
+                raise
+            attempts += 1
+        except AssertionError as e:
+            if attempts == max_attempts or not str(e).startswith("Regex pattern did not match"):
                 raise
             attempts += 1
         else:
