@@ -97,7 +97,8 @@ class LoadLibrary:
                 * `net` or `clr` &#8594; all keyword arguments are ignored
                 * `java` &#8594; [JavaGateway][py4j.java_gateway.JavaGateway]{:target="_blank"}
                 * `com` &#8594; [comtypes.CreateObject][CreateObject]{:target="_blank"}
-                * `activex` &#8594; [Application.load][msl.loadlib.activex.Application.load]
+                * `activex` &#8594; [Application][msl.loadlib.activex.Application] and
+                    [Application.load][msl.loadlib.activex.Application.load]
 
         Raises:
             OSError: If the library cannot be loaded.
@@ -196,9 +197,16 @@ class LoadLibrary:
             self._lib = CreateObject(clsid, **kwargs)
 
         elif _libtype == "activex":
-            from .activex import Application  # noqa: PLC0415
+            from .activex import Application, Colour, WindowClassStyle, WindowStyle  # noqa: PLC0415
 
-            self._app = Application()
+            # the default value for each kwargs.pop() should equal the corresponding Application kwarg value
+            self._app = Application(
+                background=kwargs.pop("background", Colour.WHITE),
+                class_style=kwargs.pop("class_style", WindowClassStyle.NONE),
+                icon=kwargs.pop("icon", None),
+                title=kwargs.pop("title", "ActiveX"),
+                window_style=kwargs.pop("window_style", WindowStyle.OVERLAPPEDWINDOW),
+            )
             self._lib = self._app.load(self._path, **kwargs)
 
         elif _libtype == "java":

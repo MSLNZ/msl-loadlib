@@ -12,15 +12,15 @@ from msl.loadlib.activex import Application, Icon, MenuGroup, MenuItem
 
 def letter_clicked(item: MenuItem) -> None:
     """A callback function. You could interact with the `ocx` object."""
-    print(item, item.data)
     if item.text == "C":
         item.checked = not item.checked
+    print(item)
 
 
 def group_clicked(item: MenuItem) -> None:
     """A callback function. You could interact with the `ocx` object."""
-    print(item)
     group.checked = item
+    print(item)
 
 
 # Create an application window

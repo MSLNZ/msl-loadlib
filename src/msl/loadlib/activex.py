@@ -28,6 +28,7 @@ import ctypes
 import os
 from ctypes import wintypes as wt
 from enum import IntEnum, IntFlag
+from itertools import count
 from typing import TYPE_CHECKING
 
 try:
@@ -633,7 +634,7 @@ class Icon:
 
     def __repr__(self) -> str:
         """Returns the string representation."""
-        return f"<Icon file={self._file!r} index={self._index}>"
+        return f"<Icon file={self._file!r}, index={self._index}>"
 
     def __del__(self) -> None:
         """Destroys the icon and frees any memory the icon occupied."""
@@ -663,27 +664,35 @@ class MenuItem:
             or [Menu.append][msl.loadlib.activex.Menu.append]
             to create a new menu item.
         """
+        self._id: int = next(_id)
+        self._checked: bool = False
+
         self._hmenu: int = kwargs["hmenu"]
-        self._id: int = kwargs["id"]
         self._text: str = kwargs["text"]
         self._callback: Callable[[MenuItem], None] | None = kwargs["callback"]
         self._flags: int = kwargs["flags"]
-        self._checked: bool = False
-        self._data: Any = kwargs["data"]
+
+        self.data: Any = kwargs["data"]
+        """[Any][typing.Any] &mdash; User-defined data associated with the menu item."""
+
+        _maybe_append_item_to_menu(self)
 
     def __eq__(self, other: object) -> bool:
         """Checks for equal id's."""
         if isinstance(other, MenuItem):
-            return self.id == other.id
+            return self._id == other._id
         return NotImplemented
 
     def __hash__(self) -> int:
-        """Return the hash value for the ID."""
-        return hash(self.id)
+        """Return the hash value for the ID.
+
+        !!! note "Added in version 1.1"
+        """
+        return hash(self._id)
 
     def __repr__(self) -> str:
         """Returns the string representation."""
-        return f"<{self.__class__.__name__} id={self._id} text={self._text!r}>"
+        return f"<MenuItem id={self._id}, text={self._text!r}, checked={self._checked}, data={self.data!r}>"
 
     @property
     def callback(self) -> Callable[[MenuItem], None] | None:
@@ -702,26 +711,7 @@ class MenuItem:
     @checked.setter
     def checked(self, value: bool) -> None:
         """Set the checked state of the menu item."""
-        if self._hmenu == -1:
-            msg = "A MenuItem must first be added to a Menu before it can be checked"
-            raise ValueError(msg)
-
-        # MF_CHECKED=8, MF_UNCHECKED=0
-        state = 8 if value else 0
-        previous = user32.CheckMenuItem(self._hmenu, self._id, state)
-        if previous == -1:
-            raise ctypes.WinError()
-        self._checked = bool(value)
-
-    @property
-    def data(self) -> Any:
-        """[Any][typing.Any] &mdash; User-defined data associated with the menu item."""
-        return self._data
-
-    @data.setter
-    def data(self, value: Any) -> None:
-        """Set the user data."""
-        if self._hmenu == -1:
+        if self._hmenu < 0:
             msg = "A MenuItem must first be added to a Menu before it can be checked"
             raise ValueError(msg)
 
@@ -767,14 +757,37 @@ class MenuGroup:
         """
         self._name: str = name
         self._items: list[MenuItem] = []
+        self._hmenu: int = -1
+
+    def __getitem__(self, index: int) -> MenuItem:
+        """Get an item from the group (ignoring SEPARATOR's).
+
+        !!! note "Added in version 1.1"
+        """
+        # iterate through all items to ignore items that are a SEPARATOR
+        for i, item in enumerate(self):
+            if i == index:
+                return item
+
+        msg = "MenuGroup index out of range"
+        raise IndexError(msg)
+
+    def __iter__(self) -> Iterator[MenuItem]:
+        """Returns an iterator of the [MenuItem][msl.loadlib.activex.MenuItem]s (ignoring SEPARATOR's)."""
+        return (item for item in self._items if item.flags != MenuFlag.SEPARATOR)
+
+    def __len__(self) -> int:
+        """Returns the number of items in the group (ignoring SEPARATOR's).
+
+        !!! note "Added in version 1.1"
+        """
+        return sum(1 for _ in self)
 
     def __repr__(self) -> str:
         """Returns the string representation."""
-        return f"<{self.__class__.__name__} name={self._name!r} size={len(self._items)}>"
-
-    def __iter__(self) -> Iterator[MenuItem]:
-        """Returns an iterator of the [MenuItem][msl.loadlib.activex.MenuItem]s."""
-        return iter(self._items)
+        n = len(self)
+        s = "" if n == 1 else "s"
+        return f"<{self.__class__.__name__} name={self._name!r} ({n} item{s})>"
 
     def append(
         self,
@@ -798,13 +811,13 @@ class MenuGroup:
         Returns:
             The menu item that was appended to the group.
         """
-        item = MenuItem(hmenu=-1, text=text, callback=callback, id=-1, flags=flags, data=data)
+        item = MenuItem(hmenu=self._hmenu, text=text, callback=callback, flags=flags, data=data)
         self._items.append(item)
         return item
 
     def append_separator(self) -> None:
         """Append a horizontal dividing line to the group."""
-        self._items.append(MenuItem(hmenu=-1, text=None, callback=None, id=-1, flags=MenuFlag.SEPARATOR, data=None))
+        self._items.append(MenuItem(hmenu=self._hmenu, text=None, callback=None, flags=MenuFlag.SEPARATOR, data=None))
 
     @property
     def checked(self) -> MenuItem | None:
@@ -824,6 +837,14 @@ class MenuGroup:
             i.checked = i == item
 
     @property
+    def hmenu(self) -> int:
+        """[int][] &mdash; The handle to the [Menu][msl.loadlib.activex.Menu] that the menu group belongs to.
+
+        !!! note "Added in version 1.1"
+        """
+        return self._hmenu
+
+    @property
     def name(self) -> str:
         """[str][] &mdash; The name of the menu group."""
         return self._name
@@ -840,13 +861,7 @@ class Menu:
             [Application.menu][msl.loadlib.activex.Application.menu]
             property to access the menu instance.
         """
-        self._id: int = 0
-        self._items: dict[int, MenuItem] = {}
         self._hmenu: int = user32.CreateMenu()
-
-    def __getitem__(self, item: int) -> MenuItem:
-        """Get a [MenuItem][msl.loadlib.activex.MenuItem]."""
-        return self._items[item]
 
     def append(
         self,
@@ -872,11 +887,7 @@ class Menu:
         Returns:
             The menu item that was appended.
         """
-        self._id += 1
-        user32.AppendMenuW(hmenu, flags, self._id, text)
-        item = MenuItem(hmenu=hmenu, text=text, callback=callback, id=self._id, flags=flags, data=data)
-        self._items[self._id] = item
-        return item
+        return MenuItem(hmenu=hmenu, text=text, callback=callback, flags=flags, data=data)
 
     def append_group(self, hmenu: int, menu_group: MenuGroup) -> None:
         """Append a group of menu items to a popup menu.
@@ -885,12 +896,13 @@ class Menu:
             hmenu: The handle of a popup menu to append the group to.
             menu_group: A group of menu items.
         """
-        for item in menu_group:
-            self._id += 1
-            item._hmenu = hmenu  # noqa: SLF001  # pyright: ignore[reportPrivateUsage]
-            item._id = self._id  # noqa: SLF001  # pyright: ignore[reportPrivateUsage]
-            user32.AppendMenuW(hmenu, item.flags, self._id, item.text)
-            self._items[self._id] = item
+        # all future item's appended to the group will have the same hmenu value
+        menu_group._hmenu = hmenu  # pyright: ignore[reportPrivateUsage]  # noqa: SLF001
+
+        # use menu_group._items to include the group's separator's
+        for item in menu_group._items:  # pyright: ignore[reportPrivateUsage]  # noqa: SLF001
+            item._hmenu = hmenu  # pyright: ignore[reportPrivateUsage]  # noqa: SLF001
+            _maybe_append_item_to_menu(item)
 
     def append_separator(self, hmenu: int) -> None:
         """Append a horizontal dividing line to a popup menu.
@@ -898,8 +910,7 @@ class Menu:
         Args:
             hmenu: The handle to a popup menu.
         """
-        self._id += 1
-        user32.AppendMenuW(hmenu, MenuFlag.SEPARATOR, self._id, None)
+        user32.AppendMenuW(hmenu, MenuFlag.SEPARATOR, next(_id), None)
 
     def create(self, text: str) -> int:
         """Create a new popup menu and append it to the main menu.
@@ -921,17 +932,35 @@ class Menu:
         return self._hmenu
 
 
+_id = count()
+
+# Application._window_procedure() receives the MenuItem.id as the w_param value for a WM_COMMAND message
+# Use a MenuItem.id -> MenuItem mapping
+_items: dict[int, MenuItem] = {}
+
+
+def _maybe_append_item_to_menu(item: MenuItem) -> None:
+    """Call user32.AppendMenuW() if `item` has a valid `hmenu` and is not a `SEPARATOR`."""
+    if item.hmenu < 0 or item.flags == MenuFlag.SEPARATOR or item.id in _items:
+        return
+
+    _items[item.id] = item
+    if not user32.AppendMenuW(item.hmenu, item.flags, item.id, item.text):
+        raise ctypes.WinError()
+
+
 class Application:
     """Create the main application window to display ActiveX controls."""
 
+    # if the default kwarg values change, update LoadLibrary section for _libtype == "activex"
     def __init__(
         self,
         *,
         background: Colour = Colour.WHITE,
         class_style: WindowClassStyle = WindowClassStyle.NONE,
         icon: Icon | None = None,
-        style: WindowStyle = WindowStyle.OVERLAPPEDWINDOW,
         title: str = "ActiveX",
+        window_style: WindowStyle = WindowStyle.OVERLAPPEDWINDOW,
     ) -> None:
         """Create the main application window to display ActiveX controls.
 
@@ -940,14 +969,14 @@ class Application:
             class_style: The class style(s). Can be any combination (bitwise OR)
                 of [WindowClassStyle][msl.loadlib.activex.WindowClassStyle] values.
             icon: The application icon.
-            style: The window style(s). Can be any combination (bitwise OR)
-                of [WindowStyle][msl.loadlib.activex.WindowStyle] values.
             title: The text to display in the titlebar (if one is visible).
+            window_style: The window style(s). Can be any combination (bitwise OR)
+                of [WindowStyle][msl.loadlib.activex.WindowStyle] values.
         """
         super().__init__()
         self._atom: wt.ATOM | None = None
         self._icon: Icon | None = icon  # prevent an icon from being garbage collected
-        self._event_connections: list[Any] = []  # actually list[_AdviseConnection]
+        self._events: list[Any] = []  # actually list[_AdviseConnection]
         self._msg_handlers: list[Callable[[int, int, int, int], None]] = []
 
         if not windll_initialised:
@@ -977,7 +1006,7 @@ class Application:
         self._hwnd: int = _create_window(
             class_name=self._window.lpszClassName,
             window_name=title,
-            style=style,
+            style=window_style,
             instance=self._window.hInstance,
         )
 
@@ -992,9 +1021,9 @@ class Application:
 
     def __del__(self) -> None:
         """Destroy all event handlers and unregister the window."""
-        for ec in self._event_connections:
-            ec.disconnect()
-        self._event_connections.clear()
+        for event in self._events:
+            event.disconnect()
+        self._events.clear()
 
         if self._atom is not None:
             user32.UnregisterClassW(self._window.lpszClassName, self._window.hInstance)
@@ -1007,7 +1036,7 @@ class Application:
             handler(hwnd, message, w_param, l_param)
 
         if message == WM_COMMAND:
-            item = self._menu[w_param]
+            item = _items[w_param]
             if item.callback is not None:
                 item.callback(item)
         elif message == WM_DESTROY:
@@ -1035,8 +1064,8 @@ class Application:
         """Close the application."""
         user32.PostMessageW(self._hwnd, WM_DESTROY, 0, 0)
 
-    def handle_events(self, source: Any, sink: Callable[..., Any] | None = None, *, interface: Any = None) -> Any:
-        """Handle events from an ActiveX object (see [GetEvents][]{:target="_blank"}).
+    def handle_events(self, source: Any, sink: Any = None, *, interface: Any = None) -> Any:
+        """Handle ActiveX events (see [GetEvents][]{:target="_blank"}).
 
         Args:
             source: An ActiveX object that emits events.
@@ -1051,7 +1080,7 @@ class Application:
         """
         assert client is not None  # noqa: S101
         cxn = client.GetEvents(source, sink or self, interface=interface)  # pyright: ignore[reportUnknownMemberType,reportUnknownVariableType]
-        self._event_connections.append(cxn)
+        self._events.append(cxn)
         return cxn  # pyright: ignore[reportUnknownVariableType]
 
     @property
@@ -1120,8 +1149,8 @@ class Application:
             instance=kernel32.GetModuleHandleW(None),
         )
 
-        unknown = ctypes.POINTER(comtypes.IUnknown)()  # pyright: ignore[reportUnknownMemberType,reportUnknownArgumentType,reportDeprecated]
-        ret = atl.AtlAxGetControl(hwnd, ctypes.byref(unknown))
+        unknown = ctypes.POINTER(comtypes.IUnknown)()  # pyright: ignore[reportUnknownMemberType, reportUnknownArgumentType, reportUnknownVariableType]
+        ret = atl.AtlAxGetControl(hwnd, ctypes.byref(unknown))  # pyright: ignore[reportUnknownArgumentType]
         if ret != 0:
             msg = f"AtlAxGetControl {ctypes.WinError()}"
             raise OSError(msg)
@@ -1222,3 +1251,36 @@ class Application:
     def thread_id(self) -> int:
         """[int][] &mdash; The identifier of the thread that created the main application window."""
         return self._thread_id
+
+    def unhandle_events(self, *advise_connection: Any) -> None:
+        """Stop handling ActiveX events.
+
+        !!! note "Added in version 1.1"
+
+        Args:
+            advise_connection: The event connection(s) to stop listening to. The object is one that
+                is returned by [handle_events][msl.loadlib.activex.Application.handle_events]. If no
+                arguments are specified, stops handling all ActiveX events. It is also necessary to
+                delete ([del][]) the connection variable(s) in the calling program (and maybe invoke
+                the Python garbage collector) if events are still firing.
+        """
+        if not advise_connection:
+            for event in self._events:
+                event.disconnect()
+            self._events.clear()
+            return
+
+        for ac in advise_connection:
+            ac.disconnect()
+            self._events.remove(ac)
+
+    def wait_for_events(self, timeout: float) -> None:
+        """Wait for ActiveX events to occur (see [PumpEvents][]{:target="_blank"}).
+
+        !!! note "Added in version 1.1"
+
+        Args:
+            timeout: The number of seconds to wait for events to occur.
+        """
+        assert client is not None  # noqa: S101
+        client.PumpEvents(timeout)  # pyright: ignore[reportUnknownMemberType]

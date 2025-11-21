@@ -7,24 +7,30 @@ from msl.loadlib import activex
 
 
 def test_menu_item() -> None:
-    mi = activex.MenuItem(hmenu=123, id=7, text="hello world", callback=None, flags=1, data=[-1, 0, 1])
-    assert mi.hmenu == 123
-    assert mi.id == 7
+    mi = activex.MenuItem(hmenu=-1, text="hello world", callback=None, flags=1, data=[-1, 0, 1])
+    assert mi.id >= 0
     assert mi.checked is False
+
+    assert mi.hmenu == -1
     assert mi.text == "hello world"
     assert mi.callback is None
     assert mi.flags == 1
     assert mi == mi  # noqa: PLR0124
     assert mi is mi  # noqa: PLR0124
-    assert str(mi) == "<MenuItem id=7 text='hello world'>"
     assert mi.data == [-1, 0, 1]
+    mi.data = 8
+    assert mi.data == 8
+    assert str(mi) == "<MenuItem id=0, text='hello world', checked=False, data=8>"
+    assert hash(mi) == hash(mi.id)
 
-    mi2 = activex.MenuItem(hmenu=123, id=8, text="hello world", callback=None, flags=1, data=[-1, 0, 1])
+    mi2 = activex.MenuItem(hmenu=-1, text="hello world", callback=None, flags=1, data=8)
+    assert mi2.id == mi.id + 1
     assert mi != mi2  # IDs do not match
 
-    mi3 = activex.MenuItem(hmenu=-1, id=1, text="a", callback=None, flags=0, data=None)
-
-    with pytest.raises(ValueError, match="A MenuItem must first be added to a Menu"):
+    mi3 = activex.MenuItem(hmenu=-1, text="a", callback=None, flags=0, data=None)
+    assert mi3.id == mi.id + 2
+    assert mi != mi3  # IDs do not match
+    with pytest.raises(ValueError, match=r"A MenuItem must first be added to a Menu"):
         mi3.checked = True
 
 
@@ -32,25 +38,40 @@ def test_menu_group() -> None:
     mg = activex.MenuGroup()
     assert mg.name == ""
     assert mg.checked is None
-    assert str(mg) == "<MenuGroup name='' size=0>"
+    assert str(mg) == "<MenuGroup name='' (0 items)>"
 
     mg = activex.MenuGroup("click")
     a = mg.append("a")
     assert isinstance(a, activex.MenuItem)
-    _ = mg.append("b", data=8, flags=activex.MenuFlag.POPUP)
+    assert str(mg) == "<MenuGroup name='click' (1 item)>"
+    b = mg.append("b", data=8, flags=activex.MenuFlag.POPUP)
     mg.append_separator()
-    _ = mg.append("c", callback=None)
+    mg.append_separator()
+    c = mg.append("c", callback=None)
     assert mg.name == "click"
     assert mg.checked is None
-    assert str(mg) == "<MenuGroup name='click' size=4>"
+
+    # separator's are not considered as items
+    assert str(mg) == "<MenuGroup name='click' (3 items)>"
+    assert len(mg) == 3
 
     for item in mg:
         assert isinstance(item, activex.MenuItem)
         assert item.checked is False
+        assert item.flags != activex.MenuFlag.SEPARATOR
 
-    for item in [a, None]:  # type: ignore[assignment]
-        with pytest.raises(ValueError, match="A MenuGroup must first be added to a Menu"):
-            mg.checked = item
+    assert mg[0] == a
+    assert mg[1] == b
+    assert mg[2] == c
+
+    with pytest.raises(ValueError, match=r"A MenuGroup must first be added to a Menu"):
+        mg.checked = None
+
+    with pytest.raises(ValueError, match=r"A MenuGroup must first be added to a Menu"):
+        mg.checked = a
+
+    with pytest.raises(IndexError):
+        _ = mg[3]
 
 
 @skipif_not_windows
@@ -63,8 +84,6 @@ def test_menu() -> None:  # noqa: PLR0915
 
     new = m.append(h_file, "New", data=-1)
     assert isinstance(new, activex.MenuItem)
-    assert m[new.id] is new
-    assert new.id == 1
     assert new.text == "New"
     assert new.flags == activex.MenuFlag.STRING
     assert new.callback is None
@@ -74,6 +93,7 @@ def test_menu() -> None:  # noqa: PLR0915
     m.append_separator(h_file)
 
     h_settings = m.create("Settings")
+    assert h_settings > 0
 
     group = activex.MenuGroup("Alphabet")
     a = group.append("A", data="a")
@@ -82,27 +102,23 @@ def test_menu() -> None:  # noqa: PLR0915
     group.append_separator()
     c = group.append("C")
 
+    with pytest.raises(ValueError, match=r"A MenuItem must first be added to a Menu"):
+        c.checked = True
+    with pytest.raises(ValueError, match=r"A MenuGroup must first be added to a Menu"):
+        group.checked = c
+
     m.append_group(h_settings, group)
 
-    assert m[a.id] is a
-    assert a.id == 3  # adding a separator (before creating 'Settings') increments the ID counter
     assert a.text == "A"
     assert a.flags == activex.MenuFlag.STRING
     assert a.callback is None
     assert a.data == "a"
     assert a.checked is False
 
-    assert m[b.id] is b
-    assert b.id == 4
     assert b.text == "B"
     assert b.data is None
 
-    assert m[c.id] is c
-    assert c.id == 6  # adding a separator (in the group) increments the ID counter
     assert c.text == "C"
-
-    with pytest.raises(KeyError):
-        _ = m[c.id + 1]
 
     assert group.checked is None
     assert a.checked is False
@@ -134,7 +150,6 @@ def test_menu() -> None:  # noqa: PLR0915
     assert c.checked is False
 
 
-@pytest.mark.filterwarnings(pytest.PytestUnhandledThreadExceptionWarning)  # type: ignore[arg-type] # pyright: ignore[reportArgumentType]
 @skipif_not_windows
 def test_application() -> None:
     app = activex.Application()
@@ -144,6 +159,10 @@ def test_application() -> None:
     app.set_window_position(10, 0, 100, 250)
     app.set_window_size(100, 100)
     app.set_window_title("new title")
+    app.unhandle_events()
+
+    with pytest.raises(AttributeError, match=r"disconnect"):
+        app.unhandle_events(None)
 
     # ok to call close() multiple times
     app.close()
@@ -161,7 +180,7 @@ def test_application_raises() -> None:
 @skipif_not_windows
 def test_icon() -> None:
     icon = activex.Icon("does not exist")
-    assert str(icon) == "<Icon file='does not exist' index=0>"
+    assert str(icon) == "<Icon file='does not exist', index=0>"
     assert icon.hicon is None
 
     # ok to call destroy() multiple times
@@ -177,3 +196,32 @@ def test_icon() -> None:
     assert icon.hicon is not None
     assert icon.hicon > 0
     icon.destroy()
+
+
+def test_menu_group_added_early() -> None:
+    mg = activex.MenuGroup()
+    first = mg.append("first", data=1)
+    assert mg.hmenu == -1
+    assert first.hmenu == -1
+
+    menu = activex.Menu()
+    handle = menu.create("Text")
+    assert handle > 0
+
+    with pytest.raises(ValueError, match=r"A MenuItem must first be added to a Menu"):
+        first.checked = True
+    with pytest.raises(ValueError, match=r"A MenuGroup must first be added to a Menu"):
+        mg.checked = first
+
+    menu.append_group(handle, mg)
+    assert mg.hmenu == handle
+
+    assert mg.checked is None
+
+    second = mg.append("second", data=2)
+    assert second.hmenu == handle
+
+    mg.checked = first
+    assert mg.checked is first
+    assert first.checked
+    assert not second.checked
