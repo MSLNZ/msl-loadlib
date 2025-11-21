@@ -198,6 +198,7 @@ def test_icon() -> None:
     icon.destroy()
 
 
+@skipif_not_windows
 def test_menu_group_added_early() -> None:
     mg = activex.MenuGroup()
     first = mg.append("first", data=1)
