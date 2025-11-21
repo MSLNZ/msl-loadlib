@@ -6,12 +6,17 @@
 
 ***Added:***
 
+- `Application.unhandle_events` method
+- `Application.wait_for_events` method
 - support for Python 3.14
 
 ***Changed:***
 
+- `LoadLibrary` can now pass keyword arguments to `Application` when loading ActiveX libraries
+- rename `Application` *style* keyword argument to *window_style*
+- `MenuGroup` now behaves like a sequence of `MenuItem`'s
+- type annotation for *sink* argument is now `Any` in `Application.handle_events` method
 - no longer set `sys.coinit_flags` to Multi-Threaded Apartment if the attribute has not already been set
-
 
 ## 1.0.0 (2025-06-09)
 
