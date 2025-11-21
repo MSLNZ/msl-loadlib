@@ -500,7 +500,6 @@ def test_comtypes() -> None:
     assert found_it, f"did not find {progid!r} in utils.get_com_info() dict"
 
 
-@pytest.mark.filterwarnings(pytest.PytestUnhandledThreadExceptionWarning)  # type: ignore[arg-type] # pyright: ignore[reportArgumentType]
 @skipif_no_comtypes
 def test_activex_raises() -> None:
     with pytest.raises(OSError, match=r"Cannot find an ActiveX library with ID 'ABC'"):
