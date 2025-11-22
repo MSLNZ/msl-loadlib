@@ -941,10 +941,12 @@ _items: dict[int, MenuItem] = {}
 
 def _maybe_append_item_to_menu(item: MenuItem) -> None:
     """Call user32.AppendMenuW() if `item` has a valid `hmenu` and is not a `SEPARATOR`."""
-    if item.hmenu < 0 or item.flags == MenuFlag.SEPARATOR or item.id in _items:
+    if item.hmenu < 0 or item.id in _items:
         return
 
-    _items[item.id] = item
+    if item.flags != MenuFlag.SEPARATOR:
+        _items[item.id] = item
+
     if not user32.AppendMenuW(item.hmenu, item.flags, item.id, item.text):
         raise ctypes.WinError()
 
