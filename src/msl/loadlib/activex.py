@@ -696,11 +696,11 @@ class MenuItem:
 
     @property
     def callback(self) -> Callable[[MenuItem], None] | None:
-        """[Callable][] | `None` &mdash; The function to call when the menu item is clicked.
+        """[Callable][][[[MenuItem][msl.loadlib.activex.MenuItem]], `None`] | `None` &mdash; The function to call when the menu item is clicked.
 
         The function receives an instance of the [MenuItem][msl.loadlib.activex.MenuItem]
         that was selected as an argument and the return type is `None`.
-        """
+        """  # noqa: E501
         return self._callback
 
     @property
