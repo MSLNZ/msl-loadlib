@@ -1,10 +1,26 @@
 # Install
 
-`msl-loadlib` is available for installation via the [Python Package Index]{:target="_blank"}
+`msl-loadlib` is available for installation via the [Python Package Index]{:target="_blank"}. It can be installed using a variety of package managers
 
-```console
-pip install msl-loadlib
-```
+=== "pip"
+    ```console
+    pip install msl-loadlib
+    ```
+
+=== "uv"
+    ```console
+    uv add msl-loadlib
+    ```
+
+=== "poetry"
+    ```console
+    poetry add msl-loadlib
+    ```
+
+=== "pdm"
+    ```console
+    pdm add msl-loadlib
+    ```
 
 ## Optional dependencies
 
@@ -14,27 +30,91 @@ pip install msl-loadlib
 
 You can install `msl-loadlib` and [Python.NET]{:target="_blank"} using,
 
-```console
-pip install msl-loadlib[clr]
-```
+=== "pip"
+    ```console
+    pip install msl-loadlib[clr]
+    ```
+
+=== "uv"
+    ```console
+    uv add msl-loadlib[clr]
+    ```
+
+=== "poetry"
+    ```console
+    poetry add msl-loadlib[clr]
+    ```
+
+=== "pdm"
+    ```console
+    pdm add msl-loadlib[clr]
+    ```
 
 `msl-loadlib` and [Py4J]{:target="_blank"},
 
-```console
-pip install msl-loadlib[java]
-```
+=== "pip"
+    ```console
+    pip install msl-loadlib[java]
+    ```
+
+=== "uv"
+    ```console
+    uv add msl-loadlib[java]
+    ```
+
+=== "poetry"
+    ```console
+    poetry add msl-loadlib[java]
+    ```
+
+=== "pdm"
+    ```console
+    pdm add msl-loadlib[java]
+    ```
 
 `msl-loadlib` and [comtypes]{:target="_blank"},
 
-```console
-pip install msl-loadlib[com]
-```
+=== "pip"
+    ```console
+    pip install msl-loadlib[com]
+    ```
+
+=== "uv"
+    ```console
+    uv add msl-loadlib[com]
+    ```
+
+=== "poetry"
+    ```console
+    poetry add msl-loadlib[com]
+    ```
+
+=== "pdm"
+    ```console
+    pdm add msl-loadlib[com]
+    ```
 
 or `msl-loadlib` and all optional dependencies
 
-```console
-pip install msl-loadlib[all]
-```
+=== "pip"
+    ```console
+    pip install msl-loadlib[all]
+    ```
+
+=== "uv"
+    ```console
+    uv add msl-loadlib[all]
+    ```
+
+=== "poetry"
+    ```console
+    poetry add msl-loadlib[all]
+    ```
+
+=== "pdm"
+    ```console
+    pdm add msl-loadlib[all]
+    ```
 
 ## Compatibility
 * The 32-bit server is built into a [frozen]{:target="_blank"} executable for Windows and Linux (glibc).
