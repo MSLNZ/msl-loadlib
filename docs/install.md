@@ -46,7 +46,7 @@ pip install msl-loadlib[all]
 
 64-bit Windows already comes with [WoW64]{:target="_blank"} to run 32-bit software and therefore no prerequisites are required to load 32-bit libraries. However, the library might have its own dependencies, such as a particular Visual C++ Redistributable, that may need to be installed.
 
-If you need to load a .NET library, you must install [Python.NET]{:target="_blank"}
+If you need to load a .NET library, you must install [Python.NET]{:target="_blank"} (see also [Configure a .NET runtime][config-runtime]).
 
 ```console
 pip install pythonnet
@@ -97,7 +97,7 @@ The following ensures that the [ss]{:target="_blank"} command is available
 sudo apt install iproute2
 ```
 
-If you need to load a .NET library then you must install [Mono]{:target="_blank"} and [Python.NET]{:target="_blank"}
+If you need to load a .NET library, you must install either the [Mono]{:target="_blank"} or [.NET Core]{:target="_blank"} runtime and [Python.NET]{:target="_blank"} (see also [Configure a .NET runtime][config-runtime]).
 
 ```console
 pip3 install pythonnet
@@ -136,7 +136,7 @@ To load a C/C++ or FORTRAN library install gcc (which includes gfortran)
 brew install gcc
 ```
 
-If you need to load a .NET library, you must install [Mono]{:target="_blank"},
+If you need to load a .NET library, you must install either the [Mono]{:target="_blank"} or [.NET Core]{:target="_blank"} runtime and [Python.NET]{:target="_blank"} (see also [Configure a .NET runtime][config-runtime]).
 
 ```console
 brew install mono
@@ -173,6 +173,7 @@ brew cask install java
 [Java Runtime Environment]: https://www.java.com/en/download/manual.jsp
 [ldd]: https://man7.org/linux/man-pages/man1/ldd.1.html
 [Mono]: https://www.mono-project.com/download/stable/
+[.NET Core]: https://dotnet.microsoft.com/en-us/download/dotnet/latest/runtime
 [PATH]: https://en.wikipedia.org/wiki/PATH_(variable)
 [Py4J]: https://www.py4j.org/
 [Python.NET]: https://pythonnet.github.io/

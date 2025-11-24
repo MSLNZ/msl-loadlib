@@ -156,6 +156,7 @@
         "mypackage",
         "namedtuple",
         "ndarray",
+        "netfx",
         "NOACTIVATE",
         "NOCLOSE",
         "noconfirm",

@@ -97,7 +97,7 @@ or, a one-dimensional [Array]{:target="_blank"} of the specified [Type]{:target=
 
 ## Configure a .NET runtime {: #config-runtime }
 
-To configure `pythonnet` to use the .NET Core runtime, you must either run
+By default, `pythonnet` uses the .NET Framework runtime on Windows and the Mono runtime on Linux/macOS. To configure `pythonnet` to use the non-default runtime, such as the .NET Core runtime, you must either run
 
 ```python
 from pythonnet import load
@@ -111,7 +111,7 @@ import os
 os.environ["PYTHONNET_RUNTIME"] = "coreclr"
 ```
 
-before [LoadLibrary][msl.loadlib.load_library.LoadLibrary] is called. To use the Mono runtime, replace `"coreclr"` with `"mono"`.
+before [LoadLibrary][msl.loadlib.load_library.LoadLibrary] is called. To explicitly use the Mono runtime, replace `"coreclr"` with `"mono"` or to use the .NET Framework runtime on Windows use `"netfx"`.
 
 ## .NET Source Code {: #dotnet-lib }
 
