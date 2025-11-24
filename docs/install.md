@@ -62,9 +62,9 @@ a [Java Runtime Environment]{:target="_blank"}, and ensure that the `java` execu
 
 ```console
 > java -version
-java version "23.0.2" 2025-01-21
-Java(TM) SE Runtime Environment (build 23.0.2+7-58)
-Java HotSpot(TM) 64-Bit Server VM (build 23.0.2+7-58, mixed mode, sharing)
+java version "25.0.1" 2025-10-21 LTS
+Java(TM) SE Runtime Environment (build 25.0.1+8-LTS-27)
+Java HotSpot(TM) 64-Bit Server VM (build 25.0.1+8-LTS-27, mixed mode, sharing)
 ```
 
 If you need to load a [Component Object Model]{:target="_blank"} or an [ActiveX]{:target="_blank"} library you must install [comtypes]{:target="_blank"}
