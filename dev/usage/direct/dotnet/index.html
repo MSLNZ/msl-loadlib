@@ -2354,7 +2354,7 @@
 -->
 
 <h2 id="config-runtime">Configure a .NET runtime<a class="headerlink" href="#config-runtime" title="Permanent link">¤</a></h2>
-<p>To configure <code>pythonnet</code> to use the .NET Core runtime, you must either run</p>
+<p>By default, <code>pythonnet</code> uses the .NET Framework runtime on Windows and the Mono runtime on Linux/macOS. To configure <code>pythonnet</code> to use the non-default runtime, such as the .NET Core runtime, you must either run</p>
 <div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">pythonnet</span><span class="w"> </span><span class="kn">import</span> <span class="n">load</span>
 <span class="n">load</span><span class="p">(</span><span class="s2">&quot;coreclr&quot;</span><span class="p">)</span>
 </code></pre></div>
@@ -2362,7 +2362,7 @@
 <div class="highlight"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
 <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">&quot;PYTHONNET_RUNTIME&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;coreclr&quot;</span>
 </code></pre></div>
-<p>before <a class="autorefs autorefs-internal" title="            LoadLibrary" href="../../../api/load_library/#msl.loadlib.load_library.LoadLibrary">LoadLibrary</a> is called. To use the Mono runtime, replace <code>"coreclr"</code> with <code>"mono"</code>.</p>
+<p>before <a class="autorefs autorefs-internal" title="            LoadLibrary" href="../../../api/load_library/#msl.loadlib.load_library.LoadLibrary">LoadLibrary</a> is called. To explicitly use the Mono runtime, replace <code>"coreclr"</code> with <code>"mono"</code> or to use the .NET Framework runtime on Windows use <code>"netfx"</code>.</p>
 <h2 id="dotnet-lib">.NET Source Code<a class="headerlink" href="#dotnet-lib" title="Permanent link">¤</a></h2>
 <details class="example">
 <summary>dotnet_lib.cs</summary>
