@@ -2923,10 +2923,7 @@ If <code>libtype</code> is</p>
 <span class="normal">362</span>
 <span class="normal">363</span>
 <span class="normal">364</span>
-<span class="normal">365</span>
-<span class="normal">366</span>
-<span class="normal">367</span>
-<span class="normal">368</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="p">:</span> <span class="n">PathLike</span><span class="p">,</span> <span class="n">libtype</span><span class="p">:</span> <span class="n">LibType</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>  <span class="c1"># noqa: C901, PLR0912, PLR0915</span>
+<span class="normal">365</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="p">:</span> <span class="n">PathLike</span><span class="p">,</span> <span class="n">libtype</span><span class="p">:</span> <span class="n">LibType</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>  <span class="c1"># noqa: C901, PLR0912, PLR0915</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Load a library.</span>
 
 <span class="sd">    For example, a C/C++, FORTRAN, .NET, Java, Delphi, LabVIEW, ActiveX, ... library.</span>
@@ -3166,10 +3163,7 @@ If <code>libtype</code> is</p>
 
     <span class="k">elif</span> <span class="n">_libtype</span> <span class="ow">in</span> <span class="p">{</span><span class="s2">&quot;net&quot;</span><span class="p">,</span> <span class="s2">&quot;clr&quot;</span><span class="p">}:</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">is_pythonnet_installed</span><span class="p">():</span>
-            <span class="n">msg</span> <span class="o">=</span> <span class="p">(</span>
-                <span class="s2">&quot;Cannot load a .NET Assembly because pythonnet is not installed or not supported on this platform.&quot;</span>
-                <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">To install it run: pip install pythonnet&quot;</span>
-            <span class="p">)</span>
+            <span class="n">msg</span> <span class="o">=</span> <span class="s2">&quot;Cannot load a .NET Assembly because pythonnet is not installed.</span><span class="se">\n</span><span class="s2">Run: pip install pythonnet&quot;</span>
             <span class="k">raise</span> <span class="ne">OSError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
 
         <span class="kn">import</span><span class="w"> </span><span class="nn">clr</span>  <span class="c1"># type: ignore[import-untyped] # pyright: ignore[reportMissingTypeStubs]  # noqa: PLC0415</span>
@@ -3436,7 +3430,10 @@ and the message loop is not running
 
             <details class="mkdocstrings-source">
               <summary>Source code in <code>src/msl/loadlib/load_library.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">403</span>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">400</span>
+<span class="normal">401</span>
+<span class="normal">402</span>
+<span class="normal">403</span>
 <span class="normal">404</span>
 <span class="normal">405</span>
 <span class="normal">406</span>
@@ -3447,10 +3444,7 @@ and the message loop is not running
 <span class="normal">411</span>
 <span class="normal">412</span>
 <span class="normal">413</span>
-<span class="normal">414</span>
-<span class="normal">415</span>
-<span class="normal">416</span>
-<span class="normal">417</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">cleanup</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="normal">414</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">cleanup</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Clean up references to the library.</span>
 
 <span class="sd">    !!! note &quot;Added in version 0.10&quot;</span>

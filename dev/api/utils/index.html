@@ -3667,7 +3667,7 @@ Uses the <code>ss</code> command instead of <code>netstat</code> on Linux.</p>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">try</span><span class="p">:</span>
         <span class="kn">import</span><span class="w"> </span><span class="nn">clr</span>  <span class="c1"># type: ignore[import-untyped] # pyright: ignore[reportMissingTypeStubs, reportUnusedImport]  # noqa: F401, PLC0415</span>
-    <span class="k">except</span> <span class="p">(</span><span class="ne">ImportError</span><span class="p">,</span> <span class="ne">RuntimeError</span><span class="p">):</span>
+    <span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
         <span class="k">return</span> <span class="kc">False</span>
     <span class="k">return</span> <span class="kc">True</span>
 </code></pre></div></td></tr></table></div>
