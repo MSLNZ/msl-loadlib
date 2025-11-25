@@ -16,14 +16,14 @@ jobs:
       fail-fast: false
       matrix:
         python-version: ["3.8", "3.9", "3.10", "3.11", "3.12", "3.13", "3.14"]
-        os: [windows-latest, ubuntu-22.04, macos-14, macos-13]
+        os: [windows-latest, ubuntu-22.04, macos-14, macos-15-intel]
         architecture: [x64, x86]
         exclude:
           - os: ubuntu-22.04
             architecture: x86
           - os: macos-14
             architecture: x86
-          - os: macos-13
+          - os: macos-15-intel
             architecture: x86
     steps:
       - name: Checkout repository
@@ -34,11 +34,11 @@ jobs:
           sudo dpkg --add-architecture i386
           sudo apt-get update
           sudo apt-get install -y libgfortran5:i386
-      # - name: Set PYTHONNET_RUNTIME=coreclr
-      #   if: ${{ matrix.os == 'macos-14' }}
-      #   run: echo "PYTHONNET_RUNTIME=coreclr" >> "$GITHUB_ENV"
-      - name: Mono version (not Windows)
-        if: ${{ matrix.os != 'windows-latest'}}
+      - name: Set PYTHONNET_RUNTIME=coreclr
+        if: ${{ matrix.os == 'macos-15-intel' }}
+        run: echo "PYTHONNET_RUNTIME=coreclr" >> "$GITHUB_ENV"
+      - name: Mono version (ubuntu-22.04 OR macos-14)
+        if: ${{ matrix.os == 'ubuntu-22.04' || matrix.os == 'macos-14'}}
         run: mono --version
       - name: Java version
         run: java -version
