@@ -6,6 +6,7 @@ import os
 import platform
 import sys
 from pathlib import Path
+from subprocess import check_call
 from typing import Callable
 
 import pytest
@@ -30,6 +31,16 @@ def has_labview_runtime(*, x86: bool) -> bool:
         return False
     # cSpell: ignore lvrt
     return any(int(folder.name) >= MIN_LABVIEW_RUNTIME and (folder / "lvrt.dll").is_file() for folder in root.iterdir())
+
+
+def has_mono_runtime() -> bool:
+    """Check if a Mono runtime is installed."""
+    try:
+        _ = check_call(["mono", "--version"])  # noqa: S607
+    except FileNotFoundError:
+        return False
+    else:
+        return True
 
 
 MIN_LABVIEW_RUNTIME = 2017

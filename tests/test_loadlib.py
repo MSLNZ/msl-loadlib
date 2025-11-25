@@ -29,6 +29,7 @@ from conftest import (
     IS_MAC,
     IS_MAC_ARM64,
     IS_WINDOWS,
+    has_mono_runtime,
     skipif_no_comtypes,
     skipif_no_pythonnet,
     skipif_not_windows,
@@ -75,7 +76,7 @@ def test_wrong_bitness_dotnet() -> None:
 
 
 @skipif_no_pythonnet
-@pytest.mark.skipif(IS_WINDOWS, reason="requires mono runtime")
+@pytest.mark.skipif(not has_mono_runtime(), reason="requires mono runtime")
 @pytest.mark.parametrize("filename", ["dotnet_lib32.dll", "dotnet_lib64.dll"])
 def test_mono_bitness_independent(filename: str) -> None:
     path = EXAMPLES_DIR / filename
