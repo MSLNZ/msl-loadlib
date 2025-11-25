@@ -27,11 +27,11 @@ def test_port_functions() -> None:
 
 
 def test_is_pythonnet_installed() -> None:
-    if IS_MAC_ARM64:
-        with pytest.raises(RuntimeError):
-            assert utils.is_pythonnet_installed()
-    elif sys.version_info[:2] == (3, 14):
+    if sys.version_info[:2] == (3, 14):
         assert not utils.is_pythonnet_installed()
+    elif IS_MAC_ARM64:
+        with pytest.raises(RuntimeError):
+            _ = utils.is_pythonnet_installed()
     else:
         assert utils.is_pythonnet_installed()
 
