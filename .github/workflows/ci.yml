@@ -34,11 +34,11 @@ jobs:
           sudo dpkg --add-architecture i386
           sudo apt-get update
           sudo apt-get install -y libgfortran5:i386
-      - name: Set PYTHONNET_RUNTIME=coreclr (macos-14)
-        if: ${{ matrix.os == 'macos-14' }}
-        run: echo "PYTHONNET_RUNTIME=coreclr" >> "$GITHUB_ENV"
-      - name: Mono version (ubuntu-22.04 OR macos-13)
-        if: ${{ matrix.os == 'ubuntu-22.04' || matrix.os == 'macos-13'}}
+      # - name: Set PYTHONNET_RUNTIME=coreclr
+      #   if: ${{ matrix.os == 'macos-14' }}
+      #   run: echo "PYTHONNET_RUNTIME=coreclr" >> "$GITHUB_ENV"
+      - name: Mono version (not Windows)
+        if: ${{ matrix.os != 'windows-latest'}}
         run: mono --version
       - name: Java version
         run: java -version
