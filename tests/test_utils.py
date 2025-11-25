@@ -7,7 +7,7 @@ from xml.etree import ElementTree as ET
 
 import pytest
 
-from conftest import IS_MAC_ARM64, IS_WINDOWS, skipif_not_windows
+from conftest import IS_WINDOWS, skipif_not_windows
 from msl.loadlib import ConnectionTimeoutError, LoadLibrary, utils
 
 
@@ -27,7 +27,7 @@ def test_port_functions() -> None:
 
 
 def test_is_pythonnet_installed() -> None:
-    if IS_MAC_ARM64 or sys.version_info[:2] == (3, 14):
+    if sys.version_info[:2] == (3, 14):
         assert not utils.is_pythonnet_installed()
     else:
         assert utils.is_pythonnet_installed()
