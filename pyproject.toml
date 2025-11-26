@@ -68,6 +68,7 @@ test = [
 ]
 type = [
     "basedpyright>=1.28.1",
+    "hatchling>=1.27.0",
     "mypy>=1.14.1",
 ]
 dev = [
