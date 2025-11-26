@@ -1,6 +1,8 @@
 name: Build then Publish to PyPI
 
-on: [push]
+on:
+  release:
+    types: [published]
 
 jobs:
   build-packages:
@@ -26,3 +28,21 @@ jobs:
         with:
             name: python-package-distributions
             path: dist/
+
+  publish:
+    name: Publish distributions to PyPI
+    needs: build-packages
+    runs-on: ubuntu-latest
+    environment:
+      name: pypi
+      url: https://pypi.org/p/msl-loadlib
+    permissions:
+      id-token: write  # IMPORTANT: mandatory for trusted publishing
+    steps:
+      - name: Download the stored distributions
+        uses: actions/download-artifact@v6
+        with:
+            name: python-package-distributions
+            path: dist/
+      - name: Publish distributions to PyPI
+        uses: pypa/gh-action-pypi-publish@release/v1
