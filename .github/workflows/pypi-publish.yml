@@ -1,0 +1,28 @@
+name: Build then Publish to PyPI
+
+on: [push]
+
+jobs:
+  build-packages:
+    name: Build distribution packages
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v5
+        with:
+          fetch-depth: 0
+      - name: Set up Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: "3.14"
+      - name: Upgrade pip
+        run: python -m pip install --upgrade pip
+      - name: Build custom wheels
+        run: |
+          python -m pip install --upgrade hatch
+          hatch build --target custom --target sdist
+      - name: Store the distribution packages
+        uses: actions/upload-artifact@v5
+        with:
+            name: python-package-distributions
+            path: dist/
