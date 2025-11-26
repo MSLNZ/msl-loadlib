@@ -28,6 +28,8 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v5
+        with:
+          fetch-depth: 0  # fetch all commits/branches
       - name: Install system dependencies (Ubuntu)
         if: ${{ matrix.os == 'ubuntu-22.04' }}
         run: |
