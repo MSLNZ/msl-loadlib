@@ -65,7 +65,7 @@ class Client(Client64):
 
 
 @skipif_no_server32
-@pytest.mark.parametrize("host", [None, "127.0.0.1"])  # type: ignore[misc]
+@pytest.mark.parametrize("host", [None, "127.0.0.1"])  # type: ignore[untyped-decorator]
 def test_equivalent(host: None | str) -> None:  # type: ignore[misc]
     c = Client(host=host, x=1.2)
     basename = Path(c.lib32_path).name

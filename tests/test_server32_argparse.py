@@ -167,7 +167,7 @@ def test_add_dll_directory_win32() -> None:  # type: ignore[misc]
             pass
 
 
-@pytest.mark.skipif(IS_WINDOWS, reason="do not test on Windows")  # type: ignore[misc]
+@pytest.mark.skipif(IS_WINDOWS, reason="do not test on Windows")  # type: ignore[untyped-decorator]
 @skipif_no_server32
 def test_add_dll_directory_linux() -> None:  # type: ignore[misc]
     with pytest.raises(ConnectionTimeoutError, match=r"not supported"):  # noqa: SIM117
