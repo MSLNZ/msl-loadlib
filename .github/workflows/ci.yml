@@ -27,7 +27,7 @@ jobs:
             architecture: x86
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
         with:
           fetch-depth: 0  # fetch all commits/branches
       - name: Install system dependencies (Ubuntu)
@@ -78,7 +78,7 @@ jobs:
       MYPYPATH: src
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
       - name: Setup uv
         uses: astral-sh/setup-uv@v7
         with:
