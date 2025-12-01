@@ -50,7 +50,7 @@ class Cpp32(Server32):
         }
         ```
 
-        See the corresponding [Cpp64.add][msl.examples.loadlib.Cpp64.add] method.
+        See the corresponding [Cpp64.add][msl.examples.loadlib.cpp64.Cpp64.add] method.
 
         Args:
             a: First integer.
@@ -76,7 +76,7 @@ class Cpp32(Server32):
         }
         ```
 
-        See the corresponding [Cpp64.subtract][msl.examples.loadlib.Cpp64.subtract] method.
+        See the corresponding [Cpp64.subtract][msl.examples.loadlib.cpp64.Cpp64.subtract] method.
 
         Args:
             a: First floating-point number.
@@ -106,7 +106,7 @@ class Cpp32(Server32):
         }
         ```
 
-        See the corresponding [Cpp64.add_or_subtract][msl.examples.loadlib.Cpp64.add_or_subtract] method.
+        See the corresponding [Cpp64.add_or_subtract][msl.examples.loadlib.cpp64.Cpp64.add_or_subtract] method.
 
         Args:
             a: First double-precision number.
@@ -135,7 +135,7 @@ class Cpp32(Server32):
         }
         ```
 
-        See the corresponding [Cpp64.scalar_multiply][msl.examples.loadlib.Cpp64.scalar_multiply] method.
+        See the corresponding [Cpp64.scalar_multiply][msl.examples.loadlib.cpp64.Cpp64.scalar_multiply] method.
 
         Args:
             a: Scalar value.
@@ -175,7 +175,7 @@ class Cpp32(Server32):
         }
         ```
 
-        See the corresponding [Cpp64.reverse_string_v1][msl.examples.loadlib.Cpp64.reverse_string_v1] method.
+        See the corresponding [Cpp64.reverse_string_v1][msl.examples.loadlib.cpp64.Cpp64.reverse_string_v1] method.
 
         Args:
             original: The original string.
@@ -210,7 +210,7 @@ class Cpp32(Server32):
         }
         ```
 
-        See the corresponding [Cpp64.reverse_string_v2][msl.examples.loadlib.Cpp64.reverse_string_v2] method.
+        See the corresponding [Cpp64.reverse_string_v2][msl.examples.loadlib.cpp64.Cpp64.reverse_string_v2] method.
 
         Args:
             original: The original string.
@@ -241,7 +241,7 @@ class Cpp32(Server32):
         }
         ```
 
-        See the corresponding [Cpp64.distance_4_points][msl.examples.loadlib.Cpp64.distance_4_points] method.
+        See the corresponding [Cpp64.distance_4_points][msl.examples.loadlib.cpp64.Cpp64.distance_4_points] method.
 
         Args:
             four_points: The points to use to calculate the total distance.
@@ -275,7 +275,7 @@ class Cpp32(Server32):
         }
         ```
 
-        See the corresponding [Cpp64.circumference][msl.examples.loadlib.Cpp64.circumference] method.
+        See the corresponding [Cpp64.circumference][msl.examples.loadlib.cpp64.Cpp64.circumference] method.
 
         Args:
             radius: The radius of the circle.
