@@ -63,7 +63,7 @@ jobs:
           python -m pip install pythonnet --pre
       - name: Build custom wheels
         run: |
-          python -m pip install --upgrade hatch
+          python -m pip install --upgrade hatch "virtualenv<21"
           hatch build --target custom
       - name: Install package from custom-built wheel
         run: python -m pip install --find-links dist --no-index msl-loadlib
