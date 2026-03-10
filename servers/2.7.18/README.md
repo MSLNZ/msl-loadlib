@@ -1,6 +1,6 @@
 This 32-bit server is bundled with the following versions:
 
-* Python 2.17.18
+* Python 2.7.18
 * msl-loadlib 0.10.0
 * pythonnet 2.5.2
 * comtypes 1.2.1
