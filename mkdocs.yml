@@ -1,6 +1,6 @@
 site_name: MSL-LoadLib
 site_description: Load a library (and access a 32-bit library from 64-bit Python)
-copyright: Copyright &copy; 2017 - 2025 Measurement Standards Laboratory of New Zealand
+copyright: Copyright &copy; 2017 - 2026 Measurement Standards Laboratory of New Zealand
 repo_url: https://github.com/MSLNZ/msl-loadlib/
 site_url: https://github.com/MSLNZ/msl-loadlib/
 
