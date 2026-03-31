@@ -5,7 +5,7 @@ This 32-bit server is bundled with the following versions:
 * pythonnet 2.5.2
 * comtypes 1.2.1
 
-You can use this 32-bit server with your 64-bit application by using the following templates as a starting point, with `my_client.py`, `my_server.py` and `server32-windows.exe` saved in the same directory (`server32-windows.exe.config` is only required if you are loading a 32-bit .NET library). You can install the latest version of `msl-loadlib` in your 64-bit Python interpreter.
+You can use this 32-bit server with your 64-bit application by using the following templates as a starting point, with `my_client.py`, `my_server.py` and `server32-windows.exe` saved in the same directory (`server32-windows.exe.config` is only required if you are loading a 32-bit .NET library that was built with .NET Framework version < 4.0). You can install the latest version of `msl-loadlib` in your 64-bit Python interpreter.
 
 ```python
 # my_client.py
