@@ -146,12 +146,12 @@ class Server32(HTTPServer):
 
         [interactive console]: https://docs.python.org/3/tutorial/interpreter.html#interactive-mode
         """
-        exe = Path(__file__).parent / server_filename
+        title = "msl.loadlib.Server32 || interactive console"
         if IS_WINDOWS:
-            cmd = f'start "msl.loadlib.Server32 || interactive console" "{exe}" --interactive'
+            cmd, shell = ["start", title], True
         else:
-            cmd = f"gnome-terminal --command='{exe} --interactive'"
-        _ = os.system(cmd)  # noqa: S605
+            cmd, shell = ["x-terminal-emulator", "-T", title, "-e"], False
+        _ = subprocess.call([*cmd, Path(__file__).parent / server_filename, "--interactive"], shell=shell)  # noqa: S603
 
     @staticmethod
     def remove_site_packages_64bit() -> str:

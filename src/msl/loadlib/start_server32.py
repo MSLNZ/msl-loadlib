@@ -146,7 +146,7 @@ def main() -> int:  # noqa: C901, PLR0911, PLR0912, PLR0915
 
         class Quitter:
             def __repr__(self) -> str:
-                ctrl = '"Ctrl-Z then Enter"' if sys.platform == "win32" else "Ctrl-D (i.e. EOF)"
+                ctrl = '"Ctrl-Z then Enter"' if sys.platform == "win32" else "Ctrl-D (i.e., EOF)"
                 return f"Use exit(), quit() or {ctrl} to exit the 32-bit server console"
 
             def __call__(self, *args, **kwargs):  # type: ignore[no-untyped-def] # pyright: ignore[reportMissingParameterType,reportUnknownParameterType] # noqa: ANN002, ANN003, ANN204, ARG002
