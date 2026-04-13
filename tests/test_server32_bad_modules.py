@@ -87,7 +87,7 @@ def test_bad_super_init() -> None:
 
 @skipif_no_server32
 def test_bad_lib_path() -> None:
-    check("bad_lib_path", r"Cannot find 'doesnotexist' \[libtype='cdll'\]")
+    check("bad_lib_path", r"Cannot find 'doesnotexist' for libtype='cdll'")
 
 
 @skipif_no_server32
