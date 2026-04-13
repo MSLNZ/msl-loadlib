@@ -122,7 +122,7 @@ def no_pythonnet() -> None:
 
 
 def no_server32() -> None:
-    """Skip doctest if a 32-bit server has not been frozen for this architechture."""
+    """Skip doctest if a 32-bit server has not been frozen for this architecture."""
     if IS_MAC or IS_LINUX_AARCH64:
         pytest.skip("requires a 32-bit server")
 
