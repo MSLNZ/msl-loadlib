@@ -31,7 +31,9 @@ def has_labview_runtime(*, x86: bool) -> bool:
     if not root.is_dir():
         return False
     # cSpell: ignore lvrt
-    return any(int(folder.name) >= MIN_LABVIEW_RUNTIME and (folder / "lvrt.dll").is_file() for folder in root.iterdir())
+    return any(
+        float(folder.name) >= MIN_LABVIEW_RUNTIME and (folder / "lvrt.dll").is_file() for folder in root.iterdir()
+    )
 
 
 def has_mono_runtime() -> bool:
