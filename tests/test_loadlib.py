@@ -484,7 +484,7 @@ def test_comtypes() -> None:
     with LoadLibrary(progid, "com") as obj:
         assert obj.lib.BuildPath("root", "filename") == r"root\filename"
 
-    with pytest.raises(OSError, match=r"Cannot find 'ABC.def.GHI' for libtype='com'"):
+    with pytest.raises(OSError, match=r"Cannot find 'ABC.def.GHI' \[libtype='com'\]"):
         _ = LoadLibrary("ABC.def.GHI", "com")
 
     info = get_com_info()
