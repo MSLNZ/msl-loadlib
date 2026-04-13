@@ -10,7 +10,7 @@ Load a 64-bit FORTRAN library in 64-bit Python. *To load the 32-bit library in 3
 Load the example [FORTRAN library][fortran-lib]
 
 <!-- invisible-code-block: pycon
->>> SKIP_IF_32BIT() or SKIP_IF_MACOS_ARM64()
+>>> SKIP_IF_32BIT() or SKIP_IF_MACOS_ARM64() or SKIP_IF_LINUX_AARCH64()
 
 -->
 

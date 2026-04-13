@@ -26,6 +26,7 @@ import pytest
 from conftest import (
     HAS_32BIT_LABVIEW_RUNTIME,
     HAS_64BIT_LABVIEW_RUNTIME,
+    IS_LINUX_AARCH64,
     IS_MAC,
     IS_MAC_ARM64,
     IS_WINDOWS,
@@ -39,7 +40,7 @@ from msl.loadlib import IS_PYTHON_64BIT, LoadLibrary
 from msl.loadlib._constants import default_extension
 from msl.loadlib.utils import get_available_port, get_com_info
 
-suffix = "arm64" if IS_MAC_ARM64 else "64" if IS_PYTHON_64BIT else "32"
+suffix = "aarch64" if IS_LINUX_AARCH64 else "arm64" if IS_MAC_ARM64 else "64" if IS_PYTHON_64BIT else "32"
 
 
 def test_invalid_libtype() -> None:

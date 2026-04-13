@@ -13,7 +13,7 @@ The source code of the C++ program is available [here][cpp-lib].
 Create a [Cpp64][msl.examples.loadlib.cpp64.Cpp64] client to communicate with the 32-bit library from 64-bit Python
 
 <!-- invisible-code-block: pycon
->>> SKIP_IF_MACOS()
+>>> SKIP_IF_NO_SERVER32()
 
 -->
 

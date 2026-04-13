@@ -10,7 +10,7 @@ Load the example 64-bit C++ library in 64-bit Python. *To load the 32-bit librar
 Load the example [C++ library][cpp-lib]
 
 <!-- invisible-code-block: pycon
->>> SKIP_IF_32BIT() or SKIP_IF_MACOS_ARM64()
+>>> SKIP_IF_32BIT() or SKIP_IF_MACOS_ARM64() or SKIP_IF_LINUX_AARCH64()
 
 -->
 

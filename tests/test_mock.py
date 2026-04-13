@@ -24,11 +24,12 @@ else:
 
 
 IS_MACOS_ARM64 = sys.platform == "darwin" and platform.machine() == "arm64"
+IS_LINUX_AARCH64 = sys.platform == "linux" and platform.machine() == "aarch64"
 
 
 class Server(Server32):
     def __init__(self, host: str, port: int, **kwargs: str) -> None:
-        arch = "arm64" if IS_MACOS_ARM64 else "64" if sys.maxsize > 2**32 else "32"
+        arch = "aarch64" if IS_LINUX_AARCH64 else "arm64" if IS_MACOS_ARM64 else "64" if sys.maxsize > 2**32 else "32"
         path = os.path.join(Server32.examples_dir(), f"cpp_lib{arch}")  # noqa: PTH118
         super().__init__(path, "cdll", host, port)
 
@@ -107,6 +108,8 @@ def test_attributes() -> None:
         # client and server are running in 64-bit Python
         if IS_MACOS_ARM64:
             assert c.lib32_path.endswith(f"cpp_libarm64{default_extension}")
+        if IS_LINUX_AARCH64:
+            assert c.lib32_path.endswith(f"cpp_libaarch64{default_extension}")
         else:
             assert c.lib32_path.endswith(f"cpp_lib64{default_extension}")
     else:

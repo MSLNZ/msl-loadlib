@@ -5,7 +5,7 @@ This example illustrates that Python data types are preserved when they are pass
 Create an [Echo64][msl.examples.loadlib.echo64.Echo64] instance
 
 <!-- invisible-code-block: pycon
->>> SKIP_IF_MACOS()
+>>> SKIP_IF_NO_SERVER32()
 
 -->
 
