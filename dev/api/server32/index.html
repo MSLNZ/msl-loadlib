@@ -2972,12 +2972,12 @@ with the Python interpreter on the 32-bit server.</p>
 
 <span class="sd">    [interactive console]: https://docs.python.org/3/tutorial/interpreter.html#interactive-mode</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">exe</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="vm">__file__</span><span class="p">)</span><span class="o">.</span><span class="n">parent</span> <span class="o">/</span> <span class="n">server_filename</span>
+    <span class="n">title</span> <span class="o">=</span> <span class="s2">&quot;msl.loadlib.Server32 || interactive console&quot;</span>
     <span class="k">if</span> <span class="n">IS_WINDOWS</span><span class="p">:</span>
-        <span class="n">cmd</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;start &quot;msl.loadlib.Server32 || interactive console&quot; &quot;</span><span class="si">{</span><span class="n">exe</span><span class="si">}</span><span class="s1">&quot; --interactive&#39;</span>
+        <span class="n">cmd</span><span class="p">,</span> <span class="n">shell</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;start&quot;</span><span class="p">,</span> <span class="n">title</span><span class="p">],</span> <span class="kc">True</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="n">cmd</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;gnome-terminal --command=&#39;</span><span class="si">{</span><span class="n">exe</span><span class="si">}</span><span class="s2"> --interactive&#39;&quot;</span>
-    <span class="n">_</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">system</span><span class="p">(</span><span class="n">cmd</span><span class="p">)</span>  <span class="c1"># noqa: S605</span>
+        <span class="n">cmd</span><span class="p">,</span> <span class="n">shell</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;x-terminal-emulator&quot;</span><span class="p">,</span> <span class="s2">&quot;-T&quot;</span><span class="p">,</span> <span class="n">title</span><span class="p">,</span> <span class="s2">&quot;-e&quot;</span><span class="p">],</span> <span class="kc">False</span>
+    <span class="n">_</span> <span class="o">=</span> <span class="n">subprocess</span><span class="o">.</span><span class="n">call</span><span class="p">([</span><span class="o">*</span><span class="n">cmd</span><span class="p">,</span> <span class="n">Path</span><span class="p">(</span><span class="vm">__file__</span><span class="p">)</span><span class="o">.</span><span class="n">parent</span> <span class="o">/</span> <span class="n">server_filename</span><span class="p">,</span> <span class="s2">&quot;--interactive&quot;</span><span class="p">],</span> <span class="n">shell</span><span class="o">=</span><span class="n">shell</span><span class="p">)</span>  <span class="c1"># noqa: S603</span>
 </code></pre></div></td></tr></table></div>
             </details>
     </div>
