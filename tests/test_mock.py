@@ -108,7 +108,7 @@ def test_attributes() -> None:
         # client and server are running in 64-bit Python
         if IS_MACOS_ARM64:
             assert c.lib32_path.endswith(f"cpp_libarm64{default_extension}")
-        if IS_LINUX_AARCH64:
+        elif IS_LINUX_AARCH64:
             assert c.lib32_path.endswith(f"cpp_libaarch64{default_extension}")
         else:
             assert c.lib32_path.endswith(f"cpp_lib64{default_extension}")
