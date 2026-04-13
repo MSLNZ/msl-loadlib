@@ -7,14 +7,14 @@ from py4j.java_gateway import (  # type: ignore[import-untyped] # pyright: ignor
     JVMView,  # pyright: ignore[reportUnknownVariableType]
 )
 
-from conftest import IS_MAC_ARM64, skipif_no_pythonnet, skipif_no_server32
+from conftest import IS_LINUX_AARCH64, IS_MAC_ARM64, skipif_no_pythonnet, skipif_no_server32
 from msl.examples.loadlib import EXAMPLES_DIR, Cpp64
 from msl.loadlib import IS_PYTHON_64BIT, LoadLibrary
 from msl.loadlib._constants import default_extension
 from msl.loadlib.load_library import DotNet
 from msl.loadlib.utils import logger
 
-suffix = "arm64" if IS_MAC_ARM64 else "64" if IS_PYTHON_64BIT else "32"
+suffix = "aarch64" if IS_LINUX_AARCH64 else "arm64" if IS_MAC_ARM64 else "64" if IS_PYTHON_64BIT else "32"
 
 
 def test_raises() -> None:
@@ -50,7 +50,8 @@ def test_cpp() -> None:
 
 @skipif_no_pythonnet
 def test_dotnet() -> None:
-    path = str(EXAMPLES_DIR / f"dotnet_lib{suffix}.dll")
+    s = "64" if IS_PYTHON_64BIT else "32"
+    path = str(EXAMPLES_DIR / f"dotnet_lib{s}.dll")
     with LoadLibrary(path, libtype="net") as library:
         assert isinstance(library.assembly, library.lib.System.Reflection.Assembly)
         assert library.assembly is not None

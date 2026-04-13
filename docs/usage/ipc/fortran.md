@@ -11,7 +11,7 @@ This example shows how to access a 32-bit FORTRAN library from 64-bit Python. [F
 Create a [Fortran64][msl.examples.loadlib.fortran64.Fortran64] client to communicate with the 32-bit [fortran_lib32][fortran-lib] library
 
 <!-- invisible-code-block: pycon
->>> SKIP_IF_MACOS()
+>>> SKIP_IF_NO_SERVER32()
 
 -->
 

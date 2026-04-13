@@ -21,6 +21,7 @@ from msl.loadlib import IS_PYTHON_64BIT
 IS_WINDOWS: bool = sys.platform == "win32"
 IS_MAC: bool = sys.platform == "darwin"
 IS_MAC_ARM64 = IS_MAC and platform.machine() == "arm64"
+IS_LINUX_AARCH64 = sys.platform == "linux" and platform.machine() == "aarch64"
 
 
 def has_labview_runtime(*, x86: bool) -> bool:
@@ -74,7 +75,7 @@ def bit32() -> None:
 
 def readme_all() -> None:
     """Skip all doctest in README."""
-    if not IS_PYTHON_64BIT or IS_MAC_ARM64:
+    if (not IS_PYTHON_64BIT) or IS_MAC_ARM64 or IS_LINUX_AARCH64:
         pytest.skip("skipped all tests")
 
 
@@ -88,6 +89,12 @@ def readme_com() -> None:
     """Skip from COM doctest in README."""
     if not IS_WINDOWS:
         pytest.skip("skipped at COM test")
+
+
+def linux_aarch64() -> None:
+    """Skip doctest if linux and aarch64."""
+    if IS_LINUX_AARCH64:
+        pytest.skip("ignore on linux aarch64")
 
 
 def mac_arm64() -> None:
@@ -114,6 +121,12 @@ def no_pythonnet() -> None:
         pytest.skip("pythonnet is not installed/supported on this platform")
 
 
+def no_server32() -> None:
+    """Skip doctest if a 32-bit server has not been frozen for this architechture."""
+    if IS_MAC or IS_LINUX_AARCH64:
+        pytest.skip("requires a 32-bit server")
+
+
 def win32_github_actions() -> None:
     """Skip doctest if using a Windows running on GitHub Actions."""
     if IS_WINDOWS and os.getenv("GITHUB_ACTIONS") == "true":
@@ -129,9 +142,11 @@ def doctest_skipif(doctest_namespace: dict[str, Callable[[], None]]) -> None:
             "SKIP_IF_64BIT": bit64,
             "SKIP_IF_MACOS": is_mac,
             "SKIP_IF_MACOS_ARM64": mac_arm64,
+            "SKIP_IF_LINUX_AARCH64": linux_aarch64,
             "SKIP_IF_NO_LABVIEW32": no_labview32,
             "SKIP_IF_NO_LABVIEW64": no_labview64,
             "SKIP_IF_NO_PYTHONNET": no_pythonnet,
+            "SKIP_IF_NO_SERVER32": no_server32,
             "SKIP_IF_NOT_WINDOWS": not_windows,
             "SKIP_IF_WINDOWS_GITHUB_ACTIONS": win32_github_actions,
             "SKIP_README_ALL": readme_all,
@@ -143,7 +158,7 @@ def doctest_skipif(doctest_namespace: dict[str, Callable[[], None]]) -> None:
 
 skipif_no_comtypes = pytest.mark.skipif(not IS_WINDOWS, reason="comtypes is only supported on Windows")
 skipif_no_pythonnet = pytest.mark.skipif(clr is None, reason="pythonnet is not installed/supported on this platform")
-skipif_no_server32 = pytest.mark.skipif(IS_MAC, reason="32-bit server does not exist")
+skipif_no_server32 = pytest.mark.skipif(IS_MAC or IS_LINUX_AARCH64, reason="requires a 32-bit server")
 skipif_not_windows = pytest.mark.skipif(not IS_WINDOWS, reason="not Windows")
 
 xfail_windows_ga = pytest.mark.xfail(

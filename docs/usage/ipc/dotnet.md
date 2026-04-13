@@ -28,7 +28,7 @@ This example shows how to access a 32-bit .NET library from 64-bit Python (Windo
 Create a [DotNet64][msl.examples.loadlib.dotnet64.DotNet64] client to communicate with the 32-bit [dotnet_lib32.dll][dotnet-lib] library
 
 <!-- invisible-code-block: pycon
->>> SKIP_IF_NOT_WINDOWS() or SKIP_IF_WINDOWS_GITHUB_ACTIONS()
+>>> SKIP_IF_NO_SERVER32() or SKIP_IF_WINDOWS_GITHUB_ACTIONS()
 
 -->
 
