@@ -37,8 +37,10 @@ include = (".py", "py.typed", ".jar", ".class")
 # the keys used here must be the same as the values in the "versions" array
 # in the [tool.hatch.build.targets.custom] table of pyproject.toml
 versions: dict[str, tuple[str, ...]] = {
+    "linux_aarch64": (*include, "libaarch64.so", "dotnet_lib32.dll", "dotnet_lib64.dll"),
+    "linux_armv7l": (*include,),
     "linux_i686": (*include, "lib32.so", "linux", "linux.config", "dotnet_lib32.dll"),
-    "linux_x86_64": (*include, ".so", "linux", "linux.config", "dotnet_lib32.dll", "dotnet_lib64.dll"),
+    "linux_x86_64": (*include, "lib32.so", "lib64.so", "linux", "linux.config", "dotnet_lib32.dll", "dotnet_lib64.dll"),
     "macos_arm64": (*include, "libarm64.dylib"),
     "macos_x86_64": (*include, "lib64.dylib", "dotnet_lib32.dll", "dotnet_lib64.dll"),
     "musl_aarch64": (*include,),
@@ -52,6 +54,18 @@ class CustomWheelBuilder(WheelBuilder):
     """Build custom wheels."""
 
     current_api: str = ""
+
+    def build_linux_aarch64(self, directory: str, **build_data: Any) -> str:
+        """Update the tag for a linux_aarch64 build."""
+        self.current_api = "linux_aarch64"
+        build_data["tag"] = "py3-none-manylinux2014_aarch64.manylinux_2_17_aarch64"
+        return self.build_standard(directory, **build_data)
+
+    def build_linux_armv7l(self, directory: str, **build_data: Any) -> str:
+        """Update the tag for a linux_armv7l build."""
+        self.current_api = "linux_armv7l"
+        build_data["tag"] = "py3-none-manylinux2014_armv7l.manylinux_2_17_armv7l"
+        return self.build_standard(directory, **build_data)
 
     def build_linux_i686(self, directory: str, **build_data: Any) -> str:
         """Update the tag for a linux_i686 build."""
@@ -104,6 +118,8 @@ class CustomWheelBuilder(WheelBuilder):
     def get_version_api(self) -> dict[str, Callable[..., str]]:
         """Overrides abstractmethod BuilderInterface.get_version_api()."""
         return {
+            "linux_aarch64": self.build_linux_aarch64,
+            "linux_armv7l": self.build_linux_armv7l,
             "linux_i686": self.build_linux_i686,
             "linux_x86_64": self.build_linux_x86_64,
             "macos_arm64": self.build_macos_arm64,

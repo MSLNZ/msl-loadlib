@@ -101,6 +101,8 @@ packages = ["src/msl"]
 [tool.hatch.build.targets.custom]
 packages = ["src/msl"]
 versions = [
+    "linux_aarch64",
+    "linux_armv7l",
     "linux_i686",
     "linux_x86_64",
     "macos_arm64",
