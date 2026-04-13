@@ -54,7 +54,7 @@ def test_invalid_path(path: None | str) -> None:
         _ = LoadLibrary(path)  # type: ignore[arg-type] # pyright: ignore[reportArgumentType]
 
 
-@pytest.mark.skipif(IS_MAC, reason="the 32-bit libraries do not exist for macOS")
+@pytest.mark.skipif(IS_MAC or IS_LINUX_AARCH64, reason="the 32-bit libraries do not exist")
 @pytest.mark.parametrize("filename", ["cpp_lib", "fortran_lib"])
 def test_wrong_bitness(filename: str) -> None:
     suffix = "32" if IS_PYTHON_64BIT else "64"
