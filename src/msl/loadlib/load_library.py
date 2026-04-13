@@ -163,7 +163,7 @@ class LoadLibrary:
                             success = True
                             break
                     if not success:
-                        msg = f"Cannot find {path!r} for libtype={_libtype!r}"
+                        msg = f"Cannot find {path!r} [libtype={_libtype!r}]"
                         raise OSError(msg)
                 else:
                     self._path = file2
@@ -191,7 +191,7 @@ class LoadLibrary:
             try:
                 clsid = GUID.from_progid(self._path)  # pyright: ignore[reportUnknownVariableType,reportUnknownMemberType]
             except (TypeError, OSError):
-                msg = f"Cannot find {path!r} for libtype='com'"
+                msg = f"Cannot find {path!r} [libtype='com']"
                 raise OSError(msg) from None
 
             self._lib = CreateObject(clsid, **kwargs)

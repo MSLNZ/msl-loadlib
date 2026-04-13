@@ -53,5 +53,5 @@ def test_framework_v2() -> None:
 
     # the above tests also depend on LoadLibrary raising OSError
     # if the DLL file does not exist
-    with pytest.raises(OSError, match=r"Cannot find '.*legacy_v2_runtime.dll' for libtype='clr'"):
+    with pytest.raises(OSError, match=r"Cannot find '.*legacy_v2_runtime.dll' \[libtype='clr'\]"):
         _ = LoadLibrary(root_dir / "legacy_v2_runtime.dll", libtype="clr")
