@@ -18,7 +18,6 @@
     },
     "ignorePaths": [
         "cspell.json",
-        "docs/conf.py",
         "mkdocs.yml",
         "pyproject.toml",
         "tests/dotnet_config/legacy_v2_runtime/legacy_v2_runtime.vcproj",
