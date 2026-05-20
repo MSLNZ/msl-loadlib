@@ -1,0 +1,1 @@
+This directory contains frozen 32-bit servers that are running on older versions of Python.

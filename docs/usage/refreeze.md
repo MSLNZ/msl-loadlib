@@ -3,7 +3,7 @@
 If you want to create a custom 32-bit server, you will need
 
 * a 32-bit version of Python (version 3.8 or later) installed
-* [PyInstaller]{:target="_blank"} installed in the 32-bit Python environment (ideally, you would use a [virtual environment][venv]{:target="_blank"} to install the necessary packages to create the server)
+* [PyInstaller](https://www.pyinstaller.org/){:target="_blank"} installed in the 32-bit Python environment (ideally, you would use a [virtual environment][venv]{:target="_blank"} to install the necessary packages to create the server)
 
 Some reasons why you may want to create a custom 32-bit server are that you want to
 
@@ -56,4 +56,6 @@ For example, if you want to include your own package and data files, you would r
 freeze32 --imports my_package --data .\my_data\lib32.dll
 ```
 
-[PyInstaller]: https://www.pyinstaller.org/
+## Legacy Server
+
+[This directory](https://github.com/MSLNZ/msl-loadlib/tree/main/servers){:target="_blank"} of the repository contains frozen 32-bit servers that are running on older versions of Python. You may download a server and follow the instructions that are outlined in the README files of the repository on how to use it.
