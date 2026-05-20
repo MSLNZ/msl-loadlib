@@ -12,7 +12,7 @@
 
 ***Changed:***
 
-- rename `_types.py` to `types.py`
+- rename `_types.py` to `typing.py`
 - `LoadLibrary` can now pass keyword arguments to `Application` when loading ActiveX libraries
 - rename `Application` *style* keyword argument to *window_style*
 - `MenuGroup` now behaves like a sequence of `MenuItem`'s

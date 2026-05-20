@@ -41,7 +41,7 @@ if TYPE_CHECKING:
     from collections.abc import Iterator
     from typing import Any, Callable
 
-    from .types import PathLike
+    from .typing import PathLike
 
 __all__: list[str] = [
     "Application",

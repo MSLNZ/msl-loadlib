@@ -25,7 +25,7 @@ if TYPE_CHECKING:
     from typing import Any
 
     from .activex import Application
-    from .types import LibType, PathLike, Server32Subclass
+    from .typing import LibType, PathLike, Server32Subclass
 
 METADATA: str = "-METADATA-"
 SHUTDOWN: str = "-SHUTDOWN-"

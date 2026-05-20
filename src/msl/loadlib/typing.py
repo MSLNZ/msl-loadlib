@@ -1,4 +1,4 @@
-"""Custom types."""
+"""Custom type annotations."""
 
 from __future__ import annotations
 
@@ -17,13 +17,16 @@ class Server32Subclass(Protocol):
     """An subclass of [Server32][msl.loadlib.server32.Server32]."""
 
     socket: _socket
+    """[socket][socket.socket] &mdash; The socket instance."""
+
     path: str
+    """[str][] &mdash; The path to the library file."""
 
     def __init__(self, host: str | None, port: int, **kwargs: str) -> None:
         """Base class for loading a 32-bit library in 32-bit Python."""
 
     def serve_forever(self) -> None:
-        """Handle one request at a time until [shutdown][msl.loadlib.types.Server32Subclass.shutdown]."""
+        """Handle one request at a time until [shutdown][msl.loadlib.typing.Server32Subclass.shutdown]."""
 
     def server_activate(self) -> None:
         """Called by constructor to activate the server."""
@@ -35,7 +38,7 @@ class Server32Subclass(Protocol):
         """Called to clean-up the server."""
 
     def shutdown(self) -> None:
-        """Stops the [serve_forever][msl.loadlib.types.Server32Subclass.serve_forever] loop."""
+        """Stops the [serve_forever][msl.loadlib.typing.Server32Subclass.serve_forever] loop."""
 
     def shutdown_handler(self) -> None:
         """Called just before the server shuts down."""
