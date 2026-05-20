@@ -1151,8 +1151,8 @@ class Application:
             instance=kernel32.GetModuleHandleW(None),
         )
 
-        unknown = ctypes.POINTER(comtypes.IUnknown)()  # pyright: ignore[reportUnknownMemberType, reportUnknownArgumentType, reportUnknownVariableType]
-        ret = atl.AtlAxGetControl(hwnd, ctypes.byref(unknown))  # pyright: ignore[reportUnknownArgumentType]
+        unknown = ctypes.POINTER(comtypes.IUnknown)()  # pyright: ignore[reportUnknownMemberType, reportUnknownArgumentType, reportDeprecated]
+        ret = atl.AtlAxGetControl(hwnd, ctypes.byref(unknown))
         if ret != 0:
             msg = f"AtlAxGetControl {ctypes.WinError()}"
             raise OSError(msg)
