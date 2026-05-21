@@ -162,14 +162,9 @@ cache_dir = ".cache/mypy"
 platform = "win32"
 strict = true
 strict_bytes = true
-
-# with the environment variable MYPYPATH=src defined, namespace_packages=true and
-# explicit_package_bases=true, the following error goes away
-#   Source file found twice under different module names: "loadlib" and "msl.loadlib"
-# https://mypy.readthedocs.io/en/stable/running_mypy.html#mapping-file-paths-to-modules
+mypy_path = "src"
 namespace_packages = true
 explicit_package_bases = true
-
 allow_redefinition = false
 allow_untyped_globals = false
 disallow_any_decorated = true

@@ -75,8 +75,6 @@ jobs:
   lint:
     name: Lint
     runs-on: windows-latest
-    env:
-      MYPYPATH: src
     steps:
       - name: Checkout repository
         uses: actions/checkout@v6
