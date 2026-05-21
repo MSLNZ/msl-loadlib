@@ -14,7 +14,7 @@ PathLike = Union[str, bytes, os.PathLike[str], os.PathLike[bytes]]  # pyright: i
 
 
 class Server32Subclass(Protocol):
-    """An subclass of [Server32][msl.loadlib.server32.Server32]."""
+    """A subclass of [Server32][msl.loadlib.server32.Server32]."""
 
     socket: _socket
     """[socket][socket.socket] &mdash; The socket instance."""
