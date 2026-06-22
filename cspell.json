@@ -27,6 +27,7 @@
     "words": [
         "ACCEPTFILES",
         "activex",
+        "annotationlib",
         "APPLMODAL",
         "APPWINDOW",
         "arange",
@@ -227,6 +228,7 @@
         "tanh",
         "TASKMODAL",
         "teardown",
+        "templatelib",
         "THICKFRAME",
         "TILEDWINDOW",
         "titlebar",

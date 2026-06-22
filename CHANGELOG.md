@@ -4,6 +4,11 @@
 
 ## unreleased
 
+The 32-bit server is frozen with the following versions
+
+- `server32-windows.exe` &mdash; Python 3.14.6, pythonnet 3.1.0, comtypes 1.4.16
+- `server32-linux` &mdash; Python 3.14.6
+
 ***Added:***
 
 - `Application.unhandle_events` method
