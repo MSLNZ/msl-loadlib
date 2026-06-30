@@ -2,12 +2,12 @@
 
 ---
 
-## unreleased
+## 1.1.0 (2026-06-30)
 
 The 32-bit server is frozen with the following versions
 
 - `server32-windows.exe` &mdash; Python 3.14.6, pythonnet 3.1.0, comtypes 1.4.16
-- `server32-linux` &mdash; Python 3.14.6
+- `server32-linux` &mdash; Python 3.14.6 (built with GLIBC 2.27)
 
 ***Added:***
 
@@ -29,7 +29,7 @@ The 32-bit server is frozen with the following versions
 The 32-bit server is frozen with the following versions
 
 - `server32-windows.exe` &mdash; Python 3.13.4, pythonnet 3.0.5, comtypes 1.4.11
-- `server32-linux` &mdash; Python 3.13.4
+- `server32-linux` &mdash; Python 3.13.4 (built with GLIBC 2.27)
 
 ***Added:***
 
