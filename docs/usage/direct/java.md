@@ -40,7 +40,6 @@ Solve a linear system of equations, `Ax=b`, using the `Matrix` library class and
 >>> for i in range(3):
 ...     for j in range(3):
 ...         A[i][j] = float(coefficients[i][j])
-...
 >>> b = jar.gateway.new_array(jar.lib.Double, 3)
 >>> b[0] = 4.0
 >>> b[1] = 15.0
@@ -59,9 +58,8 @@ Verify that `x` is the solution
 >>> for i in range(3):
 ...     x_i = 0.0
 ...     for j in range(3):
-...         x_i += coefficients[i][j] * x.getValue(j,0)
+...         x_i += coefficients[i][j] * x.getValue(j, 0)
 ...     assert abs(x_i - b[i]) < 1e-12
-...
 
 ```
 

@@ -34,7 +34,7 @@ send a boolean as a keyword argument
 send multiple data types as arguments and as keyword arguments
 
 ```pycon
->>> echo.send_data(1.2, {"my_list":[1, 2, 3]}, 0.2j, range(10), x=True, y="hello world!")
+>>> echo.send_data(1.2, {"my_list": [1, 2, 3]}, 0.2j, range(10), x=True, y="hello world!")
 ((1.2, {'my_list': [1, 2, 3]}, 0.2j, range(0, 10)), {'x': True, 'y': 'hello world!'})
 
 ```

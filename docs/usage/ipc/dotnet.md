@@ -13,6 +13,7 @@ This example shows how to access a 32-bit .NET library from 64-bit Python (Windo
 
     ```python
     from pythonnet import load
+
     load("coreclr")
     ```
 
@@ -20,6 +21,7 @@ This example shows how to access a 32-bit .NET library from 64-bit Python (Windo
 
     ```python
     import os
+
     os.environ["PYTHONNET_RUNTIME"] = "coreclr"
     ```
 
@@ -51,7 +53,7 @@ Add two integers, see [DotNet64.add_integers][msl.examples.loadlib.dotnet64.DotN
 Divide two C# floating-point numbers, see [DotNet64.divide_floats][msl.examples.loadlib.dotnet64.DotNet64.divide_floats]
 
 ```pycon
->>> dn.divide_floats(3., 2.)
+>>> dn.divide_floats(3.0, 2.0)
 1.5
 
 ```
@@ -67,9 +69,9 @@ Multiple two C# double-precision numbers, see [DotNet64.multiply_doubles][msl.ex
 Add or subtract two C# double-precision numbers, see [DotNet64.add_or_subtract][msl.examples.loadlib.dotnet64.DotNet64.add_or_subtract]
 
 ```pycon
->>> dn.add_or_subtract(99., 9., do_addition=True)
+>>> dn.add_or_subtract(99.0, 9.0, do_addition=True)
 108.0
->>> dn.add_or_subtract(99., 9., do_addition=False)
+>>> dn.add_or_subtract(99.0, 9.0, do_addition=False)
 90.0
 
 ```
@@ -90,8 +92,8 @@ Multiply a 1D array by a number, see [DotNet64.scalar_multiply][msl.examples.loa
 Multiply two matrices, see [DotNet64.multiply_matrices][msl.examples.loadlib.dotnet64.DotNet64.multiply_matrices]
 
 ```pycon
->>> m1 = [[1., 2., 3.], [4., 5., 6.]]
->>> m2 = [[1., 2.], [3., 4.], [5., 6.]]
+>>> m1 = [[1.0, 2.0, 3.0], [4.0, 5.0, 6.0]]
+>>> m2 = [[1.0, 2.0], [3.0, 4.0], [5.0, 6.0]]
 >>> dn.multiply_matrices(m1, m2)
 [[22.0, 28.0], [49.0, 64.0]]
 

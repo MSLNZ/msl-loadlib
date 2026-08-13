@@ -69,7 +69,7 @@ If you have a [numpy.ndarray][]{:target="_blank"} in 64-bit Python then you cann
 
 ```pycon
 >>> import numpy as np
->>> a = np.arange(9.)
+>>> a = np.arange(9.0)
 >>> cpp.scalar_multiply(3.1, a.tolist())
 [0.0, 3.1, 6.2, 9.3, 12.4, 15.5, 18.6, 21.7, 24.8]
 
@@ -150,7 +150,6 @@ The [Cpp32.circumference][msl.examples.loadlib.cpp32.Cpp32.circumference] method
 ```pycon
 >>> for i in range(16):
 ...     print(cpp.circumference(0.5, 2**i))
-...
 0.0
 2.0
 2.828427124746...

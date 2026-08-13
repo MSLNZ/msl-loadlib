@@ -34,7 +34,7 @@ Add two `int8` values, see [Fortran64.sum_8bit][msl.examples.loadlib.fortran64.F
 Add two `int16` values, see [Fortran64.sum_16bit][msl.examples.loadlib.fortran64.Fortran64.sum_16bit]
 
 ```pycon
->>> f.sum_16bit(2**15-1, -1)
+>>> f.sum_16bit(2**15 - 1, -1)
 32766
 
 ```
@@ -50,7 +50,7 @@ Add two `int32` values, see [Fortran64.sum_32bit][msl.examples.loadlib.fortran64
 Add two `int64` values, see [Fortran64.sum_64bit][msl.examples.loadlib.fortran64.Fortran64.sum_64bit]
 
 ```pycon
->>> f.sum_64bit(2**63, -2**62)
+>>> f.sum_64bit(2**63, -(2**62))
 4611686018427387904
 
 ```
@@ -114,7 +114,7 @@ Compute the Bessel function of the first kind of order 0, see [Fortran64.besselJ
 Calculate the standard deviation of a list of values, see [Fortran64.standard_deviation][msl.examples.loadlib.fortran64.Fortran64.standard_deviation]
 
 ```pycon
->>> f.standard_deviation([float(val) for val in range(1,10)])
+>>> f.standard_deviation([float(val) for val in range(1, 10)])
 2.73861278752583...
 
 ```
@@ -123,7 +123,7 @@ Add two 1D arrays, see [Fortran64.add_1d_arrays][msl.examples.loadlib.fortran64.
 
 ```pycon
 >>> a = [float(val) for val in range(1, 10)]
->>> b = [0.5*val for val in range(1, 10)]
+>>> b = [0.5 * val for val in range(1, 10)]
 >>> a
 [1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0]
 >>> b

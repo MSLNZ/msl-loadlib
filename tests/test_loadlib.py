@@ -49,7 +49,7 @@ def test_invalid_libtype() -> None:
 
 
 @pytest.mark.parametrize("path", [None, ""])
-def test_invalid_path(path: None | str) -> None:
+def test_invalid_path(path: str | None) -> None:
     with pytest.raises(ValueError, match=r"Must specify a non-empty path"):
         _ = LoadLibrary(path)  # type: ignore[arg-type] # pyright: ignore[reportArgumentType]
 

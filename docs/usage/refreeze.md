@@ -37,6 +37,7 @@ Create a script that calls the [freeze_server32.main][msl.loadlib.freeze_server3
 
 ```python
 from msl.loadlib import freeze_server32
+
 freeze_server32.main(imports="numpy")
 ```
 

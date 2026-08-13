@@ -22,8 +22,8 @@ import os
 
 from msl.loadlib import Client64, Server32
 
-class Polling32(Server32):
 
+class Polling32(Server32):
     def __init__(self, host, port):
         # Loading a "dummy" 32-bit library for this example
         path = os.path.join(Server32.examples_dir(), "cpp_lib32")
@@ -58,15 +58,17 @@ class Polling32(Server32):
         """Append a message."""
         self._stdout.append(message)
 
-class Polling64(Client64):
 
+class Polling64(Client64):
     def __init__(self):
         super().__init__(__file__)
 
     def __getattr__(self, name):
         def send(*args, **kwargs):
             return self.request32(name, *args, **kwargs)
+
         return send
+
 
 # Only execute this section of code on the 64-bit client
 # (not on the 32-bit server). You may also prefer to write the

@@ -36,7 +36,7 @@ Create an instance of the `ArrayManipulation` class in the `DotNetMSL` namespace
 
 ```pycon
 >>> am = net.lib.DotNetMSL.ArrayManipulation()
->>> values = am.scalar_multiply(2., [1., 2., 3., 4., 5.])
+>>> values = am.scalar_multiply(2.0, [1.0, 2.0, 3.0, 4.0, 5.0])
 >>> values
 <System.Double[] object at ...>
 >>> [val for val in values]
@@ -101,6 +101,7 @@ By default, `pythonnet` uses the .NET Framework runtime on Windows and the Mono 
 
 ```python
 from pythonnet import load
+
 load("coreclr")
 ```
 
@@ -108,6 +109,7 @@ or define a `PYTHONNET_RUNTIME=coreclr` environment variable, e.g.,
 
 ```python
 import os
+
 os.environ["PYTHONNET_RUNTIME"] = "coreclr"
 ```
 

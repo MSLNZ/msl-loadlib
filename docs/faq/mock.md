@@ -11,8 +11,8 @@ Here is an example on how a client (running within 64-bit Python) can have a [Se
 ```python
 from msl.loadlib import Client64, Server32
 
-class MockableServer(Server32):
 
+class MockableServer(Server32):
     def __init__(self, host, port, **kwargs):
         # Decide which library to load on the server.
         # `host` is `None` when the connection is mocked.
@@ -22,10 +22,11 @@ class MockableServer(Server32):
             path = "path/to/32bit/c/library.so"
         super().__init__(path, "cdll", host, port)
 
-class MockableClient(Client64):
 
+class MockableClient(Client64):
     def __init__(self, **kwargs):
         super().__init__(__file__, **kwargs)
+
 
 if __name__ == "__main__":
     client_uses_32bit_library = MockableClient()

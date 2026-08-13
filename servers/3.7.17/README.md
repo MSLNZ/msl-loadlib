@@ -13,8 +13,8 @@ You can use this 32-bit server with your 64-bit application by using the followi
 # my_client.py
 from msl.loadlib import Client64
 
-class MyClient(Client64):
 
+class MyClient(Client64):
     def __init__(self) -> None:
         super().__init__("my_server", server32_dir=".", protocol=4)
 ```
@@ -25,8 +25,8 @@ The code in `my_server.py` must be valid for running in a Python 3.7 interpreter
 # my_server.py
 from msl.loadlib import Server32
 
-class MyServer(Server32):
 
+class MyServer(Server32):
     def __init__(self, host, port, **kwargs):
         super().__init__(r"path\to\library.dll", "cdll", host, port)
 ```

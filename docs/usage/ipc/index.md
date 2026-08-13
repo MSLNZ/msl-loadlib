@@ -16,6 +16,7 @@ Suppose you want to call functions in a 32-bit C library, `my_lib.dll`, from a 6
 
     from msl.loadlib import Server32
 
+
     class MyServer(Server32):
         """Load a 32-bit C library 'my_lib.dll' that has an 'add' and a 'version' function."""
 
@@ -48,6 +49,7 @@ The following `MyClient` is a subclass of [Client64][] and it will communicate w
     from __future__ import annotations
 
     from msl.loadlib import Client64
+
 
     class MyClient(Client64):
         """Call a function in 'my_lib.dll' via the 'MyServer' wrapper."""
@@ -118,14 +120,15 @@ Keyword arguments, `kwargs`, that the [Server32][] subclass requires can be pass
     ```python
     from msl.loadlib import Client64
 
-    class LinearAlgebra(Client64):
 
+    class LinearAlgebra(Client64):
         def __init__(self):
             super().__init__("linear_algebra_32.py")
 
         def __getattr__(self, name):
             def send(*args, **kwargs):
                 return self.request32(name, *args, **kwargs)
+
             return send
     ```
 
