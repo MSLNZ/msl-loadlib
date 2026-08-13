@@ -23,7 +23,7 @@
       
       
       <link rel="icon" href="../../../assets/images/favicon.ico">
-      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.6">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
     
     
       
@@ -31,7 +31,7 @@
       
     
     
-      <link rel="stylesheet" href="../../../assets/stylesheets/main.484c7ddc.min.css">
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.ec1eaa64.min.css">
       
         
         <link rel="stylesheet" href="../../../assets/stylesheets/palette.ab4e12ef.min.css">
@@ -2324,10 +2324,12 @@
 <summary>Configure a .NET runtime</summary>
 <p>To configure <code>pythonnet</code> to use the .NET Core runtime, you must either run</p>
 <div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">pythonnet</span><span class="w"> </span><span class="kn">import</span> <span class="n">load</span>
+
 <span class="n">load</span><span class="p">(</span><span class="s2">&quot;coreclr&quot;</span><span class="p">)</span>
 </code></pre></div>
 <p>or define a <code>PYTHONNET_RUNTIME=coreclr</code> environment variable, e.g.,</p>
 <div class="highlight"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
+
 <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">&quot;PYTHONNET_RUNTIME&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;coreclr&quot;</span>
 </code></pre></div>
 <p>before <a class="autorefs autorefs-external" href="https://docs.python.org/3/library/functions.html#super" target="_blank">super()</a> is called in the <a class="autorefs autorefs-internal" href="../../../api/server32/#server32">Server32</a> subclass. To use the Mono runtime, replace <code>"coreclr"</code> with <code>"mono"</code>.</p>
@@ -2347,7 +2349,7 @@
 <span class="go">10</span>
 </code></pre></div>
 <p>Divide two C# floating-point numbers, see <a class="autorefs autorefs-internal" title="            divide_floats" href="../../../examples/dotnet64/#msl.examples.loadlib.dotnet64.DotNet64.divide_floats">DotNet64.divide_floats</a></p>
-<div class="highlight"><pre><span></span><code><span class="gp">&gt;&gt;&gt; </span><span class="n">dn</span><span class="o">.</span><span class="n">divide_floats</span><span class="p">(</span><span class="mf">3.</span><span class="p">,</span> <span class="mf">2.</span><span class="p">)</span>
+<div class="highlight"><pre><span></span><code><span class="gp">&gt;&gt;&gt; </span><span class="n">dn</span><span class="o">.</span><span class="n">divide_floats</span><span class="p">(</span><span class="mf">3.0</span><span class="p">,</span> <span class="mf">2.0</span><span class="p">)</span>
 <span class="go">1.5</span>
 </code></pre></div>
 <p>Multiple two C# double-precision numbers, see <a class="autorefs autorefs-internal" title="            multiply_doubles" href="../../../examples/dotnet64/#msl.examples.loadlib.dotnet64.DotNet64.multiply_doubles">DotNet64.multiply_doubles</a></p>
@@ -2355,9 +2357,9 @@
 <span class="go">458383.926</span>
 </code></pre></div>
 <p>Add or subtract two C# double-precision numbers, see <a class="autorefs autorefs-internal" title="            add_or_subtract" href="../../../examples/dotnet64/#msl.examples.loadlib.dotnet64.DotNet64.add_or_subtract">DotNet64.add_or_subtract</a></p>
-<div class="highlight"><pre><span></span><code><span class="gp">&gt;&gt;&gt; </span><span class="n">dn</span><span class="o">.</span><span class="n">add_or_subtract</span><span class="p">(</span><span class="mf">99.</span><span class="p">,</span> <span class="mf">9.</span><span class="p">,</span> <span class="n">do_addition</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<div class="highlight"><pre><span></span><code><span class="gp">&gt;&gt;&gt; </span><span class="n">dn</span><span class="o">.</span><span class="n">add_or_subtract</span><span class="p">(</span><span class="mf">99.0</span><span class="p">,</span> <span class="mf">9.0</span><span class="p">,</span> <span class="n">do_addition</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 <span class="go">108.0</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">dn</span><span class="o">.</span><span class="n">add_or_subtract</span><span class="p">(</span><span class="mf">99.</span><span class="p">,</span> <span class="mf">9.</span><span class="p">,</span> <span class="n">do_addition</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">dn</span><span class="o">.</span><span class="n">add_or_subtract</span><span class="p">(</span><span class="mf">99.0</span><span class="p">,</span> <span class="mf">9.0</span><span class="p">,</span> <span class="n">do_addition</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 <span class="go">90.0</span>
 </code></pre></div>
 <h2 id="ipc-dotnet-arrays">Arrays<a class="headerlink" href="#ipc-dotnet-arrays" title="Permanent link">¤</a></h2>
@@ -2369,8 +2371,8 @@
 <span class="go">[0.0, 2.0, 4.0, 6.0, 8.0, 10.0, 12.0, 14.0, 16.0, 18.0]</span>
 </code></pre></div>
 <p>Multiply two matrices, see <a class="autorefs autorefs-internal" title="            multiply_matrices" href="../../../examples/dotnet64/#msl.examples.loadlib.dotnet64.DotNet64.multiply_matrices">DotNet64.multiply_matrices</a></p>
-<div class="highlight"><pre><span></span><code><span class="gp">&gt;&gt;&gt; </span><span class="n">m1</span> <span class="o">=</span> <span class="p">[[</span><span class="mf">1.</span><span class="p">,</span> <span class="mf">2.</span><span class="p">,</span> <span class="mf">3.</span><span class="p">],</span> <span class="p">[</span><span class="mf">4.</span><span class="p">,</span> <span class="mf">5.</span><span class="p">,</span> <span class="mf">6.</span><span class="p">]]</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">m2</span> <span class="o">=</span> <span class="p">[[</span><span class="mf">1.</span><span class="p">,</span> <span class="mf">2.</span><span class="p">],</span> <span class="p">[</span><span class="mf">3.</span><span class="p">,</span> <span class="mf">4.</span><span class="p">],</span> <span class="p">[</span><span class="mf">5.</span><span class="p">,</span> <span class="mf">6.</span><span class="p">]]</span>
+<div class="highlight"><pre><span></span><code><span class="gp">&gt;&gt;&gt; </span><span class="n">m1</span> <span class="o">=</span> <span class="p">[[</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">2.0</span><span class="p">,</span> <span class="mf">3.0</span><span class="p">],</span> <span class="p">[</span><span class="mf">4.0</span><span class="p">,</span> <span class="mf">5.0</span><span class="p">,</span> <span class="mf">6.0</span><span class="p">]]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">m2</span> <span class="o">=</span> <span class="p">[[</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">2.0</span><span class="p">],</span> <span class="p">[</span><span class="mf">3.0</span><span class="p">,</span> <span class="mf">4.0</span><span class="p">],</span> <span class="p">[</span><span class="mf">5.0</span><span class="p">,</span> <span class="mf">6.0</span><span class="p">]]</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">dn</span><span class="o">.</span><span class="n">multiply_matrices</span><span class="p">(</span><span class="n">m1</span><span class="p">,</span> <span class="n">m2</span><span class="p">)</span>
 <span class="go">[[22.0, 28.0], [49.0, 64.0]]</span>
 </code></pre></div>
@@ -2524,7 +2526,7 @@
       <script id="__config" type="application/json">{"annotate": null, "base": "../../..", "features": ["content.code.copy", "navigation.footer", "navigation.indexes", "navigation.top", "navigation.tabs", "navigation.tabs.sticky", "search.highlight", "search.suggest"], "search": "../../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": {"provider": "mike"}}</script>
     
     
-      <script src="../../../assets/javascripts/bundle.79ae519e.min.js"></script>
+      <script src="../../../assets/javascripts/bundle.d7400e89.min.js"></script>
       
     
   </body>

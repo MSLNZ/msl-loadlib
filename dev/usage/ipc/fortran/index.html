@@ -23,7 +23,7 @@
       
       
       <link rel="icon" href="../../../assets/images/favicon.ico">
-      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.6">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
     
     
       
@@ -31,7 +31,7 @@
       
     
     
-      <link rel="stylesheet" href="../../../assets/stylesheets/main.484c7ddc.min.css">
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.ec1eaa64.min.css">
       
         
         <link rel="stylesheet" href="../../../assets/stylesheets/palette.ab4e12ef.min.css">
@@ -2316,7 +2316,7 @@
 <span class="go">60</span>
 </code></pre></div>
 <p>Add two <code>int16</code> values, see <a class="autorefs autorefs-internal" title="            sum_16bit" href="../../../examples/fortran64/#msl.examples.loadlib.fortran64.Fortran64.sum_16bit">Fortran64.sum_16bit</a></p>
-<div class="highlight"><pre><span></span><code><span class="gp">&gt;&gt;&gt; </span><span class="n">f</span><span class="o">.</span><span class="n">sum_16bit</span><span class="p">(</span><span class="mi">2</span><span class="o">**</span><span class="mi">15</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+<div class="highlight"><pre><span></span><code><span class="gp">&gt;&gt;&gt; </span><span class="n">f</span><span class="o">.</span><span class="n">sum_16bit</span><span class="p">(</span><span class="mi">2</span><span class="o">**</span><span class="mi">15</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
 <span class="go">32766</span>
 </code></pre></div>
 <p>Add two <code>int32</code> values, see <a class="autorefs autorefs-internal" title="            sum_32bit" href="../../../examples/fortran64/#msl.examples.loadlib.fortran64.Fortran64.sum_32bit">Fortran64.sum_32bit</a></p>
@@ -2324,7 +2324,7 @@
 <span class="go">123456789</span>
 </code></pre></div>
 <p>Add two <code>int64</code> values, see <a class="autorefs autorefs-internal" title="            sum_64bit" href="../../../examples/fortran64/#msl.examples.loadlib.fortran64.Fortran64.sum_64bit">Fortran64.sum_64bit</a></p>
-<div class="highlight"><pre><span></span><code><span class="gp">&gt;&gt;&gt; </span><span class="n">f</span><span class="o">.</span><span class="n">sum_64bit</span><span class="p">(</span><span class="mi">2</span><span class="o">**</span><span class="mi">63</span><span class="p">,</span> <span class="o">-</span><span class="mi">2</span><span class="o">**</span><span class="mi">62</span><span class="p">)</span>
+<div class="highlight"><pre><span></span><code><span class="gp">&gt;&gt;&gt; </span><span class="n">f</span><span class="o">.</span><span class="n">sum_64bit</span><span class="p">(</span><span class="mi">2</span><span class="o">**</span><span class="mi">63</span><span class="p">,</span> <span class="o">-</span><span class="p">(</span><span class="mi">2</span><span class="o">**</span><span class="mi">62</span><span class="p">))</span>
 <span class="go">4611686018427387904</span>
 </code></pre></div>
 <p>Multiply two <code>float32</code> values, see <a class="autorefs autorefs-internal" title="            multiply_float32" href="../../../examples/fortran64/#msl.examples.loadlib.fortran64.Fortran64.multiply_float32">Fortran64.multiply_float32</a></p>
@@ -2359,12 +2359,12 @@
 </code></pre></div>
 <h2 id="ipc-fortran-arrays">Arrays<a class="headerlink" href="#ipc-fortran-arrays" title="Permanent link">¤</a></h2>
 <p>Calculate the standard deviation of a list of values, see <a class="autorefs autorefs-internal" title="            standard_deviation" href="../../../examples/fortran64/#msl.examples.loadlib.fortran64.Fortran64.standard_deviation">Fortran64.standard_deviation</a></p>
-<div class="highlight"><pre><span></span><code><span class="gp">&gt;&gt;&gt; </span><span class="n">f</span><span class="o">.</span><span class="n">standard_deviation</span><span class="p">([</span><span class="nb">float</span><span class="p">(</span><span class="n">val</span><span class="p">)</span> <span class="k">for</span> <span class="n">val</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">10</span><span class="p">)])</span>
+<div class="highlight"><pre><span></span><code><span class="gp">&gt;&gt;&gt; </span><span class="n">f</span><span class="o">.</span><span class="n">standard_deviation</span><span class="p">([</span><span class="nb">float</span><span class="p">(</span><span class="n">val</span><span class="p">)</span> <span class="k">for</span> <span class="n">val</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">10</span><span class="p">)])</span>
 <span class="go">2.73861278752583...</span>
 </code></pre></div>
 <p>Add two 1D arrays, see <a class="autorefs autorefs-internal" title="            add_1d_arrays" href="../../../examples/fortran64/#msl.examples.loadlib.fortran64.Fortran64.add_1d_arrays">Fortran64.add_1d_arrays</a></p>
 <div class="highlight"><pre><span></span><code><span class="gp">&gt;&gt;&gt; </span><span class="n">a</span> <span class="o">=</span> <span class="p">[</span><span class="nb">float</span><span class="p">(</span><span class="n">val</span><span class="p">)</span> <span class="k">for</span> <span class="n">val</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">10</span><span class="p">)]</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">b</span> <span class="o">=</span> <span class="p">[</span><span class="mf">0.5</span><span class="o">*</span><span class="n">val</span> <span class="k">for</span> <span class="n">val</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">10</span><span class="p">)]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">b</span> <span class="o">=</span> <span class="p">[</span><span class="mf">0.5</span> <span class="o">*</span> <span class="n">val</span> <span class="k">for</span> <span class="n">val</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">10</span><span class="p">)]</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">a</span>
 <span class="go">[1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0]</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">b</span>
@@ -2515,7 +2515,7 @@
       <script id="__config" type="application/json">{"annotate": null, "base": "../../..", "features": ["content.code.copy", "navigation.footer", "navigation.indexes", "navigation.top", "navigation.tabs", "navigation.tabs.sticky", "search.highlight", "search.suggest"], "search": "../../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": {"provider": "mike"}}</script>
     
     
-      <script src="../../../assets/javascripts/bundle.79ae519e.min.js"></script>
+      <script src="../../../assets/javascripts/bundle.d7400e89.min.js"></script>
       
     
   </body>

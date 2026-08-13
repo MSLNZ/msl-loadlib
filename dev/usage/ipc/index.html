@@ -23,7 +23,7 @@
       
       
       <link rel="icon" href="../../assets/images/favicon.ico">
-      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.6">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
     
     
       
@@ -31,7 +31,7 @@
       
     
     
-      <link rel="stylesheet" href="../../assets/stylesheets/main.484c7ddc.min.css">
+      <link rel="stylesheet" href="../../assets/stylesheets/main.ec1eaa64.min.css">
       
         
         <link rel="stylesheet" href="../../assets/stylesheets/palette.ab4e12ef.min.css">
@@ -2225,6 +2225,7 @@
 
 <span class="kn">from</span><span class="w"> </span><span class="nn">msl.loadlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">Server32</span>
 
+
 <span class="k">class</span><span class="w"> </span><span class="nc">MyServer</span><span class="p">(</span><span class="n">Server32</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Load a 32-bit C library &#39;my_lib.dll&#39; that has an &#39;add&#39; and a &#39;version&#39; function.&quot;&quot;&quot;</span>
 
@@ -2254,6 +2255,7 @@
 <div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">__future__</span><span class="w"> </span><span class="kn">import</span> <span class="n">annotations</span>
 
 <span class="kn">from</span><span class="w"> </span><span class="nn">msl.loadlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">Client64</span>
+
 
 <span class="k">class</span><span class="w"> </span><span class="nc">MyClient</span><span class="p">(</span><span class="n">Client64</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Call a function in &#39;my_lib.dll&#39; via the &#39;MyServer&#39; wrapper.&quot;&quot;&quot;</span>
@@ -2315,14 +2317,15 @@
 <p>Then you can simplify the implementation by defining your <a class="autorefs autorefs-internal" href="../../api/client64/#client64">Client64</a> subclass as</p>
 <div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">msl.loadlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">Client64</span>
 
-<span class="k">class</span><span class="w"> </span><span class="nc">LinearAlgebra</span><span class="p">(</span><span class="n">Client64</span><span class="p">):</span>
 
+<span class="k">class</span><span class="w"> </span><span class="nc">LinearAlgebra</span><span class="p">(</span><span class="n">Client64</span><span class="p">):</span>
     <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="s2">&quot;linear_algebra_32.py&quot;</span><span class="p">)</span>
 
     <span class="k">def</span><span class="w"> </span><span class="fm">__getattr__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
         <span class="k">def</span><span class="w"> </span><span class="nf">send</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">request32</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
         <span class="k">return</span> <span class="n">send</span>
 </code></pre></div>
 <p>and you will get the same behaviour. If you call a method that does not exist on the <a class="autorefs autorefs-internal" href="../../api/server32/#server32">Server32</a> subclass or if you specify the wrong number of arguments or keyword arguments then a <a class="autorefs autorefs-internal" title="            Server32Error" href="../../api/exceptions/#msl.loadlib.exceptions.Server32Error">Server32Error</a> will be raised.</p>
@@ -2478,7 +2481,7 @@
       <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["content.code.copy", "navigation.footer", "navigation.indexes", "navigation.top", "navigation.tabs", "navigation.tabs.sticky", "search.highlight", "search.suggest"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": {"provider": "mike"}}</script>
     
     
-      <script src="../../assets/javascripts/bundle.79ae519e.min.js"></script>
+      <script src="../../assets/javascripts/bundle.d7400e89.min.js"></script>
       
     
   </body>

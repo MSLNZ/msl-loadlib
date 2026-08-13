@@ -23,7 +23,7 @@
       
       
       <link rel="icon" href="../../assets/images/favicon.ico">
-      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.6">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
     
     
       
@@ -31,7 +31,7 @@
       
     
     
-      <link rel="stylesheet" href="../../assets/stylesheets/main.484c7ddc.min.css">
+      <link rel="stylesheet" href="../../assets/stylesheets/main.ec1eaa64.min.css">
       
         
         <link rel="stylesheet" href="../../assets/stylesheets/palette.ab4e12ef.min.css">
@@ -2200,8 +2200,8 @@
 
 <span class="kn">from</span><span class="w"> </span><span class="nn">msl.loadlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">Client64</span><span class="p">,</span> <span class="n">Server32</span>
 
-<span class="k">class</span><span class="w"> </span><span class="nc">Polling32</span><span class="p">(</span><span class="n">Server32</span><span class="p">):</span>
 
+<span class="k">class</span><span class="w"> </span><span class="nc">Polling32</span><span class="p">(</span><span class="n">Server32</span><span class="p">):</span>
     <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">host</span><span class="p">,</span> <span class="n">port</span><span class="p">):</span>
         <span class="c1"># Loading a &quot;dummy&quot; 32-bit library for this example</span>
         <span class="n">path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">Server32</span><span class="o">.</span><span class="n">examples_dir</span><span class="p">(),</span> <span class="s2">&quot;cpp_lib32&quot;</span><span class="p">)</span>
@@ -2236,15 +2236,17 @@
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Append a message.&quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_stdout</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">message</span><span class="p">)</span>
 
-<span class="k">class</span><span class="w"> </span><span class="nc">Polling64</span><span class="p">(</span><span class="n">Client64</span><span class="p">):</span>
 
+<span class="k">class</span><span class="w"> </span><span class="nc">Polling64</span><span class="p">(</span><span class="n">Client64</span><span class="p">):</span>
     <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="vm">__file__</span><span class="p">)</span>
 
     <span class="k">def</span><span class="w"> </span><span class="fm">__getattr__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
         <span class="k">def</span><span class="w"> </span><span class="nf">send</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">request32</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
         <span class="k">return</span> <span class="n">send</span>
+
 
 <span class="c1"># Only execute this section of code on the 64-bit client</span>
 <span class="c1"># (not on the 32-bit server). You may also prefer to write the</span>
@@ -2394,7 +2396,7 @@
       <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["content.code.copy", "navigation.footer", "navigation.indexes", "navigation.top", "navigation.tabs", "navigation.tabs.sticky", "search.highlight", "search.suggest"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": {"provider": "mike"}}</script>
     
     
-      <script src="../../assets/javascripts/bundle.79ae519e.min.js"></script>
+      <script src="../../assets/javascripts/bundle.d7400e89.min.js"></script>
       
     
   </body>

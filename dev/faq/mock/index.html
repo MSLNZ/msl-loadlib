@@ -21,7 +21,7 @@
       
       
       <link rel="icon" href="../../assets/images/favicon.ico">
-      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.6">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
     
     
       
@@ -29,7 +29,7 @@
       
     
     
-      <link rel="stylesheet" href="../../assets/stylesheets/main.484c7ddc.min.css">
+      <link rel="stylesheet" href="../../assets/stylesheets/main.ec1eaa64.min.css">
       
         
         <link rel="stylesheet" href="../../assets/stylesheets/palette.ab4e12ef.min.css">
@@ -2183,8 +2183,8 @@
 <p>Here is an example on how a client (running within 64-bit Python) can have a <a class="autorefs autorefs-internal" href="../../api/server32/#server32">Server32</a> subclass load a 32-bit library or a 64-bit library.</p>
 <div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">msl.loadlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">Client64</span><span class="p">,</span> <span class="n">Server32</span>
 
-<span class="k">class</span><span class="w"> </span><span class="nc">MockableServer</span><span class="p">(</span><span class="n">Server32</span><span class="p">):</span>
 
+<span class="k">class</span><span class="w"> </span><span class="nc">MockableServer</span><span class="p">(</span><span class="n">Server32</span><span class="p">):</span>
     <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">host</span><span class="p">,</span> <span class="n">port</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="c1"># Decide which library to load on the server.</span>
         <span class="c1"># `host` is `None` when the connection is mocked.</span>
@@ -2194,10 +2194,11 @@
             <span class="n">path</span> <span class="o">=</span> <span class="s2">&quot;path/to/32bit/c/library.so&quot;</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="s2">&quot;cdll&quot;</span><span class="p">,</span> <span class="n">host</span><span class="p">,</span> <span class="n">port</span><span class="p">)</span>
 
-<span class="k">class</span><span class="w"> </span><span class="nc">MockableClient</span><span class="p">(</span><span class="n">Client64</span><span class="p">):</span>
 
+<span class="k">class</span><span class="w"> </span><span class="nc">MockableClient</span><span class="p">(</span><span class="n">Client64</span><span class="p">):</span>
     <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="vm">__file__</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
 
 <span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
     <span class="n">client_uses_32bit_library</span> <span class="o">=</span> <span class="n">MockableClient</span><span class="p">()</span>
@@ -2316,7 +2317,7 @@
       <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["content.code.copy", "navigation.footer", "navigation.indexes", "navigation.top", "navigation.tabs", "navigation.tabs.sticky", "search.highlight", "search.suggest"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": {"provider": "mike"}}</script>
     
     
-      <script src="../../assets/javascripts/bundle.79ae519e.min.js"></script>
+      <script src="../../assets/javascripts/bundle.d7400e89.min.js"></script>
       
     
   </body>

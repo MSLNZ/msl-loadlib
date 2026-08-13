@@ -23,7 +23,7 @@
       
       
       <link rel="icon" href="../../../assets/images/favicon.ico">
-      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.6">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
     
     
       
@@ -31,7 +31,7 @@
       
     
     
-      <link rel="stylesheet" href="../../../assets/stylesheets/main.484c7ddc.min.css">
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.ec1eaa64.min.css">
       
         
         <link rel="stylesheet" href="../../../assets/stylesheets/palette.ab4e12ef.min.css">
@@ -2316,7 +2316,7 @@
 </code></pre></div>
 <p>Create an instance of the <code>ArrayManipulation</code> class in the <code>DotNetMSL</code> namespace and call the <code>scalar_multiply</code> method</p>
 <div class="highlight"><pre><span></span><code><span class="gp">&gt;&gt;&gt; </span><span class="n">am</span> <span class="o">=</span> <span class="n">net</span><span class="o">.</span><span class="n">lib</span><span class="o">.</span><span class="n">DotNetMSL</span><span class="o">.</span><span class="n">ArrayManipulation</span><span class="p">()</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">values</span> <span class="o">=</span> <span class="n">am</span><span class="o">.</span><span class="n">scalar_multiply</span><span class="p">(</span><span class="mf">2.</span><span class="p">,</span> <span class="p">[</span><span class="mf">1.</span><span class="p">,</span> <span class="mf">2.</span><span class="p">,</span> <span class="mf">3.</span><span class="p">,</span> <span class="mf">4.</span><span class="p">,</span> <span class="mf">5.</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">values</span> <span class="o">=</span> <span class="n">am</span><span class="o">.</span><span class="n">scalar_multiply</span><span class="p">(</span><span class="mf">2.0</span><span class="p">,</span> <span class="p">[</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">2.0</span><span class="p">,</span> <span class="mf">3.0</span><span class="p">,</span> <span class="mf">4.0</span><span class="p">,</span> <span class="mf">5.0</span><span class="p">])</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">values</span>
 <span class="go">&lt;System.Double[] object at ...&gt;</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="p">[</span><span class="n">val</span> <span class="k">for</span> <span class="n">val</span> <span class="ow">in</span> <span class="n">values</span><span class="p">]</span>
@@ -2356,10 +2356,12 @@
 <h2 id="config-runtime">Configure a .NET runtime<a class="headerlink" href="#config-runtime" title="Permanent link">¤</a></h2>
 <p>By default, <code>pythonnet</code> uses the .NET Framework runtime on Windows and the Mono runtime on Linux/macOS. To configure <code>pythonnet</code> to use the non-default runtime, such as the .NET Core runtime, you must either run</p>
 <div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">pythonnet</span><span class="w"> </span><span class="kn">import</span> <span class="n">load</span>
+
 <span class="n">load</span><span class="p">(</span><span class="s2">&quot;coreclr&quot;</span><span class="p">)</span>
 </code></pre></div>
 <p>or define a <code>PYTHONNET_RUNTIME=coreclr</code> environment variable, e.g.,</p>
 <div class="highlight"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
+
 <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">&quot;PYTHONNET_RUNTIME&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;coreclr&quot;</span>
 </code></pre></div>
 <p>before <a class="autorefs autorefs-internal" title="            LoadLibrary" href="../../../api/load_library/#msl.loadlib.load_library.LoadLibrary">LoadLibrary</a> is called. To explicitly use the Mono runtime, replace <code>"coreclr"</code> with <code>"mono"</code> or to use the .NET Framework runtime on Windows use <code>"netfx"</code>.</p>
@@ -2621,7 +2623,7 @@
       <script id="__config" type="application/json">{"annotate": null, "base": "../../..", "features": ["content.code.copy", "navigation.footer", "navigation.indexes", "navigation.top", "navigation.tabs", "navigation.tabs.sticky", "search.highlight", "search.suggest"], "search": "../../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": {"provider": "mike"}}</script>
     
     
-      <script src="../../../assets/javascripts/bundle.79ae519e.min.js"></script>
+      <script src="../../../assets/javascripts/bundle.d7400e89.min.js"></script>
       
     
   </body>

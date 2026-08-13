@@ -23,7 +23,7 @@
       
       
       <link rel="icon" href="../../../assets/images/favicon.ico">
-      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.6">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
     
     
       
@@ -31,7 +31,7 @@
       
     
     
-      <link rel="stylesheet" href="../../../assets/stylesheets/main.484c7ddc.min.css">
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.ec1eaa64.min.css">
       
         
         <link rel="stylesheet" href="../../../assets/stylesheets/palette.ab4e12ef.min.css">
@@ -2317,7 +2317,6 @@
 <span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">3</span><span class="p">):</span>
 <span class="gp">... </span>    <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">3</span><span class="p">):</span>
 <span class="gp">... </span>        <span class="n">A</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">coefficients</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">])</span>
-<span class="gp">...</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">b</span> <span class="o">=</span> <span class="n">jar</span><span class="o">.</span><span class="n">gateway</span><span class="o">.</span><span class="n">new_array</span><span class="p">(</span><span class="n">jar</span><span class="o">.</span><span class="n">lib</span><span class="o">.</span><span class="n">Double</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">b</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="mf">4.0</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">b</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="mf">15.0</span>
@@ -2332,9 +2331,8 @@
 <div class="highlight"><pre><span></span><code><span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">3</span><span class="p">):</span>
 <span class="gp">... </span>    <span class="n">x_i</span> <span class="o">=</span> <span class="mf">0.0</span>
 <span class="gp">... </span>    <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">3</span><span class="p">):</span>
-<span class="gp">... </span>        <span class="n">x_i</span> <span class="o">+=</span> <span class="n">coefficients</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">*</span> <span class="n">x</span><span class="o">.</span><span class="n">getValue</span><span class="p">(</span><span class="n">j</span><span class="p">,</span><span class="mi">0</span><span class="p">)</span>
+<span class="gp">... </span>        <span class="n">x_i</span> <span class="o">+=</span> <span class="n">coefficients</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">*</span> <span class="n">x</span><span class="o">.</span><span class="n">getValue</span><span class="p">(</span><span class="n">j</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
 <span class="gp">... </span>    <span class="k">assert</span> <span class="nb">abs</span><span class="p">(</span><span class="n">x_i</span> <span class="o">-</span> <span class="n">b</span><span class="p">[</span><span class="n">i</span><span class="p">])</span> <span class="o">&lt;</span> <span class="mf">1e-12</span>
-<span class="gp">...</span>
 </code></pre></div>
 <p>Shutdown the connection to the <a href="https://en.wikipedia.org/wiki/Java_virtual_machine" target="_blank">JVM</a> when finished</p>
 <div class="highlight"><pre><span></span><code><span class="gp">&gt;&gt;&gt; </span><span class="n">jar</span><span class="o">.</span><span class="n">gateway</span><span class="o">.</span><span class="n">shutdown</span><span class="p">()</span>
@@ -3014,7 +3012,7 @@
       <script id="__config" type="application/json">{"annotate": null, "base": "../../..", "features": ["content.code.copy", "navigation.footer", "navigation.indexes", "navigation.top", "navigation.tabs", "navigation.tabs.sticky", "search.highlight", "search.suggest"], "search": "../../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": {"provider": "mike"}}</script>
     
     
-      <script src="../../../assets/javascripts/bundle.79ae519e.min.js"></script>
+      <script src="../../../assets/javascripts/bundle.d7400e89.min.js"></script>
       
     
   </body>

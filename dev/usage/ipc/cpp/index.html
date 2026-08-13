@@ -23,7 +23,7 @@
       
       
       <link rel="icon" href="../../../assets/images/favicon.ico">
-      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.6">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
     
     
       
@@ -31,7 +31,7 @@
       
     
     
-      <link rel="stylesheet" href="../../../assets/stylesheets/main.484c7ddc.min.css">
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.ec1eaa64.min.css">
       
         
         <link rel="stylesheet" href="../../../assets/stylesheets/palette.ab4e12ef.min.css">
@@ -2360,7 +2360,7 @@
 </code></pre></div>
 <p>If you have a <a class="autorefs autorefs-external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" target="_blank">numpy.ndarray</a> in 64-bit Python then you cannot pass the <code>ndarray</code> object to <a class="autorefs autorefs-internal" href="../../../api/server32/#server32">Server32</a> because the 32-bit server would need to load the <code>ndarray</code> in a 32-bit version of numpy (which is not included by default in the 32-bit server, but could be &mdash; see <a class="autorefs autorefs-internal" title="Custom Server" href="../../refreeze/#refreeze">refreeze</a> for more details). To simplify the procedure you could convert the <code>ndarray</code> to a <a class="autorefs autorefs-external" href="https://docs.python.org/3/glossary.html#term-list" target="_blank">list</a> using the <a class="autorefs autorefs-external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.tolist.html#numpy.ndarray.tolist" target="_blank">numpy.ndarray.tolist</a> method</p>
 <div class="highlight"><pre><span></span><code><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">a</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mf">9.</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">a</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mf">9.0</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">cpp</span><span class="o">.</span><span class="n">scalar_multiply</span><span class="p">(</span><span class="mf">3.1</span><span class="p">,</span> <span class="n">a</span><span class="o">.</span><span class="n">tolist</span><span class="p">())</span>
 <span class="go">[0.0, 3.1, 6.2, 9.3, 12.4, 15.5, 18.6, 21.7, 24.8]</span>
 </code></pre></div>
@@ -2411,7 +2411,6 @@
 <strong>not a fixed size</strong> it must be created in the <a class="autorefs autorefs-internal" title="            circumference" href="../../../examples/cpp32/#msl.examples.loadlib.cpp32.Cpp32.circumference">Cpp32.circumference</a> method. The <a class="autorefs autorefs-internal" title="            circumference" href="../../../examples/cpp64/#msl.examples.loadlib.cpp64.Cpp64.circumference">Cpp64.circumference</a> method takes the values of the <em>radius</em> and <em>n</em> as input arguments to pass to the <a class="autorefs autorefs-internal" title="            circumference" href="../../../examples/cpp32/#msl.examples.loadlib.cpp32.Cpp32.circumference">Cpp32.circumference</a> method.</p>
 <div class="highlight"><pre><span></span><code><span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">16</span><span class="p">):</span>
 <span class="gp">... </span>    <span class="nb">print</span><span class="p">(</span><span class="n">cpp</span><span class="o">.</span><span class="n">circumference</span><span class="p">(</span><span class="mf">0.5</span><span class="p">,</span> <span class="mi">2</span><span class="o">**</span><span class="n">i</span><span class="p">))</span>
-<span class="gp">...</span>
 <span class="go">0.0</span>
 <span class="go">2.0</span>
 <span class="go">2.828427124746...</span>
@@ -2561,7 +2560,7 @@
       <script id="__config" type="application/json">{"annotate": null, "base": "../../..", "features": ["content.code.copy", "navigation.footer", "navigation.indexes", "navigation.top", "navigation.tabs", "navigation.tabs.sticky", "search.highlight", "search.suggest"], "search": "../../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": {"provider": "mike"}}</script>
     
     
-      <script src="../../../assets/javascripts/bundle.79ae519e.min.js"></script>
+      <script src="../../../assets/javascripts/bundle.d7400e89.min.js"></script>
       
     
   </body>
