@@ -2357,14 +2357,14 @@ instance of this class is created within a 64-bit Python interpreter.</p>
 <span class="normal">29</span>
 <span class="normal">30</span>
 <span class="normal">31</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Communicates with a 32-bit LabVIEW library, [labview_lib][labview-lib].</span>
+<span class="w">    </span><span class="sd">"""Communicates with a 32-bit LabVIEW library, [labview_lib][labview-lib].</span>
 
 <span class="sd">    This class demonstrates how to communicate with a 32-bit LabVIEW library if an</span>
 <span class="sd">    instance of this class is created within a 64-bit Python interpreter.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="c1"># specify the name of the corresponding 32-bit server module, labview32, which hosts</span>
     <span class="c1"># the 32-bit LabVIEW library -- labview_lib32.dll</span>
-    <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">module32</span><span class="o">=</span><span class="s2">&quot;labview32&quot;</span><span class="p">,</span> <span class="n">append_sys_path</span><span class="o">=</span><span class="n">Path</span><span class="p">(</span><span class="vm">__file__</span><span class="p">)</span><span class="o">.</span><span class="n">parent</span><span class="p">)</span>
+    <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">module32</span><span class="o">=</span><span class="s2">"labview32"</span><span class="p">,</span> <span class="n">append_sys_path</span><span class="o">=</span><span class="n">Path</span><span class="p">(</span><span class="vm">__file__</span><span class="p">)</span><span class="o">.</span><span class="n">parent</span><span class="p">)</span>
 </code></pre></div></td></tr></table></div>
                   </details>
 
@@ -2490,7 +2490,7 @@ population (<code>weighting = 1</code>) standard deviation and variance.</p>
 <span class="normal">49</span>
 <span class="normal">50</span>
 <span class="normal">51</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">stdev</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">float</span><span class="p">],</span> <span class="n">weighting</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">]:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Calculates the mean, variance and standard deviation of the values in the input `x`.</span>
+<span class="w">    </span><span class="sd">"""Calculates the mean, variance and standard deviation of the values in the input `x`.</span>
 
 <span class="sd">    See the corresponding [Labview32.stdev][msl.examples.loadlib.labview32.Labview32.stdev] method.</span>
 
@@ -2501,12 +2501,12 @@ population (<code>weighting = 1</code>) standard deviation and variance.</p>
 
 <span class="sd">    Returns:</span>
 <span class="sd">        The mean, variance and standard deviation.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="k">if</span> <span class="n">weighting</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">{</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">}:</span>
-        <span class="n">msg</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;The weighting must be either 0 or 1, got </span><span class="si">{</span><span class="n">weighting</span><span class="si">}</span><span class="s2">&quot;</span>
+        <span class="n">msg</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">"The weighting must be either 0 or 1, got </span><span class="si">{</span><span class="n">weighting</span><span class="si">}</span><span class="s2">"</span>
         <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
 
-    <span class="n">reply</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">request32</span><span class="p">(</span><span class="s2">&quot;stdev&quot;</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">weighting</span><span class="p">)</span>
+    <span class="n">reply</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">request32</span><span class="p">(</span><span class="s2">"stdev"</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">weighting</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">reply</span>
 </code></pre></div></td></tr></table></div>
             </details>

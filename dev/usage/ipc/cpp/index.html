@@ -2366,7 +2366,7 @@
 </code></pre></div>
 <p>or you could use the builtin <a class="autorefs autorefs-external" href="https://docs.python.org/3/library/array.html#array.array" target="_blank">array.array</a> class</p>
 <div class="highlight"><pre><span></span><code><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">array</span><span class="w"> </span><span class="kn">import</span> <span class="n">array</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">b</span> <span class="o">=</span> <span class="n">array</span><span class="p">(</span><span class="s2">&quot;d&quot;</span><span class="p">,</span> <span class="n">a</span><span class="o">.</span><span class="n">tobytes</span><span class="p">())</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">b</span> <span class="o">=</span> <span class="n">array</span><span class="p">(</span><span class="s2">"d"</span><span class="p">,</span> <span class="n">a</span><span class="o">.</span><span class="n">tobytes</span><span class="p">())</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">cpp</span><span class="o">.</span><span class="n">scalar_multiply</span><span class="p">(</span><span class="mf">3.1</span><span class="p">,</span> <span class="n">b</span><span class="p">)</span>
 <span class="go">[0.0, 3.1, 6.2, 9.3, 12.4, 15.5, 18.6, 21.7, 24.8]</span>
 </code></pre></div>
@@ -2376,12 +2376,12 @@
 </code></pre></div>
 <h2 id="ipc-cpp-strings">Strings<a class="headerlink" href="#ipc-cpp-strings" title="Permanent link">¤</a></h2>
 <p>In this example the memory for the reversed string is allocated in Python, see <a class="autorefs autorefs-internal" title="            reverse_string_v1" href="../../../examples/cpp64/#msl.examples.loadlib.cpp64.Cpp64.reverse_string_v1">Cpp64.reverse_string_v1</a></p>
-<div class="highlight"><pre><span></span><code><span class="gp">&gt;&gt;&gt; </span><span class="n">cpp</span><span class="o">.</span><span class="n">reverse_string_v1</span><span class="p">(</span><span class="s2">&quot;hello world!&quot;</span><span class="p">)</span>
-<span class="go">&#39;!dlrow olleh&#39;</span>
+<div class="highlight"><pre><span></span><code><span class="gp">&gt;&gt;&gt; </span><span class="n">cpp</span><span class="o">.</span><span class="n">reverse_string_v1</span><span class="p">(</span><span class="s2">"hello world!"</span><span class="p">)</span>
+<span class="go">'!dlrow olleh'</span>
 </code></pre></div>
 <p>In this example the memory for the reversed string is allocated in C++, see <a class="autorefs autorefs-internal" title="            reverse_string_v2" href="../../../examples/cpp64/#msl.examples.loadlib.cpp64.Cpp64.reverse_string_v2">Cpp64.reverse_string_v2</a></p>
-<div class="highlight"><pre><span></span><code><span class="gp">&gt;&gt;&gt; </span><span class="n">cpp</span><span class="o">.</span><span class="n">reverse_string_v2</span><span class="p">(</span><span class="s2">&quot;uncertainty&quot;</span><span class="p">)</span>
-<span class="go">&#39;ytniatrecnu&#39;</span>
+<div class="highlight"><pre><span></span><code><span class="gp">&gt;&gt;&gt; </span><span class="n">cpp</span><span class="o">.</span><span class="n">reverse_string_v2</span><span class="p">(</span><span class="s2">"uncertainty"</span><span class="p">)</span>
+<span class="go">'ytniatrecnu'</span>
 </code></pre></div>
 <h2 id="ipc-cpp-structs">Structs<a class="headerlink" href="#ipc-cpp-structs" title="Permanent link">¤</a></h2>
 <p>It is possible to <a class="autorefs autorefs-external" href="https://docs.python.org/3/library/pickle.html#module-pickle" target="_blank">pickle</a> a <a class="autorefs autorefs-external" href="https://docs.python.org/3/library/ctypes.html#ctypes.Structure" target="_blank">ctypes.Structure</a> and pass the

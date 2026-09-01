@@ -2227,23 +2227,23 @@
 
 
 <span class="k">class</span><span class="w"> </span><span class="nc">MyServer</span><span class="p">(</span><span class="n">Server32</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Load a 32-bit C library &#39;my_lib.dll&#39; that has an &#39;add&#39; and a &#39;version&#39; function.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""Load a 32-bit C library 'my_lib.dll' that has an 'add' and a 'version' function."""</span>
 
     <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">host</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">port</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
         <span class="c1"># The `host` and `port` arguments are mandatory.</span>
         <span class="c1"># All values in `kwargs` are of type string.</span>
-        <span class="c1"># Calling super() loads the &#39;my_lib.dll&#39; library using `ctypes.CDLL`.</span>
-        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="s2">&quot;my_lib.dll&quot;</span><span class="p">,</span> <span class="s2">&quot;cdll&quot;</span><span class="p">,</span> <span class="n">host</span><span class="p">,</span> <span class="n">port</span><span class="p">)</span>
+        <span class="c1"># Calling super() loads the 'my_lib.dll' library using `ctypes.CDLL`.</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="s2">"my_lib.dll"</span><span class="p">,</span> <span class="s2">"cdll"</span><span class="p">,</span> <span class="n">host</span><span class="p">,</span> <span class="n">port</span><span class="p">)</span>
 
         <span class="c1"># The Server32 class has a `lib` attribute that is a reference</span>
         <span class="c1"># to the ctypes.CDLL object.</span>
 
-        <span class="c1"># The &#39;version&#39; function in the library returns an int32_t.</span>
-        <span class="c1"># Store the result as an attribute of &#39;MyServer&#39;.</span>
+        <span class="c1"># The 'version' function in the library returns an int32_t.</span>
+        <span class="c1"># Store the result as an attribute of 'MyServer'.</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">version</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">lib</span><span class="o">.</span><span class="n">version</span><span class="p">()</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">add</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">a</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">b</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
-        <span class="c1"># The &#39;add&#39; function in the library takes two int32_t parameters</span>
+        <span class="c1"># The 'add' function in the library takes two int32_t parameters</span>
         <span class="c1"># and returns the sum.</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">lib</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">)</span>
 </code></pre></div>
@@ -2258,21 +2258,21 @@
 
 
 <span class="k">class</span><span class="w"> </span><span class="nc">MyClient</span><span class="p">(</span><span class="n">Client64</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Call a function in &#39;my_lib.dll&#39; via the &#39;MyServer&#39; wrapper.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""Call a function in 'my_lib.dll' via the 'MyServer' wrapper."""</span>
 
     <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="c1"># Specify the name of the Python module to run on the 32-bit server (i.e., &quot;my_server&quot;).</span>
+        <span class="c1"># Specify the name of the Python module to run on the 32-bit server (i.e., "my_server").</span>
         <span class="c1"># All user-defined keyword arguments will appear as `kwargs` in `MyServer.__init__`.</span>
-        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="s2">&quot;my_server&quot;</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="s2">"my_server"</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">add</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">a</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">b</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
         <span class="c1"># The `Client64` class has a `request32` method to send a request to the 32-bit server.</span>
         <span class="c1"># Send the `a` and `b` arguments to the `MyServer.add` method.</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">request32</span><span class="p">(</span><span class="s2">&quot;add&quot;</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">request32</span><span class="p">(</span><span class="s2">"add"</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">)</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">version</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
-        <span class="c1"># Get the &#39;version&#39; attribute.</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">request32</span><span class="p">(</span><span class="s2">&quot;version&quot;</span><span class="p">)</span>
+        <span class="c1"># Get the 'version' attribute.</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">request32</span><span class="p">(</span><span class="s2">"version"</span><span class="p">)</span>
 </code></pre></div>
 </div>
 <p>The <code>MyClient</code> class could then be used as follows</p>
@@ -2297,22 +2297,22 @@
 <span class="k">class</span><span class="w"> </span><span class="nc">LinearAlgebra</span><span class="p">(</span><span class="n">Client64</span><span class="p">):</span>
 
     <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="s2">&quot;linear_algebra_32.py&quot;</span><span class="p">)</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="s2">"linear_algebra_32.py"</span><span class="p">)</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">solve</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">matrix</span><span class="p">,</span> <span class="n">vector</span><span class="p">):</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">request32</span><span class="p">(</span><span class="s2">&quot;solve&quot;</span><span class="p">,</span> <span class="n">matrix</span><span class="p">,</span> <span class="n">vector</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">request32</span><span class="p">(</span><span class="s2">"solve"</span><span class="p">,</span> <span class="n">matrix</span><span class="p">,</span> <span class="n">vector</span><span class="p">)</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">eigenvalues</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">matrix</span><span class="p">):</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">request32</span><span class="p">(</span><span class="s2">&quot;eigenvalues&quot;</span><span class="p">,</span> <span class="n">matrix</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">request32</span><span class="p">(</span><span class="s2">"eigenvalues"</span><span class="p">,</span> <span class="n">matrix</span><span class="p">)</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">stdev</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">as_population</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">request32</span><span class="p">(</span><span class="s2">&quot;stdev&quot;</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">as_population</span><span class="o">=</span><span class="n">as_population</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">request32</span><span class="p">(</span><span class="s2">"stdev"</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">as_population</span><span class="o">=</span><span class="n">as_population</span><span class="p">)</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">determinant</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">matrix</span><span class="p">):</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">request32</span><span class="p">(</span><span class="s2">&quot;determinant&quot;</span><span class="p">,</span> <span class="n">matrix</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">request32</span><span class="p">(</span><span class="s2">"determinant"</span><span class="p">,</span> <span class="n">matrix</span><span class="p">)</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">cross_product</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">vector1</span><span class="p">,</span> <span class="n">vector2</span><span class="p">):</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">request32</span><span class="p">(</span><span class="s2">&quot;cross_product&quot;</span><span class="p">,</span> <span class="n">vector1</span><span class="p">,</span> <span class="n">vector2</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">request32</span><span class="p">(</span><span class="s2">"cross_product"</span><span class="p">,</span> <span class="n">vector1</span><span class="p">,</span> <span class="n">vector2</span><span class="p">)</span>
 </code></pre></div>
 <p>Then you can simplify the implementation by defining your <a class="autorefs autorefs-internal" href="../../api/client64/#client64">Client64</a> subclass as</p>
 <div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">msl.loadlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">Client64</span>
@@ -2320,7 +2320,7 @@
 
 <span class="k">class</span><span class="w"> </span><span class="nc">LinearAlgebra</span><span class="p">(</span><span class="n">Client64</span><span class="p">):</span>
     <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="s2">&quot;linear_algebra_32.py&quot;</span><span class="p">)</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="s2">"linear_algebra_32.py"</span><span class="p">)</span>
 
     <span class="k">def</span><span class="w"> </span><span class="fm">__getattr__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
         <span class="k">def</span><span class="w"> </span><span class="nf">send</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>

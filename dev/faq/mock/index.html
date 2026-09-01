@@ -2189,10 +2189,10 @@
         <span class="c1"># Decide which library to load on the server.</span>
         <span class="c1"># `host` is `None` when the connection is mocked.</span>
         <span class="k">if</span> <span class="n">host</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">path</span> <span class="o">=</span> <span class="s2">&quot;path/to/64bit/c/library.so&quot;</span>
+            <span class="n">path</span> <span class="o">=</span> <span class="s2">"path/to/64bit/c/library.so"</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="n">path</span> <span class="o">=</span> <span class="s2">&quot;path/to/32bit/c/library.so&quot;</span>
-        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="s2">&quot;cdll&quot;</span><span class="p">,</span> <span class="n">host</span><span class="p">,</span> <span class="n">port</span><span class="p">)</span>
+            <span class="n">path</span> <span class="o">=</span> <span class="s2">"path/to/32bit/c/library.so"</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="s2">"cdll"</span><span class="p">,</span> <span class="n">host</span><span class="p">,</span> <span class="n">port</span><span class="p">)</span>
 
 
 <span class="k">class</span><span class="w"> </span><span class="nc">MockableClient</span><span class="p">(</span><span class="n">Client64</span><span class="p">):</span>
@@ -2200,7 +2200,7 @@
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="vm">__file__</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
 
 
-<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">"__main__"</span><span class="p">:</span>
     <span class="n">client_uses_32bit_library</span> <span class="o">=</span> <span class="n">MockableClient</span><span class="p">()</span>
     <span class="n">client_uses_64bit_library</span> <span class="o">=</span> <span class="n">MockableClient</span><span class="p">(</span><span class="n">host</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
 </code></pre></div>

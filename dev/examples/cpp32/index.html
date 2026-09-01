@@ -2628,19 +2628,19 @@ then returns the response from the library.</p>
 <span class="normal">38</span>
 <span class="normal">39</span>
 <span class="normal">40</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">host</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">port</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Wrapper around a 32-bit C++ library.</span>
+<span class="w">    </span><span class="sd">"""Wrapper around a 32-bit C++ library.</span>
 
 <span class="sd">    This class demonstrates how to send/receive various data types to/from a</span>
-<span class="sd">    32-bit C++ library via [ctypes][]{:target=&quot;_blank&quot;}.</span>
+<span class="sd">    32-bit C++ library via [ctypes][]{:target="_blank"}.</span>
 
 <span class="sd">    Args:</span>
 <span class="sd">        host: The IP address (or hostname) to use for the server.</span>
 <span class="sd">        port: The port to open for the server.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="c1"># By not specifying the extension of the library file the server will open</span>
     <span class="c1"># the appropriate file based on the operating system.</span>
-    <span class="n">path</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="vm">__file__</span><span class="p">)</span><span class="o">.</span><span class="n">parent</span> <span class="o">/</span> <span class="s2">&quot;cpp_lib32&quot;</span>
-    <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="s2">&quot;cdll&quot;</span><span class="p">,</span> <span class="n">host</span><span class="p">,</span> <span class="n">port</span><span class="p">)</span>
+    <span class="n">path</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="vm">__file__</span><span class="p">)</span><span class="o">.</span><span class="n">parent</span> <span class="o">/</span> <span class="s2">"cpp_lib32"</span>
+    <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="s2">"cdll"</span><span class="p">,</span> <span class="n">host</span><span class="p">,</span> <span class="n">port</span><span class="p">)</span>
 </code></pre></div></td></tr></table></div>
                   </details>
 
@@ -2776,7 +2776,7 @@ then returns the response from the library.</p>
 <span class="normal">64</span>
 <span class="normal">65</span>
 <span class="normal">66</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">add</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">a</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">b</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Add two integers.</span>
+<span class="w">    </span><span class="sd">"""Add two integers.</span>
 
 <span class="sd">    The corresponding C++ code is</span>
 
@@ -2794,7 +2794,7 @@ then returns the response from the library.</p>
 
 <span class="sd">    Returns:</span>
 <span class="sd">        The sum, `a + b`.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="c1"># restype and argtypes should be defined elsewhere, shown here for illustrative purposes</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">lib</span><span class="o">.</span><span class="n">add</span><span class="o">.</span><span class="n">restype</span> <span class="o">=</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">c_int32</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">lib</span><span class="o">.</span><span class="n">add</span><span class="o">.</span><span class="n">argtypes</span> <span class="o">=</span> <span class="p">[</span><span class="n">ctypes</span><span class="o">.</span><span class="n">c_int32</span><span class="p">,</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">c_int32</span><span class="p">]</span>
@@ -2950,7 +2950,7 @@ then returns the response from the library.</p>
 <span class="normal">121</span>
 <span class="normal">122</span>
 <span class="normal">123</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">add_or_subtract</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">a</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">b</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">do_addition</span><span class="p">:</span> <span class="nb">bool</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Add or subtract two double-precision numbers *(&#39;double&#39; refers to the C++ data type)*.</span>
+<span class="w">    </span><span class="sd">"""Add or subtract two double-precision numbers *('double' refers to the C++ data type)*.</span>
 
 <span class="sd">    The corresponding C++ code is</span>
 
@@ -2973,7 +2973,7 @@ then returns the response from the library.</p>
 
 <span class="sd">    Returns:</span>
 <span class="sd">        `a + b` if `do_addition` is `True` else `a - b`.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="c1"># restype and argtypes should be defined elsewhere, shown here for illustrative purposes</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">lib</span><span class="o">.</span><span class="n">add_or_subtract</span><span class="o">.</span><span class="n">restype</span> <span class="o">=</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">c_double</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">lib</span><span class="o">.</span><span class="n">add_or_subtract</span><span class="o">.</span><span class="n">argtypes</span> <span class="o">=</span> <span class="p">[</span><span class="n">ctypes</span><span class="o">.</span><span class="n">c_double</span><span class="p">,</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">c_double</span><span class="p">,</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">c_bool</span><span class="p">]</span>
@@ -3133,7 +3133,7 @@ struct as the input parameter to sum the distance between adjacent points on the
 <span class="normal">299</span>
 <span class="normal">300</span>
 <span class="normal">301</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">circumference</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">radius</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">n</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Estimates the circumference of a circle.</span>
+<span class="w">    </span><span class="sd">"""Estimates the circumference of a circle.</span>
 
 <span class="sd">    This method calls the `distance_n_points` function in [cpp_lib][cpp-lib].</span>
 
@@ -3161,7 +3161,7 @@ struct as the input parameter to sum the distance between adjacent points on the
 
 <span class="sd">    Returns:</span>
 <span class="sd">        The estimated circumference of the circle.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="c1"># restype and argtypes should be defined elsewhere, shown here for illustrative purposes</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">lib</span><span class="o">.</span><span class="n">distance_n_points</span><span class="o">.</span><span class="n">restype</span> <span class="o">=</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">c_double</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">lib</span><span class="o">.</span><span class="n">distance_n_points</span><span class="o">.</span><span class="n">argtypes</span> <span class="o">=</span> <span class="p">[</span><span class="n">NPoints</span><span class="p">]</span>
@@ -3292,7 +3292,7 @@ struct as the input parameter to sum the distance between adjacent points on the
 <span class="normal">253</span>
 <span class="normal">254</span>
 <span class="normal">255</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">distance_4_points</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">four_points</span><span class="p">:</span> <span class="n">FourPoints</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Calculates the total distance connecting 4 [Point][msl.examples.loadlib.cpp32.Point]s.</span>
+<span class="w">    </span><span class="sd">"""Calculates the total distance connecting 4 [Point][msl.examples.loadlib.cpp32.Point]s.</span>
 
 <span class="sd">    The corresponding C++ code is</span>
 
@@ -3313,7 +3313,7 @@ struct as the input parameter to sum the distance between adjacent points on the
 
 <span class="sd">    Returns:</span>
 <span class="sd">        The total distance connecting the 4 points.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="c1"># restype should be defined elsewhere, shown here for illustrative purposes</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">lib</span><span class="o">.</span><span class="n">distance_4_points</span><span class="o">.</span><span class="n">restype</span> <span class="o">=</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">c_double</span>
     <span class="n">result</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">lib</span><span class="o">.</span><span class="n">distance_4_points</span><span class="p">(</span><span class="n">four_points</span><span class="p">)</span>
@@ -3438,7 +3438,7 @@ passes the string to C++.</p>
 <span class="normal">191</span>
 <span class="normal">192</span>
 <span class="normal">193</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">reverse_string_v1</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">original</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Reverse a string (version 1).</span>
+<span class="w">    </span><span class="sd">"""Reverse a string (version 1).</span>
 
 <span class="sd">    In this method Python allocates the memory for the reversed string and</span>
 <span class="sd">    passes the string to C++.</span>
@@ -3460,7 +3460,7 @@ passes the string to C++.</p>
 
 <span class="sd">    Returns:</span>
 <span class="sd">        The string reversed.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="c1"># restype and argtypes should be defined elsewhere, shown here for illustrative purposes</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">lib</span><span class="o">.</span><span class="n">reverse_string_v1</span><span class="o">.</span><span class="n">restype</span> <span class="o">=</span> <span class="kc">None</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">lib</span><span class="o">.</span><span class="n">reverse_string_v1</span><span class="o">.</span><span class="n">argtypes</span> <span class="o">=</span> <span class="p">[</span><span class="n">ctypes</span><span class="o">.</span><span class="n">c_char_p</span><span class="p">,</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">c_int32</span><span class="p">,</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">c_char_p</span><span class="p">]</span>
@@ -3592,7 +3592,7 @@ the string to Python.</p>
 <span class="normal">225</span>
 <span class="normal">226</span>
 <span class="normal">227</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">reverse_string_v2</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">original</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Reverse a string (version 2).</span>
+<span class="w">    </span><span class="sd">"""Reverse a string (version 2).</span>
 
 <span class="sd">    In this method C++ allocates the memory for the reversed string and passes</span>
 <span class="sd">    the string to Python.</span>
@@ -3616,7 +3616,7 @@ the string to Python.</p>
 
 <span class="sd">    Returns:</span>
 <span class="sd">        The string reversed.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="c1"># restype and argtypes should be defined elsewhere, shown here for illustrative purposes</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">lib</span><span class="o">.</span><span class="n">reverse_string_v2</span><span class="o">.</span><span class="n">restype</span> <span class="o">=</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">c_char_p</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">lib</span><span class="o">.</span><span class="n">reverse_string_v2</span><span class="o">.</span><span class="n">argtypes</span> <span class="o">=</span> <span class="p">[</span><span class="n">ctypes</span><span class="o">.</span><span class="n">c_char_p</span><span class="p">,</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">c_int32</span><span class="p">]</span>
@@ -3762,7 +3762,7 @@ the string to Python.</p>
 <span class="normal">158</span>
 <span class="normal">159</span>
 <span class="normal">160</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">scalar_multiply</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">a</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">xin</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">float</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">float</span><span class="p">]:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Multiply each element in an array by a number.</span>
+<span class="w">    </span><span class="sd">"""Multiply each element in an array by a number.</span>
 
 <span class="sd">    The corresponding C++ code is</span>
 
@@ -3782,7 +3782,7 @@ the string to Python.</p>
 
 <span class="sd">    Returns:</span>
 <span class="sd">        A new array with each element in `xin` multiplied by `a`.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="c1"># restype and argtypes should be defined elsewhere, shown here for illustrative purposes</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">lib</span><span class="o">.</span><span class="n">scalar_multiply</span><span class="o">.</span><span class="n">restype</span> <span class="o">=</span> <span class="kc">None</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">lib</span><span class="o">.</span><span class="n">scalar_multiply</span><span class="o">.</span><span class="n">argtypes</span> <span class="o">=</span> <span class="p">[</span>
@@ -3922,7 +3922,7 @@ the string to Python.</p>
 <span class="normal">90</span>
 <span class="normal">91</span>
 <span class="normal">92</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">subtract</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">a</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">b</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Subtract two floating-point numbers *(&#39;float&#39; refers to the C++ data type)*.</span>
+<span class="w">    </span><span class="sd">"""Subtract two floating-point numbers *('float' refers to the C++ data type)*.</span>
 
 <span class="sd">    The corresponding C++ code is</span>
 
@@ -3940,7 +3940,7 @@ the string to Python.</p>
 
 <span class="sd">    Returns:</span>
 <span class="sd">        The difference, `a - b`.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="c1"># restype and argtypes should be defined elsewhere, shown here for illustrative purposes</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">lib</span><span class="o">.</span><span class="n">subtract</span><span class="o">.</span><span class="n">restype</span> <span class="o">=</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">c_float</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">lib</span><span class="o">.</span><span class="n">subtract</span><span class="o">.</span><span class="n">argtypes</span> <span class="o">=</span> <span class="p">[</span><span class="n">ctypes</span><span class="o">.</span><span class="n">c_float</span><span class="p">,</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">c_float</span><span class="p">]</span>
@@ -4093,9 +4093,9 @@ the string to Python.</p>
 <span class="normal">346</span>
 <span class="normal">347</span>
 <span class="normal">348</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">point1</span><span class="p">:</span> <span class="n">Point</span><span class="p">,</span> <span class="n">point2</span><span class="p">:</span> <span class="n">Point</span><span class="p">,</span> <span class="n">point3</span><span class="p">:</span> <span class="n">Point</span><span class="p">,</span> <span class="n">point4</span><span class="p">:</span> <span class="n">Point</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;C++ struct that is a fixed size in memory.</span>
+<span class="w">    </span><span class="sd">"""C++ struct that is a fixed size in memory.</span>
 
-<span class="sd">    This object can be [pickle][]{:target=&quot;_blank&quot;}d.</span>
+<span class="sd">    This object can be [pickle][]{:target="_blank"}d.</span>
 
 <span class="sd">    ```cpp</span>
 <span class="sd">    struct FourPoints {</span>
@@ -4108,7 +4108,7 @@ the string to Python.</p>
 <span class="sd">        point2: The second point.</span>
 <span class="sd">        point3: The third point.</span>
 <span class="sd">        point4: The fourth point.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">points</span><span class="p">:</span> <span class="n">Array</span><span class="p">[</span><span class="n">Point</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">Point</span> <span class="o">*</span> <span class="mi">4</span><span class="p">)(</span><span class="n">point1</span><span class="p">,</span> <span class="n">point2</span><span class="p">,</span> <span class="n">point3</span><span class="p">,</span> <span class="n">point4</span><span class="p">)</span>
 </code></pre></div></td></tr></table></div>

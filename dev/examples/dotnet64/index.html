@@ -2549,14 +2549,14 @@ instance of this class is created within a 64-bit Python interpreter.</p>
 <span class="normal">23</span>
 <span class="normal">24</span>
 <span class="normal">25</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Communicates with the 32-bit .NET [dotnet_lib32.dll][dotnet-lib] library.</span>
+<span class="w">    </span><span class="sd">"""Communicates with the 32-bit .NET [dotnet_lib32.dll][dotnet-lib] library.</span>
 
 <span class="sd">    This class demonstrates how to communicate with a 32-bit .NET library if an</span>
 <span class="sd">    instance of this class is created within a 64-bit Python interpreter.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="c1"># specify the name of the corresponding 32-bit server module, dotnet32, which hosts</span>
     <span class="c1"># the 32-bit .NET library -- dotnet_lib32.dll.</span>
-    <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="s2">&quot;dotnet32&quot;</span><span class="p">,</span> <span class="n">append_sys_path</span><span class="o">=</span><span class="n">Path</span><span class="p">(</span><span class="vm">__file__</span><span class="p">)</span><span class="o">.</span><span class="n">parent</span><span class="p">)</span>
+    <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="s2">"dotnet32"</span><span class="p">,</span> <span class="n">append_sys_path</span><span class="o">=</span><span class="n">Path</span><span class="p">(</span><span class="vm">__file__</span><span class="p">)</span><span class="o">.</span><span class="n">parent</span><span class="p">)</span>
 </code></pre></div></td></tr></table></div>
                   </details>
 
@@ -2676,7 +2676,7 @@ instance of this class is created within a 64-bit Python interpreter.</p>
 <span class="normal">52</span>
 <span class="normal">53</span>
 <span class="normal">54</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">add_integers</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">a</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">b</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Add two integers.</span>
+<span class="w">    </span><span class="sd">"""Add two integers.</span>
 
 <span class="sd">    See the corresponding [DotNet32.add_integers][msl.examples.loadlib.dotnet32.DotNet32.add_integers] method.</span>
 
@@ -2686,8 +2686,8 @@ instance of this class is created within a 64-bit Python interpreter.</p>
 
 <span class="sd">    Returns:</span>
 <span class="sd">        The sum, `a + b`.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">reply</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">request32</span><span class="p">(</span><span class="s2">&quot;add_integers&quot;</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">)</span>
+<span class="sd">    """</span>
+    <span class="n">reply</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">request32</span><span class="p">(</span><span class="s2">"add_integers"</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">reply</span>
 </code></pre></div></td></tr></table></div>
             </details>
@@ -2852,7 +2852,7 @@ instance of this class is created within a 64-bit Python interpreter.</p>
 <span class="normal">164</span>
 <span class="normal">165</span>
 <span class="normal">166</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">add_multiple</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">a</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">b</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">c</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">d</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">e</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Add multiple integers.</span>
+<span class="w">    </span><span class="sd">"""Add multiple integers.</span>
 
 <span class="sd">    Calls a static method in a static class.</span>
 
@@ -2867,8 +2867,8 @@ instance of this class is created within a 64-bit Python interpreter.</p>
 
 <span class="sd">    Returns:</span>
 <span class="sd">        The sum of the input arguments.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">reply</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">request32</span><span class="p">(</span><span class="s2">&quot;add_multiple&quot;</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">c</span><span class="p">,</span> <span class="n">d</span><span class="p">,</span> <span class="n">e</span><span class="p">)</span>
+<span class="sd">    """</span>
+    <span class="n">reply</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">request32</span><span class="p">(</span><span class="s2">"add_multiple"</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">c</span><span class="p">,</span> <span class="n">d</span><span class="p">,</span> <span class="n">e</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">reply</span>
 </code></pre></div></td></tr></table></div>
             </details>
@@ -2996,7 +2996,7 @@ instance of this class is created within a 64-bit Python interpreter.</p>
 <span class="normal"> 99</span>
 <span class="normal">100</span>
 <span class="normal">101</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">add_or_subtract</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">a</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">b</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">do_addition</span><span class="p">:</span> <span class="nb">bool</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Add or subtract two C# double-precision numbers.</span>
+<span class="w">    </span><span class="sd">"""Add or subtract two C# double-precision numbers.</span>
 
 <span class="sd">    See the corresponding [DotNet32.add_or_subtract][msl.examples.loadlib.dotnet32.DotNet32.add_or_subtract] method.</span>
 
@@ -3007,8 +3007,8 @@ instance of this class is created within a 64-bit Python interpreter.</p>
 
 <span class="sd">    Returns:</span>
 <span class="sd">        `a + b` if `do_addition` is `True` else `a - b`.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">reply</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">request32</span><span class="p">(</span><span class="s2">&quot;add_or_subtract&quot;</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">do_addition</span><span class="o">=</span><span class="n">do_addition</span><span class="p">)</span>
+<span class="sd">    """</span>
+    <span class="n">reply</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">request32</span><span class="p">(</span><span class="s2">"add_or_subtract"</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">do_addition</span><span class="o">=</span><span class="n">do_addition</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">reply</span>
 </code></pre></div></td></tr></table></div>
             </details>
@@ -3173,7 +3173,7 @@ instance of this class is created within a 64-bit Python interpreter.</p>
 <span class="normal">184</span>
 <span class="normal">185</span>
 <span class="normal">186</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">concatenate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">a</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">b</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">c</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">d</span><span class="p">:</span> <span class="nb">bool</span><span class="p">,</span> <span class="n">e</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>  <span class="c1"># noqa: FBT001</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Concatenate strings.</span>
+<span class="w">    </span><span class="sd">"""Concatenate strings.</span>
 
 <span class="sd">    Calls a static method in a static class.</span>
 
@@ -3188,8 +3188,8 @@ instance of this class is created within a 64-bit Python interpreter.</p>
 
 <span class="sd">    Returns:</span>
 <span class="sd">        The strings concatenated together.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">reply</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">request32</span><span class="p">(</span><span class="s2">&quot;concatenate&quot;</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">c</span><span class="p">,</span> <span class="n">d</span><span class="p">,</span> <span class="n">e</span><span class="p">)</span>
+<span class="sd">    """</span>
+    <span class="n">reply</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">request32</span><span class="p">(</span><span class="s2">"concatenate"</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">c</span><span class="p">,</span> <span class="n">d</span><span class="p">,</span> <span class="n">e</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">reply</span>
 </code></pre></div></td></tr></table></div>
             </details>
@@ -3300,7 +3300,7 @@ instance of this class is created within a 64-bit Python interpreter.</p>
 <span class="normal">67</span>
 <span class="normal">68</span>
 <span class="normal">69</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">divide_floats</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">a</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">b</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Divide two C# floating-point numbers.</span>
+<span class="w">    </span><span class="sd">"""Divide two C# floating-point numbers.</span>
 
 <span class="sd">    See the corresponding [DotNet32.divide_floats][msl.examples.loadlib.dotnet32.DotNet32.divide_floats] method.</span>
 
@@ -3310,8 +3310,8 @@ instance of this class is created within a 64-bit Python interpreter.</p>
 
 <span class="sd">    Returns:</span>
 <span class="sd">        The quotient, `a / b`.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">reply</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">request32</span><span class="p">(</span><span class="s2">&quot;divide_floats&quot;</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">)</span>
+<span class="sd">    """</span>
+    <span class="n">reply</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">request32</span><span class="p">(</span><span class="s2">"divide_floats"</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">reply</span>
 </code></pre></div></td></tr></table></div>
             </details>
@@ -3381,17 +3381,17 @@ using the <a class="autorefs autorefs-internal" title="            assembly
 <span class="normal">37</span>
 <span class="normal">38</span>
 <span class="normal">39</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">get_class_names</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Gets the class names in the library.</span>
+<span class="w">    </span><span class="sd">"""Gets the class names in the library.</span>
 
-<span class="sd">    Calls [GetTypes](https://learn.microsoft.com/en-us/dotnet/api/system.reflection.assembly.gettypes){:target=&quot;_blank&quot;}</span>
+<span class="sd">    Calls [GetTypes](https://learn.microsoft.com/en-us/dotnet/api/system.reflection.assembly.gettypes){:target="_blank"}</span>
 <span class="sd">    using the [assembly][msl.loadlib.load_library.LoadLibrary.assembly] property.</span>
 
 <span class="sd">    See the corresponding [DotNet32.get_class_names][msl.examples.loadlib.dotnet32.DotNet32.get_class_names] method.</span>
 
 <span class="sd">    Returns:</span>
 <span class="sd">        The names of the classes that are available in [dotnet_lib32.dll][dotnet-lib].</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">reply</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">request32</span><span class="p">(</span><span class="s2">&quot;get_class_names&quot;</span><span class="p">)</span>
+<span class="sd">    """</span>
+    <span class="n">reply</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">request32</span><span class="p">(</span><span class="s2">"get_class_names"</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">reply</span>
 </code></pre></div></td></tr></table></div>
             </details>
@@ -3504,7 +3504,7 @@ method.</p>
 <span class="normal">83</span>
 <span class="normal">84</span>
 <span class="normal">85</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">multiply_doubles</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">a</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">b</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Multiply two C# double-precision numbers.</span>
+<span class="w">    </span><span class="sd">"""Multiply two C# double-precision numbers.</span>
 
 <span class="sd">    See the corresponding [DotNet32.multiply_doubles][msl.examples.loadlib.dotnet32.DotNet32.multiply_doubles]</span>
 <span class="sd">    method.</span>
@@ -3515,8 +3515,8 @@ method.</p>
 
 <span class="sd">    Returns:</span>
 <span class="sd">        The product, `a * b`.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">reply</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">request32</span><span class="p">(</span><span class="s2">&quot;multiply_doubles&quot;</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">)</span>
+<span class="sd">    """</span>
+    <span class="n">reply</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">request32</span><span class="p">(</span><span class="s2">"multiply_doubles"</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">reply</span>
 </code></pre></div></td></tr></table></div>
             </details>
@@ -3611,7 +3611,7 @@ method.</p>
 <span class="normal">130</span>
 <span class="normal">131</span>
 <span class="normal">132</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">multiply_matrices</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">a1</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">Sequence</span><span class="p">[</span><span class="nb">float</span><span class="p">]],</span> <span class="n">a2</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">Sequence</span><span class="p">[</span><span class="nb">float</span><span class="p">]])</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">list</span><span class="p">[</span><span class="nb">float</span><span class="p">]]:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Multiply two matrices.</span>
+<span class="w">    </span><span class="sd">"""Multiply two matrices.</span>
 
 <span class="sd">    See the corresponding [DotNet32.multiply_matrices][msl.examples.loadlib.dotnet32.DotNet32.multiply_matrices]</span>
 <span class="sd">    method.</span>
@@ -3622,8 +3622,8 @@ method.</p>
 
 <span class="sd">    Return:</span>
 <span class="sd">        The product, `a1 @ a2`.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">reply</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">list</span><span class="p">[</span><span class="nb">float</span><span class="p">]]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">request32</span><span class="p">(</span><span class="s2">&quot;multiply_matrices&quot;</span><span class="p">,</span> <span class="n">a1</span><span class="p">,</span> <span class="n">a2</span><span class="p">)</span>
+<span class="sd">    """</span>
+    <span class="n">reply</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">list</span><span class="p">[</span><span class="nb">float</span><span class="p">]]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">request32</span><span class="p">(</span><span class="s2">"multiply_matrices"</span><span class="p">,</span> <span class="n">a1</span><span class="p">,</span> <span class="n">a2</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">reply</span>
 </code></pre></div></td></tr></table></div>
             </details>
@@ -3717,7 +3717,7 @@ method.</p>
 <span class="normal">144</span>
 <span class="normal">145</span>
 <span class="normal">146</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">reverse_string</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">original</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Reverse a string.</span>
+<span class="w">    </span><span class="sd">"""Reverse a string.</span>
 
 <span class="sd">    See the corresponding [DotNet32.reverse_string][msl.examples.loadlib.dotnet32.DotNet32.reverse_string] method.</span>
 
@@ -3726,8 +3726,8 @@ method.</p>
 
 <span class="sd">    Returns:</span>
 <span class="sd">        The string reversed.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">reply</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">request32</span><span class="p">(</span><span class="s2">&quot;reverse_string&quot;</span><span class="p">,</span> <span class="n">original</span><span class="p">)</span>
+<span class="sd">    """</span>
+    <span class="n">reply</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">request32</span><span class="p">(</span><span class="s2">"reverse_string"</span><span class="p">,</span> <span class="n">original</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">reply</span>
 </code></pre></div></td></tr></table></div>
             </details>
@@ -3838,7 +3838,7 @@ method.</p>
 <span class="normal">114</span>
 <span class="normal">115</span>
 <span class="normal">116</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">scalar_multiply</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">a</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">xin</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">float</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">float</span><span class="p">]:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Multiply each element in an array by a number.</span>
+<span class="w">    </span><span class="sd">"""Multiply each element in an array by a number.</span>
 
 <span class="sd">    See the corresponding [DotNet32.scalar_multiply][msl.examples.loadlib.dotnet32.DotNet32.scalar_multiply] method.</span>
 
@@ -3848,8 +3848,8 @@ method.</p>
 
 <span class="sd">    Returns:</span>
 <span class="sd">        A new array with each element in `xin` multiplied by `a`.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">reply</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">request32</span><span class="p">(</span><span class="s2">&quot;scalar_multiply&quot;</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">xin</span><span class="p">)</span>
+<span class="sd">    """</span>
+    <span class="n">reply</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">request32</span><span class="p">(</span><span class="s2">"scalar_multiply"</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">xin</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">reply</span>
 </code></pre></div></td></tr></table></div>
             </details>

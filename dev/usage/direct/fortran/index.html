@@ -2284,7 +2284,7 @@
 
 <div class="highlight"><pre><span></span><code><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">msl.loadlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">LoadLibrary</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">msl.examples.loadlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">EXAMPLES_DIR</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">fortran</span> <span class="o">=</span> <span class="n">LoadLibrary</span><span class="p">(</span><span class="n">EXAMPLES_DIR</span> <span class="o">/</span> <span class="s2">&quot;fortran_lib64&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">fortran</span> <span class="o">=</span> <span class="n">LoadLibrary</span><span class="p">(</span><span class="n">EXAMPLES_DIR</span> <span class="o">/</span> <span class="s2">"fortran_lib64"</span><span class="p">)</span>
 </code></pre></div>
 <p>Call the <code>factorial</code> function. With a FORTRAN library you must pass values by reference using <a class="autorefs autorefs-external" href="https://docs.python.org/3/library/ctypes.html#ctypes.byref" target="_blank">byref</a> and since the returned value is not of type <a class="autorefs autorefs-external" href="https://docs.python.org/3/library/ctypes.html#ctypes.c_int" target="_blank">c_int</a> the <a class="autorefs autorefs-external" href="https://docs.python.org/3/library/ctypes.html#ctypes-return-types" target="_blank">restype</a> must be configured for a value of type <a class="autorefs autorefs-external" href="https://docs.python.org/3/library/ctypes.html#ctypes.c_double" target="_blank">c_double</a> to be returned from the library function</p>
 <div class="highlight"><pre><span></span><code><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">ctypes</span><span class="w"> </span><span class="kn">import</span> <span class="n">byref</span><span class="p">,</span> <span class="n">c_int</span><span class="p">,</span> <span class="n">c_double</span>
@@ -2305,7 +2305,7 @@
 
 <span class="c">! return the sum of two 8-bit signed integers</span>
 <span class="k">function </span><span class="n">sum_8bit</span><span class="p">(</span><span class="n">a</span><span class="p">,</span><span class="w"> </span><span class="n">b</span><span class="p">)</span><span class="w"> </span><span class="k">result</span><span class="p">(</span><span class="k">value</span><span class="p">)</span>
-<span class="w">    </span><span class="c">!DEC$ ATTRIBUTES DLLEXPORT, ALIAS:&#39;sum_8bit&#39; :: sum_8bit</span>
+<span class="w">    </span><span class="c">!DEC$ ATTRIBUTES DLLEXPORT, ALIAS:'sum_8bit' :: sum_8bit</span>
 <span class="w">    </span><span class="k">implicit none</span>
 <span class="k">    </span><span class="kt">integer</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">a</span><span class="p">,</span><span class="w"> </span><span class="n">b</span><span class="p">,</span><span class="w"> </span><span class="k">value</span>
 <span class="k">    value</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">a</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">b</span>
@@ -2314,7 +2314,7 @@
 
 <span class="c">! return the sum of two 16-bit signed integers</span>
 <span class="k">function </span><span class="n">sum_16bit</span><span class="p">(</span><span class="n">a</span><span class="p">,</span><span class="w"> </span><span class="n">b</span><span class="p">)</span><span class="w"> </span><span class="k">result</span><span class="p">(</span><span class="k">value</span><span class="p">)</span>
-<span class="w">    </span><span class="c">!DEC$ ATTRIBUTES DLLEXPORT, ALIAS:&#39;sum_16bit&#39; :: sum_16bit</span>
+<span class="w">    </span><span class="c">!DEC$ ATTRIBUTES DLLEXPORT, ALIAS:'sum_16bit' :: sum_16bit</span>
 <span class="w">    </span><span class="k">implicit none</span>
 <span class="k">    </span><span class="kt">integer</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">a</span><span class="p">,</span><span class="w"> </span><span class="n">b</span><span class="p">,</span><span class="w"> </span><span class="k">value</span>
 <span class="k">    value</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">a</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">b</span>
@@ -2323,7 +2323,7 @@
 
 <span class="c">! return the sum of two 32-bit signed integers</span>
 <span class="k">function </span><span class="n">sum_32bit</span><span class="p">(</span><span class="n">a</span><span class="p">,</span><span class="w"> </span><span class="n">b</span><span class="p">)</span><span class="w"> </span><span class="k">result</span><span class="p">(</span><span class="k">value</span><span class="p">)</span>
-<span class="w">    </span><span class="c">!DEC$ ATTRIBUTES DLLEXPORT, ALIAS:&#39;sum_32bit&#39; :: sum_32bit</span>
+<span class="w">    </span><span class="c">!DEC$ ATTRIBUTES DLLEXPORT, ALIAS:'sum_32bit' :: sum_32bit</span>
 <span class="w">    </span><span class="k">implicit none</span>
 <span class="k">    </span><span class="kt">integer</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">a</span><span class="p">,</span><span class="w"> </span><span class="n">b</span><span class="p">,</span><span class="w"> </span><span class="k">value</span>
 <span class="k">    value</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">a</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">b</span>
@@ -2332,7 +2332,7 @@
 
 <span class="c">! return the sum of two 64-bit signed integers</span>
 <span class="k">function </span><span class="n">sum_64bit</span><span class="p">(</span><span class="n">a</span><span class="p">,</span><span class="w"> </span><span class="n">b</span><span class="p">)</span><span class="w"> </span><span class="k">result</span><span class="p">(</span><span class="k">value</span><span class="p">)</span>
-<span class="w">    </span><span class="c">!DEC$ ATTRIBUTES DLLEXPORT, ALIAS:&#39;sum_64bit&#39; :: sum_64bit</span>
+<span class="w">    </span><span class="c">!DEC$ ATTRIBUTES DLLEXPORT, ALIAS:'sum_64bit' :: sum_64bit</span>
 <span class="w">    </span><span class="k">implicit none</span>
 <span class="k">    </span><span class="kt">integer</span><span class="p">(</span><span class="mi">8</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">a</span><span class="p">,</span><span class="w"> </span><span class="n">b</span><span class="p">,</span><span class="w"> </span><span class="k">value</span>
 <span class="k">    value</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">a</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">b</span>
@@ -2341,7 +2341,7 @@
 
 <span class="c">! return the product of two 32-bit floating point numbers</span>
 <span class="k">function </span><span class="n">multiply_float32</span><span class="p">(</span><span class="n">a</span><span class="p">,</span><span class="w"> </span><span class="n">b</span><span class="p">)</span><span class="w"> </span><span class="k">result</span><span class="p">(</span><span class="k">value</span><span class="p">)</span>
-<span class="w">    </span><span class="c">!DEC$ ATTRIBUTES DLLEXPORT, ALIAS:&#39;multiply_float32&#39; :: multiply_float32</span>
+<span class="w">    </span><span class="c">!DEC$ ATTRIBUTES DLLEXPORT, ALIAS:'multiply_float32' :: multiply_float32</span>
 <span class="w">    </span><span class="k">implicit none</span>
 <span class="k">    </span><span class="kt">real</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">a</span><span class="p">,</span><span class="w"> </span><span class="n">b</span><span class="p">,</span><span class="w"> </span><span class="k">value</span>
 <span class="k">    value</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">a</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">b</span>
@@ -2350,16 +2350,16 @@
 
 <span class="c">! return the product of two 64-bit floating point numbers</span>
 <span class="k">function </span><span class="n">multiply_float64</span><span class="p">(</span><span class="n">a</span><span class="p">,</span><span class="w"> </span><span class="n">b</span><span class="p">)</span><span class="w"> </span><span class="k">result</span><span class="p">(</span><span class="k">value</span><span class="p">)</span>
-<span class="w">    </span><span class="c">!DEC$ ATTRIBUTES DLLEXPORT, ALIAS:&#39;multiply_float64&#39; :: multiply_float64</span>
+<span class="w">    </span><span class="c">!DEC$ ATTRIBUTES DLLEXPORT, ALIAS:'multiply_float64' :: multiply_float64</span>
 <span class="w">    </span><span class="k">implicit none</span>
 <span class="k">    </span><span class="kt">real</span><span class="p">(</span><span class="mi">8</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">a</span><span class="p">,</span><span class="w"> </span><span class="n">b</span><span class="p">,</span><span class="w"> </span><span class="k">value</span>
 <span class="k">    value</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">a</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">b</span>
 <span class="k">end function </span><span class="n">multiply_float64</span>
 
 
-<span class="c">! return True if &#39;a&#39; &gt; 0 else False </span>
+<span class="c">! return True if 'a' &gt; 0 else False </span>
 <span class="k">function </span><span class="n">is_positive</span><span class="p">(</span><span class="n">a</span><span class="p">)</span><span class="w"> </span><span class="k">result</span><span class="p">(</span><span class="k">value</span><span class="p">)</span>
-<span class="w">    </span><span class="c">!DEC$ ATTRIBUTES DLLEXPORT, ALIAS:&#39;is_positive&#39; :: is_positive</span>
+<span class="w">    </span><span class="c">!DEC$ ATTRIBUTES DLLEXPORT, ALIAS:'is_positive' :: is_positive</span>
 <span class="w">    </span><span class="k">implicit none</span>
 <span class="k">    </span><span class="kt">logical</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="k">value</span>
 <span class="k">    </span><span class="kt">real</span><span class="p">(</span><span class="mi">8</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">a</span>
@@ -2369,7 +2369,7 @@
 
 <span class="c">! if do_addition is True return a+b otherwise return a-b</span>
 <span class="k">function </span><span class="n">add_or_subtract</span><span class="p">(</span><span class="n">a</span><span class="p">,</span><span class="w"> </span><span class="n">b</span><span class="p">,</span><span class="w"> </span><span class="n">do_addition</span><span class="p">)</span><span class="w"> </span><span class="k">result</span><span class="p">(</span><span class="k">value</span><span class="p">)</span>
-<span class="w">    </span><span class="c">!DEC$ ATTRIBUTES DLLEXPORT, ALIAS:&#39;add_or_subtract&#39; :: add_or_subtract</span>
+<span class="w">    </span><span class="c">!DEC$ ATTRIBUTES DLLEXPORT, ALIAS:'add_or_subtract' :: add_or_subtract</span>
 <span class="w">    </span><span class="k">implicit none</span>
 <span class="k">    </span><span class="kt">logical</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">do_addition</span>
 <span class="w">    </span><span class="kt">integer</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">a</span><span class="p">,</span><span class="w"> </span><span class="n">b</span><span class="p">,</span><span class="w"> </span><span class="k">value</span>
@@ -2381,16 +2381,16 @@
 <span class="k">end function </span><span class="n">add_or_subtract</span>
 
 
-<span class="c">! compute the n&#39;th factorial of a 8-bit signed integer, return a double-precision number</span>
+<span class="c">! compute the n'th factorial of a 8-bit signed integer, return a double-precision number</span>
 <span class="k">function </span><span class="n">factorial</span><span class="p">(</span><span class="n">n</span><span class="p">)</span><span class="w"> </span><span class="k">result</span><span class="p">(</span><span class="k">value</span><span class="p">)</span>
-<span class="w">    </span><span class="c">!DEC$ ATTRIBUTES DLLEXPORT, ALIAS:&#39;factorial&#39; :: factorial</span>
+<span class="w">    </span><span class="c">!DEC$ ATTRIBUTES DLLEXPORT, ALIAS:'factorial' :: factorial</span>
 <span class="w">    </span><span class="k">implicit none</span>
 <span class="k">    </span><span class="kt">integer</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">n</span>
 <span class="w">    </span><span class="kt">integer</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">i</span>
 <span class="w">    </span><span class="kt">double precision </span><span class="k">value</span>
 <span class="k">    if</span><span class="w"> </span><span class="p">(</span><span class="n">n</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="k">then</span>
 <span class="k">        value</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">0.d0</span>
-<span class="w">        </span><span class="k">print</span><span class="w"> </span><span class="o">*</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;Cannot compute the factorial of a negative number&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">n</span>
+<span class="w">        </span><span class="k">print</span><span class="w"> </span><span class="o">*</span><span class="p">,</span><span class="w"> </span><span class="s2">"Cannot compute the factorial of a negative number"</span><span class="p">,</span><span class="w"> </span><span class="n">n</span>
 <span class="w">    </span><span class="k">else</span>
 <span class="k">        value</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">1.d0</span>
 <span class="w">        </span><span class="k">do </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="n">n</span>
@@ -2402,7 +2402,7 @@
 
 <span class="c">! calculate the standard deviation of an array.</span>
 <span class="k">function </span><span class="n">standard_deviation</span><span class="p">(</span><span class="n">a</span><span class="p">,</span><span class="w"> </span><span class="n">n</span><span class="p">)</span><span class="w"> </span><span class="k">result</span><span class="p">(</span><span class="n">var</span><span class="p">)</span>
-<span class="w">    </span><span class="c">!DEC$ ATTRIBUTES DLLEXPORT, ALIAS:&#39;standard_deviation&#39; :: standard_deviation</span>
+<span class="w">    </span><span class="c">!DEC$ ATTRIBUTES DLLEXPORT, ALIAS:'standard_deviation' :: standard_deviation</span>
 <span class="w">    </span><span class="kt">integer</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">n</span><span class="w"> </span><span class="c">! the length of the array</span>
 <span class="w">    </span><span class="kt">double precision</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">var</span><span class="p">,</span><span class="w"> </span><span class="n">a</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
 <span class="w">    </span><span class="n">var</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">SUM</span><span class="p">(</span><span class="n">a</span><span class="p">)</span><span class="o">/</span><span class="n">SIZE</span><span class="p">(</span><span class="n">a</span><span class="p">)</span><span class="w"> </span><span class="c">! SUM is a built-in fortran function</span>
@@ -2412,15 +2412,15 @@
 
 <span class="c">! compute the Bessel function of the first kind of order 0 of x</span>
 <span class="k">function </span><span class="n">besselj0</span><span class="p">(</span><span class="n">x</span><span class="p">)</span><span class="w"> </span><span class="k">result</span><span class="p">(</span><span class="n">val</span><span class="p">)</span>
-<span class="w">    </span><span class="c">!DEC$ ATTRIBUTES DLLEXPORT, ALIAS:&#39;besselj0&#39; :: besselj0</span>
+<span class="w">    </span><span class="c">!DEC$ ATTRIBUTES DLLEXPORT, ALIAS:'besselj0' :: besselj0</span>
 <span class="w">    </span><span class="kt">double precision</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">x</span><span class="p">,</span><span class="w"> </span><span class="n">val</span>
 <span class="w">    </span><span class="n">val</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">BESSEL_J0</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
 <span class="k">end function </span><span class="n">besselJ0</span>
 
 
-<span class="c">! reverse a string, &#39;n&#39; is the length of the original string</span>
+<span class="c">! reverse a string, 'n' is the length of the original string</span>
 <span class="k">subroutine </span><span class="n">reverse_string</span><span class="p">(</span><span class="n">original</span><span class="p">,</span><span class="w"> </span><span class="n">n</span><span class="p">,</span><span class="w"> </span><span class="n">reversed</span><span class="p">)</span>
-<span class="w">    </span><span class="c">!DEC$ ATTRIBUTES DLLEXPORT, ALIAS:&#39;reverse_string&#39; :: reverse_string</span>
+<span class="w">    </span><span class="c">!DEC$ ATTRIBUTES DLLEXPORT, ALIAS:'reverse_string' :: reverse_string</span>
 <span class="w">    </span><span class="c">!DEC$ ATTRIBUTES REFERENCE :: original, reversed</span>
 <span class="w">    </span><span class="k">implicit none</span>
 <span class="k">    </span><span class="kt">integer</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">i</span><span class="p">,</span><span class="w"> </span><span class="n">n</span>
@@ -2433,7 +2433,7 @@
 
 <span class="c">! element-wise addition of two 1D double-precision arrays</span>
 <span class="k">subroutine </span><span class="n">add_1d_arrays</span><span class="p">(</span><span class="n">a</span><span class="p">,</span><span class="w"> </span><span class="n">in1</span><span class="p">,</span><span class="w"> </span><span class="n">in2</span><span class="p">,</span><span class="w"> </span><span class="n">n</span><span class="p">)</span>
-<span class="w">    </span><span class="c">!DEC$ ATTRIBUTES DLLEXPORT, ALIAS:&#39;add_1d_arrays&#39; :: add_1d_arrays</span>
+<span class="w">    </span><span class="c">!DEC$ ATTRIBUTES DLLEXPORT, ALIAS:'add_1d_arrays' :: add_1d_arrays</span>
 <span class="w">    </span><span class="k">implicit none</span>
 <span class="k">    </span><span class="kt">integer</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">n</span><span class="w"> </span><span class="c">! the length of the input arrays</span>
 <span class="w">    </span><span class="kt">double precision</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">in1</span><span class="p">(</span><span class="n">n</span><span class="p">),</span><span class="w"> </span><span class="n">in2</span><span class="p">(</span><span class="n">n</span><span class="p">)</span><span class="w"> </span><span class="c">! the arrays to add (element-wise)</span>
@@ -2446,7 +2446,7 @@
 <span class="c">! NOTE: multi-dimensional arrays are column-major order in FORTRAN, </span>
 <span class="c">!       whereas C (Python) is row-major order.</span>
 <span class="k">subroutine </span><span class="n">matrix_multiply</span><span class="p">(</span><span class="n">a</span><span class="p">,</span><span class="w"> </span><span class="n">a1</span><span class="p">,</span><span class="w"> </span><span class="n">r1</span><span class="p">,</span><span class="w"> </span><span class="n">c1</span><span class="p">,</span><span class="w"> </span><span class="n">a2</span><span class="p">,</span><span class="w"> </span><span class="n">r2</span><span class="p">,</span><span class="w"> </span><span class="n">c2</span><span class="p">)</span>
-<span class="w">    </span><span class="c">!DEC$ ATTRIBUTES DLLEXPORT, ALIAS:&#39;matrix_multiply&#39; :: matrix_multiply</span>
+<span class="w">    </span><span class="c">!DEC$ ATTRIBUTES DLLEXPORT, ALIAS:'matrix_multiply' :: matrix_multiply</span>
 <span class="w">    </span><span class="k">implicit none</span>
 <span class="k">    </span><span class="kt">integer</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">r1</span><span class="p">,</span><span class="w"> </span><span class="n">c1</span><span class="p">,</span><span class="w"> </span><span class="n">r2</span><span class="p">,</span><span class="w"> </span><span class="n">c2</span><span class="w"> </span><span class="c">! the dimensions of the input arrays</span>
 <span class="w">    </span><span class="kt">double precision</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">a1</span><span class="p">(</span><span class="n">r1</span><span class="p">,</span><span class="n">c1</span><span class="p">),</span><span class="w"> </span><span class="n">a2</span><span class="p">(</span><span class="n">r2</span><span class="p">,</span><span class="n">c2</span><span class="p">)</span><span class="w"> </span><span class="c">! the arrays to multiply</span>

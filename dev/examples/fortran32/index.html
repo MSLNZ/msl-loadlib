@@ -2694,19 +2694,19 @@ then returns the response from the library.</p>
 <span class="normal">36</span>
 <span class="normal">37</span>
 <span class="normal">38</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">host</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">port</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;A wrapper around a 32-bit FORTRAN library, [fortran_lib32][fortran-lib].</span>
+<span class="w">    </span><span class="sd">"""A wrapper around a 32-bit FORTRAN library, [fortran_lib32][fortran-lib].</span>
 
 <span class="sd">    This class demonstrates how to pass various data types to/from a</span>
-<span class="sd">    32-bit FORTRAN library via [ctypes][]{:target=&quot;_blank&quot;}.</span>
+<span class="sd">    32-bit FORTRAN library via [ctypes][]{:target="_blank"}.</span>
 
 <span class="sd">    Args:</span>
 <span class="sd">        host: The IP address (or hostname) to use for the server.</span>
 <span class="sd">        port: The port to open for the server.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="c1"># By not specifying the extension of the library file the server will open</span>
     <span class="c1"># the appropriate file based on the operating system.</span>
-    <span class="n">path</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="vm">__file__</span><span class="p">)</span><span class="o">.</span><span class="n">parent</span> <span class="o">/</span> <span class="s2">&quot;fortran_lib32&quot;</span>
-    <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="s2">&quot;cdll&quot;</span><span class="p">,</span> <span class="n">host</span><span class="p">,</span> <span class="n">port</span><span class="p">)</span>
+    <span class="n">path</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="vm">__file__</span><span class="p">)</span><span class="o">.</span><span class="n">parent</span> <span class="o">/</span> <span class="s2">"fortran_lib32"</span>
+    <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="s2">"cdll"</span><span class="p">,</span> <span class="n">host</span><span class="p">,</span> <span class="n">port</span><span class="p">)</span>
 </code></pre></div></td></tr></table></div>
                   </details>
 
@@ -2739,7 +2739,7 @@ then returns the response from the library.</p>
         <p>Perform an element-wise addition of two 1D double-precision arrays.</p>
 <p>The corresponding FORTRAN code is</p>
 <div class="highlight"><pre><span></span><code><span class="k">subroutine </span><span class="n">add_1d_arrays</span><span class="p">(</span><span class="n">a</span><span class="p">,</span><span class="w"> </span><span class="n">in1</span><span class="p">,</span><span class="w"> </span><span class="n">in2</span><span class="p">,</span><span class="w"> </span><span class="n">n</span><span class="p">)</span>
-<span class="w">    </span><span class="c">!DEC$ ATTRIBUTES DLLEXPORT, ALIAS:&#39;add_1d_arrays&#39; :: add_1d_arrays</span>
+<span class="w">    </span><span class="c">!DEC$ ATTRIBUTES DLLEXPORT, ALIAS:'add_1d_arrays' :: add_1d_arrays</span>
 <span class="w">    </span><span class="k">implicit none</span>
 <span class="k">    </span><span class="kt">integer</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">n</span><span class="w"> </span><span class="c">! the length of the input arrays</span>
 <span class="w">    </span><span class="kt">double precision</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">in1</span><span class="p">(</span><span class="n">n</span><span class="p">),</span><span class="w"> </span><span class="n">in2</span><span class="p">(</span><span class="n">n</span><span class="p">)</span><span class="w"> </span><span class="c">! the arrays to add (element-wise)</span>
@@ -2855,13 +2855,13 @@ then returns the response from the library.</p>
 <span class="normal">481</span>
 <span class="normal">482</span>
 <span class="normal">483</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">add_1d_arrays</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">a1</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">float</span><span class="p">],</span> <span class="n">a2</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">float</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">float</span><span class="p">]:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Perform an element-wise addition of two 1D double-precision arrays.</span>
+<span class="w">    </span><span class="sd">"""Perform an element-wise addition of two 1D double-precision arrays.</span>
 
 <span class="sd">    The corresponding FORTRAN code is</span>
 
 <span class="sd">    ```fortran</span>
 <span class="sd">    subroutine add_1d_arrays(a, in1, in2, n)</span>
-<span class="sd">        !DEC$ ATTRIBUTES DLLEXPORT, ALIAS:&#39;add_1d_arrays&#39; :: add_1d_arrays</span>
+<span class="sd">        !DEC$ ATTRIBUTES DLLEXPORT, ALIAS:'add_1d_arrays' :: add_1d_arrays</span>
 <span class="sd">        implicit none</span>
 <span class="sd">        integer(4) :: n ! the length of the input arrays</span>
 <span class="sd">        double precision :: in1(n), in2(n) ! the arrays to add (element-wise)</span>
@@ -2878,7 +2878,7 @@ then returns the response from the library.</p>
 
 <span class="sd">    Returns:</span>
 <span class="sd">        The element-wise addition of `a1 + a2`.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="c1"># restype should be defined elsewhere, shown here for illustrative purposes</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">lib</span><span class="o">.</span><span class="n">add_1d_arrays</span><span class="o">.</span><span class="n">restype</span> <span class="o">=</span> <span class="kc">None</span>
 
@@ -2909,7 +2909,7 @@ then returns the response from the library.</p>
         <p>Add or subtract two integers.</p>
 <p>The corresponding FORTRAN code is</p>
 <div class="highlight"><pre><span></span><code><span class="k">function </span><span class="n">add_or_subtract</span><span class="p">(</span><span class="n">a</span><span class="p">,</span><span class="w"> </span><span class="n">b</span><span class="p">,</span><span class="w"> </span><span class="n">do_addition</span><span class="p">)</span><span class="w"> </span><span class="k">result</span><span class="p">(</span><span class="k">value</span><span class="p">)</span>
-<span class="w">    </span><span class="c">!DEC$ ATTRIBUTES DLLEXPORT, ALIAS:&#39;add_or_subtract&#39; :: add_or_subtract</span>
+<span class="w">    </span><span class="c">!DEC$ ATTRIBUTES DLLEXPORT, ALIAS:'add_or_subtract' :: add_or_subtract</span>
 <span class="w">    </span><span class="k">implicit none</span>
 <span class="k">    </span><span class="kt">logical</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">do_addition</span>
 <span class="w">    </span><span class="kt">integer</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">a</span><span class="p">,</span><span class="w"> </span><span class="n">b</span><span class="p">,</span><span class="w"> </span><span class="k">value</span>
@@ -3032,13 +3032,13 @@ method.</p>
 <span class="normal">310</span>
 <span class="normal">311</span>
 <span class="normal">312</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">add_or_subtract</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">a</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">b</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">do_addition</span><span class="p">:</span> <span class="nb">bool</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Add or subtract two integers.</span>
+<span class="w">    </span><span class="sd">"""Add or subtract two integers.</span>
 
 <span class="sd">    The corresponding FORTRAN code is</span>
 
 <span class="sd">    ```fortran</span>
 <span class="sd">    function add_or_subtract(a, b, do_addition) result(value)</span>
-<span class="sd">        !DEC$ ATTRIBUTES DLLEXPORT, ALIAS:&#39;add_or_subtract&#39; :: add_or_subtract</span>
+<span class="sd">        !DEC$ ATTRIBUTES DLLEXPORT, ALIAS:'add_or_subtract' :: add_or_subtract</span>
 <span class="sd">        implicit none</span>
 <span class="sd">        logical :: do_addition</span>
 <span class="sd">        integer(4) :: a, b, value</span>
@@ -3060,7 +3060,7 @@ method.</p>
 
 <span class="sd">    Return:</span>
 <span class="sd">        `a + b` if `do_addition` is `True` else `a - b`.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="c1"># restype should be defined elsewhere, shown here for illustrative purposes</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">lib</span><span class="o">.</span><span class="n">add_or_subtract</span><span class="o">.</span><span class="n">restype</span> <span class="o">=</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">c_int32</span>
 
@@ -3091,7 +3091,7 @@ method.</p>
         <p>Compute the Bessel function of the first kind of order 0 of x.</p>
 <p>The corresponding FORTRAN code is</p>
 <div class="highlight"><pre><span></span><code><span class="k">function </span><span class="n">besselj0</span><span class="p">(</span><span class="n">x</span><span class="p">)</span><span class="w"> </span><span class="k">result</span><span class="p">(</span><span class="n">val</span><span class="p">)</span>
-<span class="w">    </span><span class="c">!DEC$ ATTRIBUTES DLLEXPORT, ALIAS:&#39;besselj0&#39; :: besselj0</span>
+<span class="w">    </span><span class="c">!DEC$ ATTRIBUTES DLLEXPORT, ALIAS:'besselj0' :: besselj0</span>
 <span class="w">    </span><span class="kt">double precision</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">x</span><span class="p">,</span><span class="w"> </span><span class="n">val</span>
 <span class="w">    </span><span class="n">val</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">BESSEL_J0</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
 <span class="k">end function </span><span class="n">besselJ0</span>
@@ -3182,13 +3182,13 @@ method.</p>
 <span class="normal">411</span>
 <span class="normal">412</span>
 <span class="normal">413</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">besselJ0</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>  <span class="c1"># noqa: N802</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Compute the Bessel function of the first kind of order 0 of x.</span>
+<span class="w">    </span><span class="sd">"""Compute the Bessel function of the first kind of order 0 of x.</span>
 
 <span class="sd">    The corresponding FORTRAN code is</span>
 
 <span class="sd">    ```fortran</span>
 <span class="sd">    function besselj0(x) result(val)</span>
-<span class="sd">        !DEC$ ATTRIBUTES DLLEXPORT, ALIAS:&#39;besselj0&#39; :: besselj0</span>
+<span class="sd">        !DEC$ ATTRIBUTES DLLEXPORT, ALIAS:'besselj0' :: besselj0</span>
 <span class="sd">        double precision :: x, val</span>
 <span class="sd">        val = BESSEL_J0(x)</span>
 <span class="sd">    end function besselJ0</span>
@@ -3201,7 +3201,7 @@ method.</p>
 
 <span class="sd">    Returns:</span>
 <span class="sd">        The value of `BESSEL_J0(x)`.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="c1"># restype should be defined elsewhere, shown here for illustrative purposes</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">lib</span><span class="o">.</span><span class="n">besselj0</span><span class="o">.</span><span class="n">restype</span> <span class="o">=</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">c_double</span>
 
@@ -3230,14 +3230,14 @@ method.</p>
         <p>Compute the n'th factorial.</p>
 <p>The corresponding FORTRAN code is</p>
 <div class="highlight"><pre><span></span><code><span class="k">function </span><span class="n">factorial</span><span class="p">(</span><span class="n">n</span><span class="p">)</span><span class="w"> </span><span class="k">result</span><span class="p">(</span><span class="k">value</span><span class="p">)</span>
-<span class="w">    </span><span class="c">!DEC$ ATTRIBUTES DLLEXPORT, ALIAS:&#39;factorial&#39; :: factorial</span>
+<span class="w">    </span><span class="c">!DEC$ ATTRIBUTES DLLEXPORT, ALIAS:'factorial' :: factorial</span>
 <span class="w">    </span><span class="k">implicit none</span>
 <span class="k">    </span><span class="kt">integer</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">n</span>
 <span class="w">    </span><span class="kt">integer</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">i</span>
 <span class="w">    </span><span class="kt">double precision </span><span class="k">value</span>
 <span class="k">    if</span><span class="w"> </span><span class="p">(</span><span class="n">n</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="k">then</span>
 <span class="k">        value</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">0.d0</span>
-<span class="w">        </span><span class="k">print</span><span class="w"> </span><span class="o">*</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;Cannot compute the factorial of a negative number&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">n</span>
+<span class="w">        </span><span class="k">print</span><span class="w"> </span><span class="o">*</span><span class="p">,</span><span class="w"> </span><span class="s2">"Cannot compute the factorial of a negative number"</span><span class="p">,</span><span class="w"> </span><span class="n">n</span>
 <span class="w">    </span><span class="k">else</span>
 <span class="k">        value</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">1.d0</span>
 <span class="w">        </span><span class="k">do </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="n">n</span>
@@ -3343,20 +3343,20 @@ method.</p>
 <span class="normal">349</span>
 <span class="normal">350</span>
 <span class="normal">351</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">factorial</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">n</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Compute the n&#39;th factorial.</span>
+<span class="w">    </span><span class="sd">"""Compute the n'th factorial.</span>
 
 <span class="sd">    The corresponding FORTRAN code is</span>
 
 <span class="sd">    ```fortran</span>
 <span class="sd">    function factorial(n) result(value)</span>
-<span class="sd">        !DEC$ ATTRIBUTES DLLEXPORT, ALIAS:&#39;factorial&#39; :: factorial</span>
+<span class="sd">        !DEC$ ATTRIBUTES DLLEXPORT, ALIAS:'factorial' :: factorial</span>
 <span class="sd">        implicit none</span>
 <span class="sd">        integer(1) :: n</span>
 <span class="sd">        integer(4) :: i</span>
 <span class="sd">        double precision value</span>
 <span class="sd">        if (n &lt; 0) then</span>
 <span class="sd">            value = 0.d0</span>
-<span class="sd">            print *, &quot;Cannot compute the factorial of a negative number&quot;, n</span>
+<span class="sd">            print *, "Cannot compute the factorial of a negative number", n</span>
 <span class="sd">        else</span>
 <span class="sd">            value = 1.d0</span>
 <span class="sd">            do i = 2, n</span>
@@ -3373,7 +3373,7 @@ method.</p>
 
 <span class="sd">    Returns:</span>
 <span class="sd">        The factorial of `n`.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="c1"># restype should be defined elsewhere, shown here for illustrative purposes</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">lib</span><span class="o">.</span><span class="n">factorial</span><span class="o">.</span><span class="n">restype</span> <span class="o">=</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">c_double</span>
 
@@ -3402,7 +3402,7 @@ method.</p>
         <p>Returns whether the value of the input argument is &gt; 0.</p>
 <p>The corresponding FORTRAN code is</p>
 <div class="highlight"><pre><span></span><code><span class="k">function </span><span class="n">is_positive</span><span class="p">(</span><span class="n">a</span><span class="p">)</span><span class="w"> </span><span class="k">result</span><span class="p">(</span><span class="k">value</span><span class="p">)</span>
-<span class="w">    </span><span class="c">!DEC$ ATTRIBUTES DLLEXPORT, ALIAS:&#39;is_positive&#39; :: is_positive</span>
+<span class="w">    </span><span class="c">!DEC$ ATTRIBUTES DLLEXPORT, ALIAS:'is_positive' :: is_positive</span>
 <span class="w">    </span><span class="k">implicit none</span>
 <span class="k">    </span><span class="kt">logical</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="k">value</span>
 <span class="k">    </span><span class="kt">real</span><span class="p">(</span><span class="mi">8</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">a</span>
@@ -3498,13 +3498,13 @@ method.</p>
 <span class="normal">271</span>
 <span class="normal">272</span>
 <span class="normal">273</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">is_positive</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">a</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Returns whether the value of the input argument is &gt; 0.</span>
+<span class="w">    </span><span class="sd">"""Returns whether the value of the input argument is &gt; 0.</span>
 
 <span class="sd">    The corresponding FORTRAN code is</span>
 
 <span class="sd">    ```fortran</span>
 <span class="sd">    function is_positive(a) result(value)</span>
-<span class="sd">        !DEC$ ATTRIBUTES DLLEXPORT, ALIAS:&#39;is_positive&#39; :: is_positive</span>
+<span class="sd">        !DEC$ ATTRIBUTES DLLEXPORT, ALIAS:'is_positive' :: is_positive</span>
 <span class="sd">        implicit none</span>
 <span class="sd">        logical :: value</span>
 <span class="sd">        real(8) :: a</span>
@@ -3520,7 +3520,7 @@ method.</p>
 
 <span class="sd">    Returns:</span>
 <span class="sd">        Whether the value of `a` is &amp;gt; 0.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="c1"># restype should be defined elsewhere, shown here for illustrative purposes</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">lib</span><span class="o">.</span><span class="n">is_positive</span><span class="o">.</span><span class="n">restype</span> <span class="o">=</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">c_bool</span>
 
@@ -3549,7 +3549,7 @@ method.</p>
         <p>Multiply two matrices.</p>
 <p>The corresponding FORTRAN code is</p>
 <div class="highlight"><pre><span></span><code><span class="k">subroutine </span><span class="n">matrix_multiply</span><span class="p">(</span><span class="n">a</span><span class="p">,</span><span class="w"> </span><span class="n">a1</span><span class="p">,</span><span class="w"> </span><span class="n">r1</span><span class="p">,</span><span class="w"> </span><span class="n">c1</span><span class="p">,</span><span class="w"> </span><span class="n">a2</span><span class="p">,</span><span class="w"> </span><span class="n">r2</span><span class="p">,</span><span class="w"> </span><span class="n">c2</span><span class="p">)</span>
-<span class="w">    </span><span class="c">!DEC$ ATTRIBUTES DLLEXPORT, ALIAS:&#39;matrix_multiply&#39; :: matrix_multiply</span>
+<span class="w">    </span><span class="c">!DEC$ ATTRIBUTES DLLEXPORT, ALIAS:'matrix_multiply' :: matrix_multiply</span>
 <span class="w">    </span><span class="k">implicit none</span>
 <span class="k">    </span><span class="kt">integer</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">r1</span><span class="p">,</span><span class="w"> </span><span class="n">c1</span><span class="p">,</span><span class="w"> </span><span class="n">r2</span><span class="p">,</span><span class="w"> </span><span class="n">c2</span><span class="w"> </span><span class="c">! the dimensions of the input arrays</span>
 <span class="w">    </span><span class="kt">double precision</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">a1</span><span class="p">(</span><span class="n">r1</span><span class="p">,</span><span class="n">c1</span><span class="p">),</span><span class="w"> </span><span class="n">a2</span><span class="p">(</span><span class="n">r2</span><span class="p">,</span><span class="n">c2</span><span class="p">)</span><span class="w"> </span><span class="c">! the arrays to multiply</span>
@@ -3707,13 +3707,13 @@ method.</p>
 <span class="normal">549</span>
 <span class="normal">550</span>
 <span class="normal">551</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">matrix_multiply</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">a1</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">Sequence</span><span class="p">[</span><span class="nb">float</span><span class="p">]],</span> <span class="n">a2</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">Sequence</span><span class="p">[</span><span class="nb">float</span><span class="p">]])</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">list</span><span class="p">[</span><span class="nb">float</span><span class="p">]]:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Multiply two matrices.</span>
+<span class="w">    </span><span class="sd">"""Multiply two matrices.</span>
 
 <span class="sd">    The corresponding FORTRAN code is</span>
 
 <span class="sd">    ```fortran</span>
 <span class="sd">    subroutine matrix_multiply(a, a1, r1, c1, a2, r2, c2)</span>
-<span class="sd">        !DEC$ ATTRIBUTES DLLEXPORT, ALIAS:&#39;matrix_multiply&#39; :: matrix_multiply</span>
+<span class="sd">        !DEC$ ATTRIBUTES DLLEXPORT, ALIAS:'matrix_multiply' :: matrix_multiply</span>
 <span class="sd">        implicit none</span>
 <span class="sd">        integer(4) :: r1, c1, r2, c2 ! the dimensions of the input arrays</span>
 <span class="sd">        double precision :: a1(r1,c1), a2(r2,c2) ! the arrays to multiply</span>
@@ -3723,8 +3723,8 @@ method.</p>
 <span class="sd">    ```</span>
 
 <span class="sd">    !!! note</span>
-<span class="sd">        FORTRAN stores multidimensional arrays in [column-major order][order]{:target=&quot;_blank&quot;},</span>
-<span class="sd">        as opposed to [row-major order][order]{:target=&quot;_blank&quot;} like C (Python) arrays. Therefore,</span>
+<span class="sd">        FORTRAN stores multidimensional arrays in [column-major order][order]{:target="_blank"},</span>
+<span class="sd">        as opposed to [row-major order][order]{:target="_blank"} like C (Python) arrays. Therefore,</span>
 <span class="sd">        the input matrices need to be transposed before sending the matrices to FORTRAN</span>
 <span class="sd">        and also the result needs to be transposed.</span>
 
@@ -3739,7 +3739,7 @@ method.</p>
 
 <span class="sd">    Returns:</span>
 <span class="sd">        The product, `a1 @ a2`.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="c1"># restype should be defined elsewhere, shown here for illustrative purposes</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">lib</span><span class="o">.</span><span class="n">matrix_multiply</span><span class="o">.</span><span class="n">restype</span> <span class="o">=</span> <span class="kc">None</span>
 
@@ -3751,8 +3751,8 @@ method.</p>
 
     <span class="k">if</span> <span class="n">n_cols1</span><span class="o">.</span><span class="n">value</span> <span class="o">!=</span> <span class="n">n_rows2</span><span class="o">.</span><span class="n">value</span><span class="p">:</span>
         <span class="n">msg</span> <span class="o">=</span> <span class="p">(</span>
-            <span class="sa">f</span><span class="s2">&quot;Cannot multiply a </span><span class="si">{</span><span class="n">n_rows1</span><span class="o">.</span><span class="n">value</span><span class="si">}</span><span class="s2">x</span><span class="si">{</span><span class="n">n_cols1</span><span class="o">.</span><span class="n">value</span><span class="si">}</span><span class="s2"> matrix &quot;</span>
-            <span class="sa">f</span><span class="s2">&quot;with a </span><span class="si">{</span><span class="n">n_rows2</span><span class="o">.</span><span class="n">value</span><span class="si">}</span><span class="s2">x</span><span class="si">{</span><span class="n">n_cols2</span><span class="o">.</span><span class="n">value</span><span class="si">}</span><span class="s2"> matrix&quot;</span>
+            <span class="sa">f</span><span class="s2">"Cannot multiply a </span><span class="si">{</span><span class="n">n_rows1</span><span class="o">.</span><span class="n">value</span><span class="si">}</span><span class="s2">x</span><span class="si">{</span><span class="n">n_cols1</span><span class="o">.</span><span class="n">value</span><span class="si">}</span><span class="s2"> matrix "</span>
+            <span class="sa">f</span><span class="s2">"with a </span><span class="si">{</span><span class="n">n_rows2</span><span class="o">.</span><span class="n">value</span><span class="si">}</span><span class="s2">x</span><span class="si">{</span><span class="n">n_cols2</span><span class="o">.</span><span class="n">value</span><span class="si">}</span><span class="s2"> matrix"</span>
         <span class="p">)</span>
         <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
 
@@ -3795,7 +3795,7 @@ method.</p>
         <p>Multiply two FORTRAN floating-point numbers.</p>
 <p>The corresponding FORTRAN code is</p>
 <div class="highlight"><pre><span></span><code><span class="k">function </span><span class="n">multiply_float32</span><span class="p">(</span><span class="n">a</span><span class="p">,</span><span class="w"> </span><span class="n">b</span><span class="p">)</span><span class="w"> </span><span class="k">result</span><span class="p">(</span><span class="k">value</span><span class="p">)</span>
-<span class="w">    </span><span class="c">!DEC$ ATTRIBUTES DLLEXPORT, ALIAS:&#39;multiply_float32&#39; :: multiply_float32</span>
+<span class="w">    </span><span class="c">!DEC$ ATTRIBUTES DLLEXPORT, ALIAS:'multiply_float32' :: multiply_float32</span>
 <span class="w">    </span><span class="k">implicit none</span>
 <span class="k">    </span><span class="kt">real</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">a</span><span class="p">,</span><span class="w"> </span><span class="n">b</span><span class="p">,</span><span class="w"> </span><span class="k">value</span>
 <span class="k">    value</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">a</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">b</span>
@@ -3908,13 +3908,13 @@ method.</p>
 <span class="normal">208</span>
 <span class="normal">209</span>
 <span class="normal">210</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">multiply_float32</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">a</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">b</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Multiply two FORTRAN floating-point numbers.</span>
+<span class="w">    </span><span class="sd">"""Multiply two FORTRAN floating-point numbers.</span>
 
 <span class="sd">    The corresponding FORTRAN code is</span>
 
 <span class="sd">    ```fortran</span>
 <span class="sd">    function multiply_float32(a, b) result(value)</span>
-<span class="sd">        !DEC$ ATTRIBUTES DLLEXPORT, ALIAS:&#39;multiply_float32&#39; :: multiply_float32</span>
+<span class="sd">        !DEC$ ATTRIBUTES DLLEXPORT, ALIAS:'multiply_float32' :: multiply_float32</span>
 <span class="sd">        implicit none</span>
 <span class="sd">        real(4) :: a, b, value</span>
 <span class="sd">        value = a * b</span>
@@ -3930,7 +3930,7 @@ method.</p>
 
 <span class="sd">    Returns:</span>
 <span class="sd">        The product, `a * b`.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="c1"># restype should be defined elsewhere, shown here for illustrative purposes</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">lib</span><span class="o">.</span><span class="n">multiply_float32</span><span class="o">.</span><span class="n">restype</span> <span class="o">=</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">c_float</span>
 
@@ -3960,7 +3960,7 @@ method.</p>
         <p>Multiply two FORTRAN double-precision numbers.</p>
 <p>The corresponding FORTRAN code is</p>
 <div class="highlight"><pre><span></span><code><span class="k">function </span><span class="n">multiply_float64</span><span class="p">(</span><span class="n">a</span><span class="p">,</span><span class="w"> </span><span class="n">b</span><span class="p">)</span><span class="w"> </span><span class="k">result</span><span class="p">(</span><span class="k">value</span><span class="p">)</span>
-<span class="w">    </span><span class="c">!DEC$ ATTRIBUTES DLLEXPORT, ALIAS:&#39;multiply_float64&#39; :: multiply_float64</span>
+<span class="w">    </span><span class="c">!DEC$ ATTRIBUTES DLLEXPORT, ALIAS:'multiply_float64' :: multiply_float64</span>
 <span class="w">    </span><span class="k">implicit none</span>
 <span class="k">    </span><span class="kt">real</span><span class="p">(</span><span class="mi">8</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">a</span><span class="p">,</span><span class="w"> </span><span class="n">b</span><span class="p">,</span><span class="w"> </span><span class="k">value</span>
 <span class="k">    value</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">a</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">b</span>
@@ -4073,13 +4073,13 @@ method.</p>
 <span class="normal">240</span>
 <span class="normal">241</span>
 <span class="normal">242</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">multiply_float64</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">a</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">b</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Multiply two FORTRAN double-precision numbers.</span>
+<span class="w">    </span><span class="sd">"""Multiply two FORTRAN double-precision numbers.</span>
 
 <span class="sd">    The corresponding FORTRAN code is</span>
 
 <span class="sd">    ```fortran</span>
 <span class="sd">    function multiply_float64(a, b) result(value)</span>
-<span class="sd">        !DEC$ ATTRIBUTES DLLEXPORT, ALIAS:&#39;multiply_float64&#39; :: multiply_float64</span>
+<span class="sd">        !DEC$ ATTRIBUTES DLLEXPORT, ALIAS:'multiply_float64' :: multiply_float64</span>
 <span class="sd">        implicit none</span>
 <span class="sd">        real(8) :: a, b, value</span>
 <span class="sd">        value = a * b</span>
@@ -4095,7 +4095,7 @@ method.</p>
 
 <span class="sd">    Returns:</span>
 <span class="sd">        The product, `a * b`.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="c1"># restype should be defined elsewhere, shown here for illustrative purposes</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">lib</span><span class="o">.</span><span class="n">multiply_float64</span><span class="o">.</span><span class="n">restype</span> <span class="o">=</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">c_double</span>
 
@@ -4125,7 +4125,7 @@ method.</p>
         <p>Reverse a string.</p>
 <p>The corresponding FORTRAN code is</p>
 <div class="highlight"><pre><span></span><code><span class="k">subroutine </span><span class="n">reverse_string</span><span class="p">(</span><span class="n">original</span><span class="p">,</span><span class="w"> </span><span class="n">n</span><span class="p">,</span><span class="w"> </span><span class="n">reversed</span><span class="p">)</span>
-<span class="w">    </span><span class="c">!DEC$ ATTRIBUTES DLLEXPORT, ALIAS:&#39;reverse_string&#39; :: reverse_string</span>
+<span class="w">    </span><span class="c">!DEC$ ATTRIBUTES DLLEXPORT, ALIAS:'reverse_string' :: reverse_string</span>
 <span class="w">    </span><span class="c">!DEC$ ATTRIBUTES REFERENCE :: original, reversed</span>
 <span class="w">    </span><span class="k">implicit none</span>
 <span class="k">    </span><span class="kt">integer</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">i</span><span class="p">,</span><span class="w"> </span><span class="n">n</span>
@@ -4230,13 +4230,13 @@ method.</p>
 <span class="normal">447</span>
 <span class="normal">448</span>
 <span class="normal">449</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">reverse_string</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">original</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Reverse a string.</span>
+<span class="w">    </span><span class="sd">"""Reverse a string.</span>
 
 <span class="sd">    The corresponding FORTRAN code is</span>
 
 <span class="sd">    ```fortran</span>
 <span class="sd">    subroutine reverse_string(original, n, reversed)</span>
-<span class="sd">        !DEC$ ATTRIBUTES DLLEXPORT, ALIAS:&#39;reverse_string&#39; :: reverse_string</span>
+<span class="sd">        !DEC$ ATTRIBUTES DLLEXPORT, ALIAS:'reverse_string' :: reverse_string</span>
 <span class="sd">        !DEC$ ATTRIBUTES REFERENCE :: original, reversed</span>
 <span class="sd">        implicit none</span>
 <span class="sd">        integer :: i, n</span>
@@ -4255,7 +4255,7 @@ method.</p>
 
 <span class="sd">    Returns:</span>
 <span class="sd">        The string reversed.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="c1"># restype should be defined elsewhere, shown here for illustrative purposes</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">lib</span><span class="o">.</span><span class="n">reverse_string</span><span class="o">.</span><span class="n">restype</span> <span class="o">=</span> <span class="kc">None</span>
 
@@ -4286,7 +4286,7 @@ method.</p>
         <p>Compute the standard deviation.</p>
 <p>The corresponding FORTRAN code is</p>
 <div class="highlight"><pre><span></span><code><span class="k">function </span><span class="n">standard_deviation</span><span class="p">(</span><span class="n">a</span><span class="p">,</span><span class="w"> </span><span class="n">n</span><span class="p">)</span><span class="w"> </span><span class="k">result</span><span class="p">(</span><span class="n">var</span><span class="p">)</span>
-<span class="w">    </span><span class="c">!DEC$ ATTRIBUTES DLLEXPORT, ALIAS:&#39;standard_deviation&#39; :: standard_deviation</span>
+<span class="w">    </span><span class="c">!DEC$ ATTRIBUTES DLLEXPORT, ALIAS:'standard_deviation' :: standard_deviation</span>
 <span class="w">    </span><span class="kt">integer</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">n</span><span class="w"> </span><span class="c">! the length of the array</span>
 <span class="w">    </span><span class="kt">double precision</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">var</span><span class="p">,</span><span class="w"> </span><span class="n">a</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
 <span class="w">    </span><span class="n">var</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">SUM</span><span class="p">(</span><span class="n">a</span><span class="p">)</span><span class="o">/</span><span class="n">SIZE</span><span class="p">(</span><span class="n">a</span><span class="p">)</span><span class="w"> </span><span class="c">! SUM is a built-in fortran function</span>
@@ -4387,13 +4387,13 @@ method.</p>
 <span class="normal">383</span>
 <span class="normal">384</span>
 <span class="normal">385</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">standard_deviation</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">float</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Compute the standard deviation.</span>
+<span class="w">    </span><span class="sd">"""Compute the standard deviation.</span>
 
 <span class="sd">    The corresponding FORTRAN code is</span>
 
 <span class="sd">    ```fortran</span>
 <span class="sd">    function standard_deviation(a, n) result(var)</span>
-<span class="sd">        !DEC$ ATTRIBUTES DLLEXPORT, ALIAS:&#39;standard_deviation&#39; :: standard_deviation</span>
+<span class="sd">        !DEC$ ATTRIBUTES DLLEXPORT, ALIAS:'standard_deviation' :: standard_deviation</span>
 <span class="sd">        integer :: n ! the length of the array</span>
 <span class="sd">        double precision :: var, a(n)</span>
 <span class="sd">        var = SUM(a)/SIZE(a) ! SUM is a built-in fortran function</span>
@@ -4410,7 +4410,7 @@ method.</p>
 
 <span class="sd">    Returns:</span>
 <span class="sd">        The standard deviation of `data`.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="c1"># restype should be defined elsewhere, shown here for illustrative purposes</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">lib</span><span class="o">.</span><span class="n">standard_deviation</span><span class="o">.</span><span class="n">restype</span> <span class="o">=</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">c_double</span>
 
@@ -4444,7 +4444,7 @@ This method converts the data types of <code>a</code> and <code>b</code> to be
 <a class="autorefs autorefs-external" href="https://docs.python.org/3/library/ctypes.html#ctypes.c_int16" target="_blank">c_int16</a>.</p>
 <p>The corresponding FORTRAN code is</p>
 <div class="highlight"><pre><span></span><code><span class="k">function </span><span class="n">sum_16bit</span><span class="p">(</span><span class="n">a</span><span class="p">,</span><span class="w"> </span><span class="n">b</span><span class="p">)</span><span class="w"> </span><span class="k">result</span><span class="p">(</span><span class="k">value</span><span class="p">)</span>
-<span class="w">    </span><span class="c">!DEC$ ATTRIBUTES DLLEXPORT, ALIAS:&#39;sum_16bit&#39; :: sum_16bit</span>
+<span class="w">    </span><span class="c">!DEC$ ATTRIBUTES DLLEXPORT, ALIAS:'sum_16bit' :: sum_16bit</span>
 <span class="w">    </span><span class="k">implicit none</span>
 <span class="k">    </span><span class="kt">integer</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">a</span><span class="p">,</span><span class="w"> </span><span class="n">b</span><span class="p">,</span><span class="w"> </span><span class="k">value</span>
 <span class="k">    value</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">a</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">b</span>
@@ -4559,17 +4559,17 @@ This method converts the data types of <code>a</code> and <code>b</code> to be
 <span class="normal">106</span>
 <span class="normal">107</span>
 <span class="normal">108</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">sum_16bit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">a</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">b</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Add two 16-bit signed integers.</span>
+<span class="w">    </span><span class="sd">"""Add two 16-bit signed integers.</span>
 
-<span class="sd">    Python only has one [int][]{:target=&quot;_blank&quot;} data type to represent integer values.</span>
+<span class="sd">    Python only has one [int][]{:target="_blank"} data type to represent integer values.</span>
 <span class="sd">    This method converts the data types of `a` and `b` to be</span>
-<span class="sd">    [c_int16][ctypes.c_int16]{:target=&quot;_blank&quot;}.</span>
+<span class="sd">    [c_int16][ctypes.c_int16]{:target="_blank"}.</span>
 
 <span class="sd">    The corresponding FORTRAN code is</span>
 
 <span class="sd">    ```fortran</span>
 <span class="sd">    function sum_16bit(a, b) result(value)</span>
-<span class="sd">        !DEC$ ATTRIBUTES DLLEXPORT, ALIAS:&#39;sum_16bit&#39; :: sum_16bit</span>
+<span class="sd">        !DEC$ ATTRIBUTES DLLEXPORT, ALIAS:'sum_16bit' :: sum_16bit</span>
 <span class="sd">        implicit none</span>
 <span class="sd">        integer(2) :: a, b, value</span>
 <span class="sd">        value = a + b</span>
@@ -4584,7 +4584,7 @@ This method converts the data types of <code>a</code> and <code>b</code> to be
 
 <span class="sd">    Returns:</span>
 <span class="sd">        The sum, `a + b`.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="c1"># restype should be defined elsewhere, shown here for illustrative purposes</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">lib</span><span class="o">.</span><span class="n">sum_16bit</span><span class="o">.</span><span class="n">restype</span> <span class="o">=</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">c_int16</span>
 
@@ -4617,7 +4617,7 @@ This method converts the data types of <code>a</code> and <code>b</code> to be
 <a class="autorefs autorefs-external" href="https://docs.python.org/3/library/ctypes.html#ctypes.c_int32" target="_blank">c_int32</a>.</p>
 <p>The corresponding FORTRAN code is</p>
 <div class="highlight"><pre><span></span><code><span class="k">function </span><span class="n">sum_32bit</span><span class="p">(</span><span class="n">a</span><span class="p">,</span><span class="w"> </span><span class="n">b</span><span class="p">)</span><span class="w"> </span><span class="k">result</span><span class="p">(</span><span class="k">value</span><span class="p">)</span>
-<span class="w">    </span><span class="c">!DEC$ ATTRIBUTES DLLEXPORT, ALIAS:&#39;sum_32bit&#39; :: sum_32bit</span>
+<span class="w">    </span><span class="c">!DEC$ ATTRIBUTES DLLEXPORT, ALIAS:'sum_32bit' :: sum_32bit</span>
 <span class="w">    </span><span class="k">implicit none</span>
 <span class="k">    </span><span class="kt">integer</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">a</span><span class="p">,</span><span class="w"> </span><span class="n">b</span><span class="p">,</span><span class="w"> </span><span class="k">value</span>
 <span class="k">    value</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">a</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">b</span>
@@ -4732,17 +4732,17 @@ This method converts the data types of <code>a</code> and <code>b</code> to be
 <span class="normal">141</span>
 <span class="normal">142</span>
 <span class="normal">143</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">sum_32bit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">a</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">b</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Add two 32-bit signed integers.</span>
+<span class="w">    </span><span class="sd">"""Add two 32-bit signed integers.</span>
 
-<span class="sd">    Python only has one [int][]{:target=&quot;_blank&quot;} data type to represent integer values.</span>
+<span class="sd">    Python only has one [int][]{:target="_blank"} data type to represent integer values.</span>
 <span class="sd">    This method converts the data types of `a` and `b` to be</span>
-<span class="sd">    [c_int32][ctypes.c_int32]{:target=&quot;_blank&quot;}.</span>
+<span class="sd">    [c_int32][ctypes.c_int32]{:target="_blank"}.</span>
 
 <span class="sd">    The corresponding FORTRAN code is</span>
 
 <span class="sd">    ```fortran</span>
 <span class="sd">    function sum_32bit(a, b) result(value)</span>
-<span class="sd">        !DEC$ ATTRIBUTES DLLEXPORT, ALIAS:&#39;sum_32bit&#39; :: sum_32bit</span>
+<span class="sd">        !DEC$ ATTRIBUTES DLLEXPORT, ALIAS:'sum_32bit' :: sum_32bit</span>
 <span class="sd">        implicit none</span>
 <span class="sd">        integer(4) :: a, b, value</span>
 <span class="sd">        value = a + b</span>
@@ -4757,7 +4757,7 @@ This method converts the data types of <code>a</code> and <code>b</code> to be
 
 <span class="sd">    Returns:</span>
 <span class="sd">        The sum, `a + b`.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="c1"># restype should be defined elsewhere, shown here for illustrative purposes</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">lib</span><span class="o">.</span><span class="n">sum_32bit</span><span class="o">.</span><span class="n">restype</span> <span class="o">=</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">c_int32</span>
 
@@ -4790,7 +4790,7 @@ This method converts the data types of <code>a</code> and <code>b</code> to be
 <a class="autorefs autorefs-external" href="https://docs.python.org/3/library/ctypes.html#ctypes.c_int64" target="_blank">c_int64</a>.</p>
 <p>The corresponding FORTRAN code is</p>
 <div class="highlight"><pre><span></span><code><span class="k">function </span><span class="n">sum_64bit</span><span class="p">(</span><span class="n">a</span><span class="p">,</span><span class="w"> </span><span class="n">b</span><span class="p">)</span><span class="w"> </span><span class="k">result</span><span class="p">(</span><span class="k">value</span><span class="p">)</span>
-<span class="w">    </span><span class="c">!DEC$ ATTRIBUTES DLLEXPORT, ALIAS:&#39;sum_64bit&#39; :: sum_64bit</span>
+<span class="w">    </span><span class="c">!DEC$ ATTRIBUTES DLLEXPORT, ALIAS:'sum_64bit' :: sum_64bit</span>
 <span class="w">    </span><span class="k">implicit none</span>
 <span class="k">    </span><span class="kt">integer</span><span class="p">(</span><span class="mi">8</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">a</span><span class="p">,</span><span class="w"> </span><span class="n">b</span><span class="p">,</span><span class="w"> </span><span class="k">value</span>
 <span class="k">    value</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">a</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">b</span>
@@ -4905,17 +4905,17 @@ This method converts the data types of <code>a</code> and <code>b</code> to be
 <span class="normal">176</span>
 <span class="normal">177</span>
 <span class="normal">178</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">sum_64bit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">a</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">b</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Add two 64-bit signed integers.</span>
+<span class="w">    </span><span class="sd">"""Add two 64-bit signed integers.</span>
 
-<span class="sd">    Python only has one [int][]{:target=&quot;_blank&quot;} data type to represent integer values.</span>
+<span class="sd">    Python only has one [int][]{:target="_blank"} data type to represent integer values.</span>
 <span class="sd">    This method converts the data types of `a` and `b` to be</span>
-<span class="sd">    [c_int64][ctypes.c_int64]{:target=&quot;_blank&quot;}.</span>
+<span class="sd">    [c_int64][ctypes.c_int64]{:target="_blank"}.</span>
 
 <span class="sd">    The corresponding FORTRAN code is</span>
 
 <span class="sd">    ```fortran</span>
 <span class="sd">    function sum_64bit(a, b) result(value)</span>
-<span class="sd">        !DEC$ ATTRIBUTES DLLEXPORT, ALIAS:&#39;sum_64bit&#39; :: sum_64bit</span>
+<span class="sd">        !DEC$ ATTRIBUTES DLLEXPORT, ALIAS:'sum_64bit' :: sum_64bit</span>
 <span class="sd">        implicit none</span>
 <span class="sd">        integer(8) :: a, b, value</span>
 <span class="sd">        value = a + b</span>
@@ -4930,7 +4930,7 @@ This method converts the data types of <code>a</code> and <code>b</code> to be
 
 <span class="sd">    Returns:</span>
 <span class="sd">        The sum, `a + b`.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="c1"># restype should be defined elsewhere, shown here for illustrative purposes</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">lib</span><span class="o">.</span><span class="n">sum_64bit</span><span class="o">.</span><span class="n">restype</span> <span class="o">=</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">c_int64</span>
 
@@ -4963,7 +4963,7 @@ This method converts the data types of <code>a</code> and <code>b</code> to be
 <a class="autorefs autorefs-external" href="https://docs.python.org/3/library/ctypes.html#ctypes.c_int8" target="_blank">c_int8</a>.</p>
 <p>The corresponding FORTRAN code is</p>
 <div class="highlight"><pre><span></span><code><span class="k">function </span><span class="n">sum_8bit</span><span class="p">(</span><span class="n">a</span><span class="p">,</span><span class="w"> </span><span class="n">b</span><span class="p">)</span><span class="w"> </span><span class="k">result</span><span class="p">(</span><span class="k">value</span><span class="p">)</span>
-<span class="w">    </span><span class="c">!DEC$ ATTRIBUTES DLLEXPORT, ALIAS:&#39;sum_8bit&#39; :: sum_8bit</span>
+<span class="w">    </span><span class="c">!DEC$ ATTRIBUTES DLLEXPORT, ALIAS:'sum_8bit' :: sum_8bit</span>
 <span class="w">    </span><span class="k">implicit none</span>
 <span class="k">    </span><span class="kt">integer</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">a</span><span class="p">,</span><span class="w"> </span><span class="n">b</span><span class="p">,</span><span class="w"> </span><span class="k">value</span>
 <span class="k">    value</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">a</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">b</span>
@@ -5078,17 +5078,17 @@ This method converts the data types of <code>a</code> and <code>b</code> to be
 <span class="normal">71</span>
 <span class="normal">72</span>
 <span class="normal">73</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">sum_8bit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">a</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">b</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Add two 8-bit signed integers.</span>
+<span class="w">    </span><span class="sd">"""Add two 8-bit signed integers.</span>
 
-<span class="sd">    Python only has one [int][]{:target=&quot;_blank&quot;} data type to represent integer values.</span>
+<span class="sd">    Python only has one [int][]{:target="_blank"} data type to represent integer values.</span>
 <span class="sd">    This method converts the data types of `a` and `b` to be</span>
-<span class="sd">    [c_int8][ctypes.c_int8]{:target=&quot;_blank&quot;}.</span>
+<span class="sd">    [c_int8][ctypes.c_int8]{:target="_blank"}.</span>
 
 <span class="sd">    The corresponding FORTRAN code is</span>
 
 <span class="sd">    ```fortran</span>
 <span class="sd">    function sum_8bit(a, b) result(value)</span>
-<span class="sd">        !DEC$ ATTRIBUTES DLLEXPORT, ALIAS:&#39;sum_8bit&#39; :: sum_8bit</span>
+<span class="sd">        !DEC$ ATTRIBUTES DLLEXPORT, ALIAS:'sum_8bit' :: sum_8bit</span>
 <span class="sd">        implicit none</span>
 <span class="sd">        integer(1) :: a, b, value</span>
 <span class="sd">        value = a + b</span>
@@ -5103,7 +5103,7 @@ This method converts the data types of <code>a</code> and <code>b</code> to be
 
 <span class="sd">    Returns:</span>
 <span class="sd">        The sum, `a + b`.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="c1"># restype should be defined elsewhere, shown here for illustrative purposes</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">lib</span><span class="o">.</span><span class="n">sum_8bit</span><span class="o">.</span><span class="n">restype</span> <span class="o">=</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">c_int8</span>
 

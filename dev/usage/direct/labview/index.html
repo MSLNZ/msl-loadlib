@@ -2284,11 +2284,11 @@
 
 <div class="highlight"><pre><span></span><code><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">msl.loadlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">LoadLibrary</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">msl.examples.loadlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">EXAMPLES_DIR</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">labview</span> <span class="o">=</span> <span class="n">LoadLibrary</span><span class="p">(</span><span class="n">EXAMPLES_DIR</span> <span class="o">/</span> <span class="s2">&quot;labview_lib64.dll&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">labview</span> <span class="o">=</span> <span class="n">LoadLibrary</span><span class="p">(</span><span class="n">EXAMPLES_DIR</span> <span class="o">/</span> <span class="s2">"labview_lib64.dll"</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">labview</span>
 <span class="go">&lt;LoadLibrary libtype=CDLL path=...labview_lib64.dll&gt;</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">labview</span><span class="o">.</span><span class="n">lib</span>
-<span class="go">&lt;CDLL &#39;...labview_lib64.dll&#39;, handle ... at ...&gt;</span>
+<span class="go">&lt;CDLL '...labview_lib64.dll', handle ... at ...&gt;</span>
 </code></pre></div>
 <p>Create some data to calculate the mean, variance and standard deviation of</p>
 <div class="highlight"><pre><span></span><code><span class="gp">&gt;&gt;&gt; </span><span class="n">data</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">7</span><span class="p">,</span> <span class="mi">8</span><span class="p">,</span> <span class="mi">9</span><span class="p">]</span>
@@ -2326,12 +2326,12 @@
 <p><img alt="labview_lib" src="../../../assets/images/labview_lib.png" /></p>
 </div>
 <div class="tabbed-block">
-<div class="highlight"><pre><span></span><code><span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;extcode.h&quot;</span>
+<div class="highlight"><pre><span></span><code><span class="cp">#include</span><span class="w"> </span><span class="cpf">"extcode.h"</span>
 <span class="cp">#pragma pack(push)</span>
 <span class="cp">#pragma pack(1)</span>
 
 <span class="cp">#ifdef __cplusplus</span>
-<span class="k">extern</span><span class="w"> </span><span class="s">&quot;C&quot;</span><span class="w"> </span><span class="p">{</span>
+<span class="k">extern</span><span class="w"> </span><span class="s">"C"</span><span class="w"> </span><span class="p">{</span>
 <span class="cp">#endif</span>
 <span class="k">typedef</span><span class="w"> </span><span class="kt">uint16_t</span><span class="w">  </span><span class="n">Enum</span><span class="p">;</span>
 <span class="cp">#define Enum_Sample 0</span>
@@ -2346,7 +2346,7 @@
 <span class="n">MgErr</span><span class="w"> </span><span class="kr">__cdecl</span><span class="w"> </span><span class="n">LVDLLStatus</span><span class="p">(</span><span class="kt">char</span><span class="w"> </span><span class="o">*</span><span class="n">errStr</span><span class="p">,</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">errStrLen</span><span class="p">,</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="o">*</span><span class="k">module</span><span class="p">);</span>
 
 <span class="cp">#ifdef __cplusplus</span>
-<span class="p">}</span><span class="w"> </span><span class="c1">// extern &quot;C&quot;</span>
+<span class="p">}</span><span class="w"> </span><span class="c1">// extern "C"</span>
 <span class="cp">#endif</span>
 
 <span class="cp">#pragma pack(pop)</span>

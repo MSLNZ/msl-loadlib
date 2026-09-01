@@ -2686,12 +2686,12 @@ Use <a class="autorefs autorefs-internal" title="            LoadLibrary" href="
 <span class="normal">65</span>
 <span class="normal">66</span>
 <span class="normal">67</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="p">:</span> <span class="n">PathLike</span><span class="p">,</span> <span class="n">libtype</span><span class="p">:</span> <span class="n">LibType</span><span class="p">,</span> <span class="n">host</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">port</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Base class for loading a 32-bit library in 32-bit Python.</span>
+<span class="w">    </span><span class="sd">"""Base class for loading a 32-bit library in 32-bit Python.</span>
 
 <span class="sd">    All modules that are to be run on the 32-bit server must contain a class</span>
 <span class="sd">    that inherits this class. The module may import most of the</span>
-<span class="sd">    [standard](https://docs.python.org/3/py-modindex.html){:target=&quot;_blank&quot;}</span>
-<span class="sd">    python modules (graphic-related modules, e.g., [tkinter][]{:target=&quot;_blank&quot;},</span>
+<span class="sd">    [standard](https://docs.python.org/3/py-modindex.html){:target="_blank"}</span>
+<span class="sd">    python modules (graphic-related modules, e.g., [tkinter][]{:target="_blank"},</span>
 <span class="sd">    are not available).</span>
 
 <span class="sd">    Args:</span>
@@ -2700,14 +2700,14 @@ Use <a class="autorefs autorefs-internal" title="            LoadLibrary" href="
 
 <span class="sd">            !!! attention</span>
 <span class="sd">                Since Java byte code is executed on the</span>
-<span class="sd">                [JVM](https://en.wikipedia.org/wiki/Java_virtual_machine){:target=&quot;_blank&quot;}</span>
+<span class="sd">                [JVM](https://en.wikipedia.org/wiki/Java_virtual_machine){:target="_blank"}</span>
 <span class="sd">                it does not make sense to use [Server32][] for a Java `.jar` or `.class` file.</span>
 <span class="sd">                Use [LoadLibrary][msl.loadlib.load_library.LoadLibrary] to load a Java library.</span>
 
 <span class="sd">        host: The IP address (or hostname) to use for the server.</span>
 <span class="sd">        port: The port to open for the server.</span>
 <span class="sd">        kwargs: All keyword arguments are passed to [LoadLibrary][msl.loadlib.load_library.LoadLibrary].</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">_library</span><span class="p">:</span> <span class="n">LoadLibrary</span> <span class="o">=</span> <span class="n">LoadLibrary</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">libtype</span><span class="o">=</span><span class="n">libtype</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">_app</span><span class="p">:</span> <span class="n">Application</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_library</span><span class="o">.</span><span class="n">application</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">_assembly</span><span class="p">:</span> <span class="n">Any</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_library</span><span class="o">.</span><span class="n">assembly</span>
@@ -2893,14 +2893,14 @@ and the message loop is not running
 <span class="normal">234</span>
 <span class="normal">235</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nd">@staticmethod</span>
 <span class="k">def</span><span class="w"> </span><span class="nf">examples_dir</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">Path</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;[Path][pathlib.Path] &amp;mdash; The directory where the [example][direct] libraries are located.</span>
+<span class="w">    </span><span class="sd">"""[Path][pathlib.Path] &amp;mdash; The directory where the [example][direct] libraries are located.</span>
 
-<span class="sd">    !!! note &quot;Added in version 0.9&quot;</span>
-<span class="sd">    !!! note &quot;Changed in version 1.0&quot;</span>
-<span class="sd">        The return type changed from [str][]{:target=&quot;_blank&quot;} to [Path][pathlib.Path]{:target=&quot;_blank&quot;}.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    !!! note "Added in version 0.9"</span>
+<span class="sd">    !!! note "Changed in version 1.0"</span>
+<span class="sd">        The return type changed from [str][]{:target="_blank"} to [Path][pathlib.Path]{:target="_blank"}.</span>
+<span class="sd">    """</span>
     <span class="n">path</span> <span class="o">=</span> <span class="n">sys</span><span class="o">.</span><span class="n">executable</span> <span class="k">if</span> <span class="n">Server32</span><span class="o">.</span><span class="n">is_interpreter</span><span class="p">()</span> <span class="k">else</span> <span class="vm">__file__</span>
-    <span class="k">return</span> <span class="n">Path</span><span class="p">(</span><span class="n">path</span><span class="p">)</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">parent</span> <span class="o">/</span> <span class="s2">&quot;examples&quot;</span> <span class="o">/</span> <span class="s2">&quot;loadlib&quot;</span>
+    <span class="k">return</span> <span class="n">Path</span><span class="p">(</span><span class="n">path</span><span class="p">)</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">parent</span> <span class="o">/</span> <span class="s2">"examples"</span> <span class="o">/</span> <span class="s2">"loadlib"</span>
 </code></pre></div></td></tr></table></div>
             </details>
     </div>
@@ -2930,7 +2930,7 @@ with the Python interpreter on the 32-bit server.</p>
 <div class="admonition tip">
 <p class="admonition-title">Tip</p>
 <p>You can start the console from a terminal by running
-<div class="highlight"><pre><span></span><code><span class="go">python -c &quot;from msl.loadlib import Server32; Server32.interactive_console()&quot;</span>
+<div class="highlight"><pre><span></span><code><span class="go">python -c "from msl.loadlib import Server32; Server32.interactive_console()"</span>
 </code></pre></div></p>
 </div>
 
@@ -2959,25 +2959,25 @@ with the Python interpreter on the 32-bit server.</p>
 <span class="normal">153</span>
 <span class="normal">154</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nd">@staticmethod</span>
 <span class="k">def</span><span class="w"> </span><span class="nf">interactive_console</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Start an [interactive console]{:target=&quot;_blank&quot;}.</span>
+<span class="w">    </span><span class="sd">"""Start an [interactive console]{:target="_blank"}.</span>
 
-<span class="sd">    This method starts an [interactive console]{:target=&quot;_blank&quot;}, in a new terminal,</span>
+<span class="sd">    This method starts an [interactive console]{:target="_blank"}, in a new terminal,</span>
 <span class="sd">    with the Python interpreter on the 32-bit server.</span>
 
 <span class="sd">    !!! tip</span>
 <span class="sd">        You can start the console from a terminal by running</span>
 <span class="sd">        ```console</span>
-<span class="sd">        python -c &quot;from msl.loadlib import Server32; Server32.interactive_console()&quot;</span>
+<span class="sd">        python -c "from msl.loadlib import Server32; Server32.interactive_console()"</span>
 <span class="sd">        ```</span>
 
 <span class="sd">    [interactive console]: https://docs.python.org/3/tutorial/interpreter.html#interactive-mode</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">title</span> <span class="o">=</span> <span class="s2">&quot;msl.loadlib.Server32 || interactive console&quot;</span>
+<span class="sd">    """</span>
+    <span class="n">title</span> <span class="o">=</span> <span class="s2">"msl.loadlib.Server32 || interactive console"</span>
     <span class="k">if</span> <span class="n">IS_WINDOWS</span><span class="p">:</span>
-        <span class="n">cmd</span><span class="p">,</span> <span class="n">shell</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;start&quot;</span><span class="p">,</span> <span class="n">title</span><span class="p">],</span> <span class="kc">True</span>
+        <span class="n">cmd</span><span class="p">,</span> <span class="n">shell</span> <span class="o">=</span> <span class="p">[</span><span class="s2">"start"</span><span class="p">,</span> <span class="n">title</span><span class="p">],</span> <span class="kc">True</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="n">cmd</span><span class="p">,</span> <span class="n">shell</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;x-terminal-emulator&quot;</span><span class="p">,</span> <span class="s2">&quot;-T&quot;</span><span class="p">,</span> <span class="n">title</span><span class="p">,</span> <span class="s2">&quot;-e&quot;</span><span class="p">],</span> <span class="kc">False</span>
-    <span class="n">_</span> <span class="o">=</span> <span class="n">subprocess</span><span class="o">.</span><span class="n">call</span><span class="p">([</span><span class="o">*</span><span class="n">cmd</span><span class="p">,</span> <span class="n">Path</span><span class="p">(</span><span class="vm">__file__</span><span class="p">)</span><span class="o">.</span><span class="n">parent</span> <span class="o">/</span> <span class="n">server_filename</span><span class="p">,</span> <span class="s2">&quot;--interactive&quot;</span><span class="p">],</span> <span class="n">shell</span><span class="o">=</span><span class="n">shell</span><span class="p">)</span>  <span class="c1"># noqa: S603</span>
+        <span class="n">cmd</span><span class="p">,</span> <span class="n">shell</span> <span class="o">=</span> <span class="p">[</span><span class="s2">"x-terminal-emulator"</span><span class="p">,</span> <span class="s2">"-T"</span><span class="p">,</span> <span class="n">title</span><span class="p">,</span> <span class="s2">"-e"</span><span class="p">],</span> <span class="kc">False</span>
+    <span class="n">_</span> <span class="o">=</span> <span class="n">subprocess</span><span class="o">.</span><span class="n">call</span><span class="p">([</span><span class="o">*</span><span class="n">cmd</span><span class="p">,</span> <span class="n">Path</span><span class="p">(</span><span class="vm">__file__</span><span class="p">)</span><span class="o">.</span><span class="n">parent</span> <span class="o">/</span> <span class="n">server_filename</span><span class="p">,</span> <span class="s2">"--interactive"</span><span class="p">],</span> <span class="n">shell</span><span class="o">=</span><span class="n">shell</span><span class="p">)</span>  <span class="c1"># noqa: S603</span>
 </code></pre></div></td></tr></table></div>
             </details>
     </div>
@@ -3069,7 +3069,7 @@ by the correct bitness of the Python interpreter.</p>
 <span class="normal">223</span>
 <span class="normal">224</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nd">@staticmethod</span>
 <span class="k">def</span><span class="w"> </span><span class="nf">is_interpreter</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Check if code is running on the 32-bit server.</span>
+<span class="w">    </span><span class="sd">"""Check if code is running on the 32-bit server.</span>
 
 <span class="sd">    If the same module is executed by both [Client64][] and [Server32][]</span>
 <span class="sd">    then there may be sections of the code that should only be executed</span>
@@ -3089,8 +3089,8 @@ by the correct bitness of the Python interpreter.</p>
 <span class="sd">    Returns:</span>
 <span class="sd">        Whether the module is running on the 32-bit server.</span>
 
-<span class="sd">    !!! note &quot;Added in version 0.9&quot;</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    !!! note "Added in version 0.9"</span>
+<span class="sd">    """</span>
     <span class="k">return</span> <span class="n">sys</span><span class="o">.</span><span class="n">executable</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="n">server_filename</span><span class="p">)</span>
 </code></pre></div></td></tr></table></div>
             </details>
@@ -3136,7 +3136,7 @@ to crash.</p>
         <span class="n">path</span> <span class="o">=</span> <span class="n">Server32</span><span class="o">.</span><span class="n">remove_site_packages_64bit</span><span class="p">()</span>
 
         <span class="c1"># Load the COM library (this is when `comtypes` gets imported)</span>
-        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="s2">&quot;Scripting.FileSystemObject&quot;</span><span class="p">,</span> <span class="s2">&quot;com&quot;</span><span class="p">,</span> <span class="n">host</span><span class="p">,</span> <span class="n">port</span><span class="p">)</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="s2">"Scripting.FileSystemObject"</span><span class="p">,</span> <span class="s2">"com"</span><span class="p">,</span> <span class="n">host</span><span class="p">,</span> <span class="n">port</span><span class="p">)</span>
 
         <span class="c1"># Optional: add the site-packages directory back into sys.path</span>
         <span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
@@ -3216,7 +3216,7 @@ Can be an empty string if the directory was not found in <a class="autorefs auto
 <span class="normal">197</span>
 <span class="normal">198</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nd">@staticmethod</span>
 <span class="k">def</span><span class="w"> </span><span class="nf">remove_site_packages_64bit</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Remove the _site-packages_ directory from the 64-bit process.</span>
+<span class="w">    </span><span class="sd">"""Remove the _site-packages_ directory from the 64-bit process.</span>
 
 <span class="sd">    By default, the _site-packages_ directory of the 64-bit process is</span>
 <span class="sd">    included in [sys.path][] of the 32-bit process. Having the</span>
@@ -3241,7 +3241,7 @@ Can be an empty string if the directory was not found in <a class="autorefs auto
 <span class="sd">            path = Server32.remove_site_packages_64bit()</span>
 
 <span class="sd">            # Load the COM library (this is when `comtypes` gets imported)</span>
-<span class="sd">            super().__init__(&quot;Scripting.FileSystemObject&quot;, &quot;com&quot;, host, port)</span>
+<span class="sd">            super().__init__("Scripting.FileSystemObject", "com", host, port)</span>
 
 <span class="sd">            # Optional: add the site-packages directory back into sys.path</span>
 <span class="sd">            sys.path.append(path)</span>
@@ -3251,12 +3251,12 @@ Can be an empty string if the directory was not found in <a class="autorefs auto
 <span class="sd">        The path to the _site-packages_ directory that was removed.</span>
 <span class="sd">            Can be an empty string if the directory was not found in [sys.path][].</span>
 
-<span class="sd">    !!! note &quot;Added in version 0.9&quot;</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    !!! note "Added in version 0.9"</span>
+<span class="sd">    """</span>
     <span class="k">for</span> <span class="n">index</span><span class="p">,</span> <span class="n">path</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="p">):</span>
-        <span class="k">if</span> <span class="n">path</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s2">&quot;site-packages&quot;</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">path</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s2">"site-packages"</span><span class="p">):</span>
             <span class="k">return</span> <span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="n">index</span><span class="p">)</span>
-    <span class="k">return</span> <span class="s2">&quot;&quot;</span>
+    <span class="k">return</span> <span class="s2">""</span>
 </code></pre></div></td></tr></table></div>
             </details>
     </div>
@@ -3294,13 +3294,13 @@ threads or closing file handles, before the server shuts down.</p>
 <span class="normal">242</span>
 <span class="normal">243</span>
 <span class="normal">244</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">shutdown_handler</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Called just before the server shuts down.</span>
+<span class="w">    </span><span class="sd">"""Called just before the server shuts down.</span>
 
 <span class="sd">    Override this method to do any necessary cleanup, such as stopping</span>
 <span class="sd">    threads or closing file handles, before the server shuts down.</span>
 
-<span class="sd">    !!! note &quot;Added in version 0.6&quot;</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    !!! note "Added in version 0.6"</span>
+<span class="sd">    """</span>
 </code></pre></div></td></tr></table></div>
             </details>
     </div>
@@ -3328,7 +3328,7 @@ threads or closing file handles, before the server shuts down.</p>
 <div class="admonition tip">
 <p class="admonition-title">Tip</p>
 <p>You can view the version from a terminal by running
-<div class="highlight"><pre><span></span><code><span class="go">python -c &quot;from msl.loadlib import Server32; print(Server32.version())&quot;</span>
+<div class="highlight"><pre><span></span><code><span class="go">python -c "from msl.loadlib import Server32; print(Server32.version())"</span>
 </code></pre></div></p>
 </div>
 
@@ -3348,16 +3348,16 @@ threads or closing file handles, before the server shuts down.</p>
 <span class="normal">131</span>
 <span class="normal">132</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nd">@staticmethod</span>
 <span class="k">def</span><span class="w"> </span><span class="nf">version</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;[str][] &amp;mdash; The version of Python that the 32-bit server is running on.</span>
+<span class="w">    </span><span class="sd">"""[str][] &amp;mdash; The version of Python that the 32-bit server is running on.</span>
 
 <span class="sd">    !!! tip</span>
 <span class="sd">        You can view the version from a terminal by running</span>
 <span class="sd">        ```console</span>
-<span class="sd">        python -c &quot;from msl.loadlib import Server32; print(Server32.version())&quot;</span>
+<span class="sd">        python -c "from msl.loadlib import Server32; print(Server32.version())"</span>
 <span class="sd">        ```</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="n">exe</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="vm">__file__</span><span class="p">)</span><span class="o">.</span><span class="n">parent</span> <span class="o">/</span> <span class="n">server_filename</span>
-    <span class="k">return</span> <span class="n">subprocess</span><span class="o">.</span><span class="n">check_output</span><span class="p">([</span><span class="n">exe</span><span class="p">,</span> <span class="s2">&quot;--version&quot;</span><span class="p">])</span><span class="o">.</span><span class="n">decode</span><span class="p">()</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>  <span class="c1"># noqa: S603</span>
+    <span class="k">return</span> <span class="n">subprocess</span><span class="o">.</span><span class="n">check_output</span><span class="p">([</span><span class="n">exe</span><span class="p">,</span> <span class="s2">"--version"</span><span class="p">])</span><span class="o">.</span><span class="n">decode</span><span class="p">()</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>  <span class="c1"># noqa: S603</span>
 </code></pre></div></td></tr></table></div>
             </details>
     </div>

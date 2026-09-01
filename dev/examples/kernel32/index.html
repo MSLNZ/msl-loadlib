@@ -2429,15 +2429,15 @@ then returns the response from the library.</p>
 <span class="normal">34</span>
 <span class="normal">35</span>
 <span class="normal">36</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">host</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">port</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Wrapper around the 32-bit Windows `__stdcall` library, [kernel32.dll]{:target=&quot;_blank&quot;}.</span>
+<span class="w">    </span><span class="sd">"""Wrapper around the 32-bit Windows `__stdcall` library, [kernel32.dll]{:target="_blank"}.</span>
 
 <span class="sd">    [kernel32.dll]: https://www.geoffchappell.com/studies/windows/win32/kernel32/api/</span>
 
 <span class="sd">    Args:</span>
 <span class="sd">        host: The IP address (or hostname) to use for the server.</span>
 <span class="sd">        port: The port to open for the server.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="s2">&quot;C:/Windows/SysWOW64/kernel32.dll&quot;</span><span class="p">,</span> <span class="s2">&quot;windll&quot;</span><span class="p">,</span> <span class="n">host</span><span class="p">,</span> <span class="n">port</span><span class="p">)</span>
+<span class="sd">    """</span>
+    <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="s2">"C:/Windows/SysWOW64/kernel32.dll"</span><span class="p">,</span> <span class="s2">"windll"</span><span class="p">,</span> <span class="n">host</span><span class="p">,</span> <span class="n">port</span><span class="p">)</span>
 </code></pre></div></td></tr></table></div>
                   </details>
 
@@ -2517,7 +2517,7 @@ then returns the response from the library.</p>
 <span class="normal">56</span>
 <span class="normal">57</span>
 <span class="normal">58</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">get_local_time</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">datetime</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Calls the [kernel32.GetLocalTime]{:target=&quot;_blank&quot;} function to get the current date and time.</span>
+<span class="w">    </span><span class="sd">"""Calls the [kernel32.GetLocalTime]{:target="_blank"} function to get the current date and time.</span>
 
 <span class="sd">    See the corresponding [Kernel64.get_local_time][msl.examples.loadlib.kernel64.Kernel64.get_local_time] method.</span>
 
@@ -2525,7 +2525,7 @@ then returns the response from the library.</p>
 
 <span class="sd">    Returns:</span>
 <span class="sd">        The current date and time.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="n">st</span> <span class="o">=</span> <span class="n">SystemTime</span><span class="p">()</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">lib</span><span class="o">.</span><span class="n">GetLocalTime</span><span class="p">(</span><span class="n">ctypes</span><span class="o">.</span><span class="n">byref</span><span class="p">(</span><span class="n">st</span><span class="p">))</span>
     <span class="k">return</span> <span class="n">datetime</span><span class="p">(</span>  <span class="c1"># noqa: DTZ001</span>

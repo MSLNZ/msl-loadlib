@@ -2403,16 +2403,16 @@ the same data type in the 32-bit process and vice versa.
 <span class="normal">29</span>
 <span class="normal">30</span>
 <span class="normal">31</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">host</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">port</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Example that shows Python data types are preserved between [Echo32][] and [Echo64][].</span>
+<span class="w">    </span><span class="sd">"""Example that shows Python data types are preserved between [Echo32][] and [Echo64][].</span>
 
 <span class="sd">    Args:</span>
 <span class="sd">        host: The IP address (or hostname) to use for the server.</span>
 <span class="sd">        port: The port to open for the server.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="c1"># even though this is a *echo* class that does not call a library</span>
     <span class="c1"># we still need to provide a library file that exists. Use the C++ library.</span>
-    <span class="n">path</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="vm">__file__</span><span class="p">)</span><span class="o">.</span><span class="n">parent</span> <span class="o">/</span> <span class="s2">&quot;cpp_lib32&quot;</span>
-    <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="s2">&quot;cdll&quot;</span><span class="p">,</span> <span class="n">host</span><span class="p">,</span> <span class="n">port</span><span class="p">)</span>
+    <span class="n">path</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="vm">__file__</span><span class="p">)</span><span class="o">.</span><span class="n">parent</span> <span class="o">/</span> <span class="s2">"cpp_lib32"</span>
+    <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="s2">"cdll"</span><span class="p">,</span> <span class="n">host</span><span class="p">,</span> <span class="n">port</span><span class="p">)</span>
 </code></pre></div></td></tr></table></div>
                   </details>
 
@@ -2534,7 +2534,7 @@ the same data type in the 32-bit process and vice versa.
 <span class="normal">43</span>
 <span class="normal">44</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nd">@staticmethod</span>
 <span class="k">def</span><span class="w"> </span><span class="nf">received_data</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">tuple</span><span class="p">[</span><span class="n">Any</span><span class="p">,</span> <span class="o">...</span><span class="p">],</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Process a request from the [Echo64.send_data][msl.examples.loadlib.echo64.Echo64.send_data] method.</span>
+<span class="w">    </span><span class="sd">"""Process a request from the [Echo64.send_data][msl.examples.loadlib.echo64.Echo64.send_data] method.</span>
 
 <span class="sd">    Args:</span>
 <span class="sd">        args: The arguments.</span>
@@ -2542,7 +2542,7 @@ the same data type in the 32-bit process and vice versa.
 
 <span class="sd">    Returns:</span>
 <span class="sd">        The `args` and `kwargs` that were received.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="k">return</span> <span class="n">args</span><span class="p">,</span> <span class="n">kwargs</span>
 </code></pre></div></td></tr></table></div>
             </details>

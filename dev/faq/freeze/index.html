@@ -2181,7 +2181,7 @@
 <h1 id="faq-freeze">Freezing the <code>msl-loadlib</code> package<a class="headerlink" href="#faq-freeze" title="Permanent link">¤</a></h1>
 <p>If you want to use <a href="https://pyinstaller.org/en/stable/" target="_blank">PyInstaller</a> or <a href="https://cx-freeze.readthedocs.io/en/latest/index.html" target="_blank">cx-Freeze</a> to bundle <code>msl-loadlib</code> in a frozen application, the 32-bit server must be added as a data file.</p>
 <p>For example, using <a href="https://pyinstaller.org/en/stable/" target="_blank">PyInstaller</a> on Windows you would include an <code>--add-data</code> option</p>
-<div class="highlight"><pre><span></span><code><span class="go">pyinstaller --add-data &quot;..\site-packages\msl\loadlib\server32-windows.exe:.&quot;</span>
+<div class="highlight"><pre><span></span><code><span class="go">pyinstaller --add-data "..\site-packages\msl\loadlib\server32-windows.exe:."</span>
 </code></pre></div>
 <p>where you must replace the leading <code>..</code> prefix with the parent directories to the file (i.e., specify the absolute path to the file). On Linux, replace <code>server32-windows.exe:.</code> with <code>server32-linux:.</code></p>
 <p>If the server is loading a .NET library that was compiled with .NET &lt; 4.0, you must also add the <code>server32-windows.exe.config</code> data file. Otherwise, you do not need to add this config file.</p>

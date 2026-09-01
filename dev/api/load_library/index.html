@@ -2924,7 +2924,7 @@ If <code>libtype</code> is</p>
 <span class="normal">363</span>
 <span class="normal">364</span>
 <span class="normal">365</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="p">:</span> <span class="n">PathLike</span><span class="p">,</span> <span class="n">libtype</span><span class="p">:</span> <span class="n">LibType</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>  <span class="c1"># noqa: C901, PLR0912, PLR0915</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Load a library.</span>
+<span class="w">    </span><span class="sd">"""Load a library.</span>
 
 <span class="sd">    For example, a C/C++, FORTRAN, .NET, Java, Delphi, LabVIEW, ActiveX, ... library.</span>
 
@@ -2933,14 +2933,14 @@ If <code>libtype</code> is</p>
 <span class="sd">            The search order to find the library is:</span>
 
 <span class="sd">            1. assume that a full or a relative (to the current working directory) path is specified</span>
-<span class="sd">            2. use [ctypes.util.find_library][]{:target=&quot;_blank&quot;}</span>
-<span class="sd">            3. search [sys.path][]{:target=&quot;_blank&quot;}</span>
-<span class="sd">            4. search [os.environ[&quot;PATH&quot;]][os.environ]{:target=&quot;_blank&quot;}.</span>
+<span class="sd">            2. use [ctypes.util.find_library][]{:target="_blank"}</span>
+<span class="sd">            3. search [sys.path][]{:target="_blank"}</span>
+<span class="sd">            4. search [os.environ["PATH"]][os.environ]{:target="_blank"}.</span>
 
-<span class="sd">            If loading a [COM]{:target=&quot;_blank&quot;} library, `path` may either be the</span>
+<span class="sd">            If loading a [COM]{:target="_blank"} library, `path` may either be the</span>
 
-<span class="sd">            * ProgID (e.g, `&quot;InternetExplorer.Application&quot;`), or the</span>
-<span class="sd">            * CLSID (e.g., `&quot;{2F7860A2-1473-4D75-827D-6C4E27600CAC}&quot;`).</span>
+<span class="sd">            * ProgID (e.g, `"InternetExplorer.Application"`), or the</span>
+<span class="sd">            * CLSID (e.g., `"{2F7860A2-1473-4D75-827D-6C4E27600CAC}"`).</span>
 
 <span class="sd">            [COM]: https://learn.microsoft.com/en-us/windows/win32/com/component-object-model--com--portal</span>
 
@@ -2952,8 +2952,8 @@ If <code>libtype</code> is</p>
 <span class="sd">            * `windll` or `oledll`: a library that uses the `__stdcall` calling convention</span>
 <span class="sd">            * `net` or `clr`: a .NET library (Common Language Runtime)</span>
 <span class="sd">            * `java`: a Java archive (`.jar` or `.class` files)</span>
-<span class="sd">            * `com`: a [COM]{:target=&quot;_blank&quot;} library</span>
-<span class="sd">            * `activex`: an [ActiveX]{:target=&quot;_blank&quot;} library</span>
+<span class="sd">            * `com`: a [COM]{:target="_blank"} library</span>
+<span class="sd">            * `activex`: an [ActiveX]{:target="_blank"} library</span>
 
 <span class="sd">            [COM]: https://learn.microsoft.com/en-us/windows/win32/com/component-object-model--com--portal</span>
 <span class="sd">            [ActiveX]: https://learn.microsoft.com/en-us/windows/win32/com/activex-controls</span>
@@ -2963,7 +2963,7 @@ If <code>libtype</code> is</p>
 <span class="sd">                `libtype` will automatically be set to `java` if `path` ends with</span>
 <span class="sd">                `.jar` or `.class`.</span>
 
-<span class="sd">            !!! note &quot;Support for library types were added in the following `msl-loadlib` versions&quot;</span>
+<span class="sd">            !!! note "Support for library types were added in the following `msl-loadlib` versions"</span>
 <span class="sd">                * 0.1: __cdecl, __stdcall, .NET</span>
 <span class="sd">                * 0.4: Java</span>
 <span class="sd">                * 0.5: COM</span>
@@ -2972,19 +2972,19 @@ If <code>libtype</code> is</p>
 <span class="sd">        kwargs: All additional keyword arguments are passed to the object that loads the library.</span>
 <span class="sd">            If `libtype` is</span>
 
-<span class="sd">            * `cdll` &amp;#8594; [ctypes.CDLL][]{:target=&quot;_blank&quot;}</span>
-<span class="sd">            * `windll` &amp;#8594; [ctypes.WinDLL][]{:target=&quot;_blank&quot;}</span>
-<span class="sd">            * `oledll` &amp;#8594; [ctypes.OleDLL][]{:target=&quot;_blank&quot;}</span>
+<span class="sd">            * `cdll` &amp;#8594; [ctypes.CDLL][]{:target="_blank"}</span>
+<span class="sd">            * `windll` &amp;#8594; [ctypes.WinDLL][]{:target="_blank"}</span>
+<span class="sd">            * `oledll` &amp;#8594; [ctypes.OleDLL][]{:target="_blank"}</span>
 <span class="sd">            * `net` or `clr` &amp;#8594; all keyword arguments are ignored</span>
-<span class="sd">            * `java` &amp;#8594; [JavaGateway][py4j.java_gateway.JavaGateway]{:target=&quot;_blank&quot;}</span>
-<span class="sd">            * `com` &amp;#8594; [comtypes.CreateObject][CreateObject]{:target=&quot;_blank&quot;}</span>
+<span class="sd">            * `java` &amp;#8594; [JavaGateway][py4j.java_gateway.JavaGateway]{:target="_blank"}</span>
+<span class="sd">            * `com` &amp;#8594; [comtypes.CreateObject][CreateObject]{:target="_blank"}</span>
 <span class="sd">            * `activex` &amp;#8594; [Application][msl.loadlib.activex.Application] and</span>
 <span class="sd">                [Application.load][msl.loadlib.activex.Application.load]</span>
 
 <span class="sd">    Raises:</span>
 <span class="sd">        OSError: If the library cannot be loaded.</span>
 <span class="sd">        ValueError: If the value of `libtype` is not supported.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="c1"># a reference to the ActiveX application</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">_app</span><span class="p">:</span> <span class="n">Application</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
 
@@ -2998,20 +2998,20 @@ If <code>libtype</code> is</p>
     <span class="bp">self</span><span class="o">.</span><span class="n">_gateway</span><span class="p">:</span> <span class="n">Any</span> <span class="o">=</span> <span class="kc">None</span>
 
     <span class="k">if</span> <span class="ow">not</span> <span class="n">path</span><span class="p">:</span>
-        <span class="n">msg</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;Must specify a non-empty path, got </span><span class="si">{</span><span class="n">path</span><span class="si">!r}</span><span class="s2">&quot;</span>
+        <span class="n">msg</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">"Must specify a non-empty path, got </span><span class="si">{</span><span class="n">path</span><span class="si">!r}</span><span class="s2">"</span>
         <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
 
-    <span class="c1"># fixes Issue #8, if `path` is a &lt;class &#39;pathlib.Path&#39;&gt; object</span>
+    <span class="c1"># fixes Issue #8, if `path` is a &lt;class 'pathlib.Path'&gt; object</span>
     <span class="n">path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">fsdecode</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
 
     <span class="n">_libtype</span><span class="p">:</span> <span class="nb">str</span>
     <span class="k">if</span> <span class="n">libtype</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>  <span class="c1"># noqa: SIM108</span>
-        <span class="n">_libtype</span> <span class="o">=</span> <span class="s2">&quot;java&quot;</span> <span class="k">if</span> <span class="n">path</span><span class="o">.</span><span class="n">endswith</span><span class="p">((</span><span class="s2">&quot;.jar&quot;</span><span class="p">,</span> <span class="s2">&quot;.class&quot;</span><span class="p">))</span> <span class="k">else</span> <span class="s2">&quot;cdll&quot;</span>
+        <span class="n">_libtype</span> <span class="o">=</span> <span class="s2">"java"</span> <span class="k">if</span> <span class="n">path</span><span class="o">.</span><span class="n">endswith</span><span class="p">((</span><span class="s2">".jar"</span><span class="p">,</span> <span class="s2">".class"</span><span class="p">))</span> <span class="k">else</span> <span class="s2">"cdll"</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="n">_libtype</span> <span class="o">=</span> <span class="n">libtype</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
 
     <span class="k">if</span> <span class="n">_libtype</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">_LIBTYPES</span><span class="p">:</span>
-        <span class="n">msg</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;Invalid libtype </span><span class="si">{</span><span class="n">_libtype</span><span class="si">!r}</span><span class="se">\n</span><span class="s2">Must be one of: </span><span class="si">{</span><span class="s1">&#39;, &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">_LIBTYPES</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span>
+        <span class="n">msg</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">"Invalid libtype </span><span class="si">{</span><span class="n">_libtype</span><span class="si">!r}</span><span class="se">\n</span><span class="s2">Must be one of: </span><span class="si">{</span><span class="s1">', '</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">_LIBTYPES</span><span class="p">)</span><span class="si">}</span><span class="s2">"</span>
         <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
 
     <span class="c1"># create a new reference to `path` just in case the</span>
@@ -3022,21 +3022,21 @@ If <code>libtype</code> is</p>
 
     <span class="c1"># assume a default extension if no extension was provided</span>
     <span class="n">_</span><span class="p">,</span> <span class="n">ext</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">splitext</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
-    <span class="k">if</span> <span class="ow">not</span> <span class="n">ext</span> <span class="ow">and</span> <span class="n">_libtype</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">{</span><span class="s2">&quot;java&quot;</span><span class="p">,</span> <span class="s2">&quot;com&quot;</span><span class="p">,</span> <span class="s2">&quot;activex&quot;</span><span class="p">}:</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">ext</span> <span class="ow">and</span> <span class="n">_libtype</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">{</span><span class="s2">"java"</span><span class="p">,</span> <span class="s2">"com"</span><span class="p">,</span> <span class="s2">"activex"</span><span class="p">}:</span>
         <span class="n">_path</span> <span class="o">+=</span> <span class="n">default_extension</span>
 
     <span class="bp">self</span><span class="o">.</span><span class="n">_path</span><span class="p">:</span> <span class="nb">str</span>
-    <span class="k">if</span> <span class="n">_libtype</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">{</span><span class="s2">&quot;com&quot;</span><span class="p">,</span> <span class="s2">&quot;activex&quot;</span><span class="p">}:</span>
+    <span class="k">if</span> <span class="n">_libtype</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">{</span><span class="s2">"com"</span><span class="p">,</span> <span class="s2">"activex"</span><span class="p">}:</span>
         <span class="n">file</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="n">_path</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="n">file</span><span class="p">):</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_path</span> <span class="o">=</span> <span class="n">file</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="c1"># for find_library use the original &#39;path&#39; value since it may be a library name</span>
-            <span class="c1"># without any prefix like &#39;lib&#39;, suffix like &#39;.so&#39;, &#39;.dylib&#39; or version number</span>
+            <span class="c1"># for find_library use the original 'path' value since it may be a library name</span>
+            <span class="c1"># without any prefix like 'lib', suffix like '.so', '.dylib' or version number</span>
             <span class="n">file2</span> <span class="o">=</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">util</span><span class="o">.</span><span class="n">find_library</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
-            <span class="k">if</span> <span class="n">file2</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>  <span class="c1"># then search sys.path and os.environ[&#39;PATH&#39;]</span>
+            <span class="k">if</span> <span class="n">file2</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>  <span class="c1"># then search sys.path and os.environ['PATH']</span>
                 <span class="n">success</span> <span class="o">=</span> <span class="kc">False</span>
-                <span class="n">search_dirs</span> <span class="o">=</span> <span class="n">sys</span><span class="o">.</span><span class="n">path</span> <span class="o">+</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">&quot;PATH&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">pathsep</span><span class="p">)</span>
+                <span class="n">search_dirs</span> <span class="o">=</span> <span class="n">sys</span><span class="o">.</span><span class="n">path</span> <span class="o">+</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">"PATH"</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">pathsep</span><span class="p">)</span>
                 <span class="k">for</span> <span class="n">directory</span> <span class="ow">in</span> <span class="n">search_dirs</span><span class="p">:</span>
                     <span class="n">p</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">directory</span><span class="p">,</span> <span class="n">_path</span><span class="p">)</span>
                     <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="n">p</span><span class="p">):</span>
@@ -3044,22 +3044,22 @@ If <code>libtype</code> is</p>
                         <span class="n">success</span> <span class="o">=</span> <span class="kc">True</span>
                         <span class="k">break</span>
                 <span class="k">if</span> <span class="ow">not</span> <span class="n">success</span><span class="p">:</span>
-                    <span class="n">msg</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;Cannot find </span><span class="si">{</span><span class="n">path</span><span class="si">!r}</span><span class="s2"> [libtype=</span><span class="si">{</span><span class="n">_libtype</span><span class="si">!r}</span><span class="s2">]&quot;</span>
+                    <span class="n">msg</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">"Cannot find </span><span class="si">{</span><span class="n">path</span><span class="si">!r}</span><span class="s2"> [libtype=</span><span class="si">{</span><span class="n">_libtype</span><span class="si">!r}</span><span class="s2">]"</span>
                     <span class="k">raise</span> <span class="ne">OSError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">_path</span> <span class="o">=</span> <span class="n">file2</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_path</span> <span class="o">=</span> <span class="n">_path</span>
 
-    <span class="k">if</span> <span class="n">_libtype</span> <span class="o">==</span> <span class="s2">&quot;cdll&quot;</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">_libtype</span> <span class="o">==</span> <span class="s2">"cdll"</span><span class="p">:</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_lib</span> <span class="o">=</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">CDLL</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_path</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
-    <span class="k">elif</span> <span class="n">_libtype</span> <span class="o">==</span> <span class="s2">&quot;windll&quot;</span><span class="p">:</span>
+    <span class="k">elif</span> <span class="n">_libtype</span> <span class="o">==</span> <span class="s2">"windll"</span><span class="p">:</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_lib</span> <span class="o">=</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">WinDLL</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_path</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
-    <span class="k">elif</span> <span class="n">_libtype</span> <span class="o">==</span> <span class="s2">&quot;oledll&quot;</span><span class="p">:</span>
+    <span class="k">elif</span> <span class="n">_libtype</span> <span class="o">==</span> <span class="s2">"oledll"</span><span class="p">:</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_lib</span> <span class="o">=</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">OleDLL</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_path</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
-    <span class="k">elif</span> <span class="n">_libtype</span> <span class="o">==</span> <span class="s2">&quot;com&quot;</span><span class="p">:</span>
+    <span class="k">elif</span> <span class="n">_libtype</span> <span class="o">==</span> <span class="s2">"com"</span><span class="p">:</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">is_comtypes_installed</span><span class="p">():</span>
-            <span class="n">msg</span> <span class="o">=</span> <span class="s2">&quot;Cannot load a COM library because comtypes is not installed.</span><span class="se">\n</span><span class="s2">Run: pip install comtypes&quot;</span>
+            <span class="n">msg</span> <span class="o">=</span> <span class="s2">"Cannot load a COM library because comtypes is not installed.</span><span class="se">\n</span><span class="s2">Run: pip install comtypes"</span>
             <span class="k">raise</span> <span class="ne">OSError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
 
         <span class="kn">from</span><span class="w"> </span><span class="nn">comtypes</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>  <span class="c1"># type: ignore[import-untyped] # pyright: ignore[reportMissingTypeStubs]  # noqa: PLC0415</span>
@@ -3072,27 +3072,27 @@ If <code>libtype</code> is</p>
         <span class="k">try</span><span class="p">:</span>
             <span class="n">clsid</span> <span class="o">=</span> <span class="n">GUID</span><span class="o">.</span><span class="n">from_progid</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_path</span><span class="p">)</span>  <span class="c1"># pyright: ignore[reportUnknownVariableType,reportUnknownMemberType]</span>
         <span class="k">except</span> <span class="p">(</span><span class="ne">TypeError</span><span class="p">,</span> <span class="ne">OSError</span><span class="p">):</span>
-            <span class="n">msg</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;Cannot find </span><span class="si">{</span><span class="n">path</span><span class="si">!r}</span><span class="s2"> [libtype=&#39;com&#39;]&quot;</span>
+            <span class="n">msg</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">"Cannot find </span><span class="si">{</span><span class="n">path</span><span class="si">!r}</span><span class="s2"> [libtype='com']"</span>
             <span class="k">raise</span> <span class="ne">OSError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span> <span class="kn">from</span><span class="w"> </span><span class="kc">None</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">_lib</span> <span class="o">=</span> <span class="n">CreateObject</span><span class="p">(</span><span class="n">clsid</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
 
-    <span class="k">elif</span> <span class="n">_libtype</span> <span class="o">==</span> <span class="s2">&quot;activex&quot;</span><span class="p">:</span>
+    <span class="k">elif</span> <span class="n">_libtype</span> <span class="o">==</span> <span class="s2">"activex"</span><span class="p">:</span>
         <span class="kn">from</span><span class="w"> </span><span class="nn">.activex</span><span class="w"> </span><span class="kn">import</span> <span class="n">Application</span><span class="p">,</span> <span class="n">Colour</span><span class="p">,</span> <span class="n">WindowClassStyle</span><span class="p">,</span> <span class="n">WindowStyle</span>  <span class="c1"># noqa: PLC0415</span>
 
         <span class="c1"># the default value for each kwargs.pop() should equal the corresponding Application kwarg value</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_app</span> <span class="o">=</span> <span class="n">Application</span><span class="p">(</span>
-            <span class="n">background</span><span class="o">=</span><span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s2">&quot;background&quot;</span><span class="p">,</span> <span class="n">Colour</span><span class="o">.</span><span class="n">WHITE</span><span class="p">),</span>
-            <span class="n">class_style</span><span class="o">=</span><span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s2">&quot;class_style&quot;</span><span class="p">,</span> <span class="n">WindowClassStyle</span><span class="o">.</span><span class="n">NONE</span><span class="p">),</span>
-            <span class="n">icon</span><span class="o">=</span><span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s2">&quot;icon&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span>
-            <span class="n">title</span><span class="o">=</span><span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s2">&quot;title&quot;</span><span class="p">,</span> <span class="s2">&quot;ActiveX&quot;</span><span class="p">),</span>
-            <span class="n">window_style</span><span class="o">=</span><span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s2">&quot;window_style&quot;</span><span class="p">,</span> <span class="n">WindowStyle</span><span class="o">.</span><span class="n">OVERLAPPEDWINDOW</span><span class="p">),</span>
+            <span class="n">background</span><span class="o">=</span><span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s2">"background"</span><span class="p">,</span> <span class="n">Colour</span><span class="o">.</span><span class="n">WHITE</span><span class="p">),</span>
+            <span class="n">class_style</span><span class="o">=</span><span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s2">"class_style"</span><span class="p">,</span> <span class="n">WindowClassStyle</span><span class="o">.</span><span class="n">NONE</span><span class="p">),</span>
+            <span class="n">icon</span><span class="o">=</span><span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s2">"icon"</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span>
+            <span class="n">title</span><span class="o">=</span><span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s2">"title"</span><span class="p">,</span> <span class="s2">"ActiveX"</span><span class="p">),</span>
+            <span class="n">window_style</span><span class="o">=</span><span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s2">"window_style"</span><span class="p">,</span> <span class="n">WindowStyle</span><span class="o">.</span><span class="n">OVERLAPPEDWINDOW</span><span class="p">),</span>
         <span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_lib</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_app</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_path</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
 
-    <span class="k">elif</span> <span class="n">_libtype</span> <span class="o">==</span> <span class="s2">&quot;java&quot;</span><span class="p">:</span>
+    <span class="k">elif</span> <span class="n">_libtype</span> <span class="o">==</span> <span class="s2">"java"</span><span class="p">:</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">is_py4j_installed</span><span class="p">():</span>
-            <span class="n">msg</span> <span class="o">=</span> <span class="s2">&quot;Cannot load a Java file because Py4J is not installed.</span><span class="se">\n</span><span class="s2">Run: pip install py4j&quot;</span>
+            <span class="n">msg</span> <span class="o">=</span> <span class="s2">"Cannot load a Java file because Py4J is not installed.</span><span class="se">\n</span><span class="s2">Run: pip install py4j"</span>
             <span class="k">raise</span> <span class="ne">OSError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
 
         <span class="kn">from</span><span class="w"> </span><span class="nn">py4j.java_gateway</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>  <span class="c1"># type: ignore[import-untyped] # pyright: ignore[reportMissingTypeStubs]  # noqa: PLC0415</span>
@@ -3104,42 +3104,42 @@ If <code>libtype</code> is</p>
         <span class="p">)</span>
 
         <span class="c1"># find the py4j*.jar file (needed to import the py4j.GatewayServer on the Java side)</span>
-        <span class="n">filename</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;py4j</span><span class="si">{</span><span class="n">__version__</span><span class="si">}</span><span class="s2">.jar&quot;</span>
-        <span class="n">py4j_jar</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;PY4J_JAR&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
+        <span class="n">filename</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">"py4j</span><span class="si">{</span><span class="n">__version__</span><span class="si">}</span><span class="s2">.jar"</span>
+        <span class="n">py4j_jar</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"PY4J_JAR"</span><span class="p">,</span> <span class="s2">""</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">py4j_jar</span><span class="p">:</span>
             <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="n">py4j_jar</span><span class="p">)</span> <span class="ow">or</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">py4j_jar</span><span class="p">)</span> <span class="o">!=</span> <span class="n">filename</span><span class="p">:</span>
                 <span class="n">msg</span> <span class="o">=</span> <span class="p">(</span>
-                    <span class="sa">f</span><span class="s2">&quot;A PY4J_JAR environment variable exists, &quot;</span>
-                    <span class="sa">f</span><span class="s2">&quot;but the full path to </span><span class="si">{</span><span class="n">filename</span><span class="si">}</span><span class="s2"> is invalid</span><span class="se">\n</span><span class="s2">&quot;</span>
-                    <span class="sa">f</span><span class="s2">&quot;PY4J_JAR=</span><span class="si">{</span><span class="n">py4j_jar</span><span class="si">}</span><span class="s2">&quot;</span>
+                    <span class="sa">f</span><span class="s2">"A PY4J_JAR environment variable exists, "</span>
+                    <span class="sa">f</span><span class="s2">"but the full path to </span><span class="si">{</span><span class="n">filename</span><span class="si">}</span><span class="s2"> is invalid</span><span class="se">\n</span><span class="s2">"</span>
+                    <span class="sa">f</span><span class="s2">"PY4J_JAR=</span><span class="si">{</span><span class="n">py4j_jar</span><span class="si">}</span><span class="s2">"</span>
                 <span class="p">)</span>
                 <span class="k">raise</span> <span class="ne">OSError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">root</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">executable</span><span class="p">)</span>
-            <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="p">[</span><span class="n">root</span><span class="p">,</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">root</span><span class="p">),</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">expanduser</span><span class="p">(</span><span class="s2">&quot;~&quot;</span><span class="p">),</span> <span class="s2">&quot;.local&quot;</span><span class="p">)]:</span>
-                <span class="n">py4j_jar</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">item</span><span class="p">,</span> <span class="s2">&quot;share&quot;</span><span class="p">,</span> <span class="s2">&quot;py4j&quot;</span><span class="p">,</span> <span class="n">filename</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="p">[</span><span class="n">root</span><span class="p">,</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">root</span><span class="p">),</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">expanduser</span><span class="p">(</span><span class="s2">"~"</span><span class="p">),</span> <span class="s2">".local"</span><span class="p">)]:</span>
+                <span class="n">py4j_jar</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">item</span><span class="p">,</span> <span class="s2">"share"</span><span class="p">,</span> <span class="s2">"py4j"</span><span class="p">,</span> <span class="n">filename</span><span class="p">)</span>
                 <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="n">py4j_jar</span><span class="p">):</span>
                     <span class="k">break</span>
             <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="n">py4j_jar</span><span class="p">):</span>
                 <span class="n">msg</span> <span class="o">=</span> <span class="p">(</span>
-                    <span class="sa">f</span><span class="s2">&quot;Cannot find </span><span class="si">{</span><span class="n">filename</span><span class="si">}</span><span class="se">\n</span><span class="s2">&quot;</span>
-                    <span class="sa">f</span><span class="s2">&quot;Create a PY4J_JAR environment variable to be equal to the full path to </span><span class="si">{</span><span class="n">filename</span><span class="si">}</span><span class="s2">&quot;</span>
+                    <span class="sa">f</span><span class="s2">"Cannot find </span><span class="si">{</span><span class="n">filename</span><span class="si">}</span><span class="se">\n</span><span class="s2">"</span>
+                    <span class="sa">f</span><span class="s2">"Create a PY4J_JAR environment variable to be equal to the full path to </span><span class="si">{</span><span class="n">filename</span><span class="si">}</span><span class="s2">"</span>
                 <span class="p">)</span>
                 <span class="k">raise</span> <span class="ne">OSError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
 
-        <span class="n">gp</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s2">&quot;gateway_parameters&quot;</span><span class="p">,</span> <span class="n">GatewayParameters</span><span class="p">(</span><span class="n">address</span><span class="o">=</span><span class="s2">&quot;127.0.0.1&quot;</span><span class="p">,</span> <span class="n">port</span><span class="o">=</span><span class="n">get_available_port</span><span class="p">()))</span>
+        <span class="n">gp</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s2">"gateway_parameters"</span><span class="p">,</span> <span class="n">GatewayParameters</span><span class="p">(</span><span class="n">address</span><span class="o">=</span><span class="s2">"127.0.0.1"</span><span class="p">,</span> <span class="n">port</span><span class="o">=</span><span class="n">get_available_port</span><span class="p">()))</span>
 
         <span class="c1"># build the java command</span>
-        <span class="n">wrapper</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="vm">__file__</span><span class="p">),</span> <span class="s2">&quot;py4j-wrapper.jar&quot;</span><span class="p">)</span>
-        <span class="n">cmd</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;java&quot;</span><span class="p">,</span> <span class="s2">&quot;-cp&quot;</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">py4j_jar</span><span class="si">}{</span><span class="n">os</span><span class="o">.</span><span class="n">pathsep</span><span class="si">}{</span><span class="n">wrapper</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="s2">&quot;Py4JWrapper&quot;</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">gp</span><span class="o">.</span><span class="n">port</span><span class="p">)]</span>
+        <span class="n">wrapper</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="vm">__file__</span><span class="p">),</span> <span class="s2">"py4j-wrapper.jar"</span><span class="p">)</span>
+        <span class="n">cmd</span> <span class="o">=</span> <span class="p">[</span><span class="s2">"java"</span><span class="p">,</span> <span class="s2">"-cp"</span><span class="p">,</span> <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">py4j_jar</span><span class="si">}{</span><span class="n">os</span><span class="o">.</span><span class="n">pathsep</span><span class="si">}{</span><span class="n">wrapper</span><span class="si">}</span><span class="s2">"</span><span class="p">,</span> <span class="s2">"Py4JWrapper"</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">gp</span><span class="o">.</span><span class="n">port</span><span class="p">)]</span>
 
         <span class="c1"># from the URLClassLoader documentation:</span>
-        <span class="c1">#   Any URL that ends with a &#39;/&#39; is assumed to refer to a directory. Otherwise, the URL</span>
+        <span class="c1">#   Any URL that ends with a '/' is assumed to refer to a directory. Otherwise, the URL</span>
         <span class="c1">#   is assumed to refer to a JAR file which will be downloaded and opened as needed.</span>
-        <span class="k">if</span> <span class="n">ext</span> <span class="o">==</span> <span class="s2">&quot;.jar&quot;</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">ext</span> <span class="o">==</span> <span class="s2">".jar"</span><span class="p">:</span>
             <span class="n">cmd</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_path</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>  <span class="c1"># it is a .class file</span>
-            <span class="n">cmd</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_path</span><span class="p">)</span><span class="si">}</span><span class="s2">/&quot;</span><span class="p">)</span>
+            <span class="n">cmd</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_path</span><span class="p">)</span><span class="si">}</span><span class="s2">/"</span><span class="p">)</span>
 
         <span class="k">try</span><span class="p">:</span>
             <span class="c1"># start the py4j.GatewayServer</span>
@@ -3147,29 +3147,29 @@ If <code>libtype</code> is</p>
             <span class="n">_</span> <span class="o">=</span> <span class="n">subprocess</span><span class="o">.</span><span class="n">Popen</span><span class="p">(</span><span class="n">cmd</span><span class="p">,</span> <span class="n">stderr</span><span class="o">=</span><span class="n">subprocess</span><span class="o">.</span><span class="n">PIPE</span><span class="p">,</span> <span class="n">stdout</span><span class="o">=</span><span class="n">subprocess</span><span class="o">.</span><span class="n">PIPE</span><span class="p">,</span> <span class="n">creationflags</span><span class="o">=</span><span class="n">flags</span><span class="p">)</span>  <span class="c1"># noqa: S603</span>
         <span class="k">except</span> <span class="ne">OSError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
             <span class="n">err</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">)</span><span class="o">.</span><span class="n">rstrip</span><span class="p">()</span>
-            <span class="n">err</span> <span class="o">+=</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">You must have a Java Runtime Environment installed and available on PATH&quot;</span>
+            <span class="n">err</span> <span class="o">+=</span> <span class="s2">"</span><span class="se">\n</span><span class="s2">You must have a Java Runtime Environment installed and available on PATH"</span>
             <span class="k">raise</span> <span class="ne">OSError</span><span class="p">(</span><span class="n">err</span><span class="p">)</span> <span class="kn">from</span><span class="w"> </span><span class="kc">None</span>
 
         <span class="k">try</span><span class="p">:</span>
             <span class="n">wait_for_server</span><span class="p">(</span><span class="n">gp</span><span class="o">.</span><span class="n">address</span><span class="p">,</span> <span class="n">gp</span><span class="o">.</span><span class="n">port</span><span class="p">,</span> <span class="mf">10.0</span><span class="p">)</span>
         <span class="k">except</span> <span class="ne">OSError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
             <span class="n">err</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">)</span><span class="o">.</span><span class="n">rstrip</span><span class="p">()</span>
-            <span class="n">err</span> <span class="o">+=</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Could not start the Py4J GatewayServer&quot;</span>
+            <span class="n">err</span> <span class="o">+=</span> <span class="s2">"</span><span class="se">\n</span><span class="s2">Could not start the Py4J GatewayServer"</span>
             <span class="k">raise</span> <span class="ne">OSError</span><span class="p">(</span><span class="n">err</span><span class="p">)</span> <span class="kn">from</span><span class="w"> </span><span class="kc">None</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">_gateway</span> <span class="o">=</span> <span class="n">JavaGateway</span><span class="p">(</span><span class="n">gateway_parameters</span><span class="o">=</span><span class="n">gp</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">_lib</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_gateway</span><span class="o">.</span><span class="n">jvm</span>  <span class="c1"># pyright: ignore[reportUnknownMemberType]</span>
 
-    <span class="k">elif</span> <span class="n">_libtype</span> <span class="ow">in</span> <span class="p">{</span><span class="s2">&quot;net&quot;</span><span class="p">,</span> <span class="s2">&quot;clr&quot;</span><span class="p">}:</span>
+    <span class="k">elif</span> <span class="n">_libtype</span> <span class="ow">in</span> <span class="p">{</span><span class="s2">"net"</span><span class="p">,</span> <span class="s2">"clr"</span><span class="p">}:</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">is_pythonnet_installed</span><span class="p">():</span>
-            <span class="n">msg</span> <span class="o">=</span> <span class="s2">&quot;Cannot load a .NET Assembly because pythonnet is not installed.</span><span class="se">\n</span><span class="s2">Run: pip install pythonnet&quot;</span>
+            <span class="n">msg</span> <span class="o">=</span> <span class="s2">"Cannot load a .NET Assembly because pythonnet is not installed.</span><span class="se">\n</span><span class="s2">Run: pip install pythonnet"</span>
             <span class="k">raise</span> <span class="ne">OSError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
 
         <span class="kn">import</span><span class="w"> </span><span class="nn">clr</span>  <span class="c1"># type: ignore[import-untyped] # pyright: ignore[reportMissingTypeStubs]  # noqa: PLC0415</span>
         <span class="kn">import</span><span class="w"> </span><span class="nn">System</span>  <span class="c1"># type: ignore[import-not-found] # pyright: ignore[reportMissingImports]  # noqa: PLC0415</span>
 
-        <span class="n">dotnet</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;System&quot;</span><span class="p">:</span> <span class="n">System</span><span class="p">}</span>
+        <span class="n">dotnet</span> <span class="o">=</span> <span class="p">{</span><span class="s2">"System"</span><span class="p">:</span> <span class="n">System</span><span class="p">}</span>
 
         <span class="c1"># the library must be available in sys.path</span>
         <span class="n">head</span><span class="p">,</span> <span class="n">tail</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_path</span><span class="p">)</span>
@@ -3177,7 +3177,7 @@ If <code>libtype</code> is</p>
 
         <span class="n">System</span><span class="p">:</span> <span class="n">Any</span>  <span class="c1"># type: ignore[no-redef] # noqa: N806  # cSpell: ignore redef</span>
         <span class="k">try</span><span class="p">:</span>  <span class="c1"># noqa: SIM105</span>
-            <span class="c1"># don&#39;t include the library extension</span>
+            <span class="c1"># don't include the library extension</span>
             <span class="n">clr</span><span class="o">.</span><span class="n">AddReference</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">splitext</span><span class="p">(</span><span class="n">tail</span><span class="p">)[</span><span class="mi">0</span><span class="p">])</span>  <span class="c1"># pyright: ignore[reportUnknownMemberType]</span>
         <span class="k">except</span> <span class="p">(</span><span class="n">System</span><span class="o">.</span><span class="n">IO</span><span class="o">.</span><span class="n">FileNotFoundException</span><span class="p">,</span> <span class="n">System</span><span class="o">.</span><span class="n">IO</span><span class="o">.</span><span class="n">FileLoadException</span><span class="p">):</span>
             <span class="c1"># The file must exist since its existence is checked above.</span>
@@ -3202,10 +3202,10 @@ If <code>libtype</code> is</p>
             <span class="c1"># Example error message that can occur if the library is for .NET &lt;4.0,</span>
             <span class="c1"># and the useLegacyV2RuntimeActivationPolicy is not enabled:</span>
             <span class="c1">#</span>
-            <span class="c1"># &quot; Mixed mode assembly is built against version &#39;v2.0.50727&#39; of the</span>
+            <span class="c1"># " Mixed mode assembly is built against version 'v2.0.50727' of the</span>
             <span class="c1">#  runtime and cannot be loaded in the 4.0 runtime without additional</span>
-            <span class="c1">#  configuration information. &quot;</span>
-            <span class="k">if</span> <span class="nb">str</span><span class="p">(</span><span class="n">err</span><span class="p">)</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;Mixed mode assembly is built against version&quot;</span><span class="p">):</span>
+            <span class="c1">#  configuration information. "</span>
+            <span class="k">if</span> <span class="nb">str</span><span class="p">(</span><span class="n">err</span><span class="p">)</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">"Mixed mode assembly is built against version"</span><span class="p">):</span>
                 <span class="n">py_exe</span> <span class="o">=</span> <span class="n">sys</span><span class="o">.</span><span class="n">executable</span>
                 <span class="k">if</span> <span class="n">sys</span><span class="o">.</span><span class="n">prefix</span> <span class="o">!=</span> <span class="n">sys</span><span class="o">.</span><span class="n">base_prefix</span><span class="p">:</span>
                     <span class="c1"># Python is running in a venv/virtualenv</span>
@@ -3213,23 +3213,23 @@ If <code>libtype</code> is</p>
                     <span class="n">py_exe</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">base_prefix</span><span class="p">,</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">py_exe</span><span class="p">))</span>
                 <span class="n">status</span><span class="p">,</span> <span class="n">msg</span> <span class="o">=</span> <span class="n">check_dot_net_config</span><span class="p">(</span><span class="n">py_exe</span><span class="p">)</span>
                 <span class="k">if</span> <span class="n">status</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
-                    <span class="n">msg</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;Checking .NET config returned </span><span class="si">{</span><span class="n">msg</span><span class="si">!r}</span><span class="s2"> and still cannot load the library.</span><span class="se">\n</span><span class="si">{</span><span class="n">err</span><span class="si">}</span><span class="s2">&quot;</span>
+                    <span class="n">msg</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">"Checking .NET config returned </span><span class="si">{</span><span class="n">msg</span><span class="si">!r}</span><span class="s2"> and still cannot load the library.</span><span class="se">\n</span><span class="si">{</span><span class="n">err</span><span class="si">}</span><span class="s2">"</span>
                 <span class="k">raise</span> <span class="ne">OSError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span> <span class="kn">from</span><span class="w"> </span><span class="nn">err</span>
 
-            <span class="n">msg</span> <span class="o">=</span> <span class="s2">&quot;The above &#39;System.IO.FileLoadException&#39; is not handled.</span><span class="se">\n</span><span class="s2">&quot;</span>
+            <span class="n">msg</span> <span class="o">=</span> <span class="s2">"The above 'System.IO.FileLoadException' is not handled.</span><span class="se">\n</span><span class="s2">"</span>
             <span class="k">raise</span> <span class="ne">OSError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span> <span class="kn">from</span><span class="w"> </span><span class="nn">err</span>
 
         <span class="k">try</span><span class="p">:</span>
             <span class="n">types</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_assembly</span><span class="o">.</span><span class="n">GetTypes</span><span class="p">()</span>
         <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>  <span class="c1"># noqa: BLE001</span>
             <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="n">e</span><span class="p">)</span>
-            <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;The LoaderExceptions are:&quot;</span><span class="p">)</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">"The LoaderExceptions are:"</span><span class="p">)</span>
             <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">e</span><span class="o">.</span><span class="n">LoaderExceptions</span><span class="p">:</span>  <span class="c1"># type: ignore[attr-defined] # pyright: ignore[reportUnknownMemberType,reportAttributeAccessIssue,reportUnknownVariableType]</span>
-                <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;  </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">item</span><span class="o">.</span><span class="n">Message</span><span class="p">)</span>  <span class="c1"># pyright: ignore[reportUnknownMemberType,reportUnknownArgumentType]</span>
+                <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">"  </span><span class="si">%s</span><span class="s2">"</span><span class="p">,</span> <span class="n">item</span><span class="o">.</span><span class="n">Message</span><span class="p">)</span>  <span class="c1"># pyright: ignore[reportUnknownMemberType,reportUnknownArgumentType]</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">types</span><span class="p">:</span>
                 <span class="k">try</span><span class="p">:</span>
-                    <span class="n">obj</span> <span class="o">=</span> <span class="nb">__import__</span><span class="p">(</span><span class="n">t</span><span class="o">.</span><span class="n">Namespace</span><span class="p">)</span> <span class="k">if</span> <span class="n">t</span><span class="o">.</span><span class="n">Namespace</span> <span class="k">else</span> <span class="nb">getattr</span><span class="p">(</span><span class="nb">__import__</span><span class="p">(</span><span class="s2">&quot;clr&quot;</span><span class="p">),</span> <span class="n">t</span><span class="o">.</span><span class="n">FullName</span><span class="p">)</span>
+                    <span class="n">obj</span> <span class="o">=</span> <span class="nb">__import__</span><span class="p">(</span><span class="n">t</span><span class="o">.</span><span class="n">Namespace</span><span class="p">)</span> <span class="k">if</span> <span class="n">t</span><span class="o">.</span><span class="n">Namespace</span> <span class="k">else</span> <span class="nb">getattr</span><span class="p">(</span><span class="nb">__import__</span><span class="p">(</span><span class="s2">"clr"</span><span class="p">),</span> <span class="n">t</span><span class="o">.</span><span class="n">FullName</span><span class="p">)</span>
                 <span class="k">except</span><span class="p">:</span>  <span class="c1"># noqa: E722</span>
                     <span class="n">obj</span> <span class="o">=</span> <span class="n">t</span>
                     <span class="n">obj</span><span class="o">.</span><span class="vm">__name__</span> <span class="o">=</span> <span class="n">t</span><span class="o">.</span><span class="n">FullName</span>
@@ -3240,10 +3240,10 @@ If <code>libtype</code> is</p>
         <span class="bp">self</span><span class="o">.</span><span class="n">_lib</span> <span class="o">=</span> <span class="n">DotNet</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_path</span><span class="p">,</span> <span class="n">dotnet</span><span class="p">)</span>
 
     <span class="k">else</span><span class="p">:</span>
-        <span class="n">msg</span> <span class="o">=</span> <span class="s2">&quot;Should not get here -- contact developers&quot;</span>
+        <span class="n">msg</span> <span class="o">=</span> <span class="s2">"Should not get here -- contact developers"</span>
         <span class="k">raise</span> <span class="ne">AssertionError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
 
-    <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Loaded </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_path</span><span class="p">)</span>
+    <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">"Loaded </span><span class="si">%s</span><span class="s2">"</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_path</span><span class="p">)</span>
 </code></pre></div></td></tr></table></div>
                   </details>
 
@@ -3445,20 +3445,20 @@ and the message loop is not running
 <span class="normal">412</span>
 <span class="normal">413</span>
 <span class="normal">414</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">cleanup</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Clean up references to the library.</span>
+<span class="w">    </span><span class="sd">"""Clean up references to the library.</span>
 
-<span class="sd">    !!! note &quot;Added in version 0.10&quot;</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    !!! note "Added in version 0.10"</span>
+<span class="sd">    """</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">_assembly</span> <span class="o">=</span> <span class="kc">None</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">_lib</span> <span class="o">=</span> <span class="kc">None</span>
     <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_gateway</span><span class="p">:</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_gateway</span><span class="o">.</span><span class="n">shutdown</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_gateway</span> <span class="o">=</span> <span class="kc">None</span>
-        <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;shutdown Py4J.GatewayServer&quot;</span><span class="p">)</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">"shutdown Py4J.GatewayServer"</span><span class="p">)</span>
     <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_app</span><span class="p">:</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_app</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_app</span> <span class="o">=</span> <span class="kc">None</span>
-        <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;close ActiveX application&quot;</span><span class="p">)</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">"close ActiveX application"</span><span class="p">)</span>
 </code></pre></div></td></tr></table></div>
             </details>
     </div>

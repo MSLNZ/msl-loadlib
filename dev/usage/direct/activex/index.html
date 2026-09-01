@@ -2190,50 +2190,50 @@
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">letter_clicked</span><span class="p">(</span><span class="n">item</span><span class="p">:</span> <span class="n">MenuItem</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;A callback function. You could interact with the `ocx` object.&quot;&quot;&quot;</span>
-    <span class="k">if</span> <span class="n">item</span><span class="o">.</span><span class="n">text</span> <span class="o">==</span> <span class="s2">&quot;C&quot;</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">"""A callback function. You could interact with the `ocx` object."""</span>
+    <span class="k">if</span> <span class="n">item</span><span class="o">.</span><span class="n">text</span> <span class="o">==</span> <span class="s2">"C"</span><span class="p">:</span>
         <span class="n">item</span><span class="o">.</span><span class="n">checked</span> <span class="o">=</span> <span class="ow">not</span> <span class="n">item</span><span class="o">.</span><span class="n">checked</span>
     <span class="nb">print</span><span class="p">(</span><span class="n">item</span><span class="p">)</span>
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">group_clicked</span><span class="p">(</span><span class="n">item</span><span class="p">:</span> <span class="n">MenuItem</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;A callback function. You could interact with the `ocx` object.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""A callback function. You could interact with the `ocx` object."""</span>
     <span class="n">group</span><span class="o">.</span><span class="n">checked</span> <span class="o">=</span> <span class="n">item</span>
     <span class="nb">print</span><span class="p">(</span><span class="n">item</span><span class="p">)</span>
 
 
 <span class="c1"># Create an application window</span>
-<span class="n">app</span> <span class="o">=</span> <span class="n">Application</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s2">&quot;My ActiveX Control&quot;</span><span class="p">,</span> <span class="n">icon</span><span class="o">=</span><span class="n">Icon</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">executable</span><span class="p">))</span>
+<span class="n">app</span> <span class="o">=</span> <span class="n">Application</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s2">"My ActiveX Control"</span><span class="p">,</span> <span class="n">icon</span><span class="o">=</span><span class="n">Icon</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">executable</span><span class="p">))</span>
 
-<span class="c1"># Create a new &#39;Letters&#39; menu</span>
-<span class="n">letters</span> <span class="o">=</span> <span class="n">app</span><span class="o">.</span><span class="n">menu</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="s2">&quot;Letters&quot;</span><span class="p">)</span>
+<span class="c1"># Create a new 'Letters' menu</span>
+<span class="n">letters</span> <span class="o">=</span> <span class="n">app</span><span class="o">.</span><span class="n">menu</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="s2">"Letters"</span><span class="p">)</span>
 
-<span class="c1"># Append items to the &#39;Letters&#39; menu</span>
-<span class="n">app</span><span class="o">.</span><span class="n">menu</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">letters</span><span class="p">,</span> <span class="s2">&quot;A&quot;</span><span class="p">)</span>
-<span class="n">app</span><span class="o">.</span><span class="n">menu</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">letters</span><span class="p">,</span> <span class="s2">&quot;B&quot;</span><span class="p">,</span> <span class="n">callback</span><span class="o">=</span><span class="n">letter_clicked</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="c1"># Append items to the 'Letters' menu</span>
+<span class="n">app</span><span class="o">.</span><span class="n">menu</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">letters</span><span class="p">,</span> <span class="s2">"A"</span><span class="p">)</span>
+<span class="n">app</span><span class="o">.</span><span class="n">menu</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">letters</span><span class="p">,</span> <span class="s2">"B"</span><span class="p">,</span> <span class="n">callback</span><span class="o">=</span><span class="n">letter_clicked</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
 <span class="n">app</span><span class="o">.</span><span class="n">menu</span><span class="o">.</span><span class="n">append_separator</span><span class="p">(</span><span class="n">letters</span><span class="p">)</span>
-<span class="n">app</span><span class="o">.</span><span class="n">menu</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">letters</span><span class="p">,</span> <span class="s2">&quot;C&quot;</span><span class="p">,</span> <span class="n">callback</span><span class="o">=</span><span class="n">letter_clicked</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">])</span>
+<span class="n">app</span><span class="o">.</span><span class="n">menu</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">letters</span><span class="p">,</span> <span class="s2">"C"</span><span class="p">,</span> <span class="n">callback</span><span class="o">=</span><span class="n">letter_clicked</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">])</span>
 
 <span class="c1"># Create a new menu group</span>
 <span class="n">group</span> <span class="o">=</span> <span class="n">MenuGroup</span><span class="p">()</span>
-<span class="n">group</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;Group 1&quot;</span><span class="p">,</span> <span class="n">callback</span><span class="o">=</span><span class="n">group_clicked</span><span class="p">)</span>
-<span class="n">group</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;Group 2&quot;</span><span class="p">,</span> <span class="n">callback</span><span class="o">=</span><span class="n">group_clicked</span><span class="p">)</span>
-<span class="n">group</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;Group 3&quot;</span><span class="p">,</span> <span class="n">callback</span><span class="o">=</span><span class="n">group_clicked</span><span class="p">)</span>
+<span class="n">group</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">"Group 1"</span><span class="p">,</span> <span class="n">callback</span><span class="o">=</span><span class="n">group_clicked</span><span class="p">)</span>
+<span class="n">group</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">"Group 2"</span><span class="p">,</span> <span class="n">callback</span><span class="o">=</span><span class="n">group_clicked</span><span class="p">)</span>
+<span class="n">group</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">"Group 3"</span><span class="p">,</span> <span class="n">callback</span><span class="o">=</span><span class="n">group_clicked</span><span class="p">)</span>
 
-<span class="c1"># Create a new &#39;Numbers&#39; menu</span>
-<span class="n">numbers</span> <span class="o">=</span> <span class="n">app</span><span class="o">.</span><span class="n">menu</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="s2">&quot;Numbers&quot;</span><span class="p">)</span>
-<span class="c1"># Add the group to the &#39;Numbers&#39; menu</span>
+<span class="c1"># Create a new 'Numbers' menu</span>
+<span class="n">numbers</span> <span class="o">=</span> <span class="n">app</span><span class="o">.</span><span class="n">menu</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="s2">"Numbers"</span><span class="p">)</span>
+<span class="c1"># Add the group to the 'Numbers' menu</span>
 <span class="n">app</span><span class="o">.</span><span class="n">menu</span><span class="o">.</span><span class="n">append_group</span><span class="p">(</span><span class="n">numbers</span><span class="p">,</span> <span class="n">group</span><span class="p">)</span>
 <span class="c1"># Add a separator then another item</span>
 <span class="n">app</span><span class="o">.</span><span class="n">menu</span><span class="o">.</span><span class="n">append_separator</span><span class="p">(</span><span class="n">numbers</span><span class="p">)</span>
-<span class="n">app</span><span class="o">.</span><span class="n">menu</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">numbers</span><span class="p">,</span> <span class="s2">&quot;Not in Group&quot;</span><span class="p">)</span>
+<span class="n">app</span><span class="o">.</span><span class="n">menu</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">numbers</span><span class="p">,</span> <span class="s2">"Not in Group"</span><span class="p">)</span>
 
 <span class="c1"># Define the size of the main application window</span>
 <span class="n">width</span> <span class="o">=</span> <span class="mi">300</span>
 <span class="n">height</span> <span class="o">=</span> <span class="mi">300</span>
 
 <span class="c1"># Uncomment the next line to load your ActiveX control in the main window</span>
-<span class="c1"># ocx = app.load(&quot;My.OCX.Application&quot;, width=width, height=height)</span>
+<span class="c1"># ocx = app.load("My.OCX.Application", width=width, height=height)</span>
 
 <span class="n">app</span><span class="o">.</span><span class="n">set_window_size</span><span class="p">(</span><span class="n">width</span><span class="p">,</span> <span class="n">height</span><span class="p">)</span>
 <span class="n">app</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>

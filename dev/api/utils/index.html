@@ -2475,11 +2475,11 @@ defined in the <em>py_exe_path</em>.config file and that it is enabled.</p>
 <p>This <a href="https://stackoverflow.com/questions/14508627/" target="_blank">link</a> provides
 an overview explaining why the <strong>useLegacyV2RuntimeActivationPolicy</strong> property is required.</p>
 <p>The <em>py_exe_path</em>.config file that is created is</p>
-<div class="highlight"><pre><span></span><code><span class="cp">&lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot; ?&gt;</span>
+<div class="highlight"><pre><span></span><code><span class="cp">&lt;?xml version="1.0" encoding="utf-8" ?&gt;</span>
 <span class="nt">&lt;configuration&gt;</span>
-<span class="w">    </span><span class="nt">&lt;startup</span><span class="w"> </span><span class="na">useLegacyV2RuntimeActivationPolicy=</span><span class="s">&quot;true&quot;</span><span class="nt">&gt;</span>
-<span class="w">        </span><span class="nt">&lt;supportedRuntime</span><span class="w"> </span><span class="na">version=</span><span class="s">&quot;v4.0&quot;</span><span class="w"> </span><span class="nt">/&gt;</span>
-<span class="w">        </span><span class="nt">&lt;supportedRuntime</span><span class="w"> </span><span class="na">version=</span><span class="s">&quot;v2.0.50727&quot;</span><span class="w"> </span><span class="nt">/&gt;</span>
+<span class="w">    </span><span class="nt">&lt;startup</span><span class="w"> </span><span class="na">useLegacyV2RuntimeActivationPolicy=</span><span class="s">"true"</span><span class="nt">&gt;</span>
+<span class="w">        </span><span class="nt">&lt;supportedRuntime</span><span class="w"> </span><span class="na">version=</span><span class="s">"v4.0"</span><span class="w"> </span><span class="nt">/&gt;</span>
+<span class="w">        </span><span class="nt">&lt;supportedRuntime</span><span class="w"> </span><span class="na">version=</span><span class="s">"v2.0.50727"</span><span class="w"> </span><span class="nt">/&gt;</span>
 <span class="w">    </span><span class="nt">&lt;/startup&gt;</span>
 <span class="nt">&lt;/configuration&gt;</span>
 </code></pre></div>
@@ -2655,26 +2655,26 @@ an overview explaining why the <strong>useLegacyV2RuntimeActivationPolicy</stron
 <span class="normal">199</span>
 <span class="normal">200</span>
 <span class="normal">201</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">check_dot_net_config</span><span class="p">(</span><span class="n">py_exe_path</span><span class="p">:</span> <span class="n">PathLike</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">str</span><span class="p">]:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Checks if the **useLegacyV2RuntimeActivationPolicy** property is enabled.</span>
+<span class="w">    </span><span class="sd">"""Checks if the **useLegacyV2RuntimeActivationPolicy** property is enabled.</span>
 
-<span class="sd">    By default, [Python.NET](https://pythonnet.github.io/){:target=&quot;_blank&quot;} works</span>
+<span class="sd">    By default, [Python.NET](https://pythonnet.github.io/){:target="_blank"} works</span>
 <span class="sd">    with .NET 4.0+ and therefore it cannot automatically load a library that was compiled</span>
 <span class="sd">    with .NET &amp;lt; 4.0.</span>
 
 <span class="sd">    This function ensures that the **useLegacyV2RuntimeActivationPolicy** property is</span>
 <span class="sd">    defined in the *py_exe_path*.config file and that it is enabled.</span>
 
-<span class="sd">    This [link](https://stackoverflow.com/questions/14508627/){:target=&quot;_blank&quot;} provides</span>
+<span class="sd">    This [link](https://stackoverflow.com/questions/14508627/){:target="_blank"} provides</span>
 <span class="sd">    an overview explaining why the **useLegacyV2RuntimeActivationPolicy** property is required.</span>
 
 <span class="sd">    The *py_exe_path*.config file that is created is</span>
 
 <span class="sd">    ```xml</span>
-<span class="sd">    &lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot; ?&gt;</span>
+<span class="sd">    &lt;?xml version="1.0" encoding="utf-8" ?&gt;</span>
 <span class="sd">    &lt;configuration&gt;</span>
-<span class="sd">        &lt;startup useLegacyV2RuntimeActivationPolicy=&quot;true&quot;&gt;</span>
-<span class="sd">            &lt;supportedRuntime version=&quot;v4.0&quot; /&gt;</span>
-<span class="sd">            &lt;supportedRuntime version=&quot;v2.0.50727&quot; /&gt;</span>
+<span class="sd">        &lt;startup useLegacyV2RuntimeActivationPolicy="true"&gt;</span>
+<span class="sd">            &lt;supportedRuntime version="v4.0" /&gt;</span>
+<span class="sd">            &lt;supportedRuntime version="v2.0.50727" /&gt;</span>
 <span class="sd">        &lt;/startup&gt;</span>
 <span class="sd">    &lt;/configuration&gt;</span>
 <span class="sd">    ```</span>
@@ -2690,71 +2690,71 @@ an overview explaining why the <strong>useLegacyV2RuntimeActivationPolicy</stron
 <span class="sd">            * -1: if there was a problem</span>
 <span class="sd">            * 0: if the .NET property was already enabled, or</span>
 <span class="sd">            * 1: if the property was created successfully.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">config_path</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">fsdecode</span><span class="p">(</span><span class="n">py_exe_path</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;.config&quot;</span>
+<span class="sd">    """</span>
+    <span class="n">config_path</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">fsdecode</span><span class="p">(</span><span class="n">py_exe_path</span><span class="p">)</span> <span class="o">+</span> <span class="s2">".config"</span>
 
     <span class="k">if</span> <span class="n">Path</span><span class="p">(</span><span class="n">config_path</span><span class="p">)</span><span class="o">.</span><span class="n">is_file</span><span class="p">():</span>
         <span class="k">try</span><span class="p">:</span>
             <span class="n">tree</span> <span class="o">=</span> <span class="n">ET</span><span class="o">.</span><span class="n">parse</span><span class="p">(</span><span class="n">config_path</span><span class="p">)</span>  <span class="c1"># noqa: S314</span>
         <span class="k">except</span> <span class="n">ET</span><span class="o">.</span><span class="n">ParseError</span><span class="p">:</span>
-            <span class="n">msg</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;Invalid XML file </span><span class="si">{</span><span class="n">config_path</span><span class="si">}</span><span class="se">\n</span><span class="s2">Cannot create the useLegacyV2RuntimeActivationPolicy property.</span><span class="se">\n</span><span class="s2">&quot;</span>
+            <span class="n">msg</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">"Invalid XML file </span><span class="si">{</span><span class="n">config_path</span><span class="si">}</span><span class="se">\n</span><span class="s2">Cannot create the useLegacyV2RuntimeActivationPolicy property.</span><span class="se">\n</span><span class="s2">"</span>
             <span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
             <span class="k">return</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">msg</span>
 
         <span class="n">root</span> <span class="o">=</span> <span class="n">tree</span><span class="o">.</span><span class="n">getroot</span><span class="p">()</span>
 
-        <span class="k">if</span> <span class="n">root</span><span class="o">.</span><span class="n">tag</span> <span class="o">!=</span> <span class="s2">&quot;configuration&quot;</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">root</span><span class="o">.</span><span class="n">tag</span> <span class="o">!=</span> <span class="s2">"configuration"</span><span class="p">:</span>
             <span class="n">msg</span> <span class="o">=</span> <span class="p">(</span>
-                <span class="sa">f</span><span class="s2">&quot;The root tag in </span><span class="si">{</span><span class="n">config_path</span><span class="si">}</span><span class="s2"> is &lt;</span><span class="si">{</span><span class="n">root</span><span class="o">.</span><span class="n">tag</span><span class="si">}</span><span class="s2">&gt;.</span><span class="se">\n</span><span class="s2">&quot;</span>
-                <span class="sa">f</span><span class="s2">&quot;It must be &lt;configuration&gt; in order to create a .NET Framework config</span><span class="se">\n</span><span class="s2">&quot;</span>
-                <span class="sa">f</span><span class="s2">&quot;file which enables the useLegacyV2RuntimeActivationPolicy property.</span><span class="se">\n</span><span class="s2">&quot;</span>
-                <span class="sa">f</span><span class="s2">&quot;To load an assembly from a .NET Framework version &lt; 4.0 the following</span><span class="se">\n</span><span class="s2">&quot;</span>
-                <span class="sa">f</span><span class="s2">&quot;must be in </span><span class="si">{</span><span class="n">config_path</span><span class="si">}</span><span class="se">\n\n</span><span class="s2">&quot;</span>
-                <span class="sa">f</span><span class="s2">&quot;&lt;configuration&gt;</span><span class="si">{</span><span class="n">_NET_FRAMEWORK_FIX</span><span class="si">}</span><span class="s2">&lt;/configuration&gt;</span><span class="se">\n</span><span class="s2">&quot;</span>
+                <span class="sa">f</span><span class="s2">"The root tag in </span><span class="si">{</span><span class="n">config_path</span><span class="si">}</span><span class="s2"> is &lt;</span><span class="si">{</span><span class="n">root</span><span class="o">.</span><span class="n">tag</span><span class="si">}</span><span class="s2">&gt;.</span><span class="se">\n</span><span class="s2">"</span>
+                <span class="sa">f</span><span class="s2">"It must be &lt;configuration&gt; in order to create a .NET Framework config</span><span class="se">\n</span><span class="s2">"</span>
+                <span class="sa">f</span><span class="s2">"file which enables the useLegacyV2RuntimeActivationPolicy property.</span><span class="se">\n</span><span class="s2">"</span>
+                <span class="sa">f</span><span class="s2">"To load an assembly from a .NET Framework version &lt; 4.0 the following</span><span class="se">\n</span><span class="s2">"</span>
+                <span class="sa">f</span><span class="s2">"must be in </span><span class="si">{</span><span class="n">config_path</span><span class="si">}</span><span class="se">\n\n</span><span class="s2">"</span>
+                <span class="sa">f</span><span class="s2">"&lt;configuration&gt;</span><span class="si">{</span><span class="n">_NET_FRAMEWORK_FIX</span><span class="si">}</span><span class="s2">&lt;/configuration&gt;</span><span class="se">\n</span><span class="s2">"</span>
             <span class="p">)</span>
             <span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
             <span class="k">return</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">msg</span>
 
         <span class="c1"># check if the policy exists</span>
-        <span class="n">policy</span> <span class="o">=</span> <span class="n">root</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s2">&quot;startup/[@useLegacyV2RuntimeActivationPolicy]&quot;</span><span class="p">)</span>
+        <span class="n">policy</span> <span class="o">=</span> <span class="n">root</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s2">"startup/[@useLegacyV2RuntimeActivationPolicy]"</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">policy</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">lines</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">config_path</span><span class="p">)</span><span class="o">.</span><span class="n">read_text</span><span class="p">()</span><span class="o">.</span><span class="n">splitlines</span><span class="p">()</span>
             <span class="n">lines</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">_NET_FRAMEWORK_FIX</span><span class="p">)</span>
-            <span class="n">_</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">config_path</span><span class="p">)</span><span class="o">.</span><span class="n">write_text</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">lines</span><span class="p">))</span>
+            <span class="n">_</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">config_path</span><span class="p">)</span><span class="o">.</span><span class="n">write_text</span><span class="p">(</span><span class="s2">"</span><span class="se">\n</span><span class="s2">"</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">lines</span><span class="p">))</span>
             <span class="n">msg</span> <span class="o">=</span> <span class="p">(</span>
-                <span class="sa">f</span><span class="s2">&quot;Added the useLegacyV2RuntimeActivationPolicy property to</span><span class="se">\n</span><span class="s2">&quot;</span>
-                <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">config_path</span><span class="si">}</span><span class="se">\n</span><span class="s2">&quot;</span>
-                <span class="sa">f</span><span class="s2">&quot;Try again to see if Python can now load the .NET library.</span><span class="se">\n</span><span class="s2">&quot;</span>
+                <span class="sa">f</span><span class="s2">"Added the useLegacyV2RuntimeActivationPolicy property to</span><span class="se">\n</span><span class="s2">"</span>
+                <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">config_path</span><span class="si">}</span><span class="se">\n</span><span class="s2">"</span>
+                <span class="sa">f</span><span class="s2">"Try again to see if Python can now load the .NET library.</span><span class="se">\n</span><span class="s2">"</span>
             <span class="p">)</span>
             <span class="k">return</span> <span class="mi">1</span><span class="p">,</span> <span class="n">msg</span>
 
-        <span class="k">if</span> <span class="n">policy</span><span class="o">.</span><span class="n">attrib</span><span class="p">[</span><span class="s2">&quot;useLegacyV2RuntimeActivationPolicy&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">!=</span> <span class="s2">&quot;true&quot;</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">policy</span><span class="o">.</span><span class="n">attrib</span><span class="p">[</span><span class="s2">"useLegacyV2RuntimeActivationPolicy"</span><span class="p">]</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">!=</span> <span class="s2">"true"</span><span class="p">:</span>
             <span class="n">msg</span> <span class="o">=</span> <span class="p">(</span>
-                <span class="sa">f</span><span class="s1">&#39;The useLegacyV2RuntimeActivationPolicy attribute is &quot;false&quot; in</span><span class="se">\n</span><span class="s1">&#39;</span>
-                <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">config_path</span><span class="si">}</span><span class="se">\n</span><span class="s2">&quot;</span>
-                <span class="sa">f</span><span class="s2">&quot;Cannot load an assembly from a .NET Framework version &lt; 4.0.</span><span class="se">\n</span><span class="s2">&quot;</span>
+                <span class="sa">f</span><span class="s1">'The useLegacyV2RuntimeActivationPolicy attribute is "false" in</span><span class="se">\n</span><span class="s1">'</span>
+                <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">config_path</span><span class="si">}</span><span class="se">\n</span><span class="s2">"</span>
+                <span class="sa">f</span><span class="s2">"Cannot load an assembly from a .NET Framework version &lt; 4.0.</span><span class="se">\n</span><span class="s2">"</span>
             <span class="p">)</span>
             <span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
             <span class="k">return</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">msg</span>
 
-        <span class="k">return</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;The useLegacyV2RuntimeActivationPolicy property is enabled&quot;</span>
+        <span class="k">return</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">"The useLegacyV2RuntimeActivationPolicy property is enabled"</span>
 
     <span class="n">text</span> <span class="o">=</span> <span class="p">(</span>
-        <span class="sa">f</span><span class="s1">&#39;&lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot; ?&gt;&#39;</span>
-        <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">_NET_FRAMEWORK_DESCRIPTION</span><span class="si">}</span><span class="s2">&quot;</span>
-        <span class="sa">f</span><span class="s2">&quot;&lt;configuration&gt;&quot;</span>
-        <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">_NET_FRAMEWORK_FIX</span><span class="si">}</span><span class="s2">&quot;</span>
-        <span class="sa">f</span><span class="s2">&quot;&lt;/configuration&gt;</span><span class="se">\n</span><span class="s2">&quot;</span>
+        <span class="sa">f</span><span class="s1">'&lt;?xml version="1.0" encoding="utf-8" ?&gt;'</span>
+        <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">_NET_FRAMEWORK_DESCRIPTION</span><span class="si">}</span><span class="s2">"</span>
+        <span class="sa">f</span><span class="s2">"&lt;configuration&gt;"</span>
+        <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">_NET_FRAMEWORK_FIX</span><span class="si">}</span><span class="s2">"</span>
+        <span class="sa">f</span><span class="s2">"&lt;/configuration&gt;</span><span class="se">\n</span><span class="s2">"</span>
     <span class="p">)</span>
     <span class="n">_</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">config_path</span><span class="p">)</span><span class="o">.</span><span class="n">write_text</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>
 
     <span class="n">msg</span> <span class="o">=</span> <span class="p">(</span>
-        <span class="sa">f</span><span class="s2">&quot;The library appears to be from a .NET Framework version &lt; 4.0.</span><span class="se">\n</span><span class="s2">&quot;</span>
-        <span class="sa">f</span><span class="s1">&#39;To fix the &quot;Mixed mode assembly is built against ...&quot; error</span><span class="se">\n</span><span class="s1">&#39;</span>
-        <span class="sa">f</span><span class="s2">&quot;the useLegacyV2RuntimeActivationPolicy property was added to</span><span class="se">\n</span><span class="s2">&quot;</span>
-        <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">config_path</span><span class="si">}</span><span class="se">\n\n</span><span class="s2">&quot;</span>
-        <span class="sa">f</span><span class="s2">&quot;Rerun the script, or restart the interactive console, to see if</span><span class="se">\n</span><span class="s2">&quot;</span>
-        <span class="sa">f</span><span class="s2">&quot;Python can now load the .NET library.</span><span class="se">\n</span><span class="s2">&quot;</span>
+        <span class="sa">f</span><span class="s2">"The library appears to be from a .NET Framework version &lt; 4.0.</span><span class="se">\n</span><span class="s2">"</span>
+        <span class="sa">f</span><span class="s1">'To fix the "Mixed mode assembly is built against ..." error</span><span class="se">\n</span><span class="s1">'</span>
+        <span class="sa">f</span><span class="s2">"the useLegacyV2RuntimeActivationPolicy property was added to</span><span class="se">\n</span><span class="s2">"</span>
+        <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">config_path</span><span class="si">}</span><span class="se">\n\n</span><span class="s2">"</span>
+        <span class="sa">f</span><span class="s2">"Rerun the script, or restart the interactive console, to see if</span><span class="se">\n</span><span class="s2">"</span>
+        <span class="sa">f</span><span class="s2">"Python can now load the .NET library.</span><span class="se">\n</span><span class="s2">"</span>
     <span class="p">)</span>
     <span class="k">return</span> <span class="mi">1</span><span class="p">,</span> <span class="n">msg</span>
 </code></pre></div></td></tr></table></div>
@@ -2957,9 +2957,9 @@ the module is saved to the <code>../site-packages/comtypes/gen</code> directory.
 <span class="normal">413</span>
 <span class="normal">414</span>
 <span class="normal">415</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">generate_com_wrapper</span><span class="p">(</span><span class="n">lib</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span> <span class="n">out_dir</span><span class="p">:</span> <span class="n">PathLike</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ModuleType</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Generate a Python wrapper module around a [COM]{:target=&quot;_blank&quot;} library.</span>
+<span class="w">    </span><span class="sd">"""Generate a Python wrapper module around a [COM]{:target="_blank"} library.</span>
 
-<span class="sd">    For more information see [Accessing type libraries]{:target=&quot;_blank&quot;}.</span>
+<span class="sd">    For more information see [Accessing type libraries]{:target="_blank"}.</span>
 
 <span class="sd">    [COM]: https://learn.microsoft.com/en-us/windows/win32/com/component-object-model--com--portal</span>
 <span class="sd">    [Accessing type libraries]: https://comtypes.readthedocs.io/en/stable/client.html#accessing-type-libraries</span>
@@ -2980,7 +2980,7 @@ the module is saved to the <code>../site-packages/comtypes/gen</code> directory.
 <span class="sd">            * a sequence specifying the `GUID` of a library, a major and a minor</span>
 <span class="sd">                version number, plus optionally an `LCID` number, e.g.,</span>
 
-<span class="sd">                `[&quot;{EAB22AC0-30C1-11CF-A7EB-0000C05BAE0B}&quot;, 1, 1]`</span>
+<span class="sd">                `["{EAB22AC0-30C1-11CF-A7EB-0000C05BAE0B}", 1, 1]`</span>
 
 <span class="sd">            * an object with `_reg_libid_` and `_reg_version_` attributes</span>
 
@@ -2990,10 +2990,10 @@ the module is saved to the <code>../site-packages/comtypes/gen</code> directory.
 <span class="sd">    Returns:</span>
 <span class="sd">        The wrapper module that was generated.</span>
 
-<span class="sd">    !!! note &quot;Added in version 0.9&quot;</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    !!! note "Added in version 0.9"</span>
+<span class="sd">    """</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="n">is_comtypes_installed</span><span class="p">():</span>
-        <span class="n">msg</span> <span class="o">=</span> <span class="s2">&quot;Cannot create a COM wrapper because comtypes is not installed, run</span><span class="se">\n</span><span class="s2">  pip install comtypes&quot;</span>
+        <span class="n">msg</span> <span class="o">=</span> <span class="s2">"Cannot create a COM wrapper because comtypes is not installed, run</span><span class="se">\n</span><span class="s2">  pip install comtypes"</span>
         <span class="k">raise</span> <span class="ne">OSError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
 
     <span class="kn">import</span><span class="w"> </span><span class="nn">comtypes.client</span>  <span class="c1"># type: ignore[import-untyped] # pyright: ignore[reportMissingTypeStubs]  # noqa: PLC0415</span>
@@ -3021,9 +3021,9 @@ the module is saved to the <code>../site-packages/comtypes/gen</code> directory.
         <span class="n">obj</span> <span class="o">=</span> <span class="n">comtypes</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">CreateObject</span><span class="p">(</span><span class="n">lib</span><span class="p">)</span>  <span class="c1"># pyright: ignore[reportUnknownMemberType,reportUnknownVariableType]</span>
         <span class="n">mod</span> <span class="o">=</span> <span class="n">from_pointer</span><span class="p">(</span><span class="n">obj</span><span class="p">)</span>
     <span class="k">except</span> <span class="p">(</span><span class="ne">AttributeError</span><span class="p">,</span> <span class="ne">TypeError</span><span class="p">)</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
-        <span class="k">if</span> <span class="s2">&quot;LoadLibrary&quot;</span> <span class="ow">in</span> <span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">):</span>
+        <span class="k">if</span> <span class="s2">"LoadLibrary"</span> <span class="ow">in</span> <span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">):</span>
             <span class="n">mod</span> <span class="o">=</span> <span class="n">from_pointer</span><span class="p">(</span><span class="n">lib</span><span class="o">.</span><span class="n">lib</span><span class="p">)</span>
-        <span class="k">elif</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">lib</span><span class="p">,</span> <span class="s2">&quot;__com_interface__&quot;</span><span class="p">):</span>
+        <span class="k">elif</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">lib</span><span class="p">,</span> <span class="s2">"__com_interface__"</span><span class="p">):</span>
             <span class="n">mod</span> <span class="o">=</span> <span class="n">from_pointer</span><span class="p">(</span><span class="n">lib</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="k">raise</span>
@@ -3063,10 +3063,10 @@ the module is saved to the <code>../site-packages/comtypes/gen</code> directory.
 <span class="normal">239</span>
 <span class="normal">240</span>
 <span class="normal">241</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">get_available_port</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;[int][] &amp;mdash; Returns a port number that is available.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""[int][] &amp;mdash; Returns a port number that is available."""</span>
     <span class="n">port</span><span class="p">:</span> <span class="nb">int</span>
     <span class="k">with</span> <span class="n">socket</span><span class="o">.</span><span class="n">socket</span><span class="p">()</span> <span class="k">as</span> <span class="n">sock</span><span class="p">:</span>
-        <span class="n">sock</span><span class="o">.</span><span class="n">bind</span><span class="p">((</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">))</span>
+        <span class="n">sock</span><span class="o">.</span><span class="n">bind</span><span class="p">((</span><span class="s2">""</span><span class="p">,</span> <span class="mi">0</span><span class="p">))</span>
         <span class="n">_</span><span class="p">,</span> <span class="n">port</span> <span class="o">=</span> <span class="n">sock</span><span class="o">.</span><span class="n">getsockname</span><span class="p">()</span>
         <span class="k">return</span> <span class="n">port</span>
 </code></pre></div></td></tr></table></div>
@@ -3131,7 +3131,7 @@ information to be returned for each <a href="https://docs.microsoft.com/en-us/wi
 <div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">msl.loadlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">utils</span>
 
 <span class="n">info</span> <span class="o">=</span> <span class="n">utils</span><span class="o">.</span><span class="n">get_com_info</span><span class="p">()</span>
-<span class="n">more_info</span> <span class="o">=</span> <span class="n">utils</span><span class="o">.</span><span class="n">get_com_info</span><span class="p">(</span><span class="s2">&quot;Version&quot;</span><span class="p">,</span> <span class="s2">&quot;ToolboxBitmap32&quot;</span><span class="p">)</span>
+<span class="n">more_info</span> <span class="o">=</span> <span class="n">utils</span><span class="o">.</span><span class="n">get_com_info</span><span class="p">(</span><span class="s2">"Version"</span><span class="p">,</span> <span class="s2">"ToolboxBitmap32"</span><span class="p">)</span>
 </code></pre></div>
 
 
@@ -3236,7 +3236,7 @@ information to be returned for each <a href="https://docs.microsoft.com/en-us/wi
 <span class="normal">335</span>
 <span class="normal">336</span>
 <span class="normal">337</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">get_com_info</span><span class="p">(</span><span class="o">*</span><span class="n">additional_keys</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span><span class="p">]]:</span>  <span class="c1"># noqa: C901</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Reads the registry for the [COM]{:target=&quot;_blank&quot;} libraries that are available.</span>
+<span class="w">    </span><span class="sd">"""Reads the registry for the [COM]{:target="_blank"} libraries that are available.</span>
 
 <span class="sd">    [COM]: https://learn.microsoft.com/en-us/windows/win32/com/component-object-model--com--portal</span>
 
@@ -3247,7 +3247,7 @@ information to be returned for each <a href="https://docs.microsoft.com/en-us/wi
 <span class="sd">        additional_keys: The Program ID (`ProgID`) key is returned automatically.</span>
 <span class="sd">            You can include additional keys (e.g., `Version`, `InprocHandler32`, `ToolboxBitmap32`,</span>
 <span class="sd">            `VersionIndependentProgID`, ...) if you also want this additional</span>
-<span class="sd">            information to be returned for each [Class ID]{:target=&quot;_blank&quot;}.</span>
+<span class="sd">            information to be returned for each [Class ID]{:target="_blank"}.</span>
 
 <span class="sd">            [Class ID]: https://docs.microsoft.com/en-us/windows/desktop/com/clsid-key-hklm</span>
 
@@ -3257,25 +3257,25 @@ information to be returned for each <a href="https://docs.microsoft.com/en-us/wi
 <span class="sd">    from msl.loadlib import utils</span>
 
 <span class="sd">    info = utils.get_com_info()</span>
-<span class="sd">    more_info = utils.get_com_info(&quot;Version&quot;, &quot;ToolboxBitmap32&quot;)</span>
+<span class="sd">    more_info = utils.get_com_info("Version", "ToolboxBitmap32")</span>
 <span class="sd">    ```</span>
 
 <span class="sd">    Returns:</span>
-<span class="sd">        The keys are the Class ID&#39;s and each value is a [dict][] of the information that was requested.</span>
+<span class="sd">        The keys are the Class ID's and each value is a [dict][] of the information that was requested.</span>
 
-<span class="sd">    !!! note &quot;Added in version 0.5&quot;</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    !!! note "Added in version 0.5"</span>
+<span class="sd">    """</span>
     <span class="k">if</span> <span class="n">winreg</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="k">return</span> <span class="p">{}</span>  <span class="c1"># type: ignore[unreachable]</span>
 
     <span class="n">results</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span><span class="p">]]</span> <span class="o">=</span> <span class="p">{}</span>
-    <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;CLSID&quot;</span><span class="p">,</span> <span class="sa">r</span><span class="s2">&quot;Wow6432Node\CLSID&quot;</span><span class="p">]:</span>
+    <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">"CLSID"</span><span class="p">,</span> <span class="sa">r</span><span class="s2">"Wow6432Node\CLSID"</span><span class="p">]:</span>
         <span class="k">try</span><span class="p">:</span>
             <span class="n">key</span> <span class="o">=</span> <span class="n">winreg</span><span class="o">.</span><span class="n">OpenKey</span><span class="p">(</span><span class="n">winreg</span><span class="o">.</span><span class="n">HKEY_CLASSES_ROOT</span><span class="p">,</span> <span class="n">item</span><span class="p">)</span>
         <span class="k">except</span> <span class="ne">OSError</span><span class="p">:</span>
             <span class="k">continue</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;Parsing HKEY_CLASSES_ROOT\</span><span class="si">%s</span><span class="s2">\...&quot;</span><span class="p">,</span> <span class="n">item</span><span class="p">)</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">r</span><span class="s2">"Parsing HKEY_CLASSES_ROOT\</span><span class="si">%s</span><span class="s2">\..."</span><span class="p">,</span> <span class="n">item</span><span class="p">)</span>
 
         <span class="n">index</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>
         <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
@@ -3290,12 +3290,12 @@ information to be returned for each <a href="https://docs.microsoft.com/en-us/wi
             <span class="c1"># ProgID is mandatory, if this fails then ignore</span>
             <span class="c1"># this CLSID and go to the next index in the registry</span>
             <span class="k">try</span><span class="p">:</span>
-                <span class="n">progid</span> <span class="o">=</span> <span class="n">winreg</span><span class="o">.</span><span class="n">QueryValue</span><span class="p">(</span><span class="n">sub_key</span><span class="p">,</span> <span class="s2">&quot;ProgID&quot;</span><span class="p">)</span>
+                <span class="n">progid</span> <span class="o">=</span> <span class="n">winreg</span><span class="o">.</span><span class="n">QueryValue</span><span class="p">(</span><span class="n">sub_key</span><span class="p">,</span> <span class="s2">"ProgID"</span><span class="p">)</span>
             <span class="k">except</span> <span class="ne">OSError</span><span class="p">:</span>
                 <span class="k">pass</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="n">results</span><span class="p">[</span><span class="n">clsid</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
-                <span class="n">results</span><span class="p">[</span><span class="n">clsid</span><span class="p">][</span><span class="s2">&quot;ProgID&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">progid</span>
+                <span class="n">results</span><span class="p">[</span><span class="n">clsid</span><span class="p">][</span><span class="s2">"ProgID"</span><span class="p">]</span> <span class="o">=</span> <span class="n">progid</span>
 
                 <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">additional_keys</span><span class="p">:</span>
                     <span class="k">try</span><span class="p">:</span>
@@ -3371,13 +3371,13 @@ information to be returned for each <a href="https://docs.microsoft.com/en-us/wi
 <span class="normal">94</span>
 <span class="normal">95</span>
 <span class="normal">96</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">is_comtypes_installed</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Checks if `comtypes` is installed.</span>
+<span class="w">    </span><span class="sd">"""Checks if `comtypes` is installed.</span>
 
 <span class="sd">    Returns:</span>
 <span class="sd">        Whether `comtypes` is installed.</span>
 
-<span class="sd">    !!! note &quot;Added in version 0.5&quot;</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    !!! note "Added in version 0.5"</span>
+<span class="sd">    """</span>
     <span class="k">try</span><span class="p">:</span>
         <span class="kn">import</span><span class="w"> </span><span class="nn">comtypes</span>  <span class="c1"># type: ignore[import-untyped] # pyright: ignore[reportMissingTypeStubs, reportUnusedImport]  # noqa: F401, PLC0415</span>
     <span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
@@ -3499,7 +3499,7 @@ Uses the <code>ss</code> command instead of <code>netstat</code> on Linux.</p>
 <span class="normal">230</span>
 <span class="normal">231</span>
 <span class="normal">232</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">is_port_in_use</span><span class="p">(</span><span class="n">port</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Checks whether the TCP port is in use.</span>
+<span class="w">    </span><span class="sd">"""Checks whether the TCP port is in use.</span>
 
 <span class="sd">    Args:</span>
 <span class="sd">        port: The port number to test.</span>
@@ -3507,26 +3507,26 @@ Uses the <code>ss</code> command instead of <code>netstat</code> on Linux.</p>
 <span class="sd">    Returns:</span>
 <span class="sd">        Whether the TCP port is in use.</span>
 
-<span class="sd">    !!! note &quot;Changed in version 0.10&quot;</span>
+<span class="sd">    !!! note "Changed in version 0.10"</span>
 <span class="sd">        Only check TCP ports (instead of both TCP and UDP ports).</span>
 <span class="sd">        Uses the ``ss`` command instead of ``netstat`` on Linux.</span>
 
-<span class="sd">    !!! note &quot;Changed in version 0.7&quot;</span>
+<span class="sd">    !!! note "Changed in version 0.7"</span>
 <span class="sd">        Renamed from `port_in_use` and added support for macOS.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="n">flags</span> <span class="o">=</span> <span class="mi">0</span>
     <span class="k">if</span> <span class="n">IS_WINDOWS</span><span class="p">:</span>
         <span class="n">flags</span> <span class="o">=</span> <span class="mh">0x08000000</span>  <span class="c1"># fixes issue 31, CREATE_NO_WINDOW = 0x08000000</span>
-        <span class="n">cmd</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;netstat&quot;</span><span class="p">,</span> <span class="s2">&quot;-a&quot;</span><span class="p">,</span> <span class="s2">&quot;-n&quot;</span><span class="p">,</span> <span class="s2">&quot;-p&quot;</span><span class="p">,</span> <span class="s2">&quot;TCP&quot;</span><span class="p">]</span>
+        <span class="n">cmd</span> <span class="o">=</span> <span class="p">[</span><span class="s2">"netstat"</span><span class="p">,</span> <span class="s2">"-a"</span><span class="p">,</span> <span class="s2">"-n"</span><span class="p">,</span> <span class="s2">"-p"</span><span class="p">,</span> <span class="s2">"TCP"</span><span class="p">]</span>
     <span class="k">elif</span> <span class="n">IS_LINUX</span><span class="p">:</span>
-        <span class="n">cmd</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;ss&quot;</span><span class="p">,</span> <span class="s2">&quot;-ant&quot;</span><span class="p">]</span>
+        <span class="n">cmd</span> <span class="o">=</span> <span class="p">[</span><span class="s2">"ss"</span><span class="p">,</span> <span class="s2">"-ant"</span><span class="p">]</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="n">cmd</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;lsof&quot;</span><span class="p">,</span> <span class="s2">&quot;-nPw&quot;</span><span class="p">,</span> <span class="s2">&quot;-iTCP&quot;</span><span class="p">]</span>
+        <span class="n">cmd</span> <span class="o">=</span> <span class="p">[</span><span class="s2">"lsof"</span><span class="p">,</span> <span class="s2">"-nPw"</span><span class="p">,</span> <span class="s2">"-iTCP"</span><span class="p">]</span>
     <span class="n">p</span> <span class="o">=</span> <span class="n">subprocess</span><span class="o">.</span><span class="n">Popen</span><span class="p">(</span><span class="n">cmd</span><span class="p">,</span> <span class="n">stdout</span><span class="o">=</span><span class="n">subprocess</span><span class="o">.</span><span class="n">PIPE</span><span class="p">,</span> <span class="n">stderr</span><span class="o">=</span><span class="n">subprocess</span><span class="o">.</span><span class="n">PIPE</span><span class="p">,</span> <span class="n">creationflags</span><span class="o">=</span><span class="n">flags</span><span class="p">)</span>  <span class="c1"># noqa: S603</span>
     <span class="n">out</span><span class="p">,</span> <span class="n">err</span> <span class="o">=</span> <span class="n">p</span><span class="o">.</span><span class="n">communicate</span><span class="p">()</span>
     <span class="k">if</span> <span class="n">err</span><span class="p">:</span>
-        <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="n">err</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="n">errors</span><span class="o">=</span><span class="s2">&quot;ignore&quot;</span><span class="p">))</span>
-    <span class="k">return</span> <span class="n">out</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="sa">b</span><span class="s2">&quot;:</span><span class="si">%d</span><span class="s2"> &quot;</span> <span class="o">%</span> <span class="n">port</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span>
+        <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="n">err</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="n">errors</span><span class="o">=</span><span class="s2">"ignore"</span><span class="p">))</span>
+    <span class="k">return</span> <span class="n">out</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="sa">b</span><span class="s2">":</span><span class="si">%d</span><span class="s2"> "</span> <span class="o">%</span> <span class="n">port</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span>
 </code></pre></div></td></tr></table></div>
             </details>
     </div>
@@ -3590,13 +3590,13 @@ Uses the <code>ss</code> command instead of <code>netstat</code> on Linux.</p>
 <span class="normal">79</span>
 <span class="normal">80</span>
 <span class="normal">81</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">is_py4j_installed</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Checks if `py4j` is installed.</span>
+<span class="w">    </span><span class="sd">"""Checks if `py4j` is installed.</span>
 
 <span class="sd">    Returns:</span>
 <span class="sd">        Whether `py4j` is installed.</span>
 
-<span class="sd">    !!! note &quot;Added in version 0.4&quot;</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    !!! note "Added in version 0.4"</span>
+<span class="sd">    """</span>
     <span class="k">try</span><span class="p">:</span>
         <span class="kn">import</span><span class="w"> </span><span class="nn">py4j</span>  <span class="c1"># type: ignore[import-untyped] # pyright: ignore[reportMissingTypeStubs, reportUnusedImport]  # noqa: F401, PLC0415</span>
     <span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
@@ -3660,11 +3660,11 @@ Uses the <code>ss</code> command instead of <code>netstat</code> on Linux.</p>
 <span class="normal">64</span>
 <span class="normal">65</span>
 <span class="normal">66</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">is_pythonnet_installed</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Checks if `pythonnet` is installed.</span>
+<span class="w">    </span><span class="sd">"""Checks if `pythonnet` is installed.</span>
 
 <span class="sd">    Returns:</span>
 <span class="sd">        Whether `pythonnet` is installed.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="k">try</span><span class="p">:</span>
         <span class="kn">import</span><span class="w"> </span><span class="nn">clr</span>  <span class="c1"># type: ignore[import-untyped] # pyright: ignore[reportMissingTypeStubs, reportUnusedImport]  # noqa: F401, PLC0415</span>
     <span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
@@ -3799,7 +3799,7 @@ Uses the <code>ss</code> command instead of <code>netstat</code> on Linux.</p>
 <span class="normal">260</span>
 <span class="normal">261</span>
 <span class="normal">262</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">wait_for_server</span><span class="p">(</span><span class="n">host</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">port</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">timeout</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Wait for the 32-bit server to start.</span>
+<span class="w">    </span><span class="sd">"""Wait for the 32-bit server to start.</span>
 
 <span class="sd">    Args:</span>
 <span class="sd">        host: The hostname or IP address of the server.</span>
@@ -3808,14 +3808,14 @@ Uses the <code>ss</code> command instead of <code>netstat</code> on Linux.</p>
 
 <span class="sd">    Raises:</span>
 <span class="sd">        ConnectionTimeoutError: If a timeout occurred.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="n">stop</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span> <span class="o">+</span> <span class="nb">max</span><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">timeout</span><span class="p">)</span>
     <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
         <span class="k">if</span> <span class="n">is_port_in_use</span><span class="p">(</span><span class="n">port</span><span class="p">):</span>
             <span class="k">return</span>
 
         <span class="k">if</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span> <span class="o">&gt;</span> <span class="n">stop</span><span class="p">:</span>
-            <span class="n">msg</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;Timeout after </span><span class="si">{</span><span class="n">timeout</span><span class="si">:</span><span class="s2">.1f</span><span class="si">}</span><span class="s2"> second(s). Could not connect to </span><span class="si">{</span><span class="n">host</span><span class="si">}</span><span class="s2">:</span><span class="si">{</span><span class="n">port</span><span class="si">}</span><span class="s2">&quot;</span>
+            <span class="n">msg</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">"Timeout after </span><span class="si">{</span><span class="n">timeout</span><span class="si">:</span><span class="s2">.1f</span><span class="si">}</span><span class="s2"> second(s). Could not connect to </span><span class="si">{</span><span class="n">host</span><span class="si">}</span><span class="s2">:</span><span class="si">{</span><span class="n">port</span><span class="si">}</span><span class="s2">"</span>
             <span class="k">raise</span> <span class="n">ConnectionTimeoutError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
 </code></pre></div></td></tr></table></div>
             </details>

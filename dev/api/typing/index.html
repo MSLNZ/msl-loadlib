@@ -2520,14 +2520,14 @@
 
 <a href="#msl.loadlib.typing.LibType" class="headerlink" title="Permanent link">¤</a></h2>
 <div class="doc-signature highlight"><pre><span></span><code><span class="n">LibType</span> <span class="o">=</span> <span class="n">Literal</span><span class="p">[</span>
-    <span class="s2">&quot;cdll&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;windll&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;oledll&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;net&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;clr&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;java&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;com&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;activex&quot;</span><span class="p">,</span>
+    <span class="s2">"cdll"</span><span class="p">,</span>
+    <span class="s2">"windll"</span><span class="p">,</span>
+    <span class="s2">"oledll"</span><span class="p">,</span>
+    <span class="s2">"net"</span><span class="p">,</span>
+    <span class="s2">"clr"</span><span class="p">,</span>
+    <span class="s2">"java"</span><span class="p">,</span>
+    <span class="s2">"com"</span><span class="p">,</span>
+    <span class="s2">"activex"</span><span class="p">,</span>
 <span class="p">]</span>
 </code></pre></div>
 
@@ -2598,7 +2598,7 @@
                     <summary>Source code in <code>src/msl/loadlib/typing.py</code></summary>
                     <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">25</span>
 <span class="normal">26</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">host</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span><span class="p">,</span> <span class="n">port</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Base class for loading a 32-bit library in 32-bit Python.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""Base class for loading a 32-bit library in 32-bit Python."""</span>
 </code></pre></div></td></tr></table></div>
                   </details>
 
@@ -2683,7 +2683,7 @@
               <summary>Source code in <code>src/msl/loadlib/typing.py</code></summary>
               <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">28</span>
 <span class="normal">29</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">serve_forever</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Handle one request at a time until [shutdown][msl.loadlib.typing.Server32Subclass.shutdown].&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""Handle one request at a time until [shutdown][msl.loadlib.typing.Server32Subclass.shutdown]."""</span>
 </code></pre></div></td></tr></table></div>
             </details>
     </div>
@@ -2710,7 +2710,7 @@
               <summary>Source code in <code>src/msl/loadlib/typing.py</code></summary>
               <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">31</span>
 <span class="normal">32</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">server_activate</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Called by constructor to activate the server.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""Called by constructor to activate the server."""</span>
 </code></pre></div></td></tr></table></div>
             </details>
     </div>
@@ -2737,7 +2737,7 @@
               <summary>Source code in <code>src/msl/loadlib/typing.py</code></summary>
               <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">34</span>
 <span class="normal">35</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">server_bind</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Called by constructor to bind the socket.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""Called by constructor to bind the socket."""</span>
 </code></pre></div></td></tr></table></div>
             </details>
     </div>
@@ -2764,7 +2764,7 @@
               <summary>Source code in <code>src/msl/loadlib/typing.py</code></summary>
               <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">37</span>
 <span class="normal">38</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">server_close</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Called to clean-up the server.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""Called to clean-up the server."""</span>
 </code></pre></div></td></tr></table></div>
             </details>
     </div>
@@ -2791,7 +2791,7 @@
               <summary>Source code in <code>src/msl/loadlib/typing.py</code></summary>
               <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">40</span>
 <span class="normal">41</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">shutdown</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Stops the [serve_forever][msl.loadlib.typing.Server32Subclass.serve_forever] loop.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""Stops the [serve_forever][msl.loadlib.typing.Server32Subclass.serve_forever] loop."""</span>
 </code></pre></div></td></tr></table></div>
             </details>
     </div>
@@ -2818,7 +2818,7 @@
               <summary>Source code in <code>src/msl/loadlib/typing.py</code></summary>
               <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">43</span>
 <span class="normal">44</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">shutdown_handler</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Called just before the server shuts down.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""Called just before the server shuts down."""</span>
 </code></pre></div></td></tr></table></div>
             </details>
     </div>

@@ -3381,7 +3381,7 @@
     <span class="n">background</span><span class="o">=</span><span class="n">Colour</span><span class="o">.</span><span class="n">WHITE</span><span class="p">,</span>
     <span class="n">class_style</span><span class="o">=</span><span class="n">WindowClassStyle</span><span class="o">.</span><span class="n">NONE</span><span class="p">,</span>
     <span class="n">icon</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-    <span class="n">title</span><span class="o">=</span><span class="s2">&quot;ActiveX&quot;</span><span class="p">,</span>
+    <span class="n">title</span><span class="o">=</span><span class="s2">"ActiveX"</span><span class="p">,</span>
     <span class="n">window_style</span><span class="o">=</span><span class="n">WindowStyle</span><span class="o">.</span><span class="n">OVERLAPPEDWINDOW</span><span class="p">,</span>
 <span class="p">)</span>
 </code></pre></div>
@@ -3569,10 +3569,10 @@ of <a class="autorefs autorefs-internal" title="            WindowStyle" href="#
     <span class="n">background</span><span class="p">:</span> <span class="n">Colour</span> <span class="o">=</span> <span class="n">Colour</span><span class="o">.</span><span class="n">WHITE</span><span class="p">,</span>
     <span class="n">class_style</span><span class="p">:</span> <span class="n">WindowClassStyle</span> <span class="o">=</span> <span class="n">WindowClassStyle</span><span class="o">.</span><span class="n">NONE</span><span class="p">,</span>
     <span class="n">icon</span><span class="p">:</span> <span class="n">Icon</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
-    <span class="n">title</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;ActiveX&quot;</span><span class="p">,</span>
+    <span class="n">title</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">"ActiveX"</span><span class="p">,</span>
     <span class="n">window_style</span><span class="p">:</span> <span class="n">WindowStyle</span> <span class="o">=</span> <span class="n">WindowStyle</span><span class="o">.</span><span class="n">OVERLAPPEDWINDOW</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Create the main application window to display ActiveX controls.</span>
+<span class="w">    </span><span class="sd">"""Create the main application window to display ActiveX controls.</span>
 
 <span class="sd">    Args:</span>
 <span class="sd">        background: The background colour of the main window.</span>
@@ -3582,7 +3582,7 @@ of <a class="autorefs autorefs-internal" title="            WindowStyle" href="#
 <span class="sd">        title: The text to display in the titlebar (if one is visible).</span>
 <span class="sd">        window_style: The window style(s). Can be any combination (bitwise OR)</span>
 <span class="sd">            of [WindowStyle][msl.loadlib.activex.WindowStyle] values.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">_atom</span><span class="p">:</span> <span class="n">wt</span><span class="o">.</span><span class="n">ATOM</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">_icon</span><span class="p">:</span> <span class="n">Icon</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="n">icon</span>  <span class="c1"># prevent an icon from being garbage collected</span>
@@ -3590,7 +3590,7 @@ of <a class="autorefs autorefs-internal" title="            WindowStyle" href="#
     <span class="bp">self</span><span class="o">.</span><span class="n">_msg_handlers</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">Callable</span><span class="p">[[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">],</span> <span class="kc">None</span><span class="p">]]</span> <span class="o">=</span> <span class="p">[]</span>
 
     <span class="k">if</span> <span class="ow">not</span> <span class="n">windll_initialised</span><span class="p">:</span>
-        <span class="n">msg</span> <span class="o">=</span> <span class="s2">&quot;An ActiveX application is not supported on this platform&quot;</span>
+        <span class="n">msg</span> <span class="o">=</span> <span class="s2">"An ActiveX application is not supported on this platform"</span>
         <span class="k">raise</span> <span class="ne">OSError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
 
     <span class="n">h_icon</span> <span class="o">=</span> <span class="n">icon</span><span class="o">.</span><span class="n">hicon</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">icon</span><span class="p">,</span> <span class="n">Icon</span><span class="p">)</span> <span class="k">else</span> <span class="n">user32</span><span class="o">.</span><span class="n">LoadIconW</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="n">wt</span><span class="o">.</span><span class="n">LPCWSTR</span><span class="p">(</span><span class="n">IDI_APPLICATION</span><span class="p">))</span>
@@ -3605,8 +3605,8 @@ of <a class="autorefs autorefs-internal" title="            WindowStyle" href="#
     <span class="bp">self</span><span class="o">.</span><span class="n">_window</span><span class="o">.</span><span class="n">hIcon</span> <span class="o">=</span> <span class="n">h_icon</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">_window</span><span class="o">.</span><span class="n">hCursor</span> <span class="o">=</span> <span class="n">user32</span><span class="o">.</span><span class="n">LoadCursorW</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="n">wt</span><span class="o">.</span><span class="n">LPCWSTR</span><span class="p">(</span><span class="n">IDC_ARROW</span><span class="p">))</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">_window</span><span class="o">.</span><span class="n">hbrBackground</span> <span class="o">=</span> <span class="n">gdi32</span><span class="o">.</span><span class="n">GetStockObject</span><span class="p">(</span><span class="n">background</span><span class="p">)</span>
-    <span class="bp">self</span><span class="o">.</span><span class="n">_window</span><span class="o">.</span><span class="n">lpszMenuName</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;ActiveXMenu</span><span class="si">{</span><span class="nb">id</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_window</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span>  <span class="c1"># make the name unique</span>
-    <span class="bp">self</span><span class="o">.</span><span class="n">_window</span><span class="o">.</span><span class="n">lpszClassName</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;ActiveXClass</span><span class="si">{</span><span class="nb">id</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_window</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">_window</span><span class="o">.</span><span class="n">lpszMenuName</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">"ActiveXMenu</span><span class="si">{</span><span class="nb">id</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_window</span><span class="p">)</span><span class="si">}</span><span class="s2">"</span>  <span class="c1"># make the name unique</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">_window</span><span class="o">.</span><span class="n">lpszClassName</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">"ActiveXClass</span><span class="si">{</span><span class="nb">id</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_window</span><span class="p">)</span><span class="si">}</span><span class="s2">"</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">_window</span><span class="o">.</span><span class="n">hIconSm</span> <span class="o">=</span> <span class="n">h_icon</span>
 
     <span class="bp">self</span><span class="o">.</span><span class="n">_atom</span> <span class="o">=</span> <span class="n">user32</span><span class="o">.</span><span class="n">RegisterClassExW</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_window</span><span class="p">)</span>
@@ -3622,11 +3622,11 @@ of <a class="autorefs autorefs-internal" title="            WindowStyle" href="#
 
     <span class="bp">self</span><span class="o">.</span><span class="n">_thread_id</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">user32</span><span class="o">.</span><span class="n">GetWindowThreadProcessId</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_hwnd</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
 
-    <span class="c1"># calling AtlAxWinInit initializes ATL&#39;s control hosting code</span>
-    <span class="c1"># by registering the &quot;AtlAxWin&quot; window class so that this window</span>
+    <span class="c1"># calling AtlAxWinInit initializes ATL's control hosting code</span>
+    <span class="c1"># by registering the "AtlAxWin" window class so that this window</span>
     <span class="c1"># class is available to the CreateWindowExW function</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="n">atl</span><span class="o">.</span><span class="n">AtlAxWinInit</span><span class="p">():</span>
-        <span class="n">msg</span> <span class="o">=</span> <span class="s2">&quot;Cannot register the &#39;AtlAxWin&#39; window class&quot;</span>
+        <span class="n">msg</span> <span class="o">=</span> <span class="s2">"Cannot register the 'AtlAxWin' window class"</span>
         <span class="k">raise</span> <span class="ne">OSError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
 </code></pre></div></td></tr></table></div>
                   </details>
@@ -3783,7 +3783,7 @@ for more details about the input arguments to the <code>handler</code>.</p>
 <span class="normal">1061</span>
 <span class="normal">1062</span>
 <span class="normal">1063</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">add_message_handler</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">handler</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">],</span> <span class="kc">None</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Add a custom handler for processing window messages.</span>
+<span class="w">    </span><span class="sd">"""Add a custom handler for processing window messages.</span>
 
 <span class="sd">    Messages correspond to events from the user and from the operating system.</span>
 
@@ -3791,9 +3791,9 @@ for more details about the input arguments to the <code>handler</code>.</p>
 <span class="sd">        handler: A function that processes messages sent to the main window.</span>
 <span class="sd">            The function must accept four positional arguments (all integer values)</span>
 <span class="sd">            and the returned object is ignored. See</span>
-<span class="sd">            [WindowProc](https://learn.microsoft.com/en-us/windows/win32/learnwin32/writing-the-window-procedure){:target=&quot;_blank&quot;}</span>
+<span class="sd">            [WindowProc](https://learn.microsoft.com/en-us/windows/win32/learnwin32/writing-the-window-procedure){:target="_blank"}</span>
 <span class="sd">            for more details about the input arguments to the `handler`.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">_msg_handlers</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">handler</span><span class="p">)</span>
 </code></pre></div></td></tr></table></div>
             </details>
@@ -3822,7 +3822,7 @@ for more details about the input arguments to the <code>handler</code>.</p>
               <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1065</span>
 <span class="normal">1066</span>
 <span class="normal">1067</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">close</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Close the application.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""Close the application."""</span>
     <span class="n">user32</span><span class="o">.</span><span class="n">PostMessageW</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_hwnd</span><span class="p">,</span> <span class="n">WM_DESTROY</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
 </code></pre></div></td></tr></table></div>
             </details>
@@ -3955,7 +3955,7 @@ is used as the <code>sink</code>.</p>
 <span class="normal">1084</span>
 <span class="normal">1085</span>
 <span class="normal">1086</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">handle_events</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">source</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span> <span class="n">sink</span><span class="p">:</span> <span class="n">Any</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">interface</span><span class="p">:</span> <span class="n">Any</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Any</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Handle ActiveX events (see [GetEvents][]{:target=&quot;_blank&quot;}).</span>
+<span class="w">    </span><span class="sd">"""Handle ActiveX events (see [GetEvents][]{:target="_blank"}).</span>
 
 <span class="sd">    Args:</span>
 <span class="sd">        source: An ActiveX object that emits events.</span>
@@ -3967,7 +3967,7 @@ is used as the <code>sink</code>.</p>
 
 <span class="sd">    Returns:</span>
 <span class="sd">        An `_AdviseConnection` object from `comtypes`.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="k">assert</span> <span class="n">client</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>  <span class="c1"># noqa: S101</span>
     <span class="n">cxn</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">GetEvents</span><span class="p">(</span><span class="n">source</span><span class="p">,</span> <span class="n">sink</span> <span class="ow">or</span> <span class="bp">self</span><span class="p">,</span> <span class="n">interface</span><span class="o">=</span><span class="n">interface</span><span class="p">)</span>  <span class="c1"># pyright: ignore[reportUnknownMemberType,reportUnknownVariableType]</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">_events</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">cxn</span><span class="p">)</span>
@@ -4256,7 +4256,7 @@ the ActiveX object. Can be any combination (bitwise OR) of
     <span class="n">style</span><span class="p">:</span> <span class="n">WindowStyle</span> <span class="o">=</span> <span class="n">WindowStyle</span><span class="o">.</span><span class="n">VISIBLE</span> <span class="o">|</span> <span class="n">WindowStyle</span><span class="o">.</span><span class="n">CHILD</span><span class="p">,</span>
     <span class="n">ex_style</span><span class="p">:</span> <span class="n">ExtendedWindowStyle</span> <span class="o">=</span> <span class="n">ExtendedWindowStyle</span><span class="o">.</span><span class="n">LEFT</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Any</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Load an ActiveX library.</span>
+<span class="w">    </span><span class="sd">"""Load an ActiveX library.</span>
 
 <span class="sd">    Args:</span>
 <span class="sd">        activex_id: ProgID or CLSID of the ActiveX object.</span>
@@ -4275,9 +4275,9 @@ the ActiveX object. Can be any combination (bitwise OR) of
 
 <span class="sd">    Returns:</span>
 <span class="sd">        The interface pointer to the ActiveX library.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="k">if</span> <span class="n">comtypes</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">msg</span> <span class="o">=</span> <span class="s2">&quot;comtypes must be installed to load an ActiveX library&quot;</span>
+        <span class="n">msg</span> <span class="o">=</span> <span class="s2">"comtypes must be installed to load an ActiveX library"</span>
         <span class="k">raise</span> <span class="ne">OSError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
 
     <span class="k">try</span><span class="p">:</span>
@@ -4286,14 +4286,14 @@ the ActiveX object. Can be any combination (bitwise OR) of
         <span class="n">window_name</span> <span class="o">=</span> <span class="kc">None</span>
 
     <span class="k">if</span> <span class="ow">not</span> <span class="n">window_name</span><span class="p">:</span>
-        <span class="n">msg</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;Cannot find an ActiveX library with ID </span><span class="si">{</span><span class="n">activex_id</span><span class="si">!r}</span><span class="s2">&quot;</span>
+        <span class="n">msg</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">"Cannot find an ActiveX library with ID </span><span class="si">{</span><span class="n">activex_id</span><span class="si">!r}</span><span class="s2">"</span>
         <span class="k">raise</span> <span class="ne">OSError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
 
     <span class="k">if</span> <span class="n">parent</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">parent</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_hwnd</span>
 
     <span class="n">hwnd</span> <span class="o">=</span> <span class="n">_create_window</span><span class="p">(</span>
-        <span class="n">class_name</span><span class="o">=</span><span class="s2">&quot;AtlAxWin&quot;</span><span class="p">,</span>
+        <span class="n">class_name</span><span class="o">=</span><span class="s2">"AtlAxWin"</span><span class="p">,</span>
         <span class="n">window_name</span><span class="o">=</span><span class="n">window_name</span><span class="p">,</span>
         <span class="n">style</span><span class="o">=</span><span class="n">style</span><span class="p">,</span>
         <span class="n">ex_style</span><span class="o">=</span><span class="n">ex_style</span><span class="p">,</span>
@@ -4308,7 +4308,7 @@ the ActiveX object. Can be any combination (bitwise OR) of
     <span class="n">unknown</span> <span class="o">=</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">POINTER</span><span class="p">(</span><span class="n">comtypes</span><span class="o">.</span><span class="n">IUnknown</span><span class="p">)()</span>  <span class="c1"># pyright: ignore[reportUnknownMemberType, reportUnknownArgumentType, reportDeprecated]</span>
     <span class="n">ret</span> <span class="o">=</span> <span class="n">atl</span><span class="o">.</span><span class="n">AtlAxGetControl</span><span class="p">(</span><span class="n">hwnd</span><span class="p">,</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">byref</span><span class="p">(</span><span class="n">unknown</span><span class="p">))</span>
     <span class="k">if</span> <span class="n">ret</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
-        <span class="n">msg</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;AtlAxGetControl </span><span class="si">{</span><span class="n">ctypes</span><span class="o">.</span><span class="n">WinError</span><span class="p">()</span><span class="si">}</span><span class="s2">&quot;</span>
+        <span class="n">msg</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">"AtlAxGetControl </span><span class="si">{</span><span class="n">ctypes</span><span class="o">.</span><span class="n">WinError</span><span class="p">()</span><span class="si">}</span><span class="s2">"</span>
         <span class="k">raise</span> <span class="ne">OSError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
     <span class="k">assert</span> <span class="n">client</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>  <span class="c1"># noqa: S101</span>
     <span class="k">return</span> <span class="n">client</span><span class="o">.</span><span class="n">GetBestInterface</span><span class="p">(</span><span class="n">unknown</span><span class="p">)</span>  <span class="c1"># pyright: ignore[reportUnknownMemberType,reportUnknownVariableType]</span>
@@ -4335,8 +4335,8 @@ the ActiveX object. Can be any combination (bitwise OR) of
     <span class="n">hwnd</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="n">language_id</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
     <span class="n">options</span><span class="o">=</span><span class="n">MessageBoxOption</span><span class="o">.</span><span class="n">OK</span><span class="p">,</span>
-    <span class="n">text</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span>
-    <span class="n">title</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span>
+    <span class="n">text</span><span class="o">=</span><span class="s2">""</span><span class="p">,</span>
+    <span class="n">title</span><span class="o">=</span><span class="s2">""</span><span class="p">,</span>
 <span class="p">)</span>
 </code></pre></div>
 
@@ -4497,10 +4497,10 @@ the ActiveX object. Can be any combination (bitwise OR) of
     <span class="n">hwnd</span><span class="p">:</span> <span class="nb">int</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="n">language_id</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>
     <span class="n">options</span><span class="p">:</span> <span class="n">MessageBoxOption</span> <span class="o">=</span> <span class="n">MessageBoxOption</span><span class="o">.</span><span class="n">OK</span><span class="p">,</span>
-    <span class="n">text</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
-    <span class="n">title</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
+    <span class="n">text</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">""</span><span class="p">,</span>
+    <span class="n">title</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">""</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Display a modal dialog box (see [MessageBoxExW]{:target=&quot;_blank&quot;}).</span>
+<span class="w">    </span><span class="sd">"""Display a modal dialog box (see [MessageBoxExW]{:target="_blank"}).</span>
 
 <span class="sd">    [MessageBoxExW]: https://learn.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-messageboxexw</span>
 
@@ -4514,7 +4514,7 @@ the ActiveX object. Can be any combination (bitwise OR) of
 
 <span class="sd">    Returns:</span>
 <span class="sd">        An indication of how the message box was closed.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="n">ret</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">user32</span><span class="o">.</span><span class="n">MessageBoxExW</span><span class="p">(</span><span class="n">hwnd</span><span class="p">,</span> <span class="n">text</span><span class="p">,</span> <span class="n">title</span><span class="p">,</span> <span class="n">options</span><span class="p">,</span> <span class="n">language_id</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">ret</span>
 </code></pre></div></td></tr></table></div>
@@ -4562,11 +4562,11 @@ thread if you want to execute other code while the application is running.</p>
 <span class="normal">1206</span>
 <span class="normal">1207</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nd">@staticmethod</span>
 <span class="k">def</span><span class="w"> </span><span class="nf">run</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Run the application.</span>
+<span class="w">    </span><span class="sd">"""Run the application.</span>
 
 <span class="sd">    This is a blocking call. Create and run the application in a separate</span>
 <span class="sd">    thread if you want to execute other code while the application is running.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="n">msg</span> <span class="o">=</span> <span class="n">wt</span><span class="o">.</span><span class="n">MSG</span><span class="p">()</span>
     <span class="k">try</span><span class="p">:</span>
         <span class="k">while</span> <span class="n">user32</span><span class="o">.</span><span class="n">GetMessageW</span><span class="p">(</span><span class="n">msg</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
@@ -4712,7 +4712,7 @@ thread if you want to execute other code while the application is running.</p>
 <span class="normal">1222</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">set_window_position</span><span class="p">(</span>
     <span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">y</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">width</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">height</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">flags</span><span class="p">:</span> <span class="n">WindowPosition</span> <span class="o">=</span> <span class="n">WindowPosition</span><span class="o">.</span><span class="n">NONE</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Set the position of the main window.</span>
+<span class="w">    </span><span class="sd">"""Set the position of the main window.</span>
 
 <span class="sd">    Args:</span>
 <span class="sd">        x: The new position of the left side of the window.</span>
@@ -4721,7 +4721,7 @@ thread if you want to execute other code while the application is running.</p>
 <span class="sd">        height: The new height (in pixels) of the window.</span>
 <span class="sd">        flags: The window sizing and positioning flags. Can be any combination</span>
 <span class="sd">            (bitwise OR) of [WindowPosition][msl.loadlib.activex.WindowPosition] values.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="n">user32</span><span class="o">.</span><span class="n">SetWindowPos</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_hwnd</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">width</span><span class="p">,</span> <span class="n">height</span><span class="p">,</span> <span class="n">flags</span><span class="p">)</span>
 </code></pre></div></td></tr></table></div>
             </details>
@@ -4803,12 +4803,12 @@ thread if you want to execute other code while the application is running.</p>
 <span class="normal">1230</span>
 <span class="normal">1231</span>
 <span class="normal">1232</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">set_window_size</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">width</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">height</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Set the size of the main window.</span>
+<span class="w">    </span><span class="sd">"""Set the size of the main window.</span>
 
 <span class="sd">    Args:</span>
 <span class="sd">        width: The new width (in pixels) of the window.</span>
 <span class="sd">        height: The new height (in pixels) of the window.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="c1"># SWP_NOMOVE Retains the current position (ignores X and Y parameters)</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">set_window_position</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">width</span><span class="p">,</span> <span class="n">height</span><span class="p">,</span> <span class="n">flags</span><span class="o">=</span><span class="n">WindowPosition</span><span class="o">.</span><span class="n">NOMOVE</span><span class="p">)</span>
 </code></pre></div></td></tr></table></div>
@@ -4873,11 +4873,11 @@ thread if you want to execute other code while the application is running.</p>
 <span class="normal">1238</span>
 <span class="normal">1239</span>
 <span class="normal">1240</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">set_window_title</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">title</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Set the text to display in the window&#39;s title bar.</span>
+<span class="w">    </span><span class="sd">"""Set the text to display in the window's title bar.</span>
 
 <span class="sd">    Args:</span>
 <span class="sd">        title: The title bar text.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="n">user32</span><span class="o">.</span><span class="n">SetWindowTextW</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_hwnd</span><span class="p">,</span> <span class="n">title</span><span class="p">)</span>
 </code></pre></div></td></tr></table></div>
             </details>
@@ -4943,11 +4943,11 @@ thread if you want to execute other code while the application is running.</p>
 <span class="normal">1248</span>
 <span class="normal">1249</span>
 <span class="normal">1250</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">show</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">command</span><span class="p">:</span> <span class="n">ShowWindow</span> <span class="o">=</span> <span class="n">ShowWindow</span><span class="o">.</span><span class="n">NORMAL</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Show the main application window.</span>
+<span class="w">    </span><span class="sd">"""Show the main application window.</span>
 
 <span class="sd">    Args:</span>
 <span class="sd">        command: Controls how the window is shown.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="n">user32</span><span class="o">.</span><span class="n">SetMenu</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_hwnd</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_menu</span><span class="o">.</span><span class="n">hmenu</span><span class="p">)</span>
     <span class="n">user32</span><span class="o">.</span><span class="n">ShowWindow</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_hwnd</span><span class="p">,</span> <span class="n">command</span><span class="p">)</span>
     <span class="n">user32</span><span class="o">.</span><span class="n">UpdateWindow</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_hwnd</span><span class="p">)</span>
@@ -5034,9 +5034,9 @@ the Python garbage collector) if events are still firing.</p>
 <span class="normal">1275</span>
 <span class="normal">1276</span>
 <span class="normal">1277</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">unhandle_events</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">advise_connection</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Stop handling ActiveX events.</span>
+<span class="w">    </span><span class="sd">"""Stop handling ActiveX events.</span>
 
-<span class="sd">    !!! note &quot;Added in version 1.1&quot;</span>
+<span class="sd">    !!! note "Added in version 1.1"</span>
 
 <span class="sd">    Args:</span>
 <span class="sd">        advise_connection: The event connection(s) to stop listening to. The object is one that</span>
@@ -5044,7 +5044,7 @@ the Python garbage collector) if events are still firing.</p>
 <span class="sd">            arguments are specified, stops handling all ActiveX events. It is also necessary to</span>
 <span class="sd">            delete ([del][]) the connection variable(s) in the calling program (and maybe invoke</span>
 <span class="sd">            the Python garbage collector) if events are still firing.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="n">advise_connection</span><span class="p">:</span>
         <span class="k">for</span> <span class="n">event</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_events</span><span class="p">:</span>
             <span class="n">event</span><span class="o">.</span><span class="n">disconnect</span><span class="p">()</span>
@@ -5122,13 +5122,13 @@ the Python garbage collector) if events are still firing.</p>
 <span class="normal">1286</span>
 <span class="normal">1287</span>
 <span class="normal">1288</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">wait_for_events</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">timeout</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Wait for ActiveX events to occur (see [PumpEvents][]{:target=&quot;_blank&quot;}).</span>
+<span class="w">    </span><span class="sd">"""Wait for ActiveX events to occur (see [PumpEvents][]{:target="_blank"}).</span>
 
-<span class="sd">    !!! note &quot;Added in version 1.1&quot;</span>
+<span class="sd">    !!! note "Added in version 1.1"</span>
 
 <span class="sd">    Args:</span>
 <span class="sd">        timeout: The number of seconds to wait for events to occur.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="k">assert</span> <span class="n">client</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>  <span class="c1"># noqa: S101</span>
     <span class="n">client</span><span class="o">.</span><span class="n">PumpEvents</span><span class="p">(</span><span class="n">timeout</span><span class="p">)</span>  <span class="c1"># pyright: ignore[reportUnknownMemberType]</span>
 </code></pre></div></td></tr></table></div>
@@ -5741,21 +5741,21 @@ the Python garbage collector) if events are still firing.</p>
 <span class="normal">631</span>
 <span class="normal">632</span>
 <span class="normal">633</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">file</span><span class="p">:</span> <span class="n">PathLike</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">index</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">hinstance</span><span class="p">:</span> <span class="nb">int</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Extract an icon from an executable file, DLL or icon file.</span>
+<span class="w">    </span><span class="sd">"""Extract an icon from an executable file, DLL or icon file.</span>
 
 <span class="sd">    Args:</span>
 <span class="sd">        file: The path to an executable file, DLL or icon file.</span>
 <span class="sd">        index: The zero-based index of the icon to extract.</span>
 <span class="sd">        hinstance: Handle to the instance of the calling application.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">_hicon</span><span class="p">:</span> <span class="nb">int</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
 
     <span class="k">if</span> <span class="ow">not</span> <span class="n">windll_initialised</span><span class="p">:</span>
-        <span class="n">msg</span> <span class="o">=</span> <span class="s2">&quot;Loading an icon is not supported on this platform&quot;</span>
+        <span class="n">msg</span> <span class="o">=</span> <span class="s2">"Loading an icon is not supported on this platform"</span>
         <span class="k">raise</span> <span class="ne">OSError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
 
     <span class="k">if</span> <span class="n">index</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
-        <span class="n">msg</span> <span class="o">=</span> <span class="s2">&quot;A negative index is not supported&quot;</span>
+        <span class="n">msg</span> <span class="o">=</span> <span class="s2">"A negative index is not supported"</span>
         <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
 
     <span class="k">if</span> <span class="n">hinstance</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
@@ -5827,7 +5827,7 @@ the Python garbage collector) if events are still firing.</p>
 <span class="normal">650</span>
 <span class="normal">651</span>
 <span class="normal">652</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">destroy</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Destroys the icon and frees any memory the icon occupied.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""Destroys the icon and frees any memory the icon occupied."""</span>
     <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_hicon</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">_hicon</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
         <span class="n">user32</span><span class="o">.</span><span class="n">DestroyIcon</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_hicon</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_hicon</span> <span class="o">=</span> <span class="kc">None</span>
@@ -5893,13 +5893,13 @@ property to access the menu instance.</p>
 <span class="normal">862</span>
 <span class="normal">863</span>
 <span class="normal">864</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;A menu associated with the main application window.</span>
+<span class="w">    </span><span class="sd">"""A menu associated with the main application window.</span>
 
 <span class="sd">    !!! warning</span>
 <span class="sd">        Do not instantiate directly. Use the</span>
 <span class="sd">        [Application.menu][msl.loadlib.activex.Application.menu]</span>
 <span class="sd">        property to access the menu instance.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">_hmenu</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">user32</span><span class="o">.</span><span class="n">CreateMenu</span><span class="p">()</span>
 </code></pre></div></td></tr></table></div>
                   </details>
@@ -6120,7 +6120,7 @@ combination (bitwise OR) of <a class="autorefs autorefs-internal" title="       
     <span class="n">data</span><span class="p">:</span> <span class="n">Any</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="n">flags</span><span class="p">:</span> <span class="n">MenuFlag</span> <span class="o">=</span> <span class="n">MenuFlag</span><span class="o">.</span><span class="n">STRING</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">MenuItem</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Create a new [MenuItem][msl.loadlib.activex.MenuItem] and append it to a popup menu.</span>
+<span class="w">    </span><span class="sd">"""Create a new [MenuItem][msl.loadlib.activex.MenuItem] and append it to a popup menu.</span>
 
 <span class="sd">    Args:</span>
 <span class="sd">        hmenu: The handle of a popup menu to append the new menu item to.</span>
@@ -6134,7 +6134,7 @@ combination (bitwise OR) of <a class="autorefs autorefs-internal" title="       
 
 <span class="sd">    Returns:</span>
 <span class="sd">        The menu item that was appended.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="k">return</span> <span class="n">MenuItem</span><span class="p">(</span><span class="n">hmenu</span><span class="o">=</span><span class="n">hmenu</span><span class="p">,</span> <span class="n">text</span><span class="o">=</span><span class="n">text</span><span class="p">,</span> <span class="n">callback</span><span class="o">=</span><span class="n">callback</span><span class="p">,</span> <span class="n">flags</span><span class="o">=</span><span class="n">flags</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">data</span><span class="p">)</span>
 </code></pre></div></td></tr></table></div>
             </details>
@@ -6221,16 +6221,16 @@ combination (bitwise OR) of <a class="autorefs autorefs-internal" title="       
 <span class="normal">903</span>
 <span class="normal">904</span>
 <span class="normal">905</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">append_group</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">hmenu</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">menu_group</span><span class="p">:</span> <span class="n">MenuGroup</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Append a group of menu items to a popup menu.</span>
+<span class="w">    </span><span class="sd">"""Append a group of menu items to a popup menu.</span>
 
 <span class="sd">    Args:</span>
 <span class="sd">        hmenu: The handle of a popup menu to append the group to.</span>
 <span class="sd">        menu_group: A group of menu items.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="c1"># all future item&#39;s appended to the group will have the same hmenu value</span>
+<span class="sd">    """</span>
+    <span class="c1"># all future item's appended to the group will have the same hmenu value</span>
     <span class="n">menu_group</span><span class="o">.</span><span class="n">_hmenu</span> <span class="o">=</span> <span class="n">hmenu</span>  <span class="c1"># pyright: ignore[reportPrivateUsage]  # noqa: SLF001</span>
 
-    <span class="c1"># use menu_group._items to include the group&#39;s separator&#39;s</span>
+    <span class="c1"># use menu_group._items to include the group's separator's</span>
     <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">menu_group</span><span class="o">.</span><span class="n">_items</span><span class="p">:</span>  <span class="c1"># pyright: ignore[reportPrivateUsage]  # noqa: SLF001</span>
         <span class="n">item</span><span class="o">.</span><span class="n">_hmenu</span> <span class="o">=</span> <span class="n">hmenu</span>  <span class="c1"># pyright: ignore[reportPrivateUsage]  # noqa: SLF001</span>
         <span class="n">_maybe_append_item_to_menu</span><span class="p">(</span><span class="n">item</span><span class="p">)</span>
@@ -6296,11 +6296,11 @@ combination (bitwise OR) of <a class="autorefs autorefs-internal" title="       
 <span class="normal">911</span>
 <span class="normal">912</span>
 <span class="normal">913</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">append_separator</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">hmenu</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Append a horizontal dividing line to a popup menu.</span>
+<span class="w">    </span><span class="sd">"""Append a horizontal dividing line to a popup menu.</span>
 
 <span class="sd">    Args:</span>
 <span class="sd">        hmenu: The handle to a popup menu.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="n">user32</span><span class="o">.</span><span class="n">AppendMenuW</span><span class="p">(</span><span class="n">hmenu</span><span class="p">,</span> <span class="n">MenuFlag</span><span class="o">.</span><span class="n">SEPARATOR</span><span class="p">,</span> <span class="nb">next</span><span class="p">(</span><span class="n">_id</span><span class="p">),</span> <span class="kc">None</span><span class="p">)</span>
 </code></pre></div></td></tr></table></div>
             </details>
@@ -6393,14 +6393,14 @@ combination (bitwise OR) of <a class="autorefs autorefs-internal" title="       
 <span class="normal">925</span>
 <span class="normal">926</span>
 <span class="normal">927</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">create</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">text</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Create a new popup menu and append it to the main menu.</span>
+<span class="w">    </span><span class="sd">"""Create a new popup menu and append it to the main menu.</span>
 
 <span class="sd">    Args:</span>
 <span class="sd">        text: The text to display for the popup menu.</span>
 
 <span class="sd">    Returns:</span>
 <span class="sd">        The handle to the popup menu that was created.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="n">flags</span> <span class="o">=</span> <span class="n">MenuFlag</span><span class="o">.</span><span class="n">STRING</span> <span class="o">|</span> <span class="n">MenuFlag</span><span class="o">.</span><span class="n">POPUP</span>
     <span class="n">h</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">user32</span><span class="o">.</span><span class="n">CreatePopupMenu</span><span class="p">()</span>
     <span class="n">user32</span><span class="o">.</span><span class="n">AppendMenuW</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_hmenu</span><span class="p">,</span> <span class="n">flags</span><span class="p">,</span> <span class="n">h</span><span class="p">,</span> <span class="n">text</span><span class="p">)</span>
@@ -6622,7 +6622,7 @@ combination (bitwise OR) of <a class="autorefs autorefs-internal" title="       
 
 
 <a href="#msl.loadlib.activex.MenuGroup" class="headerlink" title="Permanent link">¤</a></h2>
-<div class="doc-signature highlight"><pre><span></span><code><span class="nf">MenuGroup</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
+<div class="doc-signature highlight"><pre><span></span><code><span class="nf">MenuGroup</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s1">''</span><span class="p">)</span>
 </code></pre></div>
 
     <div class="doc doc-contents ">
@@ -6685,15 +6685,15 @@ that a particular item is selected.</p>
 <span class="normal">757</span>
 <span class="normal">758</span>
 <span class="normal">759</span>
-<span class="normal">760</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;A group of [MenuItem][msl.loadlib.activex.MenuItem]s.</span>
+<span class="normal">760</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">""</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">"""A group of [MenuItem][msl.loadlib.activex.MenuItem]s.</span>
 
 <span class="sd">    Only one item in the group may have a check mark to indicate</span>
 <span class="sd">    that a particular item is selected.</span>
 
 <span class="sd">    Args:</span>
 <span class="sd">        name: A name to associate with the group.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">_name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">name</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">_items</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">MenuItem</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">_hmenu</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>
@@ -6946,7 +6946,7 @@ combination (bitwise OR) of <a class="autorefs autorefs-internal" title="       
     <span class="n">data</span><span class="p">:</span> <span class="n">Any</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="n">flags</span><span class="p">:</span> <span class="n">MenuFlag</span> <span class="o">=</span> <span class="n">MenuFlag</span><span class="o">.</span><span class="n">STRING</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">MenuItem</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Create a new [MenuItem][msl.loadlib.activex.MenuItem] and append it to the group.</span>
+<span class="w">    </span><span class="sd">"""Create a new [MenuItem][msl.loadlib.activex.MenuItem] and append it to the group.</span>
 
 <span class="sd">    Args:</span>
 <span class="sd">        text: The content of the new menu item.</span>
@@ -6959,7 +6959,7 @@ combination (bitwise OR) of <a class="autorefs autorefs-internal" title="       
 
 <span class="sd">    Returns:</span>
 <span class="sd">        The menu item that was appended to the group.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="n">item</span> <span class="o">=</span> <span class="n">MenuItem</span><span class="p">(</span><span class="n">hmenu</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_hmenu</span><span class="p">,</span> <span class="n">text</span><span class="o">=</span><span class="n">text</span><span class="p">,</span> <span class="n">callback</span><span class="o">=</span><span class="n">callback</span><span class="p">,</span> <span class="n">flags</span><span class="o">=</span><span class="n">flags</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">data</span><span class="p">)</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">_items</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">item</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">item</span>
@@ -6990,7 +6990,7 @@ combination (bitwise OR) of <a class="autorefs autorefs-internal" title="       
               <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">818</span>
 <span class="normal">819</span>
 <span class="normal">820</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">append_separator</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Append a horizontal dividing line to the group.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""Append a horizontal dividing line to the group."""</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">_items</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">MenuItem</span><span class="p">(</span><span class="n">hmenu</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_hmenu</span><span class="p">,</span> <span class="n">text</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">callback</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">flags</span><span class="o">=</span><span class="n">MenuFlag</span><span class="o">.</span><span class="n">SEPARATOR</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="kc">None</span><span class="p">))</span>
 </code></pre></div></td></tr></table></div>
             </details>
@@ -7062,24 +7062,24 @@ to create a new menu item.</p>
 <span class="normal">676</span>
 <span class="normal">677</span>
 <span class="normal">678</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;A menu item that belongs to a popup menu.</span>
+<span class="w">    </span><span class="sd">"""A menu item that belongs to a popup menu.</span>
 
 <span class="sd">    !!! warning</span>
 <span class="sd">        Do not instantiate this class directly. Use</span>
 <span class="sd">        [MenuGroup.append][msl.loadlib.activex.MenuGroup.append]</span>
 <span class="sd">        or [Menu.append][msl.loadlib.activex.Menu.append]</span>
 <span class="sd">        to create a new menu item.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">_id</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="nb">next</span><span class="p">(</span><span class="n">_id</span><span class="p">)</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">_checked</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>
 
-    <span class="bp">self</span><span class="o">.</span><span class="n">_hmenu</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s2">&quot;hmenu&quot;</span><span class="p">]</span>
-    <span class="bp">self</span><span class="o">.</span><span class="n">_text</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s2">&quot;text&quot;</span><span class="p">]</span>
-    <span class="bp">self</span><span class="o">.</span><span class="n">_callback</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[</span><span class="n">MenuItem</span><span class="p">],</span> <span class="kc">None</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s2">&quot;callback&quot;</span><span class="p">]</span>
-    <span class="bp">self</span><span class="o">.</span><span class="n">_flags</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s2">&quot;flags&quot;</span><span class="p">]</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">_hmenu</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s2">"hmenu"</span><span class="p">]</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">_text</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s2">"text"</span><span class="p">]</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">_callback</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[</span><span class="n">MenuItem</span><span class="p">],</span> <span class="kc">None</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s2">"callback"</span><span class="p">]</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">_flags</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s2">"flags"</span><span class="p">]</span>
 
-    <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">:</span> <span class="n">Any</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;[Any][typing.Any] &amp;mdash; User-defined data associated with the menu item.&quot;&quot;&quot;</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">:</span> <span class="n">Any</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s2">"data"</span><span class="p">]</span>
+<span class="w">    </span><span class="sd">"""[Any][typing.Any] &amp;mdash; User-defined data associated with the menu item."""</span>
 
     <span class="n">_maybe_append_item_to_menu</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
 </code></pre></div></td></tr></table></div>

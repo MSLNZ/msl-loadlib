@@ -2505,14 +2505,14 @@ instance of this class is created within a 64-bit Python interpreter.</p>
 <span class="normal">25</span>
 <span class="normal">26</span>
 <span class="normal">27</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Communicates with a 32-bit C++ library via the server running [Cpp32][].</span>
+<span class="w">    </span><span class="sd">"""Communicates with a 32-bit C++ library via the server running [Cpp32][].</span>
 
 <span class="sd">    This class demonstrates how to communicate with a 32-bit C++ library if an</span>
 <span class="sd">    instance of this class is created within a 64-bit Python interpreter.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="c1"># specify the name of the corresponding 32-bit server module, cpp32,</span>
     <span class="c1"># which hosts the 32-bit C++ library -- cpp_lib32.</span>
-    <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="s2">&quot;cpp32&quot;</span><span class="p">,</span> <span class="n">append_sys_path</span><span class="o">=</span><span class="n">Path</span><span class="p">(</span><span class="vm">__file__</span><span class="p">)</span><span class="o">.</span><span class="n">parent</span><span class="p">)</span>
+    <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="s2">"cpp32"</span><span class="p">,</span> <span class="n">append_sys_path</span><span class="o">=</span><span class="n">Path</span><span class="p">(</span><span class="vm">__file__</span><span class="p">)</span><span class="o">.</span><span class="n">parent</span><span class="p">)</span>
 </code></pre></div></td></tr></table></div>
                   </details>
 
@@ -2632,7 +2632,7 @@ instance of this class is created within a 64-bit Python interpreter.</p>
 <span class="normal">40</span>
 <span class="normal">41</span>
 <span class="normal">42</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">add</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">a</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">b</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Add two integers.</span>
+<span class="w">    </span><span class="sd">"""Add two integers.</span>
 
 <span class="sd">    See the corresponding [Cpp32.add][msl.examples.loadlib.cpp32.Cpp32.add] method.</span>
 
@@ -2642,8 +2642,8 @@ instance of this class is created within a 64-bit Python interpreter.</p>
 
 <span class="sd">    Returns:</span>
 <span class="sd">        The sum, `a + b`.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">reply</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">request32</span><span class="p">(</span><span class="s2">&quot;add&quot;</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">)</span>
+<span class="sd">    """</span>
+    <span class="n">reply</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">request32</span><span class="p">(</span><span class="s2">"add"</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">reply</span>
 </code></pre></div></td></tr></table></div>
             </details>
@@ -2771,7 +2771,7 @@ instance of this class is created within a 64-bit Python interpreter.</p>
 <span class="normal">71</span>
 <span class="normal">72</span>
 <span class="normal">73</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">add_or_subtract</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">a</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">b</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">do_addition</span><span class="p">:</span> <span class="nb">bool</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Add or subtract two floating-point numbers *(&#39;double&#39; refers to the C++ data type)*.</span>
+<span class="w">    </span><span class="sd">"""Add or subtract two floating-point numbers *('double' refers to the C++ data type)*.</span>
 
 <span class="sd">    See the corresponding [Cpp32.add_or_subtract][msl.examples.loadlib.cpp32.Cpp32.add_or_subtract] method.</span>
 
@@ -2782,8 +2782,8 @@ instance of this class is created within a 64-bit Python interpreter.</p>
 
 <span class="sd">    Returns:</span>
 <span class="sd">        `a + b` if `do_addition` is `True` else `a - b`.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">reply</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">request32</span><span class="p">(</span><span class="s2">&quot;add_or_subtract&quot;</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">do_addition</span><span class="o">=</span><span class="n">do_addition</span><span class="p">)</span>
+<span class="sd">    """</span>
+    <span class="n">reply</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">request32</span><span class="p">(</span><span class="s2">"add_or_subtract"</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">do_addition</span><span class="o">=</span><span class="n">do_addition</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">reply</span>
 </code></pre></div></td></tr></table></div>
             </details>
@@ -2897,7 +2897,7 @@ instance of this class is created within a 64-bit Python interpreter.</p>
 <span class="normal">155</span>
 <span class="normal">156</span>
 <span class="normal">157</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">circumference</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">radius</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">n</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Estimates the circumference of a circle.</span>
+<span class="w">    </span><span class="sd">"""Estimates the circumference of a circle.</span>
 
 <span class="sd">    This method calls the `distance_n_points` function in [cpp_lib][cpp-lib].</span>
 
@@ -2909,8 +2909,8 @@ instance of this class is created within a 64-bit Python interpreter.</p>
 
 <span class="sd">    Returns:</span>
 <span class="sd">        The estimated circumference of the circle.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">reply</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">request32</span><span class="p">(</span><span class="s2">&quot;circumference&quot;</span><span class="p">,</span> <span class="n">radius</span><span class="p">,</span> <span class="n">n</span><span class="p">)</span>
+<span class="sd">    """</span>
+    <span class="n">reply</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">request32</span><span class="p">(</span><span class="s2">"circumference"</span><span class="p">,</span> <span class="n">radius</span><span class="p">,</span> <span class="n">n</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">reply</span>
 </code></pre></div></td></tr></table></div>
             </details>
@@ -3012,21 +3012,21 @@ can load the <a class="autorefs autorefs-external" href="https://docs.python.org
 <span class="normal">138</span>
 <span class="normal">139</span>
 <span class="normal">140</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">distance_4_points</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">points</span><span class="p">:</span> <span class="n">FourPoints</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Calculates the total distance connecting 4 [Point][msl.examples.loadlib.cpp32.Point]s.</span>
+<span class="w">    </span><span class="sd">"""Calculates the total distance connecting 4 [Point][msl.examples.loadlib.cpp32.Point]s.</span>
 
 <span class="sd">    See the corresponding [Cpp32.distance_4_points][msl.examples.loadlib.cpp32.Cpp32.distance_4_points] method.</span>
 
 <span class="sd">    Args:</span>
 <span class="sd">        points: The points to use to calculate the total distance.</span>
 <span class="sd">            Since `points` is a struct that is a fixed size we can pass the</span>
-<span class="sd">            [ctypes.Structure][]{:target=&quot;_blank&quot;} object directly from 64-bit Python to</span>
-<span class="sd">            the 32-bit Python. The [ctypes][]{:target=&quot;_blank&quot;} module on the 32-bit server</span>
-<span class="sd">            can load the [pickle][]{:target=&quot;_blank&quot;}d [ctypes.Structure][]{:target=&quot;_blank&quot;}.</span>
+<span class="sd">            [ctypes.Structure][]{:target="_blank"} object directly from 64-bit Python to</span>
+<span class="sd">            the 32-bit Python. The [ctypes][]{:target="_blank"} module on the 32-bit server</span>
+<span class="sd">            can load the [pickle][]{:target="_blank"}d [ctypes.Structure][]{:target="_blank"}.</span>
 
 <span class="sd">    Returns:</span>
 <span class="sd">        The total distance connecting the 4 points.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">reply</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">request32</span><span class="p">(</span><span class="s2">&quot;distance_4_points&quot;</span><span class="p">,</span> <span class="n">points</span><span class="p">)</span>
+<span class="sd">    """</span>
+    <span class="n">reply</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">request32</span><span class="p">(</span><span class="s2">"distance_4_points"</span><span class="p">,</span> <span class="n">points</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">reply</span>
 </code></pre></div></td></tr></table></div>
             </details>
@@ -3125,7 +3125,7 @@ and passes the string to C++.</p>
 <span class="normal">103</span>
 <span class="normal">104</span>
 <span class="normal">105</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">reverse_string_v1</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">original</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Reverse a string (version 1).</span>
+<span class="w">    </span><span class="sd">"""Reverse a string (version 1).</span>
 
 <span class="sd">    In this method Python allocates the memory for the reversed string</span>
 <span class="sd">    and passes the string to C++.</span>
@@ -3137,8 +3137,8 @@ and passes the string to C++.</p>
 
 <span class="sd">    Returns:</span>
 <span class="sd">        The string reversed.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">reply</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">request32</span><span class="p">(</span><span class="s2">&quot;reverse_string_v1&quot;</span><span class="p">,</span> <span class="n">original</span><span class="p">)</span>
+<span class="sd">    """</span>
+    <span class="n">reply</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">request32</span><span class="p">(</span><span class="s2">"reverse_string_v1"</span><span class="p">,</span> <span class="n">original</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">reply</span>
 </code></pre></div></td></tr></table></div>
             </details>
@@ -3237,7 +3237,7 @@ the string to Python.</p>
 <span class="normal">120</span>
 <span class="normal">121</span>
 <span class="normal">122</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">reverse_string_v2</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">original</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Reverse a string (version 2).</span>
+<span class="w">    </span><span class="sd">"""Reverse a string (version 2).</span>
 
 <span class="sd">    In this method C++ allocates the memory for the reversed string and passes</span>
 <span class="sd">    the string to Python.</span>
@@ -3249,8 +3249,8 @@ the string to Python.</p>
 
 <span class="sd">    Returns:</span>
 <span class="sd">        The string reversed.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">reply</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">request32</span><span class="p">(</span><span class="s2">&quot;reverse_string_v2&quot;</span><span class="p">,</span> <span class="n">original</span><span class="p">)</span>
+<span class="sd">    """</span>
+    <span class="n">reply</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">request32</span><span class="p">(</span><span class="s2">"reverse_string_v2"</span><span class="p">,</span> <span class="n">original</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">reply</span>
 </code></pre></div></td></tr></table></div>
             </details>
@@ -3361,7 +3361,7 @@ the string to Python.</p>
 <span class="normal">86</span>
 <span class="normal">87</span>
 <span class="normal">88</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">scalar_multiply</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">a</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">xin</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">float</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">float</span><span class="p">]:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Multiply each element in an array by a number.</span>
+<span class="w">    </span><span class="sd">"""Multiply each element in an array by a number.</span>
 
 <span class="sd">    See the corresponding [Cpp32.scalar_multiply][msl.examples.loadlib.cpp32.Cpp32.scalar_multiply] method.</span>
 
@@ -3371,8 +3371,8 @@ the string to Python.</p>
 
 <span class="sd">    Returns:</span>
 <span class="sd">        A new array with each element in `xin` multiplied by `a`.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">reply</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">request32</span><span class="p">(</span><span class="s2">&quot;scalar_multiply&quot;</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">xin</span><span class="p">)</span>
+<span class="sd">    """</span>
+    <span class="n">reply</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">request32</span><span class="p">(</span><span class="s2">"scalar_multiply"</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">xin</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">reply</span>
 </code></pre></div></td></tr></table></div>
             </details>
@@ -3483,7 +3483,7 @@ the string to Python.</p>
 <span class="normal">55</span>
 <span class="normal">56</span>
 <span class="normal">57</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">subtract</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">a</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">b</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Subtract two floating-point numbers *(&#39;float&#39; refers to the C++ data type)*.</span>
+<span class="w">    </span><span class="sd">"""Subtract two floating-point numbers *('float' refers to the C++ data type)*.</span>
 
 <span class="sd">    See the corresponding [Cpp32.subtract][msl.examples.loadlib.cpp32.Cpp32.subtract] method.</span>
 
@@ -3493,8 +3493,8 @@ the string to Python.</p>
 
 <span class="sd">    Returns:</span>
 <span class="sd">        The difference, `a - b`.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">reply</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">request32</span><span class="p">(</span><span class="s2">&quot;subtract&quot;</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">)</span>
+<span class="sd">    """</span>
+    <span class="n">reply</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">request32</span><span class="p">(</span><span class="s2">"subtract"</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">reply</span>
 </code></pre></div></td></tr></table></div>
             </details>

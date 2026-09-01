@@ -2284,7 +2284,7 @@
 
 <div class="highlight"><pre><span></span><code><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">msl.loadlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">LoadLibrary</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">msl.examples.loadlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">EXAMPLES_DIR</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">cpp</span> <span class="o">=</span> <span class="n">LoadLibrary</span><span class="p">(</span><span class="n">EXAMPLES_DIR</span> <span class="o">/</span> <span class="s2">&quot;cpp_lib64&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">cpp</span> <span class="o">=</span> <span class="n">LoadLibrary</span><span class="p">(</span><span class="n">EXAMPLES_DIR</span> <span class="o">/</span> <span class="s2">"cpp_lib64"</span><span class="p">)</span>
 </code></pre></div>
 <p>By default, <a class="autorefs autorefs-external" href="https://docs.python.org/3/library/ctypes.html#module-ctypes" target="_blank">ctypes</a> treats all input argument types and the return type of a library function to be a <a class="autorefs autorefs-external" href="https://docs.python.org/3/library/ctypes.html#ctypes.c_int" target="_blank">c_int</a>. Therefore, the <a class="autorefs autorefs-external" href="https://docs.python.org/3/library/ctypes.html#ctypes-specifying-required-argument-types" target="_blank">argtypes</a> and the <a class="autorefs autorefs-external" href="https://docs.python.org/3/library/ctypes.html#ctypes-return-types" target="_blank">restype</a> should be defined for each function in the library. A few examples for the <a class="autorefs autorefs-internal" title="C++ Source Code" href="#cpp-lib">C++ library</a> are shown below</p>
 <div class="highlight"><pre><span></span><code><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">ctypes</span><span class="w"> </span><span class="kn">import</span> <span class="n">c_char_p</span><span class="p">,</span> <span class="n">c_float</span><span class="p">,</span> <span class="n">c_int32</span>
@@ -2303,11 +2303,11 @@
 </code></pre></div>
 <p>Call the <code>reverse_string_v1</code> function to reverse the characters in a byte string. Python manages the memory of the reversed sting by creating a string buffer of the necessary length</p>
 <div class="highlight"><pre><span></span><code><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">ctypes</span><span class="w"> </span><span class="kn">import</span> <span class="n">create_string_buffer</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">original</span> <span class="o">=</span> <span class="sa">b</span><span class="s2">&quot;olleh&quot;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">original</span> <span class="o">=</span> <span class="sa">b</span><span class="s2">"olleh"</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">reverse</span> <span class="o">=</span> <span class="n">create_string_buffer</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">original</span><span class="p">))</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">cpp</span><span class="o">.</span><span class="n">lib</span><span class="o">.</span><span class="n">reverse_string_v1</span><span class="p">(</span><span class="n">original</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">original</span><span class="p">),</span> <span class="n">reverse</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">reverse</span><span class="o">.</span><span class="n">raw</span><span class="o">.</span><span class="n">decode</span><span class="p">()</span>
-<span class="go">&#39;hello&#39;</span>
+<span class="go">'hello'</span>
 </code></pre></div>
 <h2 id="cpp-lib">C++ Source Code<a class="headerlink" href="#cpp-lib" title="Permanent link">¤</a></h2>
 <details class="example">
@@ -2322,7 +2322,7 @@
 <span class="c1">//   g++ cpp_lib.cpp -fPIC -shared -Bstatic -Wall -o cpp_lib64.so</span>
 <span class="c1">//</span>
 <span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;math.h&gt;</span>
-<span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;cpp_lib.h&quot;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">"cpp_lib.h"</span>
 
 <span class="kt">int</span><span class="w"> </span><span class="nf">add</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">a</span><span class="p">,</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">b</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
 <span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">a</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">b</span><span class="p">;</span>
@@ -2396,9 +2396,9 @@
 <span class="w">    </span><span class="cp">#define EXPORT __declspec(dllexport)</span>
 <span class="cp">#elif defined(__GNUC__)</span>
 <span class="w">    </span><span class="c1">// G++</span>
-<span class="w">    </span><span class="cp">#define EXPORT __attribute__((visibility(&quot;default&quot;)))</span>
+<span class="w">    </span><span class="cp">#define EXPORT __attribute__((visibility("default")))</span>
 <span class="cp">#else</span>
-<span class="cp">#   error &quot;Unknown EXPORT semantics&quot;</span>
+<span class="cp">#   error "Unknown EXPORT semantics"</span>
 <span class="cp">#endif</span>
 
 <span class="k">struct</span><span class="w"> </span><span class="nc">Point</span><span class="w"> </span><span class="p">{</span>
@@ -2415,7 +2415,7 @@
 <span class="w">    </span><span class="n">Point</span><span class="w"> </span><span class="o">*</span><span class="n">points</span><span class="p">;</span>
 <span class="p">};</span>
 
-<span class="k">extern</span><span class="w"> </span><span class="s">&quot;C&quot;</span><span class="w"> </span><span class="p">{</span>
+<span class="k">extern</span><span class="w"> </span><span class="s">"C"</span><span class="w"> </span><span class="p">{</span>
 
 <span class="w">    </span><span class="c1">// a + b</span>
 <span class="w">    </span><span class="n">EXPORT</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">add</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">a</span><span class="p">,</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">b</span><span class="p">);</span>
@@ -2426,7 +2426,7 @@
 <span class="w">    </span><span class="c1">// IF do_addition IS TRUE THEN a + b ELSE a - b</span>
 <span class="w">    </span><span class="n">EXPORT</span><span class="w"> </span><span class="kt">double</span><span class="w"> </span><span class="n">add_or_subtract</span><span class="p">(</span><span class="kt">double</span><span class="w"> </span><span class="n">a</span><span class="p">,</span><span class="w"> </span><span class="kt">double</span><span class="w"> </span><span class="n">b</span><span class="p">,</span><span class="w"> </span><span class="kt">bool</span><span class="w"> </span><span class="n">do_addition</span><span class="p">);</span>
 
-<span class="w">    </span><span class="c1">// multiply each element in &#39;x&#39; by &#39;a&#39;</span>
+<span class="w">    </span><span class="c1">// multiply each element in 'x' by 'a'</span>
 <span class="w">    </span><span class="n">EXPORT</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="n">scalar_multiply</span><span class="p">(</span><span class="kt">double</span><span class="w"> </span><span class="n">a</span><span class="p">,</span><span class="w"> </span><span class="kt">double</span><span class="o">*</span><span class="w"> </span><span class="n">xin</span><span class="p">,</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">n</span><span class="p">,</span><span class="w"> </span><span class="kt">double</span><span class="o">*</span><span class="w"> </span><span class="n">xout</span><span class="p">);</span>
 
 <span class="w">    </span><span class="c1">// reverse a string</span>

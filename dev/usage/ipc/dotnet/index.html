@@ -2325,12 +2325,12 @@
 <p>To configure <code>pythonnet</code> to use the .NET Core runtime, you must either run</p>
 <div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">pythonnet</span><span class="w"> </span><span class="kn">import</span> <span class="n">load</span>
 
-<span class="n">load</span><span class="p">(</span><span class="s2">&quot;coreclr&quot;</span><span class="p">)</span>
+<span class="n">load</span><span class="p">(</span><span class="s2">"coreclr"</span><span class="p">)</span>
 </code></pre></div>
 <p>or define a <code>PYTHONNET_RUNTIME=coreclr</code> environment variable, e.g.,</p>
 <div class="highlight"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
 
-<span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">&quot;PYTHONNET_RUNTIME&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;coreclr&quot;</span>
+<span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">"PYTHONNET_RUNTIME"</span><span class="p">]</span> <span class="o">=</span> <span class="s2">"coreclr"</span>
 </code></pre></div>
 <p>before <a class="autorefs autorefs-external" href="https://docs.python.org/3/library/functions.html#super" target="_blank">super()</a> is called in the <a class="autorefs autorefs-internal" href="../../../api/server32/#server32">Server32</a> subclass. To use the Mono runtime, replace <code>"coreclr"</code> with <code>"mono"</code>.</p>
 </details>
@@ -2379,20 +2379,20 @@
 <h2 id="ipc-dotnet-strings">Strings<a class="headerlink" href="#ipc-dotnet-strings" title="Permanent link">¤</a></h2>
 <p>Get the names of the classes in the .NET library module, see <a class="autorefs autorefs-internal" title="            get_class_names" href="../../../examples/dotnet64/#msl.examples.loadlib.dotnet64.DotNet64.get_class_names">DotNet64.get_class_names</a></p>
 <div class="highlight"><pre><span></span><code><span class="gp">&gt;&gt;&gt; </span><span class="n">dn</span><span class="o">.</span><span class="n">get_class_names</span><span class="p">()</span>
-<span class="go">[&#39;StringManipulation&#39;, &#39;StaticClass&#39;, &#39;DotNetMSL.BasicMath&#39;, &#39;DotNetMSL.ArrayManipulation&#39;]</span>
+<span class="go">['StringManipulation', 'StaticClass', 'DotNetMSL.BasicMath', 'DotNetMSL.ArrayManipulation']</span>
 </code></pre></div>
 <p>Reverse a string, see <a class="autorefs autorefs-internal" title="            reverse_string" href="../../../examples/dotnet64/#msl.examples.loadlib.dotnet64.DotNet64.reverse_string">DotNet64.reverse_string</a></p>
-<div class="highlight"><pre><span></span><code><span class="gp">&gt;&gt;&gt; </span><span class="n">dn</span><span class="o">.</span><span class="n">reverse_string</span><span class="p">(</span><span class="s2">&quot;New Zealand&quot;</span><span class="p">)</span>
-<span class="go">&#39;dnalaeZ weN&#39;</span>
+<div class="highlight"><pre><span></span><code><span class="gp">&gt;&gt;&gt; </span><span class="n">dn</span><span class="o">.</span><span class="n">reverse_string</span><span class="p">(</span><span class="s2">"New Zealand"</span><span class="p">)</span>
+<span class="go">'dnalaeZ weN'</span>
 </code></pre></div>
 <h2 id="ipc-dotnet-static">Static Class<a class="headerlink" href="#ipc-dotnet-static" title="Permanent link">¤</a></h2>
 <p>Call the static methods in the <code>StaticClass</code> class</p>
 <div class="highlight"><pre><span></span><code><span class="gp">&gt;&gt;&gt; </span><span class="n">dn</span><span class="o">.</span><span class="n">add_multiple</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">)</span>
 <span class="go">15</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">dn</span><span class="o">.</span><span class="n">concatenate</span><span class="p">(</span><span class="s2">&quot;the&quot;</span><span class="p">,</span> <span class="s2">&quot; experiment&quot;</span><span class="p">,</span> <span class="s2">&quot; worked&quot;</span><span class="p">,</span> <span class="kc">False</span><span class="p">,</span> <span class="s2">&quot; temporarily&quot;</span><span class="p">)</span>
-<span class="go">&#39;the experiment worked&#39;</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">dn</span><span class="o">.</span><span class="n">concatenate</span><span class="p">(</span><span class="s2">&quot;the&quot;</span><span class="p">,</span> <span class="s2">&quot; experiment&quot;</span><span class="p">,</span> <span class="s2">&quot; worked&quot;</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="s2">&quot; temporarily&quot;</span><span class="p">)</span>
-<span class="go">&#39;the experiment worked temporarily&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">dn</span><span class="o">.</span><span class="n">concatenate</span><span class="p">(</span><span class="s2">"the"</span><span class="p">,</span> <span class="s2">" experiment"</span><span class="p">,</span> <span class="s2">" worked"</span><span class="p">,</span> <span class="kc">False</span><span class="p">,</span> <span class="s2">" temporarily"</span><span class="p">)</span>
+<span class="go">'the experiment worked'</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">dn</span><span class="o">.</span><span class="n">concatenate</span><span class="p">(</span><span class="s2">"the"</span><span class="p">,</span> <span class="s2">" experiment"</span><span class="p">,</span> <span class="s2">" worked"</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="s2">" temporarily"</span><span class="p">)</span>
+<span class="go">'the experiment worked temporarily'</span>
 </code></pre></div>
 <p>You have access to the server's <code>stdout</code> and <code>stderr</code> streams when you shut down the server</p>
 <div class="highlight"><pre><span></span><code><span class="gp">&gt;&gt;&gt; </span><span class="n">stdout</span><span class="p">,</span> <span class="n">stderr</span> <span class="o">=</span> <span class="n">dn</span><span class="o">.</span><span class="n">shutdown_server32</span><span class="p">()</span>

@@ -2306,7 +2306,7 @@
 
 <div class="highlight"><pre><span></span><code><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">msl.loadlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">LoadLibrary</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">msl.examples.loadlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">EXAMPLES_DIR</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">net</span> <span class="o">=</span> <span class="n">LoadLibrary</span><span class="p">(</span><span class="n">EXAMPLES_DIR</span> <span class="o">/</span> <span class="s2">&quot;dotnet_lib64.dll&quot;</span><span class="p">,</span> <span class="s2">&quot;net&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">net</span> <span class="o">=</span> <span class="n">LoadLibrary</span><span class="p">(</span><span class="n">EXAMPLES_DIR</span> <span class="o">/</span> <span class="s2">"dotnet_lib64.dll"</span><span class="p">,</span> <span class="s2">"net"</span><span class="p">)</span>
 </code></pre></div>
 <p>The library contains a reference to the <code>DotNetMSL</code> module (which is a C# namespace), the <code>StaticClass</code> class, the <code>StringManipulation</code> class and the <a href="https://docs.microsoft.com/en-us/dotnet/api/system" target="_blank">System</a> namespace.</p>
 <p>Create an instance of the <code>BasicMath</code> class in the <code>DotNetMSL</code> namespace and call the <code>multiply_doubles</code> method</p>
@@ -2323,8 +2323,8 @@
 <span class="go">[2.0, 4.0, 6.0, 8.0, 10.0]</span>
 </code></pre></div>
 <p>Call the <code>reverse_string</code> method in the <code>StringManipulation</code> class to reverse a string</p>
-<div class="highlight"><pre><span></span><code><span class="gp">&gt;&gt;&gt; </span><span class="n">net</span><span class="o">.</span><span class="n">lib</span><span class="o">.</span><span class="n">StringManipulation</span><span class="p">()</span><span class="o">.</span><span class="n">reverse_string</span><span class="p">(</span><span class="s2">&quot;abcdefghijklmnopqrstuvwxyz&quot;</span><span class="p">)</span>
-<span class="go">&#39;zyxwvutsrqponmlkjihgfedcba&#39;</span>
+<div class="highlight"><pre><span></span><code><span class="gp">&gt;&gt;&gt; </span><span class="n">net</span><span class="o">.</span><span class="n">lib</span><span class="o">.</span><span class="n">StringManipulation</span><span class="p">()</span><span class="o">.</span><span class="n">reverse_string</span><span class="p">(</span><span class="s2">"abcdefghijklmnopqrstuvwxyz"</span><span class="p">)</span>
+<span class="go">'zyxwvutsrqponmlkjihgfedcba'</span>
 </code></pre></div>
 <p>Call the static <code>add_multiple</code> method in the <code>StaticClass</code> class to add five integers</p>
 <div class="highlight"><pre><span></span><code><span class="gp">&gt;&gt;&gt; </span><span class="n">net</span><span class="o">.</span><span class="n">lib</span><span class="o">.</span><span class="n">StaticClass</span><span class="o">.</span><span class="n">add_multiple</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">)</span>
@@ -2357,12 +2357,12 @@
 <p>By default, <code>pythonnet</code> uses the .NET Framework runtime on Windows and the Mono runtime on Linux/macOS. To configure <code>pythonnet</code> to use the non-default runtime, such as the .NET Core runtime, you must either run</p>
 <div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">pythonnet</span><span class="w"> </span><span class="kn">import</span> <span class="n">load</span>
 
-<span class="n">load</span><span class="p">(</span><span class="s2">&quot;coreclr&quot;</span><span class="p">)</span>
+<span class="n">load</span><span class="p">(</span><span class="s2">"coreclr"</span><span class="p">)</span>
 </code></pre></div>
 <p>or define a <code>PYTHONNET_RUNTIME=coreclr</code> environment variable, e.g.,</p>
 <div class="highlight"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
 
-<span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">&quot;PYTHONNET_RUNTIME&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;coreclr&quot;</span>
+<span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">"PYTHONNET_RUNTIME"</span><span class="p">]</span> <span class="o">=</span> <span class="s2">"coreclr"</span>
 </code></pre></div>
 <p>before <a class="autorefs autorefs-internal" title="            LoadLibrary" href="../../../api/load_library/#msl.loadlib.load_library.LoadLibrary">LoadLibrary</a> is called. To explicitly use the Mono runtime, replace <code>"coreclr"</code> with <code>"mono"</code> or to use the .NET Framework runtime on Windows use <code>"netfx"</code>.</p>
 <h2 id="dotnet-lib">.NET Source Code<a class="headerlink" href="#dotnet-lib" title="Permanent link">¤</a></h2>
@@ -2434,7 +2434,7 @@
 <span class="w">            </span><span class="kt">double</span><span class="p">[,]</span><span class="w"> </span><span class="n">C</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="kt">double</span><span class="p">[</span><span class="n">rA</span><span class="p">,</span><span class="w"> </span><span class="n">cB</span><span class="p">];</span>
 <span class="w">            </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">cA</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="n">rB</span><span class="p">)</span>
 <span class="w">            </span><span class="p">{</span>
-<span class="w">                </span><span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="s">&quot;matrices can&#39;t be multiplied!&quot;</span><span class="p">);</span>
+<span class="w">                </span><span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="s">"matrices can't be multiplied!"</span><span class="p">);</span>
 <span class="w">                </span><span class="k">return</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="kt">double</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">];</span>
 <span class="w">            </span><span class="p">}</span>
 <span class="w">            </span><span class="k">else</span>

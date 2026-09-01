@@ -2407,14 +2407,14 @@ then returns the response from the library.</p>
 <span class="normal">36</span>
 <span class="normal">37</span>
 <span class="normal">38</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">host</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">port</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Wrapper around the 32-bit LabVIEW library, [labview_lib][labview-lib].</span>
+<span class="w">    </span><span class="sd">"""Wrapper around the 32-bit LabVIEW library, [labview_lib][labview-lib].</span>
 
 <span class="sd">    Args:</span>
 <span class="sd">        host: The IP address (or hostname) to use for the server.</span>
 <span class="sd">        port: The port to open for the server.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">path</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="vm">__file__</span><span class="p">)</span><span class="o">.</span><span class="n">parent</span> <span class="o">/</span> <span class="s2">&quot;labview_lib32.dll&quot;</span>
-    <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="s2">&quot;cdll&quot;</span><span class="p">,</span> <span class="n">host</span><span class="p">,</span> <span class="n">port</span><span class="p">)</span>
+<span class="sd">    """</span>
+    <span class="n">path</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="vm">__file__</span><span class="p">)</span><span class="o">.</span><span class="n">parent</span> <span class="o">/</span> <span class="s2">"labview_lib32.dll"</span>
+    <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="s2">"cdll"</span><span class="p">,</span> <span class="n">host</span><span class="p">,</span> <span class="n">port</span><span class="p">)</span>
 </code></pre></div></td></tr></table></div>
                   </details>
 
@@ -2538,7 +2538,7 @@ population (<code>weighting = 1</code>) standard deviation and variance.</p>
 <span class="normal">54</span>
 <span class="normal">55</span>
 <span class="normal">56</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">stdev</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">float</span><span class="p">],</span> <span class="n">weighting</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">]:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Calculates the mean, variance and standard deviation of the values in the input `x`.</span>
+<span class="w">    </span><span class="sd">"""Calculates the mean, variance and standard deviation of the values in the input `x`.</span>
 
 <span class="sd">    See the corresponding [Labview64.stdev][msl.examples.loadlib.labview64.Labview64.stdev] method.</span>
 
@@ -2549,7 +2549,7 @@ population (<code>weighting = 1</code>) standard deviation and variance.</p>
 
 <span class="sd">    Returns:</span>
 <span class="sd">        The mean, variance and standard deviation.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="n">data</span> <span class="o">=</span> <span class="p">(</span><span class="n">c_double</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="p">))(</span><span class="o">*</span><span class="n">x</span><span class="p">)</span>
     <span class="n">mean</span><span class="p">,</span> <span class="n">variance</span><span class="p">,</span> <span class="n">std</span> <span class="o">=</span> <span class="n">c_double</span><span class="p">(),</span> <span class="n">c_double</span><span class="p">(),</span> <span class="n">c_double</span><span class="p">()</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">lib</span><span class="o">.</span><span class="n">stdev</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="p">),</span> <span class="n">weighting</span><span class="p">,</span> <span class="n">byref</span><span class="p">(</span><span class="n">mean</span><span class="p">),</span> <span class="n">byref</span><span class="p">(</span><span class="n">variance</span><span class="p">),</span> <span class="n">byref</span><span class="p">(</span><span class="n">std</span><span class="p">))</span>

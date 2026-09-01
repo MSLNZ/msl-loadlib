@@ -2637,14 +2637,14 @@ instance of this class is created within a 64-bit Python interpreter.</p>
 <span class="normal">23</span>
 <span class="normal">24</span>
 <span class="normal">25</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Communicates with the 32-bit .NET [fortran_lib][fortran-lib] library.</span>
+<span class="w">    </span><span class="sd">"""Communicates with the 32-bit .NET [fortran_lib][fortran-lib] library.</span>
 
 <span class="sd">    This class demonstrates how to communicate with a 32-bit FORTRAN library if an</span>
 <span class="sd">    instance of this class is created within a 64-bit Python interpreter.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="c1"># specify the name of the corresponding 32-bit server module, fortran32, which hosts</span>
     <span class="c1"># the 32-bit FORTRAN library -- fortran_lib32.</span>
-    <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">module32</span><span class="o">=</span><span class="s2">&quot;fortran32&quot;</span><span class="p">,</span> <span class="n">append_sys_path</span><span class="o">=</span><span class="n">Path</span><span class="p">(</span><span class="vm">__file__</span><span class="p">)</span><span class="o">.</span><span class="n">parent</span><span class="p">)</span>
+    <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">module32</span><span class="o">=</span><span class="s2">"fortran32"</span><span class="p">,</span> <span class="n">append_sys_path</span><span class="o">=</span><span class="n">Path</span><span class="p">(</span><span class="vm">__file__</span><span class="p">)</span><span class="o">.</span><span class="n">parent</span><span class="p">)</span>
 </code></pre></div></td></tr></table></div>
                   </details>
 
@@ -2764,7 +2764,7 @@ instance of this class is created within a 64-bit Python interpreter.</p>
 <span class="normal">220</span>
 <span class="normal">221</span>
 <span class="normal">222</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">add_1d_arrays</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">a1</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">float</span><span class="p">],</span> <span class="n">a2</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">float</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">float</span><span class="p">]:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Perform an element-wise addition of two 1D double-precision arrays.</span>
+<span class="w">    </span><span class="sd">"""Perform an element-wise addition of two 1D double-precision arrays.</span>
 
 <span class="sd">    See the corresponding [Fortran32.add_1d_arrays][msl.examples.loadlib.fortran32.Fortran32.add_1d_arrays] method.</span>
 
@@ -2774,8 +2774,8 @@ instance of this class is created within a 64-bit Python interpreter.</p>
 
 <span class="sd">    Returns:</span>
 <span class="sd">        The element-wise addition of `a1 + a2`.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">reply</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">request32</span><span class="p">(</span><span class="s2">&quot;add_1d_arrays&quot;</span><span class="p">,</span> <span class="n">a1</span><span class="p">,</span> <span class="n">a2</span><span class="p">)</span>
+<span class="sd">    """</span>
+    <span class="n">reply</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">request32</span><span class="p">(</span><span class="s2">"add_1d_arrays"</span><span class="p">,</span> <span class="n">a1</span><span class="p">,</span> <span class="n">a2</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">reply</span>
 </code></pre></div></td></tr></table></div>
             </details>
@@ -2905,7 +2905,7 @@ method.</p>
 <span class="normal">146</span>
 <span class="normal">147</span>
 <span class="normal">148</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">add_or_subtract</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">a</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">b</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">do_addition</span><span class="p">:</span> <span class="nb">bool</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Add or subtract two integers.</span>
+<span class="w">    </span><span class="sd">"""Add or subtract two integers.</span>
 
 <span class="sd">    See the corresponding [Fortran32.add_or_subtract][msl.examples.loadlib.fortran32.Fortran32.add_or_subtract]</span>
 <span class="sd">    method.</span>
@@ -2917,8 +2917,8 @@ method.</p>
 
 <span class="sd">    Returns:</span>
 <span class="sd">        `a + b` if `do_addition` is `True` else `a - b`.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">reply</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">request32</span><span class="p">(</span><span class="s2">&quot;add_or_subtract&quot;</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">do_addition</span><span class="o">=</span><span class="n">do_addition</span><span class="p">)</span>
+<span class="sd">    """</span>
+    <span class="n">reply</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">request32</span><span class="p">(</span><span class="s2">"add_or_subtract"</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">do_addition</span><span class="o">=</span><span class="n">do_addition</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">reply</span>
 </code></pre></div></td></tr></table></div>
             </details>
@@ -3012,7 +3012,7 @@ method.</p>
 <span class="normal">190</span>
 <span class="normal">191</span>
 <span class="normal">192</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">besselJ0</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>  <span class="c1"># noqa: N802</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Compute the Bessel function of the first kind of order 0 of x.</span>
+<span class="w">    </span><span class="sd">"""Compute the Bessel function of the first kind of order 0 of x.</span>
 
 <span class="sd">    See the corresponding [Fortran32.besselJ0][msl.examples.loadlib.fortran32.Fortran32.besselJ0] method.</span>
 
@@ -3021,8 +3021,8 @@ method.</p>
 
 <span class="sd">    Returns:</span>
 <span class="sd">        The value of `BESSEL_J0(x)`.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">reply</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">request32</span><span class="p">(</span><span class="s2">&quot;besselJ0&quot;</span><span class="p">,</span> <span class="n">x</span><span class="p">)</span>
+<span class="sd">    """</span>
+    <span class="n">reply</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">request32</span><span class="p">(</span><span class="s2">"besselJ0"</span><span class="p">,</span> <span class="n">x</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">reply</span>
 </code></pre></div></td></tr></table></div>
             </details>
@@ -3116,7 +3116,7 @@ method.</p>
 <span class="normal">160</span>
 <span class="normal">161</span>
 <span class="normal">162</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">factorial</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">n</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Compute the n&#39;th factorial.</span>
+<span class="w">    </span><span class="sd">"""Compute the n'th factorial.</span>
 
 <span class="sd">    See the corresponding [Fortran32.factorial][msl.examples.loadlib.fortran32.Fortran32.factorial] method.</span>
 
@@ -3125,8 +3125,8 @@ method.</p>
 
 <span class="sd">    Returns:</span>
 <span class="sd">        The factorial of `n`.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">reply</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">request32</span><span class="p">(</span><span class="s2">&quot;factorial&quot;</span><span class="p">,</span> <span class="n">n</span><span class="p">)</span>
+<span class="sd">    """</span>
+    <span class="n">reply</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">request32</span><span class="p">(</span><span class="s2">"factorial"</span><span class="p">,</span> <span class="n">n</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">reply</span>
 </code></pre></div></td></tr></table></div>
             </details>
@@ -3220,7 +3220,7 @@ method.</p>
 <span class="normal">129</span>
 <span class="normal">130</span>
 <span class="normal">131</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">is_positive</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">a</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Returns whether the value of the input argument is &gt; 0.</span>
+<span class="w">    </span><span class="sd">"""Returns whether the value of the input argument is &gt; 0.</span>
 
 <span class="sd">    See the corresponding [Fortran32.is_positive][msl.examples.loadlib.fortran32.Fortran32.is_positive] method.</span>
 
@@ -3229,8 +3229,8 @@ method.</p>
 
 <span class="sd">    Returns:</span>
 <span class="sd">        Whether the value of `a` is &amp;gt; 0.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">reply</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">request32</span><span class="p">(</span><span class="s2">&quot;is_positive&quot;</span><span class="p">,</span> <span class="n">a</span><span class="p">)</span>
+<span class="sd">    """</span>
+    <span class="n">reply</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">request32</span><span class="p">(</span><span class="s2">"is_positive"</span><span class="p">,</span> <span class="n">a</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">reply</span>
 </code></pre></div></td></tr></table></div>
             </details>
@@ -3343,7 +3343,7 @@ method.</p>
 <span class="normal">236</span>
 <span class="normal">237</span>
 <span class="normal">238</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">matrix_multiply</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">a1</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">Sequence</span><span class="p">[</span><span class="nb">float</span><span class="p">]],</span> <span class="n">a2</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">Sequence</span><span class="p">[</span><span class="nb">float</span><span class="p">]])</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">list</span><span class="p">[</span><span class="nb">float</span><span class="p">]]:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Multiply two matrices.</span>
+<span class="w">    </span><span class="sd">"""Multiply two matrices.</span>
 
 <span class="sd">    See the corresponding [Fortran32.matrix_multiply][msl.examples.loadlib.fortran32.Fortran32.matrix_multiply]</span>
 <span class="sd">    method.</span>
@@ -3354,8 +3354,8 @@ method.</p>
 
 <span class="sd">    Returns:</span>
 <span class="sd">        The product, `a1 @ a2`.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">reply</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">list</span><span class="p">[</span><span class="nb">float</span><span class="p">]]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">request32</span><span class="p">(</span><span class="s2">&quot;matrix_multiply&quot;</span><span class="p">,</span> <span class="n">a1</span><span class="p">,</span> <span class="n">a2</span><span class="p">)</span>
+<span class="sd">    """</span>
+    <span class="n">reply</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">list</span><span class="p">[</span><span class="nb">float</span><span class="p">]]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">request32</span><span class="p">(</span><span class="s2">"matrix_multiply"</span><span class="p">,</span> <span class="n">a1</span><span class="p">,</span> <span class="n">a2</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">reply</span>
 </code></pre></div></td></tr></table></div>
             </details>
@@ -3468,7 +3468,7 @@ method.</p>
 <span class="normal"> 99</span>
 <span class="normal">100</span>
 <span class="normal">101</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">multiply_float32</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">a</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">b</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Send a request to multiply two FORTRAN floating-point numbers.</span>
+<span class="w">    </span><span class="sd">"""Send a request to multiply two FORTRAN floating-point numbers.</span>
 
 <span class="sd">    See the corresponding [Fortran32.multiply_float32][msl.examples.loadlib.fortran32.Fortran32.multiply_float32]</span>
 <span class="sd">    method.</span>
@@ -3479,8 +3479,8 @@ method.</p>
 
 <span class="sd">    Returns:</span>
 <span class="sd">        The product, `a * b`.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">reply</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">request32</span><span class="p">(</span><span class="s2">&quot;multiply_float32&quot;</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">)</span>
+<span class="sd">    """</span>
+    <span class="n">reply</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">request32</span><span class="p">(</span><span class="s2">"multiply_float32"</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">reply</span>
 </code></pre></div></td></tr></table></div>
             </details>
@@ -3593,7 +3593,7 @@ method.</p>
 <span class="normal">115</span>
 <span class="normal">116</span>
 <span class="normal">117</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">multiply_float64</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">a</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">b</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Send a request to multiply two FORTRAN double-precision numbers.</span>
+<span class="w">    </span><span class="sd">"""Send a request to multiply two FORTRAN double-precision numbers.</span>
 
 <span class="sd">    See the corresponding [Fortran32.multiply_float64][msl.examples.loadlib.fortran32.Fortran32.multiply_float64]</span>
 <span class="sd">    method.</span>
@@ -3604,8 +3604,8 @@ method.</p>
 
 <span class="sd">    Returns:</span>
 <span class="sd">        The product, `a * b`.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">reply</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">request32</span><span class="p">(</span><span class="s2">&quot;multiply_float64&quot;</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">)</span>
+<span class="sd">    """</span>
+    <span class="n">reply</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">request32</span><span class="p">(</span><span class="s2">"multiply_float64"</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">reply</span>
 </code></pre></div></td></tr></table></div>
             </details>
@@ -3701,7 +3701,7 @@ method.</p>
 <span class="normal">205</span>
 <span class="normal">206</span>
 <span class="normal">207</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">reverse_string</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">original</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Reverse a string.</span>
+<span class="w">    </span><span class="sd">"""Reverse a string.</span>
 
 <span class="sd">    See the corresponding [Fortran32.reverse_string][msl.examples.loadlib.fortran32.Fortran32.reverse_string]</span>
 <span class="sd">    method.</span>
@@ -3711,8 +3711,8 @@ method.</p>
 
 <span class="sd">    Returns:</span>
 <span class="sd">        The string reversed.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">reply</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">request32</span><span class="p">(</span><span class="s2">&quot;reverse_string&quot;</span><span class="p">,</span> <span class="n">original</span><span class="p">)</span>
+<span class="sd">    """</span>
+    <span class="n">reply</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">request32</span><span class="p">(</span><span class="s2">"reverse_string"</span><span class="p">,</span> <span class="n">original</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">reply</span>
 </code></pre></div></td></tr></table></div>
             </details>
@@ -3810,7 +3810,7 @@ method.</p>
 <span class="normal">176</span>
 <span class="normal">177</span>
 <span class="normal">178</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">standard_deviation</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">float</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Compute the standard deviation.</span>
+<span class="w">    </span><span class="sd">"""Compute the standard deviation.</span>
 
 <span class="sd">    See the corresponding</span>
 <span class="sd">    [Fortran32.standard_deviation][msl.examples.loadlib.fortran32.Fortran32.standard_deviation]</span>
@@ -3821,8 +3821,8 @@ method.</p>
 
 <span class="sd">    Returns:</span>
 <span class="sd">        The standard deviation of `data`.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">reply</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">request32</span><span class="p">(</span><span class="s2">&quot;standard_deviation&quot;</span><span class="p">,</span> <span class="n">data</span><span class="p">)</span>
+<span class="sd">    """</span>
+    <span class="n">reply</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">request32</span><span class="p">(</span><span class="s2">"standard_deviation"</span><span class="p">,</span> <span class="n">data</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">reply</span>
 </code></pre></div></td></tr></table></div>
             </details>
@@ -3933,7 +3933,7 @@ method.</p>
 <span class="normal">53</span>
 <span class="normal">54</span>
 <span class="normal">55</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">sum_16bit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">a</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">b</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Send a request to add two 16-bit signed integers.</span>
+<span class="w">    </span><span class="sd">"""Send a request to add two 16-bit signed integers.</span>
 
 <span class="sd">    See the corresponding [Fortran32.sum_16bit][msl.examples.loadlib.fortran32.Fortran32.sum_16bit] method.</span>
 
@@ -3943,8 +3943,8 @@ method.</p>
 
 <span class="sd">    Returns:</span>
 <span class="sd">        The sum, `a + b`.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">reply</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">request32</span><span class="p">(</span><span class="s2">&quot;sum_16bit&quot;</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">)</span>
+<span class="sd">    """</span>
+    <span class="n">reply</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">request32</span><span class="p">(</span><span class="s2">"sum_16bit"</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">reply</span>
 </code></pre></div></td></tr></table></div>
             </details>
@@ -4055,7 +4055,7 @@ method.</p>
 <span class="normal">68</span>
 <span class="normal">69</span>
 <span class="normal">70</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">sum_32bit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">a</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">b</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Send a request to add two 32-bit signed integers.</span>
+<span class="w">    </span><span class="sd">"""Send a request to add two 32-bit signed integers.</span>
 
 <span class="sd">    See the corresponding [Fortran32.sum_32bit][msl.examples.loadlib.fortran32.Fortran32.sum_32bit] method.</span>
 
@@ -4065,8 +4065,8 @@ method.</p>
 
 <span class="sd">    Returns:</span>
 <span class="sd">        The sum, `a + b`.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">reply</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">request32</span><span class="p">(</span><span class="s2">&quot;sum_32bit&quot;</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">)</span>
+<span class="sd">    """</span>
+    <span class="n">reply</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">request32</span><span class="p">(</span><span class="s2">"sum_32bit"</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">reply</span>
 </code></pre></div></td></tr></table></div>
             </details>
@@ -4177,7 +4177,7 @@ method.</p>
 <span class="normal">83</span>
 <span class="normal">84</span>
 <span class="normal">85</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">sum_64bit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">a</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">b</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Send a request to add two 64-bit signed integers.</span>
+<span class="w">    </span><span class="sd">"""Send a request to add two 64-bit signed integers.</span>
 
 <span class="sd">    See the corresponding [Fortran32.sum_64bit][msl.examples.loadlib.fortran32.Fortran32.sum_64bit] method.</span>
 
@@ -4187,8 +4187,8 @@ method.</p>
 
 <span class="sd">    Returns:</span>
 <span class="sd">        The sum, `a + b`.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">reply</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">request32</span><span class="p">(</span><span class="s2">&quot;sum_64bit&quot;</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">)</span>
+<span class="sd">    """</span>
+    <span class="n">reply</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">request32</span><span class="p">(</span><span class="s2">"sum_64bit"</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">reply</span>
 </code></pre></div></td></tr></table></div>
             </details>
@@ -4299,7 +4299,7 @@ method.</p>
 <span class="normal">38</span>
 <span class="normal">39</span>
 <span class="normal">40</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">sum_8bit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">a</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">b</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Send a request to add two 8-bit signed integers.</span>
+<span class="w">    </span><span class="sd">"""Send a request to add two 8-bit signed integers.</span>
 
 <span class="sd">    See the corresponding [Fortran32.sum_8bit][msl.examples.loadlib.fortran32.Fortran32.sum_8bit] method.</span>
 
@@ -4309,8 +4309,8 @@ method.</p>
 
 <span class="sd">    Returns:</span>
 <span class="sd">        The sum, `a + b`.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">reply</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">request32</span><span class="p">(</span><span class="s2">&quot;sum_8bit&quot;</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">)</span>
+<span class="sd">    """</span>
+    <span class="n">reply</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">request32</span><span class="p">(</span><span class="s2">"sum_8bit"</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">reply</span>
 </code></pre></div></td></tr></table></div>
             </details>

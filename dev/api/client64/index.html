@@ -2437,7 +2437,7 @@ a 32-bit library from 64-bit Python.</p>
     <span class="n">add_dll_directory</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="n">append_environ_path</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="n">append_sys_path</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-    <span class="n">host</span><span class="o">=</span><span class="s2">&quot;127.0.0.1&quot;</span><span class="p">,</span>
+    <span class="n">host</span><span class="o">=</span><span class="s2">"127.0.0.1"</span><span class="p">,</span>
     <span class="n">port</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
     <span class="n">protocol</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span>
     <span class="n">rpc_timeout</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
@@ -2893,7 +2893,7 @@ is imported.</p>
     <span class="n">add_dll_directory</span><span class="p">:</span> <span class="n">PathLike</span> <span class="o">|</span> <span class="n">Iterable</span><span class="p">[</span><span class="n">PathLike</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="n">append_environ_path</span><span class="p">:</span> <span class="n">PathLike</span> <span class="o">|</span> <span class="n">Iterable</span><span class="p">[</span><span class="n">PathLike</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="n">append_sys_path</span><span class="p">:</span> <span class="n">PathLike</span> <span class="o">|</span> <span class="n">Iterable</span><span class="p">[</span><span class="n">PathLike</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
-    <span class="n">host</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="s2">&quot;127.0.0.1&quot;</span><span class="p">,</span>
+    <span class="n">host</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="s2">"127.0.0.1"</span><span class="p">,</span>
     <span class="n">port</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>
     <span class="n">protocol</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">5</span><span class="p">,</span>
     <span class="n">rpc_timeout</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
@@ -2901,7 +2901,7 @@ is imported.</p>
     <span class="n">timeout</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mi">10</span><span class="p">,</span>
     <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Base class for communicating with a 32-bit library from 64-bit Python.</span>
+<span class="w">    </span><span class="sd">"""Base class for communicating with a 32-bit library from 64-bit Python.</span>
 
 <span class="sd">    Starts a 32-bit server, [Server32][], to host a Python class that is a wrapper</span>
 <span class="sd">    around a 32-bit library. [Client64][] runs within a 64-bit Python interpreter</span>
@@ -2912,19 +2912,19 @@ is imported.</p>
 <span class="sd">        module32: The name of, or the path to, a Python module that will be imported by the</span>
 <span class="sd">            32-bit server. The module must contain a class that inherits from [Server32][].</span>
 
-<span class="sd">        add_dll_directory: Add path(s) to the 32-bit server&#39;s DLL search path.</span>
-<span class="sd">            See [os.add_dll_directory][]{:target=&quot;_blank&quot;} for more details.</span>
+<span class="sd">        add_dll_directory: Add path(s) to the 32-bit server's DLL search path.</span>
+<span class="sd">            See [os.add_dll_directory][]{:target="_blank"} for more details.</span>
 <span class="sd">            Supported on Windows only.</span>
 
-<span class="sd">            !!! note &quot;Added in version 1.0&quot;</span>
+<span class="sd">            !!! note "Added in version 1.0"</span>
 
-<span class="sd">        append_environ_path: Append path(s) to the 32-bit server&#39;s</span>
-<span class="sd">            [os.environ[&quot;PATH&quot;]][os.environ]{:target=&quot;_blank&quot;} variable. This may be useful if</span>
+<span class="sd">        append_environ_path: Append path(s) to the 32-bit server's</span>
+<span class="sd">            [os.environ["PATH"]][os.environ]{:target="_blank"} variable. This may be useful if</span>
 <span class="sd">            the library that is being loaded requires additional libraries that</span>
 <span class="sd">            must be available on `PATH`.</span>
 
-<span class="sd">        append_sys_path: Append path(s) to the 32-bit server&#39;s [sys.path][]{:target=&quot;_blank&quot;}</span>
-<span class="sd">            variable. The value of [sys.path][]{:target=&quot;_blank&quot;} from the 64-bit process is</span>
+<span class="sd">        append_sys_path: Append path(s) to the 32-bit server's [sys.path][]{:target="_blank"}</span>
+<span class="sd">            variable. The value of [sys.path][]{:target="_blank"} from the 64-bit process is</span>
 <span class="sd">            automatically included, i.e.,</span>
 
 <span class="sd">            &lt;code&gt;path&lt;sub&gt;32&lt;/sub&gt; = path&lt;sub&gt;64&lt;/sub&gt; + append_sys_path&lt;/code&gt;</span>
@@ -2932,27 +2932,27 @@ is imported.</p>
 <span class="sd">        host: The hostname (IP address) of the 32-bit server. If `None` then the</span>
 <span class="sd">            connection to the server is [mocked][faq-mock].</span>
 
-<span class="sd">            !!! note &quot;Changed in version 1.0&quot;</span>
+<span class="sd">            !!! note "Changed in version 1.0"</span>
 <span class="sd">                A value of `None` is allowed.</span>
 
 <span class="sd">        port: The port to open on the 32-bit server. If `0`, any available port will be used.</span>
 
-<span class="sd">        protocol: The [pickle protocol][pickle-protocols]{:target=&quot;_blank&quot;} to use.</span>
-<span class="sd">            !!! note &quot;Added in version 0.8&quot;</span>
+<span class="sd">        protocol: The [pickle protocol][pickle-protocols]{:target="_blank"} to use.</span>
+<span class="sd">            !!! note "Added in version 0.8"</span>
 
 <span class="sd">        rpc_timeout: The maximum number of seconds to wait for a response from the 32-bit server.</span>
-<span class="sd">            The [RPC](https://en.wikipedia.org/wiki/Remote_procedure_call){:target=&quot;_blank&quot;}</span>
+<span class="sd">            The [RPC](https://en.wikipedia.org/wiki/Remote_procedure_call){:target="_blank"}</span>
 <span class="sd">            timeout value is used for *all* requests from the server. If you want different</span>
 <span class="sd">            requests to have different timeout values, you will need to implement custom</span>
 <span class="sd">            timeout handling for each method on the server. Default is `None`, which will</span>
-<span class="sd">            call [socket.getdefaulttimeout][]{:target=&quot;_blank&quot;} to get the timeout value.</span>
+<span class="sd">            call [socket.getdefaulttimeout][]{:target="_blank"} to get the timeout value.</span>
 
-<span class="sd">            !!! note &quot;Added in version 0.6&quot;</span>
+<span class="sd">            !!! note "Added in version 0.6"</span>
 
 <span class="sd">        server32_dir: The directory where the 32-bit server is located.</span>
 <span class="sd">            Specifying this value may be useful if you created a [custom server][refreeze].</span>
 
-<span class="sd">            !!! note &quot;Added in version 0.10&quot;</span>
+<span class="sd">            !!! note "Added in version 0.10"</span>
 
 <span class="sd">        timeout: The maximum number of seconds to wait to establish a connection</span>
 <span class="sd">            with the 32-bit server.</span>
@@ -2971,9 +2971,9 @@ is imported.</p>
 <span class="sd">        specify the folder where `module32` is located by passing a value to the</span>
 <span class="sd">        `append_sys_path` parameter. Using the `append_sys_path` option also allows</span>
 <span class="sd">        for any other modules that `module32` may depend on to also be included</span>
-<span class="sd">        in [sys.path][]{:target=&quot;_blank&quot;} so that those modules can be imported when `module32`</span>
+<span class="sd">        in [sys.path][]{:target="_blank"} so that those modules can be imported when `module32`</span>
 <span class="sd">        is imported.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">_client</span><span class="p">:</span> <span class="n">_MockClient</span> <span class="o">|</span> <span class="n">_HTTPClient</span>
     <span class="k">if</span> <span class="n">host</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_client</span> <span class="o">=</span> <span class="n">_MockClient</span><span class="p">(</span>
@@ -3265,7 +3265,7 @@ is imported.</p>
 <span class="normal">228</span>
 <span class="normal">229</span>
 <span class="normal">230</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">request32</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Any</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Send a request to the 32-bit server.</span>
+<span class="w">    </span><span class="sd">"""Send a request to the 32-bit server.</span>
 
 <span class="sd">    Args:</span>
 <span class="sd">        name: The name of a method, property or attribute of the [Server32][] subclass.</span>
@@ -3278,7 +3278,7 @@ is imported.</p>
 <span class="sd">    Raises:</span>
 <span class="sd">        Server32Error: If there was an error processing the request on the 32-bit server.</span>
 <span class="sd">        ResponseTimeoutError: If a timeout occurs while waiting for the response from the 32-bit server.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_client</span><span class="o">.</span><span class="n">request32</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
 </code></pre></div></td></tr></table></div>
             </details>
@@ -3405,17 +3405,17 @@ blocking when reading the <code>stdout</code> and <code>stderr</code> PIPE buffe
 <span class="normal">257</span>
 <span class="normal">258</span>
 <span class="normal">259</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">shutdown_server32</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">kill_timeout</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mi">10</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">IO</span><span class="p">[</span><span class="nb">bytes</span><span class="p">],</span> <span class="n">IO</span><span class="p">[</span><span class="nb">bytes</span><span class="p">]]:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Shut down the 32-bit server.</span>
+<span class="w">    </span><span class="sd">"""Shut down the 32-bit server.</span>
 
 <span class="sd">    This method shuts down the 32-bit server, closes the client connection, and deletes</span>
-<span class="sd">    the temporary file that was used to store the serialized [pickle][]{:target=&quot;_blank&quot;}d data.</span>
+<span class="sd">    the temporary file that was used to store the serialized [pickle][]{:target="_blank"}d data.</span>
 
 <span class="sd">    Args:</span>
 <span class="sd">        kill_timeout: If the 32-bit server is still running after `kill_timeout`</span>
 <span class="sd">            seconds, the server will be killed using brute force. A warning will be</span>
 <span class="sd">            issued if the server is killed in this manner.</span>
 
-<span class="sd">            !!! note &quot;Added in version 0.6&quot;</span>
+<span class="sd">            !!! note "Added in version 0.6"</span>
 
 <span class="sd">    Returns:</span>
 <span class="sd">        The `(stdout, stderr)` streams from the 32-bit server.</span>
@@ -3424,13 +3424,13 @@ blocking when reading the <code>stdout</code> and <code>stderr</code> PIPE buffe
 <span class="sd">            or `stderr` on the 32-bit server to be &amp;lt; 4096. This will avoid potential</span>
 <span class="sd">            blocking when reading the `stdout` and `stderr` PIPE buffers.</span>
 
-<span class="sd">            !!! note &quot;Changed in version 0.8&quot;</span>
+<span class="sd">            !!! note "Changed in version 0.8"</span>
 <span class="sd">                Prior to version 0.8 this method returned `None`</span>
 
 <span class="sd">    !!! tip</span>
 <span class="sd">        This method gets called automatically when the reference count to the</span>
-<span class="sd">        [Client64][] instance reaches zero (see [`object.__del__`][]{:target=&quot;_blank&quot;}).</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">        [Client64][] instance reaches zero (see [`object.__del__`][]{:target="_blank"}).</span>
+<span class="sd">    """</span>
     <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_client</span><span class="o">.</span><span class="n">shutdown_server32</span><span class="p">(</span><span class="n">kill_timeout</span><span class="o">=</span><span class="n">kill_timeout</span><span class="p">)</span>
 </code></pre></div></td></tr></table></div>
             </details>

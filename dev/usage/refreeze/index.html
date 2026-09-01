@@ -2323,7 +2323,7 @@
 <p>Create a script that calls the <a class="autorefs autorefs-internal" title="            main" href="../../api/freeze_server32/#msl.loadlib.freeze_server32.main">freeze_server32.main</a> function with the appropriate keyword arguments and run your script using a 32-bit Python interpreter. For example, the following script will include 32-bit <code>numpy</code> on the server</p>
 <div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">msl.loadlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">freeze_server32</span>
 
-<span class="n">freeze_server32</span><span class="o">.</span><span class="n">main</span><span class="p">(</span><span class="n">imports</span><span class="o">=</span><span class="s2">&quot;numpy&quot;</span><span class="p">)</span>
+<span class="n">freeze_server32</span><span class="o">.</span><span class="n">main</span><span class="p">(</span><span class="n">imports</span><span class="o">=</span><span class="s2">"numpy"</span><span class="p">)</span>
 </code></pre></div>
 <h2 id="refreeze-cli">Using the CLI<a class="headerlink" href="#refreeze-cli" title="Permanent link">¤</a></h2>
 <p>When <code>msl-loadlib</code> is installed, a console script is included (named <code>freeze32</code>) that may be executed from the command line to create a new frozen 32-bit server.</p>

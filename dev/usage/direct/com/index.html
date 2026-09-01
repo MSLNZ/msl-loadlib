@@ -2193,23 +2193,23 @@
 -->
 
 <div class="highlight"><pre><span></span><code><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">msl.loadlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">LoadLibrary</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">com</span> <span class="o">=</span> <span class="n">LoadLibrary</span><span class="p">(</span><span class="s2">&quot;Scripting.FileSystemObject&quot;</span><span class="p">,</span> <span class="s2">&quot;com&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">com</span> <span class="o">=</span> <span class="n">LoadLibrary</span><span class="p">(</span><span class="s2">"Scripting.FileSystemObject"</span><span class="p">,</span> <span class="s2">"com"</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">com</span>
 <span class="go">&lt;LoadLibrary libtype=POINTER(IFileSystem3) path=Scripting.FileSystemObject&gt;</span>
 </code></pre></div>
 <p>We can then use the library to create, edit and close a text file by using the <a href="https://learn.microsoft.com/en-us/office/vba/language/reference/user-interface-help/createtextfile-method" target="_blank">CreateTextFile</a> method</p>
-<div class="highlight"><pre><span></span><code><span class="gp">&gt;&gt;&gt; </span><span class="n">fp</span> <span class="o">=</span> <span class="n">com</span><span class="o">.</span><span class="n">lib</span><span class="o">.</span><span class="n">CreateTextFile</span><span class="p">(</span><span class="s2">&quot;a_new_file.txt&quot;</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">fp</span><span class="o">.</span><span class="n">Write</span><span class="p">(</span><span class="s2">&quot;This is a test.&quot;</span><span class="p">)</span>
+<div class="highlight"><pre><span></span><code><span class="gp">&gt;&gt;&gt; </span><span class="n">fp</span> <span class="o">=</span> <span class="n">com</span><span class="o">.</span><span class="n">lib</span><span class="o">.</span><span class="n">CreateTextFile</span><span class="p">(</span><span class="s2">"a_new_file.txt"</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">fp</span><span class="o">.</span><span class="n">Write</span><span class="p">(</span><span class="s2">"This is a test."</span><span class="p">)</span>
 <span class="go">0</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">fp</span><span class="o">.</span><span class="n">Close</span><span class="p">()</span>
 <span class="go">0</span>
 </code></pre></div>
 <p>Verify that the file exists and that the text is correct</p>
-<div class="highlight"><pre><span></span><code><span class="gp">&gt;&gt;&gt; </span><span class="n">com</span><span class="o">.</span><span class="n">lib</span><span class="o">.</span><span class="n">FileExists</span><span class="p">(</span><span class="s2">&quot;a_new_file.txt&quot;</span><span class="p">)</span>
+<div class="highlight"><pre><span></span><code><span class="gp">&gt;&gt;&gt; </span><span class="n">com</span><span class="o">.</span><span class="n">lib</span><span class="o">.</span><span class="n">FileExists</span><span class="p">(</span><span class="s2">"a_new_file.txt"</span><span class="p">)</span>
 <span class="go">True</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">file</span> <span class="o">=</span> <span class="n">com</span><span class="o">.</span><span class="n">lib</span><span class="o">.</span><span class="n">OpenTextFile</span><span class="p">(</span><span class="s2">&quot;a_new_file.txt&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">file</span> <span class="o">=</span> <span class="n">com</span><span class="o">.</span><span class="n">lib</span><span class="o">.</span><span class="n">OpenTextFile</span><span class="p">(</span><span class="s2">"a_new_file.txt"</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">file</span><span class="o">.</span><span class="n">ReadAll</span><span class="p">()</span>
-<span class="go">&#39;This is a test.&#39;</span>
+<span class="go">'This is a test.'</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">file</span><span class="o">.</span><span class="n">Close</span><span class="p">()</span>
 <span class="go">0</span>
 </code></pre></div>
