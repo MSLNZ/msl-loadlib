@@ -98,7 +98,10 @@ def main() -> int:  # noqa: C901, PLR0911, PLR0912, PLR0915
     args = parser.parse_args()
 
     if args.version:
-        print(f"Python {sys.version}")
+        from msl.loadlib import __version__  # noqa: PLC0415
+
+        print("Python", sys.version)
+        print("msl-loadlib", __version__)
         return 0
 
     # include directories in sys.path
