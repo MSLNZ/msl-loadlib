@@ -50,6 +50,6 @@ RUN curl -LO https://www.sqlite.org/2026/$SQLITE_VERSION.tar.gz && \
     rm -rf sqlite*
 
 COPY install-python.sh .
-COPY build-server32.sh .
+COPY freeze-server32.sh .
 
 CMD ["linux32", "bash"]
