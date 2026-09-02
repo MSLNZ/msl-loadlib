@@ -30,3 +30,4 @@ py4jwrapper/.classpath
 # Auto-generated when freezing the server
 file_version_info.txt
 server32.spec
+docker/server32-linux

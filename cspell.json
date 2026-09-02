@@ -20,6 +20,7 @@
         "cspell.json",
         "mkdocs.yml",
         "pyproject.toml",
+        "docker/",
         "tests/dotnet_config/legacy_v2_runtime/legacy_v2_runtime.vcproj",
         "tests/namespace_with_dots/Namespace.With.Dots.csproj",
         "tests/nested_namespaces/nested_namespaces.csproj"
