@@ -21,7 +21,9 @@ jobs:
         exclude:
           - os: ubuntu
             architecture: x86
-          - os: macos
+          - os: macos-latest
+            architecture: x86
+          - os: macos-15-intel
             architecture: x86
     steps:
       - name: Checkout repository
