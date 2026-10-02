@@ -78,12 +78,12 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
       - name: Setup uv
-        uses: astral-sh/setup-uv@20cfd1bf945f4377ade1205e4dbc17946fc9a30d # v10.0.1
+        uses: astral-sh/setup-uv@c18668ad3cf93ea998bef934396af7bb5c839dc7 # v10.2.0
         with:
           enable-cache: false
           python-version: '3.14'
       - name: Spelling
-        uses: streetsidesoftware/cspell-action@e0668cf020899e887ee8ad4d173c31738a79eae8 # v9.0.1
+        uses: streetsidesoftware/cspell-action@6f3c77c1406bc930f944ba97e9801a22e42caf58 # v9.1.0
         with:
           incremental_files_only: false
       - name: Linting
