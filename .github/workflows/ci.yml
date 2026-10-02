@@ -35,7 +35,7 @@ jobs:
         run: |
           sudo dpkg --add-architecture i386
           sudo apt-get update
-          sudo apt-get install -y libgfortran5:i386
+          sudo apt-get install -y iproute2 g++ gfortran libgfortran5 zlib1g:i386 libstdc++6:i386 libgfortran5:i386
       - name: Set PYTHONNET_RUNTIME=coreclr (non Windows)
         if: ${{ matrix.os != 'windows-latest' }}
         run: echo "PYTHONNET_RUNTIME=coreclr" >> "$GITHUB_ENV"
