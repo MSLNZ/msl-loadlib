@@ -10,43 +10,48 @@ env:
 jobs:
   test:
     name: Test
-    runs-on: ${{ matrix.os }}-latest
+    runs-on: ${{ matrix.os }}
     timeout-minutes: 10
     strategy:
       fail-fast: false
       matrix:
         python-version: ["3.8", "3.9", "3.10", "3.11", "3.12", "3.13", "3.14"]
-        os: [windows, ubuntu, macos]
+        os: [windows-latest, ubuntu-24.04, macos-26-intel]
         architecture: [x64, x86]
         exclude:
-          - os: ubuntu
+          - os: ubuntu-24.04
             architecture: x86
-          - os: macos
+          - os: macos-26-intel
             architecture: x86
+        include:
+          - os: ubuntu-26.04-arm
+            python-version: "3.14"
+          - os: macos-latest
+            python-version: "3.14"
     steps:
       - name: Checkout repository
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           fetch-depth: 0  # fetch all commits/branches
-      - name: Install system dependencies (ubuntu)
-        if: ${{ matrix.os == 'ubuntu' }}
+      - name: Install system dependencies (Ubuntu)
+        if: startsWith(matrix.os, 'ubuntu')
         run: |
           sudo dpkg --add-architecture i386
           sudo apt-get update
-          sudo apt-get install -y libgfortran5:i386
-      - name: Set PYTHONNET_RUNTIME=coreclr
-        if: ${{ matrix.os == 'macos' || matrix.os == 'ubuntu' }}
+          sudo apt-get install -y iproute2 g++ gfortran libgfortran5 zlib1g:i386 libstdc++6:i386 libgfortran5:i386
+      - name: Set PYTHONNET_RUNTIME=coreclr (non Windows)
+        if: ${{ matrix.os != 'windows-latest' }}
         run: echo "PYTHONNET_RUNTIME=coreclr" >> "$GITHUB_ENV"
       - name: Java version
         run: java -version
       - name: Set up Python ${{ matrix.python-version }} (Windows)
-        if: ${{ matrix.os == 'windows' }}
+        if: ${{ matrix.os == 'windows-latest' }}
         uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
         with:
           python-version: ${{ matrix.python-version }}
           architecture: ${{ matrix.architecture }}
       - name: Set up Python ${{ matrix.python-version }} (non Windows)
-        if: ${{ matrix.os != 'windows' }}
+        if: ${{ matrix.os != 'windows-latest' }}
         uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
         with:
           python-version: ${{ matrix.python-version }}

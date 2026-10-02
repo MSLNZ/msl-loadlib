@@ -31,6 +31,7 @@ from conftest import (
     IS_MAC_ARM64,
     IS_WINDOWS,
     has_mono_runtime,
+    skipif_arm64,
     skipif_no_comtypes,
     skipif_no_pythonnet,
     skipif_not_windows,
@@ -284,6 +285,7 @@ def test_fortran() -> None:  # noqa: PLR0915
 
 
 @skipif_no_pythonnet
+@skipif_arm64
 def test_dotnet() -> None:
     bitness = "64" if IS_PYTHON_64BIT else "32"
     path = EXAMPLES_DIR / f"dotnet_lib{bitness}.dll"
