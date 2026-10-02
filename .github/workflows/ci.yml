@@ -23,13 +23,18 @@ jobs:
             architecture: x86
           - os: macos-26-intel
             architecture: x86
+        include:
+          - os: ubuntu-26.04-arm
+            python-version: "3.14"
+          - os: macos-latest
+            python-version: "3.14"
     steps:
       - name: Checkout repository
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           fetch-depth: 0  # fetch all commits/branches
       - name: Install system dependencies (Ubuntu)
-        if: ${{ matrix.os == 'ubuntu-24.04' }}
+        if: startsWith(matrix.os, 'ubuntu')
         run: |
           sudo dpkg --add-architecture i386
           sudo apt-get update
