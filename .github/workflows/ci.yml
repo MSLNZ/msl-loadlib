@@ -16,10 +16,10 @@ jobs:
       fail-fast: false
       matrix:
         python-version: ["3.8", "3.9", "3.10", "3.11", "3.12", "3.13", "3.14"]
-        os: [macos-latest, macos-15-intel]  # windows, ubuntu,
+        os: [ubuntu-latest, macos-15-intel]  # windows, macos-latest
         architecture: [x64, x86]
         exclude:
-          - os: ubuntu
+          - os: ubuntu-latest
             architecture: x86
           - os: macos-latest
             architecture: x86
@@ -31,24 +31,24 @@ jobs:
         with:
           fetch-depth: 0  # fetch all commits/branches
       - name: Install system dependencies (ubuntu)
-        if: ${{ matrix.os == 'ubuntu' }}
+        if: ${{ matrix.os == 'ubuntu-latest' }}
         run: |
           sudo dpkg --add-architecture i386
           sudo apt-get update
           sudo apt-get install -y libgfortran5:i386
       - name: Set PYTHONNET_RUNTIME=coreclr (non Windows)
-        if: ${{ matrix.os != 'windows' }}
+        if: ${{ matrix.os != 'windows-latest' }}
         run: echo "PYTHONNET_RUNTIME=coreclr" >> "$GITHUB_ENV"
       - name: Java version
         run: java -version
       - name: Set up Python ${{ matrix.python-version }} (Windows)
-        if: ${{ matrix.os == 'windows' }}
+        if: ${{ matrix.os == 'windows-latest' }}
         uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
         with:
           python-version: ${{ matrix.python-version }}
           architecture: ${{ matrix.architecture }}
       - name: Set up Python ${{ matrix.python-version }} (non Windows)
-        if: ${{ matrix.os != 'windows' }}
+        if: ${{ matrix.os != 'windows-latest' }}
         uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
         with:
           python-version: ${{ matrix.python-version }}
@@ -64,7 +64,7 @@ jobs:
       - name: Install package from custom-built wheel
         run: python -m pip install --find-links dist --no-index msl-loadlib
       - name: Run tests
-        run: python -m pytest --reruns 5
+        run: python -m pytest # --reruns 5
 
   lint:
     name: Lint
