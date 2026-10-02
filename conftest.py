@@ -162,6 +162,7 @@ skipif_no_comtypes = pytest.mark.skipif(not IS_WINDOWS, reason="comtypes is only
 skipif_no_pythonnet = pytest.mark.skipif(clr is None, reason="pythonnet is not installed/supported on this platform")
 skipif_no_server32 = pytest.mark.skipif(IS_MAC or IS_LINUX_AARCH64, reason="requires a 32-bit server")
 skipif_not_windows = pytest.mark.skipif(not IS_WINDOWS, reason="not Windows")
+skipif_arm64 = pytest.mark.skipif(IS_MAC_ARM64 or IS_LINUX_AARCH64, reason="arch cannot be arm64")
 
 xfail_windows_ga = pytest.mark.xfail(
     IS_WINDOWS and os.getenv("GITHUB_ACTIONS") == "true", reason="flaky test on Windows and GHA"
