@@ -10,7 +10,7 @@ Load the example [.NET library][dotnet-lib]
     `"clr"` is an alias for `"net"` and can also be used as the value of `libtype` when instantiating [LoadLibrary][msl.loadlib.load_library.LoadLibrary].
 
 <!-- invisible-code-block: pycon
->>> SKIP_IF_32BIT() or SKIP_IF_NO_PYTHONNET() or SKIP_IF_MACOS_ARM64()
+>>> SKIP_IF_32BIT() or SKIP_IF_NO_PYTHONNET() or SKIP_IF_MACOS_ARM64() or SKIP_IF_LINUX_AARCH64()
 
 -->
 
