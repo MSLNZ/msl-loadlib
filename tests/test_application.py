@@ -193,7 +193,7 @@ def test_icon() -> None:
         _ = activex.Icon("", index=-1)
 
     icon = activex.Icon(sys.executable)
-    assert icon.hicon is not None
+    assert icon.hicon is not None  # this fails if python.exe was install using uv, since uv does not embed an icon
     assert icon.hicon > 0
     icon.destroy()
 
