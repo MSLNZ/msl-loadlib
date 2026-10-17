@@ -2,6 +2,13 @@
 
 ---
 
+## unreleased
+
+***Added:***
+
+- support for Python 3.15
+- output the version of `msl-loadlib` when running `server32-linux --version` and `server32-windows --version`
+
 ## 1.1.0 (2026-06-30)
 
 The 32-bit server is frozen with the following versions

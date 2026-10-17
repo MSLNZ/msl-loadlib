@@ -26,16 +26,20 @@ from __future__ import annotations
 
 import ctypes
 import os
+import warnings
 from ctypes import wintypes as wt
 from enum import IntEnum, IntFlag
 from itertools import count
 from typing import TYPE_CHECKING
 
-try:
-    import comtypes  # type: ignore[import-untyped]  # pyright: ignore[reportMissingTypeStubs]
-    from comtypes import client  # pyright: ignore[reportUnknownVariableType, reportMissingTypeStubs]
-except ImportError:
-    comtypes = client = None
+with warnings.catch_warnings():
+    # Ignore "You are running 'comtypes' on Python 3.15, ..."
+    warnings.simplefilter("ignore", FutureWarning)
+    try:
+        import comtypes  # type: ignore[import-untyped]  # pyright: ignore[reportMissingTypeStubs]
+        from comtypes import client  # pyright: ignore[reportUnknownVariableType, reportMissingTypeStubs]
+    except ImportError:
+        comtypes = client = None
 
 if TYPE_CHECKING:
     from collections.abc import Iterator

@@ -7,6 +7,7 @@ import os
 import socket
 import subprocess
 import time
+import warnings
 from pathlib import Path
 from typing import TYPE_CHECKING
 from xml.etree import ElementTree as ET
@@ -90,7 +91,10 @@ def is_comtypes_installed() -> bool:
     !!! note "Added in version 0.5"
     """
     try:
-        import comtypes  # type: ignore[import-untyped] # pyright: ignore[reportMissingTypeStubs, reportUnusedImport]  # noqa: F401, PLC0415
+        with warnings.catch_warnings():
+            # Ignore "You are running 'comtypes' on Python 3.15, ..."
+            warnings.simplefilter("ignore", FutureWarning)
+            import comtypes  # type: ignore[import-untyped] # pyright: ignore[reportMissingTypeStubs, reportUnusedImport]  # noqa: F401, PLC0415
     except ImportError:
         return False
     return True
